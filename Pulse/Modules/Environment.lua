@@ -151,3 +151,10 @@ function M:OnEnable()
     Pulse:BindFrame({ "breathWarning", "breathTexture" }, syncBreath)
     Pulse:BindFrame({ "weatherChanged" }, syncWeather)
 end
+
+function M:_DebugEnvironment()
+    return {
+        breathTickerActive = breathTicker ~= nil,
+        weatherRegistered = weatherFrame:IsEventRegistered("WEATHER_CHANGED") and true or false,
+    }
+end

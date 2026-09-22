@@ -630,3 +630,13 @@ function M:OnEnable()
     Pulse:BindFrame({ "autoShotFired" }, syncAutoShot)
     Pulse:BindFrame({ "weaponSwingMain", "weaponSwingOff" }, syncSwing)
 end
+
+function M:_DebugCombat()
+    return {
+        inCombat = InCombatLockdown() and true or false,
+        isCasting = isCasting,
+        isChanneling = isChanneling,
+        swingSource = swingEventAvailable() and "event" or "estimator",
+        cooldownSetResolved = cooldownSetResolved,
+    }
+end

@@ -18,8 +18,7 @@ local failures = 0
 local function check(label, got, want)
     if got ~= want then
         failures = failures + 1
-        io.write(("FAIL  %-46s got %s, wanted %s\n")
-            :format(label, tostring(got), tostring(want)))
+        io.write(("FAIL  %-46s got %s, wanted %s\n"):format(label, tostring(got), tostring(want)))
     else
         io.write(("ok    %s\n"):format(label))
     end
@@ -31,8 +30,21 @@ end
 -- looks like a widget method returns nil; a real frame does the same for an unset data
 -- field, and UI.lua branches on exactly that (`if not ui then`, `views[view]`).
 local METHOD_PREFIXES = {
-    "Set", "Get", "Is", "Register", "Unregister", "Enable", "Disable",
-    "Show", "Hide", "Start", "Stop", "Create", "Click", "Raise", "Lower",
+    "Set",
+    "Get",
+    "Is",
+    "Register",
+    "Unregister",
+    "Enable",
+    "Disable",
+    "Show",
+    "Hide",
+    "Start",
+    "Stop",
+    "Create",
+    "Click",
+    "Raise",
+    "Lower",
 }
 
 local function looksLikeMethod(key)
@@ -89,12 +101,12 @@ local function renderedText()
 end
 
 local function clearText()
-    for _, fs in ipairs(fontStrings) do fs.__text = nil end
+    for _, fs in ipairs(fontStrings) do
+        fs.__text = nil
+    end
 end
 
-local function contains(haystack, needle)
-    return haystack:find(needle, 1, true) ~= nil
-end
+local function contains(haystack, needle) return haystack:find(needle, 1, true) ~= nil end
 
 _G = _G or _ENV
 UIParent = newFrame("Frame", "UIParent")
@@ -113,25 +125,60 @@ C_GamePad = {
     GetActiveDeviceID = function() return 1 end,
     GetPowerLevel = function() return 3 end,
 }
-C_Timer = { NewTicker = function() return { Cancel = function() end } end }
+C_Timer = {
+    NewTicker = function()
+        return { Cancel = function() end }
+    end,
+}
 function issecretvalue() return false end
 function strtrim(s) return (tostring(s or ""):gsub("^%s+", ""):gsub("%s+$", "")) end
+function wipe(t)
+    for k in pairs(t) do
+        t[k] = nil
+    end
+    return t
+end
+
+function hooksecurefunc(tbl, method, fn)
+    if type(tbl) == "string" then
+        local orig = _G[tbl]
+        _G[tbl] = function(...)
+            if orig then orig(...) end
+            return fn(...)
+        end
+    elseif type(tbl) == "table" and type(method) == "string" then
+        local orig = tbl[method]
+        tbl[method] = function(...)
+            if orig then orig(...) end
+            return fn(...)
+        end
+    end
+end
 
 -- ── Fake Pulse ────────────────────────────────────────────────────────────────
 
 -- Only the surface UI.lua reads. Deliberately not the real Core files: this suite is about
 -- whether the window copes with what Pulse hands it, and harness.lua already covers whether
 -- Pulse itself loads.
-local TRIGGER = { id = "swimTexture", label = "Swimming resistance", continuous = true,
-                  mode = nil, throttle = 0, category = "MOVEMENT" }
+local TRIGGER = {
+    id = "swimTexture",
+    label = "Swimming resistance",
+    continuous = true,
+    mode = nil,
+    throttle = 0,
+    category = "MOVEMENT",
+}
 
 local fakePulse = {
+    Fire = function() end,
+    Hold = function() end,
+    Stop = function() end,
     moduleOrder = { "Locomotion", "Silent" },
     modules = {
         -- One module with a reach-in, one without: the view must list the first and skip
         -- the second rather than printing an empty heading for it.
         Locomotion = { _DebugGait = function() return { cadence = 0.43, strike = 2, moving = true } end },
-        Silent     = { OnEnable = function() end },
+        Silent = { OnEnable = function() end },
     },
     Database = {
         Get = function(_, key)
@@ -149,15 +196,24 @@ local fakePulse = {
     Engine = {
         IsDeviceReady = function() return true end,
         _DebugLayers = function()
-            return { { name = "swimTexture", low = 0.4, high = nil,
-                       ltrigger = nil, rtrigger = 0.2, remaining = 1.5 } }
+            return {
+                {
+                    name = "swimTexture",
+                    low = 0.4,
+                    high = nil,
+                    ltrigger = nil,
+                    rtrigger = 0.2,
+                    remaining = 1.5,
+                },
+            }
         end,
-        _DebugChannels = function()
-            return { Low = { smoothed = 0.31, lastSet = 0.30 } }
-        end,
+        _DebugChannels = function() return { Low = { smoothed = 0.31, lastSet = 0.30 } } end,
         _ActiveSchema = function()
-            return { id = "standard", label = "Standard",
-                     roles = { low = { channel = "Low", intensity = 1.0 } } }
+            return {
+                id = "standard",
+                label = "Standard",
+                roles = { low = { channel = "Low", intensity = 1.0 } },
+            }
         end,
     },
 }
@@ -184,8 +240,7 @@ end
 io.write("\n--- window ---\n")
 
 check("UI.lua exported PulseDebugUI", type(_G.PulseDebugUI), "table")
-check("both slash commands registered",
-    SlashCmdList["PULSEDEBUG"] ~= nil and SlashCmdList["PULSEDEBUGUI"] ~= nil, true)
+check("both slash commands registered", SlashCmdList["PULSEDEBUG"] ~= nil and SlashCmdList["PULSEDEBUGUI"] ~= nil, true)
 
 local frame = _G["PulseDebugUIFrame"]
 check("named frame exists", type(frame), "table")
@@ -208,11 +263,12 @@ io.write("\n--- views ---\n")
 -- Each view is checked for a token only that view can produce, so a silently empty render
 -- fails instead of passing.
 local EXPECTED = {
-    { "state",    "masterEnabled" },
-    { "layers",   "swimTexture"   },
-    { "channels", "Low"           },
-    { "modules",  "cadence"       },
-    { "schema",   "standard"      },
+    { "state", "masterEnabled" },
+    { "layers", "swimTexture" },
+    { "channels", "Low" },
+    { "log", "haptic events" },
+    { "modules", "cadence" },
+    { "schema", "standard" },
 }
 
 for _, case in ipairs(EXPECTED) do
@@ -228,6 +284,18 @@ clearText()
 _G.PulseDebugUI.Show("modules")
 check("modules lists one with a reach-in", contains(renderedText(), "Locomotion"), true)
 check("  and skips one without", contains(renderedText(), "Silent"), false)
+
+-- Event log records events and clear empties them
+io.write("\n--- event log ---\n")
+_G.PulseDebugUI.RecordEvent("FIRE", "jumped", "@1.00")
+clearText()
+_G.PulseDebugUI.Show("log")
+check("event log displays fired cue", contains(renderedText(), "jumped"), true)
+check("  and shows action", contains(renderedText(), "FIRE"), true)
+_G.PulseDebugUI.ClearLog()
+clearText()
+_G.PulseDebugUI.Show("log")
+check("clear log empties the buffer", contains(renderedText(), "No haptic events recorded"), true)
 
 -- ── Live tick ─────────────────────────────────────────────────────────────────
 

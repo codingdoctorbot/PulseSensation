@@ -21,17 +21,24 @@
 
 local ADDON_NAME = ...
 
-local FRAME_WIDTH  = 660
+local wipe = wipe or function(t)
+    for k in pairs(t) do
+        t[k] = nil
+    end
+    return t
+end
+
+local FRAME_WIDTH = 660
 local FRAME_HEIGHT = 500
-local REFRESH_RATE = 0.1   -- 10Hz. Fast enough to read a release curve, slow enough that
-                           -- rebuilding the whole string every tick costs nothing visible.
+local REFRESH_RATE = 0.1 -- 10Hz. Fast enough to read a release curve, slow enough that
+-- rebuilding the whole string every tick costs nothing visible.
 
 local GOOD = "|cff44ff44"
-local BAD  = "|cffff5555"
+local BAD = "|cffff5555"
 local WARN = "|cffffcc00"
-local DIM  = "|cff999999"
+local DIM = "|cff999999"
 local HEAD = "|cffffffff"
-local R    = "|r"
+local R = "|r"
 
 local function core()
     local P = _G.Pulse
@@ -39,9 +46,7 @@ local function core()
     return P
 end
 
-local function flag(value)
-    return value and (GOOD .. "yes" .. R) or (BAD .. "no" .. R)
-end
+local function flag(value) return value and (GOOD .. "yes" .. R) or (BAD .. "no" .. R) end
 
 ---------------------------------------------------------------------------
 -- Main frame
@@ -98,12 +103,10 @@ body:SetJustifyV("TOP")
 -- refresh loop just calls the current one again and assigns the result.
 
 local views = {}
-local viewOrder = { "state", "layers", "channels", "modules", "schema" }
+local viewOrder = { "state", "layers", "channels", "log", "modules", "schema" }
 local currentView = "layers"
 
-local function line(label, value)
-    return string.format("%-28s %s", label, value or "")
-end
+local function line(label, value) return string.format("%-28s %s", label, value or "") end
 
 function views.state(P)
     local out = {}
@@ -115,6 +118,12 @@ function views.state(P)
     out[#out + 1] = HEAD .. "— pulse —" .. R
     out[#out + 1] = line("masterEnabled", flag(P.Database:Get("masterEnabled")))
     out[#out + 1] = line("profile", tostring(P.Database:GetActiveProfileName()))
+    if type(P.Database.GetProfileResolution) == "function" then
+        out[#out + 1] = line("profile resolution", tostring(P.Database:GetProfileResolution()))
+    end
+    if type(P.Database.HasPendingProfileSwitch) == "function" then
+        out[#out + 1] = line("pending switch", flag(P.Database:HasPendingProfileSwitch()))
+    end
     out[#out + 1] = line("masterIntensity", tostring(P.Database:Get("masterIntensity")))
     out[#out + 1] = line("schema", tostring(P.Database:Get("defaultHapticSchema")))
 
@@ -133,9 +142,14 @@ end
 function views.layers(P)
     local layers = P.Engine:_DebugLayers()
     if #layers == 0 then
-        return DIM .. "Nothing blending into the channel right now." .. R ..
-               "\n\n" .. DIM .. "Turn Live on, then fire a continuous cue — /pdebug hold " ..
-               "<id>, or the settings panel's mode tester — and watch it decay here." .. R
+        return DIM
+            .. "Nothing blending into the channel right now."
+            .. R
+            .. "\n\n"
+            .. DIM
+            .. "Turn Live on, then fire a continuous cue — /pdebug hold "
+            .. "<id>, or the settings panel's mode tester — and watch it decay here."
+            .. R
     end
 
     -- Four roles, not two: a layer may drive ltrigger/rtrigger only (Locomotion's split
@@ -146,27 +160,114 @@ function views.layers(P)
     end
 
     local out = {}
-    out[#out + 1] = HEAD .. string.format("%-22s %-7s %-7s %-7s %-7s %s",
-        "layer", "low", "high", "ltrig", "rtrig", "left") .. R
+    out[#out + 1] = HEAD
+        .. string.format("%-22s %-7s %-7s %-7s %-7s %s", "layer", "low", "high", "ltrig", "rtrig", "left")
+        .. R
     for _, layer in ipairs(layers) do
-        out[#out + 1] = string.format("%-22s %s %s %s %s %.2fs",
-            layer.name, cell(layer.low), cell(layer.high),
-            cell(layer.ltrigger), cell(layer.rtrigger),
-            math.max(layer.remaining, 0))
+        out[#out + 1] = string.format(
+            "%-22s %s %s %s %s %.2fs",
+            layer.name,
+            cell(layer.low),
+            cell(layer.high),
+            cell(layer.ltrigger),
+            cell(layer.rtrigger),
+            math.max(layer.remaining, 0)
+        )
     end
     return table.concat(out, "\n")
 end
 
+local channelPeaks = {}
+
 function views.channels(P)
     local channels = P.Engine:_DebugChannels()
-    if not next(channels) then
-        return DIM .. "No channel has been driven yet this session." .. R
-    end
+    if not next(channels) then return DIM .. "No channel has been driven yet this session." .. R end
     local out = {}
-    out[#out + 1] = HEAD .. string.format("%-16s %-10s %s", "channel", "smoothed", "last set") .. R
+    out[#out + 1] = HEAD .. string.format("%-14s %-9s %-9s %s", "channel", "smoothed", "peak", "last set") .. R
     for channel, info in pairs(channels) do
-        out[#out + 1] = string.format("%-16s %-10.2f %s",
-            channel, info.smoothed or 0, tostring(info.lastSet))
+        local curSmoothed = info.smoothed or 0
+        if curSmoothed > (channelPeaks[channel] or 0) then channelPeaks[channel] = curSmoothed end
+        out[#out + 1] = string.format(
+            "%-14s %-9.2f %-9.2f %s",
+            channel,
+            curSmoothed,
+            channelPeaks[channel] or 0,
+            tostring(info.lastSet)
+        )
+    end
+    return table.concat(out, "\n")
+end
+
+---------------------------------------------------------------------------
+-- Event log (rolling buffer with millisecond capture)
+---------------------------------------------------------------------------
+
+local eventLog = {}
+local MAX_LOG_ENTRIES = 50
+
+local function recordEvent(action, triggerID, extra)
+    local now = (type(GetTime) == "function") and GetTime() or 0
+    table.insert(eventLog, 1, {
+        time = now,
+        action = action,
+        id = tostring(triggerID or "unknown"),
+        extra = extra and tostring(extra) or "",
+    })
+    if #eventLog > MAX_LOG_ENTRIES then table.remove(eventLog) end
+end
+
+local hooked = false
+local function ensureHooks()
+    if hooked then return end
+    local P = core()
+    if not P or not P.Engine then return end
+    if type(hooksecurefunc) ~= "function" then return end
+    hooked = true
+    if type(P.Fire) == "function" then
+        hooksecurefunc(P, "Fire", function(_, triggerID, roleOrSchema, strength)
+            local detail = ""
+            if roleOrSchema then detail = tostring(roleOrSchema) end
+            if strength then detail = (detail ~= "" and (detail .. " ") or "") .. string.format("@%.2f", strength) end
+            recordEvent("FIRE", triggerID, detail)
+        end)
+    end
+    if type(P.Hold) == "function" then
+        hooksecurefunc(P, "Hold", function(_, triggerID, low, high, duration)
+            local detail = string.format("L:%.2f H:%.2f (%.2fs)", low or 0, high or 0, duration or 0)
+            recordEvent("HOLD", triggerID, detail)
+        end)
+    end
+    if type(P.Stop) == "function" then
+        hooksecurefunc(P, "Stop", function(_, triggerID) recordEvent("STOP", triggerID, "") end)
+    end
+    if type(P.Engine.RawChannel) == "function" then
+        hooksecurefunc(
+            P.Engine,
+            "RawChannel",
+            function(_, channel, mag, dur)
+                recordEvent("RAW", channel, string.format("%.2f (%.2fs)", mag or 0, dur or 0))
+            end
+        )
+    end
+end
+
+function views.log(P)
+    ensureHooks()
+    if #eventLog == 0 then
+        return DIM
+            .. "No haptic events recorded yet this session."
+            .. R
+            .. "\n\n"
+            .. DIM
+            .. "Cues fired via gameplay or test commands will appear here"
+            .. "\nwith timestamps so short pulses (TICK, THUD) are captured."
+            .. R
+    end
+
+    local out = {}
+    out[#out + 1] = HEAD .. string.format("%-10s %-6s %-24s %s", "time", "act", "cue / channel", "detail") .. R
+    for _, entry in ipairs(eventLog) do
+        out[#out + 1] = string.format("%-10.3f %-6s %-24s %s", entry.time, entry.action, entry.id, entry.detail)
     end
     return table.concat(out, "\n")
 end
@@ -183,9 +284,7 @@ end
 local function debugFunctionsFor(module)
     local found = {}
     for key, value in pairs(module) do
-        if type(value) == "function" and type(key) == "string" and key:find("^_Debug") then
-            found[#found + 1] = key
-        end
+        if type(value) == "function" and type(key) == "string" and key:find("^_Debug") then found[#found + 1] = key end
     end
     table.sort(found)
     return found
@@ -211,6 +310,28 @@ function views.modules(P)
     local out = {}
     local any = false
 
+    if P.CastActivity and type(P.CastActivity._DebugActive) == "function" then
+        any = true
+        out[#out + 1] = HEAD .. "CastActivity (Core)" .. R
+        local ok, result = pcall(P.CastActivity._DebugActive, P.CastActivity)
+        if not ok then
+            out[#out + 1] = "  " .. BAD .. "_DebugActive errored" .. R
+        elseif type(result) ~= "table" then
+            out[#out + 1] = "  " .. DIM .. "_DebugActive" .. R .. "  " .. formatValue(result)
+        else
+            out[#out + 1] = "  " .. DIM .. "_DebugActive" .. R
+            local keys = {}
+            for field in pairs(result) do
+                keys[#keys + 1] = tostring(field)
+            end
+            table.sort(keys)
+            for _, field in ipairs(keys) do
+                out[#out + 1] = string.format("      %-22s %s", field, formatValue(result[field]))
+            end
+        end
+        out[#out + 1] = ""
+    end
+
     for _, name in ipairs(P.moduleOrder) do
         local module = P.modules[name]
         local functions = module and debugFunctionsFor(module) or {}
@@ -229,11 +350,12 @@ function views.modules(P)
                 else
                     out[#out + 1] = "  " .. DIM .. key .. R
                     local keys = {}
-                    for field in pairs(result) do keys[#keys + 1] = tostring(field) end
+                    for field in pairs(result) do
+                        keys[#keys + 1] = tostring(field)
+                    end
                     table.sort(keys)
                     for _, field in ipairs(keys) do
-                        out[#out + 1] = string.format("      %-22s %s",
-                            field, formatValue(result[field]))
+                        out[#out + 1] = string.format("      %-22s %s", field, formatValue(result[field]))
                     end
                 end
             end
@@ -241,16 +363,12 @@ function views.modules(P)
         end
     end
 
-    if not any then
-        return DIM .. "No module exposes a _Debug* reach-in." .. R
-    end
+    if not any then return DIM .. "No module exposes a _Debug* reach-in." .. R end
     return table.concat(out, "\n")
 end
 
 function views.schema(P)
-    if type(P.Engine._ActiveSchema) ~= "function" then
-        return BAD .. "Engine._ActiveSchema not found." .. R
-    end
+    if type(P.Engine._ActiveSchema) ~= "function" then return BAD .. "Engine._ActiveSchema not found." .. R end
     local schema = P.Engine:_ActiveSchema()
     if not schema then return BAD .. "No active schema." .. R end
 
@@ -258,12 +376,14 @@ function views.schema(P)
     out[#out + 1] = HEAD .. tostring(schema.id) .. R .. "  " .. (schema.label or "")
     out[#out + 1] = ""
     local roles = {}
-    for role in pairs(schema.roles or {}) do roles[#roles + 1] = role end
+    for role in pairs(schema.roles or {}) do
+        roles[#roles + 1] = role
+    end
     table.sort(roles)
     for _, role in ipairs(roles) do
         local def = schema.roles[role]
-        out[#out + 1] = line("  " .. role, string.format("%s @ %.2f",
-            def.channel or (DIM .. "silent" .. R), def.intensity or 1.0))
+        out[#out + 1] =
+            line("  " .. role, string.format("%s @ %.2f", def.channel or (DIM .. "silent" .. R), def.intensity or 1.0))
     end
     return table.concat(out, "\n")
 end
@@ -308,17 +428,18 @@ local function selectView(id)
 end
 
 local BUTTON_LABEL = {
-    state    = "State",
-    layers   = "Layers",
+    state = "State",
+    layers = "Layers",
     channels = "Channels",
-    modules  = "Modules",
-    schema   = "Schema",
+    log = "Log",
+    modules = "Modules",
+    schema = "Schema",
 }
 
 local previous
 for _, id in ipairs(viewOrder) do
     local button = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
-    button:SetSize(96, 22)
+    button:SetSize(94, 22)
     button:SetText(BUTTON_LABEL[id])
     if previous then
         button:SetPoint("LEFT", previous, "RIGHT", 6, 0)
@@ -378,16 +499,28 @@ local function Toggle()
     frame:Show()
 end
 
+-- Hook early if Pulse is already available
+if core() then ensureHooks() end
+
 -- Debug.lua's `commands` table is a local, so the slash command there resolves this at call
 -- time through the global rather than the two files sharing a namespace.
 _G.PulseDebugUI = {
     Toggle = Toggle,
-    Show   = function(view)
+    Show = function(view)
         if view and views[view] then currentView = view end
         highlightActive()
         render()
         frame:Show()
     end,
+    ClearLog = function()
+        wipe(eventLog)
+        render()
+    end,
+    ResetPeaks = function()
+        wipe(channelPeaks)
+        render()
+    end,
+    RecordEvent = recordEvent,
 }
 
 SLASH_PULSEDEBUGUI1 = "/pdui"

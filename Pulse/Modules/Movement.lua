@@ -310,3 +310,13 @@ function M:OnEnable()
     Pulse:BindFrame({ "taxiRide" }, syncTaxi)
     Pulse:BindFrame({ "formChanged" }, syncForm)
 end
+
+function M:_DebugMovement()
+    return {
+        onTaxiRide = onTaxiRide,
+        wasFalling = wasFalling,
+        wasFlying = wasFlying,
+        smoothedSwimRatio = smoothedSwimRatio,
+        shapeshiftForm = lastForm,
+    }
+end

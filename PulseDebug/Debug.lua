@@ -76,6 +76,8 @@ function commands.help()
     row("/pdebug modes", "every mode id, discrete or continuous")
     row("/pdebug schema", "the active schema's role-to-channel map")
     row("/pdebug ui", "open the window: same readouts, with a live 10Hz refresh")
+    row("/pdebug log", "open the window directly to the rolling event log")
+    row("/pdebug clear", "clear the debug event log and channel peak history")
 end
 
 function commands.state(P)
@@ -354,6 +356,26 @@ function commands.ui()
         return
     end
     ui.Toggle()
+end
+
+function commands.log()
+    local ui = _G.PulseDebugUI
+    if not ui then
+        out(BAD .. "UI.lua is not loaded." .. R)
+        return
+    end
+    ui.Show("log")
+end
+
+function commands.clear()
+    local ui = _G.PulseDebugUI
+    if ui and type(ui.ClearLog) == "function" then
+        ui.ClearLog()
+        if type(ui.ResetPeaks) == "function" then ui.ResetPeaks() end
+        out("event log and channel peaks cleared.")
+    else
+        out(BAD .. "UI.lua is not loaded to clear." .. R)
+    end
 end
 
 local watchFrame = CreateFrame("Frame")
