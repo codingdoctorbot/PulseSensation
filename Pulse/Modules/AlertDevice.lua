@@ -110,6 +110,7 @@ function M:_WatchDisconnect()
     end
 
     frame:SetScript("OnEvent", function()
+        Pulse:FireIfEnabled("padDisconnected")
         Pulse.Engine:StopAll()
     end)
 

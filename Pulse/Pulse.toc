@@ -1,13 +1,14 @@
 ## Interface: 120100
 ## Title: Pulse
 ## Notes: Immersive controller vibration — movement, environment, and combat texture.
+## Author: codingdoctorbot
 ## Version: 0.1.0-alpha
 ## SavedVariables: PulseDB
 ## IconTexture: Interface\Icons\Spell_Nature_HealingWaveGreater
+## X-Credits: Anthropic (Claude Code), Google DeepMind (Antigravity)
 
-# Vibe-coded, non-commercial hobby project, written with Claude Code (Anthropic) rather
-# than hand-authored. Free to reuse, redistribute and share as-is; no warranty, no support,
-# expect rough edges rather than production polish.
+# Non-commercial hobby project developed with AI pair-programming assistance (Claude Code & Antigravity).
+# Free to reuse, redistribute and share as-is; no warranty, no support.
 
 # 120100 (Patch 12.1.0) CONFIRMED as this account's live client build via
 # /dump select(4, GetBuildInfo()) — no longer the placeholder 12.0 floor. Re-check before
@@ -21,6 +22,12 @@
 
 
 
+
+# Libraries
+Libs/LibStub/LibStub.lua
+Libs/CallbackHandler-1.0/CallbackHandler-1.0.lua
+Libs/LibDataBroker-1.1/LibDataBroker-1.1.lua
+Libs/LibDBIcon-1.0/LibDBIcon-1.0.lua
 
 Core/Init.lua
 Core/Database.lua
@@ -123,3 +130,4 @@ UI/Panel/Gamepad.lua
 UI/Panel/Content.lua
 UI/Panel/Spec.lua
 UI/Panel/Panel.lua
+UI/Minimap.lua

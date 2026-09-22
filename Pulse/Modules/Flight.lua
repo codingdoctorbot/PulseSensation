@@ -69,8 +69,20 @@ end
 -- Low = Constant baseline "flying" presence (floored, lightly nudged by speed).
 -- High = Speed-thrill intensity, ramping toward peak boost via thrillCurve.
 
-local function glideTick()
+local isCurrentlyGliding = false
+local glideIdleElapsed = 0
+
+local function glideTick(_, elapsed)
+    if not isCurrentlyGliding then
+        glideIdleElapsed = glideIdleElapsed + (elapsed or 0)
+        if glideIdleElapsed < 0.1 then
+            return
+        end
+        glideIdleElapsed = 0
+    end
+
     if not C_PlayerInfo or type(C_PlayerInfo.GetGlidingInfo) ~= "function" then
+        isCurrentlyGliding = false
         return
     end
     local isGliding, _, forwardSpeed = C_PlayerInfo.GetGlidingInfo()
@@ -79,11 +91,15 @@ local function glideTick()
     -- hidden value aborts the tick.
 
     if issecretvalue(isGliding) or issecretvalue(forwardSpeed) then
+        isCurrentlyGliding = false
         return
     end
     if not isGliding or not forwardSpeed or forwardSpeed < 65 then
+        isCurrentlyGliding = false
         return
     end
+
+    isCurrentlyGliding = true
 
     -- forwardSpeed ranges 65 (min gliding) to 100 (max boost).
 
@@ -98,6 +114,8 @@ end
 
 local function syncGlide()
     glideFrame:SetScript("OnUpdate", nil)
+    isCurrentlyGliding = false
+    glideIdleElapsed = 0
     if not Pulse.Database:Get("masterEnabled") then
         return
     end

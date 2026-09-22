@@ -39,6 +39,7 @@ local GLOBAL_DEFAULTS = {
     -- page is the optional control rather than the checkbox that does something. On by
     -- default because previews are useful while tuning; one click gets a clean list.
     showCueTestButtons = true,
+    minimap = { hide = false },
 }
 
 -- The shape of one profile slot. These fields used to live flat on DB; DB_VERSION 2's

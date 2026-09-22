@@ -5,10 +5,9 @@ the game into controller vibration (landing hard, gliding fast, taking a crit, a
 storm rolling in) closer to a console game's rumble than to a notification system.
 Cues layer and blend continuously rather than one cue preempting another.
 
-Vibe-coded, non-commercial hobby project, written with [Claude Code](https://claude.com/claude-code)
-rather than hand-authored line by line. Free to reuse, redistribute, and share
-as-is — no warranty, no support commitment, expect rough edges rather than
-production polish.
+Developed by **codingdoctorbot** with AI pair-programming assistance from
+[Claude Code](https://claude.com/claude-code) and Google Antigravity. Free to reuse,
+redistribute, and share as-is under the MIT license.
 
 ## Features
 
@@ -60,5 +59,16 @@ in-game; others are only `luac -p` clean so far.
 
 Copy `Pulse/`, `PulseChecklist/`, and `PulseDebug/` into your WoW `Interface/AddOns/`
 folder. `PulseChecklist` and `PulseDebug` both depend on `Pulse` being installed.
+
+## Credits & Attributions
+
+- **Author**: codingdoctorbot
+- **AI Pair Programming**: Claude Code (Anthropic) & Google Antigravity (Google DeepMind)
+- **Precursor Inspiration**: `Tremor` — provided the initial inspiration, core structural ideas, and foundational accessibility cue set.
+- **Third-Party Libraries**:
+  - `LibStub` — Kaelten, Cladhaire, ckknight, Mikk, Ammo, Nevcairiel
+  - `CallbackHandler-1.0` — Cladhaire, Ammo
+  - `LibDataBroker-1.1` — tekkub
+  - `LibDBIcon-1.0` — Torhal
 
 

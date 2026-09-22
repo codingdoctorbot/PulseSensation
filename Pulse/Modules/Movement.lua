@@ -71,6 +71,8 @@ local function pollLandingAndSwim(_, elapsed)
             elseif airTime > SOFT_LANDING_AIRTIME then
                 Pulse:FireIfEnabled("landingSoft")
             end
+        elseif wasFlying and not flying and not falling then
+            Pulse:FireIfEnabled("landingSoft")
         end
         fallStartTime = nil
     end

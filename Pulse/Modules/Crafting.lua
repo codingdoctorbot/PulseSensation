@@ -176,7 +176,22 @@ end
 -- one sensation rather than two competing. A function rather than a shared flag, so
 -- Combat.lua need not know how this module stores state and a missing module reads as "not
 -- crafting" rather than erroring.
+local lastCraftSeen = 0
+
 function M:IsCrafting()
+    if active then
+        -- Failsafe: if no cast is active, craft suppression auto-clears after 0.5s
+        if type(UnitCastingInfo) == "function" then
+            local _, _, _, startTimeMs = UnitCastingInfo("player")
+            if not startTimeMs then
+                if GetTime() - lastCraftSeen > 0.5 then
+                    active = false
+                end
+            else
+                lastCraftSeen = GetTime()
+            end
+        end
+    end
     return active
 end
 
@@ -221,6 +236,7 @@ local function beginCraft(recipeSpellID)
     strikesTotal = 0
     nextStrike = 1
     active = true
+    lastCraftSeen = GetTime()
 
     if Pulse.debug then
         print(("Pulse: craft started — %s (recipe %s)"):format(work.label, tostring(recipeSpellID)))

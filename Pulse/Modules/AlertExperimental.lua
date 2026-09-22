@@ -76,6 +76,7 @@ function M:_WatchResourceCapped()
         -- every later loading screen too, which is a harmless resync.
         frame:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
         frame:RegisterEvent("PLAYER_ENTERING_WORLD")
+        frame:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
 
         if not cappedPower then
             return
@@ -91,7 +92,11 @@ function M:_WatchResourceCapped()
     end
 
     frame:SetScript("OnEvent", function(_, event)
-        if event == "PLAYER_SPECIALIZATION_CHANGED" or event == "PLAYER_ENTERING_WORLD" then
+        if
+            event == "PLAYER_SPECIALIZATION_CHANGED"
+            or event == "PLAYER_ENTERING_WORLD"
+            or event == "UPDATE_SHAPESHIFT_FORM"
+        then
             sync()
             return
         end

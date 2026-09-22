@@ -14,13 +14,19 @@ Pulse:RegisterModule("AlertLossOfControl", M)
 -- client — never run, there or in Tremor. An unrecognised type falls back to ccMaster's
 -- generic cue rather than being dropped, so an incomplete list degrades quietly.
 local TYPE_TO_CUE = {
-    STUN = "ccStun", STUN_MECHANIC = "ccStun",
-    FEAR = "ccFear", FEAR_MECHANIC = "ccFear", CHARM = "ccFear",
+    STUN = "ccStun",
+    STUN_MECHANIC = "ccStun",
+    FEAR = "ccFear",
+    FEAR_MECHANIC = "ccFear",
+    CHARM = "ccFear",
     SILENCE = "ccSilence",
     ROOT = "ccRoot",
     DISARM = "ccDisarm",
-    PACIFY = "ccPacify", PACIFYSILENCE = "ccPacify", SCHOOL_INTERRUPT = "ccPacify",
-    CONFUSE = "ccConfuse", POSSESS = "ccConfuse",
+    PACIFY = "ccPacify",
+    PACIFYSILENCE = "ccPacify",
+    SCHOOL_INTERRUPT = "ccPacify",
+    CONFUSE = "ccConfuse",
+    POSSESS = "ccConfuse",
 }
 
 -- The set of locTypes active as of the previous event, so a still-active effect is not
@@ -33,34 +39,63 @@ function M:OnEnable()
     local function sync()
         frame:UnregisterAllEvents()
         announced = {}
-        if not Pulse.Database:Get("masterEnabled") then return end
-        if not Pulse.Database:GetCue("ccMaster") then return end
+        if not Pulse.Database:Get("masterEnabled") then
+            return
+        end
+        if not Pulse.Database:GetCue("ccMaster") then
+            return
+        end
         frame:RegisterEvent("LOSS_OF_CONTROL_ADDED")
         frame:RegisterEvent("LOSS_OF_CONTROL_UPDATE")
     end
 
-    frame:SetScript("OnEvent", function()
-        M:_OnLossOfControl()
+    frame:SetScript("OnEvent", function(_, event, ...)
+        M:_OnLossOfControl(event, ...)
     end)
 
     Pulse:BindFrame({ "ccMaster" }, sync)
 end
 
-function M:_OnLossOfControl()
+function M:_OnLossOfControl(event, unitTarget, effectIndex)
+    if unitTarget and unitTarget ~= "player" then
+        return
+    end
+
     local count = C_LossOfControl.GetActiveLossOfControlDataCount()
-    if issecretvalue(count) then return end
-    if not count then return end
+    if issecretvalue(count) then
+        return
+    end
+    if not count then
+        return
+    end
 
     local active = {}
+    local addedLocType = nil
+
+    if event == "LOSS_OF_CONTROL_ADDED" and effectIndex and type(effectIndex) == "number" then
+        local data = C_LossOfControl.GetActiveLossOfControlData(effectIndex)
+        if not issecretvalue(data) and data then
+            local locType = data.locType
+            if not issecretvalue(locType) and locType then
+                Pulse:FireIfEnabled(TYPE_TO_CUE[locType] or "ccMaster")
+                addedLocType = locType
+            end
+        end
+    end
+
     for index = 1, count do
         local data = C_LossOfControl.GetActiveLossOfControlData(index)
-        if issecretvalue(data) then return end
+        if issecretvalue(data) then
+            return
+        end
         if data then
             local locType = data.locType
-            if issecretvalue(locType) then return end
+            if issecretvalue(locType) then
+                return
+            end
 
             active[locType] = true
-            if not announced[locType] then
+            if not announced[locType] and locType ~= addedLocType then
                 Pulse:FireIfEnabled(TYPE_TO_CUE[locType] or "ccMaster")
             end
         end

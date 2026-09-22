@@ -1,6 +1,9 @@
 std = "lua51"
 max_line_length = 160
 allow_defined_top = true
+files["Pulse/Libs/**"] = {
+    ignore = { ".*" },
+}
 
 ignore = {
     "631", -- line is too long
@@ -88,6 +91,7 @@ read_globals = {
     "C_CVar",
     "C_TradeSkillUI",
     "C_EncounterEvents",
+    "C_CombatText",
     "C_Weather",
     "C_Cursor",
     "C_EventUtils",

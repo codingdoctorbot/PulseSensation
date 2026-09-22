@@ -1,10 +1,12 @@
 ## Interface: 120100
 ## Title: PulseChecklist
 ## Notes: QA tracking checklist for Pulse's cues — separate from Pulse and PulseDebug.
+## Author: codingdoctorbot
 ## Version: 0.1.0-alpha
 ## Dependencies: Pulse
 ## SavedVariables: PulseChecklistDB
 ## IconTexture: Interface\Icons\INV_Misc_Note_01
+## X-Credits: Anthropic (Claude Code), Google DeepMind (Antigravity)
 
 # Not integrated into Pulse or PulseDebug — no file in either is touched by this addon.
 # Reaches Pulse the same read-only way PulseDebug already does, through the _G.Pulse

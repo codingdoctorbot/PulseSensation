@@ -342,6 +342,9 @@ bootstrap:SetScript("OnEvent", function(self, event, loadedAddonName)
     -- first time somebody opens it rather than at login. The guide is a page in that
     -- window, built from the same Core/Guide.lua content.
     Pulse.UI.Settings:Build()
+    if Pulse.UI.Minimap and Pulse.UI.Minimap.Init then
+        Pulse.UI.Minimap:Init()
+    end
 
     self:UnregisterEvent("ADDON_LOADED")
 end)

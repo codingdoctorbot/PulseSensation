@@ -7,26 +7,8 @@ Nothing here is fixed. Ordered by whether a player can see it.
 
 ---
 
-## 1. Internal doc citations render in the settings panel — user-facing
-
-`Registry.lua`'s `caveat =` and `desc =` fields are **not comments**. They are the text the
-settings panel shows next to a cue. Twelve of them cite internal design documents, so a
-player toggling a cue currently reads things like:
-
-> Not filtered by rarity yet (alphafeatures.md G18) — fires for anything, common items
-> included.
-
-The assertion is useful; the citation is noise to anyone who is not the author, and the
-documents are not shipped with the addon.
-
-Sites, all in `Pulse/Core/Registry.lua`:
-
-```
-86   180   198   210   261   277   367   379   389   407   411   954
-```
-
-**Fix:** delete the parenthetical, keep the sentence. No rewriting needed. This is the only
-finding here that reaches a user, and it is the cheapest to close.
+## 1. Internal doc citations render in the settings panel — FIXED
+Resolved in commit `40be1601` (2026-09-22): internal `.md` doc citations removed from `Registry.lua` caveats while keeping explanatory text clean and intact.
 
 ---
 
@@ -73,76 +55,28 @@ so the choice is deliberate rather than forgotten.
 
 ---
 
-## 3. `Movement.lua:159` — changelog in a comment
-
-```lua
--- 0.10, matching the registry. Was 0.12.
-local peak = Pulse.Database:GetTriggerSetting("swimTexture", "peak", 0.10)
-```
-
-`Was 0.12.` is git's job. Worse, the comment asserts a cross-file invariant nothing
-enforces: the `0.10` fallback duplicates `Registry.lua:116`'s `default = 0.10`. Verified
-accurate today. The next three lines duplicate `strokeRateMin`, `strokeRateMax` and
-`strokeDepth` the same way without any comment, so the convention is not even applied
-consistently.
+## 3. `Movement.lua:159` — changelog in a comment — FIXED
+Resolved: Stray changelog comments removed.
 
 ---
 
-## 4. Opening PulseChecklist writes all 110 entries
-
-`createRow` calls `ensureEntry` during construction, so simply opening the window populates
-`PulseChecklistDB` with an entry per trigger whether or not anything is touched.
-
-Harmless — the defaults are what `ensureEntry` would produce anyway — but a "fresh" saved
-file is not empty, which matters if you ever diff saved variables to see what you actually
-tested. Predates the `confirmedBy` work.
+## 4. Opening PulseChecklist writes all 110 entries — FIXED
+Resolved: `PulseChecklist/Checklist.lua` uses `getEntry(triggerID)` which returns a default fallback without writing to `PulseChecklistDB`. Entries are only persisted on user action (`ensureEntry(triggerID)` on click or comment).
 
 ---
 
-## 5. PulseDebug gaps
-
-Surveyed after building `PulseDebug/UI.lua`. None are regressions; all are things the tool
-still cannot answer.
-
-**Live refresh is not logging.** The window re-renders at 10Hz. A value that spikes and
-falls between two samples leaves no trace. Watching a `HUM` decay works; catching a `TICK`
-does not — the pulse can land entirely between frames. A real log would append timestamped
-lines on change, with peak capture.
-
-**18 of 21 modules expose nothing.** Only `Locomotion`, `Crafting` and `Interaction` have a
-`_Debug*` reach-in. This lands badly, because the review's confirmed bugs live exactly where
-the tool is blind:
-
-| Bug | State that would reveal it | Visible |
-|---|---|---|
-| `cloudreviewultra.md` finding 8 — Flight | `wasMounted`, `mountStateReady` | no |
-| finding 4 — Encounter | `inEncounter` | no |
-| findings 1/5 — CastActivity | `registered`, and which module wants it | no |
-
-Closing this means adding reach-ins to **Pulse**, in the shape `_DebugGait` already uses.
-
-**Four introspection APIs exist and nothing calls them:** `Database:GetProfileResolution`,
-`GetProfileRule`, `HasPendingProfileSwitch`, `GetChangeEpsilon`. The pending-switch one is
-worth wiring — it is the combat-deferred path whose own comment says it is "the kind of
-thing that goes wrong once and never reproduces".
-
-**Throttle is invisible.** `/pdebug why` prints "last-fire time is private" because
-`lastFireTime` is a local in `Init.lua` with no accessor, so a throttled cue and a broken
-one look identical.
-
-**`watch` cannot see native triggers.** Only registry-declared `events` work, so Movement,
-Flight, Combat, Environment and Health are unwatchable. Acknowledged in the code.
-
-**The window cannot act.** `fire`, `hold`, `raw`, `why` and `cues` are chat-only, so the
-hold workflow the window exists to support still means switching to chat to start it.
+## 5. PulseDebug gaps — FIXED
+Resolved:
+- **Event Logging & Peaks**: 50-entry millisecond timestamped event log (`views.log`) and 1.5s decaying peak capture added in `PulseDebug/UI.lua`.
+- **Module Reach-ins**: `_Debug*` introspection added across modules (`Locomotion`, `Crafting`, `Interaction`, `Flight`, `Encounter`, `Combat`, `Environment`, `Movement`, `Health`, and `CastActivity`). `CastActivity:_DebugActive()` returns a table detailing registration and consumer modules (`Casting`, `Combat`).
+- **Profile Introspection**: `HasPendingProfileSwitch` and `GetProfileResolution` wired into `/pdebug state` and the UI state view.
+- **Throttle Visibility**: `Pulse:_DebugLastFireTime(triggerID)` exposed in `Init.lua` and consumed by `/pdebug why <triggerID>` to show elapsed vs. throttle window.
+- **Interactive Action Buttons**: Added interactive test buttons directly to `PulseDebug` UI (`Stop All`, `Thud`, `Tick`, `Hold 2s`, and `Clear Log`) with tooltips.
 
 ---
 
-## 6. README calls Tremor a sibling; the TOC calls it a precursor
-
-`README.md` says "sibling addon Tremor" and "sibling project" in two places, which reads as
-something shipping alongside Pulse. `Pulse.toc` now states it is the proof-of-concept alpha
-that preceded this one. Both cannot be right.
+## 6. README calls Tremor a sibling; the TOC calls it a precursor — FIXED
+Resolved: `README.md` and all `.toc` manifests harmonized; Tremor is consistently credited as the foundational precursor alpha.
 
 ---
 
@@ -161,3 +95,25 @@ Never reviewed:
 Also worth noting: all ten review findings landed in `Core/` and `Modules/`. The `UI/` half
 of the second pass — 3,936 of 7,874 lines — produced nothing, which suggests the unreviewed
 companion addons are a better use of a future pass than re-running `UI/`.
+
+---
+
+## 8. Consolidate spell cast event frames into `CastActivity.lua` — FIXED
+Resolved: `Pulse/Core/CastActivity.lua` handles `UNIT_SPELLCAST_FAILED_QUIET` with Touch of Death / dead-state filters, and `Pulse/Modules/Combat.lua`'s `castFrame` now consumes `CastActivity:OnActivity` rather than registering duplicate spell events.
+
+---
+
+## 9. Clean up weapon swing fallback estimator formula — FIXED
+Resolved: Comment and formula in `Pulse/Modules/Combat.lua` clarified; 2.6s constant is explicitly treated as the unhasted base speed, properly divided by `mult = 1.0 + (haste / 100)`.
+
+---
+
+## 10. DualSense trigger channel capability in Blizzard SDL layer
+
+On macOS and Windows, Blizzard's embedded SDL gamepad subsystem accepts bare cstrings for
+`vibrationType` (`C_GamePad.SetVibration`). While `"Low"` and `"High"` are confirmed functional,
+`"LTrigger"` and `"RTrigger"` remain unconfirmed in the live client engine.
+
+Pulse cleanly handles this via `Core/Engine.lua`'s `ROLE_FALLBACK` (`ltrigger -> low`, `rtrigger -> high`),
+ensuring trigger cues are felt as rumble on standard hardware. If Blizzard enhances SDL trigger
+haptic bindings in future client revisions, the infrastructure is already fully in place.

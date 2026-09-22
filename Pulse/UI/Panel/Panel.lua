@@ -436,6 +436,15 @@ local function slashHandler(message)
         return
     end
 
+    if command == "minimap" then
+        if Pulse.UI.Minimap and Pulse.UI.Minimap.Toggle then
+            Pulse.UI.Minimap:Toggle()
+            local cfg = Pulse.Database:Get("minimap")
+            print(("Pulse: minimap icon %s"):format((cfg and cfg.hide) and "hidden" or "shown"))
+        end
+        return
+    end
+
     if command == "profile" then
         local target = strtrim(rest or "")
         local db = Pulse.Database
