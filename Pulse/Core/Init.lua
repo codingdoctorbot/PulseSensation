@@ -5,7 +5,7 @@
 
 local ADDON_NAME, Pulse = ...
 
-_G.Pulse = Pulse   -- for /run poking while tuning, same reason as Tremor's Core/Init.lua:12
+_G.Pulse = Pulse -- for /run poking while tuning, same reason as Tremor's Core/Init.lua:12
 
 Pulse.ADDON_NAME = ADDON_NAME
 Pulse.modules = {}
@@ -27,6 +27,9 @@ end
 -- native triggers mostly self-throttle by transition-tracking and set no `throttle` field
 -- at all, which is treated as no throttle.
 local lastFireTime = {}
+
+-- Reach-in for PulseDebug /pdebug why
+function Pulse:_DebugLastFireTime(triggerID) return lastFireTime[triggerID] end
 
 -- Debug-only: last GetTime() a continuous trigger's Hold was reached. Stays empty while
 -- Pulse.debug is false, so a normal play session pays nothing.
@@ -80,13 +83,20 @@ function Pulse:HoldIfEnabled(triggerID, low, high, duration)
         local now = GetTime()
         local last = lastHoldLogTime[triggerID]
         if not last or (now - last) > HOLD_LOG_GAP then
-            print(("Pulse: %s holding -> low %.2f high %.2f"):format(
-                trigger.label or triggerID, (low or 0) * scale, (high or 0) * scale))
+            print(
+                ("Pulse: %s holding -> low %.2f high %.2f"):format(
+                    trigger.label or triggerID,
+                    (low or 0) * scale,
+                    (high or 0) * scale
+                )
+            )
         end
         lastHoldLogTime[triggerID] = now
     end
     self.Engine:Hold(triggerID, (low or 0) * scale, (high or 0) * scale, duration)
 end
+
+local staticScaled = {}
 
 -- Role-space sibling of HoldIfEnabled, for a continuous cue driving more than the two rumble
 -- roles — Modules/Locomotion.lua's left/right footfalls are the first caller. Same gates,
@@ -99,9 +109,9 @@ function Pulse:HoldRolesIfEnabled(triggerID, roles, duration)
     local trigger = self.Registry:GetTrigger(triggerID)
     if not trigger then return end
     local scale = self.Database:GetTriggerSetting(triggerID, "intensity", 1.0)
-    local scaled = {}
+    wipe(staticScaled)
     for role, value in pairs(roles) do
-        scaled[role] = (value or 0) * scale
+        staticScaled[role] = (value or 0) * scale
     end
     if self.debug then
         -- Rising edge only, as HoldIfEnabled does. Missing until 2026-09-21, which made
@@ -113,19 +123,20 @@ function Pulse:HoldRolesIfEnabled(triggerID, roles, duration)
         if not last or (now - last) > HOLD_LOG_GAP then
             local parts = {}
             for _, role in ipairs({ "low", "high", "ltrigger", "rtrigger" }) do
-                if scaled[role] then
-                    parts[#parts + 1] = ("%s %.2f"):format(role, scaled[role])
-                end
+                if staticScaled[role] then parts[#parts + 1] = ("%s %.2f"):format(role, staticScaled[role]) end
             end
-            print(("Pulse: %s holding -> %s"):format(
-                trigger.label or triggerID,
-                #parts > 0 and table.concat(parts, "  ") or "(nothing)"))
+            print(
+                ("Pulse: %s holding -> %s"):format(
+                    trigger.label or triggerID,
+                    #parts > 0 and table.concat(parts, "  ") or "(nothing)"
+                )
+            )
         end
         lastHoldLogTime[triggerID] = now
     end
     -- HoldRoles, not SetRoles: an omitted duration must mean one refresh window, as in
     -- HoldIfEnabled. SetRoles' own 0.1 default is short enough to stutter against.
-    self.Engine:HoldRoles(triggerID, scaled, duration)
+    self.Engine:HoldRoles(triggerID, staticScaled, duration)
 end
 
 -- The one calibration entry point — the panel's "Test the selected mode" button and
@@ -190,8 +201,7 @@ function Pulse:TestCue(triggerID)
     self.Engine:RefreshDevice()
     if not self.Engine:IsDeviceReady() then return false, "no controller detected" end
 
-    local scale = self.Database:GetTriggerSetting(triggerID, "intensity",
-                                                  trigger.defaultIntensity or 1.0)
+    local scale = self.Database:GetTriggerSetting(triggerID, "intensity", trigger.defaultIntensity or 1.0)
 
     if trigger.mode then
         local modeID = self.Database:GetTriggerMode(triggerID) or trigger.mode
@@ -241,9 +251,7 @@ function Pulse:WatchTrigger(trigger)
         end
     end
 
-    frame:SetScript("OnEvent", function()
-        Pulse:FireIfEnabled(trigger.id)
-    end)
+    frame:SetScript("OnEvent", function() Pulse:FireIfEnabled(trigger.id) end)
 
     self:BindFrame({ trigger.id }, sync)
     return frame

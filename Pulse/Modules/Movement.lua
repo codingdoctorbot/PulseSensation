@@ -24,6 +24,10 @@ local smoothedSwimRatio = 0
 local HARD_LANDING_AIRTIME = 2.5
 local SOFT_LANDING_AIRTIME = 0.8
 
+-- Recycled role tables to prevent GC allocation in pollLandingAndSwim loop (Rule 4)
+local staticLowRole = { low = 0 }
+local staticHighRole = { high = 0 }
+
 -- Hand-rolled, not the native math.clamp — CONFIRMED missing on the live client
 -- (Core/Engine.lua's math.lerp failed the same way). Lua Errors/unfixedpulse.rtf.
 local function clamp01(v)
@@ -49,9 +53,7 @@ local function pollLandingAndSwim()
     -- jump-initiated falls. Falling turning true with nothing already marking a start
     -- covers every other case. The jump hook still wins when it fires, by being earlier:
     -- IT ALSO CAPTURES THE ASCENT, WHICH IsFalling() DOES NOT COUNT AS FALLING.
-    if falling and not wasFalling and not fallStartTime then
-        fallStartTime = GetTime()
-    end
+    if falling and not wasFalling and not fallStartTime then fallStartTime = GetTime() end
 
     if (wasFalling and not falling) or (wasFlying and not flying and not falling) then
         if fallStartTime then
@@ -75,7 +77,7 @@ local function pollLandingAndSwim()
     -- rounds of tuning fail to settle: one set of knobs describing two sensations.
     if IsSwimming() then
         local wantAmbient = Pulse.Database:GetCue("waterTexture")
-        local wantEffort  = Pulse.Database:GetCue("swimTexture")
+        local wantEffort = Pulse.Database:GetCue("swimTexture")
 
         if wantAmbient or wantEffort then
             local current, _, _, swimSpeed = GetUnitSpeed("player")
@@ -93,12 +95,12 @@ local function pollLandingAndSwim()
             -- present whether or not you are going anywhere.
             if wantAmbient then
                 local baseline = Pulse.Database:GetTriggerSetting("waterTexture", "baseline", 0.04)
-                local rate     = Pulse.Database:GetTriggerSetting("waterTexture", "waveRate", 0.15)
+                local rate = Pulse.Database:GetTriggerSetting("waterTexture", "waveRate", 0.15)
                 -- 0.0, matching Core/Registry.lua's declared default. It was 0.40 here,
                 -- which meant any path reaching an unseeded profile turned the swell on
                 -- at 40% — the exact thing that registry entry's comment forbids, since a
                 -- rolling swell suggests ocean and this cue fires in rivers too.
-                local depth    = Pulse.Database:GetTriggerSetting("waterTexture", "waveDepth", 0.0)
+                local depth = Pulse.Database:GetTriggerSetting("waterTexture", "waveDepth", 0.0)
 
                 -- Fully under feels heavier than bobbing at the surface. IsSubmerged is
                 -- confirmed present in the client's API list; if it ever is not, or throws,
@@ -111,9 +113,7 @@ local function pollLandingAndSwim()
                     -- reading as nil — which is the 766-repeat failure this file's own
                     -- RULE B comment above is about. Every other read in this addon
                     -- orders it this way; this one did not.
-                    if ok and not issecretvalue(under) and under then
-                        baseline = baseline * boost
-                    end
+                    if ok and not issecretvalue(under) and under then baseline = baseline * boost end
                 end
 
                 -- The shape every new continuous cue in this addon should copy: decide a
@@ -136,7 +136,8 @@ local function pollLandingAndSwim()
                 --
                 -- The large eccentric mass is also the right actuator for this: slow to
                 -- spin up, slow to coast down, which is what buoyancy feels like.
-                Pulse:HoldRolesIfEnabled("waterTexture", { low = value })
+                staticLowRole.low = value
+                Pulse:HoldRolesIfEnabled("waterTexture", staticLowRole)
             end
 
             -- Effort: you are working AGAINST water. Scales with how fast you are actually
@@ -155,12 +156,11 @@ local function pollLandingAndSwim()
                 local ratio = smoothedSwimRatio
 
                 if ratio > 0.01 then
-                    -- 0.10, matching the registry. Was 0.12.
-                    local peak      = Pulse.Database:GetTriggerSetting("swimTexture", "peak", 0.10)
+                    local peak = Pulse.Database:GetTriggerSetting("swimTexture", "peak", 0.10)
                     local strokeMin = Pulse.Database:GetTriggerSetting("swimTexture", "strokeRateMin", 0.45)
                     local strokeMax = Pulse.Database:GetTriggerSetting("swimTexture", "strokeRateMax", 0.95)
-                    local depth     = Pulse.Database:GetTriggerSetting("swimTexture", "strokeDepth", 0.55)
-                    local harmonic  = Pulse.Database:GetTriggerSetting("swimTexture", "strokeAsymmetry", 0.35)
+                    local depth = Pulse.Database:GetTriggerSetting("swimTexture", "strokeDepth", 0.55)
+                    local harmonic = Pulse.Database:GetTriggerSetting("swimTexture", "strokeAsymmetry", 0.35)
 
                     -- The one real change of character, and the reason to expect this to
                     -- succeed where six earlier rounds felt "rough". Every previous version
@@ -192,9 +192,11 @@ local function pollLandingAndSwim()
                     -- separateMotors = false puts it back on `low` beside the ambient
                     -- layer, for anyone whose high motor is unbearable or dead.
                     if Pulse.Database:GetTriggerSetting("swimTexture", "separateMotors", 1) == 1 then
-                        Pulse:HoldRolesIfEnabled("swimTexture", { high = value })
+                        staticHighRole.high = value
+                        Pulse:HoldRolesIfEnabled("swimTexture", staticHighRole)
                     else
-                        Pulse:HoldRolesIfEnabled("swimTexture", { low = value })
+                        staticLowRole.low = value
+                        Pulse:HoldRolesIfEnabled("swimTexture", staticLowRole)
                     end
                 end
             elseif not wantEffort then
@@ -207,9 +209,13 @@ local function pollLandingAndSwim()
 end
 
 local function syncPoll()
-    local needed = Pulse.Database:Get("masterEnabled") and
-        (Pulse.Database:GetCue("landingSoft") or Pulse.Database:GetCue("landingHard")
-         or Pulse.Database:GetCue("swimTexture") or Pulse.Database:GetCue("waterTexture"))
+    local needed = Pulse.Database:Get("masterEnabled")
+        and (
+            Pulse.Database:GetCue("landingSoft")
+            or Pulse.Database:GetCue("landingHard")
+            or Pulse.Database:GetCue("swimTexture")
+            or Pulse.Database:GetCue("waterTexture")
+        )
     pollFrame:SetScript("OnUpdate", needed and pollLandingAndSwim or nil)
 end
 
@@ -232,8 +238,8 @@ local function taxiTick()
         local amplitude = Pulse.Database:GetTriggerSetting("taxiRide", "windAmplitude", 0.1)
         local cycleSeconds = Pulse.Database:GetTriggerSetting("taxiRide", "waveCycleSeconds", 1.75)
         local phase = (GetTime() % cycleSeconds) / cycleSeconds
-        local wave = (math.sin(phase * 2 * math.pi) + 1) / 2   -- 0..1
-        local value = amplitude * (0.5 + 0.5 * wave)            -- never fully hits 0
+        local wave = (math.sin(phase * 2 * math.pi) + 1) / 2 -- 0..1
+        local value = amplitude * (0.5 + 0.5 * wave) -- never fully hits 0
         Pulse:HoldIfEnabled("taxiRide", value, value)
     end
 end
@@ -247,6 +253,11 @@ local function syncTaxi()
     if not Pulse.Database:GetCue("taxiRide") then return end
     taxiFrame:RegisterEvent("PLAYER_CONTROL_LOST")
     taxiFrame:RegisterEvent("PLAYER_CONTROL_GAINED")
+    -- Seed from live state: if already on a flight path, preserve vibration rather than going silent
+    if UnitOnTaxi and UnitOnTaxi("player") then
+        onTaxiRide = true
+        taxiFrame:SetScript("OnUpdate", taxiTick)
+    end
 end
 
 -- RULE A habit kept even though these events carry no restricted payload: no varargs.

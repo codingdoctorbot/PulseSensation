@@ -14,24 +14,18 @@
 local ADDON_NAME = ...
 
 local PREFIX = "|cffb488ff PulseDebug|r  "
-local GOOD   = "|cff44ff44"
-local BAD    = "|cffff5555"
-local WARN   = "|cffffcc00"
-local DIM    = "|cff999999"
-local HEAD   = "|cffffffff"
-local R      = "|r"
+local GOOD = "|cff44ff44"
+local BAD = "|cffff5555"
+local WARN = "|cffffcc00"
+local DIM = "|cff999999"
+local HEAD = "|cffffffff"
+local R = "|r"
 
-local function out(text)
-    print(PREFIX .. (text or ""))
-end
+local function out(text) print(PREFIX .. (text or "")) end
 
-local function row(label, value)
-    out(string.format("%-26s %s", label, value or ""))
-end
+local function row(label, value) out(string.format("%-26s %s", label, value or "")) end
 
-local function flag(value)
-    return value and (GOOD .. "yes" .. R) or (BAD .. "no" .. R)
-end
+local function flag(value) return value and (GOOD .. "yes" .. R) or (BAD .. "no" .. R) end
 
 local function readBool(value)
     if issecretvalue(value) then return nil end
@@ -86,8 +80,10 @@ end
 
 function commands.state(P)
     out(HEAD .. "— client —" .. R)
-    row("GamePadEnable", string.format("%s%s", tostring(C_CVar.GetCVar("GamePadEnable")),
-        DIM .. "   must be 1; default is 0" .. R))
+    row(
+        "GamePadEnable",
+        string.format("%s%s", tostring(C_CVar.GetCVar("GamePadEnable")), DIM .. "   must be 1; default is 0" .. R)
+    )
     row("GamePadVibrationStrength", tostring(C_CVar.GetCVar("GamePadVibrationStrength")))
 
     out(HEAD .. "— device —" .. R)
@@ -100,8 +96,13 @@ function commands.state(P)
 
     out(HEAD .. "— pulse —" .. R)
     row("masterEnabled", flag(P.Database:Get("masterEnabled")))
-    row("profile", tostring(P.Database:GetActiveProfileName())
-        .. DIM .. "  (masterIntensity/triggers/triggerSettings are per-profile)" .. R)
+    row(
+        "profile",
+        tostring(P.Database:GetActiveProfileName())
+            .. DIM
+            .. "  (masterIntensity/triggers/triggerSettings are per-profile)"
+            .. R
+    )
     row("masterIntensity", tostring(P.Database:Get("masterIntensity")))
     row("schema", tostring(P.Database:Get("defaultHapticSchema")))
 
@@ -130,13 +131,23 @@ function commands.layers(P)
         if value == nil then return DIM .. "  -  " .. R end
         return string.format("%-5.2f", value)
     end
-    out(HEAD .. string.format("%-22s %-6s %-6s %-6s %-6s %s",
-        "layer", "low", "high", "ltrig", "rtrig", "remaining") .. R)
+    out(
+        HEAD
+            .. string.format("%-22s %-6s %-6s %-6s %-6s %s", "layer", "low", "high", "ltrig", "rtrig", "remaining")
+            .. R
+    )
     for _, layer in ipairs(layers) do
-        out(string.format("  %-20s %s %s %s %s %.2fs",
-            layer.name, cell(layer.low), cell(layer.high),
-            cell(layer.ltrigger), cell(layer.rtrigger),
-            math.max(layer.remaining, 0)))
+        out(
+            string.format(
+                "  %-20s %s %s %s %s %.2fs",
+                layer.name,
+                cell(layer.low),
+                cell(layer.high),
+                cell(layer.ltrigger),
+                cell(layer.rtrigger),
+                math.max(layer.remaining, 0)
+            )
+        )
     end
 end
 
@@ -148,8 +159,7 @@ function commands.channels(P)
     end
     out(HEAD .. string.format("%-14s %-10s %s", "channel", "smoothed", "last set") .. R)
     for channel, info in pairs(channels) do
-        out(string.format("  %-12s %-10.2f %s",
-            channel, info.smoothed or 0, tostring(info.lastSet)))
+        out(string.format("  %-12s %-10.2f %s", channel, info.smoothed or 0, tostring(info.lastSet)))
     end
 end
 
@@ -162,10 +172,15 @@ function commands.cues(P, arg)
             out(HEAD .. P.Registry:GetCategoryLabel(category) .. R)
             for _, trigger in ipairs(P.Registry:GetTriggersByCategory(category)) do
                 local shape = trigger.continuous and "continuous" or tostring(trigger.mode)
-                out(string.format("  %s %-22s %-12s %s",
-                    P.Database:GetCue(trigger.id) and (GOOD .. "on " .. R) or (DIM .. "off" .. R),
-                    trigger.id, shape,
-                    DIM .. "throttle " .. tostring(trigger.throttle or 0) .. R))
+                out(
+                    string.format(
+                        "  %s %-22s %-12s %s",
+                        P.Database:GetCue(trigger.id) and (GOOD .. "on " .. R) or (DIM .. "off" .. R),
+                        trigger.id,
+                        shape,
+                        DIM .. "throttle " .. tostring(trigger.throttle or 0) .. R
+                    )
+                )
                 -- Live tunable values (Registry.lua's `tunables`, e.g. continuous.md's
                 -- devTuning sliders or lowHealthWarning's pre-existing heartRate) — was a
                 -- gap before tonight, /pdebug had no way to see these without opening the
@@ -173,15 +188,14 @@ function commands.cues(P, arg)
                 if trigger.tunables then
                     for _, tunable in ipairs(trigger.tunables) do
                         local value = P.Database:GetTriggerSetting(trigger.id, tunable.key, tunable.default)
-                        out(string.format("      %s%-22s%s %.2f",
-                            DIM, tunable.key, R, value))
+                        out(string.format("      %s%-22s%s %.2f", DIM, tunable.key, R, value))
                     end
                 end
             end
         end
     end
     if not shown then
-        out(BAD .. "no such category: " .. R .. arg .. DIM .. "  try a partial match, e.g. \"alert\"" .. R)
+        out(BAD .. "no such category: " .. R .. arg .. DIM .. '  try a partial match, e.g. "alert"' .. R)
     end
 end
 
@@ -213,8 +227,7 @@ function commands.why(P, arg)
     -- it, and this command had no way to say so.
     local masterTriggerID = P.Registry.ALERT_CATEGORY_MASTER and P.Registry.ALERT_CATEGORY_MASTER[trigger.category]
     if masterTriggerID and masterTriggerID ~= trigger.id then
-        gate(P.Database:GetCue(masterTriggerID) and true or false,
-            masterTriggerID .. " (category master)")
+        gate(P.Database:GetCue(masterTriggerID) and true or false, masterTriggerID .. " (category master)")
     end
     gate(P.Engine:IsDeviceReady(), "device ready")
     if trigger.continuous then
@@ -223,15 +236,35 @@ function commands.why(P, arg)
         gate(trigger.mode ~= nil, "has a mode")
     end
 
-    row(DIM .. "?    " .. R .. " throttle",
-        string.format("%ss min gap%s", tostring(trigger.throttle or 0),
-            DIM .. " — last-fire time is private" .. R))
+    local throttle = trigger.throttle or 0
+    if throttle > 0 and type(P._DebugLastFireTime) == "function" then
+        local lastTime = P:_DebugLastFireTime(trigger.id)
+        if lastTime then
+            local elapsed = GetTime() - lastTime
+            local isThrottled = elapsed < throttle
+            if isThrottled then
+                gate(false, string.format("throttle (fired %.2fs ago, min %ss)", elapsed, tostring(throttle)))
+            else
+                gate(true, string.format("throttle (fired %.1fs ago, min %ss)", elapsed, tostring(throttle)))
+            end
+        else
+            gate(true, string.format("throttle (never fired this session, min %ss)", tostring(throttle)))
+        end
+    else
+        row(GOOD .. "pass " .. R .. "throttle", string.format("%ss min gap", tostring(throttle)))
+    end
 
     if blocked then
         out(BAD .. "would be dropped." .. R .. " Clear the BLOCK rows above.")
     else
-        out(GOOD .. "no visible gate blocks it." .. R .. DIM ..
-            "  Still nothing felt? Check /pdebug layers right after firing it." .. R)
+        out(
+            GOOD
+                .. "no visible gate blocks it."
+                .. R
+                .. DIM
+                .. "  Still nothing felt? Check /pdebug layers right after firing it."
+                .. R
+        )
     end
 end
 
@@ -253,8 +286,13 @@ function commands.hold(P, arg)
         out(WARN .. trigger.id .. " is discrete, not continuous." .. R .. DIM .. "  Use /pdebug fire instead." .. R)
         return
     end
-    out(string.format("HoldIfEnabled(%s, 0.5, 0.5)%s", trigger.id,
-        DIM .. "  — one 2s hold, real path, every gate applies" .. R))
+    out(
+        string.format(
+            "HoldIfEnabled(%s, 0.5, 0.5)%s",
+            trigger.id,
+            DIM .. "  — one 2s hold, real path, every gate applies" .. R
+        )
+    )
     local ticks = 0
     local ticker
     ticker = C_Timer.NewTicker(0.3, function()
@@ -284,8 +322,10 @@ end
 function commands.modes(P)
     for _, modeID in ipairs(P.ModeOrder) do
         local mode = P.Modes[modeID]
-        row("  " .. modeID, (mode.continuous and (WARN .. "continuous" .. R) or "discrete")
-            .. "  " .. (mode.label or ""))
+        row(
+            "  " .. modeID,
+            (mode.continuous and (WARN .. "continuous" .. R) or "discrete") .. "  " .. (mode.label or "")
+        )
     end
 end
 
@@ -301,8 +341,7 @@ function commands.schema(P)
     end
     out(string.format("%s%s%s  %s", HEAD, tostring(schema.id), R, schema.label or ""))
     for role, def in pairs(schema.roles or {}) do
-        row("  " .. role, string.format("%s @ %.2f",
-            def.channel or (DIM .. "silent" .. R), def.intensity or 1.0))
+        row("  " .. role, string.format("%s @ %.2f", def.channel or (DIM .. "silent" .. R), def.intensity or 1.0))
     end
 end
 
@@ -320,10 +359,12 @@ end
 local watchFrame = CreateFrame("Frame")
 local watching
 
-watchFrame:SetScript("OnEvent", function(_, event)
-    out(string.format("%s%.1f%s  %s  %s", DIM, GetTime(), R, event,
-        DIM .. "(" .. tostring(watching) .. ")" .. R))
-end)
+watchFrame:SetScript(
+    "OnEvent",
+    function(_, event)
+        out(string.format("%s%.1f%s  %s  %s", DIM, GetTime(), R, event, DIM .. "(" .. tostring(watching) .. ")" .. R))
+    end
+)
 
 function commands.watch(P, arg)
     if arg == "" or string.lower(arg) == "off" then
@@ -335,10 +376,17 @@ function commands.watch(P, arg)
     local trigger = findTrigger(P, arg)
     if not trigger then return end
     if not trigger.events or #trigger.events == 0 then
-        out(WARN .. trigger.id .. " has no registered-events entry in the registry." .. R
-            .. DIM .. "  Native triggers (Movement/Flight/Combat/Environment/Health) mostly " ..
-               "poll or hook rather than register plain events, so this only works for " ..
-               "Accessibility triggers and this addon's own World-category ones." .. R)
+        out(
+            WARN
+                .. trigger.id
+                .. " has no registered-events entry in the registry."
+                .. R
+                .. DIM
+                .. "  Native triggers (Movement/Flight/Combat/Environment/Health) mostly "
+                .. "poll or hook rather than register plain events, so this only works for "
+                .. "Accessibility triggers and this addon's own World-category ones."
+                .. R
+        )
         return
     end
     watchFrame:UnregisterAllEvents()
@@ -350,8 +398,7 @@ function commands.watch(P, arg)
             watchFrame:RegisterEvent(event)
         end
     end
-    out(string.format("watching %s%s%s  %s", HEAD, trigger.id, R,
-        DIM .. table.concat(trigger.events, ", ") .. R))
+    out(string.format("watching %s%s%s  %s", HEAD, trigger.id, R, DIM .. table.concat(trigger.events, ", ") .. R))
 end
 
 SLASH_PULSEDEBUG1 = "/pdebug"

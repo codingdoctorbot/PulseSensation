@@ -31,9 +31,9 @@ local ADDON_NAME, Pulse = ...
 local Engine = {}
 Pulse.Engine = Engine
 
-local layers = {}          -- name -> { roles = {role -> magnitude}, endTime }
-local rawHolds = {}        -- channel -> { magnitude, endTime }, calibration probe only
-local rampToken = 0        -- bumped to cancel an in-flight RampChannel sweep
+local layers = {} -- name -> { roles = {role -> magnitude}, endTime }
+local rawHolds = {} -- channel -> { magnitude, endTime }, calibration probe only
+local rampToken = 0 -- bumped to cancel an in-flight RampChannel sweep
 
 -- Bumped by StopAll, first thing. Every scheduled callback in this file captures it and
 -- refuses to run if it has moved, which is what makes StopAll mean what its name says.
@@ -49,23 +49,18 @@ local rampToken = 0        -- bumped to cancel an in-flight RampChannel sweep
 -- next tick. That is a fresh synchronous call, not stale scheduled work, and a texture
 -- resuming when the controller comes back is correct.
 local engineGeneration = 0
-local layerTokens = {}     -- name -> token, so PlayMode re-triggers cancel their own stale steps
+local layerTokens = {} -- name -> token, so PlayMode re-triggers cancel their own stale steps
 local smoothedByChannel = {}
 local lastSetByChannel = {}
 
 local deviceReady = false
 
-local REFRESH_WINDOW = 0.35   -- Hold() layers expire this long after the last refresh
+local REFRESH_WINDOW = 0.35 -- Hold() layers expire this long after the last refresh
 
 local function clamp01(v)
     if v < 0 then return 0 end
     if v > 1 then return 1 end
     return v
-end
-
--- Hand-rolled, not the native math.lerp — see the file header's 2026-09-15 note.
-local function lerp(from, to, factor)
-    return from + (to - from) * factor
 end
 
 -- Frame-rate-independent smoothing (2026-09-21). The old model applied a fixed FRACTION of
@@ -122,17 +117,13 @@ end
 -- Device state (ported from Tremor/Core/Haptics.lua — same reasoning, same shape)
 
 function Engine:RefreshDevice()
-    local enabled  = C_GamePad.IsEnabled()
+    local enabled = C_GamePad.IsEnabled()
     local deviceID = C_GamePad.GetActiveDeviceID()
     deviceReady = (enabled and deviceID) and true or false
-    if not deviceReady then
-        self:StopAll()
-    end
+    if not deviceReady then self:StopAll() end
 end
 
-function Engine:IsDeviceReady()
-    return deviceReady
-end
+function Engine:IsDeviceReady() return deviceReady end
 
 function Engine:StopAll()
     -- First, so that anything already scheduled is void before the state it would touch
@@ -173,7 +164,9 @@ function Engine:SetRoles(name, roles, duration)
     local target = layer.roles
     -- Rewritten rather than merged: a layer refreshed each tick with a different role set
     -- must not keep yesterday's roles alive.
-    for role in pairs(target) do target[role] = nil end
+    for role in pairs(target) do
+        target[role] = nil
+    end
     for role, value in pairs(roles) do
         target[role] = clamp01(value or 0)
     end
@@ -187,21 +180,15 @@ end
 -- blip rather than a layer a later tick keeps refreshing — Health.lua's lub-dub knocks,
 -- where a duration shorter than the gap between them lets the value decay toward zero in
 -- between instead of stepping from one held target straight to the next.
-function Engine:Hold(name, low, high, duration)
-    self:Set(name, low, high, duration or REFRESH_WINDOW)
-end
+function Engine:Hold(name, low, high, duration) self:Set(name, low, high, duration or REFRESH_WINDOW) end
 
 -- Role-space sibling of Hold, existing so callers get REFRESH_WINDOW by default rather than
 -- SetRoles' raw 0.1. Reaching SetRoles directly for a continuous cue is a trap: a duration
 -- shorter than the caller's own re-arm interval expires between ticks and the texture
 -- stutters, and an explicit 0 gives a layer already dead the moment it is created.
-function Engine:HoldRoles(name, roles, duration)
-    self:SetRoles(name, roles, duration or REFRESH_WINDOW)
-end
+function Engine:HoldRoles(name, roles, duration) self:SetRoles(name, roles, duration or REFRESH_WINDOW) end
 
-function Engine:StopLayer(name)
-    layers[name] = nil
-end
+function Engine:StopLayer(name) layers[name] = nil end
 
 -- StopLayer's stronger sibling: also bumps the layer's PlayMode token, so steps a previous
 -- PlayMode already handed to C_Timer no-op when they fire instead of overwriting whatever is
@@ -280,9 +267,9 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
     -- each hit while the silences stayed fixed, and past some multiplier the hits would eat
     -- their own gaps and stop being distinct taps. Scaling everything preserves the mode's
     -- rhythm while changing its pace.
-    local lowMult  = Pulse.Database:GetModeTuning(modeID, "lowMult",  1.0)
+    local lowMult = Pulse.Database:GetModeTuning(modeID, "lowMult", 1.0)
     local highMult = Pulse.Database:GetModeTuning(modeID, "highMult", 1.0)
-    local durMult  = Pulse.Database:GetModeTuning(modeID, "durMult",  1.0)
+    local durMult = Pulse.Database:GetModeTuning(modeID, "durMult", 1.0)
 
     local offset = 0
     for _, step in ipairs(mode.steps) do
@@ -298,7 +285,7 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
             local roles = {}
             local r = step.role
             if r == "both" then
-                roles.low  = clamp01(mag * lowMult)
+                roles.low = clamp01(mag * lowMult)
                 roles.high = clamp01(mag * highMult)
             elseif r == "high" then
                 roles.high = clamp01(mag * highMult)
@@ -324,6 +311,43 @@ end
 -- them there via max, same as two layers colliding on one channel), smooth with the local
 -- `smoothTowards` helper above (slower attack, faster release), and only call SetVibration
 -- when a channel's value actually moved.
+
+-- Hoisted to file-scope to eliminate closure allocation on every OnUpdate frame tick (Rule 4).
+local function driveChannel(channel, wanted, last, dt, epsilon)
+    if rawHolds[channel] then return false end
+
+    if wanted and wanted > 0 then
+        wanted = clamp01(wanted * channelConfig(channel, "gain"))
+        local gamma = channelConfig(channel, "gamma")
+        if gamma and gamma ~= 1.0 then wanted = wanted ^ gamma end
+        local floor = channelConfig(channel, "floor")
+        if floor and floor > 0 then wanted = floor + (1.0 - floor) * wanted end
+        wanted = clamp01(wanted)
+    else
+        -- Zero in, zero out, unconditionally. The breakaway floor must never turn a
+        -- silent channel into a permanently humming one.
+        wanted = 0
+    end
+
+    local smoothed = smoothTowards(
+        smoothedByChannel[channel] or 0,
+        wanted,
+        dt,
+        channelConfig(channel, "attackTau"),
+        channelConfig(channel, "releaseTau")
+    )
+    smoothedByChannel[channel] = smoothed
+
+    local isOn = smoothed > SILENCE_GATE
+    if math.abs(smoothed - (last or -1)) > epsilon then
+        C_GamePad.SetVibration(channel, smoothed)
+        lastSetByChannel[channel] = smoothed
+    end
+    return isOn
+end
+
+local frameRoleTotals = {}
+local frameTarget = {}
 
 local frame = CreateFrame("Frame")
 
@@ -364,15 +388,17 @@ frame:SetScript("OnUpdate", function(_, elapsed)
 
     -- Blend every live layer into role-space, max per role (unchanged model: several
     -- textures are legitimately felt at once, and the loudest claim on a role wins).
-    local roleTotals = nil
+    -- Recycled table (wipe): zero allocation in high-frequency loop.
+    wipe(frameRoleTotals)
+    local hasRoles = false
     for name, layer in pairs(layers) do
         if now >= layer.endTime then
             layers[name] = nil
         else
             for role, value in pairs(layer.roles) do
                 if value > 0 then
-                    roleTotals = roleTotals or {}
-                    if value > (roleTotals[role] or 0) then roleTotals[role] = value end
+                    hasRoles = true
+                    if value > (frameRoleTotals[role] or 0) then frameRoleTotals[role] = value end
                 end
             end
         end
@@ -383,17 +409,17 @@ frame:SetScript("OnUpdate", function(_, elapsed)
 
     -- Role -> channel, collapsing collisions via max, exactly as before. Two roles landing
     -- on one channel (every "only one motor works" schema) still resolve to the louder.
-    local target = nil
-    if roleTotals then
-        for role, magnitude in pairs(roleTotals) do
+    -- Recycled table (wipe): zero allocation in high-frequency loop.
+    wipe(frameTarget)
+    local hasTargets = false
+    if hasRoles then
+        for role, magnitude in pairs(frameRoleTotals) do
             local def = resolveRole(schema, role)
             if def and def.channel then
                 local channelMag = clamp01(magnitude * masterIntensity * (def.intensity or 1.0))
                 if channelMag > 0 then
-                    target = target or {}
-                    if channelMag > (target[def.channel] or 0) then
-                        target[def.channel] = channelMag
-                    end
+                    hasTargets = true
+                    if channelMag > (frameTarget[def.channel] or 0) then frameTarget[def.channel] = channelMag end
                 end
             end
         end
@@ -402,57 +428,24 @@ frame:SetScript("OnUpdate", function(_, elapsed)
     local epsilon = Pulse.Database:GetChangeEpsilon()
     local anyOn = false
 
-    -- One channel's full journey: hardware gain, response curve, breakaway remap, then
-    -- time-based smoothing, then the send gate. Order matters — gamma and the floor shape
-    -- the TARGET, and smoothing then travels through motor-space toward it, so a decay
-    -- passes back down through the floor instead of stepping off a cliff at its edge.
-    local function driveChannel(channel, wanted, last)
-        if rawHolds[channel] then return end
-
-        if wanted and wanted > 0 then
-            wanted = clamp01(wanted * channelConfig(channel, "gain"))
-            local gamma = channelConfig(channel, "gamma")
-            if gamma and gamma ~= 1.0 then wanted = wanted ^ gamma end
-            local floor = channelConfig(channel, "floor")
-            if floor and floor > 0 then wanted = floor + (1.0 - floor) * wanted end
-            wanted = clamp01(wanted)
-        else
-            -- Zero in, zero out, unconditionally. The breakaway floor must never turn a
-            -- silent channel into a permanently humming one.
-            wanted = 0
-        end
-
-        local smoothed = smoothTowards(
-            smoothedByChannel[channel] or 0, wanted, dt,
-            channelConfig(channel, "attackTau"),
-            channelConfig(channel, "releaseTau"))
-        smoothedByChannel[channel] = smoothed
-
-        if smoothed > SILENCE_GATE then anyOn = true end
-        if math.abs(smoothed - (last or -1)) > epsilon then
-            C_GamePad.SetVibration(channel, smoothed)
-            lastSetByChannel[channel] = smoothed
-        end
-    end
-
-    if target then
-        for channel, wanted in pairs(target) do
-            driveChannel(channel, wanted, lastSetByChannel[channel])
+    if hasTargets then
+        for channel, wanted in pairs(frameTarget) do
+            if driveChannel(channel, wanted, lastSetByChannel[channel], dt, epsilon) then anyOn = true end
         end
     end
 
     -- Channels that were on and now have no target at all need to decay too, not just
     -- channels present in this tick's `target` — walk everything we last set.
     for channel, last in pairs(lastSetByChannel) do
-        if not (target and target[channel]) and last > 0 then
-            driveChannel(channel, 0, last)
+        if not (hasTargets and frameTarget[channel]) and last > 0 then
+            if driveChannel(channel, 0, last, dt, epsilon) then anyOn = true end
         end
     end
 
     if not anyOn and not anyRaw and next(lastSetByChannel) then
         C_GamePad.StopVibration()
-        smoothedByChannel = {}
-        lastSetByChannel = {}
+        wipe(smoothedByChannel)
+        wipe(lastSetByChannel)
     end
 end)
 
@@ -486,15 +479,21 @@ function Engine:RampChannel(channel, peak)
 
     peak = peak or Pulse.RAMP_PEAK
     local increment = Pulse.RAMP_STEP
-    local interval  = Pulse.RAMP_STEP_SECONDS
-    local steps     = math.max(1, math.floor(peak / increment + 0.5))
+    local interval = Pulse.RAMP_STEP_SECONDS
+    local steps = math.max(1, math.floor(peak / increment + 0.5))
 
     rampToken = (rampToken or 0) + 1
     local token = rampToken
     local generation = engineGeneration
 
-    print(("Pulse: ramping %s from 0 to %d%% in steps of %.3f, about %d seconds. Say when you FIRST feel anything and use the number on that line."):format(
-        channel, math.floor(peak * 100 + 0.5), increment, math.floor(steps * interval + 0.5)))
+    print(
+        ("Pulse: ramping %s from 0 to %d%% in steps of %.3f, about %d seconds. Say when you FIRST feel anything and use the number on that line."):format(
+            channel,
+            math.floor(peak * 100 + 0.5),
+            increment,
+            math.floor(steps * interval + 0.5)
+        )
+    )
 
     for step = 1, steps do
         C_Timer.After((step - 1) * interval, function()
@@ -541,9 +540,7 @@ function Engine:_StopRawChannel(channel)
     rawHolds[channel] = nil
     smoothedByChannel[channel] = nil
     lastSetByChannel[channel] = nil
-    if deviceReady and C_GamePad and C_GamePad.SetVibration then
-        pcall(C_GamePad.SetVibration, channel, 0)
-    end
+    if deviceReady and C_GamePad and C_GamePad.SetVibration then pcall(C_GamePad.SetVibration, channel, 0) end
 end
 
 function Engine:StopRamp(channel)
@@ -553,7 +550,9 @@ function Engine:StopRamp(channel)
     else
         -- No channel named: the caller does not know which ramp is running, so every
         -- raw hold goes. Still narrower than StopAll, which would take the layers too.
-        for name in pairs(rawHolds) do self:_StopRawChannel(name) end
+        for name in pairs(rawHolds) do
+            self:_StopRawChannel(name)
+        end
     end
 end
 
@@ -588,8 +587,11 @@ function Engine:_DebugLayers()
     local snapshot = {}
     for name, layer in pairs(layers) do
         snapshot[#snapshot + 1] = {
-            name = name, low = layer.roles.low, high = layer.roles.high,
-            ltrigger = layer.roles.ltrigger, rtrigger = layer.roles.rtrigger,
+            name = name,
+            low = layer.roles.low,
+            high = layer.roles.high,
+            ltrigger = layer.roles.ltrigger,
+            rtrigger = layer.roles.rtrigger,
             remaining = layer.endTime - now,
         }
     end

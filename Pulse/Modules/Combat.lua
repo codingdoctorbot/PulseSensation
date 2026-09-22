@@ -32,11 +32,17 @@ local function syncAbilityPulse()
 end
 
 abilityPulseFrame:SetScript("OnEvent", function()
-    if not InCombatLockdown() then return end   -- the whole point is a combat heartbeat
+    if not InCombatLockdown() then return end -- the whole point is a combat heartbeat
     local info = C_Spell.GetSpellCooldown(61304)
-    if info and info.startTime and info.startTime > 0
-        and info.duration and info.duration > 0 and info.duration <= 1.5
-        and info.startTime ~= lastAbilityPulseStartTime then
+    if
+        info
+        and info.startTime
+        and info.startTime > 0
+        and info.duration
+        and info.duration > 0
+        and info.duration <= 1.5
+        and info.startTime ~= lastAbilityPulseStartTime
+    then
         lastAbilityPulseStartTime = info.startTime
         Pulse:FireIfEnabled("abilityPulse")
     end
@@ -48,7 +54,7 @@ end)
 
 local cooldownFrame = CreateFrame("Frame")
 local COOLDOWN_CATEGORY = Enum.CooldownViewerCategory and Enum.CooldownViewerCategory.Essential
-local trackedSpells = {}        -- spellID -> was on cooldown last check
+local trackedSpells = {} -- spellID -> was on cooldown last check
 local cooldownSetResolved = false
 
 local function resolveCooldownSet()
@@ -91,22 +97,34 @@ local function checkCooldowns()
         if info and not issecretvalue(info) then
             local startTime, duration = info.startTime, info.duration
             if not issecretvalue(startTime) and not issecretvalue(duration) then
-                local onCD = startTime and startTime > 0 and duration and duration > 1.5
+                local onCD = startTime
+                    and startTime > 0
+                    and duration
+                    and duration > 1.5
                     and (now < startTime + duration)
                 if Pulse.debug then
-                    print(("Pulse: cooldownReady -> spell %d onCD=%s wasOnCD=%s startTime=%s duration=%s"):format(
-                        spellID, tostring(onCD), tostring(wasOnCD), tostring(startTime), tostring(duration)))
+                    print(
+                        ("Pulse: cooldownReady -> spell %d onCD=%s wasOnCD=%s startTime=%s duration=%s"):format(
+                            spellID,
+                            tostring(onCD),
+                            tostring(wasOnCD),
+                            tostring(startTime),
+                            tostring(duration)
+                        )
+                    )
                 end
-                if wasOnCD and not onCD then
-                    Pulse:FireIfEnabled("cooldownReady")
-                end
+                if wasOnCD and not onCD then Pulse:FireIfEnabled("cooldownReady") end
                 trackedSpells[spellID] = onCD and true or false
             elseif Pulse.debug then
                 print(("Pulse: cooldownReady -> spell %d skipped, startTime/duration secret"):format(spellID))
             end
         elseif Pulse.debug then
-            print(("Pulse: cooldownReady -> spell %d skipped, info %s"):format(
-                spellID, (info == nil) and "nil" or "secret"))
+            print(
+                ("Pulse: cooldownReady -> spell %d skipped, info %s"):format(
+                    spellID,
+                    (info == nil) and "nil" or "secret"
+                )
+            )
         end
     end
 end
@@ -120,7 +138,7 @@ local function syncCooldownReady()
     resolveCooldownSet()
     cooldownFrame:RegisterEvent("SPELL_UPDATE_COOLDOWN")
     cooldownFrame:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
-    checkCooldowns()   -- seed real current state, not a stale default
+    checkCooldowns() -- seed real current state, not a stale default
 end
 
 cooldownFrame:SetScript("OnEvent", function(_, event)
@@ -139,15 +157,26 @@ local textFrame = CreateFrame("Frame")
 
 local DEFLECT_TYPES = { DODGE = true, PARRY = true, BLOCK = true }
 
-local COMBAT_TEXT_CUES = { "critLanded", "deflect", "damageTaken", "honorGained",
-    "factionGained", "healCrit", "healReceived", "debuffReceived" }
+local COMBAT_TEXT_CUES = {
+    "critLanded",
+    "deflect",
+    "damageTaken",
+    "honorGained",
+    "factionGained",
+    "healCrit",
+    "healReceived",
+    "debuffReceived",
+}
 
 local function syncCombatText()
     textFrame:UnregisterAllEvents()
     if not Pulse.Database:Get("masterEnabled") then return end
     local any = false
     for _, cueID in ipairs(COMBAT_TEXT_CUES) do
-        if Pulse.Database:GetCue(cueID) then any = true break end
+        if Pulse.Database:GetCue(cueID) then
+            any = true
+            break
+        end
     end
     if not any then return end
     textFrame:RegisterEvent("COMBAT_TEXT_UPDATE")
@@ -173,9 +202,7 @@ textFrame:SetScript("OnEvent", function(_, event, messageType)
         Pulse:FireIfEnabled("deflect")
         -- Parry haste: PARRY only, not DODGE/BLOCK. Parrying speeds up your own next
         -- main-hand swing, a real mechanic, distinct from merely avoiding the hit.
-        if messageType == "PARRY" and applyParryHaste then
-            applyParryHaste()
-        end
+        if messageType == "PARRY" and applyParryHaste then applyParryHaste() end
     elseif messageType == "HEAL_CRIT" then
         Pulse:FireIfEnabled("healCrit")
         Pulse:FireIfEnabled("healReceived")
@@ -210,9 +237,7 @@ comboFrame:SetScript("OnEvent", function(_, event, unit, powerType)
     if powerType ~= "COMBO_POINTS" then return end
     local current = UnitPower("player", Enum.PowerType.ComboPoints)
     if issecretvalue(current) or type(current) ~= "number" then return end
-    if current > lastComboPoints then
-        Pulse:FireIfEnabled("comboPoint")
-    end
+    if current > lastComboPoints then Pulse:FireIfEnabled("comboPoint") end
     lastComboPoints = current
 end)
 
@@ -246,8 +271,13 @@ local function castTick()
 
     if isCasting then
         local _, _, _, startTimeMs, endTimeMs = UnitCastingInfo("player")
-        if not issecretvalue(startTimeMs) and not issecretvalue(endTimeMs)
-            and startTimeMs and endTimeMs and endTimeMs > startTimeMs then
+        if
+            not issecretvalue(startTimeMs)
+            and not issecretvalue(endTimeMs)
+            and startTimeMs
+            and endTimeMs
+            and endTimeMs > startTimeMs
+        then
             local progress = clamp01((GetTime() * 1000 - startTimeMs) / (endTimeMs - startTimeMs))
             local peak = Pulse.Database:GetTriggerSetting("castTexture", "castSwellPeak", 0.7)
             Pulse:HoldIfEnabled("castTexture", presence, progress * peak)
@@ -272,6 +302,14 @@ local function syncCast()
     castFrame:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_STOP", "player")
     castFrame:RegisterUnitEvent("UNIT_SPELLCAST_FAILED", "player")
     castFrame:RegisterUnitEvent("UNIT_SPELLCAST_INTERRUPTED", "player")
+
+    -- Seed from live state: if mid-cast or mid-channel, resume rather than dropping the sensation
+    if type(UnitCastingInfo) == "function" and UnitCastingInfo("player") then
+        isCasting = true
+    elseif type(UnitChannelInfo) == "function" and UnitChannelInfo("player") then
+        isChanneling = true
+    end
+
     castFrame:SetScript("OnUpdate", castTick)
 end
 
@@ -296,9 +334,7 @@ local autoRepeatFrame = CreateFrame("Frame")
 local function syncAutoRepeat()
     autoRepeatFrame:UnregisterAllEvents()
     if not Pulse.Database:Get("masterEnabled") then return end
-    if not (Pulse.Database:GetCue("autoRepeatStart") or Pulse.Database:GetCue("autoRepeatStop")) then
-        return
-    end
+    if not (Pulse.Database:GetCue("autoRepeatStart") or Pulse.Database:GetCue("autoRepeatStop")) then return end
     autoRepeatFrame:RegisterEvent("START_AUTOREPEAT_SPELL")
     autoRepeatFrame:RegisterEvent("STOP_AUTOREPEAT_SPELL")
 end
@@ -320,9 +356,7 @@ local meleeAttackFrame = CreateFrame("Frame")
 local function syncMeleeAttack()
     meleeAttackFrame:UnregisterAllEvents()
     if not Pulse.Database:Get("masterEnabled") then return end
-    if not (Pulse.Database:GetCue("meleeAttackStart") or Pulse.Database:GetCue("meleeAttackStop")) then
-        return
-    end
+    if not (Pulse.Database:GetCue("meleeAttackStart") or Pulse.Database:GetCue("meleeAttackStop")) then return end
     meleeAttackFrame:RegisterEvent("PLAYER_ENTER_COMBAT")
     meleeAttackFrame:RegisterEvent("PLAYER_LEAVE_COMBAT")
 end
@@ -352,9 +386,7 @@ end
 
 autoShotFrame:SetScript("OnEvent", function(_, event, ...)
     local _, _, spellID = ...
-    if spellID == AUTO_SHOT_SPELL_ID then
-        Pulse:FireIfEnabled("autoShotFired")
-    end
+    if spellID == AUTO_SHOT_SPELL_ID then Pulse:FireIfEnabled("autoShotFired") end
 end)
 
 -- Weapon swing sync — an out-of-combat speed cache with a constant fallback, working
@@ -374,9 +406,7 @@ local function getHasteMultiplier()
     if type(GetMeleeHaste) ~= "function" then return 1.0 end
     local ok, haste = pcall(GetMeleeHaste)
     if not ok then return 1.0 end
-    if issecretvalue(haste) or type(haste) ~= "number" or haste < -90 then
-        return 1.0
-    end
+    if issecretvalue(haste) or type(haste) ~= "number" or haste < -90 then return 1.0 end
     return 1.0 + (haste / 100)
 end
 
@@ -392,9 +422,7 @@ swingFrame:SetScript("OnEvent", function(self, event, ...)
     if success and not issecretvalue(main) and type(main) == "number" and main > 0 then
         cachedMainBaseSpeed = main * mult
     end
-    if success and not issecretvalue(off) and type(off) == "number" and off > 0 then
-        cachedOffBaseSpeed = off * mult
-    end
+    if success and not issecretvalue(off) and type(off) == "number" and off > 0 then cachedOffBaseSpeed = off * mult end
 end)
 
 local STUN_LOC_TYPES = { STUN = true, STUN_MECHANIC = true }
@@ -423,9 +451,7 @@ local function GetActiveWeaponSpeeds()
     if success and not issecretvalue(main) and type(main) == "number" and main > 0 then
         cachedMainBaseSpeed = main * mult
     end
-    if success and not issecretvalue(off) and type(off) == "number" and off > 0 then
-        cachedOffBaseSpeed = off * mult
-    end
+    if success and not issecretvalue(off) and type(off) == "number" and off > 0 then cachedOffBaseSpeed = off * mult end
 
     -- Determine main-hand speed: Live -> Cache (Haste Scaled) -> constant fallback.
     --
@@ -561,24 +587,23 @@ local function syncSwing()
     mainNextSwing, offNextSwing = nil, nil
     wasSwingActive = false
     if not Pulse.Database:Get("masterEnabled") then return end
-    if not (Pulse.Database:GetCue("weaponSwingMain") or Pulse.Database:GetCue("weaponSwingOff")) then
-        return
-    end
+    if not (Pulse.Database:GetCue("weaponSwingMain") or Pulse.Database:GetCue("weaponSwingOff")) then return end
 
     -- Two ways to end up on the estimator: the event is gone (a patch), or the player
     -- chose it. Anything else uses the real signal.
     local forced = Pulse.Database:GetTriggerSetting("weaponSwingMain", "forceEstimator", 0) == 1
     if not forced and swingEventAvailable() then
         swingEventFrame:RegisterEvent("PLAYER_SWING")
-        if Pulse.debug then
-            print("Pulse: weapon swings using PLAYER_SWING (measured)")
-        end
+        if Pulse.debug then print("Pulse: weapon swings using PLAYER_SWING (measured)") end
         return
     end
 
     if Pulse.debug then
-        print(("Pulse: weapon swings using the estimator (%s)"):format(
-            forced and "forced by setting" or "PLAYER_SWING unavailable"))
+        print(
+            ("Pulse: weapon swings using the estimator (%s)"):format(
+                forced and "forced by setting" or "PLAYER_SWING unavailable"
+            )
+        )
     end
     swingFrame:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
     swingFrame:RegisterEvent("PLAYER_LOGIN")
@@ -587,8 +612,16 @@ end
 
 function M:OnEnable()
     Pulse:BindFrame({ "abilityPulse" }, syncAbilityPulse)
-    Pulse:BindFrame({ "critLanded", "deflect", "damageTaken", "honorGained", "factionGained",
-        "healCrit", "healReceived", "debuffReceived" }, syncCombatText)
+    Pulse:BindFrame({
+        "critLanded",
+        "deflect",
+        "damageTaken",
+        "honorGained",
+        "factionGained",
+        "healCrit",
+        "healReceived",
+        "debuffReceived",
+    }, syncCombatText)
     Pulse:BindFrame({ "comboPoint" }, syncComboPoint)
     Pulse:BindFrame({ "castTexture" }, syncCast)
     Pulse:BindFrame({ "cooldownReady" }, syncCooldownReady)

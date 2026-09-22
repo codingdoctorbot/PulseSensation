@@ -70,27 +70,30 @@ function SidebarMixin:CreateButtons(pages)
 
         button.Label = button:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         button.Label:SetJustifyH("LEFT")
-        button.Label:SetPoint("TOPLEFT", button, "TOPLEFT",
-            Theme.CATEGORY_LABEL_X + (page.indent or 0) * Theme.CATEGORY_INDENT, 1)
+        button.Label:SetPoint(
+            "TOPLEFT",
+            button,
+            "TOPLEFT",
+            Theme.CATEGORY_LABEL_X + (page.indent or 0) * Theme.CATEGORY_INDENT,
+            1
+        )
         button.Label:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 0, 1)
         button.Label:SetText(page.label)
 
         button.page = page
         button.isChild = (page.indent or 0) > 0
 
-        button:SetScript("OnEnter", function(self)
-            self.over = true
-            updateButtonState(self)
+        button:SetScript("OnEnter", function(btn)
+            btn.over = true
+            updateButtonState(btn)
         end)
-        button:SetScript("OnLeave", function(self)
-            self.over = false
-            updateButtonState(self)
+        button:SetScript("OnLeave", function(btn)
+            btn.over = false
+            updateButtonState(btn)
         end)
-        button:SetScript("OnClick", function(self)
-            if SOUNDKIT and SOUNDKIT.IG_MAINMENU_OPTION then
-                PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
-            end
-            self:GetParent():Select(self.page)
+        button:SetScript("OnClick", function(btn)
+            if SOUNDKIT and SOUNDKIT.IG_MAINMENU_OPTION then PlaySound(SOUNDKIT.IG_MAINMENU_OPTION) end
+            btn:GetParent():Select(btn.page)
         end)
 
         updateButtonState(button)
@@ -116,6 +119,4 @@ function SidebarMixin:GetSelectedButton()
     return self.buttons[1]
 end
 
-function SidebarMixin:GetFirstButton()
-    return self.buttons[1]
-end
+function SidebarMixin:GetFirstButton() return self.buttons[1] end

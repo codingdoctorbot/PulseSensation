@@ -60,6 +60,7 @@ read_globals = {
     "ScrollUtil",
     "LowHealthFrame",
     "GetMirrorTimerProgress",
+    "GetMirrorTimerInfo",
     "TabSystemMixin",
     "TabSystemOwnerMixin",
     "PanelTemplates_SetTab",

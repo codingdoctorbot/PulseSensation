@@ -21,9 +21,9 @@
 
 local ADDON_NAME = ...
 
-local FRAME_WIDTH  = 620
+local FRAME_WIDTH = 620
 local FRAME_HEIGHT = 480
-local ROW_HEIGHT   = 24
+local ROW_HEIGHT = 24
 local HEADER_HEIGHT = 22
 
 -- Cycle order: untested is the honest default for anything nobody's touched yet, distinct
@@ -31,19 +31,26 @@ local HEADER_HEIGHT = 22
 -- functioning" just because that happened to be first in the list.
 local STATUS_ORDER = { "untested", "functioning", "needswork", "nonfunctioning" }
 local STATUS_INFO = {
-    untested       = { label = "Untested",        r = 0.6,  g = 0.6,  b = 0.6  },
-    functioning    = { label = "Functioning",     r = 0.25, g = 0.85, b = 0.25 },
-    needswork      = { label = "Needs work",      r = 0.95, g = 0.8,  b = 0.15 },
-    nonfunctioning = { label = "Non-functioning", r = 0.95, g = 0.3,  b = 0.3  },
+    untested = { label = "Untested", r = 0.6, g = 0.6, b = 0.6 },
+    functioning = { label = "Functioning", r = 0.25, g = 0.85, b = 0.25 },
+    needswork = { label = "Needs work", r = 0.95, g = 0.8, b = 0.15 },
+    nonfunctioning = { label = "Non-functioning", r = 0.95, g = 0.3, b = 0.3 },
 }
 
 local function nextStatus(current)
     for i, status in ipairs(STATUS_ORDER) do
-        if status == current then
-            return STATUS_ORDER[(i % #STATUS_ORDER) + 1]
-        end
+        if status == current then return STATUS_ORDER[(i % #STATUS_ORDER) + 1] end
     end
     return STATUS_ORDER[1]
+end
+
+local DEFAULT_ENTRY = { status = "untested", comment = "" }
+
+local function getEntry(triggerID)
+    local entry = PulseChecklistDB[triggerID]
+    if not entry then return DEFAULT_ENTRY end
+    if not STATUS_INFO[entry.status] then entry.status = "untested" end
+    return entry
 end
 
 local function ensureEntry(triggerID)
@@ -72,10 +79,10 @@ local function currentCharacter()
     local realm = GetRealmName()
     local _, class = UnitClass("player")
     return {
-        name  = name,
+        name = name,
         realm = realm,
         class = class,
-        when  = date("%Y-%m-%d"),
+        when = date("%Y-%m-%d"),
     }
 end
 
@@ -121,6 +128,7 @@ filterBox:SetSize(240, 20)
 filterBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 24, -40)
 filterBox:SetAutoFocus(false)
 filterBox:SetScript("OnEscapePressed", filterBox.ClearFocus)
+filterBox:SetScript("OnEnterPressed", filterBox.ClearFocus)
 
 local filterHint = frame:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
 filterHint:SetPoint("LEFT", filterBox, "RIGHT", 8, 0)
@@ -175,7 +183,7 @@ local function createRow(trigger)
     commentBox:SetMaxLetters(120)
 
     local function refreshStatus()
-        local entry = ensureEntry(trigger.id)
+        local entry = getEntry(trigger.id)
         local info = STATUS_INFO[entry.status]
         -- A trailing dot rather than a second column: the row is already three controls
         -- wide and the comment box is the one that wants the space. Only the surprising
@@ -194,7 +202,7 @@ local function createRow(trigger)
 
     -- The full attribution lives in the tooltip, so it costs no row width.
     statusButton:SetScript("OnEnter", function(self)
-        local entry = ensureEntry(trigger.id)
+        local entry = getEntry(trigger.id)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         GameTooltip:AddLine(trigger.id, 1, 1, 1)
         local stamp = entry.confirmedBy
@@ -203,12 +211,26 @@ local function createRow(trigger)
         elseif not stamp then
             GameTooltip:AddLine("Set before this build recorded who did it.", 0.6, 0.6, 0.6)
         else
-            GameTooltip:AddLine(("%s set this on %s-%s (%s) on %s."):format(
-                STATUS_INFO[entry.status].label, tostring(stamp.name), tostring(stamp.realm),
-                tostring(stamp.class), tostring(stamp.when)), 0.6, 0.6, 0.6)
+            GameTooltip:AddLine(
+                ("%s set this on %s-%s (%s) on %s."):format(
+                    STATUS_INFO[entry.status].label,
+                    tostring(stamp.name),
+                    tostring(stamp.realm),
+                    tostring(stamp.class),
+                    tostring(stamp.when)
+                ),
+                0.6,
+                0.6,
+                0.6
+            )
             if not isSameCharacter(stamp) then
-                GameTooltip:AddLine("Not this character — some cues only fire for the right class or spec.",
-                    0.95, 0.8, 0.15, true)
+                GameTooltip:AddLine(
+                    "Not this character — some cues only fire for the right class or spec.",
+                    0.95,
+                    0.8,
+                    0.15,
+                    true
+                )
             end
         end
         GameTooltip:Show()
@@ -216,7 +238,8 @@ local function createRow(trigger)
     statusButton:SetScript("OnLeave", function() GameTooltip:Hide() end)
 
     local function commitComment()
-        ensureEntry(trigger.id).comment = commentBox:GetText()
+        local text = commentBox:GetText() or ""
+        if text ~= "" or PulseChecklistDB[trigger.id] then ensureEntry(trigger.id).comment = text end
     end
     commentBox:SetScript("OnEnterPressed", function(self)
         commitComment()
@@ -225,17 +248,24 @@ local function createRow(trigger)
     commentBox:SetScript("OnEditFocusLost", commitComment)
     commentBox:SetScript("OnEscapePressed", commentBox.ClearFocus)
 
-    local entry = ensureEntry(trigger.id)
+    local entry = getEntry(trigger.id)
     commentBox:SetText(entry.comment or "")
     refreshStatus()
 
     local searchText = string.lower(trigger.id .. " " .. (trigger.label or ""))
-    return { kind = "row", frame = row, triggerID = trigger.id, searchText = searchText,
-             refreshStatus = refreshStatus }
+    return {
+        kind = "row",
+        frame = row,
+        triggerID = trigger.id,
+        searchText = searchText,
+        refreshStatus = refreshStatus,
+    }
 end
 
 local function buildEntries()
-    for _, entry in ipairs(entries) do entry.frame:Hide() end
+    for _, entry in ipairs(entries) do
+        entry.frame:Hide()
+    end
     entries = {}
 
     local P = _G.Pulse
@@ -269,8 +299,7 @@ local function relayout()
             currentCategoryMatches = entry.selfMatches
             entry.anyChildVisible = false
         else
-            entry.visible = currentCategoryMatches
-                or entry.searchText:find(query, 1, true) ~= nil
+            entry.visible = currentCategoryMatches or entry.searchText:find(query, 1, true) ~= nil
         end
     end
 

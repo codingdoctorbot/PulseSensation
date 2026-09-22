@@ -19,8 +19,7 @@ local failures = 0
 local function check(label, got, want)
     if got ~= want then
         failures = failures + 1
-        io.write(("FAIL  %-50s got %s, wanted %s\n")
-            :format(label, tostring(got), tostring(want)))
+        io.write(("FAIL  %-50s got %s, wanted %s\n"):format(label, tostring(got), tostring(want)))
     else
         io.write(("ok    %s\n"):format(label))
     end
@@ -29,8 +28,22 @@ end
 -- ── Stub WoW API ──────────────────────────────────────────────────────────────
 
 local METHOD_PREFIXES = {
-    "Set", "Get", "Is", "Register", "Unregister", "Enable", "Disable",
-    "Show", "Hide", "Start", "Stop", "Create", "Click", "Clear", "Add", "Highlight",
+    "Set",
+    "Get",
+    "Is",
+    "Register",
+    "Unregister",
+    "Enable",
+    "Disable",
+    "Show",
+    "Hide",
+    "Start",
+    "Stop",
+    "Create",
+    "Click",
+    "Clear",
+    "Add",
+    "Highlight",
 }
 
 local function looksLikeMethod(key)
@@ -61,9 +74,7 @@ local function newFrame(frameType, name, parent, template)
     rawset(f, "IsShown", function() return f.__shown end)
     rawset(f, "SetScript", function(_, script, fn)
         f["__script_" .. script] = fn
-        if frameType == "Button" and f.__script_OnClick and f.__script_OnEnter then
-            buttons[f] = true
-        end
+        if frameType == "Button" and f.__script_OnClick and f.__script_OnEnter then buttons[f] = true end
     end)
     rawset(f, "GetScript", function(_, script) return f["__script_" .. script] end)
     rawset(f, "SetText", function(_, text) f.__text = text end)
@@ -100,9 +111,9 @@ function date() return "2026-09-22" end
 local tooltipLines = {}
 GameTooltip = {
     SetOwner = function() tooltipLines = {} end,
-    AddLine  = function(_, text) tooltipLines[#tooltipLines + 1] = text end,
-    Show     = function() end,
-    Hide     = function() end,
+    AddLine = function(_, text) tooltipLines[#tooltipLines + 1] = text end,
+    Show = function() end,
+    Hide = function() end,
 }
 
 -- ── Fake Pulse ────────────────────────────────────────────────────────────────
@@ -111,8 +122,8 @@ local TRIGGER = { id = "autoShotFired", label = "Auto Shot", category = "COMBAT"
 
 _G.Pulse = {
     Registry = {
-        GetCategories         = function() return { "COMBAT" } end,
-        GetCategoryLabel      = function() return "Combat texture" end,
+        GetCategories = function() return { "COMBAT" } end,
+        GetCategoryLabel = function() return "Combat texture" end,
         GetTriggersByCategory = function() return { TRIGGER } end,
     },
 }
@@ -147,13 +158,10 @@ check("a status button was built", statusButton ~= nil, true)
 
 io.write("\n--- stamping ---\n")
 
--- Building a row calls ensureEntry, so the entry exists before anything is clicked. That
--- predates confirmedBy; what matters here is that it starts unstamped.
-check("row build seeded the entry", type(PulseChecklistDB.autoShotFired), "table")
-check("  starting untested", PulseChecklistDB.autoShotFired.status, "untested")
-check("  and unstamped", PulseChecklistDB.autoShotFired.confirmedBy, nil)
+-- Building a row does not populate DB; entry is created only when clicked or commented.
+check("row build leaves entry clean", PulseChecklistDB.autoShotFired, nil)
 
-statusButton.__script_OnClick(statusButton)   -- untested -> functioning
+statusButton.__script_OnClick(statusButton) -- untested -> functioning
 local entry = PulseChecklistDB.autoShotFired
 check("click created the entry", type(entry), "table")
 check("  status advanced", entry.status, "functioning")
@@ -163,11 +171,11 @@ check("  and its realm", entry.confirmedBy and entry.confirmedBy.realm, "Testrea
 check("  and its class", entry.confirmedBy and entry.confirmedBy.class, "HUNTER")
 
 -- Cycle all the way back round to untested: the stamp must go with it.
-statusButton.__script_OnClick(statusButton)   -- needswork
-statusButton.__script_OnClick(statusButton)   -- nonfunctioning
+statusButton.__script_OnClick(statusButton) -- needswork
+statusButton.__script_OnClick(statusButton) -- nonfunctioning
 check("cycled to nonfunctioning", entry.status, "nonfunctioning")
 check("  still stamped", type(entry.confirmedBy), "table")
-statusButton.__script_OnClick(statusButton)   -- untested
+statusButton.__script_OnClick(statusButton) -- untested
 check("cycled back to untested", entry.status, "untested")
 check("  stamp cleared", entry.confirmedBy, nil)
 
@@ -175,7 +183,7 @@ check("  stamp cleared", entry.confirmedBy, nil)
 
 io.write("\n--- another character ---\n")
 
-statusButton.__script_OnClick(statusButton)   -- functioning, as Testchar
+statusButton.__script_OnClick(statusButton) -- functioning, as Testchar
 local selfText = statusButton:GetText()
 check("own confirmation is unmarked", selfText:find("\194\183", 1, true) == nil, true)
 
@@ -187,10 +195,9 @@ check("tooltip names the other character", joined:find("Testchar", 1, true) ~= n
 check("  and warns it was not this one", joined:find("Not this character", 1, true) ~= nil, true)
 
 -- The marker only appears once a refresh runs, which a click does.
-statusButton.__script_OnClick(statusButton)   -- needswork, now as Otherchar
-statusButton.__script_OnClick(statusButton)   -- nonfunctioning
-check("re-stamped to the current character",
-    PulseChecklistDB.autoShotFired.confirmedBy.name, "Otherchar")
+statusButton.__script_OnClick(statusButton) -- needswork, now as Otherchar
+statusButton.__script_OnClick(statusButton) -- nonfunctioning
+check("re-stamped to the current character", PulseChecklistDB.autoShotFired.confirmedBy.name, "Otherchar")
 
 -- ── Pre-confirmedBy saved data ────────────────────────────────────────────────
 
@@ -200,9 +207,11 @@ io.write("\n--- legacy entry ---\n")
 PulseChecklistDB.autoShotFired = { status = "functioning", comment = "worked on the hunter" }
 local okEnter = pcall(statusButton.__script_OnEnter, statusButton)
 check("tooltip copes with no stamp", okEnter, true)
-check("  and says so plainly",
-    table.concat(tooltipLines, "\n"):find("before this build recorded", 1, true) ~= nil, true)
-check("comment survived untouched",
-    PulseChecklistDB.autoShotFired.comment, "worked on the hunter")
+check(
+    "  and says so plainly",
+    table.concat(tooltipLines, "\n"):find("before this build recorded", 1, true) ~= nil,
+    true
+)
+check("comment survived untouched", PulseChecklistDB.autoShotFired.comment, "worked on the hunter")
 
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))

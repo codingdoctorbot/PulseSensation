@@ -22,12 +22,6 @@ Pulse:RegisterModule("Environment", M)
 
 local function lerp(from, to, factor) return from + (to - from) * factor end
 
-local function clamp01(v)
-    if v < 0 then return 0 end
-    if v > 1 then return 1 end
-    return v
-end
-
 local breathFrame = CreateFrame("Frame")
 local breathTicker = nil
 local warnedLowBreath = false
@@ -35,105 +29,103 @@ local breathMaxValue = nil
 local lastGasp = 0
 
 local function stopBreathTicker()
-    if breathTicker then breathTicker:Cancel(); breathTicker = nil end
+    if breathTicker then
+        breathTicker:Cancel()
+        breathTicker = nil
+    end
     warnedLowBreath = false
     breathMaxValue = nil
     lastGasp = 0
 end
 
+local function startBreathTicker(maxValue)
+    stopBreathTicker()
+    breathMaxValue = maxValue
+    -- 0.1s, not 0.5s (continuous.md §4): breathTexture's gasp gap shrinks to as little
+    -- as 0.1s near drowning, and a 0.5s poll cannot distinguish that from any other
+    -- short gap, so the acceleration would be theoretical rather than felt.
+    -- breathWarning's threshold check just runs more often, still gated by
+    -- warnedLowBreath.
+    breathTicker = C_Timer.NewTicker(0.1, function()
+        if not breathMaxValue or breathMaxValue <= 0 then return end
+        local current = GetMirrorTimerProgress("BREATH")
+        if not current or current <= 0 then return end -- 0 also means "not active"
+        local remaining = current / breathMaxValue
+        if remaining < 0.25 and not warnedLowBreath then
+            Pulse:FireIfEnabled("breathWarning")
+            warnedLowBreath = true
+        end
+
+        local startThreshold = Pulse.Database:GetTriggerSetting("breathTexture", "dangerStartThreshold", 0.70)
+        if remaining < startThreshold then
+            local midThreshold = Pulse.Database:GetTriggerSetting("breathTexture", "midBreathThreshold", 0.40)
+            local lateThreshold = Pulse.Database:GetTriggerSetting("breathTexture", "lateBreathThreshold", 0.15)
+            local heartRateCalm = Pulse.Database:GetTriggerSetting("breathTexture", "heartRateCalm", 30)
+            local heartRateCritical = Pulse.Database:GetTriggerSetting("breathTexture", "heartRateCritical", 100)
+            local MID_RATE, LATE_RATE = 40, 65
+
+            local heartRate
+            if remaining >= midThreshold then
+                local segProgress = (startThreshold - remaining) / (startThreshold - midThreshold)
+                heartRate = lerp(heartRateCalm, MID_RATE, segProgress)
+            elseif remaining >= lateThreshold then
+                local segProgress = (midThreshold - remaining) / (midThreshold - lateThreshold)
+                heartRate = lerp(MID_RATE, LATE_RATE, segProgress)
+            else
+                local segProgress = (lateThreshold - remaining) / lateThreshold
+                heartRate = lerp(LATE_RATE, heartRateCritical, segProgress)
+            end
+
+            local gap = 60 / heartRate
+            local now = GetTime()
+            if now - lastGasp >= gap then
+                lastGasp = now
+                local peak = Pulse.Database:GetTriggerSetting("breathTexture", "gaspPeak", 0.6)
+                local lub = peak
+                local dub = peak * (0.2 / 0.7)
+                Pulse:HoldIfEnabled("breathTexture", lub, lub, 0.05)
+                C_Timer.After(0.36, function() Pulse:HoldIfEnabled("breathTexture", dub, dub, 0.05) end)
+            end
+        end
+    end)
+end
+
 local function syncBreath()
     breathFrame:UnregisterAllEvents()
-    stopBreathTicker()
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not (Pulse.Database:GetCue("breathWarning") or Pulse.Database:GetCue("breathTexture")) then return end
+    if not Pulse.Database:Get("masterEnabled") then
+        stopBreathTicker()
+        return
+    end
+    if not (Pulse.Database:GetCue("breathWarning") or Pulse.Database:GetCue("breathTexture")) then
+        stopBreathTicker()
+        return
+    end
     breathFrame:RegisterEvent("MIRROR_TIMER_START")
     breathFrame:RegisterEvent("MIRROR_TIMER_STOP")
+
+    -- Seed from live state: if already underwater and breath is draining, resume rather than going silent
+    if not breathTicker and type(GetMirrorTimerProgress) == "function" then
+        local current = GetMirrorTimerProgress("BREATH")
+        if current and current > 0 then
+            local maxVal = nil
+            if type(GetMirrorTimerInfo) == "function" then
+                for i = 1, 3 do
+                    local timer, _, mVal = GetMirrorTimerInfo(i)
+                    if timer == "BREATH" and mVal and mVal > 0 then
+                        maxVal = mVal
+                        break
+                    end
+                end
+            end
+            startBreathTicker(maxVal or math.max(current, 30000))
+        end
+    end
 end
 
 breathFrame:SetScript("OnEvent", function(_, event, timerName, value, maxValue)
     if timerName ~= "BREATH" then return end
     if event == "MIRROR_TIMER_START" then
-        stopBreathTicker()
-        breathMaxValue = maxValue
-        -- 0.1s, not 0.5s (continuous.md §4): breathTexture's gasp gap shrinks to as little
-        -- as 0.1s near drowning, and a 0.5s poll cannot distinguish that from any other
-        -- short gap, so the acceleration would be theoretical rather than felt.
-        -- breathWarning's threshold check just runs more often, still gated by
-        -- warnedLowBreath.
-        breathTicker = C_Timer.NewTicker(0.1, function()
-            if not breathMaxValue or breathMaxValue <= 0 then return end
-            local current = GetMirrorTimerProgress("BREATH")
-            if not current or current <= 0 then return end   -- 0 also means "not active"
-            local remaining = current / breathMaxValue
-            if remaining < 0.25 and not warnedLowBreath then
-                Pulse:FireIfEnabled("breathWarning")
-                warnedLowBreath = true
-            end
-
-            -- continuous.md §4: dual-motor stutter/gasp, deliberately not
-            -- lowHealthWarning's clean lub-dub — two survival cues should feel different.
-            --
-            -- Grounded (2026-09-16, several live rounds) in the diving bradycardia reflex:
-            -- heart rate does not rise from the moment you hold your breath, it drops at
-            -- first for oxygen conservation and only climbs sharply as a panic response at
-            -- the true end. Three breakpoints rather than one smooth curve — silent above
-            -- dangerStartThreshold (~70% breath remaining), calm (heartRateCalm) down to
-            -- midBreathThreshold (~40%), a steeper climb to lateBreathThreshold (~15%), and
-            -- the steepest in the last stretch to zero. dangerFloor and dangerCurve are
-            -- retired: heartRateCalm IS the genuine calm starting point, and steepness comes
-            -- from three segment slopes rather than one exponent.
-            --
-            -- The interior anchor rates (40, 65 BPM) are reasoned constants, not sliders,
-            -- chosen so each segment's slope is visibly steeper than the last — about 0.33
-            -- BPM per % breath in the calm segment, 1.0 in the middle, 2.3 in the final.
-            local startThreshold = Pulse.Database:GetTriggerSetting("breathTexture", "dangerStartThreshold", 0.70)
-            if remaining < startThreshold then
-                local midThreshold  = Pulse.Database:GetTriggerSetting("breathTexture", "midBreathThreshold", 0.40)
-                local lateThreshold = Pulse.Database:GetTriggerSetting("breathTexture", "lateBreathThreshold", 0.15)
-                local heartRateCalm     = Pulse.Database:GetTriggerSetting("breathTexture", "heartRateCalm", 30)
-                local heartRateCritical = Pulse.Database:GetTriggerSetting("breathTexture", "heartRateCritical", 100)
-                local MID_RATE, LATE_RATE = 40, 65
-
-                local heartRate
-                if remaining >= midThreshold then
-                    local segProgress = (startThreshold - remaining) / (startThreshold - midThreshold)
-                    heartRate = lerp(heartRateCalm, MID_RATE, segProgress)
-                elseif remaining >= lateThreshold then
-                    local segProgress = (midThreshold - remaining) / (midThreshold - lateThreshold)
-                    heartRate = lerp(MID_RATE, LATE_RATE, segProgress)
-                else
-                    local segProgress = (lateThreshold - remaining) / lateThreshold
-                    heartRate = lerp(LATE_RATE, heartRateCritical, segProgress)
-                end
-                -- No continuous ambient undertone. Reported live 2026-09-16 to make the
-                -- knocks LESS distinct, because a low motor never settling back to zero
-                -- between beats blurs lub and dub together. Pure knock-and-silence, as
-                -- lowHealthTexture already does.
-
-                -- Physiology, 2026-09-16: lub and dub are heart valves closing, a fixed
-                -- mechanical event, not something quieter when the heart is calm. Scaling
-                -- their magnitude by danger sent low-danger beats under the motor's own
-                -- activation threshold — lub mostly cleared it, dub often did not, so beats
-                -- were reported missing their second knock. The escalation was on the wrong
-                -- variable. Now: heart rate drives tempo, while magnitude and internal
-                -- timing stay fixed at lowHealthTexture's proven always-above-threshold
-                -- constants (Health.lua: LUB_INTENSITY 0.7, DUB_INTENSITY 0.2, LUB_DUB_GAP
-                -- 0.36, KNOCK_DURATION 0.05), scaled only by the gaspPeak slider. Every beat
-                -- lands at the same felt magnitude; urgency comes from how often it beats.
-                local gap = 60 / heartRate
-                local now = GetTime()
-                if now - lastGasp >= gap then
-                    lastGasp = now
-                    local peak = Pulse.Database:GetTriggerSetting("breathTexture", "gaspPeak", 0.6)
-                    local lub = peak
-                    local dub = peak * (0.2 / 0.7)
-                    Pulse:HoldIfEnabled("breathTexture", lub, lub, 0.05)
-                    C_Timer.After(0.36, function()
-                        Pulse:HoldIfEnabled("breathTexture", dub, dub, 0.05)
-                    end)
-                end
-            end
-        end)
+        startBreathTicker(maxValue)
     elseif event == "MIRROR_TIMER_STOP" then
         stopBreathTicker()
     end
@@ -153,9 +145,7 @@ local function syncWeather()
     weatherFrame:RegisterEvent("WEATHER_CHANGED")
 end
 
-weatherFrame:SetScript("OnEvent", function()
-    Pulse:FireIfEnabled("weatherChanged")
-end)
+weatherFrame:SetScript("OnEvent", function() Pulse:FireIfEnabled("weatherChanged") end)
 
 function M:OnEnable()
     Pulse:BindFrame({ "breathWarning", "breathTexture" }, syncBreath)
