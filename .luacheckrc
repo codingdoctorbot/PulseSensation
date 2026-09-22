@@ -67,6 +67,7 @@ read_globals = {
     "TabSystemMixin",
     "TabSystemOwnerMixin",
     "PanelTemplates_SetTab",
+    "GetUIPanel",
     "StackSplitFrame",
     "MerchantFrame",
     "BankFrame",

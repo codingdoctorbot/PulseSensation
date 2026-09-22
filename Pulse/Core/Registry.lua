@@ -2160,9 +2160,9 @@ Pulse.Triggers = {
 	-- Controller UI — WoW Forever's own gamepad interface, observed rather than recreated
 	-- (Modules/ControllerUI.lua). Every cue below reads a native Blizzard signal whose name,
 	-- file and line were CHECKED against the Forever source; none is guessed. None has
-	-- `events`, because none is a plain Lua event — they arrive through CallbackRegistryMixin
-	-- callbacks (SmartNavigation), EventRegistry (the radial's open/close), or hooksecurefunc
-	-- on a Blizzard mixin method (the radial's selection lifecycle, tab changes).
+	-- `events`, because none is a plain Lua event — they arrive through passive polling
+	-- of Blizzard state (SmartNavigation, GamepadRadial, UIParent panels, GroupTargeting),
+	-- or hooksecurefunc on safe Blizzard methods (radial selection lifecycle, tab changes).
 	--
 	-- All shipped OFF by default and all UNTESTED: the source says these fire, but nothing
 	-- here has observed one land in-game. The SmartNavigation POC was written and never run,
@@ -2195,7 +2195,7 @@ Pulse.Triggers = {
 		defaultIntensity = 0.35,
 		label = "UI focus moved",
 		desc = "A very light tick each time controller focus moves to a different interface element.",
-		caveat = "Reads Blizzard's own SmartNavigation `SelectedButtonUpdated` callback, so it fires on a real focus change rather than on stick movement — holding a direction on the same element stays silent. Gated on the gamepad interface actually being active (InputUtil.IsGamepadUIEnabled), so it never fires while you're on mouse and keyboard. The first focus after a panel opens is deliberately silent.",
+		caveat = "Passively polled from SmartNavigation's currentButton every 0.05s to eliminate execution taint when gamepad mode is toggled. Fires on real focus changes rather than stick motion. Gated on gamepad UI being active.",
 	},
 	{
 		id = "uiNavigateEdge",
@@ -2206,7 +2206,7 @@ Pulse.Triggers = {
 		defaultIntensity = 0.5,
 		label = "UI navigation hit an edge",
 		desc = "A short, sharp tick when controller focus runs into the edge of a list or grid and can't go further.",
-		caveat = "One cue for all four edges, not four. SmartNavigation reports top/bottom/left/right separately, but a rumble motor cannot convey direction — four cues would feel identical and only pad the settings list. Most useful in grids like the bag window, where the boundary actually means something.",
+		caveat = "Dormant: SmartNavigation edge callbacks were retired to eliminate client execution taint when gamepad mode is toggled. Retained in registry for future native engine support.",
 	},
 	{
 		id = "uiSelectionDisabled",
@@ -2217,7 +2217,7 @@ Pulse.Triggers = {
 		defaultIntensity = 0.5,
 		label = "Focused element became unavailable",
 		desc = "Fires when the element controller focus is currently on becomes disabled.",
-		caveat = "Reads SmartNavigation's `SelectedButtonEnabledStateChanged`. Note this is the focused element CHANGING state while you sit on it — not you navigating onto something already disabled. Untested how often that actually happens in practice; it may be rare enough to not be worth a cue.",
+		caveat = "Passively polled by observing IsEnabled() on the currently focused element. Fires if the element becomes disabled while focused.",
 	},
 
 	-- ── Controller UI: focus ────────────────────────────────────────────────────
@@ -2230,7 +2230,7 @@ Pulse.Triggers = {
 		defaultIntensity = 0.5,
 		label = "Interface took controller focus",
 		desc = "A rising pulse when the controller starts driving a UI panel instead of your character.",
-		caveat = 'SmartNavigation\'s `FocusedFrame` callback. This is the boundary Forever shows as "Focus/Unfocus Interface" in its own on-screen button legend, so it maps to something the game already tells you about.',
+		caveat = "Passively polled from SmartNavigation focus state. Fires when controller navigation gains focus on a UI element.",
 	},
 	{
 		id = "uiFocusOut",
@@ -2241,7 +2241,7 @@ Pulse.Triggers = {
 		defaultIntensity = 0.5,
 		label = "Interface released controller focus",
 		desc = "A falling pulse when the controller hands control back to your character.",
-		caveat = "SmartNavigation's `UnfocusedFrame` callback — the other half of the pair above.",
+		caveat = "Passively polled from SmartNavigation focus state. Fires when controller navigation releases focus back to world control.",
 	},
 
 	-- ── Controller UI: menus and tabs ───────────────────────────────────────────
@@ -2270,7 +2270,7 @@ Pulse.Triggers = {
 		defaultIntensity = 0.6,
 		label = "Radial menu opened",
 		desc = "A rising pulse when the controller radial menu opens.",
-		caveat = "EventRegistry's `Gamepad.ShowMainMenu`, fired by Blizzard's own radial as it shows.",
+		caveat = "Passively polled from GamepadRadial:IsShown() to eliminate EventRegistry callback taint during radial menu activation.",
 	},
 	{
 		id = "radialClose",
@@ -2281,7 +2281,7 @@ Pulse.Triggers = {
 		defaultIntensity = 0.5,
 		label = "Radial menu closed",
 		desc = "A falling pulse when the radial menu closes.",
-		caveat = 'EventRegistry\'s `Gamepad.HideMainMenu`. Picking a segment that opens a panel also closes the radial, so this will usually fire right after "Radial segment chosen" rather than instead of it.',
+		caveat = "Passively polled from GamepadRadial:IsShown(). Picking a segment that opens a panel also closes the radial.",
 	},
 	{
 		id = "radialTick",
@@ -2658,7 +2658,7 @@ Pulse.Triggers = {
 		defaultIntensity = 0.6,
 		label = "UI panel opened",
 		desc = "A crisp tap when a major full-screen or side UI panel opens (character sheet, spellbook, quest log, etc.).",
-		caveat = "Observed via EventRegistry UIParentPanelManager.ShowUIPanel callback.",
+		caveat = "Passively polled via GetUIPanel every 0.05s to eliminate UIParentPanelManager execution taint on protected frames.",
 	},
 	{
 		id = "panelClose",
@@ -2669,7 +2669,7 @@ Pulse.Triggers = {
 		defaultIntensity = 0.5,
 		label = "UI panel closed",
 		desc = "A light click when a major UI panel is dismissed.",
-		caveat = "Observed via EventRegistry UIParentPanelManager.HideUIPanel callback.",
+		caveat = "Passively polled via GetUIPanel every 0.05s. Detects when major UI panels are dismissed without callback taint.",
 	},
 	{
 		id = "groupTargetingStart",
@@ -2680,7 +2680,7 @@ Pulse.Triggers = {
 		defaultIntensity = 0.6,
 		label = "Group targeting active",
 		desc = "A distinct tap when holding the controller modifier to target party or raid members.",
-		caveat = "Observed via GroupTargeting GroupTargetingStateChanged callback.",
+		caveat = "Passively polled via GroupTargeting.isTargetingActive to eliminate execution taint when targeting stops or gamepad mode is toggled.",
 	},
 	{
 		id = "groupTargetingStop",
@@ -2691,7 +2691,7 @@ Pulse.Triggers = {
 		defaultIntensity = 0.5,
 		label = "Group targeting released",
 		desc = "A soft tick when releasing the group targeting modifier back to normal navigation.",
-		caveat = "Observed via GroupTargeting GroupTargetingStateChanged callback.",
+		caveat = "Passively polled via GroupTargeting.isTargetingActive. Fires when the group targeting modifier is released.",
 	},
 }
 
