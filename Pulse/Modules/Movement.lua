@@ -31,8 +31,12 @@ local staticHighRole = { high = 0 }
 -- Hand-rolled, not the native math.clamp — CONFIRMED missing on the live client
 -- (Core/Engine.lua's math.lerp failed the same way). Lua Errors/unfixedpulse.rtf.
 local function clamp01(v)
-    if v < 0 then return 0 end
-    if v > 1 then return 1 end
+    if v < 0 then
+        return 0
+    end
+    if v > 1 then
+        return 1
+    end
     return v
 end
 
@@ -53,7 +57,9 @@ local function pollLandingAndSwim()
     -- jump-initiated falls. Falling turning true with nothing already marking a start
     -- covers every other case. The jump hook still wins when it fires, by being earlier:
     -- IT ALSO CAPTURES THE ASCENT, WHICH IsFalling() DOES NOT COUNT AS FALLING.
-    if falling and not wasFalling and not fallStartTime then fallStartTime = GetTime() end
+    if falling and not wasFalling and not fallStartTime then
+        fallStartTime = GetTime()
+    end
 
     if (wasFalling and not falling) or (wasFlying and not flying and not falling) then
         if fallStartTime then
@@ -113,7 +119,9 @@ local function pollLandingAndSwim()
                     -- reading as nil — which is the 766-repeat failure this file's own
                     -- RULE B comment above is about. Every other read in this addon
                     -- orders it this way; this one did not.
-                    if ok and not issecretvalue(under) and under then baseline = baseline * boost end
+                    if ok and not issecretvalue(under) and under then
+                        baseline = baseline * boost
+                    end
                 end
 
                 -- The shape every new continuous cue in this addon should copy: decide a
@@ -249,14 +257,26 @@ local function syncTaxi()
     taxiFrame:UnregisterAllEvents()
     onTaxiRide = false
     taxiFrame:SetScript("OnUpdate", nil)
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not Pulse.Database:GetCue("taxiRide") then return end
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
+    if
+        not (
+            Pulse.Database:GetCue("taxiRide")
+            or Pulse.Database:GetCue("taxiTakeoff")
+            or Pulse.Database:GetCue("taxiLanding")
+        )
+    then
+        return
+    end
     taxiFrame:RegisterEvent("PLAYER_CONTROL_LOST")
     taxiFrame:RegisterEvent("PLAYER_CONTROL_GAINED")
     -- Seed from live state: if already on a flight path, preserve vibration rather than going silent
     if UnitOnTaxi and UnitOnTaxi("player") then
         onTaxiRide = true
-        taxiFrame:SetScript("OnUpdate", taxiTick)
+        if Pulse.Database:GetCue("taxiRide") then
+            taxiFrame:SetScript("OnUpdate", taxiTick)
+        end
     end
 end
 
@@ -268,14 +288,25 @@ taxiFrame:SetScript("OnEvent", function(_, event)
         taxiToken = taxiToken + 1
         local token = taxiToken
         C_Timer.After(0.1, function()
-            if taxiToken ~= token then return end
-            if UnitOnTaxi("player") then
+            if taxiToken ~= token then
+                return
+            end
+            if UnitOnTaxi and UnitOnTaxi("player") then
+                local wasRiding = onTaxiRide
                 onTaxiRide = true
-                taxiFrame:SetScript("OnUpdate", taxiTick)
+                if not wasRiding then
+                    Pulse:FireIfEnabled("taxiTakeoff")
+                end
+                if Pulse.Database:GetCue("taxiRide") then
+                    taxiFrame:SetScript("OnUpdate", taxiTick)
+                end
             end
         end)
     elseif event == "PLAYER_CONTROL_GAINED" then
         taxiToken = taxiToken + 1
+        if onTaxiRide then
+            Pulse:FireIfEnabled("taxiLanding")
+        end
         onTaxiRide = false
         taxiFrame:SetScript("OnUpdate", nil)
     end
@@ -291,8 +322,12 @@ local lastForm = nil
 
 local function syncForm()
     formFrame:UnregisterAllEvents()
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not Pulse.Database:GetCue("formChanged") then return end
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
+    if not Pulse.Database:GetCue("formChanged") then
+        return
+    end
     lastForm = GetShapeshiftForm()
     formFrame:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
 end
@@ -307,7 +342,7 @@ end)
 
 function M:OnEnable()
     Pulse:BindFrame({ "landingSoft", "landingHard", "swimTexture", "waterTexture" }, syncPoll)
-    Pulse:BindFrame({ "taxiRide" }, syncTaxi)
+    Pulse:BindFrame({ "taxiRide", "taxiTakeoff", "taxiLanding" }, syncTaxi)
     Pulse:BindFrame({ "formChanged" }, syncForm)
 end
 

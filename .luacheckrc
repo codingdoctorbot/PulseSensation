@@ -129,6 +129,7 @@ read_globals = {
     "GetShapeshiftForm",
     "GetProfessions",
     "GetProfessionInfo",
+    "GetMoney",
     "issecretvalue",
     "LE_GAME_ERR_ATTACK_DEAD",
 

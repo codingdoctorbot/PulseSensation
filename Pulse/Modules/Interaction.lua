@@ -14,17 +14,13 @@
 -- per cue id and every one of these carries throttle = 1.0, so whichever path arrives first
 -- fires and the other is dropped milliseconds later.
 --
--- So "does Forever route MERCHANT_SHOW, or the manager event, or both" never has to be
--- answered — it answers itself at runtime, the same either way. An exclusion list would
--- have needed the answer up front and been wrong half the time.
+-- Merchant buy, sell, and repair tactile feedback:
+-- - merchantBuy: spending money while in a merchant window.
+-- - merchantSell: earning money while in a merchant window.
+-- - merchantRepair: durability update while in a merchant window.
 --
--- The cost, stated rather than buried: closing and reopening the same window inside a
--- second gives one pulse, not two. That was already true before this module existed.
---
--- NOT MAPPED: most of the 81. Garrisons, covenants, azerite, Chromie time, housing — retail
--- systems a classic-shaped roster never opens. They are neither listed nor excluded; they
--- fall through to `interactionWindow`, so anything unmapped still produces something and a
--- window type added to the client later is covered without an edit here.
+-- Vault closing latch:
+-- - bankClosed: heavy latch thud when closing a bank, guild bank, or void storage vault.
 
 local ADDON_NAME, Pulse = ...
 
@@ -32,14 +28,16 @@ local M = {}
 Pulse:RegisterModule("Interaction", M)
 
 local GENERIC_CUE = "interactionWindow"
-local CLOSED_CUE  = "interactionWindowClosed"
+local CLOSED_CUE = "interactionWindowClosed"
 
 -- Read through Enum where the client defines it, with the confirmed literal as fallback —
 -- the pattern Modules/Crafting.lua and Modules/Locomotion.lua use. Values CONFIRMED against
 -- PlayerInteractionManagerConstantsDocumentation.lua.
 local function interactionType(name, literal)
     local value = Enum and Enum.PlayerInteractionType and Enum.PlayerInteractionType[name]
-    if type(value) == "number" then return value end
+    if type(value) == "number" then
+        return value
+    end
     return literal
 end
 
@@ -55,29 +53,45 @@ end
 
 -- Already had cues, already had legacy watchers. Mapped here so they fire on whichever
 -- path this client actually uses.
-map("merchantShow",   { "Merchant", 5 }, { "Vendor", 12 })
-map("bankOpened",     { "Banker", 8 }, { "CharacterBanker", 67 }, { "AccountBanker", 68 })
-map("mailShow",       { "MailInfo", 17 })
-map("trainerShow",    { "Trainer", 7 })
-map("taxiOpened",     { "TaxiNode", 6 })
-map("tradeSkillShow", { "Professions", 59 },
-                      { "ProfessionsCraftingOrder", 58 },
-                      { "ProfessionsCustomerOrder", 60 })
-map("questDetail",    { "QuestGiver", 4 })
-map("tradeRequest",   { "TradePartner", 1 })
+map("merchantShow", { "Merchant", 5 }, { "Vendor", 12 })
+map("bankOpened", { "Banker", 8 }, { "CharacterBanker", 67 }, { "AccountBanker", 68 })
+map("mailShow", { "MailInfo", 17 })
+map("trainerShow", { "Trainer", 7 })
+map("taxiOpened", { "TaxiNode", 6 })
+map("tradeSkillShow", { "Professions", 59 }, { "ProfessionsCraftingOrder", 58 }, { "ProfessionsCustomerOrder", 60 })
+map("questDetail", { "QuestGiver", 4 })
+map("tradeRequest", { "TradePartner", 1 })
 
 -- New. The gaps.
-map("guildBankOpened",  { "GuildBanker", 10 }, { "VoidStorageBanker", 26 })
+map("guildBankOpened", { "GuildBanker", 10 }, { "VoidStorageBanker", 26 })
 map("auctionHouseShow", { "Auctioneer", 21 }, { "BlackMarketAuctioneer", 27 })
-map("gossipShow",       { "Gossip", 3 })
+map("gossipShow", { "Gossip", 3 })
 map("spiritHealerShow", { "SpiritHealer", 18 }, { "AreaSpiritHealer", 19 })
-map("stableShow",       { "StableMaster", 22 }, { "PetUntrainer", 80 })
-map("binderShow",       { "Binder", 20 })
+map("stableShow", { "StableMaster", 22 }, { "PetUntrainer", 80 })
+map("binderShow", { "Binder", 20 })
+
+local BANK_INTERACTIONS = {
+    [8] = true,
+    [67] = true,
+    [68] = true,
+    [10] = true,
+    [26] = true,
+}
 
 -- Every cue this module can fire, so sync knows whether to register at all.
-local WATCHED = { GENERIC_CUE, CLOSED_CUE }
+local WATCHED = {
+    GENERIC_CUE,
+    CLOSED_CUE,
+    "merchantBuy",
+    "merchantSell",
+    "merchantRepair",
+    "bankClosed",
+}
 do
     local seen = {}
+    for _, cueID in ipairs(WATCHED) do
+        seen[cueID] = true
+    end
     for _, cueID in pairs(TYPE_CUE) do
         if not seen[cueID] then
             seen[cueID] = true
@@ -86,22 +100,34 @@ do
     end
 end
 
--- Events
+-- Events & State
 
 local frame = CreateFrame("Frame")
+local inMerchant = false
+local lastMerchantMoney = 0
+local wasRepair = false
 
--- The debug line prints the RAW type for every interaction, mapped or not, which is the
--- point: the enum has 81 values and which of them actually fire on this client is an
--- observation nobody has made. One trip past a guild bank and an auctioneer with
--- /pulse debug on settles it, and the table above can then be corrected from evidence.
 local function onShow(interaction)
-    if type(interaction) ~= "number" then return end
+    if type(interaction) ~= "number" then
+        return
+    end
+
+    if interaction == 5 or interaction == 12 then
+        inMerchant = true
+        lastMerchantMoney = (GetMoney and GetMoney()) or 0
+        wasRepair = false
+    end
 
     local cueID = TYPE_CUE[interaction] or GENERIC_CUE
 
     if Pulse.debug then
-        print(("Pulse: interaction window %d -> %s%s"):format(
-            interaction, cueID, TYPE_CUE[interaction] and "" or " (unmapped, generic)"))
+        print(
+            ("Pulse: interaction window %d -> %s%s"):format(
+                interaction,
+                cueID,
+                TYPE_CUE[interaction] and "" or " (unmapped, generic)"
+            )
+        )
     end
 
     Pulse:FireIfEnabled(cueID)
@@ -111,30 +137,93 @@ local function onHide(interaction)
     if Pulse.debug and type(interaction) == "number" then
         print(("Pulse: interaction window %d closed"):format(interaction))
     end
+
+    if type(interaction) == "number" then
+        if interaction == 5 or interaction == 12 then
+            inMerchant = false
+            wasRepair = false
+        elseif BANK_INTERACTIONS[interaction] then
+            Pulse:FireIfEnabled("bankClosed")
+        end
+    end
+
     Pulse:FireIfEnabled(CLOSED_CUE)
 end
 
-frame:SetScript("OnEvent", function(_, event, interaction)
+frame:SetScript("OnEvent", function(_, event, arg1)
     if event == "PLAYER_INTERACTION_MANAGER_FRAME_SHOW" then
-        onShow(interaction)
+        onShow(arg1)
     elseif event == "PLAYER_INTERACTION_MANAGER_FRAME_HIDE" then
-        onHide(interaction)
+        onHide(arg1)
+    elseif event == "MERCHANT_SHOW" then
+        inMerchant = true
+        lastMerchantMoney = (GetMoney and GetMoney()) or 0
+        wasRepair = false
+    elseif event == "MERCHANT_CLOSED" then
+        inMerchant = false
+        wasRepair = false
+    elseif event == "UPDATE_INVENTORY_DURABILITY" then
+        if inMerchant then
+            wasRepair = true
+            Pulse:FireIfEnabled("merchantRepair")
+        end
+    elseif event == "PLAYER_MONEY" then
+        if inMerchant then
+            local current = (GetMoney and GetMoney()) or 0
+            local delta = current - lastMerchantMoney
+            lastMerchantMoney = current
+            if wasRepair then
+                wasRepair = false
+            elseif delta > 0 then
+                Pulse:FireIfEnabled("merchantSell")
+            elseif delta < 0 then
+                Pulse:FireIfEnabled("merchantBuy")
+            end
+        end
+    elseif event == "BANKFRAME_CLOSED" or event == "GUILDBANKFRAME_CLOSED" then
+        Pulse:FireIfEnabled("bankClosed")
     end
 end)
 
 local function sync()
     frame:UnregisterAllEvents()
-    if not Pulse.Database:Get("masterEnabled") then return end
+    inMerchant = false
+    wasRepair = false
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
 
     local any = false
     for _, cueID in ipairs(WATCHED) do
-        if Pulse.Database:GetCue(cueID) then any = true break end
+        if Pulse.Database:GetCue(cueID) then
+            any = true
+            break
+        end
     end
-    if not any then return end
+    if not any then
+        return
+    end
 
-    -- Registered as a pair: splitting would cost more bookkeeping than it saves events.
+    -- Interaction manager events
     pcall(frame.RegisterEvent, frame, "PLAYER_INTERACTION_MANAGER_FRAME_SHOW")
     pcall(frame.RegisterEvent, frame, "PLAYER_INTERACTION_MANAGER_FRAME_HIDE")
+
+    -- Merchant physics
+    local wantMerchantPhysics = Pulse.Database:GetCue("merchantBuy")
+        or Pulse.Database:GetCue("merchantSell")
+        or Pulse.Database:GetCue("merchantRepair")
+    if wantMerchantPhysics then
+        pcall(frame.RegisterEvent, frame, "MERCHANT_SHOW")
+        pcall(frame.RegisterEvent, frame, "MERCHANT_CLOSED")
+        pcall(frame.RegisterEvent, frame, "PLAYER_MONEY")
+        pcall(frame.RegisterEvent, frame, "UPDATE_INVENTORY_DURABILITY")
+    end
+
+    -- Bank close latch
+    if Pulse.Database:GetCue("bankClosed") then
+        pcall(frame.RegisterEvent, frame, "BANKFRAME_CLOSED")
+        pcall(frame.RegisterEvent, frame, "GUILDBANKFRAME_CLOSED")
+    end
 end
 
 function M:OnEnable()
@@ -144,6 +233,13 @@ end
 -- Reach-in for PulseDebug, read-only.
 function M:_DebugInteraction()
     local mapped = 0
-    for _ in pairs(TYPE_CUE) do mapped = mapped + 1 end
-    return { mappedTypes = mapped, watchedCues = #WATCHED }
+    for _ in pairs(TYPE_CUE) do
+        mapped = mapped + 1
+    end
+    return {
+        mappedTypes = mapped,
+        watchedCues = #WATCHED,
+        inMerchant = inMerchant,
+        wasRepair = wasRepair,
+    }
 end
