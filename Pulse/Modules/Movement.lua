@@ -44,10 +44,12 @@ end
 -- than adding a second. FireIfEnabled checks masterEnabled and the cue itself, so this is
 -- free while the cue is off, and one timestamp write is cheap enough to leave
 -- unconditional.
-hooksecurefunc("JumpOrAscendStart", function()
-    fallStartTime = GetTime()
-    Pulse:FireIfEnabled("jumped")
-end)
+if type(hooksecurefunc) == "function" and type(_G.JumpOrAscendStart) == "function" then
+    hooksecurefunc("JumpOrAscendStart", function()
+        fallStartTime = GetTime()
+        Pulse:FireIfEnabled("jumped")
+    end)
+end
 
 local function pollLandingAndSwim(_, elapsed)
     local falling, flying = IsFalling(), IsFlying()

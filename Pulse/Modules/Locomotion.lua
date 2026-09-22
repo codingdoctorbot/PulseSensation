@@ -81,7 +81,9 @@ local MOUNT_GAITS = {
 -- costs nothing.
 local function formID(name, literal)
     local value = _G[name]
-    if type(value) == "number" then return value end
+    if type(value) == "number" then
+        return value
+    end
     return literal
 end
 
@@ -158,9 +160,13 @@ local function loadPersisted()
 end
 
 local function refreshRace()
-    if type(UnitRace) ~= "function" then return end
+    if type(UnitRace) ~= "function" then
+        return
+    end
     local ok, _, raceToken = pcall(UnitRace, "player")
-    if not ok or issecretvalue(raceToken) or type(raceToken) ~= "string" then return end
+    if not ok or issecretvalue(raceToken) or type(raceToken) ~= "string" then
+        return
+    end
     character.race = raceToken
 end
 
@@ -169,28 +175,40 @@ local function refreshRidingTier()
     if C_Spell and type(C_Spell.IsSpellKnownOrOverridesKnown) == "function" then
         for spellID, spellTier in pairs(RIDING_SPELLS) do
             local ok, known = pcall(C_Spell.IsSpellKnownOrOverridesKnown, spellID)
-            if ok and known and spellTier > tier then tier = spellTier end
+            if ok and known and spellTier > tier then
+                tier = spellTier
+            end
         end
     elseif type(IsSpellKnown) == "function" then
         for spellID, spellTier in pairs(RIDING_SPELLS) do
             local ok, known = pcall(IsSpellKnown, spellID)
-            if ok and known and spellTier > tier then tier = spellTier end
+            if ok and known and spellTier > tier then
+                tier = spellTier
+            end
         end
     end
     character.ridingTier = tier
 end
 
 local function refreshArmorWeight()
-    if type(GetInventoryItemID) ~= "function" then return end
+    if type(GetInventoryItemID) ~= "function" then
+        return
+    end
     local ok, itemID = pcall(GetInventoryItemID, "player", INVSLOT_FEET)
-    if not ok then return end
+    if not ok then
+        return
+    end
     if not itemID then
         character.armorMultiplier = BAREFOOT_WEIGHT
         return
     end
-    if not (C_Item and type(C_Item.GetItemInfoInstant) == "function") then return end
+    if not (C_Item and type(C_Item.GetItemInfoInstant) == "function") then
+        return
+    end
     local okInfo, _, _, _, _, _, classID, subclassID = pcall(C_Item.GetItemInfoInstant, itemID)
-    if not okInfo then return end
+    if not okInfo then
+        return
+    end
     local armorClass = Enum and Enum.ItemClass and Enum.ItemClass.Armor or 4
     if classID == armorClass then
         character.armorMultiplier = ARMOR_WEIGHT[subclassID] or 1.0
@@ -239,16 +257,26 @@ local gait = { mode = "FOOTSTEP", cadence = 2.8, intensity = 0.35, sharpness = 4
 local inCombat = false
 local lastGoodSpeed = BASE_RUN_SPEED
 
-local function setting(key, default) return Pulse.Database:GetTriggerSetting(CUE, key, default) end
+local function setting(key, default)
+    return Pulse.Database:GetTriggerSetting(CUE, key, default)
+end
 
 -- Out of combat, read it. In combat, reuse the last out-of-combat reading: GetUnitSpeed can
 -- come back secret there, and comparing a secret throws rather than reading nil.
 local function resolveSpeed()
-    if inCombat then return lastGoodSpeed end
-    if type(GetUnitSpeed) ~= "function" then return lastGoodSpeed end
+    if inCombat then
+        return lastGoodSpeed
+    end
+    if type(GetUnitSpeed) ~= "function" then
+        return lastGoodSpeed
+    end
     local ok, speed = pcall(GetUnitSpeed, "player")
-    if not ok or issecretvalue(speed) or type(speed) ~= "number" then return lastGoodSpeed end
-    if speed > 0.05 then lastGoodSpeed = speed end
+    if not ok or issecretvalue(speed) or type(speed) ~= "number" then
+        return lastGoodSpeed
+    end
+    if speed > 0.05 then
+        lastGoodSpeed = speed
+    end
     return speed
 end
 
@@ -308,7 +336,9 @@ local function resolveGait()
         end
     end
 
-    if gait.cadence <= 0 then gait.cadence = 1.0 end
+    if gait.cadence <= 0 then
+        gait.cadence = 1.0
+    end
     gait.valid = true
 end
 
@@ -339,9 +369,13 @@ local resolveElapsed = 0
 -- Defaults to not splitting, because "Generic / unknown" declares no trigger actuators;
 -- naming your controller on the calibration page turns it on if the hardware supports it.
 local function shouldSplitFeet()
-    if setting("splitFeet", 1) ~= 1 then return false end
+    if setting("splitFeet", 1) ~= 1 then
+        return false
+    end
     local preset = Pulse.Devices and Pulse.Devices[Pulse.Database:GetDevicePreset()]
-    if preset and preset.triggers ~= true then return false end
+    if preset and preset.triggers ~= true then
+        return false
+    end
     return true
 end
 
@@ -361,8 +395,10 @@ local lastJumpAt = -1000
 -- Unconditional, like Movement.lua's hook on the same function: one timestamp write is
 -- cheaper than bookkeeping to attach and detach it with the cue. hooksecurefunc chains, so
 -- Movement's hook is unaffected.
-if type(hooksecurefunc) == "function" then
-    hooksecurefunc("JumpOrAscendStart", function() lastJumpAt = GetTime() end)
+if type(hooksecurefunc) == "function" and type(_G.JumpOrAscendStart) == "function" then
+    hooksecurefunc("JumpOrAscendStart", function()
+        lastJumpAt = GetTime()
+    end)
 end
 
 -- States in which the character has no ground contact and therefore no footfalls.
@@ -378,20 +414,30 @@ end
 local function hasGroundContact()
     -- Swimming has waterTexture for buoyancy and swimTexture for effort; a gait adds
     -- nothing. Same reasoning as FORM_SILENT above, which covers only a druid.
-    if type(IsSwimming) == "function" and IsSwimming() then return false end
+    if type(IsSwimming) == "function" and IsSwimming() then
+        return false
+    end
 
     -- Flight and Skyriding's glide. GetGlidingInfo is the confirmed-live check glideThrust
     -- already uses (Modules/Flight.lua), so the two agree about what gliding means. IsFlying
     -- covers ordinary flight and a taxi ride, which taxiRide already textures.
-    if type(IsFlying) == "function" and IsFlying() then return false end
+    if type(IsFlying) == "function" and IsFlying() then
+        return false
+    end
     if C_PlayerInfo and type(C_PlayerInfo.GetGlidingInfo) == "function" then
         local ok, gliding = pcall(C_PlayerInfo.GetGlidingInfo)
-        if ok and gliding == true then return false end
+        if ok and gliding == true then
+            return false
+        end
     end
 
     -- Falling covers the descent; the jump hook above covers the rise.
-    if type(IsFalling) == "function" and IsFalling() then return false end
-    if (GetTime() - lastJumpAt) < JUMP_ASCENT_GRACE then return false end
+    if type(IsFalling) == "function" and IsFalling() then
+        return false
+    end
+    if (GetTime() - lastJumpAt) < JUMP_ASCENT_GRACE then
+        return false
+    end
 
     return true
 end
@@ -400,7 +446,9 @@ local wasGrounded = true
 local splitRoles = { ltrigger = 0, rtrigger = 0 }
 
 local function tick(_, elapsed)
-    if not isMoving then return end
+    if not isMoving then
+        return
+    end
 
     -- Checked before the resolve: with no ground contact there is nothing to resolve and
     -- nothing to emit. Not emitting IS the mechanism — the layer decays within one refresh
@@ -419,25 +467,35 @@ local function tick(_, elapsed)
         -- Whatever was resolved before the water or the glide is stale — you can enter
         -- running and come out walking. Re-resolve rather than wait out the interval.
         resolveElapsed = 0
-        if not inCombat then resolveGait() end
+        if not inCombat then
+            resolveGait()
+        end
     end
 
     -- Keep trying until speed is readable: an invalid gait right after movement starts is
     -- the normal case, not an error.
     if not gait.valid then
-        if inCombat then return end -- combat holds whatever was last resolved
+        if inCombat then
+            return
+        end -- combat holds whatever was last resolved
         resolveGait()
-        if not gait.valid then return end
+        if not gait.valid then
+            return
+        end
         runPhase = 0 -- begin the stride on a footfall
     else
         resolveElapsed = resolveElapsed + (elapsed or 0)
         if resolveElapsed >= RESOLVE_INTERVAL then
             resolveElapsed = 0
-            if not inCombat then resolveGait() end
+            if not inCombat then
+                resolveGait()
+            end
         end
     end
 
-    if setting("mountedOnly", 1) == 1 and not (IsMounted and IsMounted()) then return end
+    if setting("mountedOnly", 1) == 1 and not (IsMounted and IsMounted()) then
+        return
+    end
 
     -- Cadence is real steps per second, and the phase accumulates elapsed time rather than
     -- counting ticks, so the stride holds its rate at any frame rate.
@@ -481,7 +539,9 @@ eventFrame:SetScript("OnEvent", function(_, event, arg1)
         if arg1 == INVSLOT_FEET then
             refreshArmorWeight()
             persist()
-            if isMoving then resolveGait() end
+            if isMoving then
+                resolveGait()
+            end
         end
     elseif event == "LEARNED_SPELL_IN_TAB" or event == "SPELLS_CHANGED" then
         refreshRidingTier()
@@ -500,15 +560,21 @@ eventFrame:SetScript("OnEvent", function(_, event, arg1)
         -- Take one last honest speed reading on the way in, then hold it for the fight.
         resolveSpeed()
         inCombat = true
-        if isMoving then resolveGait() end
+        if isMoving then
+            resolveGait()
+        end
     elseif event == "PLAYER_REGEN_ENABLED" then
         inCombat = false
-        if isMoving then resolveGait() end
+        if isMoving then
+            resolveGait()
+        end
     else
         -- PLAYER_MOUNT_DISPLAY_CHANGED / UPDATE_SHAPESHIFT_FORM. Neither
         -- PLAYER_STARTED_MOVING nor STOPPED fires when you mount or shift mid-stride, so
         -- without these the gait goes stale and you keep feeling footsteps while riding.
-        if isMoving then resolveGait() end
+        if isMoving then
+            resolveGait()
+        end
     end
 end)
 
@@ -531,8 +597,12 @@ local function sync()
     gait.valid = false
     wasGrounded = true
 
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not Pulse.Database:GetCue(CUE) then return end
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
+    if not Pulse.Database:GetCue(CUE) then
+        return
+    end
 
     loadPersisted()
     for _, event in ipairs(EVENTS) do

@@ -7,6 +7,14 @@ local ADDON_NAME, Pulse = ...
 
 _G.Pulse = Pulse -- for /run poking while tuning, same reason as Tremor's Core/Init.lua:12
 
+-- Safe global fallback for issecretvalue. Older client builds, test harnesses, or
+-- isolated environments that lack the 11.0+ Secret Values C-API will not error.
+if type(_G.issecretvalue) ~= "function" then
+    _G.issecretvalue = function()
+        return false
+    end
+end
+
 Pulse.ADDON_NAME = ADDON_NAME
 Pulse.modules = {}
 Pulse.moduleOrder = {}
@@ -29,7 +37,9 @@ end
 local lastFireTime = {}
 
 -- Reach-in for PulseDebug /pdebug why
-function Pulse:_DebugLastFireTime(triggerID) return lastFireTime[triggerID] end
+function Pulse:_DebugLastFireTime(triggerID)
+    return lastFireTime[triggerID]
+end
 
 -- Debug-only: last GetTime() a continuous trigger's Hold was reached. Stays empty while
 -- Pulse.debug is false, so a normal play session pays nothing.
@@ -42,15 +52,23 @@ local HOLD_LOG_GAP = 0.5
 -- The shared path from "a trigger's condition happened" to "play its mode". Every
 -- discrete (non-continuous) trigger ends here.
 function Pulse:FireIfEnabled(triggerID, intensityOverride)
-    if not self.Database:Get("masterEnabled") then return end
-    if not self.Database:GetCue(triggerID) then return end
+    if not self.Database:Get("masterEnabled") then
+        return
+    end
+    if not self.Database:GetCue(triggerID) then
+        return
+    end
     local trigger = self.Registry:GetTrigger(triggerID)
-    if not trigger or not trigger.mode then return end
+    if not trigger or not trigger.mode then
+        return
+    end
 
     if trigger.throttle and trigger.throttle > 0 then
         local now = GetTime()
         local last = lastFireTime[triggerID]
-        if last and (now - last) < trigger.throttle then return end
+        if last and (now - last) < trigger.throttle then
+            return
+        end
         lastFireTime[triggerID] = now
     end
 
@@ -72,10 +90,16 @@ end
 --
 -- `duration` is optional, passed through to Engine:Hold.
 function Pulse:HoldIfEnabled(triggerID, low, high, duration)
-    if not self.Database:Get("masterEnabled") then return end
-    if not self.Database:GetCue(triggerID) then return end
+    if not self.Database:Get("masterEnabled") then
+        return
+    end
+    if not self.Database:GetCue(triggerID) then
+        return
+    end
     local trigger = self.Registry:GetTrigger(triggerID)
-    if not trigger then return end
+    if not trigger then
+        return
+    end
     local scale = self.Database:GetTriggerSetting(triggerID, "intensity", 1.0)
     if self.debug then
         -- Rising edge only: a continuous trigger holds every OnUpdate tick while active,
@@ -104,10 +128,16 @@ local staticScaled = {}
 -- it, a module wanting four roles would reach Engine:SetRoles directly and silently skip
 -- masterEnabled, the cue's own switch and its intensity slider.
 function Pulse:HoldRolesIfEnabled(triggerID, roles, duration)
-    if not self.Database:Get("masterEnabled") then return end
-    if not self.Database:GetCue(triggerID) then return end
+    if not self.Database:Get("masterEnabled") then
+        return
+    end
+    if not self.Database:GetCue(triggerID) then
+        return
+    end
     local trigger = self.Registry:GetTrigger(triggerID)
-    if not trigger then return end
+    if not trigger then
+        return
+    end
     local scale = self.Database:GetTriggerSetting(triggerID, "intensity", 1.0)
     wipe(staticScaled)
     for role, value in pairs(roles) do
@@ -123,7 +153,9 @@ function Pulse:HoldRolesIfEnabled(triggerID, roles, duration)
         if not last or (now - last) > HOLD_LOG_GAP then
             local parts = {}
             for _, role in ipairs({ "low", "high", "ltrigger", "rtrigger" }) do
-                if staticScaled[role] then parts[#parts + 1] = ("%s %.2f"):format(role, staticScaled[role]) end
+                if staticScaled[role] then
+                    parts[#parts + 1] = ("%s %.2f"):format(role, staticScaled[role])
+                end
             end
             print(
                 ("Pulse: %s holding -> %s"):format(
@@ -144,9 +176,13 @@ end
 -- masterEnabled and every trigger's enabled/throttle check, but still require a live pad.
 -- Returns true, or false plus a reason, so each caller reports failure in its own voice.
 function Pulse:TestMode(modeID)
-    if not Pulse.Modes[modeID] then return false, "no such mode" end
+    if not Pulse.Modes[modeID] then
+        return false, "no such mode"
+    end
     self.Engine:RefreshDevice()
-    if not self.Engine:IsDeviceReady() then return false, "no controller detected" end
+    if not self.Engine:IsDeviceReady() then
+        return false, "no controller detected"
+    end
     self.Engine:PlayMode("preview", modeID, 1.0)
     return true
 end
@@ -181,7 +217,9 @@ local BESPOKE_PREVIEW = {
 -- Does this cue have anything to preview? A gate-only trigger that plays nothing itself
 -- (padDisconnected) has no button. Next to TestCue so the panel never re-derives the rule.
 function Pulse:CanTestCue(triggerID)
-    if BESPOKE_PREVIEW[triggerID] then return true end
+    if BESPOKE_PREVIEW[triggerID] then
+        return true
+    end
     local trigger = self.Registry:GetTrigger(triggerID)
     return (trigger and (trigger.mode or trigger.continuous)) and true or false
 end
@@ -190,22 +228,30 @@ end
 -- own voice.
 function Pulse:TestCue(triggerID)
     local trigger = self.Registry:GetTrigger(triggerID)
-    if not trigger then return false, "no such cue" end
+    if not trigger then
+        return false, "no such cue"
+    end
 
     local method = BESPOKE_PREVIEW[triggerID]
     if method then
         local health = self.modules.Health
-        if health and health[method] then return health[method](health) end
+        if health and health[method] then
+            return health[method](health)
+        end
     end
 
     self.Engine:RefreshDevice()
-    if not self.Engine:IsDeviceReady() then return false, "no controller detected" end
+    if not self.Engine:IsDeviceReady() then
+        return false, "no controller detected"
+    end
 
     local scale = self.Database:GetTriggerSetting(triggerID, "intensity", trigger.defaultIntensity or 1.0)
 
     if trigger.mode then
         local modeID = self.Database:GetTriggerMode(triggerID) or trigger.mode
-        if not Pulse.Modes[modeID] then return false, "no such mode" end
+        if not Pulse.Modes[modeID] then
+            return false, "no such mode"
+        end
         self.Engine:PlayMode(PREVIEW_LAYER, modeID, scale)
         return true
     end
@@ -240,8 +286,12 @@ function Pulse:WatchTrigger(trigger)
 
     local function sync()
         frame:UnregisterAllEvents()
-        if not Pulse.Database:Get("masterEnabled") then return end
-        if not Pulse.Database:GetCue(trigger.id) then return end
+        if not Pulse.Database:Get("masterEnabled") then
+            return
+        end
+        if not Pulse.Database:GetCue(trigger.id) then
+            return
+        end
         for _, event in ipairs(trigger.events) do
             if trigger.unit then
                 frame:RegisterUnitEvent(event, trigger.unit)
@@ -251,7 +301,9 @@ function Pulse:WatchTrigger(trigger)
         end
     end
 
-    frame:SetScript("OnEvent", function() Pulse:FireIfEnabled(trigger.id) end)
+    frame:SetScript("OnEvent", function()
+        Pulse:FireIfEnabled(trigger.id)
+    end)
 
     self:BindFrame({ trigger.id }, sync)
     return frame
@@ -271,14 +323,18 @@ end
 local bootstrap = CreateFrame("Frame")
 bootstrap:RegisterEvent("ADDON_LOADED")
 bootstrap:SetScript("OnEvent", function(self, event, loadedAddonName)
-    if loadedAddonName ~= ADDON_NAME then return end
+    if loadedAddonName ~= ADDON_NAME then
+        return
+    end
 
     Pulse.Database:Init()
     Pulse.Engine:Init()
 
     for _, name in ipairs(Pulse.moduleOrder) do
         local module = Pulse.modules[name]
-        if module.OnEnable then module:OnEnable() end
+        if module.OnEnable then
+            module:OnEnable()
+        end
     end
 
     -- The welcome page in Blizzard's AddOns list. Every cue, dial, dropdown and button

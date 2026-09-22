@@ -118,11 +118,13 @@ local function onShow(interaction)
 
     if interaction == 5 or interaction == 12 then
         inMerchant = true
-        lastMerchantMoney = (GetMoney and GetMoney()) or 0
+        local money = (GetMoney and GetMoney()) or 0
+        lastMerchantMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
         wasRepair = false
     elseif BANK_INTERACTIONS[interaction] then
         inBank = true
-        lastBankMoney = (GetMoney and GetMoney()) or 0
+        local money = (GetMoney and GetMoney()) or 0
+        lastBankMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
     end
 
     local cueID = TYPE_CUE[interaction] or GENERIC_CUE
@@ -178,26 +180,31 @@ frame:SetScript("OnEvent", function(_, event, arg1)
     elseif event == "PLAYER_MONEY" then
         if inMerchant then
             local current = (GetMoney and GetMoney()) or 0
-            local delta = current - lastMerchantMoney
-            lastMerchantMoney = current
-            if wasRepair then
-                wasRepair = false
-            elseif delta > 0 then
-                Pulse:FireIfEnabled("merchantSell")
-            elseif delta < 0 then
-                Pulse:FireIfEnabled("merchantBuy")
+            if not issecretvalue(current) and type(current) == "number" then
+                local delta = current - lastMerchantMoney
+                lastMerchantMoney = current
+                if wasRepair then
+                    wasRepair = false
+                elseif delta > 0 then
+                    Pulse:FireIfEnabled("merchantSell")
+                elseif delta < 0 then
+                    Pulse:FireIfEnabled("merchantBuy")
+                end
             end
         elseif inBank then
             local current = (GetMoney and GetMoney()) or 0
-            local delta = current - lastBankMoney
-            lastBankMoney = current
-            if delta ~= 0 then
-                Pulse:FireIfEnabled("bankGold")
+            if not issecretvalue(current) and type(current) == "number" then
+                local delta = current - lastBankMoney
+                lastBankMoney = current
+                if delta ~= 0 then
+                    Pulse:FireIfEnabled("bankGold")
+                end
             end
         end
     elseif event == "BANKFRAME_OPENED" or event == "GUILDBANKFRAME_OPENED" then
         inBank = true
-        lastBankMoney = (GetMoney and GetMoney()) or 0
+        local money = (GetMoney and GetMoney()) or 0
+        lastBankMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
     elseif event == "BANKFRAME_CLOSED" or event == "GUILDBANKFRAME_CLOSED" then
         inBank = false
         Pulse:FireIfEnabled("bankClosed")

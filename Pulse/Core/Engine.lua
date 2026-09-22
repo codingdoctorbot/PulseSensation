@@ -386,7 +386,9 @@ local function driveChannel(channel, wanted, last, dt, epsilon)
 
     local isOn = smoothed > SILENCE_GATE
     if math.abs(smoothed - (last or -1)) > epsilon then
-        C_GamePad.SetVibration(channel, smoothed)
+        if C_GamePad and C_GamePad.SetVibration then
+            pcall(C_GamePad.SetVibration, channel, smoothed)
+        end
         lastSetByChannel[channel] = smoothed
     end
     return isOn
@@ -646,20 +648,19 @@ end
 
 function Engine:Init()
     local deviceFrame = CreateFrame("Frame")
+    deviceFrame:RegisterEvent("GAME_PAD_ACTIVE_CHANGED")
+    deviceFrame:RegisterEvent("GAME_PAD_CONNECTED")
+    deviceFrame:RegisterEvent("GAME_PAD_DISCONNECTED")
+    deviceFrame:SetScript("OnEvent", function()
+        Engine:RefreshDevice()
+    end)
     local function sync()
-        deviceFrame:UnregisterAllEvents()
         if not Pulse.Database:Get("masterEnabled") then
             Engine:StopAll()
             return
         end
-        deviceFrame:RegisterEvent("GAME_PAD_ACTIVE_CHANGED")
-        deviceFrame:RegisterEvent("GAME_PAD_CONNECTED")
-        deviceFrame:RegisterEvent("GAME_PAD_DISCONNECTED")
         Engine:RefreshDevice()
     end
-    deviceFrame:SetScript("OnEvent", function()
-        Engine:RefreshDevice()
-    end)
     Pulse.Database:OnGlobalChanged("masterEnabled", sync)
     sync()
 end
