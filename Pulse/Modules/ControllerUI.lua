@@ -38,7 +38,9 @@ local OWNER = {}
 
 local function anyEnabled(cueIDs)
     for _, cueID in ipairs(cueIDs) do
-        if Pulse.Database:GetCue(cueID) then return true end
+        if Pulse.Database:GetCue(cueID) then
+            return true
+        end
     end
     return false
 end
@@ -49,7 +51,9 @@ end
 -- stay silent rather than guess (RULE E) — these cues are meaningless without a gamepad
 -- interface anyway.
 local function gamepadUIActive()
-    if not InputUtil or type(InputUtil.IsGamepadUIEnabled) ~= "function" then return false end
+    if not InputUtil or type(InputUtil.IsGamepadUIEnabled) ~= "function" then
+        return false
+    end
     local ok, enabled = pcall(InputUtil.IsGamepadUIEnabled)
     return (ok and enabled) and true or false
 end
@@ -57,7 +61,11 @@ end
 -- SmartNavigation — focus movement, edges, focus in/out
 
 local NAV_CUES = {
-    "uiNavigate", "uiNavigateEdge", "uiSelectionDisabled", "uiFocusIn", "uiFocusOut",
+    "uiNavigate",
+    "uiNavigateEdge",
+    "uiSelectionDisabled",
+    "uiFocusIn",
+    "uiFocusOut",
 }
 
 local navRegistered = false
@@ -65,20 +73,28 @@ local lastNavButton = nil
 local navSeeded = false
 
 local function currentNavButton()
-    if not SmartNavigation then return nil end
+    if not SmartNavigation then
+        return nil
+    end
     if type(SmartNavigation.GetCurrentButton) == "function" then
         local ok, button = pcall(SmartNavigation.GetCurrentButton, SmartNavigation)
-        if ok then return button end
+        if ok then
+            return button
+        end
     end
     return SmartNavigation.currentButton
 end
 
 local function onSelectionUpdated()
-    if not gamepadUIActive() then return end
+    if not gamepadUIActive() then
+        return
+    end
     local button = currentNavButton()
     -- Object identity, never the frame's name: UI elements share names or have none, and
     -- the callback can fire more than once for the same element.
-    if button == lastNavButton then return end
+    if button == lastNavButton then
+        return
+    end
     lastNavButton = button
     -- Discovering what's already focused when a panel opens is not a navigation step.
     if not navSeeded then
@@ -86,47 +102,61 @@ local function onSelectionUpdated()
         return
     end
     -- Losing the selection isn't a destination — uiFocusOut covers that transition.
-    if not button then return end
+    if not button then
+        return
+    end
     Pulse:FireIfEnabled("uiNavigate")
 end
 
 local function onEdge()
-    if not gamepadUIActive() then return end
+    if not gamepadUIActive() then
+        return
+    end
     Pulse:FireIfEnabled("uiNavigateEdge")
 end
 
 local function onSelectionDisabled()
-    if not gamepadUIActive() then return end
+    if not gamepadUIActive() then
+        return
+    end
     Pulse:FireIfEnabled("uiSelectionDisabled")
 end
 
 local function onFocusedFrame()
-    if not gamepadUIActive() then return end
+    if not gamepadUIActive() then
+        return
+    end
     Pulse:FireIfEnabled("uiFocusIn")
 end
 
 local function onUnfocusedFrame()
-    if not gamepadUIActive() then return end
+    if not gamepadUIActive() then
+        return
+    end
     Pulse:FireIfEnabled("uiFocusOut")
 end
 
 local NAV_CALLBACKS = {
-    { "SelectedButtonUpdated",             onSelectionUpdated },
+    { "SelectedButtonUpdated", onSelectionUpdated },
     { "SelectedButtonEnabledStateChanged", onSelectionDisabled },
-    { "HitTopEdge",                        onEdge },
-    { "HitBottomEdge",                     onEdge },
-    { "HitLeftEdge",                       onEdge },
-    { "HitRightEdge",                      onEdge },
-    { "FocusedFrame",                      onFocusedFrame },
-    { "UnfocusedFrame",                    onUnfocusedFrame },
+    { "HitTopEdge", onEdge },
+    { "HitBottomEdge", onEdge },
+    { "HitLeftEdge", onEdge },
+    { "HitRightEdge", onEdge },
+    { "FocusedFrame", onFocusedFrame },
+    { "UnfocusedFrame", onUnfocusedFrame },
 }
 
 local function syncNav()
     local wanted = Pulse.Database:Get("masterEnabled") and anyEnabled(NAV_CUES) or false
-    if wanted == navRegistered then return end
+    if wanted == navRegistered then
+        return
+    end
     -- Blizzard_GamepadSmartNavigation may not have loaded yet. Leave navRegistered alone so
     -- the retry in OnEnable picks this up on a later ADDON_LOADED.
-    if not SmartNavigation or type(SmartNavigation.RegisterCallback) ~= "function" then return end
+    if not SmartNavigation or type(SmartNavigation.RegisterCallback) ~= "function" then
+        return
+    end
 
     if wanted then
         -- Seed from live state: arriving with something already focused is not a step.
@@ -151,13 +181,21 @@ local radialEventsRegistered = false
 
 -- Hoisted rather than built inside sync: UnregisterCallback keys on the owner, but keeping
 -- one stable function per event avoids relying on that detail.
-local function onRadialShown()  Pulse:FireIfEnabled("radialOpen")  end
-local function onRadialHidden() Pulse:FireIfEnabled("radialClose") end
+local function onRadialShown()
+    Pulse:FireIfEnabled("radialOpen")
+end
+local function onRadialHidden()
+    Pulse:FireIfEnabled("radialClose")
+end
 
 local function syncRadialEvents()
     local wanted = Pulse.Database:Get("masterEnabled") and anyEnabled(RADIAL_EVENT_CUES) or false
-    if wanted == radialEventsRegistered then return end
-    if not EventRegistry then return end
+    if wanted == radialEventsRegistered then
+        return
+    end
+    if not EventRegistry then
+        return
+    end
 
     if wanted then
         pcall(EventRegistry.RegisterCallback, EventRegistry, "Gamepad.ShowMainMenu", onRadialShown, OWNER)
@@ -188,17 +226,27 @@ local lastRadialPage = nil
 local function radialSegmentUsable(radial, segmentIndex)
     local list = radial and radial.SegmentList
     local segment = list and list[segmentIndex]
-    if not segment or type(segment.IsEnabled) ~= "function" then return true end
+    if not segment or type(segment.IsEnabled) ~= "function" then
+        return true
+    end
     local ok, enabled = pcall(segment.IsEnabled, segment)
-    if not ok then return true end
+    if not ok then
+        return true
+    end
     return enabled and true or false
 end
 
 local function hookRadial()
-    if radialHooked then return end
+    if radialHooked then
+        return
+    end
     local radial = GamepadRadial
-    if not radial or type(radial.BeginSelection) ~= "function" then return end
-    if type(radial.HookScript) ~= "function" then return end
+    if not radial or type(radial.BeginSelection) ~= "function" then
+        return
+    end
+    if type(radial.HookScript) ~= "function" then
+        return
+    end
     radialHooked = true
 
     hooksecurefunc(radial, "BeginSelection", function(self, segmentIndex)
@@ -206,9 +254,13 @@ local function hookRadial()
         -- buttonIndex ~= currentIndex), so holding the stick on one segment does not repeat.
         -- The guard is for the OTHER caller: ActivateRadial re-selects the SAME index when
         -- the wheel rebuilds on a page change, which would double-tick.
-        if segmentIndex == lastRadialIndex then return end
+        if segmentIndex == lastRadialIndex then
+            return
+        end
         lastRadialIndex = segmentIndex
-        if segmentIndex == 0 then return end
+        if segmentIndex == 0 then
+            return
+        end
         if radialSegmentUsable(self, segmentIndex) then
             Pulse:FireIfEnabled("radialTick")
         else
@@ -241,7 +293,9 @@ local function hookRadial()
     hooksecurefunc(radial, "EndSelection", function(self)
         local hadSelection = lastRadialIndex
         lastRadialIndex = 0
-        if hadSelection == 0 then return end
+        if hadSelection == 0 then
+            return
+        end
         if self.isCancelled then
             Pulse:FireIfEnabled("radialCancel")
         else
@@ -274,13 +328,19 @@ local tabsHooked = false
 -- Panels set their own tab as they open. Where Blizzard passes isUserAction it is trusted
 -- and anything the player did not do stays silent; the legacy path has no such flag.
 local function onTabChanged(isUserAction)
-    if isUserAction == false then return end
-    if not gamepadUIActive() then return end
+    if isUserAction == false then
+        return
+    end
+    if not gamepadUIActive() then
+        return
+    end
     Pulse:FireIfEnabled("uiTabChanged")
 end
 
 local function hookTabs()
-    if tabsHooked then return end
+    if tabsHooked then
+        return
+    end
 
     -- The flag is set at the BOTTOM of this function, not here: setting it first records a
     -- total failure as a success, because the ADDON_LOADED/PLAYER_ENTERING_WORLD retry then
@@ -327,8 +387,13 @@ end
 -- EndSelection, so without it the next sweep onto the same segment is swallowed.
 
 local RADIAL_CUES = {
-    "radialOpen", "radialClose", "radialTick", "radialBlocked",
-    "radialSelect", "radialCancel", "radialPage",
+    "radialOpen",
+    "radialClose",
+    "radialTick",
+    "radialBlocked",
+    "radialSelect",
+    "radialCancel",
+    "radialPage",
 }
 
 local radialPollFrame = CreateFrame("Frame")
@@ -337,7 +402,9 @@ local RADIAL_POLL_INTERVAL = 0.05
 
 local function radialPollTick(_, elapsed)
     radialPollElapsed = radialPollElapsed + elapsed
-    if radialPollElapsed < RADIAL_POLL_INTERVAL then return end
+    if radialPollElapsed < RADIAL_POLL_INTERVAL then
+        return
+    end
     radialPollElapsed = 0
 
     local radial = GamepadRadial
@@ -347,11 +414,15 @@ local function radialPollTick(_, elapsed)
     end
 
     local page = radial.currentMainMenuPageIndex
-    if page == lastRadialPage then return end
+    if page == lastRadialPage then
+        return
+    end
     local hadPage = lastRadialPage
     lastRadialPage = page
     -- First page seen after opening seeds the tracker; it isn't a change.
-    if hadPage == nil or page == nil then return end
+    if hadPage == nil or page == nil then
+        return
+    end
     Pulse:FireIfEnabled("radialPage")
 end
 
@@ -371,11 +442,12 @@ end
 -- anything. Where a choice existed, the event won.
 
 local INTERACT_EVENT_FOR_CUE = {
-    softEnemyChanged    = "PLAYER_SOFT_ENEMY_CHANGED",
-    softFriendChanged   = "PLAYER_SOFT_FRIEND_CHANGED",
+    softEnemyChanged = "PLAYER_SOFT_ENEMY_CHANGED",
+    softFriendChanged = "PLAYER_SOFT_FRIEND_CHANGED",
     softInteractChanged = "PLAYER_SOFT_INTERACT_CHANGED",
-    actionBarPage       = "ACTIONBAR_PAGE_CHANGED",
-    inputModeChanged    = "INPUT_DEVICE_INTERFACE_TRANSITION",
+    softTargetInteraction = "PLAYER_SOFT_TARGET_INTERACTION",
+    actionBarPage = "ACTIONBAR_PAGE_CHANGED",
+    inputModeChanged = "INPUT_DEVICE_INTERFACE_TRANSITION",
 }
 
 local INTERACT_CUE_FOR_EVENT = {}
@@ -385,8 +457,14 @@ end
 
 -- cursorPickup/cursorDrop are two edges of one event, so they're handled separately.
 local INTERACT_CUES = {
-    "softEnemyChanged", "softFriendChanged", "softInteractChanged",
-    "cursorPickup", "cursorDrop", "actionBarPage", "inputModeChanged",
+    "softEnemyChanged",
+    "softFriendChanged",
+    "softInteractChanged",
+    "softTargetInteraction",
+    "cursorPickup",
+    "cursorDrop",
+    "actionBarPage",
+    "inputModeChanged",
 }
 
 local interactFrame = CreateFrame("Frame")
@@ -398,7 +476,9 @@ local hasCursorItem = false
 local function safeRegisterEvent(frame, event)
     if C_EventUtils and type(C_EventUtils.IsEventValid) == "function" then
         local ok, valid = pcall(C_EventUtils.IsEventValid, event)
-        if ok and not valid then return end
+        if ok and not valid then
+            return
+        end
     end
     pcall(frame.RegisterEvent, frame, event)
 end
@@ -406,14 +486,18 @@ end
 -- Presence only. The item is never read, compared or stored: truthiness on a non-boolean
 -- secret is the one inspection Secret Values permits, and all this needs.
 local function cursorHasItem()
-    if not C_Cursor or type(C_Cursor.GetCursorItem) ~= "function" then return false end
+    if not C_Cursor or type(C_Cursor.GetCursorItem) ~= "function" then
+        return false
+    end
     local ok, item = pcall(C_Cursor.GetCursorItem)
     return (ok and item) and true or false
 end
 
 local function syncInteract()
     interactFrame:UnregisterAllEvents()
-    if not Pulse.Database:Get("masterEnabled") then return end
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
 
     for cueID, event in pairs(INTERACT_EVENT_FOR_CUE) do
         if Pulse.Database:GetCue(cueID) then
@@ -436,13 +520,17 @@ end
 interactFrame:SetScript("OnEvent", function(_, event)
     if event == "CURSOR_CHANGED" then
         local has = cursorHasItem()
-        if has == hasCursorItem then return end
+        if has == hasCursorItem then
+            return
+        end
         hasCursorItem = has
         Pulse:FireIfEnabled(has and "cursorPickup" or "cursorDrop")
         return
     end
     local cueID = INTERACT_CUE_FOR_EVENT[event]
-    if cueID then Pulse:FireIfEnabled(cueID) end
+    if cueID then
+        Pulse:FireIfEnabled(cueID)
+    end
 end)
 
 local function installHooks()

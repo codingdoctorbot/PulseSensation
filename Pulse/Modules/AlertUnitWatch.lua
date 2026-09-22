@@ -15,6 +15,7 @@ function M:OnEnable()
     self:_WatchUnit("focus", "focusCastStart", "focusChannelStart")
     self:_WatchSwaps()
     self:_WatchTargetDeath()
+    self:_WatchHostileRadar()
 end
 
 function M:_WatchUnit(unit, startCue, channelCue)
@@ -72,17 +73,14 @@ function M:_WatchSwaps()
         M:_OnSwap(event)
     end)
 
-    Pulse:BindFrame(
-        {
-            "targetChanged",
-            "focusChanged",
-            "targetCastStart",
-            "focusCastStart",
-            "targetChannelStart",
-            "focusChannelStart",
-        },
-        sync
-    )
+    Pulse:BindFrame({
+        "targetChanged",
+        "focusChanged",
+        "targetCastStart",
+        "focusCastStart",
+        "targetChannelStart",
+        "focusChannelStart",
+    }, sync)
 end
 
 -- Legal truthiness test only: the first return of UnitCastingInfo/UnitChannelInfo is a name
@@ -128,4 +126,79 @@ function M:_WatchTargetDeath()
     end)
 
     Pulse:BindFrame({ "targetDied" }, sync)
+end
+
+local TOT_FOR_UNIT = {
+    target = "targettarget",
+    focus = "focustarget",
+}
+
+local wasTargeting = {
+    target = false,
+    focus = false,
+}
+
+local function checkUnitTargetingPlayer(unit)
+    if not UnitExists(unit) then
+        return false
+    end
+    local okAttack, canAttack = pcall(UnitCanAttack, unit, "player")
+    if not okAttack or issecretvalue(canAttack) or not canAttack then
+        return false
+    end
+    local tot = TOT_FOR_UNIT[unit]
+    if not tot or not UnitExists(tot) then
+        return false
+    end
+    local okUnit, isTargeting = pcall(UnitIsUnit, tot, "player")
+    if okUnit and not issecretvalue(isTargeting) and isTargeting then
+        return true
+    end
+    return false
+end
+
+function M:_WatchHostileRadar()
+    local frame = CreateFrame("Frame")
+
+    local function sync()
+        frame:UnregisterAllEvents()
+        wasTargeting.target = false
+        wasTargeting.focus = false
+        if not Pulse.Database:Get("masterEnabled") then
+            return
+        end
+        if Pulse.Database:GetCue("targetedByEnemy") then
+            frame:RegisterUnitEvent("UNIT_TARGET", "target", "focus")
+            frame:RegisterEvent("PLAYER_TARGET_CHANGED")
+            frame:RegisterEvent("PLAYER_FOCUS_CHANGED")
+            wasTargeting.target = checkUnitTargetingPlayer("target")
+            wasTargeting.focus = checkUnitTargetingPlayer("focus")
+        end
+    end
+
+    frame:SetScript("OnEvent", function(_, event, unit)
+        if event == "UNIT_TARGET" then
+            if unit == "target" or unit == "focus" then
+                local isTargeting = checkUnitTargetingPlayer(unit)
+                if isTargeting and not wasTargeting[unit] then
+                    Pulse:FireIfEnabled("targetedByEnemy")
+                end
+                wasTargeting[unit] = isTargeting
+            end
+        elseif event == "PLAYER_TARGET_CHANGED" then
+            local isTargeting = checkUnitTargetingPlayer("target")
+            if isTargeting then
+                Pulse:FireIfEnabled("targetedByEnemy")
+            end
+            wasTargeting.target = isTargeting
+        elseif event == "PLAYER_FOCUS_CHANGED" then
+            local isTargeting = checkUnitTargetingPlayer("focus")
+            if isTargeting then
+                Pulse:FireIfEnabled("targetedByEnemy")
+            end
+            wasTargeting.focus = isTargeting
+        end
+    end)
+
+    Pulse:BindFrame({ "targetedByEnemy" }, sync)
 end

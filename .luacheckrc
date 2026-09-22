@@ -65,6 +65,14 @@ read_globals = {
     "TabSystemOwnerMixin",
     "PanelTemplates_SetTab",
     "StackSplitFrame",
+    "MerchantFrame",
+    "BankFrame",
+    "MailFrame",
+    "TradeFrame",
+    "GuildBankFrame",
+    "AuctionHouseFrame",
+    "ERR_INV_FULL",
+    "ERR_ITEM_MAX_COUNT",
 
     -- Blizzard Modern C_* namespaces
     "C_AddOns",
@@ -73,6 +81,7 @@ read_globals = {
     "C_Item",
     "C_Timer",
     "C_PlayerInfo",
+    "C_PlayerInteractionManager",
     "C_UnitAuras",
     "C_Curve",
     "C_GamePad",

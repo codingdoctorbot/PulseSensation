@@ -55,6 +55,7 @@ Modules/Flight.lua
 Modules/Combat.lua
 Modules/Environment.lua
 Modules/World.lua
+Modules/Inventory.lua
 Modules/Encounter.lua
 Modules/Health.lua
 

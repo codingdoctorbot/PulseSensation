@@ -880,6 +880,36 @@ Pulse.Triggers = {
         caveat = "Not filtered by rarity yet — fires for anything, common items included.",
     },
     {
+        id = "bagItemAdded",
+        category = "WORLD",
+        mode = "TICK",
+        throttle = 0.2,
+        default = true,
+        label = "Item placed in bag",
+        desc = "A light tick when an item enters your bag and occupies a slot.",
+        caveat = "Fires on BAG_UPDATE_DELAYED when total free bag slots decrease. Complements Item obtained (which tracks ITEM_PUSH fly-in loot animations).",
+    },
+    {
+        id = "bagItemUsed",
+        category = "WORLD",
+        mode = "THUD",
+        throttle = 0.3,
+        default = false,
+        label = "Item consumed from bag",
+        desc = "A subtle thud when a consumable or item is used and empties a bag slot.",
+        caveat = "Fires on BAG_UPDATE_DELAYED when total free bag slots increase while not interacting with a merchant, bank, or mail.",
+    },
+    {
+        id = "bagFull",
+        category = "WORLD",
+        mode = "STUTTER",
+        throttle = 1.0,
+        default = true,
+        label = "Inventory full warning",
+        desc = "An urgent stutter vibration when your bags become full or when you attempt an action with a full inventory.",
+        caveat = "Fires on UI_ERROR_MESSAGE (inventory full error) and when free bag slots drop to zero.",
+    },
+    {
         id = "harvestComplete",
         category = "WORLD",
         mode = "CHIME",
@@ -1341,6 +1371,16 @@ Pulse.Triggers = {
         label = "Target died",
         desc = "A heavy, decisive impact when your current target dies.",
         caveat = "Fires on PLAYER_TARGET_DIED.",
+    },
+    {
+        id = "targetedByEnemy",
+        category = "ALERT_UNIT_WATCH",
+        mode = "SHUDDER",
+        throttle = 1.5,
+        default = false,
+        label = "Targeted by enemy",
+        desc = "A sharp alert pulse when your hostile target or focus turns to target you.",
+        caveat = "Watches UNIT_TARGET and target swaps for hostile units whose target is the player. Uses UnitIsUnit('targettarget', 'player') with defensive secrecy guards.",
     },
 
     -- ── Accessibility: Combat and life state (fully generic) ───────────────────
@@ -2311,6 +2351,17 @@ Pulse.Triggers = {
         desc = "A bright tick when something you could interact with — an NPC, a node, a door — comes under your reticle.",
         caveat = "PLAYER_SOFT_INTERACT_CHANGED. Unlike its two siblings this one DOES carry a payload (oldTarget/newTarget GUIDs) and is flagged SecretWhenUnitIdentityRestricted in Blizzard's own docs, so this cue deliberately reads none of it and fires on the occurrence alone. Probably the most useful of the three: it's the one that says \"there is something here\" while you're looking around.",
     },
+    {
+        id = "softTargetInteraction",
+        category = "GAMEPAD_INTERACT",
+        mode = "CLICK",
+        throttle = 0.2,
+        default = false,
+        defaultIntensity = 0.45,
+        label = "Soft target interact",
+        desc = "A tactile click when native gamepad or action targeting triggers an interaction with the soft target.",
+        caveat = "PLAYER_SOFT_TARGET_INTERACTION. Fires when native gamepad/action interact executes on the current soft target.",
+    },
 
     -- ── Gamepad interactions: item cursor ───────────────────────────────────────
     {
@@ -2758,6 +2809,7 @@ local PAGE_LAYOUT = {
                     "targetChannelStart",
                     "targetCastStopped",
                     "targetChanged",
+                    "targetedByEnemy",
                     "targetDied",
                 },
             },
@@ -2787,10 +2839,13 @@ local PAGE_LAYOUT = {
                 },
             },
             {
-                label = "Loot",
+                label = "Loot & inventory",
                 cues = {
                     "lootGold",
                     "itemObtained",
+                    "bagItemAdded",
+                    "bagItemUsed",
+                    "bagFull",
                     "harvestComplete",
                     "lootOpened",
                     "lootRoll",
@@ -2949,6 +3004,7 @@ local PAGE_LAYOUT = {
                 label = "Targeting",
                 cues = {
                     "softInteractChanged",
+                    "softTargetInteraction",
                     "softEnemyChanged",
                     "softFriendChanged",
                 },
