@@ -4,7 +4,7 @@
 ## Author: codingdoctorbot
 ## Version: 0.1.0-alpha
 ## SavedVariables: PulseDB
-## IconTexture: Interface\Icons\Spell_Nature_HealingWaveGreater
+## IconTexture: Interface\Icons\Spell_Nature_WispSplode
 ## X-Credits: Anthropic (Claude Code), Google DeepMind (Antigravity)
 
 # Non-commercial hobby project developed with AI pair-programming assistance (Claude Code & Antigravity).

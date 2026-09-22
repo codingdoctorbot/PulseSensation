@@ -38,7 +38,7 @@ function Minimap:Init()
 		ldbObj = ldb:NewDataObject("Pulse", {
 			type = "launcher",
 			text = "Pulse",
-			icon = "Interface\\Icons\\Spell_Nature_HealingWaveGreater",
+			icon = "Interface\\Icons\\Spell_Nature_WispSplode",
 			OnClick = function(_, button)
 				if button == "RightButton" then
 					local current = Pulse.Database:Get("masterEnabled")
