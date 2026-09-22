@@ -95,15 +95,19 @@ Pulse.Guide = {
     },
     {
         heading = "Profiles and automatic rules",
-        body = "Pulse provides built-in profiles (**Default**, **Raiding**, **Questing**, "
-            .. "**PvP**) and lets you create your own custom profiles for different "
-            .. "characters or playstyles.\n\n"
-            .. "On the **Profiles** page, you can bind rules that switch profiles "
-            .. "automatically when you change specializations or enter specific content "
-            .. "(such as dungeons, raids, battlegrounds, or arenas).\n\n"
-            .. "To protect combat performance, any profile switch requested while fighting "
-            .. "is safely deferred until combat lockdown ends, ensuring zero frame hitches "
-            .. "mid-encounter.",
+        body = "Pulse provides purpose-built default profiles engineered for specific "
+            .. "roles and activities — browse them on the dedicated **Default profiles** page:\n\n"
+            .. "• **Dungeon & Raid Roles** (Tank, Healer, Melee DPS, Caster DPS, Hunter) "
+            .. "prioritize high signal-to-noise: threat loss, mitigations, kick windows, and "
+            .. "spell completion ticks take priority over ambient clutter.\n"
+            .. "• **World Immersion** (Melee, Caster, Ranged) maximizes atmospheric game-feel: "
+            .. "footstep weight by armor type, mount strides, swimming resistance, weather, "
+            .. "and exploration.\n"
+            .. "• **PvP** delivers pure tactical radar with zero ambient distraction.\n\n"
+            .. "On the **Profiles** page, you can configure automatic rules that switch "
+            .. "profiles on the fly when you change talent specializations, or create custom "
+            .. "copies of any default profile. To protect combat performance, any profile "
+            .. "switch requested while fighting is safely deferred until combat ends.",
     },
     {
         heading = "The Cue Index directory",

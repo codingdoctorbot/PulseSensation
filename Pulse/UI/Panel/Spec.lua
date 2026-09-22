@@ -933,6 +933,142 @@ function Spec.BuildProfilesPage()
     return rows
 end
 
+-- ── Default profiles ──────────────────────────────────────────────────────────
+
+-- Curated profile catalog: Purpose-built setups for Dungeon roles, World Immersion, and
+-- Competitive play. Each profile card summarizes its sensory philosophy, key cues, and
+-- provides 1-click activation, specialization binding, and copying.
+function Spec.BuildDefaultProfilesPage()
+    local rows = {}
+    local store = database()
+    local specID, specName = store:GetSpecInfo()
+
+    rows[#rows + 1] = { kind = "header", label = "Default profiles" }
+
+    rows[#rows + 1] = {
+        kind = "text",
+        gap = 10,
+        body = "Curated starting setups balanced for specific roles and playstyles. "
+            .. "Unlike an empty configuration, each profile prioritizes the tactile signals "
+            .. "most critical to that activity while filtering out background noise.\n\n"
+            .. "|cffffd100Dungeons & Raids|r prioritize high signal-to-noise: threat loss, "
+            .. "defensive mitigations, interrupt windows, and spell completion ticks take precedence.\n"
+            .. "|cffffd100World Immersion|r profiles emphasize atmospheric game-feel: footstep "
+            .. "weight by armor type, mount strides, swimming resistance, weather changes, and exploration.\n"
+            .. "|cffffd100PvP|r provides pure tactical radar with zero ambient distraction.\n\n"
+            .. "Tip: Click |cffffd100Set for Spec|r to bind any profile to your active talent "
+            .. "specialization, or customize auto-switch rules on the |cffffd100Profiles|r page.",
+    }
+
+    local sections = {
+        { category = "dungeon", label = "Dungeons & Raids" },
+        { category = "immersion", label = "World Immersion" },
+        { category = "pvp", label = "Competitive & Baseline", includeGeneral = true },
+    }
+
+    for _, sec in ipairs(sections) do
+        rows[#rows + 1] = { kind = "header", label = sec.label }
+
+        for _, meta in ipairs(Pulse.DEFAULT_PROFILE_METADATA or {}) do
+            if meta.category == sec.category or (sec.includeGeneral and meta.category == "general") then
+                local pID = meta.id
+                local pLabel = meta.label or meta.name
+
+                rows[#rows + 1] = {
+                    kind = "text",
+                    font = "GameFontHighlightMedium",
+                    gap = 2,
+                    body = function()
+                        local active = (store:GetActiveProfileName() == pID)
+                        if active then
+                            return ("|cffffd100%s|r  |cff00ff00[ACTIVE]|r"):format(pLabel)
+                        else
+                            return ("|cffffffff%s|r"):format(pLabel)
+                        end
+                    end,
+                }
+
+                rows[#rows + 1] = {
+                    kind = "text",
+                    child = true,
+                    font = "GameFontDisableSmall",
+                    gap = 6,
+                    body = function()
+                        local lines = {}
+                        lines[#lines + 1] = meta.summary
+                        lines[#lines + 1] = "|cffffd100Emphasizes:|r " .. meta.emphasizes
+                        lines[#lines + 1] = "|cff888888Silences:|r " .. meta.silences
+                        lines[#lines + 1] = ("|cff888888Recommended intensity:|r %d%%"):format(
+                            math.floor((meta.intensity or 0.7) * 100 + 0.5)
+                        )
+                        return table.concat(lines, "\n")
+                    end,
+                }
+
+                rows[#rows + 1] = {
+                    kind = "button",
+                    child = true,
+                    label = "Switch to this profile",
+                    buttonText = "Activate",
+                    tooltip = ("Immediately switch to %s for the current character."):format(pLabel),
+                    onClick = function()
+                        store:SetActiveProfileName(pID)
+                        print(('Pulse: activated profile "%s"'):format(pLabel))
+                    end,
+                }
+
+                if specID then
+                    rows[#rows + 1] = {
+                        kind = "button",
+                        child = true,
+                        label = ("Auto-switch in %s"):format(specName or ("Spec " .. tostring(specID))),
+                        buttonText = "Set for Spec",
+                        tooltip = ("Automatically switch to %s whenever this character is in %s."):format(
+                            pLabel,
+                            specName or tostring(specID)
+                        ),
+                        onClick = function()
+                            local ok, reason = store:SetProfileForScope(store.SCOPE_SPEC, pID)
+                            if ok then
+                                print(
+                                    ('Pulse: bound profile "%s" to specialization %s'):format(
+                                        pLabel,
+                                        specName or tostring(specID)
+                                    )
+                                )
+                            else
+                                report(ok, reason)
+                            end
+                        end,
+                    }
+                end
+
+                rows[#rows + 1] = {
+                    kind = "button",
+                    child = true,
+                    label = "Create editable copy",
+                    buttonText = "Copy...",
+                    tooltip = ("Create a new editable custom profile that starts as an exact copy of %s."):format(
+                        pLabel
+                    ),
+                    onClick = function()
+                        prompt(
+                            ('Copy "%s" to a new custom profile named:'):format(pLabel),
+                            pID .. " Copy",
+                            "Copy",
+                            function(value)
+                                report(store:DuplicateProfile(pID, value))
+                            end
+                        )
+                    end,
+                }
+            end
+        end
+    end
+
+    return rows
+end
+
 -- ── Crafting ──────────────────────────────────────────────────────────────────
 
 -- Everything about the craft texture in one place: the master toggle, the two shared
@@ -1593,6 +1729,12 @@ function Spec.BuildPages()
     -- First of the children, before the cue pages it indexes.
     pages[#pages + 1] = { id = "cueIndex", label = "Cue index", indent = 1, build = Spec.BuildCueIndexPage }
     pages[#pages + 1] = { id = "profiles", label = "Profiles", indent = 1, build = Spec.BuildProfilesPage }
+    pages[#pages + 1] = {
+        id = "defaultProfiles",
+        label = "Default profiles",
+        indent = 1,
+        build = Spec.BuildDefaultProfilesPage,
+    }
     pages[#pages + 1] = { id = "crafting", label = "Crafting", indent = 1, build = Spec.BuildCraftingPage }
 
     for _, page in ipairs(Pulse.Registry:GetPages()) do

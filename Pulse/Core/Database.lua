@@ -24,10 +24,10 @@ local Database = {}
 Pulse.Database = Database
 
 local DB
-local DB_VERSION = 6
+local DB_VERSION = 7
 
 local GLOBAL_DEFAULTS = {
-    masterEnabled       = true,
+    masterEnabled = true,
     defaultHapticSchema = "standard",
     -- ON by default. The switch stays because a one-line-per-cue list is a legitimate
     -- thing to want, but it is not the default: if the panel ever needs to shrink, the
@@ -46,72 +46,503 @@ local GLOBAL_DEFAULTS = {
 -- Registry.lua's stock defaults, so no tuning is thrown away (see _MigrateToProfiles).
 local PROFILE_DEFAULTS = {
     masterIntensity = 0.7,
-    triggers        = {},   -- triggerID -> bool, seeded from Pulse.Triggers[*].default
-    triggerSettings = {},   -- triggerID -> { settingKey -> number }, seeded from tunables
+    triggers = {}, -- triggerID -> bool, seeded from Pulse.Triggers[*].default
+    triggerSettings = {}, -- triggerID -> { settingKey -> number }, seeded from tunables
 }
 
-local BUILTIN_PROFILE_NAMES = { "Default", "Raiding", "Questing", "PvP" }
+local BUILTIN_PROFILE_NAMES = {
+    "Default",
+    "Dungeon: Tank",
+    "Dungeon: Healer",
+    "Dungeon: Melee",
+    "Dungeon: Caster",
+    "Dungeon: Hunter",
+    "Immersion: Melee",
+    "Immersion: Caster",
+    "Immersion: Ranged",
+    "PvP",
+    "Raiding",
+    "Questing",
+}
 
--- 2026-09-16: curated on-top-of-Default content for the three non-Default built-ins,
--- reasoned per trigger by usability for that playstyle — raid survival and coordination
--- for Raiding, exploration and flavour for Questing, fast reaction only for PvP. Default is
--- never touched; it stays Registry.lua's authored baseline. Applied once via
--- _ApplyCuratedProfileContent (DB_VERSION 3) rather than the "only fill holes" seeding
--- path, because by then every trigger already had a seeded value and a hole-filling pass
--- would have found nothing to fill.
+Pulse.DEFAULT_PROFILE_METADATA = {
+    {
+        id = "Dungeon: Tank",
+        name = "Dungeon: Tank",
+        category = "dungeon",
+        label = "Dungeon: Tank",
+        summary = "Commanding protection. High threat alerts, mitigation tracking, crowd control, and kick windows. Silences non-combat clutter.",
+        emphasizes = "Threat loss/warning, heavy hits taken, defensive cooldowns, crowd control, enemy kick windows",
+        silences = "Weather, footsteps, loot popups, quest dialogs, merchant/mail",
+        intensity = 0.80,
+    },
+    {
+        id = "Dungeon: Healer",
+        name = "Dungeon: Healer",
+        category = "dungeon",
+        label = "Dungeon: Healer",
+        summary = "Attentive triage. Emergency low health warnings, dispel/CC alerts, kick warnings, and heal completion confirmation with subdued personal damage.",
+        emphasizes = "Low health alarms, heal cast success, self/enemy interrupt warnings, dispellable CC",
+        silences = "Personal damage clutter, footsteps, weather, world dialogs",
+        intensity = 0.65,
+    },
+    {
+        id = "Dungeon: Melee",
+        name = "Dungeon: Melee",
+        category = "dungeon",
+        label = "Dungeon: Melee DPS",
+        summary = "High-tempo physical execution. Snappy combo points and resource spenders, execute range alerts, boss telegraphs, and kick windows.",
+        emphasizes = "Combo points, resource cap, execute range, kick alert, boss telegraphs, burst cooldowns",
+        silences = "World dialogs, ambient weather, merchant/mail",
+        intensity = 0.75,
+    },
+    {
+        id = "Dungeon: Caster",
+        name = "Dungeon: Caster",
+        category = "dungeon",
+        label = "Dungeon: Caster DPS",
+        summary = "Fluid spellcasting pacing. Continuous channel bed during casts, crisp completion snap, lockout warnings, and proc notifications.",
+        emphasizes = "Cast texture, cast finish confirmation, lockout/pushback warnings, proc glows, kick alerts",
+        silences = "Locomotion clatter, weapon swings, loot popups, world dialogs",
+        intensity = 0.70,
+    },
+    {
+        id = "Dungeon: Hunter",
+        name = "Dungeon: Hunter",
+        category = "dungeon",
+        label = "Dungeon: Hunter",
+        summary = "Paced ranged rhythm. Auto-shot timing, pet threat and low health alert, trap triggers, execute range, and boss mechanics.",
+        emphasizes = "Auto-shot cadence, pet status, trap triggers, execute range, boss mechanics",
+        silences = "Ambient weather, world dialogs, merchant/mail",
+        intensity = 0.70,
+    },
+    {
+        id = "Immersion: Melee",
+        name = "Immersion: Melee",
+        category = "immersion",
+        label = "Immersion: Melee",
+        summary = "Visceral physical game-feel. Armor-weighted footstep gait, terrain landings, parry and block impacts, swimming drag, weather, and rich world looting.",
+        emphasizes = "Locomotion & footsteps by armor weight, mount strides, weather, swimming drag, parry/blocks, full loot/quest haptics",
+        silences = "None (full sensory richness)",
+        intensity = 0.80,
+    },
+    {
+        id = "Immersion: Caster",
+        name = "Immersion: Caster",
+        category = "immersion",
+        label = "Immersion: Caster",
+        summary = "Atmospheric and arcane. Flowing spellcast textures, elemental channeling, environmental wind and weather, flight gliding, and magical world interactions.",
+        emphasizes = "Cast flow, flight & skyriding, swimming, weather changes, quest and item haptics",
+        silences = "Jarring physical weapon clatter",
+        intensity = 0.70,
+    },
+    {
+        id = "Immersion: Ranged",
+        name = "Immersion: Ranged",
+        category = "immersion",
+        label = "Immersion: Ranged",
+        summary = "Naturalistic scout feel. Locomotion, flight gliding, wilderness weather, tracking/stealth cues, world exploration, and bow release.",
+        emphasizes = "Footstep pacing, mount travel, gliding, weather, soft-target interaction, weapon draw/release",
+        silences = "Discordant combat spam",
+        intensity = 0.75,
+    },
+    {
+        id = "PvP",
+        name = "PvP",
+        category = "pvp",
+        label = "PvP (Tactical Radar)",
+        summary = "Pure competitive reaction. Instant tactical alerts for stuns, silences, disarms, lockouts, panic health warnings, and combat transitions.",
+        emphasizes = "Full loss-of-control suite, kick opportunities, lockouts, panic health warning, combat enter/leave",
+        silences = "100% stripped of footsteps, weather, swimming, flight, loot, quest, and UI noise",
+        intensity = 0.75,
+    },
+    {
+        id = "Default",
+        name = "Default",
+        category = "general",
+        label = "Default (Balanced Baseline)",
+        summary = "The standard authored baseline. Balanced game-feel across combat, environment, movement, and alerts.",
+        emphasizes = "Standard balance across all categories",
+        silences = "None (stock defaults)",
+        intensity = 0.70,
+    },
+}
+
+-- Curated trigger overrides for built-in profiles. Profiles with `__exclusive = true` enable
+-- only their explicitly listed cues and silence all other triggers; profiles without it inherit
+-- the trigger's authored default for unmentioned cues.
 local PROFILE_TRIGGER_OVERRIDES = {
     Raiding = {
-        bossAbilityWarning = true, cooldownReady = true,
-        lowHealthWarning = true, combatLeave = true, playerAlive = true,
-        encounterStart = true, encounterEnd = true, focusCastStart = true,
-        focusChannelStart = true, rolePoll = true, summonRequest = true,
-        raidTarget = true, lootRoll = true, lootReceived = true,
+        bossAbilityWarning = true,
+        cooldownReady = true,
+        lowHealthWarning = true,
+        combatLeave = true,
+        playerAlive = true,
+        encounterStart = true,
+        encounterEnd = true,
+        focusCastStart = true,
+        focusChannelStart = true,
+        rolePoll = true,
+        summonRequest = true,
+        raidTarget = true,
+        lootRoll = true,
+        lootReceived = true,
         selfChannelInterrupted = true,
     },
     Questing = {
-        damageTaken = true, castTexture = true, comboPoint = true,
-        lowHealthWarning = true, breathTexture = true, weatherChanged = true,
-        dismount = true, jumped = true, swimTexture = true, taxiRide = true,
-        lootGold = true, itemObtained = true, equipChanged = true, emote = true,
-        combatLeave = true, partyInvite = true, whisper = true, duelRequest = true,
-        lootOpened = true, lootRoll = true, lootConfirm = true, lootReceived = true,
-        merchantShow = true, mailShow = true, taxiOpened = true, questDetail = true,
-        questComplete = true, questTurnedIn = true, zoneChanged = true,
-        enteringWorld = true, achievement = true, selfCastSucceeded = true,
+        damageTaken = true,
+        castTexture = true,
+        comboPoint = true,
+        lowHealthWarning = true,
+        breathTexture = true,
+        weatherChanged = true,
+        dismount = true,
+        jumped = true,
+        swimTexture = true,
+        taxiRide = true,
+        lootGold = true,
+        itemObtained = true,
+        equipChanged = true,
+        emote = true,
+        combatLeave = true,
+        partyInvite = true,
+        whisper = true,
+        duelRequest = true,
+        lootOpened = true,
+        lootRoll = true,
+        lootConfirm = true,
+        lootReceived = true,
+        merchantShow = true,
+        mailShow = true,
+        taxiOpened = true,
+        questDetail = true,
+        questComplete = true,
+        questTurnedIn = true,
+        zoneChanged = true,
+        enteringWorld = true,
+        achievement = true,
+        selfCastSucceeded = true,
+    },
+    ["Dungeon: Tank"] = {
+        __exclusive = true,
+        threatLost = true,
+        threatWarning = true,
+        tauntSuccess = true,
+        tauntFailed = true,
+        damageTaken = true,
+        deflect = true,
+        bossAbilityWarning = true,
+        bossChatWarning = true,
+        cooldownReady = true,
+        lossOfControlStart = true,
+        ccMaster = true,
+        ccStun = true,
+        ccSilence = true,
+        ccFear = true,
+        ccDisarm = true,
+        ccPacify = true,
+        ccIncapacitate = true,
+        focusCastStart = true,
+        focusChannelStart = true,
+        targetCastStopped = true,
+        combatEnter = true,
+        combatLeave = true,
+        playerAlive = true,
+        lowHealthWarning = true,
+        lowHealthTexture = true,
+        raidTarget = true,
+        rolePoll = true,
+        summonRequest = true,
+        durabilityLow = true,
+    },
+    ["Dungeon: Healer"] = {
+        __exclusive = true,
+        lowHealthWarning = true,
+        lowHealthTexture = true,
+        healCrit = true,
+        healReceived = true,
+        selfCastSucceeded = true,
+        selfCastFailed = true,
+        selfChannelInterrupted = true,
+        castTexture = true,
+        cooldownReady = true,
+        procGlow = true,
+        bossAbilityWarning = true,
+        bossChatWarning = true,
+        focusCastStart = true,
+        focusChannelStart = true,
+        lossOfControlStart = true,
+        ccMaster = true,
+        ccSilence = true,
+        ccStun = true,
+        ccFear = true,
+        ccIncapacitate = true,
+        rolePoll = true,
+        summonRequest = true,
+        raidTarget = true,
+        combatEnter = true,
+        combatLeave = true,
+        playerAlive = true,
+        damageTaken = true,
+    },
+    ["Dungeon: Melee"] = {
+        __exclusive = true,
+        comboPoint = true,
+        resourceCapped = true,
+        critLanded = true,
+        deflect = true,
+        weaponSwingMain = true,
+        weaponSwingOff = true,
+        targetLowHealth = true,
+        focusCastStart = true,
+        focusChannelStart = true,
+        targetCastStopped = true,
+        bossAbilityWarning = true,
+        bossChatWarning = true,
+        cooldownReady = true,
+        procGlow = true,
+        lossOfControlStart = true,
+        ccMaster = true,
+        ccStun = true,
+        ccDisarm = true,
+        damageTaken = true,
+        combatEnter = true,
+        combatLeave = true,
+        playerAlive = true,
+        lowHealthWarning = true,
+        raidTarget = true,
+    },
+    ["Dungeon: Caster"] = {
+        __exclusive = true,
+        castTexture = true,
+        selfCastSucceeded = true,
+        selfCastFailed = true,
+        selfChannelInterrupted = true,
+        critLanded = true,
+        procGlow = true,
+        cooldownReady = true,
+        resourceCapped = true,
+        focusCastStart = true,
+        focusChannelStart = true,
+        targetCastStopped = true,
+        bossAbilityWarning = true,
+        bossChatWarning = true,
+        lossOfControlStart = true,
+        ccMaster = true,
+        ccSilence = true,
+        ccStun = true,
+        damageTaken = true,
+        lowHealthWarning = true,
+        combatEnter = true,
+        combatLeave = true,
+        playerAlive = true,
+        raidTarget = true,
+    },
+    ["Dungeon: Hunter"] = {
+        __exclusive = true,
+        autoShotFired = true,
+        autoRepeatStart = true,
+        autoRepeatStop = true,
+        targetLowHealth = true,
+        procGlow = true,
+        cooldownReady = true,
+        critLanded = true,
+        focusCastStart = true,
+        focusChannelStart = true,
+        targetCastStopped = true,
+        bossAbilityWarning = true,
+        bossChatWarning = true,
+        lossOfControlStart = true,
+        ccMaster = true,
+        ccStun = true,
+        ccSilence = true,
+        threatWarning = true,
+        damageTaken = true,
+        lowHealthWarning = true,
+        combatEnter = true,
+        combatLeave = true,
+        playerAlive = true,
+        raidTarget = true,
+    },
+    ["Immersion: Melee"] = {
+        locomotion = true,
+        landingSoft = true,
+        landingHard = true,
+        jumped = true,
+        swimTexture = true,
+        waterTexture = true,
+        breathWarning = true,
+        breathTexture = true,
+        weatherChanged = true,
+        weatherTexture = true,
+        taxiRide = true,
+        taxiTakeoff = true,
+        taxiLanding = true,
+        mountUp = true,
+        dismount = true,
+        glideThrust = true,
+        lootGold = true,
+        itemObtained = true,
+        harvestComplete = true,
+        durabilityLow = true,
+        equipChanged = true,
+        emote = true,
+        achievement = true,
+        damageTaken = true,
+        deflect = true,
+        critLanded = true,
+        weaponSwingMain = true,
+        weaponSwingOff = true,
+        comboPoint = true,
+        cooldownReady = true,
+        questDetail = true,
+        questComplete = true,
+        questTurnedIn = true,
+        merchantShow = true,
+        mailShow = true,
+        taxiOpened = true,
+        softTargetInteract = true,
+        craftTexture = true,
+        combatEnter = true,
+        combatLeave = true,
+    },
+    ["Immersion: Caster"] = {
+        castTexture = true,
+        selfCastSucceeded = true,
+        critLanded = true,
+        procGlow = true,
+        locomotion = true,
+        landingSoft = true,
+        landingHard = true,
+        glideThrust = true,
+        taxiRide = true,
+        mountUp = true,
+        dismount = true,
+        swimTexture = true,
+        waterTexture = true,
+        breathTexture = true,
+        weatherChanged = true,
+        weatherTexture = true,
+        lootGold = true,
+        itemObtained = true,
+        equipChanged = true,
+        achievement = true,
+        questDetail = true,
+        questComplete = true,
+        questTurnedIn = true,
+        merchantShow = true,
+        mailShow = true,
+        taxiOpened = true,
+        softTargetInteract = true,
+        craftTexture = true,
+        combatEnter = true,
+        combatLeave = true,
+        weaponSwingMain = false,
+        weaponSwingOff = false,
+        autoShotFired = false,
+    },
+    ["Immersion: Ranged"] = {
+        autoShotFired = true,
+        critLanded = true,
+        procGlow = true,
+        locomotion = true,
+        landingSoft = true,
+        landingHard = true,
+        jumped = true,
+        glideThrust = true,
+        mountUp = true,
+        dismount = true,
+        taxiRide = true,
+        swimTexture = true,
+        waterTexture = true,
+        weatherChanged = true,
+        weatherTexture = true,
+        lootGold = true,
+        itemObtained = true,
+        harvestComplete = true,
+        equipChanged = true,
+        achievement = true,
+        questDetail = true,
+        questComplete = true,
+        questTurnedIn = true,
+        merchantShow = true,
+        mailShow = true,
+        taxiOpened = true,
+        softTargetInteract = true,
+        craftTexture = true,
+        combatEnter = true,
+        combatLeave = true,
+        weaponSwingMain = false,
+        weaponSwingOff = false,
     },
     PvP = {
-        damageTaken = true, cooldownReady = true,
-        lowHealthWarning = true, lowHealthTexture = true, combatLeave = true,
-        duelRequest = true, raidTarget = true, ccDisarm = true, ccPacify = true,
-        focusCastStart = true, selfCastFailed = true, selfChannelInterrupted = true,
+        __exclusive = true,
+        lossOfControlStart = true,
+        ccMaster = true,
+        ccStun = true,
+        ccSilence = true,
+        ccFear = true,
+        ccDisarm = true,
+        ccPacify = true,
+        ccIncapacitate = true,
+        focusCastStart = true,
+        focusChannelStart = true,
+        targetCastStopped = true,
+        selfCastFailed = true,
+        selfChannelInterrupted = true,
+        damageTaken = true,
+        cooldownReady = true,
+        lowHealthWarning = true,
+        lowHealthTexture = true,
+        targetLowHealth = true,
+        combatEnter = true,
+        combatLeave = true,
+        duelRequest = true,
+        raidTarget = true,
     },
 }
 
 local function sanitizeBool(value)
-    if issecretvalue(value) then return nil end
+    if issecretvalue(value) then
+        return nil
+    end
     return value and true or false
 end
 
 local function sanitizeProfileName(name)
-    if issecretvalue(name) or type(name) ~= "string" then return nil end
+    if issecretvalue(name) or type(name) ~= "string" then
+        return nil
+    end
     name = name:match("^%s*(.-)%s*$")
-    if name == "" or #name > 24 then return nil end
+    if name == "" or #name > 24 then
+        return nil
+    end
     return name
 end
 
 local function sanitizeNumber(value, minValue, maxValue)
-    if issecretvalue(value) then return nil end
+    if issecretvalue(value) then
+        return nil
+    end
     value = tonumber(value)
-    if not value then return nil end
-    if value < minValue then return minValue end
-    if value > maxValue then return maxValue end
+    if not value then
+        return nil
+    end
+    if value < minValue then
+        return minValue
+    end
+    if value > maxValue then
+        return maxValue
+    end
     return value
 end
 
 local function copyDefaults(src, dst)
     for key, value in pairs(src) do
         if type(value) == "table" then
-            if type(dst[key]) ~= "table" then dst[key] = {} end
+            if type(dst[key]) ~= "table" then
+                dst[key] = {}
+            end
             copyDefaults(value, dst[key])
         elseif dst[key] == nil then
             dst[key] = value
@@ -144,13 +575,17 @@ local cachedCharacterKey = nil
 local invalidateResolution
 
 local function characterKey()
-    if cachedCharacterKey then return cachedCharacterKey end
+    if cachedCharacterKey then
+        return cachedCharacterKey
+    end
     local name = UnitName("player")
     local realm = GetRealmName()
     local key = (name or "?") .. " - " .. (realm or "?")
     -- Only cache a key that actually identifies somebody. A placeholder is recomputed next
     -- call rather than frozen in.
-    if name and realm then cachedCharacterKey = key end
+    if name and realm then
+        cachedCharacterKey = key
+    end
     return key
 end
 
@@ -175,7 +610,9 @@ do
         end
         -- Guarded: these can in principle arrive before Database:Init has run, and
         -- resolving a profile against a nil store is not worth an error.
-        if not DB then return end
+        if not DB then
+            return
+        end
         if event == "PLAYER_REGEN_ENABLED" then
             Database:FlushPendingProfileSwitch()
         end
@@ -190,8 +627,12 @@ local modeTuningListeners = {}
 
 local function notify(listeners, key)
     local list = listeners[key]
-    if not list then return end
-    for _, callback in ipairs(list) do callback() end
+    if not list then
+        return
+    end
+    for _, callback in ipairs(list) do
+        callback()
+    end
 end
 
 -- Switching the active profile can change any cue's enabled state, any tunable and
@@ -245,9 +686,16 @@ function Database:ApplyDefaults()
     DB.specProfile = DB.specProfile or {}
     DB.customProfiles = DB.customProfiles or {}
     for _, name in ipairs(self:_AllProfileNames()) do
+        local isNew = (DB.profiles[name] == nil)
         DB.profiles[name] = DB.profiles[name] or {}
         copyDefaults(PROFILE_DEFAULTS, DB.profiles[name])
         self:_SeedProfileTriggerDefaults(DB.profiles[name], PROFILE_TRIGGER_OVERRIDES[name])
+        if isNew then
+            local meta = self:GetDefaultProfileMeta(name)
+            if meta and meta.intensity then
+                DB.profiles[name].masterIntensity = meta.intensity
+            end
+        end
     end
 end
 
@@ -266,20 +714,40 @@ end
 
 function Database:IsBuiltinProfile(name)
     for _, builtin in ipairs(BUILTIN_PROFILE_NAMES) do
-        if builtin == name then return true end
+        if builtin == name then
+            return true
+        end
     end
     return false
+end
+
+function Database:GetDefaultProfileMeta(name)
+    if not Pulse.DEFAULT_PROFILE_METADATA then
+        return nil
+    end
+    for _, meta in ipairs(Pulse.DEFAULT_PROFILE_METADATA) do
+        if meta.id == name then
+            return meta
+        end
+    end
+    return nil
 end
 
 -- Per-trigger seeding, aimed at one profile table rather than DB — called once per slot in
 -- ApplyDefaults. `overrides` wins over trigger.default on a first-time seed only, still
 -- "fill holes, never stomp a real choice". A custom profile created later never gets one,
--- since PROFILE_TRIGGER_OVERRIDES names only the three curated built-ins.
+-- since PROFILE_TRIGGER_OVERRIDES names only the curated built-ins.
 function Database:_SeedProfileTriggerDefaults(profile, overrides)
     for _, trigger in ipairs(Pulse.Triggers) do
         if profile.triggers[trigger.id] == nil then
             local default = overrides and overrides[trigger.id]
-            if default == nil then default = trigger.default end
+            if default == nil then
+                if overrides and overrides.__exclusive then
+                    default = false
+                else
+                    default = trigger.default
+                end
+            end
             profile.triggers[trigger.id] = default and true or false
         end
         -- Per-cue intensity for every trigger that produces vibration, mode-based or
@@ -306,7 +774,9 @@ function Database:_SeedProfileTriggerDefaults(profile, overrides)
                     -- separateMotors; the same bug silently disabled Locomotion's
                     -- mountedOnly and splitFeet.
                     local value = tunable.default
-                    if tunable.boolean then value = value and 1 or 0 end
+                    if tunable.boolean then
+                        value = value and 1 or 0
+                    end
                     settings[tunable.key] = value
                 end
             end
@@ -331,7 +801,28 @@ function Database:Migrate()
     if DB.version < 6 then
         self:_MigrateToProfileRules()
     end
+    if DB.version < 7 then
+        self:_MigrateRoleAndImmersionProfiles()
+    end
     DB.version = DB_VERSION
+end
+
+-- One-time, DB_VERSION 6 -> 7: seeds newly added Dungeon and Immersion role profiles into
+-- DB.profiles without overwriting existing custom profiles or any profiles already modified.
+function Database:_MigrateRoleAndImmersionProfiles()
+    for _, name in ipairs(BUILTIN_PROFILE_NAMES) do
+        local overrides = PROFILE_TRIGGER_OVERRIDES[name]
+        if overrides and not (DB.profiles and DB.profiles[name]) then
+            DB.profiles = DB.profiles or {}
+            DB.profiles[name] = {}
+            copyDefaults(PROFILE_DEFAULTS, DB.profiles[name])
+            self:_SeedProfileTriggerDefaults(DB.profiles[name], overrides)
+            local meta = self:GetDefaultProfileMeta(name)
+            if meta and meta.intensity then
+                DB.profiles[name].masterIntensity = meta.intensity
+            end
+        end
+    end
 end
 
 -- One-time, DB_VERSION 2 -> 3: PROFILE_TRIGGER_OVERRIDES' curated content for Raiding/
@@ -386,7 +877,9 @@ function Database:_MigrateSwimSplit()
     for _, profile in pairs(DB.profiles or {}) do
         for _, settings in pairs(profile.triggerSettings or {}) do
             for key, value in pairs(settings) do
-                if type(value) == "boolean" then settings[key] = value and 1 or 0 end
+                if type(value) == "boolean" then
+                    settings[key] = value and 1 or 0
+                end
             end
         end
     end
@@ -397,9 +890,11 @@ function Database:_MigrateSwimSplit()
         if old then
             -- max() is what the old code did with the pair, so take the same winner.
             local high = old.swimHighPeak
-            local low  = old.swimLowPeak
+            local low = old.swimLowPeak
             local peak = math.max(high or 0, low or 0)
-            if peak > 0 and old.peak == nil then old.peak = peak end
+            if peak > 0 and old.peak == nil then
+                old.peak = peak
+            end
             old.swimLowPeak, old.swimHighPeak = nil, nil
 
             if old.idleFloatAmplitude ~= nil then
@@ -426,7 +921,7 @@ end
 function Database:_MigrateToProfiles()
     local snapshot = {
         masterIntensity = DB.masterIntensity,
-        triggers        = DB.triggers or {},
+        triggers = DB.triggers or {},
         triggerSettings = DB.triggerSettings or {},
     }
     DB.profiles = {}
@@ -479,29 +974,39 @@ end
 -- returns nil when it does not, the spec scope then never resolves, and the UI hides the
 -- row rather than offering a rule that can never match.
 
-local SCOPE_SPEC      = "spec"
+local SCOPE_SPEC = "spec"
 local SCOPE_CHARACTER = "character"
-local SCOPE_ACCOUNT   = "account"
+local SCOPE_ACCOUNT = "account"
 
-Database.SCOPE_SPEC      = SCOPE_SPEC
+Database.SCOPE_SPEC = SCOPE_SPEC
 Database.SCOPE_CHARACTER = SCOPE_CHARACTER
-Database.SCOPE_ACCOUNT   = SCOPE_ACCOUNT
+Database.SCOPE_ACCOUNT = SCOPE_ACCOUNT
 
 -- id, name. Both nil on a client or character without specializations, which is a
 -- supported state, not a failure.
 function Database:GetSpecInfo()
-    if type(GetSpecialization) ~= "function" then return nil end
-    if type(GetSpecializationInfo) ~= "function" then return nil end
+    if type(GetSpecialization) ~= "function" then
+        return nil
+    end
+    if type(GetSpecializationInfo) ~= "function" then
+        return nil
+    end
     local ok, index = pcall(GetSpecialization)
-    if not ok or type(index) ~= "number" then return nil end
+    if not ok or type(index) ~= "number" then
+        return nil
+    end
     local okInfo, id, name = pcall(GetSpecializationInfo, index)
-    if not okInfo or type(id) ~= "number" then return nil end
+    if not okInfo or type(id) ~= "number" then
+        return nil
+    end
     return id, name
 end
 
 local function specKey()
     local id = Database:GetSpecInfo()
-    if not id then return nil end
+    if not id then
+        return nil
+    end
     return characterKey() .. "::" .. tostring(id)
 end
 
@@ -518,7 +1023,9 @@ local function ruleFor(scope)
     elseif scope == SCOPE_ACCOUNT then
         name = DB.accountProfile
     end
-    if name and DB.profiles[name] then return name end
+    if name and DB.profiles[name] then
+        return name
+    end
     return nil
 end
 
@@ -542,7 +1049,7 @@ end
 -- result is cached — the common case, and the one the hot path cares about. A spec rule set
 -- anywhere means resolving live every call, correct whether or not the event arrives, paid
 -- only by someone who asked for it.
-local resolution   -- { scope, name, why } or nil
+local resolution -- { scope, name, why } or nil
 
 local function anySpecRules()
     return next(DB.specProfile or {}) ~= nil
@@ -624,8 +1131,12 @@ function Database:HasPendingProfileSwitch()
 end
 
 function Database:FlushPendingProfileSwitch()
-    if not pendingProfileNotify then return false end
-    if InCombatLockdown and InCombatLockdown() then return false end
+    if not pendingProfileNotify then
+        return false
+    end
+    if InCombatLockdown and InCombatLockdown() then
+        return false
+    end
     pendingProfileNotify = false
     notifyAll(cueListeners)
     notify(globalListeners, "masterIntensity")
@@ -643,22 +1154,28 @@ function Database:RefreshActiveProfile()
     -- rule changing, which is the entire point of having a spec scope.
     invalidateResolution()
     local name = self:GetActiveProfileName()
-    if name == lastResolved then return false end
+    if name == lastResolved then
+        return false
+    end
     lastResolved = name
     if Pulse.debug then
         local _, _, why = self:GetProfileResolution()
-        print(("Pulse: profile is now \"%s\" (%s)"):format(name, why))
+        print(('Pulse: profile is now "%s" (%s)'):format(name, why))
     end
     notifyProfileSwitch()
     return true
 end
 
 function Database:SetProfileForScope(scope, name)
-    if not DB.profiles[name] then return false, "no such profile" end
+    if not DB.profiles[name] then
+        return false, "no such profile"
+    end
 
     if scope == SCOPE_SPEC then
         local key = specKey()
-        if not key then return false, "this character has no specialization" end
+        if not key then
+            return false, "this character has no specialization"
+        end
         DB.specProfile[key] = name
     elseif scope == SCOPE_CHARACTER then
         DB.charProfile[characterKey()] = name
@@ -677,7 +1194,9 @@ end
 function Database:ClearProfileForScope(scope)
     if scope == SCOPE_SPEC then
         local key = specKey()
-        if not key then return false, "this character has no specialization" end
+        if not key then
+            return false, "this character has no specialization"
+        end
         DB.specProfile[key] = nil
     elseif scope == SCOPE_CHARACTER then
         DB.charProfile[characterKey()] = nil
@@ -703,8 +1222,12 @@ end
 -- effect and only affects whoever asked for it. Found by the offline harness: "Copy this
 -- profile" was quietly repointing every character at the new copy.
 function Database:SetActiveProfileName(name)
-    if not DB.profiles[name] then return end
-    if self:GetActiveProfileName() == name then return end
+    if not DB.profiles[name] then
+        return
+    end
+    if self:GetActiveProfileName() == name then
+        return
+    end
     local scope = self:GetProfileResolution()
     if scope ~= SCOPE_SPEC and scope ~= SCOPE_CHARACTER then
         scope = SCOPE_CHARACTER
@@ -727,9 +1250,11 @@ end
 -- slot.
 function Database:CreateProfile(name)
     name = sanitizeProfileName(name)
-    if not name then return false, "enter a name (up to 24 characters)" end
+    if not name then
+        return false, "enter a name (up to 24 characters)"
+    end
     if DB.profiles[name] then
-        return false, ("a profile named \"%s\" already exists"):format(name)
+        return false, ('a profile named "%s" already exists'):format(name)
     end
     DB.profiles[name] = {}
     copyDefaults(PROFILE_DEFAULTS, DB.profiles[name])
@@ -737,7 +1262,7 @@ function Database:CreateProfile(name)
     invalidateResolution()
     DB.customProfiles[#DB.customProfiles + 1] = name
     if Pulse.debug then
-        print(("Pulse: created profile \"%s\""):format(name))
+        print(('Pulse: created profile "%s"'):format(name))
     end
     self:SetActiveProfileName(name)
     return true
@@ -748,11 +1273,15 @@ end
 -- by hand. Pulse's profiles are siblings rather than a hierarchy, so there is no scope
 -- above to inherit from and duplication has to be offered explicitly.
 function Database:DuplicateProfile(sourceName, newName)
-    if not DB.profiles[sourceName] then return false, "no such profile" end
+    if not DB.profiles[sourceName] then
+        return false, "no such profile"
+    end
     newName = sanitizeProfileName(newName)
-    if not newName then return false, "enter a name (up to 24 characters)" end
+    if not newName then
+        return false, "enter a name (up to 24 characters)"
+    end
     if DB.profiles[newName] then
-        return false, ("a profile named \"%s\" already exists"):format(newName)
+        return false, ('a profile named "%s" already exists'):format(newName)
     end
 
     -- A deep copy, so the two are independent from the first edit. Seeding afterwards
@@ -765,7 +1294,7 @@ function Database:DuplicateProfile(sourceName, newName)
     DB.customProfiles[#DB.customProfiles + 1] = newName
 
     if Pulse.debug then
-        print(("Pulse: copied profile \"%s\" to \"%s\""):format(sourceName, newName))
+        print(('Pulse: copied profile "%s" to "%s"'):format(sourceName, newName))
     end
     self:SetActiveProfileName(newName)
     return true
@@ -777,12 +1306,18 @@ function Database:RenameProfile(oldName, newName)
     if self:IsBuiltinProfile(oldName) then
         return false, "built-in profiles can't be renamed"
     end
-    if not DB.profiles[oldName] then return false, "no such profile" end
+    if not DB.profiles[oldName] then
+        return false, "no such profile"
+    end
     newName = sanitizeProfileName(newName)
-    if not newName then return false, "enter a name (up to 24 characters)" end
-    if newName == oldName then return true end
+    if not newName then
+        return false, "enter a name (up to 24 characters)"
+    end
+    if newName == oldName then
+        return true
+    end
     if DB.profiles[newName] then
-        return false, ("a profile named \"%s\" already exists"):format(newName)
+        return false, ('a profile named "%s" already exists'):format(newName)
     end
 
     DB.profiles[newName] = DB.profiles[oldName]
@@ -796,15 +1331,21 @@ function Database:RenameProfile(oldName, newName)
     -- Every rule pointing at the old name follows it, so a rename strands nobody back on
     -- Default. All three scopes: fixing up only the character rules would break a spec one.
     for charKey, profileName in pairs(DB.charProfile) do
-        if profileName == oldName then DB.charProfile[charKey] = newName end
+        if profileName == oldName then
+            DB.charProfile[charKey] = newName
+        end
     end
     for key, profileName in pairs(DB.specProfile) do
-        if profileName == oldName then DB.specProfile[key] = newName end
+        if profileName == oldName then
+            DB.specProfile[key] = newName
+        end
     end
-    if DB.accountProfile == oldName then DB.accountProfile = newName end
+    if DB.accountProfile == oldName then
+        DB.accountProfile = newName
+    end
     invalidateResolution()
     if Pulse.debug then
-        print(("Pulse: renamed profile \"%s\" to \"%s\""):format(oldName, newName))
+        print(('Pulse: renamed profile "%s" to "%s"'):format(oldName, newName))
     end
     return true
 end
@@ -817,14 +1358,20 @@ end
 -- tuning, not just the keys this function knows about.
 function Database:ResetProfileToDefaults(name)
     name = name or self:GetActiveProfileName()
-    if not DB.profiles[name] then return false, "no such profile" end
+    if not DB.profiles[name] then
+        return false, "no such profile"
+    end
 
     DB.profiles[name] = {}
     copyDefaults(PROFILE_DEFAULTS, DB.profiles[name])
     self:_SeedProfileTriggerDefaults(DB.profiles[name], PROFILE_TRIGGER_OVERRIDES[name])
+    local meta = self:GetDefaultProfileMeta(name)
+    if meta and meta.intensity then
+        DB.profiles[name].masterIntensity = meta.intensity
+    end
 
     if Pulse.debug then
-        print(("Pulse: reset profile \"%s\" to defaults"):format(name))
+        print(('Pulse: reset profile "%s" to defaults'):format(name))
     end
     if self:GetActiveProfileName() == name then
         notifyProfileSwitch()
@@ -836,7 +1383,9 @@ function Database:DeleteProfile(name)
     if self:IsBuiltinProfile(name) then
         return false, "built-in profiles can't be deleted"
     end
-    if not DB.profiles[name] then return false, "no such profile" end
+    if not DB.profiles[name] then
+        return false, "no such profile"
+    end
 
     local wasActiveHere = (self:GetActiveProfileName() == name)
 
@@ -852,15 +1401,21 @@ function Database:DeleteProfile(name)
     -- through to the next scope down. Rewriting would invent an explicit rule the player
     -- never made. ruleFor already treats a dangling name as unset, so this is tidying.
     for charKey, profileName in pairs(DB.charProfile) do
-        if profileName == name then DB.charProfile[charKey] = nil end
+        if profileName == name then
+            DB.charProfile[charKey] = nil
+        end
     end
     for key, profileName in pairs(DB.specProfile) do
-        if profileName == name then DB.specProfile[key] = nil end
+        if profileName == name then
+            DB.specProfile[key] = nil
+        end
     end
-    if DB.accountProfile == name then DB.accountProfile = nil end
+    if DB.accountProfile == name then
+        DB.accountProfile = nil
+    end
     invalidateResolution()
     if Pulse.debug then
-        print(("Pulse: deleted profile \"%s\""):format(name))
+        print(('Pulse: deleted profile "%s"'):format(name))
     end
     if wasActiveHere then
         notifyProfileSwitch()
@@ -880,10 +1435,14 @@ function Database:Get(key)
 end
 
 function Database:Set(key, value)
-    if issecretvalue(value) then return end
+    if issecretvalue(value) then
+        return
+    end
     if key == "masterIntensity" then
         value = sanitizeNumber(value, 0.0, 1.0)
-        if value == nil then return end
+        if value == nil then
+            return
+        end
         activeProfile().masterIntensity = value
         if Pulse.debug then
             print(("Pulse: %s set to %s"):format(key, tostring(value)))
@@ -895,11 +1454,15 @@ function Database:Set(key, value)
     if type(default) == "boolean" then
         value = sanitizeBool(value)
     elseif key == "defaultHapticSchema" then
-        if not Pulse.HapticSchemas[value] then return end
+        if not Pulse.HapticSchemas[value] then
+            return
+        end
     else
         return
     end
-    if value == nil then return end
+    if value == nil then
+        return
+    end
     DB[key] = value
     if Pulse.debug then
         print(("Pulse: %s set to %s"):format(key, tostring(value)))
@@ -913,12 +1476,13 @@ end
 
 function Database:SetCue(triggerID, enabled)
     enabled = sanitizeBool(enabled)
-    if enabled == nil then return end
+    if enabled == nil then
+        return
+    end
     activeProfile().triggers[triggerID] = enabled
     if Pulse.debug then
         local trigger = Pulse.Registry:GetTrigger(triggerID)
-        print(("Pulse: %s %s"):format(trigger and trigger.label or triggerID,
-            enabled and "enabled" or "disabled"))
+        print(("Pulse: %s %s"):format(trigger and trigger.label or triggerID, enabled and "enabled" or "disabled"))
     end
     notify(cueListeners, triggerID)
 end
@@ -930,20 +1494,23 @@ end
 function Database:GetTriggerSetting(triggerID, settingKey, default)
     local settings = activeProfile().triggerSettings[triggerID]
     local value = settings and settings[settingKey]
-    if value == nil then return default end
+    if value == nil then
+        return default
+    end
     return value
 end
 
 function Database:SetTriggerSetting(triggerID, settingKey, value, minValue, maxValue)
     value = sanitizeNumber(value, minValue, maxValue)
-    if value == nil then return end
+    if value == nil then
+        return
+    end
     local profile = activeProfile()
     profile.triggerSettings[triggerID] = profile.triggerSettings[triggerID] or {}
     profile.triggerSettings[triggerID][settingKey] = value
     if Pulse.debug then
         local trigger = Pulse.Registry:GetTrigger(triggerID)
-        print(("Pulse: %s %s set to %.2f"):format(
-            trigger and trigger.label or triggerID, settingKey, value))
+        print(("Pulse: %s %s set to %.2f"):format(trigger and trigger.label or triggerID, settingKey, value))
     end
     notify(triggerSettingListeners, triggerID .. ":" .. settingKey)
 end
@@ -955,13 +1522,17 @@ end
 function Database:GetModeTuning(modeID, key, default)
     local t = DB.modeTuning and DB.modeTuning[modeID]
     local value = t and t[key]
-    if value == nil then return default end
+    if value == nil then
+        return default
+    end
     return value
 end
 
 function Database:SetModeTuning(modeID, key, value, minValue, maxValue)
     value = sanitizeNumber(value, minValue, maxValue)
-    if value == nil then return end
+    if value == nil then
+        return
+    end
     DB.modeTuning = DB.modeTuning or {}
     DB.modeTuning[modeID] = DB.modeTuning[modeID] or {}
     DB.modeTuning[modeID][key] = value
@@ -994,13 +1565,17 @@ end
 function Database:GetChannelTuning(channel, key, default)
     local t = DB.channelTuning and DB.channelTuning[channel]
     local value = t and t[key]
-    if value == nil then return default end
+    if value == nil then
+        return default
+    end
     return value
 end
 
 function Database:SetChannelTuning(channel, key, value, minValue, maxValue)
     value = sanitizeNumber(value, minValue, maxValue)
-    if value == nil then return end
+    if value == nil then
+        return
+    end
     DB.channelTuning = DB.channelTuning or {}
     DB.channelTuning[channel] = DB.channelTuning[channel] or {}
     DB.channelTuning[channel][key] = value
@@ -1028,12 +1603,16 @@ end
 -- values you cannot see. Global, like the rest of the calibration.
 function Database:GetDevicePreset()
     local id = DB.devicePreset
-    if not id or not Pulse.Devices[id] then return "default" end
+    if not id or not Pulse.Devices[id] then
+        return "default"
+    end
     return id
 end
 
 function Database:SetDevicePreset(id)
-    if not Pulse.Devices[id] then return end
+    if not Pulse.Devices[id] then
+        return
+    end
     DB.devicePreset = id
 end
 
@@ -1043,7 +1622,9 @@ end
 -- numbers you already trimmed.
 function Database:ApplyDevicePreset(id)
     local device = Pulse.Devices[id]
-    if not device then return false, "no such controller preset" end
+    if not device then
+        return false, "no such controller preset"
+    end
 
     DB.channelTuning = {}
     for _, channel in ipairs(Pulse.CHANNELS) do
@@ -1057,7 +1638,7 @@ function Database:ApplyDevicePreset(id)
 
     self:SetDevicePreset(id)
     if Pulse.debug then
-        print(("Pulse: applied controller preset \"%s\""):format(device.label or id))
+        print(('Pulse: applied controller preset "%s"'):format(device.label or id))
     end
     notifyAll(channelTuningListeners)
     return true
@@ -1070,12 +1651,16 @@ end
 -- last known values are a better guess than "Human". Global: your race is not a playstyle.
 function Database:GetLocomotionProfile()
     local t = DB.locomotionProfile
-    if type(t) ~= "table" then return nil end
+    if type(t) ~= "table" then
+        return nil
+    end
     return t
 end
 
 function Database:SetLocomotionProfile(race, ridingTier, armorMultiplier)
-    if issecretvalue(race) or type(race) ~= "string" then return end
+    if issecretvalue(race) or type(race) ~= "string" then
+        return
+    end
     DB.locomotionProfile = {
         race = race,
         ridingTier = sanitizeNumber(ridingTier, 0, 3) or 0,
@@ -1086,13 +1671,17 @@ end
 -- The one non-per-channel calibration value — see Devices.lua's CHANGE_EPSILON_DEFAULT.
 function Database:GetChangeEpsilon()
     local value = DB.changeEpsilon
-    if value == nil then return Pulse.CHANGE_EPSILON_DEFAULT end
+    if value == nil then
+        return Pulse.CHANGE_EPSILON_DEFAULT
+    end
     return value
 end
 
 function Database:SetChangeEpsilon(value)
     value = sanitizeNumber(value, 0.0, 0.05)
-    if value == nil then return end
+    if value == nil then
+        return
+    end
     DB.changeEpsilon = value
     if Pulse.debug then
         print(("Pulse: change threshold set to %.4f"):format(value))
@@ -1113,14 +1702,15 @@ end
 function Database:SetTriggerMode(triggerID, modeID)
     -- nil is a legal value here — it means "clear the override, fall back to the
     -- trigger's own default mode" — so only a non-nil, unrecognised mode name is rejected.
-    if modeID ~= nil and not Pulse.Modes[modeID] then return end
+    if modeID ~= nil and not Pulse.Modes[modeID] then
+        return
+    end
     local profile = activeProfile()
     profile.triggerSettings[triggerID] = profile.triggerSettings[triggerID] or {}
     profile.triggerSettings[triggerID].__mode = modeID
     if Pulse.debug then
         local trigger = Pulse.Registry:GetTrigger(triggerID)
-        print(("Pulse: %s mode override -> %s"):format(
-            trigger and trigger.label or triggerID, modeID or "(default)"))
+        print(("Pulse: %s mode override -> %s"):format(trigger and trigger.label or triggerID, modeID or "(default)"))
     end
     notify(triggerSettingListeners, triggerID .. ":__mode")
 end
