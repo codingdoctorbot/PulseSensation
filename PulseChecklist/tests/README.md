@@ -1,6 +1,6 @@
 # Offline test harnesses
 
-Four Lua suites that load the real addon against a stub WoW API and check it without a
+Six Lua suites that load the real addon against a stub WoW API and check it without a
 client. Roughly seventy assertions, all green as of commit `cddf553`.
 
 They cannot tell you how anything looks or feels. They can tell you that every file loads
@@ -16,6 +16,10 @@ for t in harness locomotion-test crafting-test engine-test; do
     printf '%-18s ' "$t"
     lua PulseChecklist/tests/$t.lua Pulse 2>&1 | tail -1
 done
+
+# PulseDebug's window is a separate addon, so it takes a different directory.
+lua PulseChecklist/tests/pulsedebug-test.lua PulseDebug | tail -1
+lua PulseChecklist/tests/checklist-test.lua PulseChecklist | tail -1
 ```
 
 Any Lua 5.1–5.5 works; the stubs paper over the differences. A failing suite prints the
@@ -34,6 +38,8 @@ find Pulse -name '*.lua' -exec luac -p {} +
 | `harness.lua` | Loads every `Core/` file, every module and the whole `UI/Panel/` tree, then builds all 20 pages — 1,141 rows, 841 controls, 162 index entries. Every getter, dependency predicate, visibility predicate and options function runs; every value round-trips through its own setter. Also: no spec fails to build, no dropdown is still wired to Blizzard's menu, every cue-index line navigates, the dependency pass greys and ungreys correctly, and 27 profile-scope assertions |
 | `locomotion-test.lua` | The ground-contact guard — swimming, flying, gliding, falling, and the rising half of a jump, which `IsFalling` does not report |
 | `crafting-test.lua` | Craft rhythm end to end through real `CastActivity` events: profession resolution, strike scheduling, the final blow landing on completion but not on an abandoned craft, per-profession toggles and strengths |
+| `checklist-test.lua` | PulseChecklist's window and its account-wide saved table. Drives the real status button: cycling a status stamps `confirmedBy` with the current character, name, realm and class; cycling back to `untested` clears it; a status set by another character is marked and explained in the tooltip; and an entry saved before `confirmedBy` existed neither errors nor gets mislabelled |
+| `pulsedebug-test.lua` | PulseDebug's window (`UI.lua`), the one file here written entirely blind. Loads both PulseDebug files against a stub API and a fake Pulse, then drives the frame: every view renders and contains a token only it can produce, the Live toggle's OnUpdate ticks safely, the module reach-in scan finds `_Debug*` and skips modules without one, and a reach-in that throws is reported inline without taking the window down |
 | `engine-test.lua` | The asynchronous cancellation boundary. `StopAll` must void already-scheduled `PlayMode` steps and ramp steps, while a cue fired *after* it still plays |
 
 ## Two things worth knowing

@@ -456,11 +456,11 @@ end
 
 -- Which profile is active, and why
 --
--- 2026-09-22. The idea of resolving a profile automatically is taken from the
--- GamepadVibration addon (Downloads Random/GamepadVibration), as an idea rather than a
--- design: its scopes hold SETTINGS, so every character owns a private copy and two
--- characters can never share a configuration. Pulse's named profiles exist precisely so
--- five characters can share one "Raiding".
+-- 2026-09-22. Resolving a profile automatically is a borrowed idea; what the scopes hold
+-- is not. The obvious shape is for each scope to own its own copy of every setting, which
+-- is simple and wrong here: every character ends up with a private configuration and two
+-- of them can never share one. Pulse's named profiles exist precisely so five characters
+-- can share one "Raiding".
 --
 -- So the scopes here hold a NAME, not a settings table. What is automatic is which profile
 -- gets picked; what is shared stays shared.
@@ -603,10 +603,10 @@ function Database:GetProfileRule(scope)
     return ruleFor(scope)
 end
 
--- Deferred in combat, as GamepadVibration also does and for the same reason: this
--- notification is what makes every module re-register its events (Init.lua's BindFrame),
--- and tearing that down and rebuilding it mid-pull is the kind of thing that goes wrong
--- once and never reproduces. The stored rule changes immediately; only the re-sync waits.
+-- Deferred in combat: this notification is what makes every module re-register its events
+-- (Init.lua's BindFrame), and tearing that down and rebuilding it mid-pull is the kind of
+-- thing that goes wrong once and never reproduces. The stored rule changes immediately;
+-- only the re-sync waits.
 local pendingProfileNotify = false
 
 local function notifyProfileSwitch()
@@ -745,8 +745,8 @@ end
 
 -- Copy an existing profile rather than starting from stock defaults, and switch to it.
 -- CreateProfile seeds from Registry.lua, so "Raiding but quieter" meant rebuilding 151 cues
--- by hand. GamepadVibration gets this free because its scopes seed from the scope above;
--- Pulse offers it explicitly, because its profiles are siblings rather than a hierarchy.
+-- by hand. Pulse's profiles are siblings rather than a hierarchy, so there is no scope
+-- above to inherit from and duplication has to be offered explicitly.
 function Database:DuplicateProfile(sourceName, newName)
     if not DB.profiles[sourceName] then return false, "no such profile" end
     newName = sanitizeProfileName(newName)

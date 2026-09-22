@@ -53,6 +53,46 @@ local function ensureEntry(triggerID)
     return entry
 end
 
+-- Who confirmed a cue, and from where.
+--
+-- The table stays ACCOUNT-WIDE on purpose: "does swimTexture fire" is a fact about the
+-- addon and the client build, not about who is logged in, and per-character storage would
+-- mean re-testing all 110 cues on every alt.
+--
+-- But some cues can only be reached by particular characters — autoShotFired is
+-- Hunter-only (Registry.lua says so in its own caveat), combo points need a rogue or
+-- druid, weaponSwingOff needs dual wield, the Crafting cues need a profession. Marking one
+-- Functioning on the character that CAN test it, then reading it back on one that cannot,
+-- previously looked identical. This records the difference without splitting the table.
+--
+-- Entries written before this existed simply have no confirmedBy, which reads as "confirmed
+-- at some point, by someone" — the honest answer, and no migration.
+local function currentCharacter()
+    local name = UnitName("player")
+    local realm = GetRealmName()
+    local _, class = UnitClass("player")
+    return {
+        name  = name,
+        realm = realm,
+        class = class,
+        when  = date("%Y-%m-%d"),
+    }
+end
+
+local function isSameCharacter(stamp)
+    if not stamp then return true end -- nothing recorded, so nothing to disagree with
+    return stamp.name == UnitName("player") and stamp.realm == GetRealmName()
+end
+
+-- Cycling back to untested drops the stamp: an untested cue has nobody to attribute.
+local function stampEntry(entry)
+    if entry.status == "untested" then
+        entry.confirmedBy = nil
+    else
+        entry.confirmedBy = currentCharacter()
+    end
+end
+
 ---------------------------------------------------------------------------
 -- Main frame
 ---------------------------------------------------------------------------
@@ -137,15 +177,43 @@ local function createRow(trigger)
     local function refreshStatus()
         local entry = ensureEntry(trigger.id)
         local info = STATUS_INFO[entry.status]
-        statusButton:SetText(info.label)
+        -- A trailing dot rather than a second column: the row is already three controls
+        -- wide and the comment box is the one that wants the space. Only the surprising
+        -- case is marked — a status this character could not have set itself.
+        local elsewhere = entry.status ~= "untested" and not isSameCharacter(entry.confirmedBy)
+        statusButton:SetText(info.label .. (elsewhere and " |cff888888\194\183|r" or ""))
         statusButton:GetFontString():SetTextColor(info.r, info.g, info.b)
     end
 
     statusButton:SetScript("OnClick", function()
         local entry = ensureEntry(trigger.id)
         entry.status = nextStatus(entry.status)
+        stampEntry(entry)
         refreshStatus()
     end)
+
+    -- The full attribution lives in the tooltip, so it costs no row width.
+    statusButton:SetScript("OnEnter", function(self)
+        local entry = ensureEntry(trigger.id)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:AddLine(trigger.id, 1, 1, 1)
+        local stamp = entry.confirmedBy
+        if entry.status == "untested" then
+            GameTooltip:AddLine("Not tested yet.", 0.6, 0.6, 0.6)
+        elseif not stamp then
+            GameTooltip:AddLine("Set before this build recorded who did it.", 0.6, 0.6, 0.6)
+        else
+            GameTooltip:AddLine(("%s set this on %s-%s (%s) on %s."):format(
+                STATUS_INFO[entry.status].label, tostring(stamp.name), tostring(stamp.realm),
+                tostring(stamp.class), tostring(stamp.when)), 0.6, 0.6, 0.6)
+            if not isSameCharacter(stamp) then
+                GameTooltip:AddLine("Not this character — some cues only fire for the right class or spec.",
+                    0.95, 0.8, 0.15, true)
+            end
+        end
+        GameTooltip:Show()
+    end)
+    statusButton:SetScript("OnLeave", function() GameTooltip:Hide() end)
 
     local function commitComment()
         ensureEntry(trigger.id).comment = commentBox:GetText()

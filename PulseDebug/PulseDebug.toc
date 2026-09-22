@@ -6,3 +6,7 @@
 ## IconTexture: Interface\Icons\INV_Misc_Wrench_01
 
 Debug.lua
+
+# The window. Loaded after Debug.lua, but resolves its command through _G at call
+# time, so neither file depends on the other's load order.
+UI.lua

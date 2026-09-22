@@ -13,6 +13,12 @@
 # /dump select(4, GetBuildInfo()) — no longer the placeholder 12.0 floor. Re-check before
 # packaging for a client on a different build.
 
+# TREMOR, referenced throughout this codebase and its comments: the proof-of-concept
+# alpha that preceded this one. An earlier, narrower build whose accessibility cue set
+# and core structure were carried across and kept. A precursor to this alpha rather than
+# a companion to it — no TOC here declares a dependency on Tremor, nothing loads it, and
+# it does not need to be installed for any of this to work.
+
 
 
 

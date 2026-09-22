@@ -81,6 +81,7 @@ function commands.help()
     row("/pdebug watch off", "stop logging")
     row("/pdebug modes", "every mode id, discrete or continuous")
     row("/pdebug schema", "the active schema's role-to-channel map")
+    row("/pdebug ui", "open the window: same readouts, with a live 10Hz refresh")
 end
 
 function commands.state(P)
@@ -303,6 +304,17 @@ function commands.schema(P)
         row("  " .. role, string.format("%s @ %.2f",
             def.channel or (DIM .. "silent" .. R), def.intensity or 1.0))
     end
+end
+
+-- The window lives in UI.lua. Resolved through _G at call time rather than at load, so
+-- this works whichever order the two files end up in.
+function commands.ui()
+    local ui = _G.PulseDebugUI
+    if not ui then
+        out(BAD .. "UI.lua is not loaded." .. R .. DIM .. "  Check PulseDebug.toc lists it." .. R)
+        return
+    end
+    ui.Toggle()
 end
 
 local watchFrame = CreateFrame("Frame")

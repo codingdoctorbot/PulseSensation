@@ -572,11 +572,10 @@ end
 -- every character. Each one names a profile or names nothing. The first that names one
 -- wins; the rest fall through. "No rule" everywhere means Default.
 --
--- The automatic part is borrowed from GamepadVibration, which resolves a scope for you
--- instead of making you pick. NOT borrowed: what its scopes hold. There each scope owns its
--- own copy of every setting, so two characters can never share a configuration and there is
--- nothing to name. Pulse's scopes hold a NAME, so five characters can point at one
--- "Raiding" and editing it once changes it for all five.
+-- A scope holds a NAME, not its own copy of every setting, which is what lets five
+-- characters point at one "Raiding" and have editing it once change it for all five. Why
+-- it works that way is argued where the resolution lives — see "Which profile is active,
+-- and why" in Core/Database.lua.
 function Spec.BuildProfilesPage()
     local rows = {}
     local store = database()
