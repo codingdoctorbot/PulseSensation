@@ -83,7 +83,7 @@ Pulse.Triggers = {
     { id = "landingSoft", category = "MOVEMENT", mode = "TICK", default = true,
       label = "Landed",
       desc  = "A light tick when you land after a short fall or jump.",
-      caveat = "Scored by how long you were airborne, not by fall damage — that number is unreadable (FUTURE.md B1/B2). A short hop stays silent below the threshold." },
+      caveat = "Scored by how long you were airborne, not by fall damage — that number is unreadable. A short hop stays silent below the threshold." },
     { id = "landingHard", category = "MOVEMENT", mode = "THUD", default = true,
       label = "Hard landing",
       desc  = "A sharp impact when you land after a long fall.",
@@ -177,7 +177,7 @@ Pulse.Triggers = {
     { id = "glideThrust", category = "FLIGHT", continuous = true, default = true,
       label = "Dragonriding / Skyriding thrust",
       desc  = "A texture that builds as your gliding speed climbs toward a boost.",
-      caveat = "Low motor holds a steady presence, floored so it's never silent while gliding; high motor eases in from near-silent toward thrillPeak as speed climbs, shaped by thrillCurve (alphafeatures.md G4).",
+      caveat = "Low motor holds a steady presence, floored so it's never silent while gliding; high motor eases in from near-silent toward thrillPeak as speed climbs, shaped by thrillCurve.",
       devTuning = true,
       tunables = {
           { key = "presenceFloor", label = "Presence floor (low)", default = 0.15, min = 0.0, max = 0.5, step = 0.02,
@@ -195,7 +195,7 @@ Pulse.Triggers = {
     { id = "abilityPulse", category = "COMBAT", mode = "TICK", default = false,
       label = "Ability pulse",
       desc  = "A very light tick every time you use an ability, while in combat.",
-      caveat = "Detected via the global cooldown (spell 61304 ticking), not a per-ability read — so it only fires for abilities that trigger the GCD, and fires once per GCD even if what you pressed doesn't share a name with it. Off by default — this is the one idea in the whole catalogue that genuinely competes for channel time during a pull (alphafeatures.md G6). Try it, but it's not for everyone." },
+      caveat = "Detected via the global cooldown (spell 61304 ticking), not a per-ability read — so it only fires for abilities that trigger the GCD, and fires once per GCD even if what you pressed doesn't share a name with it. Off by default — this is the one idea in the whole catalogue that genuinely competes for channel time during a pull. Try it, but it's not for everyone." },
     { id = "critLanded", category = "COMBAT", mode = "THUD", default = true,
       label = "Hit with a critical strike",
       desc  = "A sharp thump when an attack against you crits.",
@@ -207,7 +207,7 @@ Pulse.Triggers = {
     { id = "castTexture", category = "COMBAT", continuous = true, default = false,
       label = "Casting texture",
       desc  = "A faint continuous hum for as long as you're casting or channelling.",
-      caveat = "Off by default — a continuous texture, not a notification (alphafeatures.md G12).",
+      caveat = "Off by default — a continuous texture, not a notification.",
       devTuning = true,
       tunables = {
           -- 2026-09-22. Was a bare 0.1 passed as the low role at both Modules/Combat.lua
@@ -258,7 +258,7 @@ Pulse.Triggers = {
       defaultIntensity = 0.3,
       label = "Damage taken",
       desc  = "A very light tap for an ordinary hit — deliberately gentle, distinct from the sharper critLanded pulse.",
-      caveat = "Reads COMBAT_TEXT_UPDATE's DAMAGE/SPELL_DAMAGE/DAMAGE_CRIT/SPELL_DAMAGE_CRIT messageTypes rather than UNIT_COMBAT, for no-churn reasons rather than necessity — UNIT_COMBAT's \"WOUND\" mechanism was believed dead (reported not firing 2026-09-15) but was confirmed live and firing on 2026-09-16 after all (combat-detection.md Part 1 §1); this cue already worked on COMBAT_TEXT_UPDATE by then, so it wasn't switched back. The reverseeng.md §4/FUTURE.md B1 suspicion that UNIT_COMBAT has been non-functional since Cataclysm-era patches should not be trusted as settled. Deliberately TICK, not THUD — a routine hit should read as noticeably gentler than critLanded's own pulse, not the same weight repeated constantly. Its own Intensity slider (the generic per-cue one every trigger gets) defaults to 0.3 rather than 1.0, same reasoning: it fires far more often than a crit or a dodge, so it needs to stay in the background rather than compete with them." },
+      caveat = "Reads COMBAT_TEXT_UPDATE's DAMAGE/SPELL_DAMAGE/DAMAGE_CRIT/SPELL_DAMAGE_CRIT messageTypes rather than UNIT_COMBAT, for no-churn reasons rather than necessity — UNIT_COMBAT's \"WOUND\" mechanism was believed dead (reported not firing 2026-09-15) but was confirmed live and firing on 2026-09-16 after all; this cue already worked on COMBAT_TEXT_UPDATE by then, so it wasn't switched back. The suspicion that UNIT_COMBAT has been non-functional since Cataclysm-era patches should not be trusted as settled. Deliberately TICK, not THUD — a routine hit should read as noticeably gentler than critLanded's own pulse, not the same weight repeated constantly. Its own Intensity slider (the generic per-cue one every trigger gets) defaults to 0.3 rather than 1.0, same reasoning: it fires far more often than a crit or a dodge, so it needs to stay in the background rather than compete with them." },
     { id = "healCrit", category = "COMBAT", mode = "CHIME", default = false,
       label = "Landed a critical heal",
       desc  = "A pleasant chime when you receive a critical heal.",
@@ -274,7 +274,7 @@ Pulse.Triggers = {
     { id = "cooldownReady", category = "COMBAT", mode = "TICK", default = false,
       label = "Tracked cooldown ready",
       desc  = "A light tick when a cooldown the built-in Cooldown Manager is tracking comes off cooldown.",
-      caveat = "Experimental (alphafeatures.md AF2): watches whichever spells the Cooldown Manager's Essential category shows, not a hardcoded list. The exact live \"just became ready\" signal was never independently confirmed before this shipped — built on the same C_Spell.GetSpellCooldown transition-tracking this file already uses for the GCD heartbeat." },
+      caveat = "Experimental: watches whichever spells the Cooldown Manager's Essential category shows, not a hardcoded list. The exact live \"just became ready\" signal was never independently confirmed before this shipped — built on the same C_Spell.GetSpellCooldown transition-tracking this file already uses for the GCD heartbeat." },
     { id = "autoRepeatStart", category = "COMBAT", mode = "TAP", default = false,
       label = "Ranged auto-repeat started",
       desc  = "A soft tick when you start auto-attacking with a ranged weapon (Auto Shot, Shoot, wands).",
@@ -364,7 +364,7 @@ Pulse.Triggers = {
     { id = "weatherChanged", category = "ENVIRONMENT", mode = "CHIME", default = false,
       label = "Weather changed",
       desc  = "A bright tick when the weather changes.",
-      caveat = "C_Weather/WEATHER_CHANGED is new as of Patch 12.1.5 (alphafeatures.md G14) and its exact return shape hasn't been verified in-game here — this fires on any change, not filtered to storm-type weather yet." },
+      caveat = "C_Weather/WEATHER_CHANGED is new as of Patch 12.1.5 and its exact return shape hasn't been verified in-game here — this fires on any change, not filtered to storm-type weather yet." },
 
     -- ── World (alphafeatures.md G9, G10, G17, G18) ─────────────────────────────
     { id = "resting", category = "WORLD", mode = "TAP", default = true,
@@ -376,7 +376,7 @@ Pulse.Triggers = {
     { id = "itemObtained", category = "WORLD", mode = "CHIME", default = false,
       label = "Item obtained",
       desc  = "A bright tick when an item enters your bags — looted, crafted, or mailed.",
-      caveat = "Not filtered by rarity yet (alphafeatures.md G18) — fires for anything, common items included." },
+      caveat = "Not filtered by rarity yet — fires for anything, common items included." },
     { id = "durabilityLow", category = "WORLD", mode = "TAP", default = true,
       label = "Gear needs repair",
       desc  = "A tick when a piece of your gear's durability drops into the low or broken range." },
@@ -386,7 +386,7 @@ Pulse.Triggers = {
     { id = "emote", category = "WORLD", mode = "CHIME", default = false,
       label = "Performed an emote",
       desc  = "A playful tick on some of your own emotes.",
-      caveat = "Pure novelty (alphafeatures.md G10). Off by default forever, basically — nobody asked for this one." },
+      caveat = "Pure novelty. Off by default forever, basically — nobody asked for this one." },
     { id = "npcEmote", category = "WORLD", mode = "CHIME", default = false,
       label = "NPC emote nearby",
       desc  = "A playful tick when an NPC emotes, yells, or whispers near you.",
@@ -404,11 +404,11 @@ Pulse.Triggers = {
             default = 0.7,
             desc = "0 = one soft pulse. 1 = a sharp lub, then a clearly separate softer dub. Derives the knock timing and intensity split automatically — see lowHealthTexture if you want those set by hand instead." },
       },
-      caveat = "Reads Blizzard's own default-UI LowHealthFrame (:IsShown()), not UnitHealth — that read is unconditionally secret (KNOWN_ISSUES.md B6/FUTURE.md B13), and the earlier color-curve attempt (alphafeatures.md AF1) was confirmed dead too. LowHealthFrame's widget state is confirmed non-secret in-game instead (alphafeatures.md AF4). Very rarely can also fire for an unrelated reason (a fullscreen UI panel open in combat) — narrow enough to document rather than guard against. No `mode` field: this no longer plays a Core/Modes.lua shape, it drives Engine:Hold directly, same mechanism as lowHealthTexture." },
+      caveat = "Reads Blizzard's own default-UI LowHealthFrame (:IsShown()), not UnitHealth — that read is unconditionally secret, and the earlier color-curve attempt was confirmed dead too. LowHealthFrame's widget state is confirmed non-secret in-game instead. Very rarely can also fire for an unrelated reason (a fullscreen UI panel open in combat) — narrow enough to document rather than guard against. No `mode` field: this no longer plays a Core/Modes.lua shape, it drives Engine:Hold directly, same mechanism as lowHealthTexture." },
     { id = "lowHealthTexture", category = "HEALTH", continuous = true, default = false,
       label = "Low health texture",
       desc  = "A sharp double-knock ('lub-dub') timed to each pulse of Blizzard's own low-health screen flash, rather than a single beat.",
-      caveat = "Off by default, layers with \"Low health\" rather than replacing it — same relationship as breathWarning/breathTexture. Same mechanism and same fullscreen-panel caveat as lowHealthWarning above (alphafeatures.md AF4). The shape itself is a code-level switch (Modules/Health.lua's HEARTBEAT_STYLE: smooth glow, flash-synced lub-dub, or an independently-timed lub-dub), not exposed here — flash-synced won out by feel. The knock's own gap/duration/intensity used to be four sliders here; fixed as plain constants in Modules/Health.lua once this exact combination was confirmed to feel right (2026-09-15)." },
+      caveat = "Off by default, layers with \"Low health\" rather than replacing it — same relationship as breathWarning/breathTexture. Same mechanism and same fullscreen-panel caveat as lowHealthWarning above. The shape itself is a code-level switch (Modules/Health.lua's HEARTBEAT_STYLE: smooth glow, flash-synced lub-dub, or an independently-timed lub-dub), not exposed here — flash-synced won out by feel. The knock's own gap/duration/intensity used to be four sliders here; fixed as plain constants in Modules/Health.lua once this exact combination was confirmed to feel right (2026-09-15)." },
 
     -- Accessibility, imported from Tremor. Ids kept identical to Tremor's, and none
     -- collides with an id above, so the cues stay recognisable across the two addons.
@@ -951,7 +951,7 @@ Pulse.Triggers = {
       defaultIntensity = 0.6,
       label = "Debuff received",
       desc  = "A sharp snap when a harmful effect lands on you.",
-      caveat = "COMBAT_TEXT_UPDATE's SPELL_AURA_START_HARMFUL messageType, identified in Pulse_Retail_Combat_Text_Windfury_Findings.md while ruling out EXTRA_ATTACKS. Occurrence only — the amount on this feed is a secret value. Not confirmed to fire; off by default." },
+      caveat = "COMBAT_TEXT_UPDATE's SPELL_AURA_START_HARMFUL messageType, ruling out EXTRA_ATTACKS. Occurrence only — the amount on this feed is a secret value. Not confirmed to fire; off by default." },
 
     { id = "xpGained", category = "ALERT_WORLD", mode = "BLIP", throttle = 0.5, default = false,
       defaultIntensity = 0.4,

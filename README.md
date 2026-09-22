@@ -15,7 +15,7 @@ production polish.
 - **110 cues across 15 categories** — movement, flight & mounts, combat texture,
   environment, world & game-feel, your own casting, loss of control, threat,
   target/focus, group & social, world & interface, controller state, and a full
-  accessibility set (combat/life state) imported from sibling addon Tremor.
+  accessibility set (combat/life state) imported from precursor proof-of-concept Tremor.
 - **21 authored vibration modes** — 16 one-shot pulses (from a light `TICK` up to
   a reserved-for-the-worst-moments `HEAVY`) and 5 continuous textures (`HUM`,
   `THRUM`, `WAVE`, `PATTER`, `DRIFT`) for ambient, held sensations rather than
