@@ -220,6 +220,83 @@ local function syncRadialEvents()
 	radialEventsRegistered = wanted
 end
 
+-- Major UI Panels — open/close via EventRegistry
+
+local PANEL_EVENT_CUES = { "panelOpen", "panelClose" }
+local panelEventsRegistered = false
+
+local function onPanelOpen()
+	if not gamepadUIActive() then
+		return
+	end
+	Pulse:FireIfEnabled("panelOpen")
+end
+
+local function onPanelClose()
+	if not gamepadUIActive() then
+		return
+	end
+	Pulse:FireIfEnabled("panelClose")
+end
+
+local function syncPanelEvents()
+	local wanted = Pulse.Database:Get("masterEnabled") and anyEnabled(PANEL_EVENT_CUES) or false
+	if wanted == panelEventsRegistered then
+		return
+	end
+	if not EventRegistry then
+		return
+	end
+
+	if wanted then
+		pcall(EventRegistry.RegisterCallback, EventRegistry, "UIParentPanelManager.ShowUIPanel", onPanelOpen, OWNER)
+		pcall(EventRegistry.RegisterCallback, EventRegistry, "UIParentPanelManager.HideUIPanel", onPanelClose, OWNER)
+	else
+		pcall(EventRegistry.UnregisterCallback, EventRegistry, "UIParentPanelManager.ShowUIPanel", OWNER)
+		pcall(EventRegistry.UnregisterCallback, EventRegistry, "UIParentPanelManager.HideUIPanel", OWNER)
+	end
+	panelEventsRegistered = wanted
+end
+
+-- Group Targeting — state transitions via GroupTargeting callback
+
+local GROUP_TARGETING_CUES = { "groupTargetingStart", "groupTargetingStop" }
+local groupTargetingRegistered = false
+
+local function onGroupTargetingChanged(_, active)
+	if not gamepadUIActive() then
+		return
+	end
+	if active then
+		Pulse:FireIfEnabled("groupTargetingStart")
+	else
+		Pulse:FireIfEnabled("groupTargetingStop")
+	end
+end
+
+local function syncGroupTargeting()
+	local wanted = Pulse.Database:Get("masterEnabled") and anyEnabled(GROUP_TARGETING_CUES) or false
+	if wanted == groupTargetingRegistered then
+		return
+	end
+	if not GroupTargeting or type(GroupTargeting.RegisterCallback) ~= "function" then
+		return
+	end
+
+	if wanted then
+		pcall(
+			GroupTargeting.RegisterCallback,
+			GroupTargeting,
+			"GroupTargetingStateChanged",
+			onGroupTargetingChanged,
+			OWNER
+		)
+	else
+		pcall(GroupTargeting.UnregisterCallback, GroupTargeting, "GroupTargetingStateChanged", OWNER)
+	end
+	groupTargetingRegistered = wanted
+end
+
 -- Radial menu — selection lifecycle via hooksecurefunc
 
 local radialHooked = false
@@ -564,6 +641,18 @@ function M:OnEnable()
 	end
 	Pulse:BindFrame(radialEventBinds, syncRadialEvents)
 
+	local panelEventBinds = { "controllerUIMaster" }
+	for _, id in ipairs(PANEL_EVENT_CUES) do
+		panelEventBinds[#panelEventBinds + 1] = id
+	end
+	Pulse:BindFrame(panelEventBinds, syncPanelEvents)
+
+	local groupTargetingBinds = { "controllerUIMaster" }
+	for _, id in ipairs(GROUP_TARGETING_CUES) do
+		groupTargetingBinds[#groupTargetingBinds + 1] = id
+	end
+	Pulse:BindFrame(groupTargetingBinds, syncGroupTargeting)
+
 	local radialBinds = { "controllerUIMaster" }
 	for _, id in ipairs(RADIAL_CUES) do
 		radialBinds[#radialBinds + 1] = id
@@ -583,5 +672,7 @@ function M:OnEnable()
 		installHooks()
 		syncNav()
 		syncRadialEvents()
+		syncPanelEvents()
+		syncGroupTargeting()
 	end)
 end

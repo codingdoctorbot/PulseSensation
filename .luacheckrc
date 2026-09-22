@@ -163,6 +163,7 @@ read_globals = {
     "GamepadSharedUtility",
     "GamepadMode",
     "GamepadRadial",
+    "GroupTargeting",
     "GAMEPAD_DPAD_LEFT",
     "GAMEPAD_DPAD_RIGHT",
     "GAMEPAD_FACE_TOP",

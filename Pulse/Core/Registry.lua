@@ -908,7 +908,7 @@ Pulse.Triggers = {
 		default = true,
 		label = "Inventory full warning",
 		desc = "An urgent stutter vibration when your bags become full or when you attempt an action with a full inventory.",
-		caveat = "Fires on UI_ERROR_MESSAGE (inventory full error) and when free bag slots drop to zero.",
+		caveat = "Fires on BAG_OVERFLOW_WITH_FULL_INVENTORY, UI_ERROR_MESSAGE (inventory full error) and when free bag slots drop to zero.",
 	},
 	{
 		id = "harvestComplete",
@@ -1384,6 +1384,17 @@ Pulse.Triggers = {
 		desc = "A sharp alert pulse when your hostile target or focus turns to target you.",
 		caveat = "Watches UNIT_TARGET and target swaps for hostile units whose target is the player. Uses UnitIsUnit('targettarget', 'player') with defensive secrecy guards.",
 	},
+	{
+		id = "targetBigDefensive",
+		category = "ALERT_UNIT_WATCH",
+		mode = "THUD",
+		throttle = 1.0,
+		default = true,
+		label = "Target used major defensive",
+		desc = "A heavy thud when your target activates a major defensive cooldown (e.g. Shield Wall, Ice Block, Divine Shield, Turtle, Cloak).",
+		caveat = "Checked via C_UnitAuras.AuraIsBigDefensive. Occurrence only.",
+		unit = "target",
+	},
 
 	-- ── Accessibility: Combat and life state (fully generic) ───────────────────
 	{
@@ -1654,6 +1665,18 @@ Pulse.Triggers = {
 		label = "Battle.net whisper received",
 		desc = "Fires when you receive a Battle.net whisper.",
 		events = { "CHAT_MSG_BN_WHISPER" },
+		unit = nil,
+	},
+	{
+		id = "pingPinAdded",
+		category = "ALERT_SOCIAL",
+		mode = "CHIME",
+		throttle = 0.5,
+		default = true,
+		label = "Ping placed",
+		desc = "A clear tactical chime when a waypoint ping pin is placed on the terrain or map.",
+		caveat = "Fires on UNIT_PING_PIN_ADDED.",
+		events = { "UNIT_PING_PIN_ADDED" },
 		unit = nil,
 	},
 
@@ -2626,6 +2649,50 @@ Pulse.Triggers = {
 		desc = "A light click when the last confirmation dialog closes.",
 		caveat = 'Same polled mechanism as "Confirmation popup appeared". Untested.',
 	},
+	{
+		id = "panelOpen",
+		category = "CONTROLLER_UI",
+		mode = "TAP",
+		throttle = 0.2,
+		default = true,
+		defaultIntensity = 0.6,
+		label = "UI panel opened",
+		desc = "A crisp tap when a major full-screen or side UI panel opens (character sheet, spellbook, quest log, etc.).",
+		caveat = "Observed via EventRegistry UIParentPanelManager.ShowUIPanel callback.",
+	},
+	{
+		id = "panelClose",
+		category = "CONTROLLER_UI",
+		mode = "CLICK",
+		throttle = 0.2,
+		default = true,
+		defaultIntensity = 0.5,
+		label = "UI panel closed",
+		desc = "A light click when a major UI panel is dismissed.",
+		caveat = "Observed via EventRegistry UIParentPanelManager.HideUIPanel callback.",
+	},
+	{
+		id = "groupTargetingStart",
+		category = "CONTROLLER_UI",
+		mode = "TAP",
+		throttle = 0.2,
+		default = true,
+		defaultIntensity = 0.6,
+		label = "Group targeting active",
+		desc = "A distinct tap when holding the controller modifier to target party or raid members.",
+		caveat = "Observed via GroupTargeting GroupTargetingStateChanged callback.",
+	},
+	{
+		id = "groupTargetingStop",
+		category = "CONTROLLER_UI",
+		mode = "TICK",
+		throttle = 0.2,
+		default = true,
+		defaultIntensity = 0.5,
+		label = "Group targeting released",
+		desc = "A soft tick when releasing the group targeting modifier back to normal navigation.",
+		caveat = "Observed via GroupTargeting GroupTargetingStateChanged callback.",
+	},
 }
 
 -- Presentation layout (2026-09-21) — which settings page and section each cue renders
@@ -2822,6 +2889,7 @@ local PAGE_LAYOUT = {
 					"targetCastStart",
 					"targetChannelStart",
 					"targetCastStopped",
+					"targetBigDefensive",
 					"targetChanged",
 					"targetedByEnemy",
 					"targetDied",
@@ -2904,7 +2972,7 @@ local PAGE_LAYOUT = {
 					"bgQueue",
 				},
 			},
-			{ label = "Group changes", cues = { "groupRoster", "partyLeader", "raidTarget" } },
+			{ label = "Group changes", cues = { "groupRoster", "partyLeader", "raidTarget", "pingPinAdded" } },
 			{
 				label = "Invites & requests",
 				cues = {
@@ -2983,14 +3051,32 @@ local PAGE_LAYOUT = {
 		id = "CONTROLLER_UI",
 		label = "Controller UI",
 		sections = {
-			{ label = "Navigation", cues = { "uiNavigate", "uiNavigateEdge", "uiSelectionDisabled" } },
+			{
+				label = "Navigation",
+				cues = {
+					"uiNavigate",
+					"uiNavigateEdge",
+					"uiSelectionDisabled",
+					"groupTargetingStart",
+					"groupTargetingStop",
+				},
+			},
 			{ label = "Focus", cues = { "uiFocusIn", "uiFocusOut" } },
 			-- Separate from Navigation: stepping focus between two buttons and swapping tab or
 			-- panel page are different gestures wanting different cues. Sources:
 			-- TabSystemOwnerMixin:SetTab, TabSystemMixin:SetTab and PanelTemplates_SetTab
 			-- (WoWForeverGamepadQA's TabDetector), plus the
 			-- UIParentPanelManager.ShowUIPanel/HideUIPanel EventRegistry callbacks.
-			{ label = "Menus & tabs", cues = { "uiTabChanged", "popupShown", "popupHidden" } },
+			{
+				label = "Menus & tabs",
+				cues = {
+					"panelOpen",
+					"panelClose",
+					"uiTabChanged",
+					"popupShown",
+					"popupHidden",
+				},
+			},
 			-- Lifecycle order rather than alphabetical: open, page, sweep, commit or cancel, close.
 			{
 				label = "Radial menu",
