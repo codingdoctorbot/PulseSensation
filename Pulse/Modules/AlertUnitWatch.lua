@@ -12,8 +12,9 @@ Pulse:RegisterModule("AlertUnitWatch", M)
 
 function M:OnEnable()
     self:_WatchUnit("target", "targetCastStart", "targetChannelStart")
-    self:_WatchUnit("focus",  "focusCastStart",  "focusChannelStart")
+    self:_WatchUnit("focus", "focusCastStart", "focusChannelStart")
     self:_WatchSwaps()
+    self:_WatchTargetDeath()
 end
 
 function M:_WatchUnit(unit, startCue, channelCue)
@@ -21,7 +22,9 @@ function M:_WatchUnit(unit, startCue, channelCue)
 
     local function sync()
         frame:UnregisterAllEvents()
-        if not Pulse.Database:Get("masterEnabled") then return end
+        if not Pulse.Database:Get("masterEnabled") then
+            return
+        end
         if Pulse.Database:GetCue(startCue) then
             frame:RegisterUnitEvent("UNIT_SPELLCAST_START", unit)
         end
@@ -46,15 +49,21 @@ function M:_WatchSwaps()
 
     local function sync()
         frame:UnregisterAllEvents()
-        if not Pulse.Database:Get("masterEnabled") then return end
-        if Pulse.Database:GetCue("targetChanged")
+        if not Pulse.Database:Get("masterEnabled") then
+            return
+        end
+        if
+            Pulse.Database:GetCue("targetChanged")
             or Pulse.Database:GetCue("targetCastStart")
-            or Pulse.Database:GetCue("targetChannelStart") then
+            or Pulse.Database:GetCue("targetChannelStart")
+        then
             frame:RegisterEvent("PLAYER_TARGET_CHANGED")
         end
-        if Pulse.Database:GetCue("focusChanged")
+        if
+            Pulse.Database:GetCue("focusChanged")
             or Pulse.Database:GetCue("focusCastStart")
-            or Pulse.Database:GetCue("focusChannelStart") then
+            or Pulse.Database:GetCue("focusChannelStart")
+        then
             frame:RegisterEvent("PLAYER_FOCUS_CHANGED")
         end
     end
@@ -63,9 +72,17 @@ function M:_WatchSwaps()
         M:_OnSwap(event)
     end)
 
-    Pulse:BindFrame({ "targetChanged", "focusChanged",
-                      "targetCastStart", "focusCastStart",
-                      "targetChannelStart", "focusChannelStart" }, sync)
+    Pulse:BindFrame(
+        {
+            "targetChanged",
+            "focusChanged",
+            "targetCastStart",
+            "focusCastStart",
+            "targetChannelStart",
+            "focusChannelStart",
+        },
+        sync
+    )
 end
 
 -- Legal truthiness test only: the first return of UnitCastingInfo/UnitChannelInfo is a name
@@ -74,11 +91,11 @@ end
 -- secret boolean with no legal inspection path — so a duplicate fire when focus == target
 -- is left to the blended engine to collapse.
 function M:_OnSwap(event)
-    local isTarget   = (event == "PLAYER_TARGET_CHANGED")
-    local unit       = isTarget and "target" or "focus"
-    local castCue    = isTarget and "targetCastStart"    or "focusCastStart"
+    local isTarget = (event == "PLAYER_TARGET_CHANGED")
+    local unit = isTarget and "target" or "focus"
+    local castCue = isTarget and "targetCastStart" or "focusCastStart"
     local channelCue = isTarget and "targetChannelStart" or "focusChannelStart"
-    local changedCue = isTarget and "targetChanged"      or "focusChanged"
+    local changedCue = isTarget and "targetChanged" or "focusChanged"
 
     if Pulse.Database:GetCue(castCue) and UnitCastingInfo(unit) then
         Pulse:FireIfEnabled(castCue)
@@ -91,4 +108,24 @@ function M:_OnSwap(event)
     end
 
     Pulse:FireIfEnabled(changedCue)
+end
+
+function M:_WatchTargetDeath()
+    local frame = CreateFrame("Frame")
+
+    local function sync()
+        frame:UnregisterAllEvents()
+        if not Pulse.Database:Get("masterEnabled") then
+            return
+        end
+        if Pulse.Database:GetCue("targetDied") then
+            frame:RegisterEvent("PLAYER_TARGET_DIED")
+        end
+    end
+
+    frame:SetScript("OnEvent", function()
+        Pulse:FireIfEnabled("targetDied")
+    end)
+
+    Pulse:BindFrame({ "targetDied" }, sync)
 end

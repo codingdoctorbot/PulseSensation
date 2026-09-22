@@ -26,13 +26,19 @@ local lastAbilityPulseStartTime = 0
 
 local function syncAbilityPulse()
     abilityPulseFrame:UnregisterAllEvents()
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not Pulse.Database:GetCue("abilityPulse") then return end
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
+    if not Pulse.Database:GetCue("abilityPulse") then
+        return
+    end
     abilityPulseFrame:RegisterEvent("SPELL_UPDATE_COOLDOWN")
 end
 
 abilityPulseFrame:SetScript("OnEvent", function()
-    if not InCombatLockdown() then return end -- the whole point is a combat heartbeat
+    if not InCombatLockdown() then
+        return
+    end -- the whole point is a combat heartbeat
     local info = C_Spell.GetSpellCooldown(61304)
     if
         info
@@ -61,32 +67,44 @@ local function resolveCooldownSet()
     wipe(trackedSpells)
     cooldownSetResolved = false
     if not COOLDOWN_CATEGORY then
-        if Pulse.debug then print("Pulse: cooldownReady -> Enum.CooldownViewerCategory.Essential missing") end
+        if Pulse.debug then
+            print("Pulse: cooldownReady -> Enum.CooldownViewerCategory.Essential missing")
+        end
         return
     end
     if not C_CooldownViewer or type(C_CooldownViewer.GetCooldownViewerCategorySet) ~= "function" then
-        if Pulse.debug then print("Pulse: cooldownReady -> C_CooldownViewer.GetCooldownViewerCategorySet missing") end
+        if Pulse.debug then
+            print("Pulse: cooldownReady -> C_CooldownViewer.GetCooldownViewerCategorySet missing")
+        end
         return
     end
     local ok, ids = pcall(C_CooldownViewer.GetCooldownViewerCategorySet, COOLDOWN_CATEGORY)
     if not ok then
-        if Pulse.debug then print("Pulse: cooldownReady -> GetCooldownViewerCategorySet threw ->", ids) end
+        if Pulse.debug then
+            print("Pulse: cooldownReady -> GetCooldownViewerCategorySet threw ->", ids)
+        end
         return
     end
     if type(ids) ~= "table" then
-        if Pulse.debug then print("Pulse: cooldownReady -> GetCooldownViewerCategorySet returned", type(ids)) end
+        if Pulse.debug then
+            print("Pulse: cooldownReady -> GetCooldownViewerCategorySet returned", type(ids))
+        end
         return
     end
     for _, spellID in ipairs(ids) do
         trackedSpells[spellID] = false
     end
     cooldownSetResolved = true
-    if Pulse.debug then print(("Pulse: cooldownReady -> resolved %d tracked spell(s)"):format(#ids)) end
+    if Pulse.debug then
+        print(("Pulse: cooldownReady -> resolved %d tracked spell(s)"):format(#ids))
+    end
 end
 
 local function checkCooldowns()
     if not cooldownSetResolved then
-        if Pulse.debug then print("Pulse: cooldownReady -> checkCooldowns skipped, set never resolved") end
+        if Pulse.debug then
+            print("Pulse: cooldownReady -> checkCooldowns skipped, set never resolved")
+        end
         return
     end
     local now = GetTime()
@@ -113,7 +131,9 @@ local function checkCooldowns()
                         )
                     )
                 end
-                if wasOnCD and not onCD then Pulse:FireIfEnabled("cooldownReady") end
+                if wasOnCD and not onCD then
+                    Pulse:FireIfEnabled("cooldownReady")
+                end
                 trackedSpells[spellID] = onCD and true or false
             elseif Pulse.debug then
                 print(("Pulse: cooldownReady -> spell %d skipped, startTime/duration secret"):format(spellID))
@@ -133,8 +153,12 @@ local function syncCooldownReady()
     cooldownFrame:UnregisterAllEvents()
     wipe(trackedSpells)
     cooldownSetResolved = false
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not Pulse.Database:GetCue("cooldownReady") then return end
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
+    if not Pulse.Database:GetCue("cooldownReady") then
+        return
+    end
     resolveCooldownSet()
     cooldownFrame:RegisterEvent("SPELL_UPDATE_COOLDOWN")
     cooldownFrame:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
@@ -170,7 +194,9 @@ local COMBAT_TEXT_CUES = {
 
 local function syncCombatText()
     textFrame:UnregisterAllEvents()
-    if not Pulse.Database:Get("masterEnabled") then return end
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
     local any = false
     for _, cueID in ipairs(COMBAT_TEXT_CUES) do
         if Pulse.Database:GetCue(cueID) then
@@ -178,7 +204,9 @@ local function syncCombatText()
             break
         end
     end
-    if not any then return end
+    if not any then
+        return
+    end
     textFrame:RegisterEvent("COMBAT_TEXT_UPDATE")
 end
 
@@ -202,7 +230,9 @@ textFrame:SetScript("OnEvent", function(_, event, messageType)
         Pulse:FireIfEnabled("deflect")
         -- Parry haste: PARRY only, not DODGE/BLOCK. Parrying speeds up your own next
         -- main-hand swing, a real mechanic, distinct from merely avoiding the hit.
-        if messageType == "PARRY" and applyParryHaste then applyParryHaste() end
+        if messageType == "PARRY" and applyParryHaste then
+            applyParryHaste()
+        end
     elseif messageType == "HEAL_CRIT" then
         Pulse:FireIfEnabled("healCrit")
         Pulse:FireIfEnabled("healReceived")
@@ -224,8 +254,12 @@ local lastComboPoints = 0
 local function syncComboPoint()
     comboFrame:UnregisterAllEvents()
     lastComboPoints = 0
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not Pulse.Database:GetCue("comboPoint") then return end
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
+    if not Pulse.Database:GetCue("comboPoint") then
+        return
+    end
     comboFrame:RegisterUnitEvent("UNIT_POWER_UPDATE", "player")
     -- Seed from live state, not 0: enabling mid-combo should not treat the existing count
     -- as a fresh gain.
@@ -234,10 +268,16 @@ local function syncComboPoint()
 end
 
 comboFrame:SetScript("OnEvent", function(_, event, unit, powerType)
-    if powerType ~= "COMBO_POINTS" then return end
+    if powerType ~= "COMBO_POINTS" then
+        return
+    end
     local current = UnitPower("player", Enum.PowerType.ComboPoints)
-    if issecretvalue(current) or type(current) ~= "number" then return end
-    if current > lastComboPoints then Pulse:FireIfEnabled("comboPoint") end
+    if issecretvalue(current) or type(current) ~= "number" then
+        return
+    end
+    if current > lastComboPoints then
+        Pulse:FireIfEnabled("comboPoint")
+    end
     lastComboPoints = current
 end)
 
@@ -250,8 +290,12 @@ local isChanneling = false
 -- Hand-rolled fallback implementation since native math.clamp is unavailable on this client
 
 local function clamp01(v)
-    if v < 0 then return 0 end
-    if v > 1 then return 1 end
+    if v < 0 then
+        return 0
+    end
+    if v > 1 then
+        return 1
+    end
     return v
 end
 
@@ -263,7 +307,9 @@ local function castTick()
     -- A craft is its own sensation (Modules/Crafting.lua) and a craft IS a cast, so without
     -- this both textures run on one channel and the engine max-blends them into something
     -- neither was tuned for. Suppression rather than blending: one action, one feeling.
-    if Pulse.IsCrafting and Pulse.IsCrafting() then return end
+    if Pulse.IsCrafting and Pulse.IsCrafting() then
+        return
+    end
 
     -- After the craft guard, not before: this runs every frame and nothing below emits
     -- during a craft.
@@ -294,8 +340,12 @@ local function syncCast()
     isCasting = false
     isChanneling = false
     castFrame:SetScript("OnUpdate", nil)
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not Pulse.Database:GetCue("castTexture") then return end
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
+    if not Pulse.Database:GetCue("castTexture") then
+        return
+    end
     castFrame:RegisterUnitEvent("UNIT_SPELLCAST_START", "player")
     castFrame:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_START", "player")
     castFrame:RegisterUnitEvent("UNIT_SPELLCAST_STOP", "player")
@@ -333,8 +383,12 @@ local autoRepeatFrame = CreateFrame("Frame")
 
 local function syncAutoRepeat()
     autoRepeatFrame:UnregisterAllEvents()
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not (Pulse.Database:GetCue("autoRepeatStart") or Pulse.Database:GetCue("autoRepeatStop")) then return end
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
+    if not (Pulse.Database:GetCue("autoRepeatStart") or Pulse.Database:GetCue("autoRepeatStop")) then
+        return
+    end
     autoRepeatFrame:RegisterEvent("START_AUTOREPEAT_SPELL")
     autoRepeatFrame:RegisterEvent("STOP_AUTOREPEAT_SPELL")
 end
@@ -355,8 +409,12 @@ local meleeAttackFrame = CreateFrame("Frame")
 
 local function syncMeleeAttack()
     meleeAttackFrame:UnregisterAllEvents()
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not (Pulse.Database:GetCue("meleeAttackStart") or Pulse.Database:GetCue("meleeAttackStop")) then return end
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
+    if not (Pulse.Database:GetCue("meleeAttackStart") or Pulse.Database:GetCue("meleeAttackStop")) then
+        return
+    end
     meleeAttackFrame:RegisterEvent("PLAYER_ENTER_COMBAT")
     meleeAttackFrame:RegisterEvent("PLAYER_LEAVE_COMBAT")
 end
@@ -379,14 +437,20 @@ local autoShotFrame = CreateFrame("Frame")
 
 local function syncAutoShot()
     autoShotFrame:UnregisterAllEvents()
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not Pulse.Database:GetCue("autoShotFired") then return end
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
+    if not Pulse.Database:GetCue("autoShotFired") then
+        return
+    end
     autoShotFrame:RegisterUnitEvent("UNIT_SPELLCAST_SUCCEEDED", "player")
 end
 
 autoShotFrame:SetScript("OnEvent", function(_, event, ...)
     local _, _, spellID = ...
-    if spellID == AUTO_SHOT_SPELL_ID then Pulse:FireIfEnabled("autoShotFired") end
+    if spellID == AUTO_SHOT_SPELL_ID then
+        Pulse:FireIfEnabled("autoShotFired")
+    end
 end)
 
 -- Weapon swing sync — an out-of-combat speed cache with a constant fallback, working
@@ -403,10 +467,16 @@ local wasSwingActive = false
 -- throw once at login and then once per frame while attacking. RULE E: a missing read
 -- degrades to "assume no haste", never to an error.
 local function getHasteMultiplier()
-    if type(GetMeleeHaste) ~= "function" then return 1.0 end
+    if type(GetMeleeHaste) ~= "function" then
+        return 1.0
+    end
     local ok, haste = pcall(GetMeleeHaste)
-    if not ok then return 1.0 end
-    if issecretvalue(haste) or type(haste) ~= "number" or haste < -90 then return 1.0 end
+    if not ok then
+        return 1.0
+    end
+    if issecretvalue(haste) or type(haste) ~= "number" or haste < -90 then
+        return 1.0
+    end
     return 1.0 + (haste / 100)
 end
 
@@ -422,21 +492,31 @@ swingFrame:SetScript("OnEvent", function(self, event, ...)
     if success and not issecretvalue(main) and type(main) == "number" and main > 0 then
         cachedMainBaseSpeed = main * mult
     end
-    if success and not issecretvalue(off) and type(off) == "number" and off > 0 then cachedOffBaseSpeed = off * mult end
+    if success and not issecretvalue(off) and type(off) == "number" and off > 0 then
+        cachedOffBaseSpeed = off * mult
+    end
 end)
 
 local STUN_LOC_TYPES = { STUN = true, STUN_MECHANIC = true }
 
 local function isPlayerStunned()
     local count = C_LossOfControl.GetActiveLossOfControlDataCount()
-    if issecretvalue(count) or not count then return false end
+    if issecretvalue(count) or not count then
+        return false
+    end
     for index = 1, count do
         local data = C_LossOfControl.GetActiveLossOfControlData(index)
-        if issecretvalue(data) then return false end
+        if issecretvalue(data) then
+            return false
+        end
         if data then
             local locType = data.locType
-            if issecretvalue(locType) then return false end
-            if STUN_LOC_TYPES[locType] then return true end
+            if issecretvalue(locType) then
+                return false
+            end
+            if STUN_LOC_TYPES[locType] then
+                return true
+            end
         end
     end
     return false
@@ -451,7 +531,9 @@ local function GetActiveWeaponSpeeds()
     if success and not issecretvalue(main) and type(main) == "number" and main > 0 then
         cachedMainBaseSpeed = main * mult
     end
-    if success and not issecretvalue(off) and type(off) == "number" and off > 0 then cachedOffBaseSpeed = off * mult end
+    if success and not issecretvalue(off) and type(off) == "number" and off > 0 then
+        cachedOffBaseSpeed = off * mult
+    end
 
     -- Determine main-hand speed: Live -> Cache (Haste Scaled) -> constant fallback.
     --
@@ -481,11 +563,17 @@ local function GetActiveWeaponSpeeds()
 end
 
 applyParryHaste = function()
-    if not mainNextSwing then return end
-    if Pulse.Database:GetTriggerSetting("weaponSwingMain", "parryHasteEnabled", 1) ~= 1 then return end
+    if not mainNextSwing then
+        return
+    end
+    if Pulse.Database:GetTriggerSetting("weaponSwingMain", "parryHasteEnabled", 1) ~= 1 then
+        return
+    end
 
     local mainSpeed = GetActiveWeaponSpeeds()
-    if not mainSpeed or mainSpeed <= 0 then return end
+    if not mainSpeed or mainSpeed <= 0 then
+        return
+    end
 
     local now = GetTime()
     local remaining = mainNextSwing - now
@@ -495,9 +583,13 @@ end
 
 local function swingTick()
     local attacking = C_Spell.IsCurrentSpell(6603)
-    if issecretvalue(attacking) then attacking = false end
+    if issecretvalue(attacking) then
+        attacking = false
+    end
     local inRange = UnitExists("target") and CheckInteractDistance("target", 3)
-    if issecretvalue(inRange) then inRange = false end
+    if issecretvalue(inRange) then
+        inRange = false
+    end
     local active = attacking and inRange and not isPlayerStunned()
 
     if active and not wasSwingActive then
@@ -557,12 +649,16 @@ local swingEventFrame = CreateFrame("Frame")
 local function swingTypeValue(name, fallback)
     local enum = Enum and Enum.PlayerSwingType
     local value = enum and enum[name]
-    if type(value) == "number" then return value end
+    if type(value) == "number" then
+        return value
+    end
     return fallback
 end
 
 swingEventFrame:SetScript("OnEvent", function(_, _, swingDuration, swingType)
-    if issecretvalue(swingType) then return end
+    if issecretvalue(swingType) then
+        return
+    end
     if swingType == swingTypeValue("MainHand", 0) then
         Pulse:FireIfEnabled("weaponSwingMain")
     elseif swingType == swingTypeValue("OffHand", 1) then
@@ -575,7 +671,9 @@ end)
 -- PLAYER_SWING the estimator returns on the next settings change or reload rather than
 -- waiting for someone to notice the silence.
 local function swingEventAvailable()
-    if not (C_EventUtils and type(C_EventUtils.IsEventValid) == "function") then return false end
+    if not (C_EventUtils and type(C_EventUtils.IsEventValid) == "function") then
+        return false
+    end
     local ok, valid = pcall(C_EventUtils.IsEventValid, "PLAYER_SWING")
     return (ok and valid) and true or false
 end
@@ -586,15 +684,21 @@ local function syncSwing()
     swingEventFrame:UnregisterAllEvents()
     mainNextSwing, offNextSwing = nil, nil
     wasSwingActive = false
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not (Pulse.Database:GetCue("weaponSwingMain") or Pulse.Database:GetCue("weaponSwingOff")) then return end
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
+    if not (Pulse.Database:GetCue("weaponSwingMain") or Pulse.Database:GetCue("weaponSwingOff")) then
+        return
+    end
 
     -- Two ways to end up on the estimator: the event is gone (a patch), or the player
     -- chose it. Anything else uses the real signal.
     local forced = Pulse.Database:GetTriggerSetting("weaponSwingMain", "forceEstimator", 0) == 1
     if not forced and swingEventAvailable() then
         swingEventFrame:RegisterEvent("PLAYER_SWING")
-        if Pulse.debug then print("Pulse: weapon swings using PLAYER_SWING (measured)") end
+        if Pulse.debug then
+            print("Pulse: weapon swings using PLAYER_SWING (measured)")
+        end
         return
     end
 
@@ -609,6 +713,74 @@ local function syncSwing()
     swingFrame:RegisterEvent("PLAYER_LOGIN")
     swingFrame:SetScript("OnUpdate", swingTick)
 end
+
+-- Proc Glow — SPELL_ACTIVATION_OVERLAY_GLOW_SHOW
+-- Fires when a reactive spell or talent lights up on the action bar.
+local procGlowFrame = CreateFrame("Frame")
+
+local function syncProcGlow()
+    procGlowFrame:UnregisterAllEvents()
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
+    if not Pulse.Database:GetCue("procGlow") then
+        return
+    end
+    procGlowFrame:RegisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_SHOW")
+end
+
+procGlowFrame:SetScript("OnEvent", function()
+    Pulse:FireIfEnabled("procGlow")
+end)
+
+-- Melee Swing Range — C_SwingTimer.EnableRangeCheck & PLAYER_SWING_RANGE_UPDATE
+-- Informs the player when entering or leaving auto-attack melee range.
+local meleeRangeFrame = CreateFrame("Frame")
+local wasInRange = nil
+
+local function syncMeleeRange()
+    meleeRangeFrame:UnregisterAllEvents()
+    wasInRange = nil
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
+    local wantRange = Pulse.Database:GetCue("meleeRangeIn") or Pulse.Database:GetCue("meleeRangeOut")
+    if not wantRange then
+        if C_SwingTimer and type(C_SwingTimer.EnableRangeCheck) == "function" then
+            pcall(C_SwingTimer.EnableRangeCheck, 0, false)
+        end
+        return
+    end
+
+    if C_SwingTimer and type(C_SwingTimer.EnableRangeCheck) == "function" then
+        pcall(C_SwingTimer.EnableRangeCheck, 0, true)
+        meleeRangeFrame:RegisterEvent("PLAYER_SWING_RANGE_UPDATE")
+        meleeRangeFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
+    end
+end
+
+meleeRangeFrame:SetScript("OnEvent", function(_, event, swingType, isInRange, checksRange)
+    if event == "PLAYER_TARGET_CHANGED" then
+        wasInRange = nil
+        return
+    end
+    if event == "PLAYER_SWING_RANGE_UPDATE" then
+        if swingType ~= 0 or not checksRange then
+            return
+        end
+        if wasInRange == nil then
+            wasInRange = isInRange
+            return
+        end
+        if isInRange and not wasInRange then
+            wasInRange = true
+            Pulse:FireIfEnabled("meleeRangeIn")
+        elseif not isInRange and wasInRange then
+            wasInRange = false
+            Pulse:FireIfEnabled("meleeRangeOut")
+        end
+    end
+end)
 
 function M:OnEnable()
     Pulse:BindFrame({ "abilityPulse" }, syncAbilityPulse)
@@ -629,6 +801,8 @@ function M:OnEnable()
     Pulse:BindFrame({ "meleeAttackStart", "meleeAttackStop" }, syncMeleeAttack)
     Pulse:BindFrame({ "autoShotFired" }, syncAutoShot)
     Pulse:BindFrame({ "weaponSwingMain", "weaponSwingOff" }, syncSwing)
+    Pulse:BindFrame({ "procGlow" }, syncProcGlow)
+    Pulse:BindFrame({ "meleeRangeIn", "meleeRangeOut" }, syncMeleeRange)
 end
 
 function M:_DebugCombat()
@@ -638,5 +812,6 @@ function M:_DebugCombat()
         isChanneling = isChanneling,
         swingSource = swingEventAvailable() and "event" or "estimator",
         cooldownSetResolved = cooldownSetResolved,
+        wasMeleeInRange = wasInRange,
     }
 end

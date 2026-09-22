@@ -560,6 +560,36 @@ Pulse.Triggers = {
         caveat = 'Experimental: watches whichever spells the Cooldown Manager\'s Essential category shows, not a hardcoded list. The exact live "just became ready" signal was never independently confirmed before this shipped — built on the same C_Spell.GetSpellCooldown transition-tracking this file already uses for the GCD heartbeat.',
     },
     {
+        id = "procGlow",
+        category = "COMBAT",
+        mode = "BURST",
+        throttle = 0.3,
+        default = true,
+        label = "Spell activation proc",
+        desc = "An electric burst when a reactive spell or talent lights up on your action bar.",
+        caveat = "Fires on SPELL_ACTIVATION_OVERLAY_GLOW_SHOW for procs such as Clearcasting, Nightfall, Overpower, Revenge, Riposte, or Art of War.",
+    },
+    {
+        id = "meleeRangeIn",
+        category = "COMBAT",
+        mode = "TICK",
+        throttle = 0.5,
+        default = false,
+        label = "Entered melee range",
+        desc = "A subtle tick when stepping within auto-attack melee range of your target.",
+        caveat = "Uses WoW Forever's native C_SwingTimer range checking.",
+    },
+    {
+        id = "meleeRangeOut",
+        category = "COMBAT",
+        mode = "TICK",
+        throttle = 0.5,
+        default = false,
+        label = "Left melee range",
+        desc = "A soft release tick when stepping out of auto-attack melee range of your target.",
+        caveat = "Uses WoW Forever's native C_SwingTimer range checking.",
+    },
+    {
         id = "autoRepeatStart",
         category = "COMBAT",
         mode = "TAP",
@@ -848,6 +878,16 @@ Pulse.Triggers = {
         label = "Item obtained",
         desc = "A bright tick when an item enters your bags — looted, crafted, or mailed.",
         caveat = "Not filtered by rarity yet — fires for anything, common items included.",
+    },
+    {
+        id = "harvestComplete",
+        category = "WORLD",
+        mode = "CHIME",
+        throttle = 1.0,
+        default = false,
+        label = "Harvest complete",
+        desc = "A bright chime when gathering an herb node, mineral vein, or skinning loot completes.",
+        caveat = "Fires on LOOT_READY when gathering loot is ready.",
     },
     {
         id = "durabilityLow",
@@ -1291,6 +1331,16 @@ Pulse.Triggers = {
         desc = "Fires when you set or clear your focus target.",
         events = { "PLAYER_FOCUS_CHANGED" },
         unit = nil,
+    },
+    {
+        id = "targetDied",
+        category = "ALERT_UNIT_WATCH",
+        mode = "IMPACT",
+        throttle = 0.5,
+        default = true,
+        label = "Target died",
+        desc = "A heavy, decisive impact when your current target dies.",
+        caveat = "Fires on PLAYER_TARGET_DIED.",
     },
 
     -- ── Accessibility: Combat and life state (fully generic) ───────────────────
@@ -1802,6 +1852,26 @@ Pulse.Triggers = {
         label = "Vault door closed",
         desc = "A heavy latch thud when closing a personal bank or guild bank vault.",
         caveat = "Fires on BANKFRAME_CLOSED, GUILDBANKFRAME_CLOSED, or interaction manager banker hide.",
+    },
+    {
+        id = "bankGold",
+        category = "ALERT_WORLD",
+        mode = "TICK",
+        throttle = 0.2,
+        default = false,
+        label = "Bank gold transfer",
+        desc = "A light coin clink when depositing or withdrawing money from a bank or guild bank.",
+        caveat = "Fires on money changes with an open bank frame or guild bank money update.",
+    },
+    {
+        id = "stackSplit",
+        category = "ALERT_WORLD",
+        mode = "TICK",
+        throttle = 0.05,
+        default = true,
+        label = "Stack split ratchet",
+        desc = "A tactile micro-tick each time the stack splitter quantity slider changes.",
+        caveat = "Hooks StackSplitFrame:UpdateStackText.",
     },
     {
         id = "taxiOpened",
@@ -2522,6 +2592,8 @@ local PAGE_LAYOUT = {
                     "abilityPulse",
                     "meleeAttackStart",
                     "meleeAttackStop",
+                    "meleeRangeIn",
+                    "meleeRangeOut",
                     "autoRepeatStart",
                     "autoRepeatStop",
                     "autoShotFired",
@@ -2540,7 +2612,7 @@ local PAGE_LAYOUT = {
                     "debuffReceived",
                 },
             },
-            { label = "Resources", cues = { "comboPoint", "resourceCapped", "cooldownReady" } },
+            { label = "Resources", cues = { "comboPoint", "resourceCapped", "cooldownReady", "procGlow" } },
             { label = "Rewards", cues = { "honorGained", "factionGained" } },
             {
                 label = "Encounter",
@@ -2686,13 +2758,17 @@ local PAGE_LAYOUT = {
                     "targetChannelStart",
                     "targetCastStopped",
                     "targetChanged",
+                    "targetDied",
                 },
             },
-            { label = "Focus", cues = {
-                "focusCastStart",
-                "focusChannelStart",
-                "focusChanged",
-            } },
+            {
+                label = "Focus",
+                cues = {
+                    "focusCastStart",
+                    "focusChannelStart",
+                    "focusChanged",
+                },
+            },
         },
     },
 
@@ -2701,17 +2777,21 @@ local PAGE_LAYOUT = {
         label = "World & Environment",
         sections = {
             { label = "Environment", cues = { "weatherChanged", "weatherTexture" } },
-            { label = "World", cues = {
-                "zoneChanged",
-                "enteringWorld",
-                "emote",
-                "npcEmote",
-            } },
+            {
+                label = "World",
+                cues = {
+                    "zoneChanged",
+                    "enteringWorld",
+                    "emote",
+                    "npcEmote",
+                },
+            },
             {
                 label = "Loot",
                 cues = {
                     "lootGold",
                     "itemObtained",
+                    "harvestComplete",
                     "lootOpened",
                     "lootRoll",
                     "lootConfirm",
@@ -2774,7 +2854,7 @@ local PAGE_LAYOUT = {
         id = "INTERFACE",
         label = "Interface & Accessibility",
         sections = {
-            { label = "Interface", cues = { "uiInfoMessage", "afkToggle" } },
+            { label = "Interface", cues = { "uiInfoMessage", "afkToggle", "stackSplit" } },
             -- One shape at one weight: a window you walked up to has opened. Uniformity is what
             -- makes these distinguishable from Controller UI's focus and tab cues, which are
             -- about moving *within* an open window. Three families, three feels: TAP for a
@@ -2791,6 +2871,7 @@ local PAGE_LAYOUT = {
                     "bankOpened",
                     "guildBankOpened",
                     "bankClosed",
+                    "bankGold",
                     "taxiOpened",
                     "trainerShow",
                     "tradeSkillShow",

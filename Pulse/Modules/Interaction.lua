@@ -86,6 +86,8 @@ local WATCHED = {
     "merchantSell",
     "merchantRepair",
     "bankClosed",
+    "bankGold",
+    "stackSplit",
 }
 do
     local seen = {}
@@ -104,7 +106,9 @@ end
 
 local frame = CreateFrame("Frame")
 local inMerchant = false
+local inBank = false
 local lastMerchantMoney = 0
+local lastBankMoney = 0
 local wasRepair = false
 
 local function onShow(interaction)
@@ -116,6 +120,9 @@ local function onShow(interaction)
         inMerchant = true
         lastMerchantMoney = (GetMoney and GetMoney()) or 0
         wasRepair = false
+    elseif BANK_INTERACTIONS[interaction] then
+        inBank = true
+        lastBankMoney = (GetMoney and GetMoney()) or 0
     end
 
     local cueID = TYPE_CUE[interaction] or GENERIC_CUE
@@ -143,6 +150,7 @@ local function onHide(interaction)
             inMerchant = false
             wasRepair = false
         elseif BANK_INTERACTIONS[interaction] then
+            inBank = false
             Pulse:FireIfEnabled("bankClosed")
         end
     end
@@ -179,15 +187,29 @@ frame:SetScript("OnEvent", function(_, event, arg1)
             elseif delta < 0 then
                 Pulse:FireIfEnabled("merchantBuy")
             end
+        elseif inBank then
+            local current = (GetMoney and GetMoney()) or 0
+            local delta = current - lastBankMoney
+            lastBankMoney = current
+            if delta ~= 0 then
+                Pulse:FireIfEnabled("bankGold")
+            end
         end
+    elseif event == "BANKFRAME_OPENED" or event == "GUILDBANKFRAME_OPENED" then
+        inBank = true
+        lastBankMoney = (GetMoney and GetMoney()) or 0
     elseif event == "BANKFRAME_CLOSED" or event == "GUILDBANKFRAME_CLOSED" then
+        inBank = false
         Pulse:FireIfEnabled("bankClosed")
+    elseif event == "GUILDBANK_UPDATE_MONEY" then
+        Pulse:FireIfEnabled("bankGold")
     end
 end)
 
 local function sync()
     frame:UnregisterAllEvents()
     inMerchant = false
+    inBank = false
     wasRepair = false
     if not Pulse.Database:Get("masterEnabled") then
         return
@@ -219,15 +241,27 @@ local function sync()
         pcall(frame.RegisterEvent, frame, "UPDATE_INVENTORY_DURABILITY")
     end
 
-    -- Bank close latch
-    if Pulse.Database:GetCue("bankClosed") then
+    -- Bank close latch & gold transfers
+    local wantBank = Pulse.Database:GetCue("bankClosed") or Pulse.Database:GetCue("bankGold")
+    if wantBank then
+        pcall(frame.RegisterEvent, frame, "BANKFRAME_OPENED")
         pcall(frame.RegisterEvent, frame, "BANKFRAME_CLOSED")
+        pcall(frame.RegisterEvent, frame, "GUILDBANKFRAME_OPENED")
         pcall(frame.RegisterEvent, frame, "GUILDBANKFRAME_CLOSED")
+    end
+    if Pulse.Database:GetCue("bankGold") then
+        pcall(frame.RegisterEvent, frame, "PLAYER_MONEY")
+        pcall(frame.RegisterEvent, frame, "GUILDBANK_UPDATE_MONEY")
     end
 end
 
 function M:OnEnable()
     Pulse:BindFrame(WATCHED, sync)
+    if StackSplitFrame and type(StackSplitFrame.UpdateStackText) == "function" then
+        hooksecurefunc(StackSplitFrame, "UpdateStackText", function()
+            Pulse:FireIfEnabled("stackSplit")
+        end)
+    end
 end
 
 -- Reach-in for PulseDebug, read-only.
@@ -240,6 +274,7 @@ function M:_DebugInteraction()
         mappedTypes = mapped,
         watchedCues = #WATCHED,
         inMerchant = inMerchant,
+        inBank = inBank,
         wasRepair = wasRepair,
     }
 end

@@ -64,6 +64,7 @@ read_globals = {
     "TabSystemMixin",
     "TabSystemOwnerMixin",
     "PanelTemplates_SetTab",
+    "StackSplitFrame",
 
     -- Blizzard Modern C_* namespaces
     "C_AddOns",
@@ -83,6 +84,7 @@ read_globals = {
     "C_EventUtils",
     "C_LossOfControl",
     "C_CooldownViewer",
+    "C_SwingTimer",
     "EventRegistry",
 
     -- Classic & Unit APIs
