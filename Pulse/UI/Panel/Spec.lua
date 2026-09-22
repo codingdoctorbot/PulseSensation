@@ -616,15 +616,49 @@ function Spec.BuildCueIndexPage()
         return labelA < labelB
     end)
 
+    -- Count cues per letter for section header labels
+    local letterCounts = {}
+    for _, entry in ipairs(entries) do
+        local label = entry.trigger.label or entry.trigger.id
+        local first = string.upper(string.sub(label, 1, 1))
+        if not string.match(first, "^[A-Z]$") then
+            first = "#"
+        end
+        letterCounts[first] = (letterCounts[first] or 0) + 1
+    end
+
     local rows = {
-        { kind = "header", label = ("All cues (%d)"):format(#entries) },
+        {
+            kind = "text",
+            font = "GameFontDisableSmall",
+            gap = 10,
+            body = ("Directory of all %d vibration cues in Pulse, in alphabetical order. Click any entry to jump directly to its controls."):format(
+                #entries
+            ),
+        },
     }
 
+    local currentLetter = nil
     for _, entry in ipairs(entries) do
         local trigger, pageID = entry.trigger, entry.pageID
+        local label = trigger.label or trigger.id
+        local first = string.upper(string.sub(label, 1, 1))
+        if not string.match(first, "^[A-Z]$") then
+            first = "#"
+        end
+
+        if first ~= currentLetter then
+            currentLetter = first
+            local count = letterCounts[currentLetter] or 1
+            rows[#rows + 1] = {
+                kind = "header",
+                label = ("%s (%d)"):format(currentLetter, count),
+            }
+        end
+
         rows[#rows + 1] = {
             kind = "index",
-            label = trigger.label or trigger.id,
+            label = label,
             tooltip = triggerTooltip(trigger),
             location = entry.location,
             get = function()
