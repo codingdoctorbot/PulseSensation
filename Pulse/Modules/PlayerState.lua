@@ -21,14 +21,18 @@ Pulse:RegisterModule("PlayerState", M)
 local xpFrame = CreateFrame("Frame")
 
 local function syncXP()
-    xpFrame:UnregisterAllEvents()
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not Pulse.Database:GetCue("xpGained") then return end
-    xpFrame:RegisterUnitEvent("PLAYER_XP_UPDATE", "player")
+	xpFrame:UnregisterAllEvents()
+	if not Pulse.Database:Get("masterEnabled") then
+		return
+	end
+	if not Pulse.Database:GetCue("xpGained") then
+		return
+	end
+	xpFrame:RegisterUnitEvent("PLAYER_XP_UPDATE", "player")
 end
 
 xpFrame:SetScript("OnEvent", function()
-    Pulse:FireIfEnabled("xpGained")
+	Pulse:FireIfEnabled("xpGained")
 end)
 
 -- Stealth texture
@@ -45,29 +49,39 @@ local stealthFrame = CreateFrame("Frame")
 local stealthElapsed = 0
 
 local function stealthTick(_, elapsed)
-    stealthElapsed = stealthElapsed + elapsed
-    if stealthElapsed < STEALTH_POLL then return end
-    stealthElapsed = 0
+	stealthElapsed = stealthElapsed + elapsed
+	if stealthElapsed < STEALTH_POLL then
+		return
+	end
+	stealthElapsed = 0
 
-    if type(IsStealthed) ~= "function" then return end
-    local ok, stealthed = pcall(IsStealthed)
-    if not ok or not stealthed then return end
+	if type(IsStealthed) ~= "function" then
+		return
+	end
+	local ok, stealthed = pcall(IsStealthed)
+	if not ok or not stealthed then
+		return
+	end
 
-    local baseline = Pulse.Database:GetTriggerSetting("stealthTexture", "baseline", 0.06)
-    local rate     = Pulse.Database:GetTriggerSetting("stealthTexture", "breathRate", 0.30)
-    local depth    = Pulse.Database:GetTriggerSetting("stealthTexture", "breathDepth", 0.35)
+	local baseline = Pulse.Database:GetTriggerSetting("stealthTexture", "baseline", 0.06)
+	local rate = Pulse.Database:GetTriggerSetting("stealthTexture", "breathRate", 0.30)
+	local depth = Pulse.Database:GetTriggerSetting("stealthTexture", "breathDepth", 0.35)
 
-    local value = Pulse.Waves.Sine(baseline, rate, depth)
-    value = Pulse.Haptics.MicroFlutter(value)
-    Pulse:HoldIfEnabled("stealthTexture", value, 0)
+	local value = Pulse.Waves.Sine(baseline, rate, depth)
+	value = Pulse.Haptics.MicroFlutter(value)
+	Pulse:HoldIfEnabled("stealthTexture", value, 0)
 end
 
 local function syncStealth()
-    stealthFrame:SetScript("OnUpdate", nil)
-    stealthElapsed = 0
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not Pulse.Database:GetCue("stealthTexture") then return end
-    stealthFrame:SetScript("OnUpdate", stealthTick)
+	stealthFrame:SetScript("OnUpdate", nil)
+	stealthElapsed = 0
+	if not Pulse.Database:Get("masterEnabled") then
+		return
+	end
+	if not Pulse.Database:GetCue("stealthTexture") then
+		return
+	end
+	stealthFrame:SetScript("OnUpdate", stealthTick)
 end
 
 -- Confirmation popups
@@ -84,48 +98,59 @@ end
 -- second taints nothing.
 
 local POPUP_POLL = 0.25
-local POPUP_FRAMES = 4       -- StaticPopup1..4, Blizzard's own pool size
+local POPUP_FRAMES = 4 -- StaticPopup1..4, Blizzard's own pool size
 local popupFrame = CreateFrame("Frame")
 local popupElapsed = 0
 local popupWasShown = false
 
 local function anyPopupShown()
-    for index = 1, POPUP_FRAMES do
-        local dialog = _G["StaticPopup" .. index]
-        if dialog and dialog.IsShown then
-            local ok, shown = pcall(dialog.IsShown, dialog)
-            if ok and shown then return true end
-        end
-    end
-    return false
+	for index = 1, POPUP_FRAMES do
+		local dialog = _G["StaticPopup" .. index]
+		if dialog and dialog.IsShown then
+			local ok, shown = pcall(dialog.IsShown, dialog)
+			if ok and shown then
+				return true
+			end
+		end
+	end
+	return false
 end
 
 local function popupTick(_, elapsed)
-    popupElapsed = popupElapsed + elapsed
-    if popupElapsed < POPUP_POLL then return end
-    popupElapsed = 0
+	popupElapsed = popupElapsed + elapsed
+	if popupElapsed < POPUP_POLL then
+		return
+	end
+	popupElapsed = 0
 
-    local shown = anyPopupShown()
-    if shown == popupWasShown then return end
-    popupWasShown = shown
-    Pulse:FireIfEnabled(shown and "popupShown" or "popupHidden")
+	local shown = anyPopupShown()
+	if shown == popupWasShown then
+		return
+	end
+	popupWasShown = shown
+	Pulse:FireIfEnabled(shown and "popupShown" or "popupHidden")
 end
 
 local function syncPopup()
-    popupFrame:SetScript("OnUpdate", nil)
-    popupElapsed = 0
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not (Pulse.Database:GetCue("popupShown") or Pulse.Database:GetCue("popupHidden")) then
-        return
-    end
-    -- Seed from live state, so arriving with a popup already open is not reported as one
-    -- opening.
-    popupWasShown = anyPopupShown()
-    popupFrame:SetScript("OnUpdate", popupTick)
+	popupFrame:SetScript("OnUpdate", nil)
+	popupElapsed = 0
+	if not Pulse.Database:Get("masterEnabled") then
+		return
+	end
+	if not Pulse.Database:GetCue("controllerUIMaster") then
+		return
+	end
+	if not (Pulse.Database:GetCue("popupShown") or Pulse.Database:GetCue("popupHidden")) then
+		return
+	end
+	-- Seed from live state, so arriving with a popup already open is not reported as one
+	-- opening.
+	popupWasShown = anyPopupShown()
+	popupFrame:SetScript("OnUpdate", popupTick)
 end
 
 function M:OnEnable()
-    Pulse:BindFrame({ "xpGained" }, syncXP)
-    Pulse:BindFrame({ "stealthTexture" }, syncStealth)
-    Pulse:BindFrame({ "popupShown", "popupHidden" }, syncPopup)
+	Pulse:BindFrame({ "xpGained" }, syncXP)
+	Pulse:BindFrame({ "stealthTexture" }, syncStealth)
+	Pulse:BindFrame({ "controllerUIMaster", "popupShown", "popupHidden" }, syncPopup)
 end

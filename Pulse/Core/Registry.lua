@@ -87,6 +87,7 @@ local CATEGORY_LABELS = {
 -- independent watchers for no shared-registration reason (removed 2026-09-16).
 Registry.ALERT_CATEGORY_MASTER = {
 	ALERT_CC = "ccMaster",
+	CONTROLLER_UI = "controllerUIMaster",
 }
 
 Pulse.Triggers = {
@@ -2150,13 +2151,24 @@ Pulse.Triggers = {
 	-- primitive names (TICK/CLICK/CONFIRM/REJECT/EDGE…) and every one maps onto a shape
 	-- Core/Modes.lua already has.
 
+	-- ── Controller UI: category master ─────────────────────────────────────────
+	{
+		id = "controllerUIMaster",
+		category = "CONTROLLER_UI",
+		silent = true,
+		default = true,
+		label = "Menu & controller UI haptics",
+		desc = "Master switch for all menu, window, tab, and radial controller haptics. Turn off to silence all UI navigation haptics at once while keeping combat and world rumble active.",
+		caveat = "With this turned off, navigation, edge bumps, radial wheels, tab switches, and popups produce no haptics and unhook from the interface to save processing.",
+	},
+
 	-- ── Controller UI: navigation ───────────────────────────────────────────────
 	{
 		id = "uiNavigate",
 		category = "CONTROLLER_UI",
 		mode = "TICK",
 		throttle = 0.03,
-		default = false,
+		default = true,
 		defaultIntensity = 0.35,
 		label = "UI focus moved",
 		desc = "A very light tick each time controller focus moves to a different interface element.",
@@ -2167,7 +2179,7 @@ Pulse.Triggers = {
 		category = "CONTROLLER_UI",
 		mode = "DEFLECT",
 		throttle = 0.1,
-		default = false,
+		default = true,
 		defaultIntensity = 0.5,
 		label = "UI navigation hit an edge",
 		desc = "A short, sharp tick when controller focus runs into the edge of a list or grid and can't go further.",
@@ -2215,7 +2227,7 @@ Pulse.Triggers = {
 		category = "CONTROLLER_UI",
 		mode = "DEFLECT",
 		throttle = 0.15,
-		default = false,
+		default = true,
 		defaultIntensity = 0.6,
 		label = "Interface tab changed",
 		desc = "Two soft ticks when you switch tabs inside a panel — Character, Spellbook, the map's zone tabs, and so on.",
@@ -2231,7 +2243,7 @@ Pulse.Triggers = {
 		category = "CONTROLLER_UI",
 		mode = "TAP",
 		throttle = 0.2,
-		default = false,
+		default = true,
 		defaultIntensity = 0.6,
 		label = "Radial menu opened",
 		desc = "A rising pulse when the controller radial menu opens.",
@@ -2242,7 +2254,7 @@ Pulse.Triggers = {
 		category = "CONTROLLER_UI",
 		mode = "TICK",
 		throttle = 0.2,
-		default = false,
+		default = true,
 		defaultIntensity = 0.5,
 		label = "Radial menu closed",
 		desc = "A falling pulse when the radial menu closes.",
@@ -2253,7 +2265,7 @@ Pulse.Triggers = {
 		category = "CONTROLLER_UI",
 		mode = "TICK",
 		throttle = 0.03,
-		default = false,
+		default = true,
 		defaultIntensity = 0.3,
 		label = "Radial segment changed",
 		desc = "A very light tick per segment as you sweep the stick around the radial — the wheel gets detents you can feel.",
@@ -2275,7 +2287,7 @@ Pulse.Triggers = {
 		category = "CONTROLLER_UI",
 		mode = "CHIME",
 		throttle = 0.2,
-		default = false,
+		default = true,
 		defaultIntensity = 0.7,
 		label = "Radial segment chosen",
 		desc = "A bright tick when you commit to a radial segment by letting the stick return to centre.",
@@ -2297,7 +2309,7 @@ Pulse.Triggers = {
 		category = "CONTROLLER_UI",
 		mode = "DOUBLE_TAP",
 		throttle = 0.15,
-		default = false,
+		default = true,
 		defaultIntensity = 0.5,
 		label = "Radial page changed",
 		desc = "Two soft ticks when you page the radial left or right with the shoulder buttons.",
@@ -2597,7 +2609,7 @@ Pulse.Triggers = {
 		category = "CONTROLLER_UI",
 		mode = "TAP",
 		throttle = 0.3,
-		default = false,
+		default = true,
 		defaultIntensity = 0.7,
 		label = "Confirmation popup appeared",
 		desc = "A tap when a confirmation dialog opens.",
@@ -2608,7 +2620,7 @@ Pulse.Triggers = {
 		category = "CONTROLLER_UI",
 		mode = "CLICK",
 		throttle = 0.3,
-		default = false,
+		default = true,
 		defaultIntensity = 0.5,
 		label = "Confirmation popup closed",
 		desc = "A light click when the last confirmation dialog closes.",
