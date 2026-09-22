@@ -29,26 +29,30 @@
 
 local ADDON_NAME, Pulse = ...
 
-local Panel   = Pulse.UI.Panel
-local Theme   = Panel.Theme
+local Panel = Pulse.UI.Panel
+local Theme = Panel.Theme
 local Content = Panel.Content
 local Sidebar = Panel.Sidebar
 local Gamepad = Panel.Gamepad
-local Spec    = Panel.Spec
+local Spec = Panel.Spec
 
 local FRAME_NAME = "PulseSettingsFrame"
 
-local frame          -- the window, nil until first open
-local dirty          = false
+local frame -- the window, nil until first open
+local dirty = false
 local dirtyScheduled = false
 
 -- ── Dirty handling ────────────────────────────────────────────────────────────
 
 local function processDirty()
     dirtyScheduled = false
-    if not dirty then return end
+    if not dirty then
+        return
+    end
     dirty = false
-    if not frame or not frame:IsShown() then return end
+    if not frame or not frame:IsShown() then
+        return
+    end
     frame.Content:RefreshRows()
     frame.Content:LayoutRows()
 end
@@ -58,8 +62,12 @@ end
 -- view. Pages out of view are refreshed when next shown.
 function Panel.MarkDirty()
     dirty = true
-    if dirtyScheduled then return end
-    if not frame or not frame:IsShown() then return end
+    if dirtyScheduled then
+        return
+    end
+    if not frame or not frame:IsShown() then
+        return
+    end
     dirtyScheduled = true
     C_Timer.After(0, processDirty)
 end
@@ -74,8 +82,12 @@ local function subscribeToDatabase()
     local db = Pulse.Database
     local mark = Panel.MarkDirty
 
-    for key in pairs(db.GLOBAL_DEFAULTS) do db:OnGlobalChanged(key, mark) end
-    for key in pairs(db.PROFILE_DEFAULTS) do db:OnGlobalChanged(key, mark) end
+    for key in pairs(db.GLOBAL_DEFAULTS) do
+        db:OnGlobalChanged(key, mark)
+    end
+    for key in pairs(db.PROFILE_DEFAULTS) do
+        db:OnGlobalChanged(key, mark)
+    end
 
     for _, trigger in ipairs(Pulse.Triggers) do
         db:OnCueChanged(trigger.id, mark)
@@ -142,12 +154,14 @@ local function buildWindow()
 
     -- Title. SettingsFrameTemplate puts it on the nine-slice; a fallback frame may not, so
     -- make our own rather than assume.
-    if f.NineSlice and f.NineSlice.Text then
-        f.NineSlice.Text:SetText("Pulse")
-    else
-        local title = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-        title:SetPoint("TOP", f, "TOP", 0, -5)
-        title:SetText("Pulse")
+    local titleText = f.NineSlice and f.NineSlice.Text
+    if not titleText then
+        titleText = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        titleText:SetPoint("TOP", f, "TOP", 0, -5)
+    end
+    titleText:SetText("Pulse")
+    if titleText.SetTextColor then
+        titleText:SetTextColor(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b)
     end
 
     -- An opaque fill of our own, before anything else is drawn.
@@ -168,7 +182,14 @@ local function buildWindow()
     local fill = f:CreateTexture(nil, "BACKGROUND")
     fill:SetPoint("TOPLEFT", f, "TOPLEFT", 8, -20)
     fill:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -5, 4)
-    fill:SetColorTexture(0.045, 0.045, 0.055, 1)
+    fill:SetColorTexture(Theme.COLOR_BG.r, Theme.COLOR_BG.g, Theme.COLOR_BG.b, 1)
+
+    -- Atmospheric watermark of the ripple artwork in the background of the content pane
+    local watermark = f:CreateTexture(nil, "BACKGROUND", nil, 1)
+    watermark:SetTexture("Interface\\AddOns\\Pulse\\Media\\SettingsBG")
+    watermark:SetPoint("TOPLEFT", f, "TOPLEFT", 190, -60)
+    watermark:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -10, 10)
+    watermark:SetAlpha(0.06)
 
     -- The inner recessed area behind the list. Blizzard_SettingsPanel.xml:10-16.
     local inner = f:CreateTexture(nil, "OVERLAY", nil, 2)
@@ -182,10 +203,14 @@ local function buildWindow()
     -- Corner X. SettingsFrameTemplate supplies ClosePanelButton; make one if it did not.
     if not f.ClosePanelButton then
         local ok, close = pcall(CreateFrame, "Button", nil, f, "UIPanelCloseButtonDefaultAnchors")
-        if ok and close then f.ClosePanelButton = close end
+        if ok and close then
+            f.ClosePanelButton = close
+        end
     end
     if f.ClosePanelButton then
-        f.ClosePanelButton:SetScript("OnClick", function() Panel.Close() end)
+        f.ClosePanelButton:SetScript("OnClick", function()
+            Panel.Close()
+        end)
     end
 
     -- Bottom-right Close. Blizzard_SettingsPanel.xml:50-55.
@@ -193,7 +218,9 @@ local function buildWindow()
     closeButton:SetSize(96, 22)
     closeButton:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -16, 16)
     closeButton:SetText(CLOSE or "Close")
-    closeButton:SetScript("OnClick", function() Panel.Close() end)
+    closeButton:SetScript("OnClick", function()
+        Panel.Close()
+    end)
     f.CloseButton = closeButton
 
     -- Sidebar.
@@ -236,7 +263,9 @@ local function buildWindow()
             f.Content:SetFilter(self:GetText())
         end)
         search:HookScript("OnEditFocusLost", function(self)
-            if self:GetText() == "" then f.Content:SetFilter(nil) end
+            if self:GetText() == "" then
+                f.Content:SetFilter(nil)
+            end
         end)
         f.SearchBox = search
     end
@@ -260,12 +289,16 @@ end
 -- ── Build ─────────────────────────────────────────────────────────────────────
 
 function Panel.EnsureBuilt()
-    if frame then return frame end
+    if frame then
+        return frame
+    end
 
     -- Everything the spec reads has to exist. Database:Init and the module OnEnable pass
     -- both run from Core/Init.lua's ADDON_LOADED bootstrap, and building lazily on first
     -- open means this file assumes nothing about event ordering.
-    if not Pulse.Database or not Pulse.Registry then return nil end
+    if not Pulse.Database or not Pulse.Registry then
+        return nil
+    end
 
     local ok, result = pcall(buildWindow)
     if not ok then
@@ -297,7 +330,9 @@ end
 -- Switch the page in view by id. Public because the cue index needs it: an index entry's
 -- whole job is to be a link.
 function Panel.GoToPage(pageID)
-    if not frame or not frame.pageList or not pageID then return false end
+    if not frame or not frame.pageList or not pageID then
+        return false
+    end
     for _, page in ipairs(frame.pageList) do
         if page.id == pageID then
             frame.Sidebar:Select(page)
@@ -309,7 +344,9 @@ end
 
 function Panel.Open(pageID)
     local f = Panel.EnsureBuilt()
-    if not f then return end
+    if not f then
+        return
+    end
 
     Panel.GoToPage(pageID)
 
@@ -318,7 +355,9 @@ function Panel.Open(pageID)
 end
 
 function Panel.Close()
-    if frame then frame:Hide() end
+    if frame then
+        frame:Hide()
+    end
 end
 
 function Panel.Toggle(pageID)
@@ -352,17 +391,18 @@ local function slashHandler(message)
 
     if command == "debug" then
         Pulse.debug = not Pulse.debug
-        print("Pulse: debug " .. (Pulse.debug
-            and "ON — option changes and cue firings will print here."
-            or "OFF"))
+        print("Pulse: debug " .. (Pulse.debug and "ON — option changes and cue firings will print here." or "OFF"))
         return
     end
 
     if command == "test" then
         local arg = strtrim(rest or "")
         if arg == "" then
-            print("Pulse: /pulse test <mode>|heartbeat|warningbeat — try one of: "
-                .. table.concat(Pulse.ModeOrder, ", ") .. ", heartbeat, warningbeat")
+            print(
+                "Pulse: /pulse test <mode>|heartbeat|warningbeat — try one of: "
+                    .. table.concat(Pulse.ModeOrder, ", ")
+                    .. ", heartbeat, warningbeat"
+            )
             return
         end
         local lowerArg = string.lower(arg)
@@ -382,9 +422,15 @@ local function slashHandler(message)
         local modeID = string.upper(arg)
         local ok, reason = Pulse:TestMode(modeID)
         if not ok then
-            print("Pulse: " .. reason .. (reason == "no such mode"
-                and (" \"" .. modeID .. "\" — try one of: " .. table.concat(Pulse.ModeOrder, ", "))
-                or ", so there is nothing to test."))
+            print(
+                "Pulse: "
+                    .. reason
+                    .. (
+                        reason == "no such mode"
+                            and (' "' .. modeID .. '" — try one of: ' .. table.concat(Pulse.ModeOrder, ", "))
+                        or ", so there is nothing to test."
+                    )
+            )
         end
         return
     end
@@ -398,4 +444,6 @@ SlashCmdList["PULSE"] = slashHandler
 
 SLASH_PULSEUI1 = "/pulseui"
 SLASH_PULSEUI2 = "/pulsepanel"
-SlashCmdList["PULSEUI"] = function() Panel.Toggle() end
+SlashCmdList["PULSEUI"] = function()
+    Panel.Toggle()
+end

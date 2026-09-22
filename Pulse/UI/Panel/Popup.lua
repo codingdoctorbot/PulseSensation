@@ -50,14 +50,14 @@ Panel.Popup = Popup
 
 -- 22 rather than Blizzard's 20: at 20 with GameFontHighlight the rows read as a wall of
 -- text with no air in them.
-local ENTRY_HEIGHT    = 22
-local LIST_PADDING    = 12
-local ENTRY_INSET     = 5     -- entries stop short of the border on both sides
-local TEXT_INSET      = 12
-local LIST_MAX_ROWS   = 12    -- a whole number of rows, so nothing is ever half-cut
-local LIST_MIN_WIDTH  = 140
-local LIST_MAX_WIDTH  = 340
-local DIALOG_WIDTH    = 400
+local ENTRY_HEIGHT = 22
+local LIST_PADDING = 12
+local ENTRY_INSET = 5 -- entries stop short of the border on both sides
+local TEXT_INSET = 12
+local LIST_MAX_ROWS = 12 -- a whole number of rows, so nothing is ever half-cut
+local LIST_MIN_WIDTH = 140
+local LIST_MAX_WIDTH = 340
+local DIALOG_WIDTH = 400
 
 -- Above the settings window, which is DIALOG — and that in turn is above Blizzard's own
 -- settings window at HIGH, since the splash page can open ours while theirs is still up.
@@ -76,8 +76,9 @@ local function backdropFrame(parent, name)
     local frame = CreateFrame("Frame", name, parent)
 
     local fill = frame:CreateTexture(nil, "BACKGROUND")
-    fill:SetAllPoints(frame)
-    fill:SetColorTexture(0.055, 0.055, 0.065, 1)
+    fill:SetPoint("TOPLEFT", frame, "TOPLEFT", 6, -6)
+    fill:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -6, 6)
+    fill:SetColorTexture(Theme.COLOR_SURFACE.r, Theme.COLOR_SURFACE.g, Theme.COLOR_SURFACE.b, 1)
 
     local ok, border = pcall(CreateFrame, "Frame", nil, frame, "DialogBorderOpaqueTemplate")
     if not ok or not border then
@@ -92,13 +93,15 @@ end
 
 -- Dropdown list
 
-local list          -- the popup itself
-local listCatcher   -- full-screen click-away catcher behind it
-local entries = {}  -- reused entry buttons, index-keyed
+local list -- the popup itself
+local listCatcher -- full-screen click-away catcher behind it
+local entries = {} -- reused entry buttons, index-keyed
 local listState = {}
 
 local function closeList()
-    if listCatcher then listCatcher:Hide() end
+    if listCatcher then
+        listCatcher:Hide()
+    end
     listState.onSelect = nil
     listState.owner = nil
 end
@@ -112,7 +115,9 @@ function Popup.IsListOpen()
 end
 
 local function ensureList()
-    if list then return end
+    if list then
+        return
+    end
 
     -- The catcher IS the parent, so anything outside the list closes it. A sibling frame
     -- would leave gaps wherever the strata overlapped.
@@ -134,7 +139,11 @@ local function ensureList()
     scroll:SetScript("OnMouseWheel", function(self, delta)
         local range = self:GetVerticalScrollRange() or 0
         local value = self:GetVerticalScroll() - (delta * ENTRY_HEIGHT * 2)
-        if value < 0 then value = 0 elseif value > range then value = range end
+        if value < 0 then
+            value = 0
+        elseif value > range then
+            value = range
+        end
         self:SetVerticalScroll(value)
     end)
     list.Scroll = scroll
@@ -163,22 +172,22 @@ end
 -- closure is replaced on every open rather than left pointing at the last menu.
 local function acquireEntry(index)
     local entry = entries[index]
-    if entry then return entry end
+    if entry then
+        return entry
+    end
 
     entry = CreateFrame("Button", nil, list.Child)
     entry:SetHeight(ENTRY_HEIGHT)
 
-    -- A filled bar behind the selected row, not gold text alone: colour is easy to miss in
-    -- a list of fifteen near-identical mode names.
+    -- A filled bar behind the selected row with subtle cyan accent tint
     entry.Selected = entry:CreateTexture(nil, "ARTWORK")
     entry.Selected:SetAllPoints(entry)
-    entry.Selected:SetColorTexture(NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g,
-                                   NORMAL_FONT_COLOR.b, 0.16)
+    entry.Selected:SetColorTexture(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b, 0.20)
     entry.Selected:Hide()
 
     entry.Highlight = entry:CreateTexture(nil, "HIGHLIGHT")
     entry.Highlight:SetAllPoints(entry)
-    entry.Highlight:SetColorTexture(1, 1, 1, 0.14)
+    entry.Highlight:SetColorTexture(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b, 0.10)
 
     entry.Text = entry:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
     entry.Text:SetJustifyH("LEFT")
@@ -187,13 +196,17 @@ local function acquireEntry(index)
     entry.Text:SetPoint("RIGHT", entry, "RIGHT", -8, 0)
 
     entry:SetScript("OnEnter", function(self)
-        if self.tooltip then Theme.ShowTooltip(self, self.label, self.tooltip) end
+        if self.tooltip then
+            Theme.ShowTooltip(self, self.label, self.tooltip)
+        end
     end)
     entry:SetScript("OnLeave", Theme.HideTooltip)
     entry:SetScript("OnClick", function(self)
         local handler = listState.onSelect
         closeList()
-        if handler then handler(self.value) end
+        if handler then
+            handler(self.value)
+        end
     end)
 
     Theme.MarkIgnored(entry)
@@ -219,8 +232,8 @@ function Popup.OpenList(owner, options, selectedValue, onSelect)
 
     for index, option in ipairs(options) do
         local entry = acquireEntry(index)
-        entry.value   = option.value
-        entry.label   = option.label
+        entry.value = option.value
+        entry.label = option.label
         entry.tooltip = option.tooltip
         entry.Text:SetText(option.label or tostring(option.value))
 
@@ -233,7 +246,9 @@ function Popup.OpenList(owner, options, selectedValue, onSelect)
         end
 
         local textWidth = entry.Text:GetStringWidth() or 0
-        if textWidth > widest then widest = textWidth end
+        if textWidth > widest then
+            widest = textWidth
+        end
 
         entry:ClearAllPoints()
         entry:SetPoint("TOPLEFT", list.Child, "TOPLEFT", 0, -(index - 1) * ENTRY_HEIGHT)
@@ -249,9 +264,10 @@ function Popup.OpenList(owner, options, selectedValue, onSelect)
     -- At least as wide as the control it drops from, and never narrow enough to clip a
     -- label. "Gamepad Controller Interactions" and the longer mode names are what push this
     -- past the control's own width.
-    local width = math.max(owner:GetWidth() or 0, LIST_MIN_WIDTH,
-                           widest + TEXT_INSET + 20)
-    if width > LIST_MAX_WIDTH then width = LIST_MAX_WIDTH end
+    local width = math.max(owner:GetWidth() or 0, LIST_MIN_WIDTH, widest + TEXT_INSET + 20)
+    if width > LIST_MAX_WIDTH then
+        width = LIST_MAX_WIDTH
+    end
 
     -- A whole number of rows: a list ending in a half-visible row reads as broken rather
     -- than scrollable.
@@ -280,7 +296,9 @@ end
 local dialog
 
 local function closeDialog()
-    if dialog then dialog:Hide() end
+    if dialog then
+        dialog:Hide()
+    end
 end
 
 function Popup.CloseDialog()
@@ -288,7 +306,9 @@ function Popup.CloseDialog()
 end
 
 local function ensureDialog()
-    if dialog then return end
+    if dialog then
+        return
+    end
 
     dialog = backdropFrame(UIParent, "PulsePanelDialog")
     dialog:SetFrameStrata(OVERLAY_STRATA)
@@ -326,7 +346,9 @@ local function ensureDialog()
         local handler = dialog.onAccept
         local value = dialog.Edit:IsShown() and dialog.Edit:GetText() or nil
         closeDialog()
-        if handler then handler(value) end
+        if handler then
+            handler(value)
+        end
     end
     dialog.accepted = accepted
 
@@ -359,12 +381,12 @@ local function layoutDialog(withEdit)
     if withEdit then
         dialog.Edit:Show()
         height = height + 20 + 14
-        dialog.Accept:SetPoint("TOPRIGHT", dialog, "TOP", -6, -(height))
-        dialog.Cancel:SetPoint("TOPLEFT", dialog, "TOP", 6, -(height))
+        dialog.Accept:SetPoint("TOPRIGHT", dialog, "TOP", -6, -height)
+        dialog.Cancel:SetPoint("TOPLEFT", dialog, "TOP", 6, -height)
     else
         dialog.Edit:Hide()
-        dialog.Accept:SetPoint("TOPRIGHT", dialog, "TOP", -6, -(height))
-        dialog.Cancel:SetPoint("TOPLEFT", dialog, "TOP", 6, -(height))
+        dialog.Accept:SetPoint("TOPRIGHT", dialog, "TOP", -6, -height)
+        dialog.Cancel:SetPoint("TOPLEFT", dialog, "TOP", 6, -height)
     end
     dialog:SetHeight(height + 22 + 18)
 end

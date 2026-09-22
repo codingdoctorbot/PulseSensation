@@ -42,32 +42,56 @@ Pulse.UI.Settings = UISettings
 -- Deliberately shipped with no picture: this addon has no artwork of its own, and a
 -- borrowed Blizzard texture on the front page would be someone else's art presented as
 -- Pulse's.
-local BACKGROUND_TEXTURE = nil
+local BACKGROUND_TEXTURE = "Interface\\AddOns\\Pulse\\Media\\SettingsBG"
+local TEX_W, TEX_H = 512, 512
 
 -- Pulse's accent. Picked to sit with the addon's own icon (Spell_Nature_HealingWaveGreater)
 -- rather than against it.
 local ACCENT = { r = 0.30, g = 0.72, b = 1.00 }
 
-local BG_TOP    = { r = 0.03, g = 0.05, b = 0.08 }
+local BG_TOP = { r = 0.03, g = 0.05, b = 0.08 }
 local BG_BOTTOM = { r = 0.07, g = 0.12, b = 0.18 }
+
+-- Dynamic cover cropping: keeps the texture centered without stretching or aspect distortion.
+local function fitCover(texture, parent)
+    if not texture or not parent then
+        return
+    end
+    local w, h = parent:GetSize()
+    if not w or w <= 0 or not h or h <= 0 then
+        return
+    end
+    local frameAspect, texAspect = w / h, TEX_W / TEX_H
+    if frameAspect > texAspect then
+        local v = (1 - texAspect / frameAspect) / 2
+        texture:SetTexCoord(0, 1, v, 1 - v)
+    else
+        local u = (1 - frameAspect / texAspect) / 2
+        texture:SetTexCoord(u, 1 - u, 0, 1)
+    end
+end
 
 -- Biggest font first. The pattern Modules/Locomotion.lua's formID uses: read through the
 -- named globals and fall back rather than assume, so a client without the display fonts
 -- gets a smaller wordmark rather than an error.
 local WORDMARK_FONTS = {
-    "Game60Font", "SystemFont_Shadow_Huge2", "SystemFont_Shadow_Huge1",
-    "GameFontNormalHuge", "GameFontNormalLarge",
+    "Game60Font",
+    "SystemFont_Shadow_Huge2",
+    "SystemFont_Shadow_Huge1",
+    "GameFontNormalHuge",
+    "GameFontNormalLarge",
 }
 
 local function firstFont(candidates)
     for _, name in ipairs(candidates) do
-        if type(_G[name]) == "table" then return name end
+        if type(_G[name]) == "table" then
+            return name
+        end
     end
     return "GameFontNormal"
 end
 
-local BODY_TEXT =
-    "Every cue, its intensity and \"feels like\" shape, your profiles, per-mode motor and "
+local BODY_TEXT = 'Every cue, its intensity and "feels like" shape, your profiles, per-mode motor and '
     .. "timing tuning, controller calibration, the mode tester and the guide — all of it "
     .. "is in Pulse's own window.\n\n"
     .. "It draws itself rather than living as pages in this panel, which is what lets it "
@@ -78,21 +102,44 @@ local BODY_TEXT =
 
 local function addonVersion()
     local get = (C_AddOns and C_AddOns.GetAddOnMetadata) or GetAddOnMetadata
-    if type(get) ~= "function" then return nil end
+    if type(get) ~= "function" then
+        return nil
+    end
     local ok, version = pcall(get, ADDON_NAME, "Version")
-    if ok and type(version) == "string" then return version end
+    if ok and type(version) == "string" then
+        return version
+    end
     return nil
 end
 
 -- One texture if a picture was supplied, two if it draws its own: a flat base underneath,
 -- so a gradient that fails to apply still leaves something solid rather than a see-through
--- page.
+-- page. With a background texture, an atmospheric scrim is layered over it to preserve
+-- contrast and typography readability.
 local function buildBackground(canvas)
     local base = canvas:CreateTexture(nil, "BACKGROUND")
     base:SetAllPoints(canvas)
 
     if BACKGROUND_TEXTURE then
         base:SetTexture(BACKGROUND_TEXTURE)
+        canvas.bgTexture = base
+        fitCover(base, canvas)
+
+        -- Atmospheric dark scrim for high contrast and readability over the ripple artwork
+        local scrim = canvas:CreateTexture(nil, "BACKGROUND", nil, 1)
+        scrim:SetAllPoints(canvas)
+        scrim:SetColorTexture(1, 1, 1, 1)
+        if type(CreateColor) == "function" and scrim.SetGradient then
+            pcall(
+                scrim.SetGradient,
+                scrim,
+                "VERTICAL",
+                CreateColor(0.02, 0.03, 0.05, 0.82),
+                CreateColor(0.01, 0.02, 0.03, 0.55)
+            )
+        else
+            scrim:SetColorTexture(0.02, 0.03, 0.05, 0.70)
+        end
         return base
     end
 
@@ -102,9 +149,13 @@ local function buildBackground(canvas)
     gradient:SetAllPoints(canvas)
     gradient:SetColorTexture(1, 1, 1, 1)
     if type(CreateColor) == "function" and gradient.SetGradient then
-        pcall(gradient.SetGradient, gradient, "VERTICAL",
-              CreateColor(BG_BOTTOM.r, BG_BOTTOM.g, BG_BOTTOM.b, 1),
-              CreateColor(BG_TOP.r, BG_TOP.g, BG_TOP.b, 1))
+        pcall(
+            gradient.SetGradient,
+            gradient,
+            "VERTICAL",
+            CreateColor(BG_BOTTOM.r, BG_BOTTOM.g, BG_BOTTOM.b, 1),
+            CreateColor(BG_TOP.r, BG_TOP.g, BG_TOP.b, 1)
+        )
     else
         gradient:Hide()
     end
@@ -114,10 +165,12 @@ end
 -- The rule under the wordmark, in two halves so it fades in from nothing and back out.
 -- SetGradient takes two stops, and a bar that just stops at both ends reads as a box.
 local function buildAccentRule(canvas, anchorTo)
-    if type(CreateColor) ~= "function" then return nil end
+    if type(CreateColor) ~= "function" then
+        return nil
+    end
 
-    local clear  = CreateColor(ACCENT.r, ACCENT.g, ACCENT.b, 0)
-    local solid  = CreateColor(ACCENT.r, ACCENT.g, ACCENT.b, 0.85)
+    local clear = CreateColor(ACCENT.r, ACCENT.g, ACCENT.b, 0)
+    local solid = CreateColor(ACCENT.r, ACCENT.g, ACCENT.b, 0.85)
 
     local left = canvas:CreateTexture(nil, "ARTWORK")
     left:SetSize(130, 2)
@@ -160,8 +213,7 @@ local function buildButton(canvas)
 end
 
 function UISettings:Build()
-    if type(Settings) ~= "table"
-        or type(Settings.RegisterCanvasLayoutCategory) ~= "function" then
+    if type(Settings) ~= "table" or type(Settings.RegisterCanvasLayoutCategory) ~= "function" then
         -- No Settings API to attach to. The window is reachable by slash command anyway,
         -- so this is a missing shortcut rather than a missing feature.
         return
@@ -204,9 +256,11 @@ function UISettings:Build()
     hint:SetJustifyH("CENTER")
     hint:SetSpacing(2)
     hint:SetPoint("TOP", open, "BOTTOM", 0, -16)
-    hint:SetText("|cffffd100/pulseui|r opens it too. "
-        .. "|cffffd100/pulse debug|r toggles logging, "
-        .. "|cffffd100/pulse test <mode>|r plays a single shape.")
+    hint:SetText(
+        "|cffffd100/pulseui|r opens it too. "
+            .. "|cffffd100/pulse debug|r toggles logging, "
+            .. "|cffffd100/pulse test <mode>|r plays a single shape."
+    )
 
     local version = addonVersion()
     if version then
@@ -218,10 +272,17 @@ function UISettings:Build()
     -- A FontString anchored on one point has no width of its own, so wrapping has to be
     -- told what to wrap to. Recomputed whenever the container resizes.
     local function layout()
+        if canvas.bgTexture then
+            fitCover(canvas.bgTexture, canvas)
+        end
         local width = canvas:GetWidth()
-        if not width or width <= 0 then return end
+        if not width or width <= 0 then
+            return
+        end
         local available = math.min(470, width - 80)
-        if available < 1 then return end
+        if available < 1 then
+            return
+        end
         body:SetWidth(available)
         hint:SetWidth(available)
         tagline:SetWidth(width - 60)

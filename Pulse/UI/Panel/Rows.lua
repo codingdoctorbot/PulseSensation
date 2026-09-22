@@ -46,8 +46,12 @@ Panel.Rows = Rows
 -- Blizzard_SettingControls.lua:449-452 — the gamepad cursor sits off the row's left edge
 -- rather than on top of the control it is pointing at.
 local function setCursorAnchor(row, control)
-    if type(SmartNavigation_SetCustomCursorAnchorPointForFrame) ~= "function" then return end
-    if type(CreateAnchor) ~= "function" then return end
+    if type(SmartNavigation_SetCustomCursorAnchorPointForFrame) ~= "function" then
+        return
+    end
+    if type(CreateAnchor) ~= "function" then
+        return
+    end
     local ok, anchor = pcall(CreateAnchor, "RIGHT", row, "LEFT", 30)
     if ok and anchor then
         pcall(SmartNavigation_SetCustomCursorAnchorPointForFrame, control, anchor)
@@ -66,8 +70,7 @@ local function createBaseRow(parent, spec, frameType)
 
     local indent = spec.child and Theme.INDENT or 0
 
-    row.Text = row:CreateFontString(nil, "OVERLAY",
-        spec.child and Theme.FONT_CHILD or Theme.FONT_NORMAL)
+    row.Text = row:CreateFontString(nil, "OVERLAY", spec.child and Theme.FONT_CHILD or Theme.FONT_NORMAL)
     row.Text:SetJustifyH("LEFT")
     row.Text:SetWordWrap(false)
     row.Text:SetPoint("LEFT", row, "LEFT", indent + Theme.TEXT_LEFT, 0)
@@ -111,7 +114,9 @@ end
 -- Attaches the tooltip to a control as well as to the label, so hovering the slider or the
 -- dropdown says the same thing as hovering its name.
 local function attachControlTooltip(row, control, spec)
-    if not control or not control.HookScript then return end
+    if not control or not control.HookScript then
+        return
+    end
     control:HookScript("OnEnter", function()
         Theme.ShowTooltip(control, spec.label, spec.tooltip)
     end)
@@ -137,6 +142,12 @@ function Rows.CreateHeader(parent, spec)
     row.Title:SetJustifyV("TOP")
     row.Title:SetPoint("TOPLEFT", row, "TOPLEFT", 7, -16)
     row.Title:SetText(spec.label or "")
+
+    local rule = row:CreateTexture(nil, "ARTWORK")
+    rule:SetHeight(1)
+    rule:SetPoint("TOPLEFT", row.Title, "BOTTOMLEFT", 0, -4)
+    rule:SetPoint("RIGHT", row, "RIGHT", -20, 0)
+    rule:SetColorTexture(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b, 0.25)
 
     row.searchText = string.lower(spec.label or "")
     Theme.MarkIgnored(row)
@@ -168,7 +179,9 @@ function Rows.CreateText(parent, spec)
     -- `body` may be a function, for a paragraph that reports state rather than stating a
     -- fact — the profiles page's "which rule is in force" line is the reason this exists.
     local function currentBody()
-        if type(spec.body) == "function" then return spec.body() or "" end
+        if type(spec.body) == "function" then
+            return spec.body() or ""
+        end
         return spec.body or ""
     end
     row.Body:SetText(currentBody())
@@ -181,20 +194,28 @@ function Rows.CreateText(parent, spec)
 
     row.MeasureHeight = function()
         local available = (row:GetWidth() or 0) - Theme.TEXT_LEFT - 20
-        if available > 1 then row.Body:SetWidth(available) end
+        if available > 1 then
+            row.Body:SetWidth(available)
+        end
         local height = row.Body:GetStringHeight()
-        if not height or height < 1 then height = 1 end
+        if not height or height < 1 then
+            height = 1
+        end
         row.rowHeight = height + (spec.gap or 4)
         row:SetHeight(row.rowHeight)
         return row.rowHeight
     end
 
     row.RefreshValue = function()
-        if type(spec.body) ~= "function" then return end
+        if type(spec.body) ~= "function" then
+            return
+        end
         local text = currentBody()
         -- No relayout needed: every caller of RefreshRows follows it with LayoutRows,
         -- which re-measures text rows itself. Setting the string is enough.
-        if text ~= row.Body:GetText() then row.Body:SetText(text) end
+        if text ~= row.Body:GetText() then
+            row.Body:SetText(text)
+        end
     end
     row.SetRowEnabled = function() end
 
@@ -238,14 +259,14 @@ function Rows.CreateCheckbox(parent, spec)
     -- Clicking the label toggles the box, exactly as Blizzard's rows do
     -- (Blizzard_SettingControls.lua:596-600).
     row.Hit:SetScript("OnMouseUp", function()
-        if box:IsEnabled() then box:Click() end
+        if box:IsEnabled() then
+            box:Click()
+        end
     end)
 
     setCursorAnchor(row, box)
-    if type(SmartNavigation_AddIgnoreInputNavigationOverride) == "function"
-        and SMART_NAV_INPUT_DIRECTION then
-        pcall(SmartNavigation_AddIgnoreInputNavigationOverride, box,
-              SMART_NAV_INPUT_DIRECTION.RIGHT)
+    if type(SmartNavigation_AddIgnoreInputNavigationOverride) == "function" and SMART_NAV_INPUT_DIRECTION then
+        pcall(SmartNavigation_AddIgnoreInputNavigationOverride, box, SMART_NAV_INPUT_DIRECTION.RIGHT)
     end
 
     row.Control = box
@@ -285,10 +306,12 @@ function Rows.CreateSlider(parent, spec)
     slider:SetWidth(Theme.SLIDER_WIDTH)
     slider:SetPoint("LEFT", row, "CENTER", Theme.CONTROL_LEFT, Theme.SLIDER_OFFSET_Y)
 
-    local step  = spec.step or 0.05
+    local step = spec.step or 0.05
     local range = (spec.max or 1) - (spec.min or 0)
     local steps = (step > 0) and (range / step) or 100
-    if steps < 1 then steps = 1 end
+    if steps < 1 then
+        steps = 1
+    end
 
     local formatters = {}
     if MinimalSliderWithSteppersMixin and MinimalSliderWithSteppersMixin.Label then
@@ -300,7 +323,9 @@ function Rows.CreateSlider(parent, spec)
     -- range; the next refresh corrects it if the store catches up.
     local function currentValue()
         local value = spec.get()
-        if type(value) ~= "number" then return spec.min or 0 end
+        if type(value) ~= "number" then
+            return spec.min or 0
+        end
         return value
     end
 
@@ -311,7 +336,9 @@ function Rows.CreateSlider(parent, spec)
     -- `applying` makes the round trip a no-op instead of a fight.
     local applying = false
     slider:RegisterCallback(MinimalSliderWithSteppersMixin.Event.OnValueChanged, function(_, value)
-        if applying then return end
+        if applying then
+            return
+        end
         applying = true
         spec.set(value)
         applying = false
@@ -327,7 +354,9 @@ function Rows.CreateSlider(parent, spec)
 
     row.Control = slider
     row.RefreshValue = function()
-        if applying then return end
+        if applying then
+            return
+        end
         local value = currentValue()
         local current = slider.Slider and slider.Slider:GetValue()
         -- Only write when it actually differs, so a refresh never nudges a slider the
@@ -362,16 +391,14 @@ end
 -- Blizzard's own rows use; the arrows are what left and right map onto for gamepad. Falls
 -- back to the bare dropdown if the template is absent, so the page still renders.
 local function createDropdownControl(row)
-    local ok, control = pcall(CreateFrame, "Frame", nil, row,
-                              "SettingsDropdownWithButtonsTemplate")
+    local ok, control = pcall(CreateFrame, "Frame", nil, row, "SettingsDropdownWithButtonsTemplate")
     if ok and control and control.Dropdown then
         control:SetPoint("LEFT", row, "CENTER", Theme.DROPDOWN_LEFT, 3)
         control.Dropdown:SetWidth(Theme.DROPDOWN_WIDTH)
         return control, control.Dropdown
     end
 
-    local ok2, dropdown = pcall(CreateFrame, "DropdownButton", nil, row,
-                                "WowStyle2DropdownTemplate")
+    local ok2, dropdown = pcall(CreateFrame, "DropdownButton", nil, row, "WowStyle2DropdownTemplate")
     if ok2 and dropdown then
         dropdown:SetWidth(Theme.DROPDOWN_WIDTH)
         dropdown:SetPoint("LEFT", row, "CENTER", Theme.CONTROL_LEFT, 3)
@@ -389,7 +416,9 @@ function Rows.CreateDropdown(parent, spec)
         -- No dropdown widget on this client: degrade to a label rather than taking the
         -- whole page down.
         row.RefreshValue = function() end
-        row.SetRowEnabled = function(_, enabled) Theme.DisplayEnabled(row, enabled) end
+        row.SetRowEnabled = function(_, enabled)
+            Theme.DisplayEnabled(row, enabled)
+        end
         return row
     end
 
@@ -401,13 +430,17 @@ function Rows.CreateDropdown(parent, spec)
 
     local function options()
         local ok, result = pcall(spec.options)
-        if ok and type(result) == "table" then return result end
+        if ok and type(result) == "table" then
+            return result
+        end
         return {}
     end
 
     local function labelFor(value)
         for _, option in ipairs(options()) do
-            if option.value == value then return option.label end
+            if option.value == value then
+                return option.label
+            end
         end
         return CUSTOM or "Custom"
     end
@@ -428,27 +461,37 @@ function Rows.CreateDropdown(parent, spec)
         for index, option in ipairs(list) do
             if option.value == current then
                 local target = list[index + delta]
-                if target then spec.set(target.value) end
+                if target then
+                    spec.set(target.value)
+                end
                 return
             end
         end
-        if list[1] then spec.set(list[1].value) end
+        if list[1] then
+            spec.set(list[1].value)
+        end
     end
 
     local function updateSteppers()
-        if not control.SetSteppersEnabled then return end
+        if not control.SetSteppersEnabled then
+            return
+        end
         local list = options()
         local current = spec.get()
         local index
         for i, option in ipairs(list) do
-            if option.value == current then index = i break end
+            if option.value == current then
+                index = i
+                break
+            end
         end
-        control:SetSteppersEnabled(index ~= nil and index > 1,
-                                   index ~= nil and index < #list)
+        control:SetSteppersEnabled(index ~= nil and index > 1, index ~= nil and index < #list)
     end
 
     dropdown:HookScript("OnMouseDown", function()
-        if not dropdown:IsEnabled() then return end
+        if not dropdown:IsEnabled() then
+            return
+        end
         Panel.Popup.OpenList(dropdown, options(), spec.get(), function(value)
             spec.set(value)
         end)
@@ -457,16 +500,22 @@ function Rows.CreateDropdown(parent, spec)
     if control.IncrementButton then
         control.IncrementButton:SetScript("OnClick", function()
             step(1)
-            if SOUNDKIT then Theme.PlayCheckSound(true) end
+            if SOUNDKIT then
+                Theme.PlayCheckSound(true)
+            end
         end)
     end
     if control.DecrementButton then
         control.DecrementButton:SetScript("OnClick", function()
             step(-1)
-            if SOUNDKIT then Theme.PlayCheckSound(true) end
+            if SOUNDKIT then
+                Theme.PlayCheckSound(true)
+            end
         end)
     end
-    if control.SetSteppersShown then control:SetSteppersShown(true) end
+    if control.SetSteppersShown then
+        control:SetSteppersShown(true)
+    end
 
     attachControlTooltip(row, dropdown, spec)
 
@@ -519,18 +568,20 @@ function Rows.CreateButton(parent, spec)
     attachControlTooltip(row, button, spec)
 
     setCursorAnchor(row, button)
-    if type(SmartNavigation_AddIgnoreInputNavigationOverride) == "function"
-        and SMART_NAV_INPUT_DIRECTION then
-        pcall(SmartNavigation_AddIgnoreInputNavigationOverride, button,
-              SMART_NAV_INPUT_DIRECTION.RIGHT)
+    if type(SmartNavigation_AddIgnoreInputNavigationOverride) == "function" and SMART_NAV_INPUT_DIRECTION then
+        pcall(SmartNavigation_AddIgnoreInputNavigationOverride, button, SMART_NAV_INPUT_DIRECTION.RIGHT)
     end
 
     row.Control = button
     row.RefreshValue = function()
-        if spec.buttonTextFunc then button:SetText(spec.buttonTextFunc()) end
+        if spec.buttonTextFunc then
+            button:SetText(spec.buttonTextFunc())
+        end
         -- Same idea as a live `body`: a row whose NAME reports state, e.g. a rule row
         -- that reads "This character — Raiding" and has to follow the rule it names.
-        if spec.labelFunc then row.Text:SetText(spec.labelFunc()) end
+        if spec.labelFunc then
+            row.Text:SetText(spec.labelFunc())
+        end
     end
     row.SetRowEnabled = function(_, enabled)
         button:SetEnabled(enabled)
@@ -549,7 +600,7 @@ end
 -- NOT a control. It changes nothing; it reports state and navigates. That distinction backs
 -- the row counts quoted in UIguide.md, so the index reads as its own kind rather than a
 -- button row with a "Go" on it.
-local DOT_ON  = { 0.25, 0.80, 0.35 }
+local DOT_ON = { 0.25, 0.80, 0.35 }
 local DOT_OFF = { 0.32, 0.32, 0.32 }
 
 function Rows.CreateIndex(parent, spec)
@@ -596,13 +647,13 @@ end
 -- ── Dispatch ──────────────────────────────────────────────────────────────────
 
 local builders = {
-    header   = Rows.CreateHeader,
-    text     = Rows.CreateText,
+    header = Rows.CreateHeader,
+    text = Rows.CreateText,
     checkbox = Rows.CreateCheckbox,
-    slider   = Rows.CreateSlider,
+    slider = Rows.CreateSlider,
     dropdown = Rows.CreateDropdown,
-    button   = Rows.CreateButton,
-    index    = Rows.CreateIndex,
+    button = Rows.CreateButton,
+    index = Rows.CreateIndex,
 }
 
 -- Every write from a row marks the panel dirty on top of whatever the database notifies.
@@ -611,23 +662,28 @@ local builders = {
 -- and a row writing one of those still has to see its own result.
 local function wrapSet(spec)
     local set = spec.set
-    if type(set) ~= "function" then return end
+    if type(set) ~= "function" then
+        return
+    end
     spec.set = function(value)
         set(value)
-        if Panel.MarkDirty then Panel.MarkDirty() end
+        if Panel.MarkDirty then
+            Panel.MarkDirty()
+        end
     end
 end
 
 function Rows.Create(parent, spec)
     local builder = builders[spec.kind]
-    if not builder then return nil end
+    if not builder then
+        return nil
+    end
 
     wrapSet(spec)
     -- A single malformed spec should cost its own row, not the page it is on.
     local ok, row = pcall(builder, parent, spec)
     if not ok then
-        print(("Pulse: could not build settings row %q (%s)")
-            :format(tostring(spec.label), tostring(row)))
+        print(("Pulse: could not build settings row %q (%s)"):format(tostring(spec.label), tostring(row)))
         return nil
     end
     return row

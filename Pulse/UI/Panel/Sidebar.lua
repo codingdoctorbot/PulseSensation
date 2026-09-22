@@ -30,15 +30,30 @@ local function updateButtonState(button)
     local selected = button.selected
     if selected then
         button.Label:SetFontObject("GameFontHighlight")
+        if button.Label.SetTextColor then
+            button.Label:SetTextColor(1, 1, 1)
+        end
         button.Texture:SetAtlas("Options_List_Active", true)
         button.Texture:Show()
+        if button.Indicator then
+            button.Indicator:Show()
+        end
     else
         button.Label:SetFontObject(button.isChild and "GameFontHighlight" or "GameFontNormal")
+        if button.Indicator then
+            button.Indicator:Hide()
+        end
         if button.over then
             button.Texture:SetAtlas("Options_List_Hover", true)
             button.Texture:Show()
+            if button.Label.SetTextColor then
+                button.Label:SetTextColor(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b)
+            end
         else
             button.Texture:Hide()
+            if button.Label.SetTextColor and NORMAL_FONT_COLOR then
+                button.Label:SetTextColor(NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+            end
         end
     end
 end
@@ -68,6 +83,14 @@ function SidebarMixin:CreateButtons(pages)
         button.Texture:SetPoint("CENTER")
         button.Texture:Hide()
 
+        -- Left-edge active indicator pill
+        button.Indicator = button:CreateTexture(nil, "OVERLAY")
+        button.Indicator:SetWidth(3)
+        button.Indicator:SetPoint("TOPLEFT", button, "TOPLEFT", 1, -2)
+        button.Indicator:SetPoint("BOTTOMLEFT", button, "BOTTOMLEFT", 1, 2)
+        button.Indicator:SetColorTexture(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b, 1)
+        button.Indicator:Hide()
+
         button.Label = button:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         button.Label:SetJustifyH("LEFT")
         button.Label:SetPoint(
@@ -92,7 +115,9 @@ function SidebarMixin:CreateButtons(pages)
             updateButtonState(btn)
         end)
         button:SetScript("OnClick", function(btn)
-            if SOUNDKIT and SOUNDKIT.IG_MAINMENU_OPTION then PlaySound(SOUNDKIT.IG_MAINMENU_OPTION) end
+            if SOUNDKIT and SOUNDKIT.IG_MAINMENU_OPTION then
+                PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
+            end
             btn:GetParent():Select(btn.page)
         end)
 
@@ -109,14 +134,20 @@ function SidebarMixin:Select(page)
         updateButtonState(button)
     end
     self.selectedPage = page
-    if self.onSelect then self.onSelect(page) end
+    if self.onSelect then
+        self.onSelect(page)
+    end
 end
 
 function SidebarMixin:GetSelectedButton()
     for _, button in ipairs(self.buttons) do
-        if button.selected then return button end
+        if button.selected then
+            return button
+        end
     end
     return self.buttons[1]
 end
 
-function SidebarMixin:GetFirstButton() return self.buttons[1] end
+function SidebarMixin:GetFirstButton()
+    return self.buttons[1]
+end
