@@ -115,6 +115,7 @@ read_globals = {
     "GetMaxBattlefieldID",
     "GetBattlefieldStatus",
     "IsStealthed",
+    "IsEncounterInProgress",
     "IsMounted",
     "IsFlying",
     "IsSwimming",

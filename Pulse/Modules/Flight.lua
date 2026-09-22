@@ -18,6 +18,12 @@ local function syncMount()
     mountFrame:UnregisterAllEvents()
     if not Pulse.Database:Get("masterEnabled") then return end
     if not (Pulse.Database:GetCue("mountUp") or Pulse.Database:GetCue("dismount")) then return end
+
+    -- Re-seed live state on sync so toggling the cue or profile while mounted
+    -- does not misfire or stay unseeded until the next zoning event.
+    wasMounted = IsMounted()
+    mountStateReady = true
+
     mountFrame:RegisterEvent("PLAYER_MOUNT_DISPLAY_CHANGED")
     mountFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
@@ -85,4 +91,13 @@ end
 function M:OnEnable()
     Pulse:BindFrame({ "mountUp", "dismount" }, syncMount)
     Pulse:BindFrame({ "glideThrust" }, syncGlide)
+end
+
+-- Reach-in for PulseDebug, read-only
+function M:_DebugFlight()
+    return {
+        wasMounted = wasMounted,
+        mountStateReady = mountStateReady,
+        isMounted = IsMounted and IsMounted() or false,
+    }
 end

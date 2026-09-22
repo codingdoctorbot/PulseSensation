@@ -50,7 +50,7 @@ local function sync()
     end
     -- CastActivity registers nothing while no cue here wants it, so a player with all four
     -- switched off pays nothing for this module existing.
-    Pulse.CastActivity:SetActive(wanted)
+    Pulse.CastActivity:SetActive("casting", wanted)
 end
 
 function M:OnEnable()

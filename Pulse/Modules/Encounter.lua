@@ -66,13 +66,22 @@ local frame = CreateFrame("Frame")
 -- Tracks inEncounter for bossChatWarning below too, so ENCOUNTER_START/END stay registered
 -- whenever EITHER cue needs them, not just bossAbilityWarning.
 local function sync()
-    frame:UnregisterAllEvents()
-    clearBossTimers()
-    inEncounter = false
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not (Pulse.Database:GetCue("bossAbilityWarning") or Pulse.Database:GetCue("bossChatWarning")) then
+    local enabled = Pulse.Database:Get("masterEnabled") and
+        (Pulse.Database:GetCue("bossAbilityWarning") or Pulse.Database:GetCue("bossChatWarning"))
+
+    if not enabled then
+        frame:UnregisterAllEvents()
+        clearBossTimers()
+        inEncounter = false
         return
     end
+
+    -- Reseed or preserve live inEncounter state if an encounter is already in progress,
+    -- rather than blind-wiping on mid-fight cue toggles or profile switches.
+    if IsEncounterInProgress and IsEncounterInProgress() then
+        inEncounter = true
+    end
+
     frame:RegisterEvent("ENCOUNTER_START")
     frame:RegisterEvent("ENCOUNTER_END")
 end
@@ -118,4 +127,12 @@ end)
 function M:OnEnable()
     Pulse:BindFrame({ "bossAbilityWarning", "bossChatWarning" }, sync)
     Pulse:BindFrame({ "bossChatWarning" }, syncChatWarning)
+end
+
+-- Reach-in for PulseDebug, read-only
+function M:_DebugEncounter()
+    return {
+        inEncounter = inEncounter,
+        activeTimers = #bossTimers,
+    }
 end

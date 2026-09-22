@@ -209,6 +209,7 @@ end
 local frame = CreateFrame("Frame")
 local sweepElapsed = 0
 local registered = false
+local consumers = {}
 
 local EVENTS = {
     "UNIT_SPELLCAST_START",
@@ -228,11 +229,23 @@ local EVENTS = {
 -- across would reintroduce a bug that took a live user report to find.
 
 -- Registration is gated like every other watcher here: nothing is registered while no
--- consumer wants it.
-function CastActivity:SetActive(active)
-    if active == registered then return end
-    registered = active
+-- consumer wants it. Keyed by consumer so multiple modules (Casting, Crafting) do not
+-- deregister each other.
+function CastActivity:SetActive(consumerKey, active)
+    if active == nil and type(consumerKey) == "boolean" then
+        consumerKey, active = "default", consumerKey
+    end
+    consumerKey = consumerKey or "default"
     if active then
+        consumers[consumerKey] = true
+    else
+        consumers[consumerKey] = nil
+    end
+
+    local shouldRegister = next(consumers) ~= nil
+    if shouldRegister == registered then return end
+    registered = shouldRegister
+    if registered then
         for _, event in ipairs(EVENTS) do
             if UnitIsUnit then frame:RegisterUnitEvent(event, "player") end
         end
@@ -251,6 +264,11 @@ function CastActivity:SetActive(active)
         frame:SetScript("OnUpdate", nil)
         self:Reset()
     end
+end
+
+-- Reach-in for PulseDebug, read-only: consumer accounting
+function CastActivity:_DebugActive()
+    return registered, consumers
 end
 
 frame:SetScript("OnEvent", function(_, event, ...)

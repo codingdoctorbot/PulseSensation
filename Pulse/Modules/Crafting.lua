@@ -282,13 +282,15 @@ local function sync()
     pollFrame:SetScript("OnUpdate", nil)
     active = false
 
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not Pulse.Database:GetCue(CUE) then return end
+    local wanted = (Pulse.Database:Get("masterEnabled") and Pulse.Database:GetCue(CUE)) or false
 
-    -- CastActivity only registers its events while something wants them
-    -- (Modules/Casting.lua's own sync does the same), so this cue being off costs nothing.
-    Pulse.CastActivity:SetActive(true)
-    pollFrame:SetScript("OnUpdate", tick)
+    -- CastActivity only registers its events while something wants them; keyed by consumer
+    -- so toggling casting cues does not unregister crafting, and disabling crafting clears its hold.
+    Pulse.CastActivity:SetActive("crafting", wanted)
+
+    if wanted then
+        pollFrame:SetScript("OnUpdate", tick)
+    end
 end
 
 function M:OnEnable()
