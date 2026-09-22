@@ -102,6 +102,7 @@ local function subscribeToDatabase()
     for _, modeID in ipairs(Pulse.ModeOrder) do
         db:OnModeTuningChanged(modeID, "lowMult", mark)
         db:OnModeTuningChanged(modeID, "highMult", mark)
+        db:OnModeTuningChanged(modeID, "triggerMult", mark)
         db:OnModeTuningChanged(modeID, "durMult", mark)
     end
 

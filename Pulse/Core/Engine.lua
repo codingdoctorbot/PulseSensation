@@ -58,8 +58,12 @@ local deviceReady = false
 local REFRESH_WINDOW = 0.35 -- Hold() layers expire this long after the last refresh
 
 local function clamp01(v)
-    if v < 0 then return 0 end
-    if v > 1 then return 1 end
+    if v < 0 then
+        return 0
+    end
+    if v > 1 then
+        return 1
+    end
     return v
 end
 
@@ -79,9 +83,13 @@ end
 -- the high motor's small one — one shared pair of numbers was always wrong on hardware.
 local function smoothTowards(current, wanted, dt, attackTau, releaseTau)
     local tau = (wanted < current) and releaseTau or attackTau
-    if not tau or tau <= 0 or not dt or dt <= 0 then return wanted end
+    if not tau or tau <= 0 or not dt or dt <= 0 then
+        return wanted
+    end
     local alpha = 1.0 - math.exp(-dt / tau)
-    if alpha >= 1 then return wanted end
+    if alpha >= 1 then
+        return wanted
+    end
     return current + (wanted - current) * alpha
 end
 
@@ -107,9 +115,13 @@ local ROLE_FALLBACK = { ltrigger = "low", rtrigger = "high" }
 
 local function resolveRole(schema, role)
     local roles = schema and schema.roles
-    if not roles then return nil end
+    if not roles then
+        return nil
+    end
     local def = roles[role]
-    if def then return def end
+    if def then
+        return def
+    end
     local fallback = ROLE_FALLBACK[role]
     return fallback and roles[fallback] or nil
 end
@@ -120,10 +132,14 @@ function Engine:RefreshDevice()
     local enabled = C_GamePad.IsEnabled()
     local deviceID = C_GamePad.GetActiveDeviceID()
     deviceReady = (enabled and deviceID) and true or false
-    if not deviceReady then self:StopAll() end
+    if not deviceReady then
+        self:StopAll()
+    end
 end
 
-function Engine:IsDeviceReady() return deviceReady end
+function Engine:IsDeviceReady()
+    return deviceReady
+end
 
 function Engine:StopAll()
     -- First, so that anything already scheduled is void before the state it would touch
@@ -180,15 +196,21 @@ end
 -- blip rather than a layer a later tick keeps refreshing — Health.lua's lub-dub knocks,
 -- where a duration shorter than the gap between them lets the value decay toward zero in
 -- between instead of stepping from one held target straight to the next.
-function Engine:Hold(name, low, high, duration) self:Set(name, low, high, duration or REFRESH_WINDOW) end
+function Engine:Hold(name, low, high, duration)
+    self:Set(name, low, high, duration or REFRESH_WINDOW)
+end
 
 -- Role-space sibling of Hold, existing so callers get REFRESH_WINDOW by default rather than
 -- SetRoles' raw 0.1. Reaching SetRoles directly for a continuous cue is a trap: a duration
 -- shorter than the caller's own re-arm interval expires between ticks and the texture
 -- stutters, and an explicit 0 gives a layer already dead the moment it is created.
-function Engine:HoldRoles(name, roles, duration) self:SetRoles(name, roles, duration or REFRESH_WINDOW) end
+function Engine:HoldRoles(name, roles, duration)
+    self:SetRoles(name, roles, duration or REFRESH_WINDOW)
+end
 
-function Engine:StopLayer(name) layers[name] = nil end
+function Engine:StopLayer(name)
+    layers[name] = nil
+end
 
 -- StopLayer's stronger sibling: also bumps the layer's PlayMode token, so steps a previous
 -- PlayMode already handed to C_Timer no-op when they fire instead of overwriting whatever is
@@ -206,7 +228,9 @@ end
 
 function Engine:PlayMode(name, modeID, scale, intensityOverride)
     local mode = Pulse.Modes[modeID]
-    if not mode then return end
+    if not mode then
+        return
+    end
     scale = scale or 1.0
 
     layerTokens[name] = (layerTokens[name] or 0) + 1
@@ -231,8 +255,12 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
                 local at = math.random() * 1.2
                 local mag = magnitude * (0.5 + math.random() * 0.5)
                 C_Timer.After(at, function()
-                    if engineGeneration ~= generation then return end
-                    if layerTokens[name] ~= token then return end
+                    if engineGeneration ~= generation then
+                        return
+                    end
+                    if layerTokens[name] ~= token then
+                        return
+                    end
                     self:Set(name, mag, 0, 0.08)
                 end)
             end
@@ -250,8 +278,12 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
                 local at = (step - 1) * (1.0 / steps)
                 local mag = target * (step / steps)
                 C_Timer.After(at, function()
-                    if engineGeneration ~= generation then return end
-                    if layerTokens[name] ~= token then return end
+                    if engineGeneration ~= generation then
+                        return
+                    end
+                    if layerTokens[name] ~= token then
+                        return
+                    end
                     self:Set(name, mag, 0, REFRESH_WINDOW)
                 end)
             end
@@ -269,6 +301,7 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
     -- rhythm while changing its pace.
     local lowMult = Pulse.Database:GetModeTuning(modeID, "lowMult", 1.0)
     local highMult = Pulse.Database:GetModeTuning(modeID, "highMult", 1.0)
+    local triggerMult = Pulse.Database:GetModeTuning(modeID, "triggerMult", 1.0)
     local durMult = Pulse.Database:GetModeTuning(modeID, "durMult", 1.0)
 
     local offset = 0
@@ -278,10 +311,9 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
         else
             local duration = step.relDuration * (mode.baseDuration or 0.25) * durMult
             local mag = clamp01(step.relIntensity * scale * (intensityOverride or 1.0))
-            -- Sparse: a step names one role (or "both") and only that role is emitted. The
-            -- trigger roles deliberately take no lowMult/highMult — those sliders are named
-            -- for the rumble motors on the Motor & Timing page, and applying a motor
-            -- multiplier to a trigger actuator would make that page lie.
+            -- Sparse: a step names one role (or "both") and only that role is emitted.
+            -- Low/high/trigger roles are scaled by their respective multiplier from the
+            -- Motor & Timing page.
             local roles = {}
             local r = step.role
             if r == "both" then
@@ -290,15 +322,21 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
             elseif r == "high" then
                 roles.high = clamp01(mag * highMult)
             elseif r == "ltrigger" or r == "rtrigger" then
-                roles[r] = mag
+                roles[r] = clamp01(mag * triggerMult)
             else
                 roles.low = clamp01(mag * lowMult)
             end
             local at = offset
             C_Timer.After(at, function()
-                if engineGeneration ~= generation then return end
-                if layerTokens[name] ~= token then return end
-                if not deviceReady then return end
+                if engineGeneration ~= generation then
+                    return
+                end
+                if layerTokens[name] ~= token then
+                    return
+                end
+                if not deviceReady then
+                    return
+                end
                 self:SetRoles(name, roles, duration)
             end)
             offset = offset + duration
@@ -314,14 +352,20 @@ end
 
 -- Hoisted to file-scope to eliminate closure allocation on every OnUpdate frame tick (Rule 4).
 local function driveChannel(channel, wanted, last, dt, epsilon)
-    if rawHolds[channel] then return false end
+    if rawHolds[channel] then
+        return false
+    end
 
     if wanted and wanted > 0 then
         wanted = clamp01(wanted * channelConfig(channel, "gain"))
         local gamma = channelConfig(channel, "gamma")
-        if gamma and gamma ~= 1.0 then wanted = wanted ^ gamma end
+        if gamma and gamma ~= 1.0 then
+            wanted = wanted ^ gamma
+        end
         local floor = channelConfig(channel, "floor")
-        if floor and floor > 0 then wanted = floor + (1.0 - floor) * wanted end
+        if floor and floor > 0 then
+            wanted = floor + (1.0 - floor) * wanted
+        end
         wanted = clamp01(wanted)
     else
         -- Zero in, zero out, unconditionally. The breakaway floor must never turn a
@@ -352,7 +396,9 @@ local frameTarget = {}
 local frame = CreateFrame("Frame")
 
 frame:SetScript("OnUpdate", function(_, elapsed)
-    if not deviceReady then return end
+    if not deviceReady then
+        return
+    end
     -- Deliberately NOT gated on masterEnabled: normal triggers already will not set a layer
     -- while it is off (Pulse:FireIfEnabled/HoldIfEnabled check first), so this loop does
     -- nothing either way. But the panel's "Test the selected mode" button and /pulse test
@@ -364,7 +410,9 @@ frame:SetScript("OnUpdate", function(_, elapsed)
     local dt = elapsed or 0
     -- A loading screen or an alt-tab can hand back an enormous elapsed. Capping it keeps
     -- the exponential honest rather than letting one frame snap every channel.
-    if dt > 0.25 then dt = 0.25 end
+    if dt > 0.25 then
+        dt = 0.25
+    end
 
     -- Raw calibration holds bypass everything below — schema, gain, gamma, floor and
     -- smoothing — on purpose. The calibration page exists to MEASURE those, so its probe
@@ -398,7 +446,9 @@ frame:SetScript("OnUpdate", function(_, elapsed)
             for role, value in pairs(layer.roles) do
                 if value > 0 then
                     hasRoles = true
-                    if value > (frameRoleTotals[role] or 0) then frameRoleTotals[role] = value end
+                    if value > (frameRoleTotals[role] or 0) then
+                        frameRoleTotals[role] = value
+                    end
                 end
             end
         end
@@ -419,7 +469,9 @@ frame:SetScript("OnUpdate", function(_, elapsed)
                 local channelMag = clamp01(magnitude * masterIntensity * (def.intensity or 1.0))
                 if channelMag > 0 then
                     hasTargets = true
-                    if channelMag > (frameTarget[def.channel] or 0) then frameTarget[def.channel] = channelMag end
+                    if channelMag > (frameTarget[def.channel] or 0) then
+                        frameTarget[def.channel] = channelMag
+                    end
                 end
             end
         end
@@ -430,7 +482,9 @@ frame:SetScript("OnUpdate", function(_, elapsed)
 
     if hasTargets then
         for channel, wanted in pairs(frameTarget) do
-            if driveChannel(channel, wanted, lastSetByChannel[channel], dt, epsilon) then anyOn = true end
+            if driveChannel(channel, wanted, lastSetByChannel[channel], dt, epsilon) then
+                anyOn = true
+            end
         end
     end
 
@@ -438,7 +492,9 @@ frame:SetScript("OnUpdate", function(_, elapsed)
     -- channels present in this tick's `target` — walk everything we last set.
     for channel, last in pairs(lastSetByChannel) do
         if not (hasTargets and frameTarget[channel]) and last > 0 then
-            if driveChannel(channel, 0, last, dt, epsilon) then anyOn = true end
+            if driveChannel(channel, 0, last, dt, epsilon) then
+                anyOn = true
+            end
         end
     end
 
@@ -456,7 +512,9 @@ end)
 -- calibration transform. Used by the controller-calibration page.
 function Engine:RawChannel(channel, magnitude, duration)
     self:RefreshDevice()
-    if not deviceReady then return false, "no controller detected" end
+    if not deviceReady then
+        return false, "no controller detected"
+    end
     rawHolds[channel] = {
         magnitude = clamp01(magnitude or 0),
         endTime = GetTime() + (duration or 0.5),
@@ -475,7 +533,9 @@ end
 -- in that file.
 function Engine:RampChannel(channel, peak)
     self:RefreshDevice()
-    if not deviceReady then return false, "no controller detected" end
+    if not deviceReady then
+        return false, "no controller detected"
+    end
 
     peak = peak or Pulse.RAMP_PEAK
     local increment = Pulse.RAMP_STEP
@@ -497,8 +557,12 @@ function Engine:RampChannel(channel, peak)
 
     for step = 1, steps do
         C_Timer.After((step - 1) * interval, function()
-            if engineGeneration ~= generation then return end
-            if rampToken ~= token then return end
+            if engineGeneration ~= generation then
+                return
+            end
+            if rampToken ~= token then
+                return
+            end
             local magnitude = increment * step
             -- Held slightly longer than the interval so there is no silent gap between
             -- steps for the mass to coast down through — a gap would read as a pulse train
@@ -509,8 +573,12 @@ function Engine:RampChannel(channel, peak)
     end
 
     C_Timer.After(steps * interval, function()
-        if engineGeneration ~= generation then return end
-        if rampToken ~= token then return end
+        if engineGeneration ~= generation then
+            return
+        end
+        if rampToken ~= token then
+            return
+        end
         -- Stop the PROBE, not everything. StopAll clears every layer, both smoothing tables
         -- and the whole raw-hold set, so finishing a sixteen-second ramp through it would
         -- cut every live gameplay cue — a swim or glide texture running at the time goes
@@ -540,7 +608,9 @@ function Engine:_StopRawChannel(channel)
     rawHolds[channel] = nil
     smoothedByChannel[channel] = nil
     lastSetByChannel[channel] = nil
-    if deviceReady and C_GamePad and C_GamePad.SetVibration then pcall(C_GamePad.SetVibration, channel, 0) end
+    if deviceReady and C_GamePad and C_GamePad.SetVibration then
+        pcall(C_GamePad.SetVibration, channel, 0)
+    end
 end
 
 function Engine:StopRamp(channel)
@@ -569,7 +639,9 @@ function Engine:Init()
         deviceFrame:RegisterEvent("GAME_PAD_DISCONNECTED")
         Engine:RefreshDevice()
     end
-    deviceFrame:SetScript("OnEvent", function() Engine:RefreshDevice() end)
+    deviceFrame:SetScript("OnEvent", function()
+        Engine:RefreshDevice()
+    end)
     Pulse.Database:OnGlobalChanged("masterEnabled", sync)
     sync()
 end
