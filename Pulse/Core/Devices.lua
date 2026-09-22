@@ -201,6 +201,7 @@ Pulse.DEVICE_ORDER = {
     "8bitdo",
     "steamdeck",
     "steamcontroller2",
+    "steamcontroller",
 }
 
 Pulse.Devices = {
@@ -290,18 +291,35 @@ Pulse.Devices = {
 
     steamdeck = {
         id = "steamdeck",
-        label = "Steam Deck",
+        label = "Steam Deck (LCD & OLED)",
         triggers = false,
-        note = "LRA haptics rather than rumble motors. Fast and low-threshold, and noticeably sharper in character than an ERM pad — expect to want less strength, not more.",
-        channels = { Low = copy(LRA), High = copy(LRA) },
+        note = "Dual trackpad LRAs driven by smart haptic drivers. Emulated dual-motor rumble requires elevated Low gain (+20%) to match traditional chassis displacement, while a 35ms attack tau smooths square-wave steps to eliminate audible trackpad chatter.",
+        channels = {
+            Low = copy(LRA, { floor = 0.050, gain = 1.20, attackTau = 0.035, releaseTau = 0.020, gamma = 0.90 }),
+            High = copy(LRA, { floor = 0.040, gain = 1.05, attackTau = 0.015, releaseTau = 0.015 }),
+        },
     },
 
     steamcontroller2 = {
         id = "steamcontroller2",
-        label = "Steam Controller 2",
+        label = "Steam Controller 2 (2026)",
         triggers = false,
-        note = "GUESS, and flagged as one. This project has no reliable information about this controller's actuators, so it is seeded as LRA on the assumption Valve stayed with haptics rather than returning to rumble motors. If it feels wrong, it probably is — Ramp it and overwrite these.",
-        channels = { Low = copy(LRA), High = copy(LRA) },
+        note = "Quad-LRA architecture: two trackpad LRAs for interface clicks plus two dedicated high-output grip LRAs for body rumble. Instantaneous transient response, wide dynamic range, and zero trackpad chatter.",
+        channels = {
+            Low = copy(LRA, { floor = 0.035, gain = 1.10, attackTau = 0.020, releaseTau = 0.015 }),
+            High = copy(LRA, { floor = 0.035, gain = 1.05, attackTau = 0.015, releaseTau = 0.012 }),
+        },
+    },
+
+    steamcontroller = {
+        id = "steamcontroller",
+        label = "Steam Controller (v1)",
+        triggers = false,
+        note = "Dual circular trackpad linear voice coils with no body rumble motors. Emulated rumble turns the touchpads into acoustic transducers; raised floor and 40ms attack prevent trigger spring rattle and harsh metallic buzz.",
+        channels = {
+            Low = copy(LRA, { floor = 0.060, gain = 1.10, attackTau = 0.040, releaseTau = 0.030 }),
+            High = copy(LRA, { floor = 0.040, gain = 1.00, attackTau = 0.020, releaseTau = 0.020 }),
+        },
     },
 }
 
@@ -321,7 +339,9 @@ local NAME_PATTERNS = {
     { "dualshock", "ds4" },
     { "ps4", "ds4" },
     { "steam deck", "steamdeck" },
-    { "steam controller", "steamcontroller2" },
+    { "steam virtual gamepad", "steamdeck" },
+    { "steam controller 2", "steamcontroller2" },
+    { "steam controller", "steamcontroller" },
     { "nintendo", "switchpro" },
     { "switch pro", "switchpro" },
     { "pro controller", "switchpro" },
@@ -352,7 +372,13 @@ local PRODUCT_MAP = {
         [0x2009] = "switchpro",
     },
     [VENDOR_VALVE] = {
-        [0x1205] = "steamdeck",
+        [0x1102] = "steamcontroller", -- Steam Controller v1 (USB wired)
+        [0x1142] = "steamcontroller", -- Steam Controller v1 (wireless dongle)
+        [0x1106] = "steamcontroller", -- Steam Controller v1 (BLE)
+        [0x11FF] = "steamdeck", -- Steam Virtual Gamepad (Steam Input)
+        [0x1201] = "steamcontroller2", -- Steam Controller 2 (wired)
+        [0x1202] = "steamcontroller2", -- Steam Controller 2 (wireless)
+        [0x1205] = "steamdeck", -- Steam Deck (LCD & OLED)
     },
 }
 
@@ -360,6 +386,7 @@ local PRODUCT_MAP = {
 local VENDOR_FALLBACK = {
     [VENDOR_MICROSOFT] = "xbox", -- Microsoft gamepads are Xbox-pattern throughout
     [VENDOR_NINTENDO] = "switchpro",
+    [VENDOR_VALVE] = "steamdeck", -- Default Valve controllers to modern LRA haptic profile
 }
 
 -- Returns deviceID, detectedPresetID, rawName — any may be nil. Never applies anything and

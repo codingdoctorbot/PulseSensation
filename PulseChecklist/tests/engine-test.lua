@@ -232,23 +232,72 @@ check("inverted schema maps high to Low channel", invHigh and invHigh.channel, "
 
 check("8bitdo preset registered", type(Pulse.Devices["8bitdo"]), "table")
 check("xbox_elite preset registered", type(Pulse.Devices.xbox_elite), "table")
+check("steamdeck preset registered", type(Pulse.Devices.steamdeck), "table")
+check("steamcontroller2 preset registered", type(Pulse.Devices.steamcontroller2), "table")
+check("steamcontroller preset registered", type(Pulse.Devices.steamcontroller), "table")
 
-local mockRawName = nil
+check("steamdeck low gain", Pulse.Devices.steamdeck.channels.Low.gain, 1.20)
+check("steamdeck low floor", Pulse.Devices.steamdeck.channels.Low.floor, 0.050)
+check("steamcontroller2 low floor", Pulse.Devices.steamcontroller2.channels.Low.floor, 0.035)
+check("steamcontroller low floor", Pulse.Devices.steamcontroller.channels.Low.floor, 0.060)
+
+local mockRawState = {}
 C_GamePad.GetDeviceRawState = function(_)
-    return { name = mockRawName }
+    return mockRawState
 end
 
-mockRawName = "8BitDo Ultimate Wireless Controller"
+mockRawState = { name = "8BitDo Ultimate Wireless Controller" }
 local _, d1 = Pulse.DetectDevice()
 check("detect 8bitdo controller", d1, "8bitdo")
 
-mockRawName = "Xbox Elite Wireless Controller"
+mockRawState = { name = "Xbox Elite Wireless Controller" }
 local _, d2 = Pulse.DetectDevice()
 check("detect xbox elite controller", d2, "xbox_elite")
 
-mockRawName = "Wireless Controller"
+mockRawState = { name = "Wireless Controller" }
 local _, d3 = Pulse.DetectDevice()
 check("detect wireless controller fallback", d3, "dualsense")
+
+mockRawState = { name = "Steam Deck Controller" }
+local _, dDeck = Pulse.DetectDevice()
+check("detect steam deck name", dDeck, "steamdeck")
+
+mockRawState = { name = "Steam Virtual Gamepad" }
+local _, dVirt = Pulse.DetectDevice()
+check("detect steam virtual gamepad name", dVirt, "steamdeck")
+
+mockRawState = { name = "Steam Controller 2" }
+local _, dSC2 = Pulse.DetectDevice()
+check("detect steam controller 2 name", dSC2, "steamcontroller2")
+
+mockRawState = { name = "Steam Controller" }
+local _, dSC1 = Pulse.DetectDevice()
+check("detect steam controller v1 name", dSC1, "steamcontroller")
+
+-- PID detection tests
+mockRawState = { vendorID = 0x28DE, productID = 0x1102 }
+local _, dPID_SC1 = Pulse.DetectDevice()
+check("detect steam controller v1 wired PID", dPID_SC1, "steamcontroller")
+
+mockRawState = { vendorID = 0x28DE, productID = 0x1142 }
+local _, dPID_SC1_Dongle = Pulse.DetectDevice()
+check("detect steam controller v1 dongle PID", dPID_SC1_Dongle, "steamcontroller")
+
+mockRawState = { vendorID = 0x28DE, productID = 0x11FF }
+local _, dPID_Virt = Pulse.DetectDevice()
+check("detect steam virtual gamepad PID", dPID_Virt, "steamdeck")
+
+mockRawState = { vendorID = 0x28DE, productID = 0x1201 }
+local _, dPID_SC2 = Pulse.DetectDevice()
+check("detect steam controller 2 wired PID", dPID_SC2, "steamcontroller2")
+
+mockRawState = { vendorID = 0x28DE, productID = 0x1205 }
+local _, dPID_Deck = Pulse.DetectDevice()
+check("detect steam deck internal PID", dPID_Deck, "steamdeck")
+
+mockRawState = { vendorID = 0x28DE, productID = 0x9999 }
+local _, dPID_Fallback = Pulse.DetectDevice()
+check("detect unknown valve vendor fallback", dPID_Fallback, "steamdeck")
 
 -- ── Active Ramp Tracking & Set Floor capture ─────────────────────────────────
 
