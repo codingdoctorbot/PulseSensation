@@ -881,6 +881,10 @@ function Spec.BuildProfilesPage()
         end,
     }
 
+    local function customProfileActive()
+        return not store:IsBuiltinProfile(store:GetActiveProfileName())
+    end
+
     rows[#rows + 1] = {
         kind = "button",
         label = "Rename this profile",
@@ -893,6 +897,7 @@ function Spec.BuildProfilesPage()
                 report(store:RenameProfile(name, value))
             end)
         end,
+        enabledWhen = customProfileActive,
     }
 
     rows[#rows + 1] = {
@@ -907,6 +912,7 @@ function Spec.BuildProfilesPage()
                 report(store:DeleteProfile(name))
             end)
         end,
+        enabledWhen = customProfileActive,
     }
 
     rows[#rows + 1] = {

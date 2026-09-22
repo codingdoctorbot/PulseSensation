@@ -403,8 +403,17 @@ function strtrim(s)
     return (tostring(s or ""):gsub("^%s+", ""):gsub("%s+$", ""))
 end
 function strsplit(sep, str, limit)
+    local s = tostring(str or "")
+    if limit and limit == 2 then
+        local pos = s:find(sep, 1, true)
+        if pos then
+            return s:sub(1, pos - 1), s:sub(pos + #sep)
+        else
+            return s
+        end
+    end
     local out = {}
-    for part in tostring(str):gmatch("[^" .. sep .. "]+") do
+    for part in s:gmatch("[^" .. sep .. "]+") do
         out[#out + 1] = part
     end
     return unpack(out)
@@ -1048,6 +1057,41 @@ do
     check("pvp active", db:GetActiveProfileName(), "PvP")
     check("pvp has lossOfControlStart", db:GetCue("lossOfControlStart"), true)
     check("pvp silences lootGold", db:GetCue("lootGold"), false)
+
+    -- Slash command /pulse profile
+    local slash = SlashCmdList["PULSE"]
+    check("slash command PULSE exists", type(slash), "function")
+    slash("profile")
+    slash("profile Tank")
+    check("slash profile Tank switches to Dungeon: Tank", db:GetActiveProfileName(), "Dungeon: Tank")
+    slash("profile nonexistent_profile_xyz")
+    check("slash profile nonexistent leaves current profile untouched", db:GetActiveProfileName(), "Dungeon: Tank")
+    slash("profile Immersion: Caster")
+    check("slash profile exact name matches", db:GetActiveProfileName(), "Immersion: Caster")
+
+    -- Profiles page Rename/Delete disabled for built-ins
+    local profilesPage = nil
+    for _, p in ipairs(Pulse.UI.Panel.Spec.BuildPages()) do
+        if p.id == "profiles" then
+            profilesPage = p
+            break
+        end
+    end
+    check("profiles page exists", type(profilesPage), "table")
+    local profRows = profilesPage.build()
+    local renameRow, deleteRow = nil, nil
+    for _, r in ipairs(profRows) do
+        if r.label == "Rename this profile" then
+            renameRow = r
+        end
+        if r.label == "Delete this profile" then
+            deleteRow = r
+        end
+    end
+    check("rename button found", type(renameRow), "table")
+    check("delete button found", type(deleteRow), "table")
+    check("rename disabled when built-in active", renameRow.enabledWhen(), false)
+    check("delete disabled when built-in active", deleteRow.enabledWhen(), false)
 end
 
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))

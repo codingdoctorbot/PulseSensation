@@ -436,6 +436,48 @@ local function slashHandler(message)
         return
     end
 
+    if command == "profile" then
+        local target = strtrim(rest or "")
+        local db = Pulse.Database
+        if not db then
+            return
+        end
+
+        local names = db:GetProfileNames()
+
+        if target == "" then
+            local _, activeName, why = db:GetProfileResolution()
+            print(('Pulse: active profile is "%s" (%s)'):format(activeName or "Default", why or "in force"))
+            return
+        end
+
+        local matchName = nil
+        local lowerTarget = string.lower(target)
+        for _, name in ipairs(names) do
+            if string.lower(name) == lowerTarget then
+                matchName = name
+                break
+            end
+        end
+
+        if not matchName then
+            for _, name in ipairs(names) do
+                if string.lower(name):find(lowerTarget, 1, true) then
+                    matchName = name
+                    break
+                end
+            end
+        end
+
+        if matchName then
+            db:SetActiveProfileName(matchName)
+            print(('Pulse: switched to profile "%s"'):format(matchName))
+        else
+            print(('Pulse: no profile matching "%s". Available: %s'):format(target, table.concat(names, ", ")))
+        end
+        return
+    end
+
     -- Bare /pulse, and /pulse ui, both land on the window.
     Panel.Toggle()
 end
