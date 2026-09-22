@@ -330,8 +330,8 @@ local function castTick()
         end
     elseif isChanneling then
         local hum = Pulse.Database:GetTriggerSetting("castTexture", "channelHum", 0.2)
-        local flutter = math.sin(GetTime() * 10) * 0.01
-        Pulse:HoldIfEnabled("castTexture", presence, hum + flutter)
+        local value = Pulse.Haptics.MicroFlutter(hum)
+        Pulse:HoldIfEnabled("castTexture", presence, value)
     end
 end
 

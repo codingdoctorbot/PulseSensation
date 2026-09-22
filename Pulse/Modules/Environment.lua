@@ -236,16 +236,19 @@ local function weatherTick()
     elseif currentWeatherType == 2 then
         -- Snow: gentle crystalline drift
         local drift = Pulse.Waves.Sine(0.02 * intensity, 0.1, 0.2)
+        drift = Pulse.Haptics.MicroFlutter(drift)
         staticWeatherRole.low = 0
         staticWeatherRole.high = drift
     elseif currentWeatherType == 3 then
         -- Sandstorm: heavy abrasive gusts on both motors
         local gust = Pulse.Waves.Sine(0.06 * intensity, 0.25, 0.5)
+        gust = Pulse.Haptics.MicroFlutter(gust)
         staticWeatherRole.low = gust
         staticWeatherRole.high = gust * 0.7
     else
         -- Miscellaneous / atmospheric wind rumble
         local wind = Pulse.Waves.Sine(0.03 * intensity, 0.2, 0.3)
+        wind = Pulse.Haptics.MicroFlutter(wind)
         staticWeatherRole.low = wind
         staticWeatherRole.high = 0
     end

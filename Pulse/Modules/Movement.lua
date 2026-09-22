@@ -49,7 +49,7 @@ hooksecurefunc("JumpOrAscendStart", function()
     Pulse:FireIfEnabled("jumped")
 end)
 
-local function pollLandingAndSwim()
+local function pollLandingAndSwim(_, elapsed)
     local falling, flying = IsFalling(), IsFlying()
 
     -- A fall not started by a jump — walked off a ledge, knocked back, dismounted mid-air
@@ -155,11 +155,16 @@ local function pollLandingAndSwim()
                 -- Raw GetUnitSpeed updates in coarse jumps; this absorbs them into a slide.
                 -- The fresh-entry snap is kept: without it, relogging mid-swim at speed
                 -- would fade in from a stale zero over the smoothing window instead of
-                -- matching what the player is actually doing.
+                -- matching what the player is actually doing. Frame-rate independent (tau = 0.075s).
                 if smoothedSwimRatio <= 0 and targetRatio > 0 then
                     smoothedSwimRatio = targetRatio
                 else
-                    smoothedSwimRatio = smoothedSwimRatio + (targetRatio - smoothedSwimRatio) * 0.2
+                    local dt = elapsed or 0.016
+                    if dt > 0.25 then
+                        dt = 0.25
+                    end
+                    local alpha = 1.0 - math.exp(-dt / 0.075)
+                    smoothedSwimRatio = smoothedSwimRatio + (targetRatio - smoothedSwimRatio) * alpha
                 end
                 local ratio = smoothedSwimRatio
 
@@ -241,13 +246,15 @@ local taxiToken = 0
 -- continuous.md §2: a sine oscillator rather than one flat value. Sustained constant
 -- vibration fades from perception within a second or two, so a slow wingbeat-like
 -- undulation reads as alive over a multi-minute flight where a flat drone goes numb.
+-- Standardized onto Pulse.Waves.Sine and kept alive across crests with MicroFlutter.
 local function taxiTick()
     if onTaxiRide then
         local amplitude = Pulse.Database:GetTriggerSetting("taxiRide", "windAmplitude", 0.1)
         local cycleSeconds = Pulse.Database:GetTriggerSetting("taxiRide", "waveCycleSeconds", 1.75)
-        local phase = (GetTime() % cycleSeconds) / cycleSeconds
-        local wave = (math.sin(phase * 2 * math.pi) + 1) / 2 -- 0..1
-        local value = amplitude * (0.5 + 0.5 * wave) -- never fully hits 0
+        local frequency = (cycleSeconds > 0) and (1.0 / cycleSeconds) or 0.57
+        -- Oscillates ±33% around a 0.75 baseline (range: 0.5 * amp .. 1.0 * amp)
+        local value = Pulse.Waves.Sine(amplitude * 0.75, frequency, 0.33)
+        value = Pulse.Haptics.MicroFlutter(value)
         Pulse:HoldIfEnabled("taxiRide", value, value)
     end
 end
