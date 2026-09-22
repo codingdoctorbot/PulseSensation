@@ -50,16 +50,11 @@ production polish.
 | **PulseChecklist** | QA tracking checklist for Pulse's cues. Read-only against Pulse (via the `_G.Pulse` handle), own window, own SavedVariables, `/pulsecheck` or `/pcheck`. |
 | **PulseDebug** | Troubleshooting companion for Pulse. Not shipped alongside it, not a second copy of its logic. |
 
-See [`Featurelist.md`](Featurelist.md) for the full breakdown of modes, triggers,
-and settings, and [`AOngoingFeatureDocs/`](AOngoingFeatureDocs) for API notes and
-in-flight/alpha feature docs.
-
 ## Status
 
 Alpha (`0.1.0-alpha`), targeting Interface `120100` (Patch 12.1.0). Built and
-iterated on with Claude Code across sessions — see [`handoff.md`](handoff.md) for
-the running log of what's shipped, what's tested in-game vs. `luac -p` clean only,
-and what's still open.
+iterated on with Claude Code across sessions. Some cues are confirmed working
+in-game; others are only `luac -p` clean so far.
 
 ## Installation
 
