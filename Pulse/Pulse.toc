@@ -1,0 +1,117 @@
+## Interface: 120100
+## Title: Pulse
+## Notes: Immersive controller vibration — movement, environment, and combat texture.
+## Version: 0.1.0-alpha
+## SavedVariables: PulseDB
+## IconTexture: Interface\Icons\Spell_Nature_HealingWaveGreater
+
+# Vibe-coded, non-commercial hobby project, written with Claude Code (Anthropic) rather
+# than hand-authored. Free to reuse, redistribute and share as-is; no warranty, no support,
+# expect rough edges rather than production polish.
+
+# 120100 (Patch 12.1.0) CONFIRMED as this account's live client build via
+# /dump select(4, GetBuildInfo()) — no longer the placeholder 12.0 floor. Re-check before
+# packaging for a client on a different build.
+
+
+
+
+Core/Init.lua
+Core/Database.lua
+Core/Modes.lua
+
+# Physical motor characteristics, one row per output channel. Before the schemas and the
+# engine because both read it: schemas route a role to a channel, Devices says how that
+# channel has to be driven.
+Core/Devices.lua
+
+# Signal-shaping helpers for continuous cues: Sine, Harmonic, MicroFlutter. Pure maths, no
+# engine contact. Consumed by Modules/Movement.lua and Modules/PlayerState.lua.
+Core/Waves.lua
+
+Core/Schemas/Standard.lua
+Core/Schemas/HighOnly.lua
+Core/Schemas/LowOnly.lua
+Core/Schemas/RumbleAndTriggers.lua
+Core/Schemas/TriggerEmphasis.lua
+Core/Engine.lua
+
+# Classifies the player's own spell activity into semantic outcomes (instant vs. completed
+# cast vs. channel, and the crafting lifecycle). A core service, not a module: it emits
+# classifications, Modules/Casting.lua decides which are worth feeling.
+Core/CastActivity.lua
+
+Core/Registry.lua
+Core/Guide.lua
+Modules/Movement.lua
+Modules/Flight.lua
+Modules/Combat.lua
+Modules/Environment.lua
+Modules/World.lua
+Modules/Encounter.lua
+Modules/Health.lua
+
+# Added 2026-09-21. Casting consumes Core/CastActivity.lua; Locomotion is the reduced gait
+# texture; PlayerState holds three small cues that needed a home.
+Modules/Casting.lua
+Modules/Locomotion.lua
+Modules/PlayerState.lua
+
+# Added 2026-09-22. The craft texture: a bed for the length of a craft with the
+# profession's own rhythm struck over it. After Modules/Combat.lua's castTexture, which
+# asks it whether to stand down.
+Modules/Crafting.lua
+
+# Every NPC and world interaction window through one event pair, keyed on
+# Enum.PlayerInteractionType. After the Alert group because it fires cues that group
+# declares; both paths can fire and FireIfEnabled's per-cue throttle merges them.
+Modules/Interaction.lua
+
+# Accessibility cues ported from Tremor, the proof-of-concept addon that preceded Pulse.
+# Grouped here the same as the separate ALERT_* categories in Core/Registry.lua, so the
+# import stays easy to tell apart from Pulse's own native modules above.
+Modules/AlertGeneric.lua
+Modules/AlertLossOfControl.lua
+Modules/AlertThreat.lua
+Modules/AlertUnitWatch.lua
+Modules/AlertSocial.lua
+Modules/AlertWorld.lua
+Modules/AlertDevice.lua
+Modules/AlertExperimental.lua
+
+# WoW Forever's native gamepad interface, observed through Blizzard's own SmartNavigation
+# and radial callbacks. Position after the Alert group is arbitrary — it depends on nothing
+# from it.
+Modules/ControllerUI.lua
+
+# The Pulse entry in Blizzard's AddOns settings list. A welcome page with a button on it —
+# every control it used to register now lives in UI/Panel/ below.
+UI/Settings.lua
+
+# Pulse's own settings window. The settings UI as of 2026-09-22, not an alternative to one:
+# all 764 controls live here, generated from the same Core/Registry.lua tables, writing the
+# same Pulse.Database keys, with the same labels, tooltips and ranges.
+#
+# Not a reskin — a different lifecycle. The Blizzard Settings framework registered every
+# one of those controls at login and rendered them through a recycling ScrollBox, which is
+# where the client crashed on closing the panel with a gamepad live. This tree builds a
+# page's rows the first time that page is opened, never recycles them, and scrolls a plain
+# ScrollFrame. Nothing here touches Core/ or Modules/.
+#
+# Load order is dependency order: Theme holds the geometry everything measures against,
+# Rows builds widgets, Sidebar and Gamepad are independent of each other, Content consumes
+# Rows, Spec declares the content as data, Panel assembles the window from all of them.
+UI/Panel/Theme.lua
+
+# Pulse's own dropdown list and dialogs. Not a style choice: opening a Blizzard menu or a
+# StaticPopup from an addon's stack ends at a protected binding call, which the client
+# refuses and which froze the game for ~30 seconds when the resulting dialog was ignored.
+# Before Rows, which builds its dropdowns against it.
+UI/Panel/Popup.lua
+
+UI/Panel/Rows.lua
+UI/Panel/Sidebar.lua
+UI/Panel/Gamepad.lua
+UI/Panel/Content.lua
+UI/Panel/Spec.lua
+UI/Panel/Panel.lua
