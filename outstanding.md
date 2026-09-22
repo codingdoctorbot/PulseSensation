@@ -117,3 +117,13 @@ On macOS and Windows, Blizzard's embedded SDL gamepad subsystem accepts bare cst
 Pulse cleanly handles this via `Core/Engine.lua`'s `ROLE_FALLBACK` (`ltrigger -> low`, `rtrigger -> high`),
 ensuring trigger cues are felt as rumble on standard hardware. If Blizzard enhances SDL trigger
 haptic bindings in future client revisions, the infrastructure is already fully in place.
+
+---
+
+## 11. Elimination of callback execution taint on GamePad deactivation — FIXED
+Resolved in commits `1142c11` and `43db5af`:
+- **Root Cause**: When Gamepad Mode was disabled (or `/console GamePadEnable 0`), Blizzard executed `SmartNavigationMixin:UninitializeGamepad()`. Inside this method, `self:HideCursor()` calls `self:SelectButton(nil)`, triggering `SelectedButtonUpdated`. Pulse's registered callback executed inside Blizzard's stack frame, tainting the execution context right before Blizzard called `GamepadMode.DeactivateBindingGroup()`, a protected C function, triggering `ADDON_ACTION_BLOCKED`.
+- **Solution**: Removed all callback registrations on Blizzard mixin/event registries (`SmartNavigation.RegisterCallback`, `GroupTargeting.RegisterCallback`, `EventRegistry.RegisterCallback`) for navigation, radial open/close, major UI panels, and group targeting.
+- **Unified Passive Polling**: Transitioned to an ultra-lightweight 20Hz (`0.05s`) read-only poll (`uiPollFrame`) in `Modules/ControllerUI.lua` that checks `SmartNavigation.currentButton`, `GamepadRadial:IsShown()`, `GetUIPanel`, and `GroupTargeting.isTargetingActive`.
+- **Edge Detection**: Directional edge callbacks (`HitTopEdge`, `HitBottomEdge`, `HitLeftEdge`, `HitRightEdge`) were safely preserved since Blizzard only fires them during active user stick navigation and never during shutdown or panel close paths.
+
