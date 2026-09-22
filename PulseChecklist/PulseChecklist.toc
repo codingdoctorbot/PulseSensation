@@ -1,0 +1,15 @@
+## Interface: 120100
+## Title: PulseChecklist
+## Notes: QA tracking checklist for Pulse's cues — separate from Pulse and PulseDebug.
+## Version: 0.1.0-alpha
+## Dependencies: Pulse
+## SavedVariables: PulseChecklistDB
+## IconTexture: Interface\Icons\INV_Misc_Note_01
+
+# Not integrated into Pulse or PulseDebug — no file in either is touched by this addon.
+# Reaches Pulse the same read-only way PulseDebug already does, through the _G.Pulse
+# handle Core/Init.lua exposes for exactly this purpose (Registry/Triggers only, never
+# writes anything back). Own SavedVariables table, own standalone window, own slash
+# command — /pulsecheck (or /pcheck) toggles it, not tucked into Interface Options.
+
+Checklist.lua

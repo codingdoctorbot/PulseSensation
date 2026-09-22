@@ -1,0 +1,8 @@
+## Interface: 120100
+## Title: PulseDebug
+## Notes: Troubleshooting companion for Pulse. Not shipped, not a second copy.
+## Version: 0.1.0-alpha
+## Dependencies: Pulse
+## IconTexture: Interface\Icons\INV_Misc_Wrench_01
+
+Debug.lua
