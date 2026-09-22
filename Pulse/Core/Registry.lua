@@ -2206,7 +2206,7 @@ Pulse.Triggers = {
 		defaultIntensity = 0.5,
 		label = "UI navigation hit an edge",
 		desc = "A short, sharp tick when controller focus runs into the edge of a list or grid and can't go further.",
-		caveat = "Dormant: SmartNavigation edge callbacks were retired to eliminate client execution taint when gamepad mode is toggled. Retained in registry for future native engine support.",
+		caveat = "One cue for all four edges (top, bottom, left, right), observed via SmartNavigation's directional edge callbacks while keeping button selection isolated via polling to prevent execution taint. Most useful in grids like bags.",
 	},
 	{
 		id = "uiSelectionDisabled",

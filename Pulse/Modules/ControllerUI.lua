@@ -94,6 +94,54 @@ local function navButtonEnabled(button)
 	return true
 end
 
+-- ── SmartNavigation Edge Detection ────────────────────────────────────────────
+--
+-- Edge events (HitTopEdge, HitBottomEdge, HitLeftEdge, HitRightEdge) only fire during active
+-- directional stick navigation when there is no neighboring element to move to. Unlike
+-- SelectedButtonUpdated, these never fire during UninitializeGamepad() or panel hide paths,
+-- making them safe to observe directly without causing execution taint on GamePad deactivation.
+
+local EDGE_EVENTS = {
+	"HitTopEdge",
+	"HitBottomEdge",
+	"HitLeftEdge",
+	"HitRightEdge",
+}
+local EDGE_OWNER = {}
+local edgeRegistered = false
+
+local function onEdge()
+	if not gamepadUIActive() then
+		return
+	end
+	Pulse:FireIfEnabled("uiNavigateEdge")
+end
+
+local function syncEdge()
+	local wanted = Pulse.Database:Get("masterEnabled")
+			and Pulse.Database:GetCue("controllerUIMaster")
+			and Pulse.Database:GetCue("uiNavigateEdge")
+		or false
+
+	if wanted == edgeRegistered then
+		return
+	end
+	if not SmartNavigation or type(SmartNavigation.RegisterCallback) ~= "function" then
+		return
+	end
+
+	if wanted then
+		for _, event in ipairs(EDGE_EVENTS) do
+			pcall(SmartNavigation.RegisterCallback, SmartNavigation, event, onEdge, EDGE_OWNER)
+		end
+	else
+		for _, event in ipairs(EDGE_EVENTS) do
+			pcall(SmartNavigation.UnregisterCallback, SmartNavigation, event, EDGE_OWNER)
+		end
+	end
+	edgeRegistered = wanted
+end
+
 -- ── Major UI Panels Inspection ────────────────────────────────────────────────
 
 local PANEL_AREAS = { "left", "center", "right", "doublewide", "fullscreen" }
@@ -249,7 +297,6 @@ end
 
 local UI_POLL_CUES = {
 	"uiNavigate",
-	"uiNavigateEdge",
 	"uiSelectionDisabled",
 	"uiFocusIn",
 	"uiFocusOut",
@@ -492,6 +539,7 @@ function M:OnEnable()
 		pollBinds[#pollBinds + 1] = id
 	end
 	Pulse:BindFrame(pollBinds, syncUIPoll)
+	Pulse:BindFrame({ "controllerUIMaster", "uiNavigateEdge" }, syncEdge)
 
 	Pulse:BindFrame(INTERACT_CUES, syncInteract)
 	installHooks()
@@ -502,5 +550,6 @@ function M:OnEnable()
 	loader:SetScript("OnEvent", function()
 		installHooks()
 		syncUIPoll()
+		syncEdge()
 	end)
 end
