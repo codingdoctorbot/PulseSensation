@@ -1271,6 +1271,29 @@ function Spec.BuildCalibrationPage()
         }
     end
 
+    rows[#rows + 1] = { kind = "header", label = "Routing & Schema" }
+
+    rows[#rows + 1] = {
+        kind = "dropdown",
+        label = "Vibration schema",
+        tooltip = "Which physical motors each trigger drives. Start with Standard Rumble or Rumble + Triggers, then calibrate the motors below.",
+        options = function()
+            local options = {}
+            for _, schema in ipairs(Pulse.Registry:GetSchemaOptions()) do
+                options[#options + 1] = { value = schema.id, label = schema.label, tooltip = schema.desc }
+            end
+            return options
+        end,
+        get = function()
+            return store:Get("defaultHapticSchema")
+        end,
+        set = function(value)
+            store:Set("defaultHapticSchema", value)
+        end,
+    }
+
+    rows[#rows + 1] = { kind = "header", label = "Hardware & Presets" }
+
     -- Picking from the dropdown only remembers the choice; Apply writes the values. A
     -- preset overwrites trimming you may have spent a while on, so it must never happen as
     -- a side effect of browsing the list.
@@ -1299,24 +1322,41 @@ function Spec.BuildCalibrationPage()
         end,
     }
 
+    rows[#rows + 1] = {
+        kind = "text",
+        child = true,
+        font = "GameFontDisableSmall",
+        gap = 8,
+        body = function()
+            local id = store:GetDevicePreset()
+            local dev = Pulse.Devices[id]
+            if not dev then
+                return ""
+            end
+            local trigText = dev.triggers and "|cff00ff00Supported|r" or "|cff888888None|r"
+            return ("Actuator profile: %s  ·  Triggers: %s\n%s"):format(dev.label or id, trigText, dev.note or "")
+        end,
+    }
+
     rows[#rows + 1] = probeButton(
         "Load its starting values",
         "Apply",
         function()
             local id = store:GetDevicePreset()
             local device = Pulse.Devices[id]
-            confirm(
-                (
-                    'Apply the "%s" starting point? This overwrites every motor\'s strength, '
-                    .. "floor, timing and curve with that controller's values — any trimming you "
-                    .. "have already done is lost."
-                ):format(device and device.label or id),
-                "Apply",
-                function()
-                    local ok, reason = store:ApplyDevicePreset(id)
-                    report(ok, reason or "could not apply that preset")
-                end
-            )
+            local confirmMsg = (
+                'Apply the "%s" starting point? This overwrites every motor\'s strength, '
+                .. "floor, timing and curve with that controller's values — any trimming you "
+                .. "have already done is lost."
+            ):format(device and device.label or id)
+            if device and device.triggers and store:Get("defaultHapticSchema") ~= "rumbleAndTriggers" then
+                confirmMsg = confirmMsg
+                    .. '\n\n|cff4db8ffTip: Since this controller has trigger actuators, consider setting Vibration schema to "Rumble + Triggers" above to route trigger cues to them.|r'
+            end
+            confirm(confirmMsg, "Apply", function()
+                local ok, reason = store:ApplyDevicePreset(id)
+                report(ok, reason or "could not apply that preset")
+            end)
             return true
         end,
         "Overwrite every motor's calibration with the selected controller's starting "
@@ -1394,6 +1434,30 @@ function Spec.BuildCalibrationPage()
                 .. "you FIRST feel anything — that is this motor's breakaway floor. Type it into "
                 .. "the slider below and quiet cues stop disappearing. Pressing Test cancels a "
                 .. "ramp in progress.",
+            true
+        )
+
+        rows[#rows + 1] = probeButton(
+            "Mark floor from ramp",
+            "Set Floor",
+            function()
+                local ramp = Pulse.Engine:GetActiveRamp()
+                if ramp and ramp.channel == channel then
+                    local floorVal = ramp.magnitude
+                    store:SetChannelTuning(channel, "floor", floorVal, 0.0, 0.40)
+                    Pulse.Engine:StopRamp(channel)
+                    print(("Pulse: captured %s breakaway floor at %.3f"):format(channel, floorVal))
+                    return true
+                elseif ramp then
+                    return false, ("a ramp is currently running on " .. ramp.channel .. ", not " .. channel)
+                else
+                    return false,
+                        "no ramp is running on this channel (press Ramp first, then Set Floor when you feel it)"
+                end
+            end,
+            "Captures the active vibration level from a running Ramp sweep and writes it "
+                .. "directly to this motor's Breakaway floor slider below, then stops the ramp. "
+                .. "Press this the moment you first feel the motor move!",
             true
         )
 

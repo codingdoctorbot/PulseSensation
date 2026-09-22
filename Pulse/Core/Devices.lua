@@ -37,15 +37,15 @@ local ADDON_NAME, Pulse = ...
 Pulse.CHANNELS = { "Low", "High", "LTrigger", "RTrigger" }
 
 Pulse.CHANNEL_LABELS = {
-    Low      = "Low motor (heavy rumble)",
-    High     = "High motor (sharp rumble)",
+    Low = "Low motor (heavy rumble)",
+    High = "High motor (sharp rumble)",
     LTrigger = "Left trigger",
     RTrigger = "Right trigger",
 }
 
 Pulse.CHANNEL_CONFIRMED = {
-    Low      = true,
-    High     = true,
+    Low = true,
+    High = true,
     LTrigger = false,
     RTrigger = false,
 }
@@ -72,26 +72,56 @@ Pulse.CHANNEL_CONFIRMED = {
 -- spin up and coast down than the high motor's small one — so the two rows wanting
 -- different taus is expected, not a bug. That is what the calibration page is for.
 Pulse.CHANNEL_DEFAULTS = {
-    gain       = 1.0,
-    gamma      = 1.0,
-    floor      = 0.0,
-    attackTau  = 0.075,
+    gain = 1.0,
+    gamma = 1.0,
+    floor = 0.0,
+    attackTau = 0.075,
     releaseTau = 0.028,
 }
 
 -- Drives the calibration page generically, same discipline as Registry.lua's `tunables`:
 -- adding a knob here adds its slider with no UI file edit.
 Pulse.CHANNEL_TUNABLES = {
-    { key = "gain", label = "Strength", min = 0.0, max = 2.0, step = 0.05,
-      desc = "Balances this motor against the others. Raise it if this motor is the weak one on your controller, lower it if it drowns everything else out. This is the knob the old \"Low Motor Only\"/\"High Motor Only\" schemas were being misused for — those still exist, but for a motor that is actually dead, not merely quieter." },
-    { key = "floor", label = "Breakaway floor", min = 0.0, max = 0.40, step = 0.005,
-      desc = "The smallest value that makes this motor actually spin. Anything above zero is remapped into the range above this floor, so a quiet cue still moves the mass instead of dying silently. Zero input still means completely off. Use \"Ramp\" below to find your controller's real figure." },
-    { key = "attackTau", label = "Attack time (s)", min = 0.005, max = 0.30, step = 0.005,
-      desc = "How long this motor takes to reach a new, stronger level. Higher is softer and more gradual; lower is snappier. 0.075 reproduces the engine's old behaviour at 60fps." },
-    { key = "releaseTau", label = "Release time (s)", min = 0.005, max = 0.30, step = 0.005,
-      desc = "How long this motor takes to fall back toward silence. Too high and consecutive taps blur into one buzz; too low and sustained textures sound chopped. 0.028 reproduces the engine's old behaviour at 60fps." },
-    { key = "gamma", label = "Response curve", min = 0.40, max = 2.50, step = 0.05,
-      desc = "Bends the relationship between what a cue asks for and what the motor is told. Below 1.0 makes quiet cues louder; above 1.0 makes them quieter and reserves more of the range for strong ones. 1.0 is the unbent default." },
+    {
+        key = "gain",
+        label = "Strength",
+        min = 0.0,
+        max = 2.0,
+        step = 0.05,
+        desc = 'Balances this motor against the others. Raise it if this motor is the weak one on your controller, lower it if it drowns everything else out. This is the knob the old "Low Motor Only"/"High Motor Only" schemas were being misused for — those still exist, but for a motor that is actually dead, not merely quieter.',
+    },
+    {
+        key = "floor",
+        label = "Breakaway floor",
+        min = 0.0,
+        max = 0.40,
+        step = 0.005,
+        desc = 'The smallest value that makes this motor actually spin. Anything above zero is remapped into the range above this floor, so a quiet cue still moves the mass instead of dying silently. Zero input still means completely off. Use "Ramp" below to find your controller\'s real figure.',
+    },
+    {
+        key = "attackTau",
+        label = "Attack time (s)",
+        min = 0.005,
+        max = 0.30,
+        step = 0.005,
+        desc = "How long this motor takes to reach a new, stronger level. Higher is softer and more gradual; lower is snappier. 0.075 reproduces the engine's old behaviour at 60fps.",
+    },
+    {
+        key = "releaseTau",
+        label = "Release time (s)",
+        min = 0.005,
+        max = 0.30,
+        step = 0.005,
+        desc = "How long this motor takes to fall back toward silence. Too high and consecutive taps blur into one buzz; too low and sustained textures sound chopped. 0.028 reproduces the engine's old behaviour at 60fps.",
+    },
+    {
+        key = "gamma",
+        label = "Response curve",
+        min = 0.40,
+        max = 2.50,
+        step = 0.05,
+        desc = "Bends the relationship between what a cue asks for and what the motor is told. Below 1.0 makes quiet cues louder; above 1.0 makes them quieter and reserves more of the range for strong ones. 1.0 is the unbent default.",
+    },
 }
 
 -- Shape of the Ramp probe on the calibration page (Core/Engine.lua drives it).
@@ -107,8 +137,8 @@ Pulse.CHANNEL_TUNABLES = {
 --
 -- 40 steps at 0.4s is about sixteen seconds. Long for a button, trivial for something
 -- pressed once per controller.
-Pulse.RAMP_PEAK         = 0.40
-Pulse.RAMP_STEP         = 0.01
+Pulse.RAMP_PEAK = 0.40
+Pulse.RAMP_STEP = 0.01
 Pulse.RAMP_STEP_SECONDS = 0.4
 
 -- Anti-spam threshold: how far a channel has to move before it is worth another
@@ -144,41 +174,61 @@ Pulse.CHANGE_EPSILON_DEFAULT = 0.0015
 -- accepted channel names are client-side and not discoverable from the source archive.
 -- Treat the field as "worth trying the Test button", not as a guarantee.
 
-local ERM_LOW  = { floor = 0.12, attackTau = 0.090, releaseTau = 0.060 }
+local ERM_LOW = { floor = 0.12, attackTau = 0.090, releaseTau = 0.060 }
 local ERM_HIGH = { floor = 0.10, attackTau = 0.050, releaseTau = 0.035 }
-local LRA      = { floor = 0.04, attackTau = 0.020, releaseTau = 0.015 }
+local LRA = { floor = 0.04, attackTau = 0.020, releaseTau = 0.015 }
 
 local function copy(src, extra)
     local t = {}
-    for k, v in pairs(src) do t[k] = v end
-    if extra then for k, v in pairs(extra) do t[k] = v end end
+    for k, v in pairs(src) do
+        t[k] = v
+    end
+    if extra then
+        for k, v in pairs(extra) do
+            t[k] = v
+        end
+    end
     return t
 end
 
 Pulse.DEVICE_ORDER = {
-    "default", "ds4", "dualsense", "xbox", "switchpro", "steamdeck", "steamcontroller2",
+    "default",
+    "ds4",
+    "dualsense",
+    "xbox",
+    "xbox_elite",
+    "switchpro",
+    "8bitdo",
+    "steamdeck",
+    "steamcontroller2",
 }
 
 Pulse.Devices = {
     -- The no-op row. Identical to CHANNEL_DEFAULTS, so selecting it is the same as pressing
     -- Reset calibration: whatever the engine did before this layer existed.
     default = {
-        id = "default", label = "Generic / unknown", triggers = false,
+        id = "default",
+        label = "Generic / unknown",
+        triggers = false,
         note = "No assumptions. Every value is the engine's own default. Use this if your controller is not listed, then Ramp each motor.",
         channels = {},
     },
 
     ds4 = {
-        id = "ds4", label = "DualShock 4 (PS4)", triggers = false,
+        id = "ds4",
+        label = "DualShock 4 (PS4)",
+        triggers = false,
         note = "Two ERM motors, large and small. No trigger actuators — the L2/R2 triggers on a DS4 are analogue inputs only.",
         channels = { Low = copy(ERM_LOW), High = copy(ERM_HIGH) },
     },
 
     dualsense = {
-        id = "dualsense", label = "DualSense (PS5)", triggers = true,
+        id = "dualsense",
+        label = "DualSense (PS5)",
+        triggers = true,
         note = "Voice-coil main actuators: quick, linear, low threshold. Trigger vibration is reported to work on this controller — the adaptive trigger assembly can be driven as a vibration source, not only as force-feedback resistance. Unverified here, and the trigger numbers are the least-founded in this table.",
         channels = {
-            Low  = copy(LRA),
+            Low = copy(LRA),
             High = copy(LRA),
             -- Least-founded row in the file, deliberately conservative. The adaptive
             -- trigger is a geared motor assembly rather than a bare voice coil, so it
@@ -191,33 +241,65 @@ Pulse.Devices = {
     },
 
     xbox = {
-        id = "xbox", label = "Xbox (One / Series)", triggers = true,
+        id = "xbox",
+        label = "Xbox (One / Series)",
+        triggers = true,
         note = "Two ERM main motors plus a small impulse motor in each trigger — the one listed controller where trigger vibration genuinely exists. The trigger motors are tiny, so they start seeded louder and higher-floored than the main pair.",
         channels = {
-            Low      = copy(ERM_LOW),
-            High     = copy(ERM_HIGH),
+            Low = copy(ERM_LOW),
+            High = copy(ERM_HIGH),
             LTrigger = { floor = 0.15, gain = 1.20, attackTau = 0.040, releaseTau = 0.030 },
             RTrigger = { floor = 0.15, gain = 1.20, attackTau = 0.040, releaseTau = 0.030 },
         },
     },
 
+    xbox_elite = {
+        id = "xbox_elite",
+        label = "Xbox Elite Series 2",
+        triggers = true,
+        note = "Two heavy ERM body motors plus impulse motors in both triggers. Slightly firmer trigger floor to compensate for weighted trigger stops.",
+        channels = {
+            Low = copy(ERM_LOW),
+            High = copy(ERM_HIGH),
+            LTrigger = { floor = 0.16, gain = 1.25, attackTau = 0.035, releaseTau = 0.028 },
+            RTrigger = { floor = 0.16, gain = 1.25, attackTau = 0.035, releaseTau = 0.028 },
+        },
+    },
+
     switchpro = {
-        id = "switchpro", label = "Switch Pro Controller", triggers = false,
+        id = "switchpro",
+        label = "Switch Pro Controller",
+        triggers = false,
         note = "HD Rumble is a pair of linear actuators. Driven through a generic rumble call rather than Nintendo's own API it tends to read weak, hence the raised strength.",
         channels = {
-            Low  = copy(LRA, { floor = 0.06, gain = 1.20 }),
+            Low = copy(LRA, { floor = 0.06, gain = 1.20 }),
             High = copy(LRA, { floor = 0.06, gain = 1.20 }),
         },
     },
 
+    ["8bitdo"] = {
+        id = "8bitdo",
+        label = "8BitDo (Ultimate / Pro 2)",
+        triggers = false,
+        note = "Asymmetric ERM rumble motors common on Mac and PC. Slightly higher breakaway floor to overcome initial mechanical friction.",
+        channels = {
+            Low = copy(ERM_LOW, { floor = 0.14, attackTau = 0.080, releaseTau = 0.050 }),
+            High = copy(ERM_HIGH, { floor = 0.12, attackTau = 0.045, releaseTau = 0.030 }),
+        },
+    },
+
     steamdeck = {
-        id = "steamdeck", label = "Steam Deck", triggers = false,
+        id = "steamdeck",
+        label = "Steam Deck",
+        triggers = false,
         note = "LRA haptics rather than rumble motors. Fast and low-threshold, and noticeably sharper in character than an ERM pad — expect to want less strength, not more.",
         channels = { Low = copy(LRA), High = copy(LRA) },
     },
 
     steamcontroller2 = {
-        id = "steamcontroller2", label = "Steam Controller 2", triggers = false,
+        id = "steamcontroller2",
+        label = "Steam Controller 2",
+        triggers = false,
         note = "GUESS, and flagged as one. This project has no reliable information about this controller's actuators, so it is seeded as LRA on the assumption Valve stayed with haptics rather than returning to rumble motors. If it feels wrong, it probably is — Ramp it and overwrite these.",
         channels = { Low = copy(LRA), High = copy(LRA) },
     },
@@ -234,31 +316,37 @@ Pulse.Devices = {
 -- Detection only ever SUGGESTS. Nothing applies without the player pressing Apply, so a
 -- wrong guess costs a dropdown selection rather than their calibration.
 local NAME_PATTERNS = {
-    { "dualsense",              "dualsense" },
-    { "ps5",                    "dualsense" },
-    { "dualshock",              "ds4" },
-    { "ps4",                    "ds4" },
-    { "steam deck",             "steamdeck" },
-    { "steam controller",       "steamcontroller2" },
-    { "nintendo",               "switchpro" },
-    { "switch pro",             "switchpro" },
-    { "pro controller",         "switchpro" },
-    { "xbox",                   "xbox" },
-    { "xinput",                 "xbox" },
+    { "dualsense", "dualsense" },
+    { "ps5", "dualsense" },
+    { "dualshock", "ds4" },
+    { "ps4", "ds4" },
+    { "steam deck", "steamdeck" },
+    { "steam controller", "steamcontroller2" },
+    { "nintendo", "switchpro" },
+    { "switch pro", "switchpro" },
+    { "pro controller", "switchpro" },
+    { "elite", "xbox_elite" },
+    { "xbox", "xbox" },
+    { "xinput", "xbox" },
+    { "8bitdo", "8bitdo" },
+    { "sn30", "8bitdo" },
+    { "pro 2", "8bitdo" },
+    { "ultimate", "8bitdo" },
+    { "wireless controller", "dualsense" },
 }
 
 -- USB vendor ids. Well established and unlikely to move.
-local VENDOR_SONY      = 0x054C
+local VENDOR_SONY = 0x054C
 local VENDOR_MICROSOFT = 0x045E
-local VENDOR_NINTENDO  = 0x057E
-local VENDOR_VALVE     = 0x28DE
+local VENDOR_NINTENDO = 0x057E
+local VENDOR_VALVE = 0x28DE
 
 local PRODUCT_MAP = {
     [VENDOR_SONY] = {
-        [0x05C4] = "ds4",        -- DualShock 4 v1
-        [0x09CC] = "ds4",        -- DualShock 4 v2
-        [0x0CE6] = "dualsense",  -- DualSense
-        [0x0DF2] = "dualsense",  -- DualSense Edge
+        [0x05C4] = "ds4", -- DualShock 4 v1
+        [0x09CC] = "ds4", -- DualShock 4 v2
+        [0x0CE6] = "dualsense", -- DualSense
+        [0x0DF2] = "dualsense", -- DualSense Edge
     },
     [VENDOR_NINTENDO] = {
         [0x2009] = "switchpro",
@@ -270,35 +358,51 @@ local PRODUCT_MAP = {
 
 -- Vendor-only fallback, for a product id this table has never heard of.
 local VENDOR_FALLBACK = {
-    [VENDOR_MICROSOFT] = "xbox",   -- Microsoft gamepads are Xbox-pattern throughout
-    [VENDOR_NINTENDO]  = "switchpro",
+    [VENDOR_MICROSOFT] = "xbox", -- Microsoft gamepads are Xbox-pattern throughout
+    [VENDOR_NINTENDO] = "switchpro",
 }
 
 -- Returns deviceID, detectedPresetID, rawName — any may be nil. Never applies anything and
 -- never errors: every read is guarded, because a controller reporting something unexpected
 -- should cost a suggestion, not a Lua error on the settings page.
 function Pulse.DetectDevice()
-    if not C_GamePad or type(C_GamePad.GetActiveDeviceID) ~= "function" then return nil end
+    if not C_GamePad or type(C_GamePad.GetActiveDeviceID) ~= "function" then
+        return nil
+    end
     local okID, deviceID = pcall(C_GamePad.GetActiveDeviceID)
-    if not okID or not deviceID then return nil end
-    if type(C_GamePad.GetDeviceRawState) ~= "function" then return deviceID end
+    if not okID or not deviceID then
+        return nil
+    end
+    if type(C_GamePad.GetDeviceRawState) ~= "function" then
+        return deviceID
+    end
 
     local okState, state = pcall(C_GamePad.GetDeviceRawState, deviceID)
-    if not okState or type(state) ~= "table" then return deviceID end
+    if not okState or type(state) ~= "table" then
+        return deviceID
+    end
 
     local name = state.name
-    if issecretvalue(name) or type(name) ~= "string" then name = nil end
+    if issecretvalue(name) or type(name) ~= "string" then
+        name = nil
+    end
 
     if name then
         local lowered = name:lower()
         for _, entry in ipairs(NAME_PATTERNS) do
-            if lowered:find(entry[1], 1, true) then return deviceID, entry[2], name end
+            if lowered:find(entry[1], 1, true) then
+                return deviceID, entry[2], name
+            end
         end
     end
 
     local vendor, product = state.vendorID, state.productID
-    if issecretvalue(vendor) or type(vendor) ~= "number" then vendor = nil end
-    if issecretvalue(product) or type(product) ~= "number" then product = nil end
+    if issecretvalue(vendor) or type(vendor) ~= "number" then
+        vendor = nil
+    end
+    if issecretvalue(product) or type(product) ~= "number" then
+        product = nil
+    end
 
     if vendor then
         local byProduct = PRODUCT_MAP[vendor]

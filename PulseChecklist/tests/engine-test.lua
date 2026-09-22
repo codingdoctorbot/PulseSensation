@@ -219,4 +219,45 @@ check("TRIGGER_CLICK emits rtrigger role", (lastRoles and lastRoles.rtrigger ~= 
 
 Engine.SetRoles = spySetRoles
 
+-- ── Inverted Schema & Presets ────────────────────────────────────────────────
+
+assert(loadfile(ROOT .. "/Core/Schemas/Inverted.lua"))("Pulse", Pulse)
+
+local inv = Pulse.HapticSchemas.inverted
+check("inverted schema registered", type(inv), "table")
+local invLow = inv.roles and inv.roles.low
+local invHigh = inv.roles and inv.roles.high
+check("inverted schema maps low to High channel", invLow and invLow.channel, "High")
+check("inverted schema maps high to Low channel", invHigh and invHigh.channel, "Low")
+
+check("8bitdo preset registered", type(Pulse.Devices["8bitdo"]), "table")
+check("xbox_elite preset registered", type(Pulse.Devices.xbox_elite), "table")
+
+local mockRawName = nil
+C_GamePad.GetDeviceRawState = function(_)
+    return { name = mockRawName }
+end
+
+mockRawName = "8BitDo Ultimate Wireless Controller"
+local _, d1 = Pulse.DetectDevice()
+check("detect 8bitdo controller", d1, "8bitdo")
+
+mockRawName = "Xbox Elite Wireless Controller"
+local _, d2 = Pulse.DetectDevice()
+check("detect xbox elite controller", d2, "xbox_elite")
+
+mockRawName = "Wireless Controller"
+local _, d3 = Pulse.DetectDevice()
+check("detect wireless controller fallback", d3, "dualsense")
+
+-- ── Active Ramp Tracking & Set Floor capture ─────────────────────────────────
+
+Engine:RampChannel("Low")
+runTimersTo(now + 0.1)
+local activeRamp = Engine:GetActiveRamp()
+check("active ramp tracked", type(activeRamp), "table")
+check("active ramp channel is Low", activeRamp and activeRamp.channel, "Low")
+Engine:StopRamp("Low")
+check("active ramp cleared by StopRamp", Engine:GetActiveRamp(), nil)
+
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))

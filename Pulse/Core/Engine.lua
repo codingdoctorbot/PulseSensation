@@ -145,6 +145,8 @@ function Engine:StopAll()
     -- First, so that anything already scheduled is void before the state it would touch
     -- is cleared.
     engineGeneration = engineGeneration + 1
+    rampToken = (rampToken or 0) + 1
+    self.activeRamp = nil
     layers = {}
     rawHolds = {}
     smoothedByChannel = {}
@@ -564,6 +566,13 @@ function Engine:RampChannel(channel, peak)
                 return
             end
             local magnitude = increment * step
+            self.activeRamp = {
+                channel = channel,
+                magnitude = magnitude,
+                step = step,
+                steps = steps,
+                token = token,
+            }
             -- Held slightly longer than the interval so there is no silent gap between
             -- steps for the mass to coast down through — a gap would read as a pulse train
             -- rather than a climb, and you would feel the gaps instead of the threshold.
@@ -583,10 +592,17 @@ function Engine:RampChannel(channel, peak)
         -- and the whole raw-hold set, so finishing a sixteen-second ramp through it would
         -- cut every live gameplay cue — a swim or glide texture running at the time goes
         -- silent until its next Hold refresh.
+        if self.activeRamp and self.activeRamp.token == token then
+            self.activeRamp = nil
+        end
         Engine:_StopRawChannel(channel)
         print("Pulse: ramp finished. Enter the value you first felt as this channel's Breakaway floor.")
     end)
     return true
+end
+
+function Engine:GetActiveRamp()
+    return self.activeRamp
 end
 
 -- What the calibration page's Test button calls. Distinct from RawChannel because a ramp
@@ -594,6 +610,7 @@ end
 -- its own. Pressing Test during a ramp should stop the ramp, so that lives here.
 function Engine:ProbeChannel(channel, magnitude, duration)
     rampToken = (rampToken or 0) + 1
+    self.activeRamp = nil
     return self:RawChannel(channel, magnitude, duration)
 end
 
@@ -615,6 +632,7 @@ end
 
 function Engine:StopRamp(channel)
     rampToken = (rampToken or 0) + 1
+    self.activeRamp = nil
     if channel then
         self:_StopRawChannel(channel)
     else
