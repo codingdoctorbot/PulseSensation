@@ -219,25 +219,18 @@ Pulse.Devices = {
         id = "ds4",
         label = "DualShock 4 (PS4)",
         triggers = false,
-        note = "Two ERM motors, large and small. No trigger actuators — the L2/R2 triggers on a DS4 are analogue inputs only.",
+        note = "Two asymmetrical ERM motors: heavy low-frequency counterweight on the left (high breakaway, 90ms spin-up) and light high-frequency motor on the right. No trigger actuators — L2/R2 are analogue inputs.",
         channels = { Low = copy(ERM_LOW), High = copy(ERM_HIGH) },
     },
 
     dualsense = {
         id = "dualsense",
         label = "DualSense (PS5)",
-        triggers = true,
-        note = "Voice-coil main actuators: quick, linear, low threshold. Trigger vibration is reported to work on this controller — the adaptive trigger assembly can be driven as a vibration source, not only as force-feedback resistance. Unverified here, and the trigger numbers are the least-founded in this table.",
+        triggers = false,
+        note = "High-definition voice-coil actuators: instantaneous transient response, wide frequency bandwidth, and near-zero breakaway friction. Note: while the hardware has adaptive trigger resistance, Blizzard's SDL gamepad layer does not drive them as vibration sources. Triggers are disabled so Pulse's role fallback seamlessly drives trigger cues through the voice coils.",
         channels = {
-            Low = copy(LRA),
-            High = copy(LRA),
-            -- Least-founded row in the file, deliberately conservative. The adaptive
-            -- trigger is a geared motor assembly rather than a bare voice coil, so it
-            -- plausibly has more friction than the main haptics and less than a classic
-            -- ERM; seeded between the two. A guess with reasoning attached, not a
-            -- measurement — if the trigger Test feels wrong, Ramp it.
-            LTrigger = { floor = 0.08, attackTau = 0.030, releaseTau = 0.025 },
-            RTrigger = { floor = 0.08, attackTau = 0.030, releaseTau = 0.025 },
+            Low = copy(LRA, { floor = 0.030, gain = 1.15, attackTau = 0.015, releaseTau = 0.012 }),
+            High = copy(LRA, { floor = 0.030, gain = 1.05, attackTau = 0.012, releaseTau = 0.010 }),
         },
     },
 
@@ -271,7 +264,7 @@ Pulse.Devices = {
         id = "switchpro",
         label = "Switch Pro Controller",
         triggers = false,
-        note = "HD Rumble is a pair of linear actuators. Driven through a generic rumble call rather than Nintendo's own API it tends to read weak, hence the raised strength.",
+        note = "HD Rumble is a pair of linear resonant actuators. Driven through a generic rumble call rather than Nintendo's own API it tends to read weak, hence the raised strength.",
         channels = {
             Low = copy(LRA, { floor = 0.06, gain = 1.20 }),
             High = copy(LRA, { floor = 0.06, gain = 1.20 }),
@@ -282,7 +275,7 @@ Pulse.Devices = {
         id = "8bitdo",
         label = "8BitDo (Ultimate / Pro 2)",
         triggers = false,
-        note = "Asymmetric ERM rumble motors common on Mac and PC. Slightly higher breakaway floor to overcome initial mechanical friction.",
+        note = "Asymmetric ERM rumble motors common on Mac and PC. Stiffer brushes require a slightly higher breakaway floor to overcome initial mechanical friction.",
         channels = {
             Low = copy(ERM_LOW, { floor = 0.14, attackTau = 0.080, releaseTau = 0.050 }),
             High = copy(ERM_HIGH, { floor = 0.12, attackTau = 0.045, releaseTau = 0.030 }),
@@ -327,9 +320,13 @@ Pulse.Devices = {
 --
 -- C_GamePad.GetDeviceRawState(deviceID) returns a GamePadRawState carrying `name`,
 -- `vendorID` and `productID` (Blizzard_APIDocumentationGenerated/GamePadDocumentation.lua
--- :428-430, read from source). Name matching first: SDL normalises controller names, and a
--- name survives hardware revisions that change a product id. Vendor/product is the
--- fallback, vendor-only the last resort.
+-- :428-430, read from source).
+--
+-- Detection hierarchy:
+-- 1. Hardware Product ID match (vendor + product): unequivocal hardware truth.
+-- 2. Specific name matching: survives firmware revisions that alter product IDs.
+-- 3. Vendor-only fallback: maps unlisted revisions to the vendor's primary actuator family.
+-- 4. Generic OS descriptor fallback: handles ambiguous names like macOS "Wireless Controller".
 --
 -- Detection only ever SUGGESTS. Nothing applies without the player pressing Apply, so a
 -- wrong guess costs a dropdown selection rather than their calibration.
@@ -345,6 +342,7 @@ local NAME_PATTERNS = {
     { "nintendo", "switchpro" },
     { "switch pro", "switchpro" },
     { "pro controller", "switchpro" },
+    { "joy-con", "switchpro" },
     { "elite", "xbox_elite" },
     { "xbox", "xbox" },
     { "xinput", "xbox" },
@@ -352,7 +350,6 @@ local NAME_PATTERNS = {
     { "sn30", "8bitdo" },
     { "pro 2", "8bitdo" },
     { "ultimate", "8bitdo" },
-    { "wireless controller", "dualsense" },
 }
 
 -- USB vendor ids. Well established and unlikely to move.
@@ -360,16 +357,43 @@ local VENDOR_SONY = 0x054C
 local VENDOR_MICROSOFT = 0x045E
 local VENDOR_NINTENDO = 0x057E
 local VENDOR_VALVE = 0x28DE
+local VENDOR_8BITDO = 0x2DC8
 
 local PRODUCT_MAP = {
     [VENDOR_SONY] = {
         [0x05C4] = "ds4", -- DualShock 4 v1
         [0x09CC] = "ds4", -- DualShock 4 v2
+        [0x0BA0] = "ds4", -- DualShock 4 USB Wireless Adaptor
         [0x0CE6] = "dualsense", -- DualSense
         [0x0DF2] = "dualsense", -- DualSense Edge
     },
+    [VENDOR_MICROSOFT] = {
+        [0x028E] = "xbox", -- Xbox 360 (wired)
+        [0x028F] = "xbox", -- Xbox 360 (wireless)
+        [0x02D1] = "xbox", -- Xbox One (2013 launch)
+        [0x02DD] = "xbox", -- Xbox One (2015 with 3.5mm jack)
+        [0x02E3] = "xbox_elite", -- Xbox Elite Series 1
+        [0x02EA] = "xbox", -- Xbox One S (Bluetooth)
+        [0x02FD] = "xbox", -- Xbox One S (Bluetooth)
+        [0x0B00] = "xbox_elite", -- Xbox Elite Series 2 (USB wired)
+        [0x0B05] = "xbox_elite", -- Xbox Elite Series 2 (Bluetooth)
+        [0x0B12] = "xbox", -- Xbox Series X|S (USB wired)
+        [0x0B13] = "xbox", -- Xbox Series X|S (Bluetooth)
+        [0x0B20] = "xbox", -- Xbox Wireless Adapter for Windows
+    },
     [VENDOR_NINTENDO] = {
-        [0x2009] = "switchpro",
+        [0x2006] = "switchpro", -- Joy-Con (L)
+        [0x2007] = "switchpro", -- Joy-Con (R)
+        [0x2009] = "switchpro", -- Switch Pro Controller
+        [0x200E] = "switchpro", -- Joy-Con Charging Grip / Combined
+    },
+    [VENDOR_8BITDO] = {
+        [0x200F] = "8bitdo", -- 8BitDo Ultimate 3-mode
+        [0x310B] = "8bitdo", -- 8BitDo Ultimate 2 Wireless / Pro 3
+        [0x6000] = "8bitdo", -- 8BitDo SN30 Pro
+        [0x6001] = "8bitdo", -- 8BitDo Pro 2
+        [0x6012] = "8bitdo", -- 8BitDo Ultimate Wireless
+        [0xAB11] = "8bitdo", -- 8BitDo F30 / SN30
     },
     [VENDOR_VALVE] = {
         [0x1102] = "steamcontroller", -- Steam Controller v1 (USB wired)
@@ -387,6 +411,8 @@ local VENDOR_FALLBACK = {
     [VENDOR_MICROSOFT] = "xbox", -- Microsoft gamepads are Xbox-pattern throughout
     [VENDOR_NINTENDO] = "switchpro",
     [VENDOR_VALVE] = "steamdeck", -- Default Valve controllers to modern LRA haptic profile
+    [VENDOR_8BITDO] = "8bitdo", -- Default 8BitDo devices to tuned ERM profile
+    [VENDOR_SONY] = "dualsense", -- Default modern Sony to DualSense profile
 }
 
 -- Returns deviceID, detectedPresetID, rawName — any may be nil. Never applies anything and
@@ -414,6 +440,23 @@ function Pulse.DetectDevice()
         name = nil
     end
 
+    local vendor, product = state.vendorID, state.productID
+    if issecretvalue(vendor) or type(vendor) ~= "number" then
+        vendor = nil
+    end
+    if issecretvalue(product) or type(product) ~= "number" then
+        product = nil
+    end
+
+    -- 1. Exact hardware match via Vendor & Product ID
+    if vendor and product then
+        local byProduct = PRODUCT_MAP[vendor]
+        if byProduct and byProduct[product] then
+            return deviceID, byProduct[product], name
+        end
+    end
+
+    -- 2. Specific name matching (identifies hardware revisions and third-party controllers)
     if name then
         local lowered = name:lower()
         for _, entry in ipairs(NAME_PATTERNS) do
@@ -423,21 +466,16 @@ function Pulse.DetectDevice()
         end
     end
 
-    local vendor, product = state.vendorID, state.productID
-    if issecretvalue(vendor) or type(vendor) ~= "number" then
-        vendor = nil
-    end
-    if issecretvalue(product) or type(product) ~= "number" then
-        product = nil
+    -- 3. Vendor-only fallback for uncataloged product IDs
+    if vendor and VENDOR_FALLBACK[vendor] then
+        return deviceID, VENDOR_FALLBACK[vendor], name
     end
 
-    if vendor then
-        local byProduct = PRODUCT_MAP[vendor]
-        if byProduct and product and byProduct[product] then
-            return deviceID, byProduct[product], name
-        end
-        if VENDOR_FALLBACK[vendor] then
-            return deviceID, VENDOR_FALLBACK[vendor], name
+    -- 4. Generic OS descriptor fallback (e.g. uncataloged Bluetooth "Wireless Controller")
+    if name then
+        local lowered = name:lower()
+        if lowered:find("wireless controller", 1, true) then
+            return deviceID, "dualsense", name
         end
     end
 

@@ -241,6 +241,14 @@ check("steamdeck low floor", Pulse.Devices.steamdeck.channels.Low.floor, 0.050)
 check("steamcontroller2 low floor", Pulse.Devices.steamcontroller2.channels.Low.floor, 0.035)
 check("steamcontroller low floor", Pulse.Devices.steamcontroller.channels.Low.floor, 0.060)
 
+check("dualsense triggers disabled", Pulse.Devices.dualsense.triggers, false)
+check("dualsense low gain", Pulse.Devices.dualsense.channels.Low.gain, 1.15)
+check("dualsense low floor", Pulse.Devices.dualsense.channels.Low.floor, 0.030)
+check("ds4 triggers disabled", Pulse.Devices.ds4.triggers, false)
+check("ds4 low floor", Pulse.Devices.ds4.channels.Low.floor, 0.120)
+check("xbox triggers enabled", Pulse.Devices.xbox.triggers, true)
+check("xbox_elite triggers enabled", Pulse.Devices.xbox_elite.triggers, true)
+
 local mockRawState = {}
 C_GamePad.GetDeviceRawState = function(_)
     return mockRawState
@@ -274,7 +282,51 @@ mockRawState = { name = "Steam Controller" }
 local _, dSC1 = Pulse.DetectDevice()
 check("detect steam controller v1 name", dSC1, "steamcontroller")
 
--- PID detection tests
+mockRawState = { name = "Joy-Con (L/R)" }
+local _, dJoy = Pulse.DetectDevice()
+check("detect joy-con name", dJoy, "switchpro")
+
+-- macOS Bluetooth DualShock 4 vs DualSense disambiguation (both name themselves "Wireless Controller")
+mockRawState = { name = "Wireless Controller", vendorID = 0x054C, productID = 0x09CC }
+local _, dMacDS4 = Pulse.DetectDevice()
+check("macOS bluetooth DS4 matches ds4 not dualsense", dMacDS4, "ds4")
+
+mockRawState = { name = "Wireless Controller", vendorID = 0x054C, productID = 0x0CE6 }
+local _, dMacDS5 = Pulse.DetectDevice()
+check("macOS bluetooth DualSense matches dualsense", dMacDS5, "dualsense")
+
+mockRawState = { vendorID = 0x054C, productID = 0x0BA0 }
+local _, dDS4Dongle = Pulse.DetectDevice()
+check("detect DS4 USB wireless adaptor PID", dDS4Dongle, "ds4")
+
+-- Xbox PID priority over generic "Xbox Wireless Controller" name
+mockRawState = { name = "Xbox Wireless Controller", vendorID = 0x045E, productID = 0x0B00 }
+local _, dPID_EliteUSB = Pulse.DetectDevice()
+check("detect xbox elite series 2 USB PID", dPID_EliteUSB, "xbox_elite")
+
+mockRawState = { name = "Xbox Wireless Controller", vendorID = 0x045E, productID = 0x0B05 }
+local _, dPID_EliteBT = Pulse.DetectDevice()
+check("detect xbox elite series 2 BT PID", dPID_EliteBT, "xbox_elite")
+
+mockRawState = { vendorID = 0x045E, productID = 0x0B12 }
+local _, dPID_SeriesX = Pulse.DetectDevice()
+check("detect xbox series X PID", dPID_SeriesX, "xbox")
+
+-- Switch Pro & Joy-Con PIDs
+mockRawState = { vendorID = 0x057E, productID = 0x2006 }
+local _, dPID_JoyConL = Pulse.DetectDevice()
+check("detect joy-con L PID", dPID_JoyConL, "switchpro")
+
+-- 8BitDo PIDs and Vendor fallback
+mockRawState = { vendorID = 0x2DC8, productID = 0x310B }
+local _, dPID_8BitDo = Pulse.DetectDevice()
+check("detect 8bitdo ultimate PID", dPID_8BitDo, "8bitdo")
+
+mockRawState = { vendorID = 0x2DC8, productID = 0x9999 }
+local _, dPID_8BitDoFallback = Pulse.DetectDevice()
+check("detect 8bitdo vendor fallback", dPID_8BitDoFallback, "8bitdo")
+
+-- Valve PID detection tests
 mockRawState = { vendorID = 0x28DE, productID = 0x1102 }
 local _, dPID_SC1 = Pulse.DetectDevice()
 check("detect steam controller v1 wired PID", dPID_SC1, "steamcontroller")
