@@ -18,15 +18,15 @@ local M = {}
 Pulse:RegisterModule("AlertExperimental", M)
 
 -- The seven DESIGN.md §4.9 admits as secondary resources, in probe order.
-local PowerType = Enum.PowerType or {}
+local PowerType = (Enum and Enum.PowerType) or {}
 local SECONDARY_POWERS = {
-    PowerType.ComboPoints   or 4,
-    PowerType.SoulShards    or 7,
-    PowerType.HolyPower     or 9,
-    PowerType.Chi           or 12,
+    PowerType.ComboPoints or 4,
+    PowerType.SoulShards or 7,
+    PowerType.HolyPower or 9,
+    PowerType.Chi or 12,
     PowerType.ArcaneCharges or 16,
-    PowerType.Essence       or 19,
-    PowerType.Runes         or 5,
+    PowerType.Essence or 19,
+    PowerType.Runes or 5,
 }
 
 local function resolveSecondaryPower()
@@ -55,8 +55,12 @@ function M:_WatchResourceCapped()
         frame:UnregisterAllEvents()
         cappedPower = nil
         wasCapped = false
-        if not Pulse.Database:Get("masterEnabled") then return end
-        if not Pulse.Database:GetCue("resourceCapped") then return end
+        if not Pulse.Database:Get("masterEnabled") then
+            return
+        end
+        if not Pulse.Database:GetCue("resourceCapped") then
+            return
+        end
 
         cappedPower = resolveSecondaryPower()
         if Pulse.debug then
@@ -73,12 +77,13 @@ function M:_WatchResourceCapped()
         frame:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
         frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 
-        if not cappedPower then return end
+        if not cappedPower then
+            return
+        end
 
-        local power    = UnitPower("player", cappedPower)
+        local power = UnitPower("player", cappedPower)
         local powerMax = UnitPowerMax("player", cappedPower)
-        if not issecretvalue(power) and not issecretvalue(powerMax)
-           and power and powerMax and powerMax > 0 then
+        if not issecretvalue(power) and not issecretvalue(powerMax) and power and powerMax and powerMax > 0 then
             wasCapped = power >= powerMax
         end
 
@@ -97,12 +102,18 @@ function M:_WatchResourceCapped()
 end
 
 function M:_OnPowerUpdate()
-    if not cappedPower then return end
+    if not cappedPower then
+        return
+    end
 
-    local power    = UnitPower("player", cappedPower)
+    local power = UnitPower("player", cappedPower)
     local powerMax = UnitPowerMax("player", cappedPower)
-    if issecretvalue(power) or issecretvalue(powerMax) then return end
-    if not power or not powerMax or powerMax <= 0 then return end
+    if issecretvalue(power) or issecretvalue(powerMax) then
+        return
+    end
+    if not power or not powerMax or powerMax <= 0 then
+        return
+    end
 
     local capped = power >= powerMax
     if capped and not wasCapped then
@@ -119,8 +130,12 @@ function M:_WatchTargetCastStopped()
 
     local function sync()
         frame:UnregisterAllEvents()
-        if not Pulse.Database:Get("masterEnabled") then return end
-        if not Pulse.Database:GetCue("targetCastStopped") then return end
+        if not Pulse.Database:Get("masterEnabled") then
+            return
+        end
+        if not Pulse.Database:GetCue("targetCastStopped") then
+            return
+        end
         frame:RegisterUnitEvent("UNIT_SPELLCAST_INTERRUPTED", "target")
     end
 
@@ -136,8 +151,12 @@ function M:_WatchActionFailed()
 
     local function sync()
         frame:UnregisterAllEvents()
-        if not Pulse.Database:Get("masterEnabled") then return end
-        if not Pulse.Database:GetCue("actionFailed") then return end
+        if not Pulse.Database:Get("masterEnabled") then
+            return
+        end
+        if not Pulse.Database:GetCue("actionFailed") then
+            return
+        end
         frame:RegisterEvent("UI_ERROR_MESSAGE")
     end
 
@@ -149,7 +168,9 @@ function M:_WatchActionFailed()
     -- since the reason code is precise enough to drop just that failure instead of
     -- suppressing every action-failed while the player is dead.
     frame:SetScript("OnEvent", function(_, event, messageType)
-        if messageType == LE_GAME_ERR_ATTACK_DEAD then return end
+        if messageType == LE_GAME_ERR_ATTACK_DEAD then
+            return
+        end
         Pulse:FireIfEnabled("actionFailed")
     end)
 

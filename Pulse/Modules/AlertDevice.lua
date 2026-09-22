@@ -10,18 +10,22 @@ Pulse:RegisterModule("AlertDevice", M)
 
 -- C_GamePad.GetPowerLevel() returns Enum.GamePadPowerLevel:
 --   0 Critical, 1 Low, 2 Medium, 3 High, 4 Wired, 5 Unknown
-local PowerLevel = Enum.GamePadPowerLevel or {}
+local PowerLevel = (Enum and Enum.GamePadPowerLevel) or {}
 local LOW_LEVELS = {
     [PowerLevel.Critical or 0] = true,
-    [PowerLevel.Low      or 1] = true,
+    [PowerLevel.Low or 1] = true,
 }
 
 local wasLow = false
 
 local function currentLow()
     local level = C_GamePad.GetPowerLevel()
-    if issecretvalue(level) then return nil end
-    if level == nil then return nil end
+    if issecretvalue(level) then
+        return nil
+    end
+    if level == nil then
+        return nil
+    end
     return LOW_LEVELS[level] and true or false
 end
 
@@ -36,8 +40,12 @@ function M:_WatchConnected()
 
     local function sync()
         frame:UnregisterAllEvents()
-        if not Pulse.Database:Get("masterEnabled") then return end
-        if not Pulse.Database:GetCue("padConnected") then return end
+        if not Pulse.Database:Get("masterEnabled") then
+            return
+        end
+        if not Pulse.Database:GetCue("padConnected") then
+            return
+        end
         frame:RegisterEvent("GAME_PAD_CONNECTED")
     end
 
@@ -58,8 +66,12 @@ function M:_WatchBattery()
 
     local function sync()
         frame:UnregisterAllEvents()
-        if not Pulse.Database:Get("masterEnabled") then return end
-        if not Pulse.Database:GetCue("padBattery") then return end
+        if not Pulse.Database:Get("masterEnabled") then
+            return
+        end
+        if not Pulse.Database:GetCue("padBattery") then
+            return
+        end
         wasLow = (currentLow() == true)
         frame:RegisterEvent("GAME_PAD_POWER_CHANGED")
     end
@@ -73,7 +85,9 @@ end
 
 function M:_OnPowerChanged()
     local low = currentLow()
-    if low == nil then return end
+    if low == nil then
+        return
+    end
 
     if low and not wasLow then
         Pulse:FireIfEnabled("padBattery")
@@ -86,8 +100,12 @@ function M:_WatchDisconnect()
 
     local function sync()
         frame:UnregisterAllEvents()
-        if not Pulse.Database:Get("masterEnabled") then return end
-        if not Pulse.Database:GetCue("padDisconnected") then return end
+        if not Pulse.Database:Get("masterEnabled") then
+            return
+        end
+        if not Pulse.Database:GetCue("padDisconnected") then
+            return
+        end
         frame:RegisterEvent("GAME_PAD_DISCONNECTED")
     end
 

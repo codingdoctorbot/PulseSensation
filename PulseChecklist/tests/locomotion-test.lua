@@ -16,6 +16,7 @@ function CreateFrame() return setmetatable({}, FrameMT) end
 
 local hooks = {}
 function hooksecurefunc(name, fn) hooks[name] = fn end
+function JumpOrAscendStart() end
 
 swimming, flying, falling, gliding = false, false, false, false
 function IsSwimming() return swimming end

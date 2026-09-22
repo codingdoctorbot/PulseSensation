@@ -16,8 +16,12 @@ local mountStateReady = false
 
 local function syncMount()
     mountFrame:UnregisterAllEvents()
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not (Pulse.Database:GetCue("mountUp") or Pulse.Database:GetCue("dismount")) then return end
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
+    if not (Pulse.Database:GetCue("mountUp") or Pulse.Database:GetCue("dismount")) then
+        return
+    end
 
     -- Re-seed live state on sync so toggling the cue or profile while mounted
     -- does not misfire or stay unseeded until the next zoning event.
@@ -53,8 +57,12 @@ local glideFrame = CreateFrame("Frame")
 -- Hand-rolled: native math.clamp is CONFIRMED absent on this client (Core/Engine.lua).
 
 local function clamp01(v)
-    if v < 0 then return 0 end
-    if v > 1 then return 1 end
+    if v < 0 then
+        return 0
+    end
+    if v > 1 then
+        return 1
+    end
     return v
 end
 
@@ -62,29 +70,40 @@ end
 -- High = Speed-thrill intensity, ramping toward peak boost via thrillCurve.
 
 local function glideTick()
+    if not C_PlayerInfo or type(C_PlayerInfo.GetGlidingInfo) ~= "function" then
+        return
+    end
     local isGliding, _, forwardSpeed = C_PlayerInfo.GetGlidingInfo()
 
--- Guard against protected or secret combat stats, which throw if compared directly. A
--- hidden value aborts the tick.
+    -- Guard against protected or secret combat stats, which throw if compared directly. A
+    -- hidden value aborts the tick.
 
-    if issecretvalue(isGliding) or issecretvalue(forwardSpeed) then return end
-    if not isGliding or not forwardSpeed or forwardSpeed < 65 then return end
+    if issecretvalue(isGliding) or issecretvalue(forwardSpeed) then
+        return
+    end
+    if not isGliding or not forwardSpeed or forwardSpeed < 65 then
+        return
+    end
 
     -- forwardSpeed ranges 65 (min gliding) to 100 (max boost).
 
     local ratio = clamp01((forwardSpeed - 65) * (1 / 35))
     local presenceFloor = Pulse.Database:GetTriggerSetting("glideThrust", "presenceFloor", 0.15)
-    local thrillPeak    = Pulse.Database:GetTriggerSetting("glideThrust", "thrillPeak", 0.7)
-    local thrillCurve   = Pulse.Database:GetTriggerSetting("glideThrust", "thrillCurve", 2.0)
-    local low  = presenceFloor + (1 - presenceFloor) * (ratio * 0.3)
+    local thrillPeak = Pulse.Database:GetTriggerSetting("glideThrust", "thrillPeak", 0.7)
+    local thrillCurve = Pulse.Database:GetTriggerSetting("glideThrust", "thrillCurve", 2.0)
+    local low = presenceFloor + (1 - presenceFloor) * (ratio * 0.3)
     local high = (ratio ^ thrillCurve) * thrillPeak
     Pulse:HoldIfEnabled("glideThrust", low, high)
 end
 
 local function syncGlide()
     glideFrame:SetScript("OnUpdate", nil)
-    if not Pulse.Database:Get("masterEnabled") then return end
-    if not Pulse.Database:GetCue("glideThrust") then return end
+    if not Pulse.Database:Get("masterEnabled") then
+        return
+    end
+    if not Pulse.Database:GetCue("glideThrust") then
+        return
+    end
     glideFrame:SetScript("OnUpdate", glideTick)
 end
 

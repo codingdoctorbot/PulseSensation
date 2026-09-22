@@ -40,17 +40,21 @@ abilityPulseFrame:SetScript("OnEvent", function()
         return
     end -- the whole point is a combat heartbeat
     local info = C_Spell.GetSpellCooldown(61304)
-    if
-        info
-        and info.startTime
-        and info.startTime > 0
-        and info.duration
-        and info.duration > 0
-        and info.duration <= 1.5
-        and info.startTime ~= lastAbilityPulseStartTime
-    then
-        lastAbilityPulseStartTime = info.startTime
-        Pulse:FireIfEnabled("abilityPulse")
+    if info and not issecretvalue(info) then
+        local startTime, duration = info.startTime, info.duration
+        if not issecretvalue(startTime) and not issecretvalue(duration) then
+            if
+                startTime
+                and startTime > 0
+                and duration
+                and duration > 0
+                and duration <= 1.5
+                and startTime ~= lastAbilityPulseStartTime
+            then
+                lastAbilityPulseStartTime = startTime
+                Pulse:FireIfEnabled("abilityPulse")
+            end
+        end
     end
 end)
 
@@ -59,7 +63,7 @@ end)
 -- NOT FUNCTIONING AT THE MOMENT — NEEDS WORK.
 
 local cooldownFrame = CreateFrame("Frame")
-local COOLDOWN_CATEGORY = Enum.CooldownViewerCategory and Enum.CooldownViewerCategory.Essential
+local COOLDOWN_CATEGORY = Enum and Enum.CooldownViewerCategory and Enum.CooldownViewerCategory.Essential
 local trackedSpells = {} -- spellID -> was on cooldown last check
 local cooldownSetResolved = false
 
@@ -248,6 +252,7 @@ end)
 -- Combo points: UNIT_POWER_UPDATE with powerType "COMBO_POINTS", filtered to an actual
 -- increase so a reset to zero after a finisher is ignored.
 
+local COMBO_POINTS_POWER_TYPE = (Enum and Enum.PowerType and Enum.PowerType.ComboPoints) or 4
 local comboFrame = CreateFrame("Frame")
 local lastComboPoints = 0
 
@@ -263,7 +268,7 @@ local function syncComboPoint()
     comboFrame:RegisterUnitEvent("UNIT_POWER_UPDATE", "player")
     -- Seed from live state, not 0: enabling mid-combo should not treat the existing count
     -- as a fresh gain.
-    local current = UnitPower("player", Enum.PowerType.ComboPoints)
+    local current = UnitPower("player", COMBO_POINTS_POWER_TYPE)
     lastComboPoints = (not issecretvalue(current) and type(current) == "number") and current or 0
 end
 
@@ -271,7 +276,7 @@ comboFrame:SetScript("OnEvent", function(_, event, unit, powerType)
     if powerType ~= "COMBO_POINTS" then
         return
     end
-    local current = UnitPower("player", Enum.PowerType.ComboPoints)
+    local current = UnitPower("player", COMBO_POINTS_POWER_TYPE)
     if issecretvalue(current) or type(current) ~= "number" then
         return
     end
