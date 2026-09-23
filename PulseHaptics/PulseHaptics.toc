@@ -1,4 +1,4 @@
-## Interface: 120100
+## Interface: 120100, 110200, 110100
 ## Title: PulseHaptics
 ## Notes: Immersive controller vibration — movement, environment, and combat texture.
 ## Author: codingdoctorbot

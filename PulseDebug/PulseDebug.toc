@@ -1,4 +1,4 @@
-## Interface: 120100
+## Interface: 120100, 110200, 110100
 ## Title: PulseDebug
 ## Notes: Troubleshooting companion for Pulse. Not shipped, not a second copy.
 ## Author: codingdoctorbot
