@@ -179,7 +179,7 @@ local function acquireHeader(index)
 	header = CreateFrame("Frame", nil, list.Child)
 	header:SetHeight(ENTRY_HEIGHT)
 
-	header.Text = header:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+	header.Text = header:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 	header.Text:SetJustifyH("LEFT")
 	header.Text:SetWordWrap(false)
 	header.Text:SetPoint("LEFT", header, "LEFT", 8, 0)
@@ -188,9 +188,9 @@ local function acquireHeader(index)
 
 	header.Line = header:CreateTexture(nil, "ARTWORK")
 	header.Line:SetHeight(1)
-	header.Line:SetPoint("BOTTOMLEFT", header, "BOTTOMLEFT", 6, 0)
-	header.Line:SetPoint("BOTTOMRIGHT", header, "BOTTOMRIGHT", -6, 0)
-	header.Line:SetColorTexture(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b, 0.35)
+	header.Line:SetPoint("BOTTOMLEFT", header, "BOTTOMLEFT", 4, 0)
+	header.Line:SetPoint("BOTTOMRIGHT", header, "BOTTOMRIGHT", -4, 0)
+	header.Line:SetColorTexture(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b, 0.40)
 
 	Theme.MarkIgnored(header)
 	headers[index] = header
@@ -205,7 +205,7 @@ local function acquireDivider(index)
 
 	div = list.Child:CreateTexture(nil, "BACKGROUND")
 	div:SetWidth(1)
-	div:SetColorTexture(0.2, 0.28, 0.38, 0.45)
+	div:SetColorTexture(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b, 0.20)
 	dividers[index] = div
 	return div
 end
@@ -342,7 +342,15 @@ function Popup.OpenList(owner, options, selectedValue, onSelect)
 				entry.Text:SetText("|cff4db8ff✔ |r" .. (option.label or tostring(option.value)))
 				entry.Text:SetTextColor(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b)
 			else
-				entry.Text:SetText("   " .. (option.label or tostring(option.value)))
+				local bullet = "   "
+				if option.category == "Snappy & Taps" then
+					bullet = " |cff88c0d0•|r "
+				elseif option.category == "Heavy Impacts" then
+					bullet = " |cffff9944•|r "
+				elseif option.category == "Triggers & Textures" then
+					bullet = " |cffa077ff•|r "
+				end
+				entry.Text:SetText(bullet .. (option.label or tostring(option.value)))
 				entry.Text:SetTextColor(0.88, 0.88, 0.88)
 			end
 
@@ -443,7 +451,16 @@ function Popup.OpenList(owner, options, selectedValue, onSelect)
 				header:ClearAllPoints()
 				header:SetPoint("TOPLEFT", list.Child, "TOPLEFT", colX + 4, 0)
 				header:SetWidth(colWidth - 8)
-				header.Text:SetText(string.upper(col.title))
+				local titleUpper = string.upper(col.title)
+				if col.title == "Snappy & Taps" then
+					header.Text:SetText("|cff88c0d0" .. titleUpper .. "|r")
+				elseif col.title == "Heavy Impacts" then
+					header.Text:SetText("|cffff9944" .. titleUpper .. "|r")
+				elseif col.title == "Triggers & Textures" then
+					header.Text:SetText("|cffa077ff" .. titleUpper .. "|r")
+				else
+					header.Text:SetText(titleUpper)
+				end
 				header:Show()
 			elseif headers[c] then
 				headers[c]:Hide()
@@ -462,7 +479,15 @@ function Popup.OpenList(owner, options, selectedValue, onSelect)
 					entry.Text:SetText("|cff4db8ff✔ |r" .. (option.label or tostring(option.value)))
 					entry.Text:SetTextColor(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b)
 				else
-					entry.Text:SetText("   " .. (option.label or tostring(option.value)))
+					local bullet = "   "
+					if option.category == "Snappy & Taps" then
+						bullet = " |cff88c0d0•|r "
+					elseif option.category == "Heavy Impacts" then
+						bullet = " |cffff9944•|r "
+					elseif option.category == "Triggers & Textures" then
+						bullet = " |cffa077ff•|r "
+					end
+					entry.Text:SetText(bullet .. (option.label or tostring(option.value)))
 					entry.Text:SetTextColor(0.88, 0.88, 0.88)
 				end
 

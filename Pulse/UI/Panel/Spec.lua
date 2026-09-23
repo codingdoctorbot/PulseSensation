@@ -180,6 +180,7 @@ end
 local function cueCheckbox(trigger)
 	return {
 		kind = "checkbox",
+		isMaster = (trigger.id == "controllerUIMaster" or trigger.id == "ccMaster"),
 		label = trigger.label,
 		tooltip = triggerTooltip(trigger),
 		get = function()
@@ -380,6 +381,7 @@ function Spec.BuildRootPage()
 
 	rows[#rows + 1] = {
 		kind = "checkbox",
+		isMaster = true,
 		label = "Enable Pulse",
 		tooltip = "Master switch. With this off, nothing registers and nothing costs anything.",
 		get = function()
