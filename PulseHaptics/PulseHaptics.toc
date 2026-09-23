@@ -1,8 +1,8 @@
 ## Interface: 120100
-## Title: Pulse
+## Title: PulseHaptics
 ## Notes: Immersive controller vibration — movement, environment, and combat texture.
 ## Author: codingdoctorbot
-## Version: 0.1.0-alpha
+## Version: 0.2.0-beta
 ## SavedVariables: PulseDB
 ## IconTexture: Interface\Icons\Spell_Nature_WispSplode
 ## X-Credits: Anthropic (Claude Code), Google DeepMind (Antigravity)

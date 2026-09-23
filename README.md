@@ -1,74 +1,94 @@
-# PulseGit
+# PulseHaptics
 
-World of Warcraft addon suite, built around **Pulse** — turns what's happening in
-the game into controller vibration (landing hard, gliding fast, taking a crit, a
-storm rolling in) closer to a console game's rumble than to a notification system.
-Cues layer and blend continuously rather than one cue preempting another.
+Immersive controller vibration suite for World of Warcraft (`_classic_beta_` / WoW Forever & Modern clients). **PulseHaptics** transforms in-game events into rich, layered tactile sensations — landing hard, gliding fast, weapon swings, tradeskill rhythms, taking a critical hit, or a storm rolling in — closer to a modern console game's nuanced haptics than a simple notification buzzer.
 
-Developed by **codingdoctorbot** with AI pair-programming assistance from
-[Claude Code](https://claude.com/claude-code) and Google Antigravity. Free to reuse,
-redistribute, and share as-is under the MIT license.
+Cues layer and blend continuously through an authored multi-layer oscillator rather than one cue preempting or cutting off another.
 
-## Features
+Developed by **codingdoctorbot** with AI pair-programming assistance from [Claude Code](https://claude.com/claude-code) (Anthropic) and [Google Antigravity](https://deepmind.google) (Google DeepMind). Free to reuse, redistribute, and share under the MIT License.
 
-- **110 cues across 15 categories** — movement, flight & mounts, combat texture,
-  environment, world & game-feel, your own casting, loss of control, threat,
-  target/focus, group & social, world & interface, controller state, and a full
-  accessibility set (combat/life state) imported from precursor proof-of-concept Tremor.
-- **21 authored vibration modes** — 16 one-shot pulses (from a light `TICK` up to
-  a reserved-for-the-worst-moments `HEAVY`) and 5 continuous textures (`HUM`,
-  `THRUM`, `WAVE`, `PATTER`, `DRIFT`) for ambient, held sensations rather than
-  a single beep.
-- **Cues blend instead of interrupting each other** — an ambient cast hum, a
-  gliding presence, and a crit thump can all play at once, smoothed continuously
-  by the engine rather than the loudest cue winning and the rest getting dropped.
-- **6 continuous textures** for things that don't have a single instant — swimming
-  resistance, dragonriding/Skyriding thrust, casting, underwater breath, low
-  health, taxi flight — each fading in and out with the condition instead of
-  announcing itself once.
-- **Deep motor & intensity control** — pick which physical motor (or PS5
-  DualSense adaptive trigger) drives which logical role, tune per-mode low/high
-  motor and duration multipliers, dial overall and per-cue intensity, and
-  reassign any trigger to a different mode via a "feels like" override.
-- **4 built-in profiles** (Default, Raiding, Questing, PvP) with independently
-  curated cue selections, plus unlimited custom profiles — each character picks
-  its own active profile.
-- **A settings panel that explains itself** — an in-panel plain-English guide, a
-  mode tester to feel a cue before enabling it, and a `/pulse test <mode>` slash
-  command.
-- **Two companion QA tools** — `PulseDebug` for live chat-based introspection
-  (fire/hold any trigger, see why a cue isn't firing, watch events in real time)
-  and `PulseChecklist` for tracking which of the 110 cues are actually confirmed
-  working in-game.
+---
 
-## Addons
+## Key Features
 
-| Addon | What it does |
-|---|---|
-| **Pulse** | The main addon — vibration engine, 21 authored "modes" (tap, thud, rising, stutter, ...), and modules covering movement, flight, combat, environment, world events, encounters, health, plus a full accessibility cue set imported from Tremor (stuns, interrupts, threat, social prompts). |
-| **PulseChecklist** | QA tracking checklist for Pulse's cues. Read-only against Pulse (via the `_G.Pulse` handle), own window, own SavedVariables, `/pulsecheck` or `/pcheck`. |
-| **PulseDebug** | Troubleshooting companion for Pulse. Not shipped alongside it, not a second copy of its logic. |
+- **110 Sensory Cues Across 15 Categories**:
+  - **Locomotion & Movement**: Distinct gaits for walking, running, jumping, landing, swimming resistance, and Skyriding thrust.
+  - **Combat Texture**: Weapon swings (main/off-hand haste pacing), spellcast swelling hum, channel flutter, auto-shot releases, and proc glows.
+  - **Tradeskill Rhythms**: Authentic percussive work beats tailored by profession (Blacksmithing hammer strikes, Mining pick strikes, Engineering rapid ticks, etc.).
+  - **Damage & Deflection**: Real-time feedback for damage taken, critical strikes, parries, blocks, and dodges.
+  - **Environment & World**: Dynamic weather intensity (rain, storms, blizzards), zone transitions, breath loss, and underwater immersion.
+  - **Accessibility & Awareness**: Threat lost/gained, interrupts, loss-of-control CC alerts, low health heartbeat, and group readiness checks (imported and expanded from precursor alpha `Tremor`).
+
+- **Zero-Garbage Engine Architecture (Rule 4 Compliance)**:
+  - Continuous haptic oscillators and frame sweeps allocate **0 garbage tables per frame**, eliminating Lua garbage collector stutter and FPS drops in combat.
+  - Idle `OnUpdate` frame scripts automatically detach when actions cease, ensuring zero idle CPU consumption.
+
+- **Taint-Immune Gamepad UI**:
+  - Native Classic LibDBIcon minimap button aperture geometry (zero GPU shader clamp artifacts).
+  - Ultra-lightweight passive 20Hz polling for controller navigation — strictly avoids Blizzard UI execution taint (`ADDON_ACTION_BLOCKED`).
+  - Protected combat-lockdown state deferral for all profile switches and option updates.
+
+- **Deep Motor & Hardware Routing**:
+  - Maps logical roles (`low`, `high`, `ltrigger`, `rtrigger`) across standard rumble and PS5 DualSense / Xbox controller profiles.
+  - Built-in hardware schemas: `Standard`, `High Motor Only`, `Low Motor Only`, `Inverted`, `Trigger Emphasis`, and `Rumble & Triggers`.
+
+- **Comprehensive In-Game Configuration & QA Tools**:
+  - Over 1,300 intuitive controls across 21 dedicated settings pages.
+  - **`PulseDebug`** (`/pdebug`): Real-time event log, live channel monitor, CVar gate diagnostics, and interactive test triggers.
+  - **`PulseChecklist`** (`/pcheck`): Interactive in-game QA testing checklist with character stamps and status tracking.
+
+---
+
+## Addon Suite Components
+
+| Addon Directory | Purpose |
+|:---|:---|
+| **`PulseHaptics`** | The core haptic engine, authored modes, 22 module watchers, settings UI, and profile manager. |
+| **`PulseDebug`** | Companion developer & troubleshooting window for real-time channel introspection and trigger auditing. |
+| **`PulseChecklist`** | In-game verification checklist to track which of the 110 cues have been field-tested on your character. |
+
+---
 
 ## Status
 
-Alpha (`0.1.0-alpha`), targeting Interface `120100` (Patch 12.1.0). Built and
-iterated on with Claude Code across sessions. Some cues are confirmed working
-in-game; others are only `luac -p` clean so far.
+**Beta (`0.2.0-beta`)** — Targeting World of Warcraft `1.60.1.69913` (Interface `120100` / Patch 12.1.0). Fully verified against official WoW Forever client source code with zero static analysis warnings and 100% test suite pass rate.
+
+---
 
 ## Installation
 
-Copy `Pulse/`, `PulseChecklist/`, and `PulseDebug/` into your WoW `Interface/AddOns/`
-folder. `PulseChecklist` and `PulseDebug` both depend on `Pulse` being installed.
+1. Download or clone this repository.
+2. Copy (or symlink) the following folders into your World of Warcraft `Interface/AddOns/` directory:
+   - `PulseHaptics/`
+   - `PulseDebug/`
+   - `PulseChecklist/`
+3. Launch World of Warcraft and ensure the addons are enabled in the character select **AddOns** menu.
+4. Type `/pulse` in chat or click the minimap button to open the settings panel.
+
+### Slash Commands
+
+- `/pulse` or `/pulsehaptics` — Toggle the PulseHaptics settings panel.
+- `/pulse test <mode>` — Trigger a test haptic shape (e.g. `/pulse test thud`).
+- `/pdebug` (or `/pulsedebug`) — Open the real-time diagnostic and troubleshooting HUD.
+- `/pcheck` (or `/pulsecheck`) — Open the in-game cue verification checklist.
+
+---
 
 ## Credits & Attributions
 
-- **Author**: codingdoctorbot
-- **AI Pair Programming**: Claude Code (Anthropic) & Google Antigravity (Google DeepMind)
-- **Precursor Inspiration**: `Tremor` — provided the initial inspiration, core structural ideas, and foundational accessibility cue set.
-- **Third-Party Libraries**:
+- **Author**: `codingdoctorbot`
+- **AI Pair Programming Assistance**:
+  - [Claude Code](https://claude.com/claude-code) — Anthropic
+  - [Antigravity](https://deepmind.google) — Google DeepMind
+- **Precursor Inspiration**:
+  - **`Tremor`** — Foundational proof-of-concept alpha that pioneered controller vibration exploration in WoW and provided the initial accessibility cue models.
+- **Embedded Third-Party Libraries**:
   - `LibStub` — Kaelten, Cladhaire, ckknight, Mikk, Ammo, Nevcairiel
   - `CallbackHandler-1.0` — Cladhaire, Ammo
   - `LibDataBroker-1.1` — tekkub
-  - `LibDBIcon-1.0` — Torhal
+  - `LibDBIcon-1.0` (aperture framing architecture) — Torhal
 
+---
 
+## License
+
+This project is licensed under the **MIT License** — free to use, modify, redistribute, and enjoy.

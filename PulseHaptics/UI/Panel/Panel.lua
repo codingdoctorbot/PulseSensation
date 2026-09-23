@@ -577,6 +577,7 @@ local function slashHandler(message)
 end
 
 SLASH_PULSE1 = "/pulse"
+SLASH_PULSE2 = "/pulsehaptics"
 SlashCmdList["PULSE"] = slashHandler
 
 SLASH_PULSEUI1 = "/pulseui"

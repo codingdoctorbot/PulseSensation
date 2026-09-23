@@ -2,8 +2,8 @@
 ## Title: PulseDebug
 ## Notes: Troubleshooting companion for Pulse. Not shipped, not a second copy.
 ## Author: codingdoctorbot
-## Version: 0.1.0-alpha
-## Dependencies: Pulse
+## Version: 0.2.0-beta
+## Dependencies: PulseHaptics
 ## IconTexture: Interface\Icons\INV_Misc_Wrench_01
 ## X-Credits: Anthropic (Claude Code), Google DeepMind (Antigravity)
 

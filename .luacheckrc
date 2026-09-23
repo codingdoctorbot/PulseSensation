@@ -1,7 +1,7 @@
 std = "lua51"
 max_line_length = 160
 allow_defined_top = true
-files["Pulse/Libs/**"] = {
+files["PulseHaptics/Libs/**"] = {
     ignore = { ".*" },
 }
 
