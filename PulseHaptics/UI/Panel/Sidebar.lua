@@ -28,26 +28,26 @@ local SidebarMixin = {}
 
 local CATEGORY_ICONS = {
 	root = "Interface\\AddOns\\PulseHaptics\\Media\\icon",
-	cueIndex = "Interface\\Icons\\INV_Misc_Spyglass_02",
-	profiles = "Interface\\Icons\\INV_Misc_Note_01",
-	defaultProfiles = "Interface\\Icons\\INV_Misc_Folder_01",
-	crafting = "Interface\\Icons\\Trade_BlackSmithing",
-	COMBAT = "Interface\\Icons\\Ability_DualWield",
-	CASTING = "Interface\\Icons\\Spell_Holy_MagicalSentry",
-	MOVEMENT = "Interface\\Icons\\Ability_Rogue_Sprint",
-	CHARACTER = "Interface\\Icons\\Spell_Holy_WordFortitude",
-	CONTROL = "Interface\\Icons\\Spell_Frost_ChainsOfIce",
-	TARGET = "Interface\\Icons\\Ability_Hunter_SniperShot",
-	WORLD = "Interface\\Icons\\Spell_Nature_EarthBind",
-	SOCIAL = "Interface\\Icons\\Spell_Holy_PrayerOfHealing02",
-	INTERFACE = "Interface\\Icons\\INV_Misc_Gear_01",
-	CONTROLLER = "Interface\\Icons\\INV_Gizmo_02",
-	CONTROLLER_UI = "Interface\\Icons\\INV_Gizmo_01",
-	GAMEPAD_INTERACT = "Interface\\Icons\\INV_Gizmo_08",
-	modeTuning = "Interface\\Icons\\Trade_Engineering",
-	calibration = "Interface\\Icons\\INV_Misc_EngGizmos_17",
-	continuous = "Interface\\Icons\\Spell_Arcane_PortalIronForge",
-	guide = "Interface\\Icons\\INV_Misc_Book_09",
+	cueIndex = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\cueIndex",
+	profiles = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\profiles",
+	defaultProfiles = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\defaultProfiles",
+	crafting = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\crafting",
+	COMBAT = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\COMBAT",
+	CASTING = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\CASTING",
+	MOVEMENT = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\MOVEMENT",
+	CHARACTER = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\CHARACTER",
+	CONTROL = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\CONTROL",
+	TARGET = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\TARGET",
+	WORLD = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\WORLD",
+	SOCIAL = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\SOCIAL",
+	INTERFACE = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\INTERFACE",
+	CONTROLLER = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\CONTROLLER",
+	CONTROLLER_UI = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\CONTROLLER_UI",
+	GAMEPAD_INTERACT = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\GAMEPAD_INTERACT",
+	modeTuning = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\modeTuning",
+	calibration = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\calibration",
+	continuous = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\continuous",
+	guide = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\guide",
 }
 
 local function setHorizontalGradient(texture, r1, g1, b1, a1, r2, g2, b2, a2)
@@ -168,7 +168,6 @@ function SidebarMixin:CreateButtons(pages)
 			icon:SetSize(14, 14)
 			icon:SetPoint("LEFT", button, "LEFT", iconX, 0)
 			icon:SetTexture(iconTexture)
-			icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 			button.Icon = icon
 		end
 
