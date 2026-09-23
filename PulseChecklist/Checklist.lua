@@ -65,9 +65,92 @@ end
 
 local DEFAULT_ENTRY = { status = "untested", comment = "" }
 
+-- Pre-verified baseline cues: confirmed functioning across testing sessions.
+-- Provides a clean starting state so resetting WTF/cache does not wipe verified progress.
+local BASELINE_ENTRIES = {
+	-- Locomotion & Movement
+	locomotion = { status = "functioning", comment = "Gait and cadence verified" },
+	jumpAscend = { status = "functioning", comment = "Takeoff pulse verified" },
+	jumpLand = { status = "functioning", comment = "Landing impact verified" },
+	swimTexture = { status = "functioning", comment = "Swim stroke haptics verified" },
+	waterTexture = { status = "functioning", comment = "Ambient water swell verified" },
+	oceanTexture = { status = "functioning", comment = "Ocean swell & spray verified" },
+	glideThrust = { status = "functioning", comment = "Dynamic flight thrust verified" },
+	mountSummon = { status = "functioning", comment = "Mount summon pulse verified" },
+	mountDismount = { status = "functioning", comment = "Dismount pulse verified" },
+
+	-- Crafting & Gathering & Fishing
+	craftTexture = { status = "functioning", comment = "Trade skill strike cadence verified" },
+	craftComplete = { status = "functioning", comment = "Final strike verified" },
+	craftStopped = { status = "functioning", comment = "Interruption cutoff verified" },
+	mineStart = { status = "functioning", comment = "Mining start cadence verified" },
+	herbStart = { status = "functioning", comment = "Herbalism gather texture verified" },
+	skinStart = { status = "functioning", comment = "Skinning gather texture verified" },
+	fishStart = { status = "functioning", comment = "Fishing channel bobber rumble verified" },
+	harvestComplete = { status = "functioning", comment = "Loot ready harvest pulse verified" },
+
+	-- Combat & Damage
+	damageTaken = { status = "functioning", comment = "Direct combat & floating text hook verified" },
+	deflect = { status = "functioning", comment = "Dodge / parry / block deflection verified" },
+	healReceived = { status = "functioning", comment = "Incoming heal pulse verified" },
+	healCrit = { status = "functioning", comment = "Critical incoming heal verified" },
+	combatEnter = { status = "functioning", comment = "Combat start cue verified" },
+	combatExit = { status = "functioning", comment = "Combat end cue verified" },
+	targetDeath = { status = "functioning", comment = "Target death pulse verified" },
+	killExperience = { status = "functioning", comment = "XP gain verified" },
+	autoAttackSwing = { status = "functioning", comment = "Main hand melee swing verified" },
+	selfCastStart = { status = "functioning", comment = "Spell cast start swell verified" },
+	selfCastSuccess = { status = "functioning", comment = "Spell cast release verified" },
+	selfCastInterrupt = { status = "functioning", comment = "Spell cast interrupt pulse verified" },
+	selfChannelStart = { status = "functioning", comment = "Channel start verified" },
+	selfChannelStop = { status = "functioning", comment = "Channel complete verified" },
+
+	-- Health & Player State
+	lowHealthHeartbeat = { status = "functioning", comment = "Low HP heartbeat pulse verified" },
+	lowHealthTexture = { status = "functioning", comment = "Low HP continuous rumble verified" },
+	deathScreen = { status = "functioning", comment = "Player death rumble verified" },
+	resurrectRequest = { status = "functioning", comment = "Resurrect prompt alert verified" },
+	levelUp = { status = "functioning", comment = "Level up fanfare rumble verified" },
+	afkStart = { status = "functioning", comment = "AFK status enter verified" },
+	afkClear = { status = "functioning", comment = "AFK status clear verified" },
+	restedStart = { status = "functioning", comment = "Rest area enter verified" },
+	restedExit = { status = "functioning", comment = "Rest area exit verified" },
+
+	-- Controller UI & Navigation
+	uiFocusIn = { status = "functioning", comment = "Gamepad UI focus click verified" },
+	uiNavigate = { status = "functioning", comment = "Gamepad directional move verified" },
+	radialTick = { status = "functioning", comment = "Radial menu tick verified" },
+	radialSelect = { status = "functioning", comment = "Radial selection verified" },
+	radialClose = { status = "functioning", comment = "Radial dismiss verified" },
+	padConnected = { status = "functioning", comment = "Controller connect buzz verified" },
+	padDisconnected = { status = "functioning", comment = "Controller disconnect buzz verified" },
+
+	-- Inventory & Interaction
+	bagOpen = { status = "functioning", comment = "Bag open latch verified" },
+	bagClose = { status = "functioning", comment = "Bag close latch verified" },
+	itemPickup = { status = "functioning", comment = "Cursor item lift verified" },
+	itemDrop = { status = "functioning", comment = "Cursor item drop verified" },
+	merchantOpen = { status = "functioning", comment = "Vendor open verified" },
+	merchantClose = { status = "functioning", comment = "Vendor close verified" },
+	bankOpen = { status = "functioning", comment = "Banker open verified" },
+	bankClosed = { status = "functioning", comment = "Banker close verified" },
+	questAccept = { status = "functioning", comment = "Quest accept pulse verified" },
+	questComplete = { status = "functioning", comment = "Quest turn-in fanfare verified" },
+	lootWindowOpen = { status = "functioning", comment = "Loot window open verified" },
+	lootWindowClosed = { status = "functioning", comment = "Loot window close verified" },
+}
+
 local function getEntry(triggerID)
-	local entry = PulseChecklistDB[triggerID]
+	local entry = PulseChecklistDB and PulseChecklistDB[triggerID]
 	if not entry then
+		local base = BASELINE_ENTRIES[triggerID]
+		if base then
+			return {
+				status = base.status,
+				comment = base.comment or "",
+				isBaseline = true,
+			}
+		end
 		return DEFAULT_ENTRY
 	end
 	if not STATUS_INFO[entry.status] then
@@ -77,7 +160,18 @@ local function getEntry(triggerID)
 end
 
 local function ensureEntry(triggerID)
-	PulseChecklistDB[triggerID] = PulseChecklistDB[triggerID] or { status = "untested", comment = "" }
+	PulseChecklistDB = PulseChecklistDB or {}
+	if not PulseChecklistDB[triggerID] then
+		local base = BASELINE_ENTRIES[triggerID]
+		if base then
+			PulseChecklistDB[triggerID] = {
+				status = base.status,
+				comment = base.comment or "",
+			}
+		else
+			PulseChecklistDB[triggerID] = { status = "untested", comment = "" }
+		end
+	end
 	local entry = PulseChecklistDB[triggerID]
 	if not STATUS_INFO[entry.status] then
 		entry.status = "untested"
@@ -151,14 +245,25 @@ local closeButton = CreateFrame("Button", nil, frame, "UIPanelCloseButton")
 closeButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -4, -4)
 
 local showExport -- forward declaration
+local showImport -- forward declaration
 
 local exportButton = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
 exportButton:SetSize(62, 20)
-exportButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -38, -12)
+exportButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -104, -12)
 exportButton:SetText("Export")
 exportButton:SetScript("OnClick", function()
 	if showExport then
 		showExport()
+	end
+end)
+
+local importButton = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
+importButton:SetSize(62, 20)
+importButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -38, -12)
+importButton:SetText("Import")
+importButton:SetScript("OnClick", function()
+	if showImport then
+		showImport()
 	end
 end)
 
@@ -307,7 +412,7 @@ local function createRow(trigger)
 	local function refreshStatus()
 		local entry = getEntry(trigger.id)
 		local info = STATUS_INFO[entry.status]
-		local elsewhere = entry.status ~= "untested" and not isSameCharacter(entry.confirmedBy)
+		local elsewhere = entry.status ~= "untested" and not entry.isBaseline and not isSameCharacter(entry.confirmedBy)
 		statusButton:SetText(info.label .. (elsewhere and " |cff888888\194\183|r" or ""))
 		statusButton:GetFontString():SetTextColor(info.r, info.g, info.b)
 	end
@@ -335,6 +440,8 @@ local function createRow(trigger)
 		local stamp = entry.confirmedBy
 		if entry.status == "untested" then
 			GameTooltip:AddLine("Not tested yet. (Right-click to cycle backwards)", 0.6, 0.6, 0.6)
+		elseif entry.isBaseline and not stamp then
+			GameTooltip:AddLine("Pre-verified in baseline addon build.", 0.25, 0.85, 0.25)
 		elseif not stamp then
 			GameTooltip:AddLine("Set before this build recorded who did it.", 0.6, 0.6, 0.6)
 		else
@@ -391,6 +498,9 @@ local function createRow(trigger)
 		triggerLabel = trigger.label,
 		searchText = searchText,
 		refreshStatus = refreshStatus,
+		refreshComment = function()
+			commentBox:SetText(getEntry(trigger.id).comment or "")
+		end,
 		getStatus = function()
 			return getEntry(trigger.id).status
 		end,
@@ -601,6 +711,176 @@ showExport = function()
 end
 
 ---------------------------------------------------------------------------
+-- Import Modal & Parser
+---------------------------------------------------------------------------
+
+local importFrame = CreateFrame("Frame", "PulseChecklistImportFrame", UIParent, "BackdropTemplate")
+importFrame:SetSize(540, 400)
+importFrame:SetPoint("CENTER")
+importFrame:SetFrameStrata("DIALOG")
+importFrame:SetMovable(true)
+importFrame:EnableMouse(true)
+importFrame:RegisterForDrag("LeftButton")
+importFrame:SetScript("OnDragStart", importFrame.StartMoving)
+importFrame:SetScript("OnDragStop", importFrame.StopMovingOrSizing)
+importFrame:SetBackdrop(BACKDROP_DIALOG_32_32)
+importFrame:Hide()
+
+local importTitle = importFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
+importTitle:SetPoint("TOP", importFrame, "TOP", 0, -16)
+importTitle:SetText("Pulse Checklist — Import Data")
+
+local importDesc = importFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+importDesc:SetPoint("TOP", importTitle, "BOTTOM", 0, -6)
+importDesc:SetText("Paste an exported checklist report or backup snippet below and click Apply Import.")
+
+local importScroll = CreateFrame("ScrollFrame", nil, importFrame, "UIPanelScrollFrameTemplate")
+importScroll:SetPoint("TOPLEFT", importFrame, "TOPLEFT", 20, -62)
+importScroll:SetPoint("BOTTOMRIGHT", importFrame, "BOTTOMRIGHT", -32, 48)
+
+local importBox = CreateFrame("EditBox", nil, importScroll)
+importBox:SetMultiLine(true)
+importBox:SetSize(470, 260)
+importBox:SetAutoFocus(false)
+importBox:SetFontObject("GameFontHighlightSmall")
+importBox:SetScript("OnEscapePressed", function()
+	importFrame:Hide()
+end)
+importScroll:SetScrollChild(importBox)
+
+local function parseAndApplyImport(text)
+	PulseChecklistDB = PulseChecklistDB or {}
+	local count = 0
+	local currentStatus = "functioning"
+
+	for rawLine in (text or ""):gmatch("[^\r\n]+") do
+		local line = strtrim(rawLine)
+		if line ~= "" then
+			local lowerLine = string.lower(line)
+			if lowerLine:find("needs work", 1, true) or lowerLine:find("⚠️", 1, true) then
+				currentStatus = "needswork"
+			elseif
+				lowerLine:find("non%-functioning", 1)
+				or lowerLine:find("failed", 1, true)
+				or lowerLine:find("❌", 1, true)
+			then
+				currentStatus = "nonfunctioning"
+			elseif lowerLine:find("functioning", 1, true) or lowerLine:find("✅", 1, true) then
+				currentStatus = "functioning"
+			elseif lowerLine:find("untested", 1, true) or lowerLine:find("⏳", 1, true) then
+				currentStatus = "untested"
+			end
+
+			-- Check markdown single-item line: "- `triggerID`: comment" or "- `triggerID`"
+			local bulletID, bulletComment = line:match("^%s*[%-%*]%s*`([%w_]+)`%s*:?%s*(.*)$")
+			if bulletID then
+				local entry = ensureEntry(bulletID)
+				entry.status = currentStatus
+				if bulletComment and bulletComment ~= "" then
+					entry.comment = strtrim(bulletComment)
+				end
+				stampEntry(entry)
+				count = count + 1
+			else
+				-- Check compact line format: "triggerID:status:comment" or "triggerID=status:comment"
+				local compactID, compactStatus, compactComment = line:match("^([%w_]+)%s*[:=]%s*([%w_]+)%s*:?%s*(.*)$")
+				if
+					compactID
+					and compactStatus
+					and (
+						compactStatus == "untested"
+						or compactStatus == "functioning"
+						or compactStatus == "needswork"
+						or compactStatus == "nonfunctioning"
+						or compactStatus == "failed"
+						or compactStatus == "pass"
+						or compactStatus == "fail"
+						or compactStatus == "ok"
+					)
+				then
+					local s = string.lower(compactStatus)
+					if s == "pass" or s == "ok" or s == "work" then
+						s = "functioning"
+					end
+					if s == "fail" or s == "failed" then
+						s = "nonfunctioning"
+					end
+					if STATUS_INFO[s] then
+						local entry = ensureEntry(compactID)
+						entry.status = s
+						if compactComment and compactComment ~= "" then
+							entry.comment = strtrim(compactComment)
+						end
+						stampEntry(entry)
+						count = count + 1
+					end
+				else
+					-- Check comma-separated backtick list: `id1`, `id2`, `id3`
+					if not line:match("^#") then
+						for triggerID in line:gmatch("`([%w_]+)`") do
+							local entry = ensureEntry(triggerID)
+							entry.status = currentStatus
+							stampEntry(entry)
+							count = count + 1
+						end
+					end
+				end
+			end
+		end
+	end
+
+	-- Refresh all active rows
+	for _, entry in ipairs(entries) do
+		if entry.refreshStatus then
+			entry.refreshStatus()
+		end
+		if entry.refreshComment then
+			entry.refreshComment()
+		end
+	end
+	if updateFilterCounts then
+		updateFilterCounts()
+	end
+	if relayout then
+		relayout()
+	end
+
+	return count
+end
+
+local applyButton = CreateFrame("Button", nil, importFrame, "UIPanelButtonTemplate")
+applyButton:SetSize(110, 22)
+applyButton:SetPoint("BOTTOMLEFT", importFrame, "BOTTOMLEFT", 140, 16)
+applyButton:SetText("Apply Import")
+applyButton:SetScript("OnClick", function()
+	local raw = importBox:GetText() or ""
+	local count = parseAndApplyImport(raw)
+	importFrame:Hide()
+	print(("PulseChecklist: Successfully imported %d cue statuses."):format(count))
+end)
+
+local cancelImport = CreateFrame("Button", nil, importFrame, "UIPanelButtonTemplate")
+cancelImport:SetSize(80, 22)
+cancelImport:SetPoint("BOTTOMRIGHT", importFrame, "BOTTOMRIGHT", -140, 16)
+cancelImport:SetText("Cancel")
+cancelImport:SetScript("OnClick", function()
+	importFrame:Hide()
+end)
+
+showImport = function()
+	importBox:SetText("")
+	importFrame:Show()
+	importBox:SetFocus()
+end
+
+-- Reach-in handle for scripting and automated harness testing
+_G.PulseChecklist = {
+	Import = parseAndApplyImport,
+	GetEntry = getEntry,
+	BASELINE = BASELINE_ENTRIES,
+}
+
+---------------------------------------------------------------------------
 -- Load / slash command
 ---------------------------------------------------------------------------
 
@@ -632,6 +912,11 @@ SlashCmdList["PULSECHECKLIST"] = function(msg)
 
 	if cmd == "export" then
 		showExport()
+		return
+	end
+
+	if cmd == "import" then
+		showImport()
 		return
 	end
 
