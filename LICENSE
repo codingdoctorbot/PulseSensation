@@ -19,3 +19,53 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+================================================================================
+ATTRIBUTIONS & ACKNOWLEDGEMENTS
+================================================================================
+
+1. AI Pair-Programming Assistance
+   This project was developed by codingdoctorbot with AI pair-programming
+   assistance from:
+   - Claude Code (Anthropic)
+   - Antigravity (Google DeepMind)
+
+2. Precursor Inspiration
+   - Tremor: The proof-of-concept precursor that pioneered controller vibration
+     exploration in World of Warcraft and provided the foundational inspiration
+     and initial accessibility cue models.
+
+================================================================================
+THIRD-PARTY COMPONENT LICENSES & EXCEPTIONS
+================================================================================
+
+The Software includes embedded third-party open-source libraries that are
+governed by their respective authors and permissive licenses:
+
+1. LibStub
+   Placed in the Public Domain by its authors:
+   Credits: Kaelten, Cladhaire, ckknight, Mikk, Ammo, Nevcairiel, joshborke.
+
+2. CallbackHandler-1.0
+   Copyright (c) 2008-2022 Cladhaire, Ammo, Nevcairiel.
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files to deal in the Software
+   without restriction.
+
+3. LibDataBroker-1.1
+   Copyright (c) 2008-2020 tekkub.
+   Licensed under the terms of the MIT License / Public Domain.
+
+4. LibDBIcon-1.0 Geometry & Framing Pattern
+   Copyright (c) Torhal, Rabbit.
+   The aperture framing geometry used for the minimap icon is derived from the
+   classic LibDBIcon-1.0 pattern.
+
+================================================================================
+TRADEMARK & FAN CONTENT DISCLAIMER
+================================================================================
+
+World of Warcraft, Warcraft, and Blizzard Entertainment are trademarks or
+registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other
+countries. This project is an unofficial fan creation and is not affiliated
+with, endorsed by, or sponsored by Blizzard Entertainment.
