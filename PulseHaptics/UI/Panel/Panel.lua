@@ -194,7 +194,7 @@ local function buildWindow()
 
 	-- Atmospheric watermark of the ripple artwork in the background of the content pane
 	local watermark = f:CreateTexture(nil, "BACKGROUND", nil, 1)
-	watermark:SetTexture("Interface\\AddOns\\Pulse\\Media\\SettingsBG")
+	watermark:SetTexture("Interface\\AddOns\\PulseHaptics\\Media\\SettingsBG")
 	watermark:SetPoint("TOPLEFT", f, "TOPLEFT", 190, -60)
 	watermark:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -10, 10)
 	watermark:SetAlpha(0.06)

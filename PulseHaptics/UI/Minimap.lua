@@ -151,21 +151,13 @@ local function createMinimapButton()
 	btn.Background = bg
 
 	-- 2. Icon artwork (Spell_Nature_WispSplode) with coordinate crop
+	-- Sized to 17x17 and centered so all 4 corners (radius 12.02) sit fully inside the gold ring aperture (radius 12.5)
 	local icon = btn:CreateTexture(nil, "ARTWORK")
-	icon:SetSize(19, 19)
+	icon:SetSize(17, 17)
 	icon:SetPoint("CENTER", btn, "CENTER", 0, 0)
 	icon:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
 	icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 	btn.Icon = icon
-
-	-- Circular mask to cleanly eliminate square corners
-	if btn.CreateMaskTexture then
-		local mask = btn:CreateMaskTexture()
-		mask:SetTexture("Interface\\CharacterFrame\\TempEnchant-Right", "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
-		mask:SetAllPoints(icon)
-		icon:AddMaskTexture(mask)
-		btn.Mask = mask
-	end
 
 	-- 3. Classic golden minimap tracking border
 	local border = btn:CreateTexture(nil, "OVERLAY")

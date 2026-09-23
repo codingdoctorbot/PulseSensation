@@ -42,7 +42,7 @@ Pulse.UI.Settings = UISettings
 -- Deliberately shipped with no picture: this addon has no artwork of its own, and a
 -- borrowed Blizzard texture on the front page would be someone else's art presented as
 -- Pulse's.
-local BACKGROUND_TEXTURE = "Interface\\AddOns\\Pulse\\Media\\SettingsBG"
+local BACKGROUND_TEXTURE = "Interface\\AddOns\\PulseHaptics\\Media\\SettingsBG"
 local TEX_W, TEX_H = 512, 512
 
 -- Pulse's accent. Picked to sit with the addon's own icon (Spell_Nature_WispSplode)
