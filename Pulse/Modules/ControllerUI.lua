@@ -94,14 +94,58 @@ local function navButtonEnabled(button)
 	return true
 end
 
--- ── SmartNavigation Edge Detection (Retired) ──────────────────────────────────
+-- ── SmartNavigation Edge Detection (Commented Out / Pending Engine Fix) ──────
 --
 -- SmartNavigation:RegisterCallback invokes AttributeDelegate:SetAttribute on a SecureFrame,
 -- which Blizzard UI strictly blocks third-party addons from doing (triggers ADDON_ACTION_FORBIDDEN).
--- Kept as a clean no-op so the cue ID and settings schema remain valid without execution taint.
+-- The original implementation is preserved commented out below so it can be quickly re-enabled
+-- if Blizzard ever unprotects CallbackRegistryMixin or decouples SmartNavigation from SecureFrame attributes.
+--
+--[[
+local EDGE_EVENTS = {
+	"HitTopEdge",
+	"HitBottomEdge",
+	"HitLeftEdge",
+	"HitRightEdge",
+}
+local EDGE_OWNER = {}
+local edgeRegistered = false
+
+local function onEdge()
+	if not gamepadUIActive() then
+		return
+	end
+	Pulse:FireIfEnabled("uiNavigateEdge")
+end
 
 local function syncEdge()
-	-- No-op: do not call SmartNavigation:RegisterCallback to protect against taint
+	local wanted = Pulse.Database:Get("masterEnabled")
+			and Pulse.Database:GetCue("controllerUIMaster")
+			and Pulse.Database:GetCue("uiNavigateEdge")
+		or false
+
+	if wanted == edgeRegistered then
+		return
+	end
+	if not SmartNavigation or type(SmartNavigation.RegisterCallback) ~= "function" then
+		return
+	end
+
+	if wanted then
+		for _, event in ipairs(EDGE_EVENTS) do
+			pcall(SmartNavigation.RegisterCallback, SmartNavigation, event, onEdge, EDGE_OWNER)
+		end
+	else
+		for _, event in ipairs(EDGE_EVENTS) do
+			pcall(SmartNavigation.UnregisterCallback, SmartNavigation, event, EDGE_OWNER)
+		end
+	end
+	edgeRegistered = wanted
+end
+--]]
+
+local function syncEdge()
+	-- Inert no-op while implementation is commented out above
 end
 
 -- ── Major UI Panels Inspection ────────────────────────────────────────────────
