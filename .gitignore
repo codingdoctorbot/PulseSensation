@@ -14,9 +14,5 @@
 *.bak
 dist/
 
-# Internal development notes, reviews & logs
-*.rtf
-Pulse-*.md
-cloudreviewultra.md
-outstanding.md
-Pulse Minimap Button*.md
+# Internal development notes, reviews & logs (now live under docs/)
+docs/dev-notes/

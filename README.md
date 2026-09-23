@@ -19,7 +19,7 @@ Feel the heavy, distinct thud of plate boots crushing cobblestone. Feel the visc
 | 🛡️ **Locomotion & Armor Weight** | Heavy plate footfalls deliver low-frequency physical inertia; leather and cloth whisper; mounted gaits authentically mirror horse, wolf, and kodo stride rhythms. |
 | ⚔️ **Living Combat Texture** | Dual-wield weapon swings alternate dynamically with your character's real melee haste; parries and blocks kick back through the controller with crisp deflection snaps. |
 | 🔮 **Spellcasting & Channels** | Spells build from an ambient micro-flutter into a powerful crescendo at completion. Channels maintain a steady, hypnotic hum. |
-| 🔨 **Tradeskill Rhythms** | Crafting is no longer a silent progress bar. Blacksmithing strikes rhythmically on the beat; mining picks chip stone with sharp percussive taps; tailoring runs silky smooth. |
+| 🔨 **Tradeskill & Gathering** | Crafting is no longer a silent progress bar. Blacksmithing strikes rhythmically on the beat; mining picks chip stone with sharp percussive taps; herbalism, skinning, and fishing each carry their own distinct gather texture and a crisp harvest-complete pulse on loot. |
 | 🌧️ **Environmental Immersion** | Distant thunderstorms rumble gently in your grip before lightning strikes; blizzards bite with icy high-frequency chatter; breath loss triggers an urgent, rising heartbeat. |
 | ♿ **Tactile Accessibility** | Full situational awareness without watching UI frames: loss-of-control stuns, interrupts, threat transitions, and execution procs felt instantly. |
 
@@ -82,6 +82,8 @@ Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open 
 | `/pulse debug` | Toggle verbose console logging on or off. |
 | `/pdebug` (or `/pulsedebug`) | Open the real-time diagnostic and troubleshooting HUD. |
 | `/pcheck` (or `/pulsecheck`) | Open the in-game cue verification checklist (all 190 cues). |
+| `/pcheck export` | Generate a markdown QA status report you can copy to clipboard. |
+| `/pcheck import` | Open the import dialog — paste a previous export to restore all statuses and notes. |
 | `/console GamePadEnable 1` | Ensure Blizzard gamepad engine subsystem is enabled. |
 | `/console GamePadVibration 1` | Ensure Blizzard gamepad vibration output is enabled. |
 
@@ -93,7 +95,7 @@ Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open 
 |:---|:---|
 | **`PulseHaptics`** | The core haptic engine, authored modes, 22 module watchers, settings UI, and profile manager. |
 | **`PulseDebug`** | Companion developer & troubleshooting window for real-time channel introspection and trigger auditing. |
-| **`PulseChecklist`** | In-game verification checklist to track which of the 190 cues have been field-tested on your character. |
+| **`PulseChecklist`** | In-game QA verification checklist tracking all 190 cues. Ships with a pre-verified baseline so a WTF reset never loses confirmed results. Supports export (markdown report) and import (paste-to-restore) entirely in-game. |
 
 ---
 
