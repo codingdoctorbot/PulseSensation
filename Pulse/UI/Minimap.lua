@@ -14,6 +14,8 @@ Pulse.UI.Minimap = MinimapButton
 local ldbObj = nil
 local buttonFrame = nil
 local isDragging = false
+local lastToggleTime = 0
+local TOGGLE_DEBOUNCE = 0.3
 
 -- ── Math & Position helpers ───────────────────────────────────────────────────
 
@@ -22,6 +24,9 @@ local function getRadius()
 		return 80
 	end
 	local width = Minimap:GetWidth() or 140
+	if not width or width <= 0 then
+		width = 140
+	end
 	return (width / 2) + 6
 end
 
@@ -74,6 +79,36 @@ local function showTooltip(owner)
 	GameTooltip:Show()
 end
 
+-- ── Action Handlers ───────────────────────────────────────────────────────────
+
+local function toggleMasterEnabled(owner)
+	local now = GetTime()
+	if (now - lastToggleTime) < TOGGLE_DEBOUNCE then
+		return
+	end
+	lastToggleTime = now
+
+	-- In-combat protection: changing master state unregisters/registers events across 22 modules
+	if InCombatLockdown and InCombatLockdown() then
+		if DEFAULT_CHAT_FRAME and DEFAULT_CHAT_FRAME.AddMessage then
+			DEFAULT_CHAT_FRAME:AddMessage(
+				"|cff00bfff[Pulse]|r Cannot toggle master haptics while in combat.",
+				1,
+				0.3,
+				0.3
+			)
+		end
+		return
+	end
+
+	local current = Pulse.Database:Get("masterEnabled")
+	Pulse.Database:Set("masterEnabled", not current)
+
+	if owner and GameTooltip:GetOwner() == owner then
+		showTooltip(owner)
+	end
+end
+
 -- ── Frame Construction ────────────────────────────────────────────────────────
 
 local function createMinimapButton()
@@ -84,7 +119,8 @@ local function createMinimapButton()
 		return nil
 	end
 
-	local btn = CreateFrame("Button", "PulseMinimapButton", Minimap)
+	-- Parent to UIParent: avoids inheriting MinimapCluster / EditMode / Gamepad context restrictions
+	local btn = CreateFrame("Button", "PulseMinimapButton", UIParent)
 	btn:SetSize(32, 32)
 	btn:SetFrameStrata("MEDIUM")
 	btn:SetFrameLevel((Minimap:GetFrameLevel() or 8) + 5)
@@ -106,16 +142,22 @@ local function createMinimapButton()
 
 	-- 2. Icon artwork (Spell_Nature_WispSplode) with coordinate crop
 	local icon = btn:CreateTexture(nil, "ARTWORK")
-	icon:SetSize(19, 19)
+	icon:SetSize(18, 18)
 	icon:SetPoint("CENTER", btn, "CENTER", 0, 0)
 	icon:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
 	icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 	btn.Icon = icon
 
-	-- Circular mask on modern clients to cleanly eliminate square corners
-	if btn.CreateMaskTexture then
+	-- Circular mask to cleanly eliminate square corners (using authentic Blizzard mask)
+	if icon.SetMask then
+		icon:SetMask("Interface\\CharacterFrame\\TempPortraitAlphaMask")
+	elseif btn.CreateMaskTexture then
 		local mask = btn:CreateMaskTexture()
-		mask:SetTexture("Interface\\CharacterFrame\\TempEnchant-Right", "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
+		mask:SetTexture(
+			"Interface\\CharacterFrame\\TempPortraitAlphaMask",
+			"CLAMPTOBLACKADDITIVE",
+			"CLAMPTOBLACKADDITIVE"
+		)
 		mask:SetAllPoints(icon)
 		icon:AddMaskTexture(mask)
 		btn.Mask = mask
@@ -145,11 +187,7 @@ local function createMinimapButton()
 	end)
 	btn:SetScript("OnClick", function(self, button)
 		if button == "RightButton" then
-			local current = Pulse.Database:Get("masterEnabled")
-			Pulse.Database:Set("masterEnabled", not current)
-			if GameTooltip:GetOwner() == self then
-				showTooltip(self)
-			end
+			toggleMasterEnabled(self)
 		else
 			if Pulse.UI.Panel and Pulse.UI.Panel.Toggle then
 				Pulse.UI.Panel.Toggle()
@@ -159,8 +197,10 @@ local function createMinimapButton()
 		end
 	end)
 
-	-- Dragging around Minimap circumference
+	-- Dragging around Minimap circumference (zero DB writes during drag, persists once on drop)
 	local getCursor = _G.GetCursorPosition
+	local currentAngle = nil
+
 	btn:SetScript("OnDragStart", function(self)
 		isDragging = true
 		GameTooltip:Hide()
@@ -172,18 +212,35 @@ local function createMinimapButton()
 			local cx, cy = getCursor()
 			local scale = Minimap:GetEffectiveScale() or 1
 			cx, cy = cx / scale, cy / scale
-			local angle = math.deg(math.atan2(cy - my, cx - mx)) % 360
-			local cfg = Pulse.Database:Get("minimap") or {}
-			cfg.minimapPos = angle
-			Pulse.Database:Set("minimap", cfg)
-			updateButtonPosition(angle)
+			currentAngle = math.deg(math.atan2(cy - my, cx - mx)) % 360
+			updateButtonPosition(currentAngle)
 		end)
 	end)
 
 	btn:SetScript("OnDragStop", function(self)
 		isDragging = false
 		self:SetScript("OnUpdate", nil)
+		if currentAngle then
+			local cfg = Pulse.Database:Get("minimap") or {}
+			cfg.minimapPos = currentAngle
+			Pulse.Database:Set("minimap", cfg)
+		end
 	end)
+
+	-- Synchronize button visibility with Minimap shown/hidden state
+	if Minimap.HookScript then
+		Minimap:HookScript("OnShow", function()
+			local cfg = Pulse.Database:Get("minimap") or {}
+			if not cfg.hide and buttonFrame then
+				buttonFrame:Show()
+			end
+		end)
+		Minimap:HookScript("OnHide", function()
+			if buttonFrame then
+				buttonFrame:Hide()
+			end
+		end)
+	end
 
 	buttonFrame = btn
 	return btn
@@ -207,8 +264,7 @@ local function initLDB()
 		icon = "Interface\\Icons\\Spell_Nature_WispSplode",
 		OnClick = function(_, button)
 			if button == "RightButton" then
-				local current = Pulse.Database:Get("masterEnabled")
-				Pulse.Database:Set("masterEnabled", not current)
+				toggleMasterEnabled(nil)
 			else
 				if Pulse.UI.Panel and Pulse.UI.Panel.Toggle then
 					Pulse.UI.Panel.Toggle()
@@ -266,6 +322,14 @@ function MinimapButton:Init()
 	Pulse.Database:OnGlobalChanged("minimap", function()
 		MinimapButton:Refresh()
 	end)
+
+	-- Settling listener: update position once world layout is finalized
+	local loginFrame = CreateFrame("Frame")
+	loginFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+	loginFrame:SetScript("OnEvent", function(frame)
+		frame:UnregisterAllEvents()
+		MinimapButton:Refresh()
+	end)
 end
 
 function MinimapButton:Refresh()
@@ -275,7 +339,7 @@ function MinimapButton:Refresh()
 	end
 
 	local cfg = Pulse.Database:Get("minimap") or {}
-	if cfg.hide then
+	if cfg.hide or (Minimap and not Minimap:IsShown()) then
 		btn:Hide()
 	else
 		btn:Show()
