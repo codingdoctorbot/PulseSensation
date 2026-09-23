@@ -109,6 +109,7 @@ read_globals = {
     "UnitPowerMax",
     "UnitGUID",
     "UnitName",
+    "Ambiguate",
     "UnitClass",
     "UnitRace",
     "UnitAura",

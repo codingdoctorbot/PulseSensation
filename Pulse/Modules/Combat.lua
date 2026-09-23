@@ -348,6 +348,11 @@ end
 -- are issecretvalue-guarded.
 
 local function castTick()
+	if not isCasting and not isChanneling then
+		castFrame:SetScript("OnUpdate", nil)
+		return
+	end
+
 	-- A craft is its own sensation (Modules/Crafting.lua) and a craft IS a cast, so without
 	-- this both textures run on one channel and the engine max-blends them into something
 	-- neither was tuned for. Suppression rather than blending: one action, one feeling.
@@ -360,10 +365,16 @@ local function castTick()
 	local presence = Pulse.Database:GetTriggerSetting("castTexture", "castPresence", 0.1)
 
 	if isCasting then
-		local name, _, _, startTimeMs, endTimeMs = UnitCastingInfo("player")
+		local name, _, _, startTimeMs, endTimeMs, isTradeskill = UnitCastingInfo("player")
 		if not name then
 			-- Cast has ended or was cancelled: prevent state desync and buzzing
 			isCasting = false
+			if not isChanneling then
+				castFrame:SetScript("OnUpdate", nil)
+			end
+			return
+		end
+		if isTradeskill then
 			return
 		end
 		if
@@ -381,9 +392,22 @@ local function castTick()
 			Pulse:HoldIfEnabled("castTexture", presence, presence * 1.5)
 		end
 	elseif isChanneling then
-		local name = UnitChannelInfo and UnitChannelInfo("player")
+		if not UnitChannelInfo then
+			isChanneling = false
+			if not isCasting then
+				castFrame:SetScript("OnUpdate", nil)
+			end
+			return
+		end
+		local name, _, _, _, _, isTradeskill = UnitChannelInfo("player")
 		if not name then
 			isChanneling = false
+			if not isCasting then
+				castFrame:SetScript("OnUpdate", nil)
+			end
+			return
+		end
+		if isTradeskill then
 			return
 		end
 		local hum = Pulse.Database:GetTriggerSetting("castTexture", "channelHum", 0.2)
@@ -414,7 +438,9 @@ local function syncCast()
 		isChanneling = true
 	end
 
-	castFrame:SetScript("OnUpdate", castTick)
+	if isCasting or isChanneling then
+		castFrame:SetScript("OnUpdate", castTick)
+	end
 end
 
 if Pulse.CastActivity and Pulse.CastActivity.OnActivity then
@@ -423,9 +449,15 @@ if Pulse.CastActivity and Pulse.CastActivity.OnActivity then
 		if c == "CAST_START" or c == "CRAFT_CAST_START" then
 			isCasting = true
 			isChanneling = false
+			if Pulse.Database:Get("masterEnabled") and Pulse.Database:GetCue("castTexture") then
+				castFrame:SetScript("OnUpdate", castTick)
+			end
 		elseif c == "CHANNEL_START" then
 			isCasting = false
 			isChanneling = true
+			if Pulse.Database:Get("masterEnabled") and Pulse.Database:GetCue("castTexture") then
+				castFrame:SetScript("OnUpdate", castTick)
+			end
 		elseif
 			c == "CAST_COMPLETE"
 			or c == "CAST_STOPPED"
@@ -437,6 +469,7 @@ if Pulse.CastActivity and Pulse.CastActivity.OnActivity then
 		then
 			isCasting = false
 			isChanneling = false
+			castFrame:SetScript("OnUpdate", nil)
 		end
 	end)
 end

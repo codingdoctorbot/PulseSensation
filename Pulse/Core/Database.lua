@@ -1514,7 +1514,12 @@ function Database:DeleteProfile(name)
 end
 
 local function activeProfile()
-	return DB.profiles[Database:GetActiveProfileName()]
+	local name = Database:GetActiveProfileName()
+	local profile = DB and DB.profiles and DB.profiles[name]
+	if not profile then
+		profile = DB and DB.profiles and DB.profiles["Default"]
+	end
+	return profile or PROFILE_DEFAULTS
 end
 
 function Database:Get(key)

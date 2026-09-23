@@ -251,6 +251,20 @@ function commands.why(P, arg)
 		gate(P.Database:GetCue(masterTriggerID) and true or false, masterTriggerID .. " (category master)")
 	end
 	gate(P.Engine:IsDeviceReady(), "device ready")
+	local COMBAT_TEXT_IDS = {
+		damageTaken = true,
+		critLanded = true,
+		deflect = true,
+		healReceived = true,
+		healCrit = true,
+		debuffReceived = true,
+		honorGained = true,
+		factionGained = true,
+	}
+	if COMBAT_TEXT_IDS[trigger.id] then
+		local fct = C_CVar and C_CVar.GetCVarBool and C_CVar.GetCVarBool("enableFloatingCombatText")
+		gate(fct ~= false, "enableFloatingCombatText CVar (WoW Game Options)")
+	end
 	if trigger.continuous then
 		row(DIM .. "n/a  " .. R .. " mode", DIM .. "continuous — driven by Hold(), not a single PlayMode call" .. R)
 	else
