@@ -119,9 +119,9 @@ local function createMinimapButton()
 		return nil
 	end
 
-	-- Parent to UIParent: avoids inheriting MinimapCluster / EditMode / Gamepad context restrictions
-	local btn = CreateFrame("Button", "PulseMinimapButton", UIParent)
-	btn:SetSize(32, 32)
+	-- Parent to Minimap matching standard Classic addon minimap buttons
+	local btn = CreateFrame("Button", "PulseMinimapButton", Minimap)
+	btn:SetSize(31, 31)
 	btn:SetFrameStrata("MEDIUM")
 	btn:SetFrameLevel((Minimap:GetFrameLevel() or 8) + 5)
 	btn:RegisterForClicks("anyUp")
@@ -142,38 +142,24 @@ local function createMinimapButton()
 		Pulse.UI.Panel.Theme.MarkIgnored(btn)
 	end
 
-	-- 1. Dark circular backing
+	-- 1. Dark circular backing (authentic Classic offset)
 	local bg = btn:CreateTexture(nil, "BACKGROUND")
 	bg:SetSize(20, 20)
-	bg:SetPoint("CENTER", btn, "CENTER", 0, 0)
+	bg:SetPoint("TOPLEFT", btn, "TOPLEFT", 7, -5)
 	bg:SetTexture("Interface\\Minimap\\UI-Minimap-Background")
 	bg:SetVertexColor(0, 0, 0, 0.85)
 	btn.Background = bg
 
 	-- 2. Icon artwork (Spell_Nature_WispSplode) with coordinate crop
 	local icon = btn:CreateTexture(nil, "ARTWORK")
-	icon:SetSize(18, 18)
-	icon:SetPoint("CENTER", btn, "CENTER", 0, 0)
+	icon:SetSize(17, 17)
+	icon:SetPoint("TOPLEFT", btn, "TOPLEFT", 7, -6)
 	icon:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
-	icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+	icon:SetTexCoord(0.05, 0.95, 0.05, 0.95)
 	btn.Icon = icon
 
-	-- Circular mask to cleanly eliminate square corners (using authentic Blizzard mask)
-	if icon.SetMask then
-		icon:SetMask("Interface\\CharacterFrame\\TempPortraitAlphaMask")
-	elseif btn.CreateMaskTexture then
-		local mask = btn:CreateMaskTexture()
-		mask:SetTexture(
-			"Interface\\CharacterFrame\\TempPortraitAlphaMask",
-			"CLAMPTOBLACKADDITIVE",
-			"CLAMPTOBLACKADDITIVE"
-		)
-		mask:SetAllPoints(icon)
-		icon:AddMaskTexture(mask)
-		btn.Mask = mask
-	end
-
 	-- 3. Classic golden minimap tracking border
+	-- The circular aperture in MiniMap-TrackingBorder naturally clips and frames the square icon
 	local border = btn:CreateTexture(nil, "OVERLAY")
 	border:SetSize(53, 53)
 	border:SetPoint("TOPLEFT", btn, "TOPLEFT", 0, 0)
@@ -182,8 +168,8 @@ local function createMinimapButton()
 
 	-- 4. Hover highlight
 	local highlight = btn:CreateTexture(nil, "HIGHLIGHT")
-	highlight:SetSize(22, 22)
-	highlight:SetPoint("CENTER", btn, "CENTER", 0, 0)
+	highlight:SetSize(24, 24)
+	highlight:SetPoint("TOPLEFT", btn, "TOPLEFT", 5, -4)
 	highlight:SetTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Highlight")
 	highlight:SetBlendMode("ADD")
 	btn.Highlight = highlight

@@ -304,9 +304,9 @@ function Pulse:WatchTrigger(trigger)
 		end
 		for _, event in ipairs(trigger.events) do
 			if trigger.unit then
-				frame:RegisterUnitEvent(event, trigger.unit)
+				pcall(frame.RegisterUnitEvent, frame, event, trigger.unit)
 			else
-				frame:RegisterEvent(event)
+				pcall(frame.RegisterEvent, frame, event)
 			end
 		end
 	end
