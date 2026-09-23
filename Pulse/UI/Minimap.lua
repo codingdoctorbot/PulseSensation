@@ -124,8 +124,18 @@ local function createMinimapButton()
 	btn:SetSize(32, 32)
 	btn:SetFrameStrata("MEDIUM")
 	btn:SetFrameLevel((Minimap:GetFrameLevel() or 8) + 5)
-	btn:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+	btn:RegisterForClicks("anyUp")
 	btn:RegisterForDrag("LeftButton")
+
+	-- Prevent click-through and motion propagation to Minimap underneath (PingLocation protection)
+	if btn.SetPropagateMouseClicks then
+		btn:SetPropagateMouseClicks(false)
+	end
+	if btn.SetPropagateMouseMotion then
+		btn:SetPropagateMouseMotion(false)
+	end
+	btn:SetScript("OnMouseDown", function() end)
+	btn:SetScript("OnMouseUp", function() end)
 
 	-- Out of SmartNavigation: gamepad stick navigation must not try to target the minimap icon
 	if Pulse.UI.Panel and Pulse.UI.Panel.Theme and Pulse.UI.Panel.Theme.MarkIgnored then
