@@ -48,6 +48,14 @@ local STEALTH_POLL = 0.1
 local stealthFrame = CreateFrame("Frame")
 local stealthElapsed = 0
 
+local function isPlayerStealthed()
+	if type(IsStealthed) ~= "function" then
+		return false
+	end
+	local ok, stealthed = pcall(IsStealthed)
+	return ok and stealthed or false
+end
+
 local function stealthTick(_, elapsed)
 	stealthElapsed = stealthElapsed + elapsed
 	if stealthElapsed < STEALTH_POLL then
@@ -55,11 +63,8 @@ local function stealthTick(_, elapsed)
 	end
 	stealthElapsed = 0
 
-	if type(IsStealthed) ~= "function" then
-		return
-	end
-	local ok, stealthed = pcall(IsStealthed)
-	if not ok or not stealthed then
+	if not isPlayerStealthed() then
+		stealthFrame:SetScript("OnUpdate", nil)
 		return
 	end
 
@@ -72,7 +77,25 @@ local function stealthTick(_, elapsed)
 	Pulse:HoldIfEnabled("stealthTexture", value, 0)
 end
 
+local function updateStealthState()
+	if not Pulse.Database:Get("masterEnabled") or not Pulse.Database:GetCue("stealthTexture") then
+		stealthFrame:SetScript("OnUpdate", nil)
+		return
+	end
+	if isPlayerStealthed() then
+		stealthElapsed = 0
+		stealthFrame:SetScript("OnUpdate", stealthTick)
+	else
+		stealthFrame:SetScript("OnUpdate", nil)
+	end
+end
+
+stealthFrame:SetScript("OnEvent", function()
+	updateStealthState()
+end)
+
 local function syncStealth()
+	stealthFrame:UnregisterAllEvents()
 	stealthFrame:SetScript("OnUpdate", nil)
 	stealthElapsed = 0
 	if not Pulse.Database:Get("masterEnabled") then
@@ -81,7 +104,9 @@ local function syncStealth()
 	if not Pulse.Database:GetCue("stealthTexture") then
 		return
 	end
-	stealthFrame:SetScript("OnUpdate", stealthTick)
+	stealthFrame:RegisterEvent("UPDATE_STEALTH")
+	stealthFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+	updateStealthState()
 end
 
 -- Confirmation popups
@@ -102,10 +127,22 @@ local POPUP_FRAMES = 4 -- StaticPopup1..4, Blizzard's own pool size
 local popupFrame = CreateFrame("Frame")
 local popupElapsed = 0
 local popupWasShown = false
+local staticPopups = nil
+
+local function getStaticPopups()
+	if not staticPopups then
+		staticPopups = {}
+		for index = 1, POPUP_FRAMES do
+			staticPopups[index] = _G["StaticPopup" .. index]
+		end
+	end
+	return staticPopups
+end
 
 local function anyPopupShown()
+	local popups = getStaticPopups()
 	for index = 1, POPUP_FRAMES do
-		local dialog = _G["StaticPopup" .. index]
+		local dialog = popups[index] or _G["StaticPopup" .. index]
 		if dialog and dialog.IsShown then
 			local ok, shown = pcall(dialog.IsShown, dialog)
 			if ok and shown then

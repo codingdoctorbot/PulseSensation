@@ -148,6 +148,10 @@ function Pulse:HoldRolesIfEnabled(triggerID, roles, duration)
 	if not trigger then
 		return
 	end
+	local catMaster = self.Registry.ALERT_CATEGORY_MASTER and self.Registry.ALERT_CATEGORY_MASTER[trigger.category]
+	if catMaster and catMaster ~= triggerID and not self.Database:GetCue(catMaster) then
+		return
+	end
 	local scale = self.Database:GetTriggerSetting(triggerID, "intensity", 1.0)
 	wipe(staticScaled)
 	for role, value in pairs(roles) do

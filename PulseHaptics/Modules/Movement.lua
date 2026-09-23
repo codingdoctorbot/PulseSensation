@@ -128,6 +128,14 @@ local function pollLandingAndSwim(_, elapsed)
 		fallStartTime = GetTime()
 	end
 
+	-- Stale jump timestamp expiration:
+	-- If JumpOrAscendStart set fallStartTime, but the jump was blocked (rooted, stunned,
+	-- mounted indoors, low ceiling) and the player never entered a falling/flying state,
+	-- clear fallStartTime after 1.5s to prevent false-positive landingHard triggers later.
+	if not falling and not flying and fallStartTime and (GetTime() - fallStartTime > 1.5) then
+		fallStartTime = nil
+	end
+
 	if (wasFalling and not falling) or (wasFlying and not flying and not falling) then
 		if fallStartTime then
 			local airTime = GetTime() - fallStartTime

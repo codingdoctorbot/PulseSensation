@@ -105,7 +105,9 @@ end
 local function runCraftTo(durationSeconds, fraction, steps)
     for i = 1, steps do
         now = castStartMs / 1000 + (durationSeconds * fraction * i / steps)
-        scripts.OnUpdate()
+        if scripts.OnUpdate then
+            scripts.OnUpdate()
+        end
     end
 end
 

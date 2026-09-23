@@ -60,7 +60,6 @@ end)
 
 -- Cooldown Manager: tracks the built-in Essential category through C_Spell.GetSpellCooldown,
 -- pcall-wrapped so a behaviour change degrades rather than errors.
--- NOT FUNCTIONING AT THE MOMENT — NEEDS WORK.
 
 local cooldownFrame = CreateFrame("Frame")
 local COOLDOWN_CATEGORY = Enum and Enum.CooldownViewerCategory and Enum.CooldownViewerCategory.Essential
@@ -95,21 +94,40 @@ local function resolveCooldownSet()
 		end
 		return
 	end
-	for _, spellID in ipairs(ids) do
-		trackedSpells[spellID] = false
+	local getInfo = C_CooldownViewer and C_CooldownViewer.GetCooldownViewerCooldownInfo
+	local count = 0
+	for _, cid in ipairs(ids) do
+		local resolvedSpellID = cid
+		if getInfo and type(getInfo) == "function" then
+			local okInfo, cdInfo = pcall(getInfo, cid)
+			if okInfo and type(cdInfo) == "table" and cdInfo.spellID and not issecretvalue(cdInfo.spellID) then
+				resolvedSpellID = (cdInfo.overrideSpellID and not issecretvalue(cdInfo.overrideSpellID))
+						and cdInfo.overrideSpellID
+					or cdInfo.spellID
+			end
+		end
+		if type(resolvedSpellID) == "number" then
+			trackedSpells[resolvedSpellID] = false
+			count = count + 1
+		end
 	end
-	cooldownSetResolved = true
+	if count > 0 then
+		cooldownSetResolved = true
+	end
 	if Pulse.debug then
-		print(("Pulse: cooldownReady -> resolved %d tracked spell(s)"):format(#ids))
+		print(("Pulse: cooldownReady -> resolved %d tracked spell(s)"):format(count))
 	end
 end
 
 local function checkCooldowns()
 	if not cooldownSetResolved then
-		if Pulse.debug then
-			print("Pulse: cooldownReady -> checkCooldowns skipped, set never resolved")
+		resolveCooldownSet()
+		if not cooldownSetResolved then
+			if Pulse.debug then
+				print("Pulse: cooldownReady -> checkCooldowns skipped, set never resolved")
+			end
+			return
 		end
-		return
 	end
 	local now = GetTime()
 	for spellID, wasOnCD in pairs(trackedSpells) do
@@ -166,12 +184,19 @@ local function syncCooldownReady()
 	resolveCooldownSet()
 	cooldownFrame:RegisterEvent("SPELL_UPDATE_COOLDOWN")
 	cooldownFrame:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
+	cooldownFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+	pcall(cooldownFrame.RegisterEvent, cooldownFrame, "COOLDOWN_VIEWER_DATA_LOADED")
 	checkCooldowns() -- seed real current state, not a stale default
 end
 
 cooldownFrame:SetScript("OnEvent", function(_, event)
-	if event == "PLAYER_SPECIALIZATION_CHANGED" then
+	if
+		event == "PLAYER_SPECIALIZATION_CHANGED"
+		or event == "PLAYER_ENTERING_WORLD"
+		or event == "COOLDOWN_VIEWER_DATA_LOADED"
+	then
 		resolveCooldownSet()
+		checkCooldowns()
 		return
 	end
 	checkCooldowns()
@@ -861,6 +886,9 @@ meleeRangeFrame:SetScript("OnEvent", function(_, event, swingType, isInRange, ch
 		return
 	end
 	if event == "PLAYER_SWING_RANGE_UPDATE" then
+		if issecretvalue and (issecretvalue(checksRange) or issecretvalue(isInRange)) then
+			return
+		end
 		if swingType ~= 0 or not checksRange then
 			return
 		end

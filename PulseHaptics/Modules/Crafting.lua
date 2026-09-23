@@ -260,6 +260,7 @@ local function endCraft(completed)
 		M:_PlayStrike()
 	end
 	active = false
+	pollFrame:SetScript("OnUpdate", nil)
 	strikesTotal = 0
 	nextStrike = 1
 end
@@ -340,17 +341,33 @@ local function onActivity(result)
 end
 
 local function sync()
-	pollFrame:SetScript("OnUpdate", nil)
-	active = false
-
 	local wanted = (Pulse.Database:Get("masterEnabled") and Pulse.Database:GetCue(CUE)) or false
 
 	-- CastActivity only registers its events while something wants them; keyed by consumer
 	-- so toggling casting cues does not unregister crafting, and disabling crafting clears its hold.
 	Pulse.CastActivity:SetActive("crafting", wanted)
 
-	if wanted then
+	if not wanted then
+		active = false
+		pollFrame:SetScript("OnUpdate", nil)
+		return
+	end
+
+	-- Reseed live state if a tradeskill cast is actively underway mid-profile switch or cue toggle
+	local isTradeskill
+	if UnitCastingInfo then
+		local name, _, _, _, _, isTrade = UnitCastingInfo("player")
+		if name and isTrade then
+			isTradeskill = true
+		end
+	end
+
+	if isTradeskill then
+		active = true
 		pollFrame:SetScript("OnUpdate", tick)
+	else
+		active = false
+		pollFrame:SetScript("OnUpdate", nil)
 	end
 end
 

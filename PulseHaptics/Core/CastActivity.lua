@@ -276,6 +276,14 @@ local EVENTS = {
 	"UNIT_SPELLCAST_CHANNEL_STOP",
 }
 
+local function onSweepUpdate(_, elapsed)
+	sweepElapsed = sweepElapsed + elapsed
+	if sweepElapsed >= SWEEP_INTERVAL then
+		sweepElapsed = 0
+		CastActivity:_Sweep()
+	end
+end
+
 -- Registration is gated like every other watcher here: nothing is registered while no
 -- consumer wants it. Keyed by consumer so multiple modules (Casting, Crafting) do not
 -- deregister each other.
@@ -304,13 +312,7 @@ function CastActivity:SetActive(consumerKey, active)
 		-- The two trade-skill events carry no unit token, so they need plain registration.
 		frame:RegisterEvent("TRADE_SKILL_CRAFT_BEGIN")
 		frame:RegisterEvent("UPDATE_TRADESKILL_CAST_STOPPED")
-		frame:SetScript("OnUpdate", function(_, elapsed)
-			sweepElapsed = sweepElapsed + elapsed
-			if sweepElapsed >= SWEEP_INTERVAL then
-				sweepElapsed = 0
-				CastActivity:_Sweep()
-			end
-		end)
+		frame:SetScript("OnUpdate", onSweepUpdate)
 	else
 		frame:UnregisterAllEvents()
 		frame:SetScript("OnUpdate", nil)

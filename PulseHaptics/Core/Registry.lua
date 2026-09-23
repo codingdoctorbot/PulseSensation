@@ -78,7 +78,7 @@ local CATEGORY_LABELS = {
 	-- through the interface; this is the controller acting on the WORLD — what is under the
 	-- reticle, on the cursor, which bar is live, which input device drives. Separate
 	-- category so PulseDebug and PulseChecklist list the two apart.
-	GAMEPAD_INTERACT = "Gamepad Controller Interactions",
+	GAMEPAD_INTERACT = "Controller Interactions",
 }
 
 -- Every trigger from ALERT_CC parents to this gate in the settings panel — the only
@@ -1398,7 +1398,7 @@ Pulse.Triggers = {
 		desc = "Fires when your target's spellcast stops before it finishes.",
 		events = { "UNIT_SPELLCAST_INTERRUPTED" },
 		unit = "target",
-		caveat = "Not an interrupt confirmation. Fires when the cast stops for any reason — you interrupted it, they moved, they lost line of sight, they died.",
+		caveat = "Fires when your target's spellcast is interrupted by a kick, stun, or counter-spell.",
 	},
 	{
 		id = "targetChanged",
@@ -3157,7 +3157,7 @@ local PAGE_LAYOUT = {
 	-- Items and Action bars sections moved here, being world-facing once they had cues.
 	{
 		id = "GAMEPAD_INTERACT",
-		label = "Gamepad Controller Interactions",
+		label = "Controller Interactions",
 		sections = {
 			{
 				label = "Targeting",

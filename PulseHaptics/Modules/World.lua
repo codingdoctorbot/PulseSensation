@@ -50,8 +50,14 @@ function M:_WatchEmote()
 	frame:SetScript("OnEvent", function(_, event, message, sender)
 		local playerName = UnitName("player")
 		local senderName = (Ambiguate and sender) and Ambiguate(sender, "none") or sender
-		if senderName == playerName or (message and playerName and message:find(playerName, 1, true)) then
+		if senderName == playerName then
 			Pulse:FireIfEnabled("emote")
+		elseif message and playerName and playerName ~= "" then
+			-- Frontier pattern: match whole word only so "Ana" does not match "Anakin"
+			local pattern = "%f[%a]" .. playerName .. "%f[%A]"
+			if message:find(pattern) then
+				Pulse:FireIfEnabled("emote")
+			end
 		end
 	end)
 

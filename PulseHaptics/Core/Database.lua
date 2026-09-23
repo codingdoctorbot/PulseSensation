@@ -689,16 +689,24 @@ do
 	-- which is the point of the spec scope. Harmless without specializations: the event
 	-- never fires, or resolves to the same name for one string comparison.
 	keyFrame:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
+	keyFrame:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+	keyFrame:RegisterEvent("TRAIT_CONFIG_UPDATED")
 	-- A switch that arrived mid-fight was deferred rather than dropped; this is where it
 	-- lands. See notifyProfileSwitch.
 	keyFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
 
 	keyFrame:SetScript("OnEvent", function(_, event)
-		if event == "PLAYER_ENTERING_WORLD" then
-			cachedCharacterKey = nil
-			characterKey()
-			-- The character key is half of every rule lookup, so a new one invalidates
-			-- the resolution as surely as a rule change does.
+		if
+			event == "PLAYER_ENTERING_WORLD"
+			or event == "PLAYER_SPECIALIZATION_CHANGED"
+			or event == "ACTIVE_TALENT_GROUP_CHANGED"
+			or event == "TRAIT_CONFIG_UPDATED"
+		then
+			if event == "PLAYER_ENTERING_WORLD" then
+				cachedCharacterKey = nil
+				characterKey()
+			end
+			-- Invalidate cached resolution on login, zone-in, or spec/talent change.
 			invalidateResolution()
 		end
 		-- Guarded: these can in principle arrive before Database:Init has run, and
@@ -1143,6 +1151,7 @@ end
 -- anywhere means resolving live every call, correct whether or not the event arrives, paid
 -- only by someone who asked for it.
 local resolution -- { scope, name, why } or nil
+local cachedSpecID -- specID corresponding to cached resolution
 
 local function anySpecRules()
 	return next(DB.specProfile or {}) ~= nil
@@ -1152,23 +1161,35 @@ end
 -- that would create a second, shadowing local and leave the early caller seeing nil again.
 function invalidateResolution()
 	resolution = nil
+	cachedSpecID = nil
 end
 
 -- Which scope is actually in force, the profile it names, and a line fit to show someone.
 function Database:GetProfileResolution()
-	local cacheable = not anySpecRules()
-	if cacheable and resolution then
-		return resolution.scope, resolution.name, resolution.why
-	end
-	local scope, name, why
+	local hasSpecRules = anySpecRules()
 	local specID, specName
 
-	-- Only asked when a spec rule could actually match. This is the expensive part: two
-	-- pcalls here and two more inside ruleFor's specKey().
-	local candidate
-	if not cacheable then
+	if not hasSpecRules then
+		if resolution then
+			return resolution.scope, resolution.name, resolution.why
+		end
+	else
+		-- When spec rules exist, check if specID has moved before doing full rule resolution.
 		specID, specName = self:GetSpecInfo()
-		candidate = ruleFor(SCOPE_SPEC)
+		if resolution and specID == cachedSpecID then
+			return resolution.scope, resolution.name, resolution.why
+		end
+		cachedSpecID = specID
+	end
+
+	local scope, name, why
+	local candidate
+	if hasSpecRules and specID then
+		local key = characterKey() .. "::" .. tostring(specID)
+		local rName = DB.specProfile[key]
+		if rName and DB.profiles[rName] then
+			candidate = rName
+		end
 	end
 
 	if candidate then
@@ -1188,9 +1209,7 @@ function Database:GetProfileResolution()
 		end
 	end
 
-	if cacheable then
-		resolution = { scope = scope, name = name, why = why }
-	end
+	resolution = { scope = scope, name = name, why = why }
 	return scope, name, why
 end
 
