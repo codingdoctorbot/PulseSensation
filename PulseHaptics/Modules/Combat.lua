@@ -390,16 +390,13 @@ local function castTick()
 	local presence = Pulse.Database:GetTriggerSetting("castTexture", "castPresence", 0.1)
 
 	if isCasting then
-		local name, _, _, startTimeMs, endTimeMs, isTradeskill = UnitCastingInfo("player")
+		local name, _, _, startTimeMs, endTimeMs = UnitCastingInfo("player")
 		if not name then
 			-- Cast has ended or was cancelled: prevent state desync and buzzing
 			isCasting = false
 			if not isChanneling then
 				castFrame:SetScript("OnUpdate", nil)
 			end
-			return
-		end
-		if isTradeskill then
 			return
 		end
 		if
@@ -424,15 +421,12 @@ local function castTick()
 			end
 			return
 		end
-		local name, _, _, _, _, isTradeskill = UnitChannelInfo("player")
+		local name = UnitChannelInfo("player")
 		if not name then
 			isChanneling = false
 			if not isCasting then
 				castFrame:SetScript("OnUpdate", nil)
 			end
-			return
-		end
-		if isTradeskill then
 			return
 		end
 		local hum = Pulse.Database:GetTriggerSetting("castTexture", "channelHum", 0.2)

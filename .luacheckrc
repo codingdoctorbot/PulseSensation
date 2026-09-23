@@ -121,6 +121,8 @@ read_globals = {
     "UnitAffectingCombat",
     "UnitCastingInfo",
     "UnitChannelInfo",
+    "GetSpellInfo",
+    "GetSpellTexture",
     "UnitOnTaxi",
     "UnitIsUnit",
     "UnitIsAFK",

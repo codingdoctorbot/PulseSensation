@@ -18,12 +18,12 @@
 -- That field is documented Nilable, so a recipe that does not resolve is normal, not an
 -- error: it falls back to GENERIC_WORK rather than going silent.
 --
--- DELIBERATELY NOT HERE: gathering. Swinging a pick at an ore node is not a recipe, so no
--- recipe id exists. The honest route is the player's own spellbook (GetProfessions ->
--- GetProfessionInfo gives spellOffset/numSpells/skillLine), cached spellID -> profession per
--- character, and that needs one live observation of what actually fires on this client
--- first. The prototype in the repo root hardcodes Midnight's ids, which will not be
--- Forever's.
+-- GATHERING & FISHING: Unlike bench crafting, gathering (Mining, Herbalism, Skinning) and
+-- Fishing fire standard CAST_START and CHANNEL_START events rather than TRADE_SKILL_CRAFT_BEGIN.
+-- They are resolved via known spell IDs, spell textures (locale-independent), and spell names,
+-- mapping directly to their authored profession sensations (e.g. pickaxe TAP strikes for Mining,
+-- calm water bed hum for Fishing). If a gathering profession is disabled on the Crafting page,
+-- castTexture in Modules/Combat.lua takes over as fallback.
 
 local ADDON_NAME, Pulse = ...
 
@@ -172,6 +172,135 @@ local function setting(key, default)
 	return Pulse.Database:GetTriggerSetting(CUE, key, default)
 end
 
+-- Gathering detection
+--
+-- Known spell IDs for Gathering and Fishing across Classic and modern client ranks.
+local GATHER_SPELL_IDS = {
+	-- Mining
+	[2575] = MINING,
+	[2576] = MINING,
+	[3564] = MINING,
+	[10248] = MINING,
+	[10249] = MINING,
+	[29354] = MINING,
+	[50310] = MINING,
+	-- Herbalism
+	[2366] = HERBALISM,
+	[2368] = HERBALISM,
+	[3570] = HERBALISM,
+	[11993] = HERBALISM,
+	[28695] = HERBALISM,
+	[50300] = HERBALISM,
+	-- Skinning
+	[8613] = SKINNING,
+	[8617] = SKINNING,
+	[8618] = SKINNING,
+	[10768] = SKINNING,
+	[32678] = SKINNING,
+	[50305] = SKINNING,
+	-- Fishing
+	[7620] = FISHING,
+	[7731] = FISHING,
+	[7732] = FISHING,
+	[18248] = FISHING,
+	[33095] = FISHING,
+	[51294] = FISHING,
+	[131474] = FISHING,
+	[131476] = FISHING,
+}
+
+local GATHER_NAMES = {
+	["mining"] = MINING,
+	["fishing"] = FISHING,
+	["herb gathering"] = HERBALISM,
+	["herbalism"] = HERBALISM,
+	["skinning"] = SKINNING,
+}
+
+local function matchTexture(tex)
+	if type(tex) ~= "string" then
+		return nil
+	end
+	local lower = tex:lower()
+	if lower:find("trade_mining", 1, true) or lower:find("inv_pick_", 1, true) then
+		return MINING
+	elseif lower:find("trade_fishing", 1, true) then
+		return FISHING
+	elseif lower:find("trade_herbalism", 1, true) or lower:find("spell_nature_naturetouchgrow", 1, true) then
+		return HERBALISM
+	elseif lower:find("trade_skinning", 1, true) or lower:find("inv_misc_pelt_", 1, true) then
+		return SKINNING
+	end
+	return nil
+end
+
+local function resolveGatherOrFishing(spellID)
+	if type(spellID) == "number" then
+		local prof = GATHER_SPELL_IDS[spellID]
+		if prof then
+			return prof
+		end
+	end
+
+	local tex, name
+	if type(spellID) == "number" then
+		if C_Spell and type(C_Spell.GetSpellTexture) == "function" then
+			local ok, t = pcall(C_Spell.GetSpellTexture, spellID)
+			if ok then
+				tex = t
+			end
+		end
+		if not tex and type(GetSpellTexture) == "function" then
+			local ok, t = pcall(GetSpellTexture, spellID)
+			if ok then
+				tex = t
+			end
+		end
+
+		if C_Spell and type(C_Spell.GetSpellInfo) == "function" then
+			local ok, info = pcall(C_Spell.GetSpellInfo, spellID)
+			if ok and type(info) == "table" and type(info.name) == "string" then
+				name = info.name
+			end
+		end
+		if not name and type(GetSpellInfo) == "function" then
+			local ok, n = pcall(GetSpellInfo, spellID)
+			if ok and type(n) == "string" then
+				name = n
+			end
+		end
+	end
+
+	if not tex or not name then
+		if type(UnitCastingInfo) == "function" then
+			local cName, _, cTex = UnitCastingInfo("player")
+			name = name or cName
+			tex = tex or cTex
+		end
+		if (not tex or not name) and type(UnitChannelInfo) == "function" then
+			local chName, _, chTex = UnitChannelInfo("player")
+			name = name or chName
+			tex = tex or chTex
+		end
+	end
+
+	if tex then
+		local prof = matchTexture(tex)
+		if prof then
+			return prof
+		end
+	end
+
+	if name and type(name) == "string" then
+		local prof = GATHER_NAMES[name:lower()]
+		if prof then
+			return prof
+		end
+	end
+
+	return nil
+end
+
 -- Suppression hook. Modules/Combat.lua asks this before emitting castTexture, so a craft is
 -- one sensation rather than two competing. A function rather than a shared flag, so
 -- Combat.lua need not know how this module stores state and a missing module reads as "not
@@ -180,16 +309,27 @@ local lastCraftSeen = 0
 
 function M:IsCrafting()
 	if active then
-		-- Failsafe: if no cast is active, craft suppression auto-clears after 0.5s
+		-- Failsafe: if no cast or channel is active, craft suppression auto-clears after 0.5s
+		local hasCast = false
 		if type(UnitCastingInfo) == "function" then
 			local _, _, _, startTimeMs = UnitCastingInfo("player")
-			if not startTimeMs then
-				if GetTime() - lastCraftSeen > 0.5 then
-					active = false
-				end
-			else
-				lastCraftSeen = GetTime()
+			if startTimeMs then
+				hasCast = true
 			end
+		end
+		if not hasCast and type(UnitChannelInfo) == "function" then
+			local _, _, _, startTimeMs = UnitChannelInfo("player")
+			if startTimeMs then
+				hasCast = true
+			end
+		end
+
+		if not hasCast then
+			if GetTime() - lastCraftSeen > 0.5 then
+				active = false
+			end
+		else
+			lastCraftSeen = GetTime()
 		end
 	end
 	return active
@@ -222,8 +362,8 @@ end
 
 local tick
 
-local function beginCraft(recipeSpellID)
-	local professionID = resolveProfession(recipeSpellID)
+local function beginCraft(recipeSpellID, explicitProfessionID)
+	local professionID = explicitProfessionID or resolveProfession(recipeSpellID)
 	local resolved = professionID and PROFESSION_WORK[professionID] or nil
 
 	-- A profession switched off on the Crafting page produces nothing at all, which is
@@ -287,7 +427,15 @@ function tick()
 		return
 	end
 
-	local _, _, _, startTimeMs, endTimeMs = UnitCastingInfo("player")
+	local startTimeMs, endTimeMs
+	if type(UnitCastingInfo) == "function" then
+		local _, _, _, s, e = UnitCastingInfo("player")
+		startTimeMs, endTimeMs = s, e
+	end
+	if not startTimeMs and type(UnitChannelInfo) == "function" then
+		local _, _, _, s, e = UnitChannelInfo("player")
+		startTimeMs, endTimeMs = s, e
+	end
 	-- RULE B, the same guard Combat.lua's castTick carries: comparing a secret value
 	-- throws rather than reading as nil.
 	if issecretvalue(startTimeMs) or issecretvalue(endTimeMs) then
@@ -329,14 +477,50 @@ end
 
 -- Wiring
 
+local isGathering = false
+
 local function onActivity(result)
 	local classification = result.classification
 	if classification == "CRAFT_START" then
+		isGathering = false
 		beginCraft(result.spellID)
+	elseif classification == "CAST_START" then
+		if not active or isGathering then
+			local prof = resolveGatherOrFishing(result.spellID)
+			if prof and (prof == MINING or prof == HERBALISM or prof == SKINNING) then
+				isGathering = true
+				beginCraft(result.spellID, prof)
+			end
+		end
+	elseif classification == "CHANNEL_START" then
+		if not active or isGathering then
+			local prof = resolveGatherOrFishing(result.spellID)
+			if prof and prof == FISHING then
+				isGathering = true
+				beginCraft(result.spellID, prof)
+			end
+		end
 	elseif classification == "CRAFT_COMPLETE" then
 		endCraft(true)
+		isGathering = false
+	elseif classification == "CAST_COMPLETE" or classification == "CHANNEL_COMPLETE" then
+		if isGathering then
+			endCraft(true)
+			isGathering = false
+		end
 	elseif classification == "CRAFT_STOPPED" then
 		endCraft(false)
+		isGathering = false
+	elseif
+		classification == "CAST_STOPPED"
+		or classification == "CHANNEL_STOP"
+		or classification == "INTERRUPTED"
+		or classification == "FAILED"
+	then
+		if isGathering then
+			endCraft(false)
+			isGathering = false
+		end
 	end
 end
 
@@ -349,24 +533,41 @@ local function sync()
 
 	if not wanted then
 		active = false
+		isGathering = false
 		pollFrame:SetScript("OnUpdate", nil)
 		return
 	end
 
-	-- Reseed live state if a tradeskill cast is actively underway mid-profile switch or cue toggle
-	local isTradeskill
-	if UnitCastingInfo then
-		local name, _, _, _, _, isTrade = UnitCastingInfo("player")
+	-- Reseed live state if a tradeskill cast or channel is actively underway mid-profile switch or cue toggle
+	local isTradeskill = false
+	local currentSpellID = nil
+	if type(UnitCastingInfo) == "function" then
+		local name, _, _, _, _, isTrade, _, _, spellId = UnitCastingInfo("player")
 		if name and isTrade then
 			isTradeskill = true
+			currentSpellID = spellId
+		end
+	end
+	if not isTradeskill and type(UnitChannelInfo) == "function" then
+		local name, _, _, _, _, isTrade, _, spellId = UnitChannelInfo("player")
+		if name and isTrade then
+			isTradeskill = true
+			currentSpellID = spellId
 		end
 	end
 
 	if isTradeskill then
+		local prof = resolveGatherOrFishing(currentSpellID)
+		if prof then
+			work = PROFESSION_WORK[prof] or GENERIC_WORK
+			gain = setting(Pulse.Professions.GainKey(prof), 1.0)
+			isGathering = true
+		end
 		active = true
 		pollFrame:SetScript("OnUpdate", tick)
 	else
 		active = false
+		isGathering = false
 		pollFrame:SetScript("OnUpdate", nil)
 	end
 end
