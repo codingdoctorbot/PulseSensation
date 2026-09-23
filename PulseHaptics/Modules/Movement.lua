@@ -471,13 +471,16 @@ function M:OnEnable()
 	Pulse:BindFrame({ "taxiRide", "taxiTakeoff", "taxiLanding" }, syncTaxi)
 	Pulse:BindFrame({ "formChanged" }, syncForm)
 
-	zoneFrame:RegisterEvent("ZONE_CHANGED")
-	zoneFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-	zoneFrame:RegisterEvent("ZONE_CHANGED_INDOORS")
-	zoneFrame:RegisterEvent("MINIMAP_UPDATE_SUBZONE")
-	zoneFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-	zoneFrame:RegisterEvent("MIRROR_TIMER_START")
-	zoneFrame:RegisterEvent("MIRROR_TIMER_STOP")
+	local function safeRegister(event)
+		pcall(zoneFrame.RegisterEvent, zoneFrame, event)
+	end
+
+	safeRegister("ZONE_CHANGED")
+	safeRegister("ZONE_CHANGED_NEW_AREA")
+	safeRegister("ZONE_CHANGED_INDOORS")
+	safeRegister("PLAYER_ENTERING_WORLD")
+	safeRegister("MIRROR_TIMER_START")
+	safeRegister("MIRROR_TIMER_STOP")
 	updateOceanZone()
 end
 
