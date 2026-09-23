@@ -183,7 +183,16 @@ end)
 
 local textFrame = CreateFrame("Frame")
 
-local DEFLECT_TYPES = { DODGE = true, PARRY = true, BLOCK = true }
+local DEFLECT_TYPES = {
+	DODGE = true,
+	PARRY = true,
+	BLOCK = true,
+	SPELL_DODGE = true,
+	SPELL_PARRY = true,
+	SPELL_BLOCK = true,
+	SPELL_DEFLECT = true,
+	SPELL_REFLECT = true,
+}
 
 local COMBAT_TEXT_CUES = {
 	"critLanded",
@@ -218,8 +227,10 @@ end
 -- factionGained ride the same event stream, occurrence only.
 
 textFrame:SetScript("OnEvent", function(_, event, messageType)
+	local ok, data = false, nil
 	if C_CombatText and type(C_CombatText.GetCurrentEventInfo) == "function" then
-		local ok, _, arg3, arg4 = pcall(C_CombatText.GetCurrentEventInfo)
+		local arg3, arg4
+		ok, data, arg3, arg4 = pcall(C_CombatText.GetCurrentEventInfo)
 		if ok then
 			-- When partial resists or absorbs occur, Blizzard's CombatText.lua translates them
 			-- into damage or crit damage if arg3 (amount) is present:
@@ -245,10 +256,21 @@ textFrame:SetScript("OnEvent", function(_, event, messageType)
 	if messageType == "DAMAGE_CRIT" or messageType == "SPELL_DAMAGE_CRIT" then
 		Pulse:FireIfEnabled("critLanded")
 		Pulse:FireIfEnabled("damageTaken")
-	elseif messageType == "DAMAGE" or messageType == "SPELL_DAMAGE" then
+	elseif messageType == "DAMAGE" or messageType == "SPELL_DAMAGE" or messageType == "DAMAGE_SHIELD" then
 		Pulse:FireIfEnabled("damageTaken")
 	elseif DEFLECT_TYPES[messageType] then
 		Pulse:FireIfEnabled("deflect")
+		-- Partial block: player blocked arg3 but took data damage
+		if
+			(messageType == "BLOCK" or messageType == "SPELL_BLOCK")
+			and ok
+			and data
+			and not issecretvalue(data)
+			and type(data) == "number"
+			and data > 0
+		then
+			Pulse:FireIfEnabled("damageTaken")
+		end
 		-- Parry haste: PARRY only, not DODGE/BLOCK. Parrying speeds up your own next
 		-- main-hand swing, a real mechanic, distinct from merely avoiding the hit.
 		if messageType == "PARRY" and applyParryHaste then
@@ -338,7 +360,12 @@ local function castTick()
 	local presence = Pulse.Database:GetTriggerSetting("castTexture", "castPresence", 0.1)
 
 	if isCasting then
-		local _, _, _, startTimeMs, endTimeMs = UnitCastingInfo("player")
+		local name, _, _, startTimeMs, endTimeMs = UnitCastingInfo("player")
+		if not name then
+			-- Cast has ended or was cancelled: prevent state desync and buzzing
+			isCasting = false
+			return
+		end
 		if
 			not issecretvalue(startTimeMs)
 			and not issecretvalue(endTimeMs)
@@ -354,6 +381,11 @@ local function castTick()
 			Pulse:HoldIfEnabled("castTexture", presence, presence * 1.5)
 		end
 	elseif isChanneling then
+		local name = UnitChannelInfo and UnitChannelInfo("player")
+		if not name then
+			isChanneling = false
+			return
+		end
 		local hum = Pulse.Database:GetTriggerSetting("castTexture", "channelHum", 0.2)
 		local value = Pulse.Haptics.MicroFlutter(hum)
 		Pulse:HoldIfEnabled("castTexture", presence, value)
@@ -396,6 +428,7 @@ if Pulse.CastActivity and Pulse.CastActivity.OnActivity then
 			isChanneling = true
 		elseif
 			c == "CAST_COMPLETE"
+			or c == "CAST_STOPPED"
 			or c == "INSTANT"
 			or c == "CHANNEL_STOP"
 			or c == "FAILED"

@@ -176,6 +176,7 @@ function CastActivity:_OnStop(unit, castGUID, spellID)
 		return
 	end
 	local key = keyFor(castGUID, spellID)
+	local pending = self.pending[key]
 	self.pending[key] = nil
 
 	-- A craft whose cast stopped without succeeding was abandoned.
@@ -188,6 +189,13 @@ function CastActivity:_OnStop(unit, castGUID, spellID)
 			castGUID = castGUID,
 			isCrafting = true,
 			duration = GetTime() - (started or GetTime()),
+		})
+	else
+		emit({
+			classification = "CAST_STOPPED",
+			spellID = spellID,
+			castGUID = castGUID,
+			duration = pending and (GetTime() - (pending.startedAt or GetTime())) or nil,
 		})
 	end
 end
