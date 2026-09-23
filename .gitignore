@@ -12,6 +12,7 @@
 # WoW / Lua build artifacts
 *.luac
 *.bak
+dist/
 
 # Internal development notes, reviews & logs
 *.rtf
