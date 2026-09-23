@@ -150,13 +150,11 @@ local function createMinimapButton()
 	bg:SetVertexColor(0, 0, 0, 0.85)
 	btn.Background = bg
 
-	-- 2. Icon artwork (Spell_Nature_WispSplode) with coordinate crop
-	-- Sized to 17x17 and centered so all 4 corners (radius 12.02) sit fully inside the gold ring aperture (radius 12.5)
+	-- 2. Custom circular haptic ripple icon (natively anti-aliased with transparent circular alpha)
 	local icon = btn:CreateTexture(nil, "ARTWORK")
-	icon:SetSize(17, 17)
+	icon:SetSize(20, 20)
 	icon:SetPoint("CENTER", btn, "CENTER", 0, 0)
-	icon:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
-	icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+	icon:SetTexture("Interface\\AddOns\\PulseHaptics\\Media\\icon")
 	btn.Icon = icon
 
 	-- 3. Classic golden minimap tracking border
@@ -257,7 +255,7 @@ local function initLDB()
 	ldbObj = ldb:NewDataObject("Pulse", {
 		type = "launcher",
 		text = "Pulse",
-		icon = "Interface\\Icons\\Spell_Nature_WispSplode",
+		icon = "Interface\\AddOns\\PulseHaptics\\Media\\icon",
 		OnClick = function(_, button)
 			if button == "RightButton" then
 				toggleMasterEnabled(nil)

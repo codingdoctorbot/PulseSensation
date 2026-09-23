@@ -4,7 +4,7 @@
 ## Author: codingdoctorbot
 ## Version: 0.2.0-beta
 ## SavedVariables: PulseDB
-## IconTexture: Interface\Icons\Spell_Nature_WispSplode
+## IconTexture: Interface\AddOns\PulseHaptics\Media\icon
 ## X-Credits: Anthropic (Claude Code), Google DeepMind (Antigravity)
 
 # Non-commercial hobby project developed with AI pair-programming assistance (Claude Code & Antigravity).

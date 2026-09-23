@@ -167,8 +167,7 @@ local function buildWindow()
 
 	local titleIcon = f:CreateTexture(nil, "OVERLAY")
 	titleIcon:SetSize(18, 18)
-	titleIcon:SetTexture("Interface\\Icons\\Spell_Nature_WispSplode")
-	titleIcon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+	titleIcon:SetTexture("Interface\\AddOns\\PulseHaptics\\Media\\icon")
 	titleIcon:SetPoint("RIGHT", titleText, "LEFT", -6, 0)
 	f.TitleIcon = titleIcon
 

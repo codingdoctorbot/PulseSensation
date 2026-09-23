@@ -27,7 +27,7 @@ Panel.Sidebar = Sidebar
 local SidebarMixin = {}
 
 local CATEGORY_ICONS = {
-	root = "Interface\\Icons\\Spell_Nature_WispSplode",
+	root = "Interface\\AddOns\\PulseHaptics\\Media\\icon",
 	cueIndex = "Interface\\Icons\\INV_Misc_Spyglass_02",
 	profiles = "Interface\\Icons\\INV_Misc_Note_01",
 	defaultProfiles = "Interface\\Icons\\INV_Misc_Folder_01",
