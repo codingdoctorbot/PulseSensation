@@ -245,13 +245,72 @@ local function syncCombatText()
 	if not any then
 		return
 	end
+	if textFrame.RegisterUnitEvent then
+		textFrame:RegisterUnitEvent("UNIT_COMBAT", "player")
+	else
+		textFrame:RegisterEvent("UNIT_COMBAT")
+	end
 	textFrame:RegisterEvent("COMBAT_TEXT_UPDATE")
+	if C_CombatText and type(C_CombatText.SetActiveUnit) == "function" then
+		pcall(C_CombatText.SetActiveUnit, "player")
+	end
+end
+
+-- Deduplication guard between UNIT_COMBAT and COMBAT_TEXT_UPDATE
+local recentCombatCues = {}
+local function fireCombatCue(cueID)
+	local now = GetTime()
+	local last = recentCombatCues[cueID]
+	if last and (now - last) < 0.08 then
+		return
+	end
+	recentCombatCues[cueID] = now
+	Pulse:FireIfEnabled(cueID)
 end
 
 -- damageTaken uses the registry's per-cue intensity, default 0.3. honorGained and
 -- factionGained ride the same event stream, occurrence only.
 
-textFrame:SetScript("OnEvent", function(_, event, messageType)
+textFrame:SetScript("OnEvent", function(_, event, ...)
+	if event == "UNIT_COMBAT" then
+		local unit, action, descriptor, amount = ...
+		if unit ~= "player" then
+			return
+		end
+		if action == "WOUND" then
+			if descriptor == "CRITICAL" or descriptor == "CRUSHING" then
+				fireCombatCue("critLanded")
+				fireCombatCue("damageTaken")
+			else
+				fireCombatCue("damageTaken")
+			end
+		elseif action == "DODGE" or action == "PARRY" or action == "BLOCK" or action == "DEFLECT" then
+			fireCombatCue("deflect")
+			if
+				action == "BLOCK"
+				and (
+					descriptor == "BLOCK_REDUCED"
+					or (type(amount) == "number" and not issecretvalue(amount) and amount > 0)
+				)
+			then
+				fireCombatCue("damageTaken")
+			end
+			if action == "PARRY" and applyParryHaste then
+				applyParryHaste()
+			end
+		elseif action == "HEAL" then
+			if descriptor == "CRITICAL" then
+				fireCombatCue("healCrit")
+				fireCombatCue("healReceived")
+			else
+				fireCombatCue("healReceived")
+			end
+		end
+		return
+	end
+
+	-- COMBAT_TEXT_UPDATE stream
+	local messageType = ...
 	local ok, data = false, nil
 	if C_CombatText and type(C_CombatText.GetCurrentEventInfo) == "function" then
 		local arg3, arg4
@@ -275,16 +334,16 @@ textFrame:SetScript("OnEvent", function(_, event, messageType)
 	-- (Pulse_Retail_Combat_Text_Windfury_Findings.md): it means the player picked up a
 	-- harmful aura. Occurrence only — the amount on this feed is a secret value.
 	if messageType == "SPELL_AURA_START_HARMFUL" then
-		Pulse:FireIfEnabled("debuffReceived")
+		fireCombatCue("debuffReceived")
 		return
 	end
 	if messageType == "DAMAGE_CRIT" or messageType == "SPELL_DAMAGE_CRIT" then
-		Pulse:FireIfEnabled("critLanded")
-		Pulse:FireIfEnabled("damageTaken")
+		fireCombatCue("critLanded")
+		fireCombatCue("damageTaken")
 	elseif messageType == "DAMAGE" or messageType == "SPELL_DAMAGE" or messageType == "DAMAGE_SHIELD" then
-		Pulse:FireIfEnabled("damageTaken")
+		fireCombatCue("damageTaken")
 	elseif DEFLECT_TYPES[messageType] then
-		Pulse:FireIfEnabled("deflect")
+		fireCombatCue("deflect")
 		-- Partial block: player blocked arg3 but took data damage
 		if
 			(messageType == "BLOCK" or messageType == "SPELL_BLOCK")
@@ -294,7 +353,7 @@ textFrame:SetScript("OnEvent", function(_, event, messageType)
 			and type(data) == "number"
 			and data > 0
 		then
-			Pulse:FireIfEnabled("damageTaken")
+			fireCombatCue("damageTaken")
 		end
 		-- Parry haste: PARRY only, not DODGE/BLOCK. Parrying speeds up your own next
 		-- main-hand swing, a real mechanic, distinct from merely avoiding the hit.
@@ -302,14 +361,14 @@ textFrame:SetScript("OnEvent", function(_, event, messageType)
 			applyParryHaste()
 		end
 	elseif messageType == "HEAL_CRIT" then
-		Pulse:FireIfEnabled("healCrit")
-		Pulse:FireIfEnabled("healReceived")
+		fireCombatCue("healCrit")
+		fireCombatCue("healReceived")
 	elseif messageType == "HEAL" or messageType == "PERIODIC_HEAL" then
-		Pulse:FireIfEnabled("healReceived")
+		fireCombatCue("healReceived")
 	elseif messageType == "HONOR_GAINED" then
-		Pulse:FireIfEnabled("honorGained")
+		fireCombatCue("honorGained")
 	elseif messageType == "FACTION" then
-		Pulse:FireIfEnabled("factionGained")
+		fireCombatCue("factionGained")
 	end
 end)
 
