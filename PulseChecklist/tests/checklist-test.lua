@@ -214,4 +214,98 @@ check(
 )
 check("comment survived untouched", PulseChecklistDB.autoShotFired.comment, "worked on the hunter")
 
+-- ── Baseline fallback ─────────────────────────────────────────────────────────
+
+io.write("\n--- baseline fallback ---\n")
+
+-- Reset DB so no real entry exists, exposing the baseline layer.
+PulseChecklistDB = {}
+who = { name = "Testchar", realm = "Testrealm", class = "HUNTER" }
+
+local C = _G.PulseChecklist
+check("PulseChecklist global exposed",       type(C), "table")
+check("  GetEntry function present",         type(C and C.GetEntry), "function")
+check("  BASELINE table present",            type(C and C.BASELINE), "table")
+
+-- locomotion is in BASELINE_ENTRIES as "functioning"
+local locoEntry = C.GetEntry("locomotion")
+check("baseline entry returns functioning",  locoEntry and locoEntry.status, "functioning")
+check("  isBaseline flag set",               locoEntry and locoEntry.isBaseline, true)
+check("  has comment",                       type(locoEntry and locoEntry.comment), "string")
+
+-- A trigger not in the baseline should return untested
+local unknownEntry = C.GetEntry("__not_a_real_trigger__")
+check("unknown trigger returns untested",    unknownEntry and unknownEntry.status, "untested")
+check("  isBaseline not set",                unknownEntry and unknownEntry.isBaseline, nil)
+
+-- Baseline entries must NOT be written to DB just by reading
+check("read does not pollute DB",            PulseChecklistDB.locomotion, nil)
+
+-- ── Import parser ─────────────────────────────────────────────────────────────
+
+io.write("\n--- import parser ---\n")
+
+PulseChecklistDB = {}
+
+local MARKDOWN_IMPORT = [[
+### Pulse QA Checklist Report — 2026-09-23
+**Progress:** 3 / 10 Tested (30%)
+
+#### ⚠️ Needs Work (1)
+- `damageTaken`: floats only fire with FCT on
+
+#### ❌ Non-Functioning (1)
+- `somebrokenCue`: never fires at all
+
+#### ✅ Functioning (3)
+`locomotion`, `jumpLand`, `craftTexture`
+]]
+
+local imported = C.Import(MARKDOWN_IMPORT)
+check("import returns count > 0",            imported > 0, true)
+
+-- Section header context propagation: needswork section
+check("needswork entry written",             PulseChecklistDB.damageTaken ~= nil, true)
+check("  correct status",                    PulseChecklistDB.damageTaken and PulseChecklistDB.damageTaken.status, "needswork")
+check("  comment preserved",                 PulseChecklistDB.damageTaken and PulseChecklistDB.damageTaken.comment, "floats only fire with FCT on")
+
+-- Nonfunctioning section
+check("nonfunctioning entry written",        PulseChecklistDB.somebrokenCue ~= nil, true)
+check("  correct status",                    PulseChecklistDB.somebrokenCue and PulseChecklistDB.somebrokenCue.status, "nonfunctioning")
+
+-- Comma-separated backtick list under functioning header
+check("functioning locomotion written",      PulseChecklistDB.locomotion ~= nil, true)
+check("  correct status",                    PulseChecklistDB.locomotion and PulseChecklistDB.locomotion.status, "functioning")
+check("functioning jumpLand written",        PulseChecklistDB.jumpLand ~= nil, true)
+check("  correct status",                    PulseChecklistDB.jumpLand and PulseChecklistDB.jumpLand.status, "functioning")
+check("functioning craftTexture written",    PulseChecklistDB.craftTexture ~= nil, true)
+check("  correct status",                    PulseChecklistDB.craftTexture and PulseChecklistDB.craftTexture.status, "functioning")
+
+-- Imported entries are stamped with the current character
+check("imported entry stamped",              PulseChecklistDB.locomotion and type(PulseChecklistDB.locomotion.confirmedBy), "table")
+check("  stamp has character name",          PulseChecklistDB.locomotion and PulseChecklistDB.locomotion.confirmedBy and PulseChecklistDB.locomotion.confirmedBy.name, "Testchar")
+
+-- ── Baseline promotion on click ───────────────────────────────────────────────
+
+io.write("\n--- baseline promotion on click ---\n")
+
+-- Reset so the row's trigger (autoShotFired) has no DB entry; use the Fake Pulse
+-- trigger which is NOT in the baseline. Verify that the baseline path (locomotion)
+-- would promote correctly by testing ensureEntry logic directly via Import.
+PulseChecklistDB = {}
+
+-- autoShotFired is not in BASELINE, so clicking the button starts from untested
+statusButton.__script_OnClick(statusButton)  -- untested -> functioning
+check("non-baseline click creates DB entry", type(PulseChecklistDB.autoShotFired), "table")
+check("  status is functioning",             PulseChecklistDB.autoShotFired and PulseChecklistDB.autoShotFired.status, "functioning")
+check("  stamped on click",                  PulseChecklistDB.autoShotFired and type(PulseChecklistDB.autoShotFired.confirmedBy), "table")
+
+-- Now simulate a baseline trigger being clicked via Import with compact format:
+-- ensureEntry will seed from BASELINE first, then click overwrites.
+PulseChecklistDB.locomotion = nil  -- ensure baseline path
+local compactImported = C.Import("locomotion:needswork:felt weak")
+check("compact import written",              PulseChecklistDB.locomotion ~= nil, true)
+check("  compact status correct",            PulseChecklistDB.locomotion and PulseChecklistDB.locomotion.status, "needswork")
+check("  compact comment correct",           PulseChecklistDB.locomotion and PulseChecklistDB.locomotion.comment, "felt weak")
+
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))
