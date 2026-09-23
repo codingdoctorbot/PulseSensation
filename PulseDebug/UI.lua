@@ -85,8 +85,38 @@ closeButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -4, -4)
 --
 -- WoW ships no monospace font, so the %-Ns padding below lines columns up approximately
 -- rather than exactly. Readable, not a table.
+---------------------------------------------------------------------------
+-- Sticky HUD: Last fired cue banner (persists across all views)
+---------------------------------------------------------------------------
+
+local stickyHudFrame = CreateFrame("Frame", nil, frame, "BackdropTemplate")
+stickyHudFrame:SetPoint("TOPLEFT", frame, "TOPLEFT", 20, -98)
+stickyHudFrame:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -32, -98)
+stickyHudFrame:SetHeight(52)
+stickyHudFrame:SetBackdrop({
+	bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
+	edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+	tile = true,
+	tileSize = 16,
+	edgeSize = 10,
+	insets = { left = 2, right = 2, top = 2, bottom = 2 },
+})
+stickyHudFrame:SetBackdropColor(0.06, 0.06, 0.08, 0.85)
+stickyHudFrame:SetBackdropBorderColor(0.35, 0.35, 0.35, 0.7)
+
+local stickyHudTitle = stickyHudFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+stickyHudTitle:SetPoint("TOPLEFT", stickyHudFrame, "TOPLEFT", 6, -4)
+stickyHudTitle:SetText("|cffffd100LAST FIRED (STICKY HUD):|r")
+
+local stickyHudText = stickyHudFrame:CreateFontString(nil, "OVERLAY", "ChatFontSmall")
+stickyHudText:SetPoint("TOPLEFT", stickyHudTitle, "BOTTOMLEFT", 0, -2)
+stickyHudText:SetPoint("BOTTOMRIGHT", stickyHudFrame, "BOTTOMRIGHT", -6, 2)
+stickyHudText:SetJustifyH("LEFT")
+stickyHudText:SetJustifyV("TOP")
+stickyHudText:SetText(DIM .. "No cues captured yet. Fire any cue in-game or via action buttons." .. R)
+
 local scrollFrame = CreateFrame("ScrollFrame", nil, frame, "UIPanelScrollFrameTemplate")
-scrollFrame:SetPoint("TOPLEFT", frame, "TOPLEFT", 20, -96)
+scrollFrame:SetPoint("TOPLEFT", frame, "TOPLEFT", 20, -156)
 scrollFrame:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -32, 18)
 
 local scrollChild = CreateFrame("Frame", nil, scrollFrame)
@@ -245,17 +275,49 @@ end
 
 local eventLog = {}
 local MAX_LOG_ENTRIES = 50
+local lastFiredEvents = {}
+
+local function updateStickyHud()
+	if not stickyHudText then
+		return
+	end
+	if #lastFiredEvents == 0 then
+		stickyHudText:SetText(DIM .. "No cues captured yet. Fire any cue in-game or via action buttons." .. R)
+		return
+	end
+	local lines = {}
+	for i = 1, math.min(#lastFiredEvents, 3) do
+		local ev = lastFiredEvents[i]
+		local sec = math.floor(ev.time)
+		local ms = math.floor((ev.time - sec) * 1000)
+		local tStr = string.format("%02d.%03d", sec % 60, ms)
+		local actColor = (ev.action == "FIRE") and "|cff44ff44"
+			or ((ev.action == "HOLD") and "|cff00ccff" or "|cffffcc00")
+		local extraStr = (ev.extra and ev.extra ~= "") and ("  " .. DIM .. ev.extra .. R) or ""
+		lines[#lines + 1] =
+			string.format("|cff888888[%s]|r %s%-4s|r |cffffffff%s|r%s", tStr, actColor, ev.action, ev.id, extraStr)
+	end
+	stickyHudText:SetText(table.concat(lines, "\n"))
+end
 
 local function recordEvent(action, triggerID, extra)
 	local now = (type(GetTime) == "function") and GetTime() or 0
-	table.insert(eventLog, 1, {
+	local entry = {
 		time = now,
 		action = action,
 		id = tostring(triggerID or "unknown"),
 		extra = extra and tostring(extra) or "",
-	})
+	}
+	table.insert(eventLog, 1, entry)
 	if #eventLog > MAX_LOG_ENTRIES then
 		table.remove(eventLog)
+	end
+	table.insert(lastFiredEvents, 1, entry)
+	if #lastFiredEvents > 3 then
+		table.remove(lastFiredEvents)
+	end
+	if updateStickyHud then
+		updateStickyHud()
 	end
 end
 
@@ -293,6 +355,11 @@ local function ensureHooks()
 	if type(P.Stop) == "function" then
 		hooksecurefunc(P, "Stop", function(_, triggerID)
 			recordEvent("STOP", triggerID, "")
+		end)
+	end
+	if type(P.PlayMode) == "function" then
+		hooksecurefunc(P, "PlayMode", function(_, mode)
+			recordEvent("MODE", tostring(mode or "unknown"), "")
 		end)
 	end
 	if type(P.Engine.RawChannel) == "function" then
@@ -462,6 +529,9 @@ local function render()
 		scrollChild:SetHeight(40)
 		return
 	end
+	if updateStickyHud then
+		updateStickyHud()
+	end
 	local view = views[currentView]
 	local ok, text = pcall(view, P)
 	body:SetText(ok and text or (BAD .. "view errored: " .. R .. tostring(text)))
@@ -566,12 +636,17 @@ btnStop:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -32, -74)
 btnStop:SetText("Stop All")
 btnStop:SetScript("OnClick", function()
 	local P = core()
-	if P and P.Engine and type(P.Engine.CancelAll) == "function" then
-		P.Engine:CancelAll()
+	if P and P.Engine then
+		if type(P.Engine.StopAll) == "function" then
+			P.Engine:StopAll()
+		end
+		if type(P.Engine.CancelAll) == "function" then
+			P.Engine:CancelAll()
+		end
 	end
 	render()
 end)
-attachTooltip(btnStop, "Cancel all active vibration pulses and held layers")
+attachTooltip(btnStop, "Emergency silence: stop all active vibration pulses and held layers")
 
 local btnThud = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
 btnThud:SetSize(46, 20)
@@ -625,9 +700,13 @@ btnClear:SetText("Clear")
 btnClear:SetScript("OnClick", function()
 	wipe(eventLog)
 	wipe(channelPeaks)
+	wipe(lastFiredEvents)
+	if updateStickyHud then
+		updateStickyHud()
+	end
 	render()
 end)
-attachTooltip(btnClear, "Clear rolling event log and channel peak history")
+attachTooltip(btnClear, "Clear rolling event log, sticky HUD, and channel peaks")
 
 local elapsedSinceRender = 0
 frame:SetScript("OnUpdate", function(_, elapsed)
@@ -675,6 +754,10 @@ _G.PulseDebugUI = {
 	end,
 	ClearLog = function()
 		wipe(eventLog)
+		wipe(lastFiredEvents)
+		if updateStickyHud then
+			updateStickyHud()
+		end
 		render()
 	end,
 	ResetPeaks = function()
