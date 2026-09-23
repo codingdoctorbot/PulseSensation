@@ -38,16 +38,21 @@ rsync -av --exclude '.DS_Store' --exclude '.*' --exclude 'tests' \
   "${REPO_DIR}/PulseChecklist/" "${STAGE_DIR}/PulseChecklist/"
 cp "${REPO_DIR}/LICENSE" "${STAGE_DIR}/PulseChecklist/"
 
-# Clean any lingering .DS_Store files in stage
-find "${STAGE_DIR}" -name ".DS_Store" -delete
+# Disable macOS AppleDouble resource forks (._* files)
+export COPYFILE_DISABLE=1
+
+# Clean any lingering Mac metadata in stage
+find "${STAGE_DIR}" \( -name ".DS_Store" -o -name "._*" \) -delete
 
 # 4. Create PulseHaptics standalone package
 echo "Creating PulseHaptics-v${VERSION}.zip..."
-(cd "${STAGE_DIR}" && zip -q -r "${DIST_DIR}/PulseHaptics-v${VERSION}.zip" PulseHaptics -x "*.DS_Store")
+(cd "${STAGE_DIR}" && zip -q -r -X "${DIST_DIR}/PulseHaptics-v${VERSION}.zip" PulseHaptics \
+  -x "*.DS_Store" -x "__MACOSX*" -x "*/__MACOSX*" -x "._*" -x "*/._*")
 
 # 5. Create PulseSensation Suite package (all 3 addons)
 echo "Creating PulseSensation-Suite-v${VERSION}.zip..."
-(cd "${STAGE_DIR}" && zip -q -r "${DIST_DIR}/PulseSensation-Suite-v${VERSION}.zip" PulseHaptics PulseDebug PulseChecklist -x "*.DS_Store")
+(cd "${STAGE_DIR}" && zip -q -r -X "${DIST_DIR}/PulseSensation-Suite-v${VERSION}.zip" PulseHaptics PulseDebug PulseChecklist \
+  -x "*.DS_Store" -x "__MACOSX*" -x "*/__MACOSX*" -x "._*" -x "*/._*")
 
 # Clean stage
 rm -rf "${STAGE_DIR}"
