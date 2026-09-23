@@ -93,9 +93,8 @@ Modules/AlertWorld.lua
 Modules/AlertDevice.lua
 Modules/AlertExperimental.lua
 
-# WoW Forever's native gamepad interface, observed through Blizzard's own SmartNavigation
-# and radial callbacks. Position after the Alert group is arbitrary — it depends on nothing
-# from it.
+# WoW Forever's native gamepad interface, observed through zero-taint passive 20Hz polling,
+# safe edge callbacks, and post-execution hooks. Position after the Alert group is arbitrary.
 Modules/ControllerUI.lua
 
 # The Pulse entry in Blizzard's AddOns settings list. A welcome page with a button on it —
@@ -103,7 +102,7 @@ Modules/ControllerUI.lua
 UI/Settings.lua
 
 # Pulse's own settings window. The settings UI as of 2026-09-22, not an alternative to one:
-# all 764 controls live here, generated from the same Core/Registry.lua tables, writing the
+# all ~1,395 controls live here, generated from the same Core/Registry.lua tables, writing the
 # same Pulse.Database keys, with the same labels, tooltips and ranges.
 #
 # Not a reskin — a different lifecycle. The Blizzard Settings framework registered every

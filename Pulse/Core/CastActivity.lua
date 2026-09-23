@@ -15,13 +15,13 @@
 -- restricted unit: every handler filters to "player" first, and nothing inspects a target,
 -- an amount or an aura.
 --
--- MIGRATION NOTE, worth reading before extending this. The cast cues in
--- Modules/AlertGeneric.lua and Modules/Combat.lua still register their own frames for the
--- same events. Two frames on one event is mild waste rather than a correctness problem,
--- since the classifier fires only its own cues. Folding them in is a later step, and when
--- it happens AlertGeneric.lua's IGNORED_SPELL_IDS filter (the Touch of Death Notification
--- fix, earned from a live bug report) MUST come with them — the prototype routed
--- FAILED_QUIET straight through and would resurrect that spam.
+-- MIGRATION NOTE, worth reading before extending this. Modules/Combat.lua has already
+-- been migrated to consume CastActivity:OnActivity for castTexture, but
+-- Modules/AlertGeneric.lua still registers its own frame for failed and interrupted alerts.
+-- Folding AlertGeneric in is a later step, and when it happens AlertGeneric.lua's
+-- IGNORED_SPELL_IDS filter (the Touch of Death Notification fix, earned from a live bug
+-- report) MUST come with it — the prototype routed FAILED_QUIET straight through and would
+-- resurrect that spam.
 
 local ADDON_NAME, Pulse = ...
 

@@ -2,7 +2,7 @@
 --
 -- The Pulse entry in Blizzard's AddOns settings list. A splash page with one button on it.
 --
--- Until 2026-09-22 this file WAS the settings panel: ~764 controls registered with
+-- Until 2026-09-22 this file WAS the settings panel: over a thousand controls registered with
 -- Blizzard's Settings API at login and rendered through a recycling ScrollBox, which is
 -- what crashed the client on closing the panel with a controller live
 -- (UI/Panel/Content.lua has the mechanism). UI/Panel/ replaces it, with every control moved
