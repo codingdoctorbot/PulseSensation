@@ -32,6 +32,7 @@ read_globals = {
     -- Blizzard FrameXML & UI
     "UIParent",
     "GlueParent",
+    "Minimap",
     "CreateFrame",
     "hooksecurefunc",
     "InCombatLockdown",
