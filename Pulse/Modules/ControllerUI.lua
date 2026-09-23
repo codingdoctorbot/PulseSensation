@@ -94,14 +94,12 @@ local function navButtonEnabled(button)
 	return true
 end
 
--- ── SmartNavigation Edge Detection (Commented Out / Pending Engine Fix) ──────
+-- ── SmartNavigation Edge Detection ────────────────────────────────────────────
 --
--- SmartNavigation:RegisterCallback invokes AttributeDelegate:SetAttribute on a SecureFrame,
--- which Blizzard UI strictly blocks third-party addons from doing (triggers ADDON_ACTION_FORBIDDEN).
--- The original implementation is preserved commented out below so it can be quickly re-enabled
--- if Blizzard ever unprotects CallbackRegistryMixin or decouples SmartNavigation from SecureFrame attributes.
---
---[[
+-- Edge events (HitTopEdge, HitBottomEdge, HitLeftEdge, HitRightEdge) fire during active
+-- directional stick navigation when there is no neighboring element to move to.
+-- Standard default is OFF so CallbackRegistryMixin:RegisterCallback is not called by default.
+
 local EDGE_EVENTS = {
 	"HitTopEdge",
 	"HitBottomEdge",
@@ -141,11 +139,6 @@ local function syncEdge()
 		end
 	end
 	edgeRegistered = wanted
-end
---]]
-
-local function syncEdge()
-	-- Inert no-op while implementation is commented out above
 end
 
 -- ── Major UI Panels Inspection ────────────────────────────────────────────────
