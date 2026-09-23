@@ -14,7 +14,7 @@ From the repo root. The argument is the addon directory.
 ```sh
 for t in harness locomotion-test crafting-test engine-test; do
     printf '%-18s ' "$t"
-    lua PulseChecklist/tests/$t.lua Pulse 2>&1 | tail -1
+    lua PulseChecklist/tests/$t.lua PulseHaptics 2>&1 | tail -1
 done
 
 # PulseDebug's window is a separate addon, so it takes a different directory.
@@ -28,14 +28,14 @@ failing assertion with what it got and what it wanted, then a `FAILURES: n` line
 Pair them with a syntax pass, which catches a different class of mistake:
 
 ```sh
-find Pulse -name '*.lua' -exec luac -p {} +
+find PulseHaptics -name '*.lua' -exec luac -p {} +
 ```
 
 ## What each one covers
 
 | Suite | Asserts |
 |---|---|
-| `harness.lua` | Loads every `Core/` file, every module and the whole `UI/Panel/` tree, then builds all 20 pages — 1,141 rows, 841 controls, 162 index entries. Every getter, dependency predicate, visibility predicate and options function runs; every value round-trips through its own setter. Also: no spec fails to build, no dropdown is still wired to Blizzard's menu, every cue-index line navigates, the dependency pass greys and ungreys correctly, and 27 profile-scope assertions |
+| `harness.lua` | Loads every `Core/` file, every module and the whole `UI/Panel/` tree, then builds all 21 pages — 1,408 rows, 1,006 controls, 190 index entries. Every getter, dependency predicate, visibility predicate and options function runs; every value round-trips through its own setter. Also: no spec fails to build, no dropdown is still wired to Blizzard's menu, every cue-index line navigates, the dependency pass greys and ungreys correctly, and 27 profile-scope assertions |
 | `locomotion-test.lua` | The ground-contact guard — swimming, flying, gliding, falling, and the rising half of a jump, which `IsFalling` does not report |
 | `crafting-test.lua` | Craft rhythm end to end through real `CastActivity` events: profession resolution, strike scheduling, the final blow landing on completion but not on an abandoned craft, per-profession toggles and strengths |
 | `checklist-test.lua` | PulseChecklist's window and its account-wide saved table. Drives the real status button: cycling a status stamps `confirmedBy` with the current character, name, realm and class; cycling back to `untested` clears it; a status set by another character is marked and explained in the tooltip; and an entry saved before `confirmedBy` existed neither errors nor gets mislabelled |

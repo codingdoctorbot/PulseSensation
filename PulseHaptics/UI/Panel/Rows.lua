@@ -76,6 +76,9 @@ local function createBaseRow(parent, spec, frameType)
 	row.Text:SetPoint("LEFT", row, "LEFT", indent + Theme.TEXT_LEFT, 0)
 	row.Text:SetPoint("RIGHT", row, "CENTER", Theme.TEXT_RIGHT, 0)
 	row.Text:SetText(spec.label or "")
+	if row.Text.SetTextColor then
+		row.Text:SetTextColor(Theme.COLOR_TEXT_PRIMARY.r, Theme.COLOR_TEXT_PRIMARY.g, Theme.COLOR_TEXT_PRIMARY.b)
+	end
 
 	row.HoverBackground = Theme.CreateHoverBackground(row)
 
@@ -271,7 +274,6 @@ function Rows.CreateCheckbox(parent, spec)
 		cardAccent:SetColorTexture(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b, 0.8)
 
 		statusBadge = row:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-		statusBadge:SetPoint("LEFT", row.Text, "RIGHT", 8, 0)
 	end
 
 	local box = CreateFrame("CheckButton", nil, row)
@@ -283,11 +285,15 @@ function Rows.CreateCheckbox(parent, spec)
 	box:SetCheckedTexture("checkmark-minimal")
 	box:SetDisabledCheckedTexture("checkmark-minimal-disabled")
 
+	if statusBadge then
+		statusBadge:SetPoint("LEFT", box, "RIGHT", 10, 0)
+	end
+
 	local function updateStatus()
 		local val = spec.get() and true or false
 		box:SetChecked(val)
 		if statusBadge then
-			statusBadge:SetText(val and "|cff00ff88[ACTIVE]|r" or "|cff888888[MUTED]|r")
+			statusBadge:SetText(val and "|cff2dd4bf[ACTIVE]|r" or "|cff64748b[MUTED]|r")
 		end
 	end
 
@@ -626,6 +632,7 @@ function Rows.CreateButton(parent, spec)
 	button:SetWidth(Theme.BUTTON_WIDTH)
 	button:SetPoint("LEFT", row, "CENTER", Theme.BUTTON_LEFT, 0)
 	button:SetText(spec.buttonText or "")
+	Theme.StyleActionButton(button, true)
 	button:SetScript("OnClick", function()
 		spec.onClick()
 	end)

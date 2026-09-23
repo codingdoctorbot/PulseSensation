@@ -110,16 +110,22 @@ Theme.COLOR_BG = { r = 0.035, g = 0.040, b = 0.055 }
 Theme.COLOR_SURFACE = { r = 0.060, g = 0.068, b = 0.085 }
 Theme.COLOR_BORDER = { r = 0.18, g = 0.22, b = 0.28 }
 
+-- Direction A: Clean cybernetic slate typography & status tokens
+Theme.COLOR_TEXT_PRIMARY = { r = 0.90, g = 0.93, b = 0.96 }
+Theme.COLOR_TEXT_MUTED = { r = 0.53, g = 0.58, b = 0.68 }
+Theme.COLOR_TEXT_ACCENT = Theme.COLOR_ACCENT
+Theme.COLOR_LIVE = { r = 0.18, g = 0.83, b = 0.75 }
+
 -- ── Helpers ───────────────────────────────────────────────────────────────────
 
 -- Subtle cyan-tinted hover wash under the cursor for high legibility and cohesive styling.
 function Theme.CreateHoverBackground(frame, inset)
-    local texture = frame:CreateTexture(nil, "BACKGROUND")
-    texture:SetColorTexture(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b, 0.08)
-    texture:SetPoint("TOPLEFT", frame, "TOPLEFT", inset or -10, 0)
-    texture:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -5, 0)
-    texture:Hide()
-    return texture
+	local texture = frame:CreateTexture(nil, "BACKGROUND")
+	texture:SetColorTexture(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b, 0.08)
+	texture:SetPoint("TOPLEFT", frame, "TOPLEFT", inset or -10, 0)
+	texture:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -5, 0)
+	texture:Hide()
+	return texture
 end
 
 -- One tooltip for the whole panel, styled like Blizzard's SettingsTooltip: control name as
@@ -129,93 +135,154 @@ end
 local tooltip
 
 local function getTooltip()
-    if tooltip then
-        return tooltip
-    end
-    -- SharedTooltipTemplate is Blizzard_SharedXML and always present; the fallback only
-    -- degrades a missing template to no tooltip rather than to a broken panel.
-    local ok, frame = pcall(CreateFrame, "GameTooltip", "PulsePanelTooltip", UIParent, "SharedTooltipTemplate")
-    if ok and frame then
-        tooltip = frame
-    else
-        tooltip = GameTooltip
-    end
-    return tooltip
+	if tooltip then
+		return tooltip
+	end
+	-- SharedTooltipTemplate is Blizzard_SharedXML and always present; the fallback only
+	-- degrades a missing template to no tooltip rather than to a broken panel.
+	local ok, frame = pcall(CreateFrame, "GameTooltip", "PulsePanelTooltip", UIParent, "SharedTooltipTemplate")
+	if ok and frame then
+		tooltip = frame
+	else
+		tooltip = GameTooltip
+	end
+	return tooltip
 end
 
 function Theme.ShowTooltip(owner, title, body)
-    if not title and not body then
-        return
-    end
-    local tip = getTooltip()
-    if not tip then
-        return
-    end
-    tip:SetOwner(owner, "ANCHOR_RIGHT", -10, 0)
-    if title and title ~= "" then
-        tip:SetText(title, 1, 1, 1, 1, true)
-        if body and body ~= "" then
-            tip:AddLine(" ")
-            tip:AddLine(body, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, true)
-        end
-    else
-        tip:SetText(body, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, true)
-    end
-    tip:Show()
+	if not title and not body then
+		return
+	end
+	local tip = getTooltip()
+	if not tip then
+		return
+	end
+	tip:SetOwner(owner, "ANCHOR_RIGHT", -10, 0)
+	if title and title ~= "" then
+		tip:SetText(title, 1, 1, 1, 1, true)
+		if body and body ~= "" then
+			tip:AddLine(" ")
+			tip:AddLine(body, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, true)
+		end
+	else
+		tip:SetText(body, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, true)
+	end
+	tip:Show()
 end
 
 function Theme.HideTooltip()
-    local tip = getTooltip()
-    if tip then
-        tip:Hide()
-    end
+	local tip = getTooltip()
+	if tip then
+		tip:Hide()
+	end
 end
 
 -- Every SmartNavigation call in this tree goes through these two. The globals come from
 -- Blizzard_GamepadSmartNavigation, loaded only where gamepad UI exists, so a bare call
 -- would error without it. Guarded once here rather than at forty call sites.
 function Theme.MarkIgnored(frame)
-    if frame and type(SmartNavigation_MarkFrameIgnored) == "function" then
-        pcall(SmartNavigation_MarkFrameIgnored, frame)
-    end
+	if frame and type(SmartNavigation_MarkFrameIgnored) == "function" then
+		pcall(SmartNavigation_MarkFrameIgnored, frame)
+	end
 end
 
 function Theme.MarkFocusable(frame)
-    if frame and type(SmartNavigation_MarkFrameFocusable) == "function" then
-        pcall(SmartNavigation_MarkFrameFocusable, frame)
-    end
+	if frame and type(SmartNavigation_MarkFrameFocusable) == "function" then
+		pcall(SmartNavigation_MarkFrameFocusable, frame)
+	end
 end
 
 function Theme.ClearIgnored(frame)
-    if frame and type(SmartNavigation_ClearIgnoreStatus) == "function" then
-        pcall(SmartNavigation_ClearIgnoreStatus, frame)
-    end
+	if frame and type(SmartNavigation_ClearIgnoreStatus) == "function" then
+		pcall(SmartNavigation_ClearIgnoreStatus, frame)
+	end
 end
 
 function Theme.PlayCheckSound(on)
-    if not SOUNDKIT then
-        return
-    end
-    local kit = on and SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF
-    if kit then
-        PlaySound(kit)
-    end
+	if not SOUNDKIT then
+		return
+	end
+	local kit = on and SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF
+	if kit then
+		PlaySound(kit)
+	end
+end
+
+-- Direction A: Clean cybernetic button styling
+function Theme.StyleActionButton(button, isAccent)
+	if not button then
+		return
+	end
+	if button.Left then
+		button.Left:SetAlpha(0)
+	end
+	if button.Middle then
+		button.Middle:SetAlpha(0)
+	end
+	if button.Right then
+		button.Right:SetAlpha(0)
+	end
+	local normal = button:GetNormalTexture()
+	if normal then
+		normal:SetAlpha(0)
+	end
+	local pushed = button:GetPushedTexture()
+	if pushed then
+		pushed:SetAlpha(0)
+	end
+	local highlight = button:GetHighlightTexture()
+	if highlight then
+		highlight:SetAlpha(0)
+	end
+
+	if not button.PulseBg then
+		local bg = button:CreateTexture(nil, "BACKGROUND")
+		bg:SetPoint("TOPLEFT", button, "TOPLEFT", 1, -1)
+		bg:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -1, 1)
+		bg:SetColorTexture(Theme.COLOR_SURFACE.r, Theme.COLOR_SURFACE.g, Theme.COLOR_SURFACE.b, 0.95)
+		button.PulseBg = bg
+
+		local border = button:CreateTexture(nil, "BORDER")
+		border:SetPoint("TOPLEFT", button, "TOPLEFT", 0, 0)
+		border:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 0, 0)
+		if isAccent then
+			border:SetColorTexture(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b, 0.7)
+		else
+			border:SetColorTexture(Theme.COLOR_BORDER.r, Theme.COLOR_BORDER.g, Theme.COLOR_BORDER.b, 0.8)
+		end
+		button.PulseBorder = border
+
+		local hl = button:CreateTexture(nil, "HIGHLIGHT")
+		hl:SetPoint("TOPLEFT", button, "TOPLEFT", 1, -1)
+		hl:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -1, 1)
+		hl:SetColorTexture(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b, 0.18)
+		button:SetHighlightTexture(hl)
+	end
+
+	local fs = button:GetFontString()
+	if fs then
+		if isAccent then
+			fs:SetTextColor(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b)
+		else
+			fs:SetTextColor(Theme.COLOR_TEXT_PRIMARY.r, Theme.COLOR_TEXT_PRIMARY.g, Theme.COLOR_TEXT_PRIMARY.b)
+		end
+	end
 end
 
 -- Greying out. Blizzard's SettingsListElementMixin:DisplayEnabled
 -- (Blizzard_SettingControls.lua:282-292) does these same three things, including taking the
 -- row out of gamepad navigation: a disabled row should be unreachable, not merely dimmed.
 function Theme.DisplayEnabled(row, enabled)
-    local color = enabled and NORMAL_FONT_COLOR or GRAY_FONT_COLOR
-    if row.Text then
-        row.Text:SetTextColor(color:GetRGB())
-    end
-    if row.DesaturateHierarchy then
-        row:DesaturateHierarchy(enabled and 0 or 1)
-    end
-    if enabled then
-        Theme.ClearIgnored(row)
-    else
-        Theme.MarkIgnored(row)
-    end
+	local color = enabled and Theme.COLOR_TEXT_PRIMARY or Theme.COLOR_TEXT_MUTED
+	if row.Text then
+		row.Text:SetTextColor(color.r, color.g, color.b)
+	end
+	if row.DesaturateHierarchy then
+		row:DesaturateHierarchy(enabled and 0 or 1)
+	end
+	if enabled then
+		Theme.ClearIgnored(row)
+	else
+		Theme.MarkIgnored(row)
+	end
 end

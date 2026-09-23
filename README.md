@@ -47,21 +47,43 @@ Engineered to take full advantage of modern gamepads:
 
 ## ⚡ 30-Second Quick Start
 
-1. **Install**: Drop `PulseHaptics`, `PulseDebug`, and `PulseChecklist` into your World of Warcraft `Interface/AddOns/` directory.
-2. **Log in**: Launch WoW with your gamepad connected.
-3. **Taste Test**: Try these immediate chat commands to feel your controller come alive:
-   - `/pulse test thud` — Heavy physical impact
-   - `/pulse test heartbeat` — Urgent low-health pulse
-   - `/pulse test wave` — Smooth environmental ocean swell
-   - `/pulse test flutter` — High-frequency magical shimmer
-4. **Customize**: Type **`/pulse`** (or click the minimap button) to explore over 1,400 tuning controls across 21 pages.
+### 1. Enable Gamepad & Vibration in WoW
+World of Warcraft requires native gamepad input and vibration telemetry to be enabled in its engine console. Run these two chat commands once in-game:
+```text
+/console GamePadEnable 1
+/console GamePadVibration 1
+```
 
-### Available Slash Commands
+### 2. Installation
+Drop the three folders (`PulseHaptics`, `PulseDebug`, and `PulseChecklist`) into your World of Warcraft `Interface/AddOns/` directory:
+- **macOS**: `/Applications/World of Warcraft/_classic_beta_/Interface/AddOns/`
+- **Windows**: `C:\Program Files (x86)\World of Warcraft\_classic_beta_\Interface\AddOns\`
 
-- `/pulse` or `/pulsehaptics` — Toggle the main settings panel.
-- `/pulse test <mode>` — Play any authored vibration mode.
-- `/pdebug` (or `/pulsedebug`) — Open the real-time diagnostic and troubleshooting HUD.
-- `/pcheck` (or `/pulsecheck`) — Open the in-game cue verification checklist.
+### 3. Immediate Taste Test
+Make sure your gamepad is turned on and try these chat commands to feel your controller come alive:
+- `/pulse test thud` — Heavy physical impact (boots, hammer, mace)
+- `/pulse test heartbeat` — Urgent cardiac rhythm
+- `/pulse test wave` — Smooth environmental ocean swell
+- `/pulse test surge` — Powerful magical energy surge
+
+### 4. Customization
+Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open the settings window with **1,408 settings rows (over 1,000 interactive controls and 190 distinct cues) across 21 pages**.
+
+---
+
+### Available In-Game Commands
+
+| Command | Action |
+|:---|:---|
+| `/pulse` or `/pulsehaptics` (or `/pulseui`) | Toggle the main settings window. |
+| `/pulse test <mode>` | Play any authored vibration mode (e.g. `thud`, `wave`, `surge`, `heartbeat`, `crack`). |
+| `/pulse profile [name]` | Inspect or switch the active profile via chat. |
+| `/pulse minimap` | Toggle the minimap button on or off. |
+| `/pulse debug` | Toggle verbose console logging on or off. |
+| `/pdebug` (or `/pulsedebug`) | Open the real-time diagnostic and troubleshooting HUD. |
+| `/pcheck` (or `/pulsecheck`) | Open the in-game cue verification checklist (all 190 cues). |
+| `/console GamePadEnable 1` | Ensure Blizzard gamepad engine subsystem is enabled. |
+| `/console GamePadVibration 1` | Ensure Blizzard gamepad vibration output is enabled. |
 
 ---
 

@@ -534,7 +534,7 @@ function Spec.BuildRootPage()
 	rows[#rows + 1] = {
 		kind = "button",
 		label = "Test the selected mode",
-		buttonText = "Play it",
+		buttonText = "Play",
 		tooltip = "There is no way to detect which motors a controller actually drives — "
 			.. "pick a schema above, then play a few modes to find out.",
 		onClick = function()
@@ -613,6 +613,19 @@ end
 
 function Spec.BuildCuePage(page)
 	local rows = {}
+	if page.id == "CONTROL" then
+		rows[#rows + 1] = {
+			kind = "text",
+			gap = 6,
+			body = "|cff888888Loss of control cues are governed by the master switch on the main Pulse page.|r",
+		}
+	elseif page.id == "CONTROLLER_UI" then
+		rows[#rows + 1] = {
+			kind = "text",
+			gap = 6,
+			body = "|cff888888Controller UI cues are governed by the master switch on the main Pulse page.|r",
+		}
+	end
 	for _, section in ipairs(page.sections) do
 		if #section.triggers > 0 then
 			rows[#rows + 1] = { kind = "header", label = section.label }
@@ -1017,8 +1030,6 @@ function Spec.BuildDefaultProfilesPage()
 	local store = database()
 	local specID, specName = store:GetSpecInfo()
 
-	rows[#rows + 1] = { kind = "header", label = "Default profiles" }
-
 	rows[#rows + 1] = {
 		kind = "text",
 		gap = 10,
@@ -1084,6 +1095,12 @@ function Spec.BuildDefaultProfilesPage()
 					child = true,
 					label = "Switch to this profile",
 					buttonText = "Activate",
+					buttonTextFunc = function()
+						return store:GetActiveProfileName() == pID and "Active" or "Activate"
+					end,
+					enabledWhen = function()
+						return store:GetActiveProfileName() ~= pID
+					end,
 					tooltip = ("Immediately switch to %s for the current character."):format(pLabel),
 					onClick = function()
 						store:SetActiveProfileName(pID)
@@ -1422,7 +1439,7 @@ function Spec.BuildModeTuningPage()
 				kind = "button",
 				child = true,
 				label = "Feel " .. modeID,
-				buttonText = "Play it",
+				buttonText = "Play",
 				tooltip = "Play " .. modeID .. " right now with whatever's currently set on its sliders above.",
 				onClick = function()
 					local ok, reason = Pulse:TestMode(modeID)

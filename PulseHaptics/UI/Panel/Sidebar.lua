@@ -100,8 +100,8 @@ local function updateButtonState(button)
 			end
 		else
 			button.Texture:Hide()
-			if button.Label.SetTextColor and NORMAL_FONT_COLOR then
-				button.Label:SetTextColor(NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+			if button.Label.SetTextColor then
+				button.Label:SetTextColor(Theme.COLOR_TEXT_MUTED.r, Theme.COLOR_TEXT_MUTED.g, Theme.COLOR_TEXT_MUTED.b)
 			end
 			if button.Icon then
 				button.Icon:SetVertexColor(0.70, 0.78, 0.85, 0.75)
