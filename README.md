@@ -54,7 +54,7 @@ Engineered to take full advantage of modern gamepads:
    - `/pulse test heartbeat` — Urgent low-health pulse
    - `/pulse test wave` — Smooth environmental ocean swell
    - `/pulse test flutter` — High-frequency magical shimmer
-4. **Customize**: Type **`/pulse`** (or click the minimap button) to explore over 1,300 tuning controls across 21 pages.
+4. **Customize**: Type **`/pulse`** (or click the minimap button) to explore over 1,400 tuning controls across 21 pages.
 
 ### Available Slash Commands
 
@@ -71,7 +71,7 @@ Engineered to take full advantage of modern gamepads:
 |:---|:---|
 | **`PulseHaptics`** | The core haptic engine, authored modes, 22 module watchers, settings UI, and profile manager. |
 | **`PulseDebug`** | Companion developer & troubleshooting window for real-time channel introspection and trigger auditing. |
-| **`PulseChecklist`** | In-game verification checklist to track which of the 110 cues have been field-tested on your character. |
+| **`PulseChecklist`** | In-game verification checklist to track which of the 190 cues have been field-tested on your character. |
 
 ---
 

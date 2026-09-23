@@ -1734,7 +1734,7 @@ Pulse.Triggers = {
 		label = "Ping placed",
 		desc = "A clear tactical chime when a waypoint ping pin is placed on the terrain or map.",
 		caveat = "Requires client ping API support.",
-		events = {},
+		events = { "PING_PIN_ADDED" },
 		unit = nil,
 	},
 
