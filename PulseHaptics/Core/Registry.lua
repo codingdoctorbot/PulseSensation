@@ -247,6 +247,64 @@ Pulse.Triggers = {
 		},
 	},
 
+	{
+		id = "oceanTexture",
+		category = "MOVEMENT",
+		continuous = true,
+		default = false,
+		label = "Ocean waves & swell",
+		desc = "Asymmetric oceanic gravity swells and coastal wave surges while swimming in the sea.",
+		caveat = "Simulates real fluid swell physics via harmonic wave synthesis: a slow, rhythmic rise into a steep wave crest, followed by a gentle glide into the trough. Driven primarily by the heavy slow motor with high-motor crest spray at peak amplitude. Automatically targets ocean and coastal waters unless configured to run in all swimming water.",
+		devTuning = true,
+		tunables = {
+			{
+				key = "swellStrength",
+				label = "Swell strength",
+				default = 0.14,
+				min = 0.0,
+				max = 0.50,
+				step = 0.02,
+				desc = "Overall heave amplitude of the oceanic swell. Sets the physical displacement intensity of the slow motor.",
+			},
+			{
+				key = "swellPeriod",
+				label = "Wave period (sec)",
+				default = 9.0,
+				min = 4.0,
+				max = 16.0,
+				step = 0.5,
+				desc = "Time in seconds for a complete wave cycle. Real oceanic swells roll every 8 to 12 seconds (~0.10 Hz). Shorter periods feel like choppy coastal chop; longer periods feel like open-ocean rollers.",
+			},
+			{
+				key = "harmonicCrest",
+				label = "Wave steepness",
+				default = 0.35,
+				min = 0.0,
+				max = 0.70,
+				step = 0.05,
+				desc = "Second-harmonic Stokes drift shaping. 0.0 is a pure symmetric sine wave; higher values create a sharp, steep crest and an elongated trough, matching real fluid gravity waves.",
+			},
+			{
+				key = "surfaceSpray",
+				label = "Crest froth & spray",
+				default = 0.08,
+				min = 0.0,
+				max = 0.30,
+				step = 0.02,
+				desc = "Crisp high-frequency motor vibration applied right as the wave crest reaches peak amplitude. Fades out smoothly when submerged.",
+			},
+			{
+				key = "oceanOnly",
+				label = "Ocean zones only",
+				default = 1,
+				min = 0,
+				max = 1,
+				step = 1,
+				desc = "When set to 1, restricts the rolling swell to ocean bodies, coasts, seas, and deep-water fatigue zones. Set to 0 to feel ocean swells in all swimming water.",
+			},
+		},
+	},
+
 	-- continuous.md §2: sine-oscillator wingbeat texture, both knobs tunable on the
 	-- dev-only tuning page.
 	{
@@ -2805,6 +2863,7 @@ local PAGE_LAYOUT = {
 					"landingHard",
 					"jumped",
 					"waterTexture",
+					"oceanTexture",
 					"swimTexture",
 					"formChanged",
 					"locomotion",

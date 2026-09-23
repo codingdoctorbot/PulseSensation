@@ -148,6 +148,9 @@ read_globals = {
     "GetProfessions",
     "GetProfessionInfo",
     "GetMoney",
+    "GetSubZoneText",
+    "GetZoneText",
+    "GetMinimapZoneText",
     "issecretvalue",
     "LE_GAME_ERR_ATTACK_DEAD",
 
