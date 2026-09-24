@@ -67,8 +67,13 @@ end
 function issecretvalue()
 	return false
 end
+local frameScripts = {}
 function CreateFrame()
-	return setmetatable({}, {
+	local f = {}
+	function f:SetScript(name, fn)
+		frameScripts[name] = fn
+	end
+	return setmetatable(f, {
 		__index = function()
 			return function() end
 		end,
@@ -372,5 +377,34 @@ check("deviceReady false when C_GamePad is nil", Engine:IsDeviceReady(), false)
 C_GamePad = savedGamePad
 Engine:RefreshDevice()
 check("deviceReady restored when C_GamePad present", Engine:IsDeviceReady(), true)
+
+-- ── OnUpdate Error Recovery (Pcall Death Loop Prevention) ─────────────────────
+Engine:Set("test_layer", 0.5, 0.5, 1.0)
+check("test_layer is present before tick", #Engine:_DebugLayers() > 0, true)
+
+-- Force onEngineTick to throw by corrupting an internal resolver
+local origActiveSchema = Engine._ActiveSchema
+Engine._ActiveSchema = function()
+	error("simulated schema explosion")
+end
+
+check("OnUpdate script is wired", type(frameScripts.OnUpdate), "function")
+frameScripts.OnUpdate(nil, 0.016)
+check("OnUpdate trapped the error in pcall", (Engine.errorCount or 0) > 0, true)
+check(
+	"  and recorded error message",
+	Engine.lastError and Engine.lastError:find("simulated schema explosion") ~= nil,
+	true
+)
+check("  and purged corrupted layers via StopAll", #Engine:_DebugLayers(), 0)
+
+-- Restore healthy function and verify next tick executes cleanly without error
+Engine._ActiveSchema = origActiveSchema
+local preErrorCount = Engine.errorCount
+Engine:Set("healthy_layer", 0.3, 0.3, 1.0)
+frameScripts.OnUpdate(nil, 0.016)
+check("next frame runs cleanly without repeating error", Engine.errorCount, preErrorCount)
+check("  and healthy layer is active", #Engine:_DebugLayers(), 1)
+Engine:StopAll()
 
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))

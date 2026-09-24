@@ -221,6 +221,9 @@ end
 -- `isTransient`: true for sharp discrete clicks/impacts (fast ~10ms attack), false for
 -- sustained immersion textures (smooth 75ms attack).
 function Engine:SetRoles(name, roles, duration, isTransient)
+	if not name or type(roles) ~= "table" then
+		return
+	end
 	local layer = layers[name]
 	if not layer then
 		layer = { roles = {} }
@@ -529,18 +532,20 @@ local function onEngineTick(elapsed)
 			layers[name] = nil
 		else
 			local isTransient = layer.isTransient
-			for role, value in pairs(layer.roles) do
-				if value > 0 then
-					hasRoles = true
-					if isTransient then
-						roleHasTransient[role] = true
-						if value > (roleTransientTotal[role] or 0) then
-							roleTransientTotal[role] = value
+			if type(layer.roles) == "table" then
+				for role, value in pairs(layer.roles) do
+					if type(value) == "number" and value > 0 then
+						hasRoles = true
+						if isTransient then
+							roleHasTransient[role] = true
+							if value > (roleTransientTotal[role] or 0) then
+								roleTransientTotal[role] = value
+							end
+						else
+							-- Continuous immersion layering: saturating sum keeps textures alive together
+							local existing = roleContinuousTotal[role] or 0
+							roleContinuousTotal[role] = 1.0 - (1.0 - existing) * (1.0 - value)
 						end
-					else
-						-- Continuous immersion layering: saturating sum keeps textures alive together
-						local existing = roleContinuousTotal[role] or 0
-						roleContinuousTotal[role] = 1.0 - (1.0 - existing) * (1.0 - value)
 					end
 				end
 			end
@@ -565,7 +570,8 @@ local function onEngineTick(elapsed)
 		end
 	end
 
-	local masterIntensity = Pulse.Database:Get("masterIntensity") or 1.0
+	local rawMaster = Pulse.Database:Get("masterIntensity")
+	local masterIntensity = (type(rawMaster) == "number") and rawMaster or 1.0
 	local schema = Engine:_ActiveSchema()
 
 	-- Role -> channel, collapsing collisions through schema routing.
@@ -636,12 +642,9 @@ frame:SetScript("OnUpdate", function(_, elapsed)
 				print("Pulse: Engine OnUpdate error: " .. tostring(err))
 			end
 		end
-		if C_GamePad and C_GamePad.StopVibration then
-			pcall(C_GamePad.StopVibration)
-		end
-		wipe(smoothedByChannel)
-		wipe(lastSetByChannel)
-		wipe(lastSentTimeByChannel)
+		-- Full state recovery: purges corrupted layers, increments engine generation
+		-- to void any orphaned async timers, and resets hardware outputs.
+		Engine:StopAll()
 	end
 end)
 
