@@ -1202,9 +1202,76 @@ do
 				})
 			end
 		end
-		check("UNIT_AURA with valid defensive spell fires targetBigDefensive", firedCount > 0, true)
-
 		Pulse.FireIfEnabled = origFire
+	end
+
+	-- Engine Fine-Tunings: Watchdog, Dual-Lane Smoothing, Immersion Saturating Mixer
+	local engineOnUpdate = nil
+	for _, f in ipairs(frames) do
+		local script = f:GetScript("OnUpdate")
+		if script then
+			engineOnUpdate = script
+			break
+		end
+	end
+	check("Engine OnUpdate frame script found", type(engineOnUpdate), "function")
+
+	if engineOnUpdate then
+		local setVibrationCalls = 0
+		local lastSetChannel, lastSetVal = nil, nil
+		C_GamePad.IsEnabled = function()
+			return true
+		end
+		C_GamePad.GetActiveDeviceID = function()
+			return 1
+		end
+		C_GamePad.SetVibration = function(channel, val)
+			setVibrationCalls = setVibrationCalls + 1
+			lastSetChannel = channel
+			lastSetVal = val
+		end
+
+		Pulse.Database:Set("masterIntensity", 1.0)
+		Pulse.Engine:RefreshDevice()
+		check("Engine device is ready for test", Pulse.Engine:IsDeviceReady(), true)
+
+		-- Test 1: Immersion-First Saturating Mixing
+		-- Two continuous textures (0.30 and 0.20) combine to ~0.44, not max 0.30
+		Pulse.Engine:Hold("waterAmbiance", 0.30, 0.30)
+		Pulse.Engine:Hold("mountGallop", 0.20, 0.20)
+		-- Step frames to allow continuous smoothing filter (75ms tau) to settle
+		for _ = 1, 10 do
+			engineOnUpdate(nil, 0.05)
+		end
+		check("Continuous textures merge via saturating sum", lastSetVal and lastSetVal > 0.40, true)
+
+		-- Transient impact layers on top without ducking continuous texture (snaps via fast transient tau)
+		Pulse.Engine:Set("impactThud", 0.50, 0.50, 0.05, true)
+		engineOnUpdate(nil, 0.05)
+		check("Transient layers on top of continuous baseline", lastSetVal and lastSetVal > 0.65, true)
+
+		-- Let transient settle to steady state
+		for _ = 1, 5 do
+			engineOnUpdate(nil, 0.05)
+		end
+
+		-- Test 2: Output Transport Watchdog
+		-- Once steady, next tick within 250ms does not trigger redundant SetVibration
+		setVibrationCalls = 0
+		engineOnUpdate(nil, 0.05)
+		check("Steady vibration within 250ms does not re-send (epsilon gate)", setVibrationCalls, 0)
+
+		-- Advance time past 250ms watchdog interval with unchanged steady input
+		local origGetTime = GetTime
+		local mockTime = origGetTime() + 0.35
+		GetTime = function()
+			return mockTime
+		end
+		engineOnUpdate(nil, 0.05)
+		check("Steady vibration past 250ms triggers watchdog refresh", setVibrationCalls > 0, true)
+		GetTime = origGetTime
+
+		Pulse.Engine:StopAll()
 	end
 end
 

@@ -52,6 +52,18 @@ local engineGeneration = 0
 local layerTokens = {} -- name -> token, so PlayMode re-triggers cancel their own stale steps
 local smoothedByChannel = {}
 local lastSetByChannel = {}
+local lastSentTimeByChannel = {}
+
+local WATCHDOG_INTERVAL = 0.250 -- 250ms keep-alive heartbeat to prevent motor firmware sleep
+local ROLES_LIST = { "low", "high", "ltrigger", "rtrigger" }
+
+-- Scratch tables for OnUpdate blending (recycled via wipe to ensure zero GC in tight loops - Rule 4)
+local frameRoleTotals = {}
+local roleContinuousTotal = {}
+local roleTransientTotal = {}
+local roleHasTransient = {}
+local channelHasTransient = {}
+local frameTarget = {}
 
 local deviceReady = false
 
@@ -151,7 +163,16 @@ function Engine:StopAll()
 	rawHolds = {}
 	smoothedByChannel = {}
 	lastSetByChannel = {}
-	C_GamePad.StopVibration()
+	wipe(lastSentTimeByChannel)
+	wipe(frameRoleTotals)
+	wipe(roleContinuousTotal)
+	wipe(roleTransientTotal)
+	wipe(roleHasTransient)
+	wipe(channelHasTransient)
+	wipe(frameTarget)
+	if C_GamePad and C_GamePad.StopVibration then
+		pcall(C_GamePad.StopVibration)
+	end
 end
 
 function Engine:_ActiveSchema()
@@ -169,16 +190,18 @@ end
 -- Reused table to prevent GC allocation in high-frequency hold/tick loops (Rule 4).
 local scratchRoles = { low = 0, high = 0 }
 
-function Engine:Set(name, low, high, duration)
+function Engine:Set(name, low, high, duration, isTransient)
 	scratchRoles.low = low or 0
 	scratchRoles.high = high or 0
-	return self:SetRoles(name, scratchRoles, duration)
+	return self:SetRoles(name, scratchRoles, duration, isTransient)
 end
 
 -- The role-space entry point. `roles` is sparse: name only what this layer drives.
 -- Recognised roles are "low", "high", "ltrigger", "rtrigger"; anything else is ignored by
 -- the resolver rather than erroring, so a typo goes quiet instead of breaking a frame.
-function Engine:SetRoles(name, roles, duration)
+-- `isTransient`: true for sharp discrete clicks/impacts (fast ~10ms attack), false for
+-- sustained immersion textures (smooth 75ms attack).
+function Engine:SetRoles(name, roles, duration, isTransient)
 	local layer = layers[name]
 	if not layer then
 		layer = { roles = {} }
@@ -194,6 +217,7 @@ function Engine:SetRoles(name, roles, duration)
 		target[role] = clamp01(value or 0)
 	end
 	layer.endTime = GetTime() + (duration or 0.1)
+	layer.isTransient = (isTransient == true) or (isTransient == nil and (duration or 0.1) <= 0.15)
 end
 
 -- Continuous hold: the caller re-invokes this every tick the state is true. Stop calling and
@@ -204,7 +228,9 @@ end
 -- where a duration shorter than the gap between them lets the value decay toward zero in
 -- between instead of stepping from one held target straight to the next.
 function Engine:Hold(name, low, high, duration)
-	self:Set(name, low, high, duration or REFRESH_WINDOW)
+	scratchRoles.low = low or 0
+	scratchRoles.high = high or 0
+	self:SetRoles(name, scratchRoles, duration or REFRESH_WINDOW, false)
 end
 
 -- Role-space sibling of Hold, existing so callers get REFRESH_WINDOW by default rather than
@@ -212,7 +238,7 @@ end
 -- shorter than the caller's own re-arm interval expires between ticks and the texture
 -- stutters, and an explicit 0 gives a layer already dead the moment it is created.
 function Engine:HoldRoles(name, roles, duration)
-	self:SetRoles(name, roles, duration or REFRESH_WINDOW)
+	self:SetRoles(name, roles, duration or REFRESH_WINDOW, false)
 end
 
 function Engine:StopLayer(name)
@@ -268,7 +294,7 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
 					if layerTokens[name] ~= token then
 						return
 					end
-					self:Set(name, mag, 0, 0.08)
+					self:Set(name, mag, 0, 0.08, true)
 				end)
 			end
 			return
@@ -291,12 +317,12 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
 					if layerTokens[name] ~= token then
 						return
 					end
-					self:Set(name, mag, 0, REFRESH_WINDOW)
+					self:Set(name, mag, 0, REFRESH_WINDOW, false)
 				end)
 			end
 			return
 		end
-		self:Set(name, (mode.low or 0) * scale, (mode.high or 0) * scale, REFRESH_WINDOW)
+		self:Set(name, (mode.low or 0) * scale, (mode.high or 0) * scale, REFRESH_WINDOW, false)
 		return
 	end
 
@@ -344,7 +370,7 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
 				if not deviceReady then
 					return
 				end
-				self:SetRoles(name, roles, duration)
+				self:SetRoles(name, roles, duration, true)
 			end)
 			offset = offset + duration
 		end
@@ -358,7 +384,7 @@ end
 -- when a channel's value actually moved.
 
 -- Hoisted to file-scope to eliminate closure allocation on every OnUpdate frame tick (Rule 4).
-local function driveChannel(channel, wanted, last, dt, epsilon)
+local function driveChannel(channel, wanted, last, dt, epsilon, now, isTransient)
 	if rawHolds[channel] then
 		return false
 	end
@@ -380,27 +406,31 @@ local function driveChannel(channel, wanted, last, dt, epsilon)
 		wanted = 0
 	end
 
-	local smoothed = smoothTowards(
-		smoothedByChannel[channel] or 0,
-		wanted,
-		dt,
-		channelConfig(channel, "attackTau"),
-		channelConfig(channel, "releaseTau")
-	)
+	-- Dual-lane adaptive smoothing:
+	-- Transient impacts use fast transientAttackTau (10-12ms) for punchy, immediate tactile feedback.
+	-- Continuous immersion textures use attackTau (75ms) for smooth, non-fatiguing rumble.
+	local attackTau = isTransient and channelConfig(channel, "transientAttackTau")
+		or channelConfig(channel, "attackTau")
+	local releaseTau = channelConfig(channel, "releaseTau")
+
+	local smoothed = smoothTowards(smoothedByChannel[channel] or 0, wanted, dt, attackTau, releaseTau)
 	smoothedByChannel[channel] = smoothed
 
 	local isOn = smoothed > SILENCE_GATE
-	if math.abs(smoothed - (last or -1)) > epsilon then
+	local delta = math.abs(smoothed - (last or -1))
+	local timeSinceLast = now - (lastSentTimeByChannel[channel] or 0)
+
+	-- Output watchdog: re-send vibration every WATCHDOG_INTERVAL (250ms) even if delta <= epsilon
+	-- to prevent controller hardware firmware timeouts on steady continuous textures.
+	if delta > epsilon or (isOn and timeSinceLast >= WATCHDOG_INTERVAL) then
 		if C_GamePad and C_GamePad.SetVibration then
 			pcall(C_GamePad.SetVibration, channel, smoothed)
 		end
 		lastSetByChannel[channel] = smoothed
+		lastSentTimeByChannel[channel] = now
 	end
 	return isOn
 end
-
-local frameRoleTotals = {}
-local frameTarget = {}
 
 local frame = CreateFrame("Frame")
 
@@ -433,32 +463,65 @@ local function onEngineTick(elapsed)
 			C_GamePad.SetVibration(channel, 0)
 			lastSetByChannel[channel] = 0
 			smoothedByChannel[channel] = 0
+			lastSentTimeByChannel[channel] = 0
 		else
 			anyRaw = true
 			if math.abs(hold.magnitude - (lastSetByChannel[channel] or -1)) > 0 then
 				C_GamePad.SetVibration(channel, hold.magnitude)
 				lastSetByChannel[channel] = hold.magnitude
 				smoothedByChannel[channel] = hold.magnitude
+				lastSentTimeByChannel[channel] = now
 			end
 		end
 	end
 
-	-- Blend every live layer into role-space, max per role (unchanged model: several
-	-- textures are legitimately felt at once, and the loudest claim on a role wins).
-	-- Recycled table (wipe): zero allocation in high-frequency loop.
+	-- Blend every live layer into role-space, saturating sum for continuous immersion cues,
+	-- with transients layered harmoniously on top without ducking or killing immersion.
+	-- Recycled tables (wipe): zero allocation in high-frequency loop (Rule 4).
 	wipe(frameRoleTotals)
+	wipe(roleContinuousTotal)
+	wipe(roleTransientTotal)
+	wipe(roleHasTransient)
+	wipe(channelHasTransient)
+
 	local hasRoles = false
 	for name, layer in pairs(layers) do
 		if now >= layer.endTime then
 			layers[name] = nil
 		else
+			local isTransient = layer.isTransient
 			for role, value in pairs(layer.roles) do
 				if value > 0 then
 					hasRoles = true
-					if value > (frameRoleTotals[role] or 0) then
-						frameRoleTotals[role] = value
+					if isTransient then
+						roleHasTransient[role] = true
+						if value > (roleTransientTotal[role] or 0) then
+							roleTransientTotal[role] = value
+						end
+					else
+						-- Continuous immersion layering: saturating sum keeps textures alive together
+						local existing = roleContinuousTotal[role] or 0
+						roleContinuousTotal[role] = 1.0 - (1.0 - existing) * (1.0 - value)
 					end
 				end
+			end
+		end
+	end
+
+	-- Combine continuous immersion baseline with punchy transients.
+	-- Immersion-first: continuous baseline is NEVER muted or ducked!
+	-- Transients layer harmoniously on top:
+	if hasRoles then
+		for _, role in ipairs(ROLES_LIST) do
+			local cont = roleContinuousTotal[role] or 0
+			local trans = roleTransientTotal[role] or 0
+			if trans > 0 and cont > 0 then
+				-- Transient rides directly on top of the immersion baseline:
+				frameRoleTotals[role] = clamp01(cont + trans * (1.0 - cont))
+			elseif trans > 0 then
+				frameRoleTotals[role] = clamp01(trans)
+			elseif cont > 0 then
+				frameRoleTotals[role] = clamp01(cont)
 			end
 		end
 	end
@@ -466,8 +529,7 @@ local function onEngineTick(elapsed)
 	local masterIntensity = Pulse.Database:Get("masterIntensity") or 1.0
 	local schema = Engine:_ActiveSchema()
 
-	-- Role -> channel, collapsing collisions via max, exactly as before. Two roles landing
-	-- on one channel (every "only one motor works" schema) still resolve to the louder.
+	-- Role -> channel, collapsing collisions through schema routing.
 	-- Recycled table (wipe): zero allocation in high-frequency loop.
 	wipe(frameTarget)
 	local hasTargets = false
@@ -481,6 +543,9 @@ local function onEngineTick(elapsed)
 					if channelMag > (frameTarget[def.channel] or 0) then
 						frameTarget[def.channel] = channelMag
 					end
+					if roleHasTransient[role] then
+						channelHasTransient[def.channel] = true
+					end
 				end
 			end
 		end
@@ -491,7 +556,9 @@ local function onEngineTick(elapsed)
 
 	if hasTargets then
 		for channel, wanted in pairs(frameTarget) do
-			if driveChannel(channel, wanted, lastSetByChannel[channel], dt, epsilon) then
+			if
+				driveChannel(channel, wanted, lastSetByChannel[channel], dt, epsilon, now, channelHasTransient[channel])
+			then
 				anyOn = true
 			end
 		end
@@ -501,16 +568,19 @@ local function onEngineTick(elapsed)
 	-- channels present in this tick's `target` — walk everything we last set.
 	for channel, last in pairs(lastSetByChannel) do
 		if not (hasTargets and frameTarget[channel]) and last > 0 then
-			if driveChannel(channel, 0, last, dt, epsilon) then
+			if driveChannel(channel, 0, last, dt, epsilon, now, false) then
 				anyOn = true
 			end
 		end
 	end
 
 	if not anyOn and not anyRaw and next(lastSetByChannel) then
-		C_GamePad.StopVibration()
+		if C_GamePad and C_GamePad.StopVibration then
+			pcall(C_GamePad.StopVibration)
+		end
 		wipe(smoothedByChannel)
 		wipe(lastSetByChannel)
+		wipe(lastSentTimeByChannel)
 	end
 end
 
@@ -525,9 +595,12 @@ frame:SetScript("OnUpdate", function(_, elapsed)
 				print("Pulse: Engine OnUpdate error: " .. tostring(err))
 			end
 		end
-		C_GamePad.StopVibration()
+		if C_GamePad and C_GamePad.StopVibration then
+			pcall(C_GamePad.StopVibration)
+		end
 		wipe(smoothedByChannel)
 		wipe(lastSetByChannel)
+		wipe(lastSentTimeByChannel)
 	end
 end)
 
