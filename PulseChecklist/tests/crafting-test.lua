@@ -341,5 +341,28 @@ startGather(2575, 3.0)
 check("disabled mining stays inactive in crafting", M:_DebugCraft().active, false)
 check("  leaving castTexture unsuppressed for fallback", Pulse.IsCrafting(), false)
 settings["p6_on"] = nil
+-- Disparate spell IDs: TRADE_SKILL_CRAFT_BEGIN has recipeSpellID (e.g. 2662 "Rough Sharpening Stone")
+-- while UNIT_SPELLCAST_START and UNIT_SPELLCAST_SUCCEEDED have profession spellID (e.g. 2018 "Blacksmithing")
+recipeProfession = Enum.Profession.Blacksmithing
+startCraft(2662, 3.0)
+Pulse.CastActivity:_OnStart("player", "guid-smith-1", 2018)
+check("disparate spell ID craft starts active", M:_DebugCraft().active, true)
+check("  and Pulse.IsCrafting agrees", Pulse.IsCrafting(), true)
+runCraftTo(3.0, 0.5, 10)
+before = strikes
+Pulse.CastActivity:_OnSucceeded("player", "guid-smith-1", 2018)
+check("disparate spell ID completes craft cleanly", M:_DebugCraft().active, false)
+check("  and plays final strike", strikes, before + 1)
+check("  and frees castTexture", Pulse.IsCrafting(), false)
+
+-- Disparate spell ID interrupted/stopped
+startCraft(2662, 3.0)
+Pulse.CastActivity:_OnStart("player", "guid-smith-2", 2018)
+runCraftTo(3.0, 0.5, 10)
+before = strikes
+Pulse.CastActivity:_OnStop("player", "guid-smith-2", 2018)
+check("disparate spell ID stop terminates craft", M:_DebugCraft().active, false)
+check("  without courtesy strike", strikes, before)
+check("  and frees castTexture", Pulse.IsCrafting(), false)
 
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))

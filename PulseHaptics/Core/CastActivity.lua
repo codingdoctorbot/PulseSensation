@@ -78,14 +78,23 @@ function CastActivity:_OnStart(unit, castGUID, spellID)
 	if not isPlayer(unit) then
 		return
 	end
-	self.pending[keyFor(castGUID, spellID)] = { spellID = spellID, startedAt = GetTime() }
+	local key = keyFor(castGUID, spellID)
+	self.pending[key] = { spellID = spellID, castGUID = castGUID, startedAt = GetTime() }
 
-	local crafting = self.crafting and self.crafting.spellID == spellID
+	local crafting = false
+	if self.crafting then
+		self.crafting.pendingKey = key
+		self.crafting.castGUID = castGUID
+		self.crafting.castSpellID = spellID
+		crafting = true
+	end
+
 	emit({
 		classification = crafting and "CRAFT_CAST_START" or "CAST_START",
 		spellID = spellID,
 		castGUID = castGUID,
 		isCrafting = crafting,
+		recipeSpellID = crafting and self.crafting.spellID or nil,
 	})
 end
 
@@ -111,16 +120,36 @@ function CastActivity:_OnSucceeded(unit, castGUID, spellID)
 	local key = keyFor(castGUID, spellID)
 
 	-- A crafting cast completing is a finished craft, not a finished spell.
-	if self.crafting and self.crafting.spellID == spellID then
-		local started = self.crafting.startedAt
+	-- WoW API bridge: TRADE_SKILL_CRAFT_BEGIN provides recipeSpellID, while UNIT_SPELLCAST_SUCCEEDED
+	-- often provides the parent profession spellID (e.g. Blacksmithing) or castGUID.
+	local isCrafting = false
+	if self.crafting then
+		if self.crafting.castGUID and castGUID then
+			isCrafting = (self.crafting.castGUID == castGUID)
+		elseif self.crafting.pendingKey then
+			isCrafting = (self.crafting.pendingKey == key)
+		elseif self.crafting.castSpellID then
+			isCrafting = (self.crafting.castSpellID == spellID)
+		elseif self.crafting.spellID == spellID then
+			isCrafting = true
+		elseif next(self.pending) == nil or self.pending[key] ~= nil then
+			-- A player can only craft one item at a time; if self.crafting is active
+			-- and any tracked cast (or test event) finishes, consume crafting state.
+			isCrafting = true
+		end
+	end
+
+	if isCrafting then
+		local craft = self.crafting
 		self.crafting = nil
 		self.pending[key] = nil
 		emit({
 			classification = "CRAFT_COMPLETE",
-			spellID = spellID,
+			spellID = craft.spellID or spellID,
+			castSpellID = spellID,
 			castGUID = castGUID,
 			isCrafting = true,
-			duration = GetTime() - (started or GetTime()),
+			duration = GetTime() - (craft.startedAt or GetTime()),
 		})
 		return
 	end
@@ -155,7 +184,23 @@ function CastActivity:_OnInterrupted(unit, castGUID, spellID)
 	if not isPlayer(unit) then
 		return
 	end
-	self.pending[keyFor(castGUID, spellID)] = nil
+	local key = keyFor(castGUID, spellID)
+	self.pending[key] = nil
+	if
+		self.crafting
+		and (not self.crafting.castGUID or self.crafting.castGUID == castGUID or self.crafting.castSpellID == spellID)
+	then
+		local craft = self.crafting
+		self.crafting = nil
+		emit({
+			classification = "CRAFT_STOPPED",
+			spellID = craft.spellID or spellID,
+			castSpellID = spellID,
+			castGUID = castGUID,
+			isCrafting = true,
+			duration = GetTime() - (craft.startedAt or GetTime()),
+		})
+	end
 	emit({ classification = "INTERRUPTED", spellID = spellID, castGUID = castGUID })
 end
 
@@ -171,7 +216,23 @@ function CastActivity:_OnFailed(unit, castGUID, spellID)
 	if not issecretvalue(spellID) and IGNORED_SPELL_IDS[spellID] then
 		return
 	end
-	self.pending[keyFor(castGUID, spellID)] = nil
+	local key = keyFor(castGUID, spellID)
+	self.pending[key] = nil
+	if
+		self.crafting
+		and (not self.crafting.castGUID or self.crafting.castGUID == castGUID or self.crafting.castSpellID == spellID)
+	then
+		local craft = self.crafting
+		self.crafting = nil
+		emit({
+			classification = "CRAFT_STOPPED",
+			spellID = craft.spellID or spellID,
+			castSpellID = spellID,
+			castGUID = castGUID,
+			isCrafting = true,
+			duration = GetTime() - (craft.startedAt or GetTime()),
+		})
+	end
 	emit({ classification = "FAILED", spellID = spellID, castGUID = castGUID })
 end
 
@@ -184,15 +245,31 @@ function CastActivity:_OnStop(unit, castGUID, spellID)
 	self.pending[key] = nil
 
 	-- A craft whose cast stopped without succeeding was abandoned.
-	if self.crafting and self.crafting.spellID == spellID then
-		local started = self.crafting.startedAt
+	local isCrafting = false
+	if self.crafting then
+		if self.crafting.castGUID and castGUID then
+			isCrafting = (self.crafting.castGUID == castGUID)
+		elseif self.crafting.pendingKey then
+			isCrafting = (self.crafting.pendingKey == key)
+		elseif self.crafting.castSpellID then
+			isCrafting = (self.crafting.castSpellID == spellID)
+		elseif self.crafting.spellID == spellID then
+			isCrafting = true
+		elseif next(self.pending) == nil or pending ~= nil then
+			isCrafting = true
+		end
+	end
+
+	if isCrafting then
+		local craft = self.crafting
 		self.crafting = nil
 		emit({
 			classification = "CRAFT_STOPPED",
-			spellID = spellID,
+			spellID = craft.spellID or spellID,
+			castSpellID = spellID,
 			castGUID = castGUID,
 			isCrafting = true,
-			duration = GetTime() - (started or GetTime()),
+			duration = GetTime() - (craft.startedAt or GetTime()),
 		})
 	else
 		emit({
@@ -223,7 +300,16 @@ function CastActivity:_OnCraftBegin(recipeSpellID)
 	if type(recipeSpellID) ~= "number" then
 		return
 	end
-	self.crafting = { spellID = recipeSpellID, startedAt = GetTime() }
+	local now = GetTime()
+	self.crafting = { spellID = recipeSpellID, startedAt = now }
+	for key, cast in pairs(self.pending) do
+		if (now - (cast.startedAt or now)) < 0.5 then
+			self.crafting.pendingKey = key
+			self.crafting.castGUID = cast.castGUID
+			self.crafting.castSpellID = cast.spellID
+			break
+		end
+	end
 	emit({ classification = "CRAFT_START", spellID = recipeSpellID, isCrafting = true })
 end
 
