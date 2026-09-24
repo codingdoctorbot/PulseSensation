@@ -1,4 +1,4 @@
-## Interface: 120100
+## Interface: 120100, 110200, 110100
 ## Title: PulseChecklist
 ## Notes: QA tracking checklist for Pulse's cues — separate from Pulse and PulseDebug.
 ## Author: codingdoctorbot
