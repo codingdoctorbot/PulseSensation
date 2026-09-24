@@ -16,5 +16,17 @@
 *.bak
 dist/
 
-# Internal development notes, reviews & logs (now live under docs/)
+# Internal development notes, reviews, proposals & archives
 docs/dev-notes/
+docs/ReviewsofReviews/
+docs/Archive/
+docs/Archive*.zip
+docs/PulseHaptics*.md
+
+# Local WoW API reference, agent docs, and Blizzard source code (large files)
+docs/DevelopmentplusReference/
+docs/WoWAddonAPIAgents-main/
+docs/wow-addon-dev-main/
+docs/reference/
+docs/Reference/
+
