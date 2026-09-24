@@ -238,15 +238,45 @@ local TRIGGER = {
 local fakeState = {
 	playedModes = {},
 	heldLayers = {},
+	heldRoles = {},
+	rawChannels = {},
 	cancelledAll = false,
+	stoppedLayer = nil,
+	cancelledLayer = nil,
 }
 
 local fakePulse = {
-	Fire = function() end,
-	Hold = function() end,
-	Stop = function() end,
-	PlayMode = function(_, mode)
-		fakeState.playedModes[#fakeState.playedModes + 1] = mode
+	FireIfEnabled = function(self, triggerID, intensityOverride)
+		self.Engine:PlayMode(triggerID, "THUD", 1.0, intensityOverride)
+	end,
+	HoldIfEnabled = function(self, triggerID, low, high, duration)
+		self.Engine:Hold(triggerID, low, high, duration)
+	end,
+	HoldRolesIfEnabled = function(self, triggerID, roles, duration)
+		self.Engine:HoldRoles(triggerID, roles, duration)
+	end,
+	Fire = function(self, ...)
+		return self:FireIfEnabled(...)
+	end,
+	Hold = function(self, ...)
+		return self:HoldIfEnabled(...)
+	end,
+	Stop = function(self, name)
+		if not name or name == "ALL" then
+			self.Engine:StopAll()
+		else
+			self.Engine:StopLayer(name)
+		end
+	end,
+	PlayMode = function(self, nameOrMode, modeID, ...)
+		if not self.Engine then
+			return
+		end
+		if modeID then
+			return self.Engine:PlayMode(nameOrMode, modeID, ...)
+		else
+			return self.Engine:PlayMode("manual", nameOrMode, 1.0, ...)
+		end
 	end,
 	moduleOrder = { "Locomotion", "Silent" },
 	modules = {
@@ -291,8 +321,30 @@ local fakePulse = {
 		CancelAll = function()
 			fakeState.cancelledAll = true
 		end,
+		StopAll = function()
+			fakeState.cancelledAll = true
+		end,
+		StopLayer = function(_, name)
+			fakeState.stoppedLayer = name
+		end,
+		CancelLayer = function(_, name)
+			fakeState.cancelledLayer = name
+		end,
+		PlayMode = function(_, name, modeID, scale)
+			local mode = modeID or name
+			fakeState.playedModes[#fakeState.playedModes + 1] = mode
+		end,
+		Hold = function(_, name, low, high, dur)
+			fakeState.heldLayers[#fakeState.heldLayers + 1] = { name = name, low = low, high = high, dur = dur }
+		end,
+		HoldRoles = function(_, name, roles, dur)
+			fakeState.heldRoles[#fakeState.heldRoles + 1] = { name = name, roles = roles, dur = dur }
+		end,
 		HoldLayer = function(_, name, low, high, dur)
 			fakeState.heldLayers[#fakeState.heldLayers + 1] = { name = name, low = low, high = high, dur = dur }
+		end,
+		RawChannel = function(_, channel, mag, dur)
+			fakeState.rawChannels[#fakeState.rawChannels + 1] = { channel = channel, mag = mag, dur = dur }
 		end,
 		_DebugLayers = function()
 			return {
@@ -397,6 +449,31 @@ _G.PulseDebugUI.ClearLog()
 clearText()
 _G.PulseDebugUI.Show("log")
 check("clear log empties the buffer", contains(renderedText(), "No haptic events recorded"), true)
+
+-- Live hooks verify that Core/Init.lua methods are properly intercepted by ensureHooks
+io.write("\n--- live hooks ---\n")
+fakePulse:FireIfEnabled("jumped", 1.0)
+clearText()
+_G.PulseDebugUI.Show("log")
+check("hook captures FireIfEnabled", contains(renderedText(), "jumped"), true)
+check("  and displays FIRE action", contains(renderedText(), "FIRE"), true)
+check("  and displays enriched mode", contains(renderedText(), "THUD"), true)
+
+fakePulse:HoldIfEnabled("swimming", 0.35, 0.45, 1.2)
+clearText()
+_G.PulseDebugUI.Show("log")
+check("hook captures HoldIfEnabled", contains(renderedText(), "swimming"), true)
+check("  and displays HOLD action", contains(renderedText(), "HOLD"), true)
+
+fakePulse.Engine:StopAll()
+clearText()
+_G.PulseDebugUI.Show("log")
+check("hook captures Engine:StopAll", contains(renderedText(), "STOP"), true)
+
+_G.PulseDebugUI.ClearLog()
+clearText()
+_G.PulseDebugUI.Show("log")
+check("clear log empties buffer after hooks", contains(renderedText(), "No haptic events recorded"), true)
 
 -- ── Action buttons ────────────────────────────────────────────────────────────
 io.write("\n--- action buttons ---\n")

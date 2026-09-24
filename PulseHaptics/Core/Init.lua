@@ -185,6 +185,33 @@ function Pulse:HoldRolesIfEnabled(triggerID, roles, duration)
 	self.Engine:HoldRoles(triggerID, staticScaled, duration)
 end
 
+-- Public convenience aliases for macros, debuggers, and external callers
+Pulse.Fire = Pulse.FireIfEnabled
+Pulse.Hold = Pulse.HoldIfEnabled
+Pulse.HoldRoles = Pulse.HoldRolesIfEnabled
+
+function Pulse:Stop(name)
+	if not self.Engine then
+		return
+	end
+	if not name or name == "ALL" then
+		self.Engine:StopAll()
+	else
+		self.Engine:StopLayer(name)
+	end
+end
+
+function Pulse:PlayMode(nameOrMode, modeID, ...)
+	if not self.Engine then
+		return
+	end
+	if modeID then
+		return self.Engine:PlayMode(nameOrMode, modeID, ...)
+	else
+		return self.Engine:PlayMode("manual", nameOrMode, 1.0, ...)
+	end
+end
+
 -- The one calibration entry point — the panel's "Test the selected mode" button and
 -- /pulse test both call it, so one place knows what testing a mode means: bypass
 -- masterEnabled and every trigger's enabled/throttle check, but still require a live pad.

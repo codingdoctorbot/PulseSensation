@@ -334,7 +334,13 @@ local function ensureHooks()
 		return
 	end
 	hooked = true
-	if type(P.Fire) == "function" then
+	if type(P.FireIfEnabled) == "function" then
+		hooksecurefunc(P, "FireIfEnabled", function(_, triggerID, intensityOverride)
+			local detail = intensityOverride and string.format("@%.2f", intensityOverride) or ""
+			recordEvent("FIRE", triggerID, detail)
+		end)
+	end
+	if type(P.Fire) == "function" and P.Fire ~= P.FireIfEnabled then
 		hooksecurefunc(P, "Fire", function(_, triggerID, roleOrSchema, strength)
 			local detail = ""
 			if roleOrSchema then
@@ -346,7 +352,18 @@ local function ensureHooks()
 			recordEvent("FIRE", triggerID, detail)
 		end)
 	end
-	if type(P.Hold) == "function" then
+	if type(P.HoldIfEnabled) == "function" then
+		hooksecurefunc(P, "HoldIfEnabled", function(_, triggerID, low, high, duration)
+			local detail = string.format("L:%.2f H:%.2f (%.2fs)", low or 0, high or 0, duration or 0)
+			recordEvent("HOLD", triggerID, detail)
+		end)
+	end
+	if type(P.HoldRolesIfEnabled) == "function" then
+		hooksecurefunc(P, "HoldRolesIfEnabled", function(_, triggerID, _, duration)
+			recordEvent("HOLD", triggerID, string.format("roles (%.2fs)", duration or 0))
+		end)
+	end
+	if type(P.Hold) == "function" and P.Hold ~= P.HoldIfEnabled then
 		hooksecurefunc(P, "Hold", function(_, triggerID, low, high, duration)
 			local detail = string.format("L:%.2f H:%.2f (%.2fs)", low or 0, high or 0, duration or 0)
 			recordEvent("HOLD", triggerID, detail)
@@ -354,12 +371,41 @@ local function ensureHooks()
 	end
 	if type(P.Stop) == "function" then
 		hooksecurefunc(P, "Stop", function(_, triggerID)
-			recordEvent("STOP", triggerID, "")
+			recordEvent("STOP", triggerID or "ALL", "")
 		end)
 	end
-	if type(P.PlayMode) == "function" then
-		hooksecurefunc(P, "PlayMode", function(_, mode)
-			recordEvent("MODE", tostring(mode or "unknown"), "")
+	if type(P.Engine.PlayMode) == "function" then
+		hooksecurefunc(P.Engine, "PlayMode", function(_, name, modeID, scale)
+			if #eventLog > 0 and eventLog[1].action == "FIRE" and eventLog[1].id == tostring(name) then
+				if modeID then
+					local extra = tostring(modeID) .. (scale and string.format(" @%.2f", scale) or "")
+					eventLog[1].extra = (eventLog[1].extra ~= "" and (eventLog[1].extra .. " ") or "") .. extra
+					if lastFiredEvents[1] and lastFiredEvents[1].id == tostring(name) then
+						lastFiredEvents[1].extra = eventLog[1].extra
+					end
+					if updateStickyHud then
+						updateStickyHud()
+					end
+				end
+			else
+				local detail = tostring(modeID or "") .. (scale and string.format(" @%.2f", scale) or "")
+				recordEvent("MODE", name, detail)
+			end
+		end)
+	end
+	if type(P.Engine.StopAll) == "function" then
+		hooksecurefunc(P.Engine, "StopAll", function()
+			recordEvent("STOP", "ALL", "")
+		end)
+	end
+	if type(P.Engine.StopLayer) == "function" then
+		hooksecurefunc(P.Engine, "StopLayer", function(_, name)
+			recordEvent("STOP", tostring(name or "layer"), "")
+		end)
+	end
+	if type(P.Engine.CancelLayer) == "function" then
+		hooksecurefunc(P.Engine, "CancelLayer", function(_, name)
+			recordEvent("CANCEL", tostring(name or "layer"), "")
 		end)
 	end
 	if type(P.Engine.RawChannel) == "function" then
@@ -726,6 +772,7 @@ end)
 ---------------------------------------------------------------------------
 
 local function Toggle()
+	ensureHooks()
 	if frame:IsShown() then
 		frame:Hide()
 		return
@@ -745,6 +792,7 @@ end
 _G.PulseDebugUI = {
 	Toggle = Toggle,
 	Show = function(view)
+		ensureHooks()
 		if view and views[view] then
 			currentView = view
 		end
