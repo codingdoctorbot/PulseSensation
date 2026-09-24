@@ -231,6 +231,25 @@ function M:_WatchDefensives()
 		return false
 	end
 
+	local function handleUnitAura(updateInfo)
+		if not updateInfo or issecretvalue(updateInfo) or type(updateInfo) ~= "table" then
+			return
+		end
+		local added = updateInfo.addedAuras
+		if not added or issecretvalue(added) or type(added) ~= "table" then
+			return
+		end
+		for _, auraData in ipairs(added) do
+			if auraData and not issecretvalue(auraData) and type(auraData) == "table" then
+				local spellID = auraData.spellId or auraData.spellID
+				if spellID and not issecretvalue(spellID) and isBigDefensiveSpell(spellID) then
+					Pulse:FireIfEnabled("targetBigDefensive")
+					return
+				end
+			end
+		end
+	end
+
 	frame:SetScript("OnEvent", function(_, event, unit, arg2, arg3)
 		if unit ~= "target" then
 			return
@@ -245,15 +264,8 @@ function M:_WatchDefensives()
 		end
 
 		if event == "UNIT_AURA" then
-			local updateInfo = arg2
-			if updateInfo and type(updateInfo) == "table" and updateInfo.addedAuras then
-				for _, auraData in ipairs(updateInfo.addedAuras) do
-					if auraData and not issecretvalue(auraData.spellId) and auraData.spellId and isBigDefensiveSpell(auraData.spellId) then
-						Pulse:FireIfEnabled("targetBigDefensive")
-						return
-					end
-				end
-			end
+			pcall(handleUnitAura, arg2)
+			return
 		end
 	end)
 

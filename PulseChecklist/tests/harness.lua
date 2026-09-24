@@ -476,8 +476,30 @@ function CreateColor(r, g, b, a)
 		end,
 	}
 end
-function issecretvalue()
+local secretSentinel = {}
+function issecretvalue(val)
+	if val == secretSentinel then
+		return true
+	end
+	if type(val) == "table" and rawget(val, "__is_secret") then
+		return true
+	end
 	return false
+end
+function UnitExists()
+	return true
+end
+function UnitCanAttack()
+	return true
+end
+function UnitIsUnit()
+	return false
+end
+function UnitCastingInfo()
+	return nil
+end
+function UnitChannelInfo()
+	return nil
 end
 function securecall(fn, ...)
 	return fn(...)
@@ -539,6 +561,7 @@ local FILES = {
 	"Core/Guide.lua",
 	"Modules/Crafting.lua",
 	"Modules/Interaction.lua",
+	"Modules/AlertUnitWatch.lua",
 	"UI/Settings.lua",
 	"UI/Panel/Theme.lua",
 	"UI/Panel/Popup.lua",
@@ -1106,6 +1129,83 @@ do
 	check("delete button found", type(deleteRow), "table")
 	check("rename disabled when built-in active", renameRow.enabledWhen(), false)
 	check("delete disabled when built-in active", deleteRow.enabledWhen(), false)
+
+	-- AlertUnitWatch UNIT_AURA secret value resilience
+	local unitWatchMod = Pulse.modules["AlertUnitWatch"]
+	check("AlertUnitWatch module registered", type(unitWatchMod), "table")
+	if unitWatchMod then
+		unitWatchMod:OnEnable()
+
+		local secretAuras = setmetatable({ __is_secret = true }, {
+			__ipairs = function()
+				error("bad argument #1 to 'ipairs' (table expected, got secret)")
+			end,
+		})
+
+		local firedCount = 0
+		local origFire = Pulse.FireIfEnabled
+		Pulse.FireIfEnabled = function(self, cueID)
+			if cueID == "targetBigDefensive" then
+				firedCount = firedCount + 1
+			end
+		end
+
+		-- Secret table in addedAuras must NOT error
+		local okAura, _ = pcall(function()
+			for _, f in ipairs(frames) do
+				local fn = f:GetScript("OnEvent")
+				if fn then
+					fn(f, "UNIT_AURA", "target", {
+						addedAuras = secretAuras,
+						isFullUpdate = true,
+					})
+				end
+			end
+		end)
+		check("UNIT_AURA with secret addedAuras does not error", okAura, true)
+
+		-- Entire updateInfo secret must NOT error
+		local okSecInfo, _ = pcall(function()
+			for _, f in ipairs(frames) do
+				local fn = f:GetScript("OnEvent")
+				if fn then
+					fn(f, "UNIT_AURA", "target", secretAuras)
+				end
+			end
+		end)
+		check("UNIT_AURA with secret updateInfo does not error", okSecInfo, true)
+
+		-- Malformed updateInfo (nil, boolean, string) must NOT error
+		pcall(function()
+			for _, f in ipairs(frames) do
+				local fn = f:GetScript("OnEvent")
+				if fn then
+					fn(f, "UNIT_AURA", "target", nil)
+					fn(f, "UNIT_AURA", "target", "unexpected_string")
+				end
+			end
+		end)
+
+		-- Valid big defensive should fire
+		_G.C_UnitAuras = {
+			AuraIsBigDefensive = function(spellID)
+				return spellID == 871
+			end,
+		}
+		for _, f in ipairs(frames) do
+			local fn = f:GetScript("OnEvent")
+			if fn then
+				fn(f, "UNIT_AURA", "target", {
+					addedAuras = {
+						{ spellId = 871 },
+					},
+				})
+			end
+		end
+		check("UNIT_AURA with valid defensive spell fires targetBigDefensive", firedCount > 0, true)
+
+		Pulse.FireIfEnabled = origFire
+	end
 end
 
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))
