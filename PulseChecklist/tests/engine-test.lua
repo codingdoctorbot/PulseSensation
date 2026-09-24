@@ -11,105 +11,105 @@ local ROOT = arg[1] or "."
 
 local now = 1000
 function GetTime()
-    return now
+	return now
 end
 
 -- A controllable timer queue, so "later" is something the test decides.
 local timers = {}
 C_Timer = {
-    After = function(delay, fn)
-        timers[#timers + 1] = { at = now + delay, fn = fn }
-    end,
+	After = function(delay, fn)
+		timers[#timers + 1] = { at = now + delay, fn = fn }
+	end,
 }
 
 local function pendingTimers()
-    return #timers
+	return #timers
 end
 
 -- Fires everything due up to `untilTime`, in order, exactly as the client would.
 local function runTimersTo(untilTime)
-    now = untilTime
-    table.sort(timers, function(a, b)
-        return a.at < b.at
-    end)
-    local due, rest = {}, {}
-    for _, t in ipairs(timers) do
-        if t.at <= untilTime then
-            due[#due + 1] = t
-        else
-            rest[#rest + 1] = t
-        end
-    end
-    timers = rest
-    for _, t in ipairs(due) do
-        t.fn()
-    end
+	now = untilTime
+	table.sort(timers, function(a, b)
+		return a.at < b.at
+	end)
+	local due, rest = {}, {}
+	for _, t in ipairs(timers) do
+		if t.at <= untilTime then
+			due[#due + 1] = t
+		else
+			rest[#rest + 1] = t
+		end
+	end
+	timers = rest
+	for _, t in ipairs(due) do
+		t.fn()
+	end
 end
 
 local vibrations = 0
 C_GamePad = {
-    IsEnabled = function()
-        return true
-    end,
-    GetActiveDeviceID = function()
-        return 1
-    end,
-    SetVibration = function()
-        vibrations = vibrations + 1
-    end,
-    StopVibration = function() end,
+	IsEnabled = function()
+		return true
+	end,
+	GetActiveDeviceID = function()
+		return 1
+	end,
+	SetVibration = function()
+		vibrations = vibrations + 1
+	end,
+	StopVibration = function() end,
 }
 
 local printed = 0
 function print()
-    printed = printed + 1
+	printed = printed + 1
 end
 function issecretvalue()
-    return false
+	return false
 end
 function CreateFrame()
-    return setmetatable({}, {
-        __index = function()
-            return function() end
-        end,
-    })
+	return setmetatable({}, {
+		__index = function()
+			return function() end
+		end,
+	})
 end
 function wipe(t)
-    for k in pairs(t) do
-        t[k] = nil
-    end
-    return t
+	for k in pairs(t) do
+		t[k] = nil
+	end
+	return t
 end
 unpack = unpack or table.unpack
 
 local Pulse = { debug = false }
 Pulse.Database = {
-    Get = function(_, key)
-        if key == "defaultHapticSchema" then
-            return "standard"
-        end
-        return true
-    end,
-    GetChannelTuning = function(_, _, _, default)
-        return default
-    end,
-    GetChangeEpsilon = function()
-        return 0.0015
-    end,
-    GetModeTuning = function(_, _, _, default)
-        return default
-    end,
-    OnChannelTuningChanged = function() end,
-    OnGlobalChanged = function() end,
+	Get = function(_, key)
+		if key == "defaultHapticSchema" then
+			return "standard"
+		end
+		return true
+	end,
+	GetChannelTuning = function(_, _, _, default)
+		return default
+	end,
+	GetChangeEpsilon = function()
+		return 0.0015
+	end,
+	GetModeTuning = function(_, _, _, default)
+		return default
+	end,
+	OnChannelTuningChanged = function() end,
+	OnGlobalChanged = function() end,
 }
 
 for _, file in ipairs({
-    "Core/Modes.lua",
-    "Core/Devices.lua",
-    "Core/Schemas/Standard.lua",
-    "Core/Engine.lua",
+	"Core/Modes.lua",
+	"Core/Devices.lua",
+	"Core/Schemas/Standard.lua",
+	"Core/Engine.lua",
 }) do
-    assert(loadfile(ROOT .. "/" .. file))("Pulse", Pulse)
+	assert(loadfile(ROOT .. "/" .. file))("Pulse", Pulse)
 end
 
 local Engine = Pulse.Engine
@@ -119,30 +119,30 @@ Engine:RefreshDevice()
 local recreated = 0
 local realSet, realSetRoles = Engine.Set, Engine.SetRoles
 Engine.Set = function(self, ...)
-    recreated = recreated + 1
-    return realSet(self, ...)
+	recreated = recreated + 1
+	return realSet(self, ...)
 end
 Engine.SetRoles = function(self, ...)
-    recreated = recreated + 1
-    return realSetRoles(self, ...)
+	recreated = recreated + 1
+	return realSetRoles(self, ...)
 end
 
 local realRaw = Engine.RawChannel
 local rawCalls = 0
 Engine.RawChannel = function(self, ...)
-    rawCalls = rawCalls + 1
-    return realRaw(self, ...)
+	rawCalls = rawCalls + 1
+	return realRaw(self, ...)
 end
 
 -- ── Helpers ───────────────────────────────────────────────────────────────────
 
 local failures = 0
 local function check(label, got, want)
-    local ok = (got == want)
-    if not ok then
-        failures = failures + 1
-    end
-    io.write(("%-52s %-8s %s\n"):format(label, tostring(got), ok and "ok" or ("FAIL want " .. tostring(want))))
+	local ok = (got == want)
+	if not ok then
+		failures = failures + 1
+	end
+	io.write(("%-52s %-8s %s\n"):format(label, tostring(got), ok and "ok" or ("FAIL want " .. tostring(want))))
 end
 
 -- ── A normal sequence still runs ──────────────────────────────────────────────
@@ -208,8 +208,8 @@ check("TRIGGER_RECOIL has low rumble", Pulse.ModeRoleInfo.TRIGGER_RECOIL.hasLow,
 local lastRoles = nil
 local spySetRoles = Engine.SetRoles
 Engine.SetRoles = function(self, name, roles, duration)
-    lastRoles = roles
-    return spySetRoles(self, name, roles, duration)
+	lastRoles = roles
+	return spySetRoles(self, name, roles, duration)
 end
 
 Engine:RefreshDevice()
@@ -251,7 +251,7 @@ check("xbox_elite triggers enabled", Pulse.Devices.xbox_elite.triggers, true)
 
 local mockRawState = {}
 C_GamePad.GetDeviceRawState = function(_)
-    return mockRawState
+	return mockRawState
 end
 
 mockRawState = { name = "8BitDo Ultimate Wireless Controller" }
@@ -360,5 +360,17 @@ check("active ramp tracked", type(activeRamp), "table")
 check("active ramp channel is Low", activeRamp and activeRamp.channel, "Low")
 Engine:StopRamp("Low")
 check("active ramp cleared by StopRamp", Engine:GetActiveRamp(), nil)
+
+-- ── Defensive C_GamePad guards on RefreshDevice ──────────────────────────────
+local savedGamePad = C_GamePad
+C_GamePad = nil
+local okNilGP = pcall(function()
+	Engine:RefreshDevice()
+end)
+check("RefreshDevice safe when C_GamePad is nil", okNilGP, true)
+check("deviceReady false when C_GamePad is nil", Engine:IsDeviceReady(), false)
+C_GamePad = savedGamePad
+Engine:RefreshDevice()
+check("deviceReady restored when C_GamePad present", Engine:IsDeviceReady(), true)
 
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))

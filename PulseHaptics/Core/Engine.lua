@@ -141,9 +141,14 @@ end
 -- Device state (ported from Tremor/Core/Haptics.lua — same reasoning, same shape)
 
 function Engine:RefreshDevice()
-	local enabled = C_GamePad.IsEnabled()
-	local deviceID = C_GamePad.GetActiveDeviceID()
-	deviceReady = (enabled and deviceID) and true or false
+	if not C_GamePad or type(C_GamePad.IsEnabled) ~= "function" or type(C_GamePad.GetActiveDeviceID) ~= "function" then
+		deviceReady = false
+		self:StopAll()
+		return
+	end
+	local okEnabled, enabled = pcall(C_GamePad.IsEnabled)
+	local okID, deviceID = pcall(C_GamePad.GetActiveDeviceID)
+	deviceReady = (okEnabled and enabled and okID and deviceID) and true or false
 	if not deviceReady then
 		self:StopAll()
 	end
@@ -592,6 +597,8 @@ local lastErrorTime = 0
 frame:SetScript("OnUpdate", function(_, elapsed)
 	local ok, err = pcall(onEngineTick, elapsed)
 	if not ok then
+		Engine.lastError = tostring(err)
+		Engine.errorCount = (Engine.errorCount or 0) + 1
 		local now = GetTime()
 		if now - lastErrorTime > 5.0 then
 			lastErrorTime = now
@@ -607,6 +614,10 @@ frame:SetScript("OnUpdate", function(_, elapsed)
 		wipe(lastSentTimeByChannel)
 	end
 end)
+
+function Engine:GetLastError()
+	return self.lastError, self.errorCount or 0
+end
 
 -- Calibration probe. The addon cannot measure a motor; the person holding it can, so the
 -- job here is to present an unprocessed, predictable stimulus and get out of the way.

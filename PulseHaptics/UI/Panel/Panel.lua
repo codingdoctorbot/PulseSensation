@@ -478,6 +478,12 @@ local function slashHandler(message)
 	if command == "debug" then
 		Pulse.debug = not Pulse.debug
 		print("Pulse: debug " .. (Pulse.debug and "ON — option changes and cue firings will print here." or "OFF"))
+		if Pulse.Engine and Pulse.Engine.GetLastError then
+			local lastErr, count = Pulse.Engine:GetLastError()
+			if count and count > 0 then
+				print(("Pulse: (Engine recorded %d errors. Last error: %s)"):format(count, tostring(lastErr)))
+			end
+		end
 		return
 	end
 

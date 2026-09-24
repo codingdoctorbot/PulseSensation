@@ -1,4 +1,4 @@
-## Interface: 120100, 110200, 110100
+## Interface: 120100
 ## Title: PulseHaptics
 ## Notes: Immersive controller vibration — movement, environment, and combat texture.
 ## Author: codingdoctorbot
@@ -11,8 +11,8 @@
 # Free to reuse, redistribute and share as-is; no warranty, no support.
 
 # 120100 (Patch 12.1.0) CONFIRMED as this account's live client build via
-# /dump select(4, GetBuildInfo()) — no longer the placeholder 12.0 floor. Re-check before
-# packaging for a client on a different build.
+# /dump select(4, GetBuildInfo()). Older client builds (11.1 / 11.2) are
+# unvalidated compatibility targets.
 
 # TREMOR, referenced throughout this codebase and its comments: the proof-of-concept
 # alpha that preceded this one. An earlier, narrower build whose accessibility cue set

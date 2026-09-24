@@ -3,10 +3,10 @@
 
 [![WoW Version](https://img.shields.io/badge/World%20of%20Warcraft-Forever%20%2F%20Classic%20Beta%20(120100)-blue.svg)](https://github.com/codingdoctorbot/PulseSensation)
 [![Status](https://img.shields.io/badge/Release-0.2.0--beta-purple.svg)](https://github.com/codingdoctorbot/PulseSensation/releases)
-[![Performance](https://img.shields.io/badge/GC%20Overhead-0%20KB%2Fs%20(Zero%20Stutter)-brightgreen.svg)]()
+[![Performance](https://img.shields.io/badge/Performance-Zero--GC%20Tight%20Loops-brightgreen.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**PulseHaptics** isn't another vibration alert addon that buzzes like a pager. It is a full-fidelity, console-grade haptic physics and sensory synthesizer built specifically for World of Warcraft.
+**PulseHaptics** is an immersive, console-style tactile haptics and sensory feedback engine built specifically for World of Warcraft gamepad players.
 
 Feel the heavy, distinct thud of plate boots crushing cobblestone. Feel the viscous drag and resistance of deep water as you dive under. Feel the rhythmic hammer strikes of blacksmithing on an anvil, the hum of raw arcane energy swelling in your palms before a spell unleashes, and the violent crack of a critical hit.
 
@@ -55,9 +55,11 @@ World of Warcraft requires native gamepad input and vibration telemetry to be en
 ```
 
 ### 2. Installation
-Drop the three folders (`PulseHaptics`, `PulseDebug`, and `PulseChecklist`) into your World of Warcraft `Interface/AddOns/` directory:
-- **macOS**: `/Applications/World of Warcraft/_classic_beta_/Interface/AddOns/`
-- **Windows**: `C:\Program Files (x86)\World of Warcraft\_classic_beta_\Interface\AddOns\`
+Install the addons into your World of Warcraft `Interface/AddOns/` directory:
+- **Core Addon**: `PulseHaptics` (the standalone engine & settings UI)
+- **Suite Extras** (Optional): `PulseDebug` (live diagnostics HUD) and `PulseChecklist` (in-game verification checklist)
+- **macOS Path**: `/Applications/World of Warcraft/_classic_beta_/Interface/AddOns/`
+- **Windows Path**: `C:\Program Files (x86)\World of Warcraft\_classic_beta_\Interface\AddOns\`
 
 ### 3. Immediate Taste Test
 Make sure your gamepad is turned on and try these chat commands to feel your controller come alive:
@@ -67,7 +69,7 @@ Make sure your gamepad is turned on and try these chat commands to feel your con
 - `/pulse test surge` — Powerful magical energy surge
 
 ### 4. Customization
-Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open the settings window with **1,408 settings rows (over 1,000 interactive controls and 190 distinct cues) across 21 pages**.
+Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open the settings window with **over 1,000 interactive controls across 202 distinct triggers and 21 categories**.
 
 ---
 
@@ -79,23 +81,25 @@ Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open 
 | `/pulse test <mode>` | Play any authored vibration mode (e.g. `thud`, `wave`, `surge`, `heartbeat`, `crack`). |
 | `/pulse profile [name]` | Inspect or switch the active profile via chat. |
 | `/pulse minimap` | Toggle the minimap button on or off. |
-| `/pulse debug` | Toggle verbose console logging on or off. |
-| `/pdebug` (or `/pulsedebug`) | Open the real-time diagnostic and troubleshooting HUD. |
-| `/pcheck` (or `/pulsecheck`) | Open the in-game cue verification checklist (all 190 cues). |
-| `/pcheck export` | Generate a markdown QA status report you can copy to clipboard. |
-| `/pcheck import` | Open the import dialog — paste a previous export to restore all statuses and notes. |
+| `/pulse debug` | Toggle verbose console logging and view engine error diagnostics. |
+| `/pdebug` *(PulseDebug)* | Open the real-time diagnostic and troubleshooting HUD. |
+| `/pcheck` *(PulseChecklist)* | Open the in-game cue verification checklist (all 202 cues). |
+| `/pcheck export` *(PulseChecklist)* | Generate a markdown QA status report you can copy to clipboard. |
+| `/pcheck import` *(PulseChecklist)* | Open the import dialog to restore cue verification statuses. |
 | `/console GamePadEnable 1` | Ensure Blizzard gamepad engine subsystem is enabled. |
 | `/console GamePadVibration 1` | Ensure Blizzard gamepad vibration output is enabled. |
 
 ---
 
-## 📦 Addon Suite Components
+## 📦 Addon Components & Distribution
 
-| Addon Directory | Purpose |
-|:---|:---|
-| **`PulseHaptics`** | The core haptic engine, authored modes, 22 module watchers, settings UI, and profile manager. |
-| **`PulseDebug`** | Companion developer & troubleshooting window for real-time channel introspection and trigger auditing. |
-| **`PulseChecklist`** | In-game QA verification checklist tracking all 190 cues. Ships with a pre-verified baseline so a WTF reset never loses confirmed results. Supports export (markdown report) and import (paste-to-restore) entirely in-game. |
+PulseSensation is distributed as both a standalone release and a developer suite:
+
+| Component | In Standalone ZIP? | Purpose |
+|:---|:---:|:---|
+| **`PulseHaptics`** | ✅ **Yes** | The core haptic engine, 202 authored triggers, 22 module watchers, custom settings UI, and profile manager. |
+| **`PulseDebug`** | 📦 *Suite ZIP* | Developer & troubleshooting window for real-time channel introspection and trigger auditing (`/pdebug`). |
+| **`PulseChecklist`** | 📦 *Suite ZIP* | In-game QA tracking checklist for all 202 cues with markdown import/export (`/pcheck`). |
 
 ---
 
@@ -106,12 +110,11 @@ Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open 
   - [Claude Code](https://claude.com/claude-code) — Anthropic
   - [Google Antigravity](https://deepmind.google) — Google DeepMind
 - **Precursor Inspiration**:
-  - **`Tremor`** — The proof-of-concept precursor that pioneered controller vibration exploration in World of Warcraft and provided the foundational inspiration and initial accessibility cue models.
+  - **`Tremor`** — The proof-of-concept precursor that pioneered controller vibration exploration in World of Warcraft and provided foundational inspiration.
 - **Embedded Third-Party Libraries**:
   - `LibStub` — Kaelten, Cladhaire, ckknight, Mikk, Ammo, Nevcairiel
   - `CallbackHandler-1.0` — Cladhaire, Ammo
   - `LibDataBroker-1.1` — tekkub
-  - `LibDBIcon-1.0` (aperture framing architecture) — Torhal
 
 ---
 
