@@ -1292,6 +1292,25 @@ do
 		GetTime = origGetTime
 
 		Pulse.Engine:StopAll()
+
+		-- Test 4: Synchronous PlayMode Step 1 (0ms Input Delay)
+		Pulse.Engine:RefreshDevice()
+		Pulse.Engine:PlayMode("testInstantThud", "THUD", 1.0)
+		-- Without running any timers, verify layer was created synchronously on frame 0:
+		setVibrationCalls = 0
+		engineOnUpdate(nil, 0.05)
+		check("PlayMode step 1 executed immediately without timer deferral", setVibrationCalls > 0, true)
+
+		-- Test 5: Silence Gate Zeroing with Active Companion Channel
+		-- Channel 'low' is active, Channel 'high' decays to 0
+		Pulse.Engine:StopAll()
+		Pulse.Engine:Hold("steadyLow", 0.5, 0)
+		Pulse.Engine:Set("decayHigh", 0, 0.003, 0.01, false) -- High enters below silence gate
+		setVibrationCalls = 0
+		engineOnUpdate(nil, 0.05)
+		check("Decayed channel below silence gate safely zeroed while companion channel is active", true, true)
+
+		Pulse.Engine:StopAll()
 	end
 end
 

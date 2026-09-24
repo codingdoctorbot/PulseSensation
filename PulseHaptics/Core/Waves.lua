@@ -166,7 +166,7 @@ function Pulse.Haptics.MicroFlutterOffset(amount, time)
 		amplitude = math.max(MICRO_FLUTTER_MIN, epsilon * MICRO_FLUTTER_EPS_MULT)
 	end
 	local t = time or GetTime()
-	return math.sin(TWO_PI * MICRO_FLUTTER_HZ * t) * amplitude
+	return math.sin((TWO_PI * MICRO_FLUTTER_HZ * t) % TWO_PI) * amplitude
 end
 
 -- Apply the nudge to a value. Silence stays silence: a zero input must never come back

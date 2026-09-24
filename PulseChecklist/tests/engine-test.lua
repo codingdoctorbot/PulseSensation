@@ -155,10 +155,10 @@ check("  and they run when nothing stops them", recreated > 0, true)
 
 -- ── StopAll voids scheduled PlayMode steps ────────────────────────────────────
 
-recreated = 0
 Engine:PlayMode("test", "STUTTER", 1.0)
 local scheduled = pendingTimers()
 check("STUTTER scheduled again", scheduled > 0, true)
+recreated = 0
 Engine:StopAll()
 runTimersTo(now + 5)
 check("StopAll voids every pending step", recreated, 0)

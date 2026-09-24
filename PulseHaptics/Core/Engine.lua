@@ -195,6 +195,20 @@ end
 -- Reused table to prevent GC allocation in high-frequency hold/tick loops (Rule 4).
 local scratchRoles = { low = 0, high = 0 }
 
+-- Ring buffer of recycled role tables for PlayMode steps (Rule 4: Zero-GC)
+local rolePool = {}
+for i = 1, 16 do
+	rolePool[i] = {}
+end
+local rolePoolIdx = 0
+
+local function getRoleTable()
+	rolePoolIdx = (rolePoolIdx % 16) + 1
+	local t = rolePool[rolePoolIdx]
+	wipe(t)
+	return t
+end
+
 function Engine:Set(name, low, high, duration, isTransient)
 	scratchRoles.low = low or 0
 	scratchRoles.high = high or 0
@@ -221,7 +235,8 @@ function Engine:SetRoles(name, roles, duration, isTransient)
 	for role, value in pairs(roles) do
 		target[role] = clamp01(value or 0)
 	end
-	layer.endTime = GetTime() + (duration or 0.1)
+	local dur = (duration and duration > 0) and duration or 0.1
+	layer.endTime = GetTime() + dur
 	layer.isTransient = (isTransient == true)
 end
 
@@ -235,7 +250,8 @@ end
 function Engine:Hold(name, low, high, duration)
 	scratchRoles.low = low or 0
 	scratchRoles.high = high or 0
-	self:SetRoles(name, scratchRoles, duration or REFRESH_WINDOW, false)
+	local dur = (duration and duration > 0) and duration or REFRESH_WINDOW
+	self:SetRoles(name, scratchRoles, dur, false)
 end
 
 -- Role-space sibling of Hold, existing so callers get REFRESH_WINDOW by default rather than
@@ -243,7 +259,8 @@ end
 -- shorter than the caller's own re-arm interval expires between ticks and the texture
 -- stutters, and an explicit 0 gives a layer already dead the moment it is created.
 function Engine:HoldRoles(name, roles, duration)
-	self:SetRoles(name, roles, duration or REFRESH_WINDOW, false)
+	local dur = (duration and duration > 0) and duration or REFRESH_WINDOW
+	self:SetRoles(name, roles, dur, false)
 end
 
 function Engine:StopLayer(name)
@@ -349,34 +366,34 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
 		else
 			local duration = step.relDuration * (mode.baseDuration or 0.25) * durMult
 			local mag = clamp01(step.relIntensity * scale * (intensityOverride or 1.0))
-			-- Sparse: a step names one role (or "both") and only that role is emitted.
-			-- Low/high/trigger roles are scaled by their respective multiplier from the
-			-- Motor & Timing page.
-			local roles = {}
+			local stepRoles = getRoleTable()
 			local r = step.role
 			if r == "both" then
-				roles.low = clamp01(mag * lowMult)
-				roles.high = clamp01(mag * highMult)
+				stepRoles.low = clamp01(mag * lowMult)
+				stepRoles.high = clamp01(mag * highMult)
 			elseif r == "high" then
-				roles.high = clamp01(mag * highMult)
+				stepRoles.high = clamp01(mag * highMult)
 			elseif r == "ltrigger" or r == "rtrigger" then
-				roles[r] = clamp01(mag * triggerMult)
+				stepRoles[r] = clamp01(mag * triggerMult)
 			else
-				roles.low = clamp01(mag * lowMult)
+				stepRoles.low = clamp01(mag * lowMult)
 			end
 			local at = offset
-			C_Timer.After(at, function()
-				if engineGeneration ~= generation then
-					return
+
+			if at <= 0 then
+				-- Synchronous execution on frame zero: eliminates 16-33ms C_Timer.After input lag on impacts
+				if deviceReady then
+					self:SetRoles(name, stepRoles, duration, true)
 				end
-				if layerTokens[name] ~= token then
-					return
-				end
-				if not deviceReady then
-					return
-				end
-				self:SetRoles(name, roles, duration, true)
-			end)
+			else
+				-- Subsequent delayed steps: schedule via timer with recycled role tables
+				C_Timer.After(at, function()
+					if engineGeneration ~= generation or layerTokens[name] ~= token or not deviceReady then
+						return
+					end
+					self:SetRoles(name, stepRoles, duration, true)
+				end)
+			end
 			offset = offset + duration
 		end
 	end
@@ -420,6 +437,19 @@ local function driveChannel(channel, wanted, last, dt, epsilon, now, isTransient
 
 	local smoothed = smoothTowards(smoothedByChannel[channel] or 0, wanted, dt, attackTau, releaseTau)
 	smoothedByChannel[channel] = smoothed
+
+	-- When wanted is zero and smoothed decays below the silence gate, explicitly zero the motor.
+	-- This prevents sub-threshold residual voltage leaks when another channel is still active.
+	if wanted == 0 and smoothed <= SILENCE_GATE then
+		if (last or 0) > 0 then
+			if C_GamePad and C_GamePad.SetVibration then
+				pcall(C_GamePad.SetVibration, channel, 0)
+			end
+			lastSetByChannel[channel] = 0
+		end
+		smoothedByChannel[channel] = 0
+		return false
+	end
 
 	local isOn = smoothed > SILENCE_GATE
 	local delta = math.abs(smoothed - (last or -1))

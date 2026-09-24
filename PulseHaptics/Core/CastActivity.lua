@@ -309,8 +309,10 @@ function CastActivity:SetActive(consumerKey, active)
 	registered = shouldRegister
 	if registered then
 		for _, event in ipairs(EVENTS) do
-			if UnitIsUnit then
+			if frame.RegisterUnitEvent then
 				frame:RegisterUnitEvent(event, "player")
+			else
+				frame:RegisterEvent(event)
 			end
 		end
 		-- The two trade-skill events carry no unit token, so they need plain registration.
