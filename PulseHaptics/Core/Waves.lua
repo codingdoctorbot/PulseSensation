@@ -30,10 +30,16 @@ Pulse.Haptics = Pulse.Haptics or {}
 -- Hand-rolled, not math.clamp — CONFIRMED absent on this client (Core/Engine.lua's header
 -- notes math.lerp failing the same way). Local because no file here exports one.
 local function clamp01(v)
-    if v ~= v then return 0 end       -- NaN in, silence out
-    if v < 0 then return 0 end
-    if v > 1 then return 1 end
-    return v
+	if v ~= v then
+		return 0
+	end -- NaN in, silence out
+	if v < 0 then
+		return 0
+	end
+	if v > 1 then
+		return 1
+	end
+	return v
 end
 
 local TWO_PI = math.pi * 2
@@ -59,17 +65,21 @@ local TWO_PI = math.pi * 2
 --
 -- Returns 0..1, clamped: baseline plus depth can mathematically exceed 1, and clamping here
 -- rather than in every caller is the point of a shared helper.
-function Pulse.Waves.Sine(baseline, frequency, depth, phase, time)
-    baseline = baseline or 0
-    if baseline <= 0 then return 0 end
+function Pulse.Waves.Sine(baseline, frequency, depth, phase, time, thetaOverride)
+	baseline = baseline or 0
+	if baseline <= 0 then
+		return 0
+	end
 
-    frequency = frequency or 1.0
-    depth     = depth or 0
-    if depth == 0 then return clamp01(baseline) end
+	frequency = frequency or 1.0
+	depth = depth or 0
+	if depth == 0 then
+		return clamp01(baseline)
+	end
 
-    local t     = time or GetTime()
-    local theta = TWO_PI * frequency * t + (phase or 0)
-    return clamp01(baseline * (1.0 + depth * math.sin(theta)))
+	local t = time or GetTime()
+	local theta = thetaOverride or (TWO_PI * frequency * t + (phase or 0))
+	return clamp01(baseline * (1.0 + depth * math.sin(theta)))
 end
 
 -- 2. Harmonic — a baseline that breathes with a shape
@@ -94,29 +104,32 @@ end
 --                  knob deciding whether the cycle leans forward or back.
 --
 -- Every other parameter behaves exactly as in Sine above.
-function Pulse.Waves.Harmonic(baseline, frequency, depth, harmonic, harmonicPhase, phase, time)
-    baseline = baseline or 0
-    if baseline <= 0 then return 0 end
+function Pulse.Waves.Harmonic(baseline, frequency, depth, harmonic, harmonicPhase, phase, time, thetaOverride)
+	baseline = baseline or 0
+	if baseline <= 0 then
+		return 0
+	end
 
-    frequency = frequency or 1.0
-    depth     = depth or 0
-    harmonic  = harmonic or 0
-    if depth == 0 then return clamp01(baseline) end
+	frequency = frequency or 1.0
+	depth = depth or 0
+	harmonic = harmonic or 0
+	if depth == 0 then
+		return clamp01(baseline)
+	end
 
-    local t     = time or GetTime()
-    local theta = TWO_PI * frequency * t + (phase or 0)
+	local t = time or GetTime()
+	local theta = thetaOverride or (TWO_PI * frequency * t + (phase or 0))
 
-    if harmonic == 0 then
-        -- Skip the second sine entirely: a continuous cue evaluates this every frame, and
-        -- a caller leaving the harmonic at zero should pay exactly what Sine costs.
-        return clamp01(baseline * (1.0 + depth * math.sin(theta)))
-    end
+	if harmonic == 0 then
+		-- Skip the second sine entirely: a continuous cue evaluates this every frame, and
+		-- a caller leaving the harmonic at zero should pay exactly what Sine costs.
+		return clamp01(baseline * (1.0 + depth * math.sin(theta)))
+	end
 
-    local composite = math.sin(theta)
-                    + harmonic * math.sin(2 * theta + (harmonicPhase or 0))
-    composite = composite / (1.0 + math.abs(harmonic))
+	local composite = math.sin(theta) + harmonic * math.sin(2 * theta + (harmonicPhase or 0))
+	composite = composite / (1.0 + math.abs(harmonic))
 
-    return clamp01(baseline * (1.0 + depth * composite))
+	return clamp01(baseline * (1.0 + depth * composite))
 end
 
 -- 3. MicroFlutter — keeping a steady signal alive
@@ -140,21 +153,20 @@ end
 -- page, and never drops below the value already known to work. The figure is
 -- PRE-SMOOTHING: the engine's attack/release filter attenuates a 7Hz wobble considerably,
 -- so the swing actually delivered to the motor is a good deal smaller.
-local MICRO_FLUTTER_HZ        = 7.0
-local MICRO_FLUTTER_MIN       = 0.01    -- the amplitude confirmed working in Combat.lua
-local MICRO_FLUTTER_EPS_MULT  = 4.0     -- headroom over the gate if the threshold is raised
+local MICRO_FLUTTER_HZ = 7.0
+local MICRO_FLUTTER_MIN = 0.01 -- the amplitude confirmed working in Combat.lua
+local MICRO_FLUTTER_EPS_MULT = 4.0 -- headroom over the gate if the threshold is raised
 
 -- Returns the flutter offset alone, unclamped and signed, for a caller that wants to
 -- inspect or scale it. Most callers want MicroFlutter below.
 function Pulse.Haptics.MicroFlutterOffset(amount, time)
-    local amplitude = amount
-    if not amplitude then
-        local epsilon = Pulse.Database and Pulse.Database.GetChangeEpsilon
-            and Pulse.Database:GetChangeEpsilon() or 0
-        amplitude = math.max(MICRO_FLUTTER_MIN, epsilon * MICRO_FLUTTER_EPS_MULT)
-    end
-    local t = time or GetTime()
-    return math.sin(TWO_PI * MICRO_FLUTTER_HZ * t) * amplitude
+	local amplitude = amount
+	if not amplitude then
+		local epsilon = Pulse.Database and Pulse.Database.GetChangeEpsilon and Pulse.Database:GetChangeEpsilon() or 0
+		amplitude = math.max(MICRO_FLUTTER_MIN, epsilon * MICRO_FLUTTER_EPS_MULT)
+	end
+	local t = time or GetTime()
+	return math.sin(TWO_PI * MICRO_FLUTTER_HZ * t) * amplitude
 end
 
 -- Apply the nudge to a value. Silence stays silence: a zero input must never come back
@@ -164,7 +176,9 @@ end
 --   amount  optional explicit amplitude, overriding the derived one. For cooking.
 --   time    optional, defaults to GetTime().
 function Pulse.Haptics.MicroFlutter(value, amount, time)
-    value = value or 0
-    if value <= 0 then return 0 end
-    return clamp01(value + Pulse.Haptics.MicroFlutterOffset(amount, time))
+	value = value or 0
+	if value <= 0 then
+		return 0
+	end
+	return clamp01(value + Pulse.Haptics.MicroFlutterOffset(amount, time))
 end

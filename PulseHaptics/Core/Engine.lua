@@ -404,7 +404,7 @@ local frameTarget = {}
 
 local frame = CreateFrame("Frame")
 
-frame:SetScript("OnUpdate", function(_, elapsed)
+local function onEngineTick(elapsed)
 	if not deviceReady then
 		return
 	end
@@ -508,6 +508,23 @@ frame:SetScript("OnUpdate", function(_, elapsed)
 	end
 
 	if not anyOn and not anyRaw and next(lastSetByChannel) then
+		C_GamePad.StopVibration()
+		wipe(smoothedByChannel)
+		wipe(lastSetByChannel)
+	end
+end
+
+local lastErrorTime = 0
+frame:SetScript("OnUpdate", function(_, elapsed)
+	local ok, err = pcall(onEngineTick, elapsed)
+	if not ok then
+		local now = GetTime()
+		if now - lastErrorTime > 5.0 then
+			lastErrorTime = now
+			if Pulse and Pulse.debug then
+				print("Pulse: Engine OnUpdate error: " .. tostring(err))
+			end
+		end
 		C_GamePad.StopVibration()
 		wipe(smoothedByChannel)
 		wipe(lastSetByChannel)
@@ -656,7 +673,13 @@ function Engine:Init()
 	deviceFrame:RegisterEvent("GAME_PAD_ACTIVE_CHANGED")
 	deviceFrame:RegisterEvent("GAME_PAD_CONNECTED")
 	deviceFrame:RegisterEvent("GAME_PAD_DISCONNECTED")
-	deviceFrame:SetScript("OnEvent", function()
+	deviceFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+	deviceFrame:RegisterEvent("PLAYER_LEAVING_WORLD")
+	deviceFrame:SetScript("OnEvent", function(_, event)
+		if event == "PLAYER_LEAVING_WORLD" then
+			Engine:StopAll()
+			return
+		end
 		Engine:RefreshDevice()
 	end)
 	local function sync()

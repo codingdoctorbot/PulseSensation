@@ -1069,7 +1069,7 @@ do
 
 	db:SetActiveProfileName("PvP")
 	check("pvp active", db:GetActiveProfileName(), "PvP")
-	check("pvp has lossOfControlStart", db:GetCue("lossOfControlStart"), true)
+	check("pvp has ccMaster", db:GetCue("ccMaster"), true)
 	check("pvp silences lootGold", db:GetCue("lootGold"), false)
 
 	-- Slash command /pulse profile

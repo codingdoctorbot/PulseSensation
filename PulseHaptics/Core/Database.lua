@@ -229,22 +229,20 @@ local PROFILE_TRIGGER_OVERRIDES = {
 	["Dungeon: Tank"] = {
 		__exclusive = true,
 		threatLost = true,
-		threatWarning = true,
-		tauntSuccess = true,
-		tauntFailed = true,
+		threatRising = true,
+		threatAggro = true,
 		damageTaken = true,
 		deflect = true,
 		bossAbilityWarning = true,
 		bossChatWarning = true,
 		cooldownReady = true,
-		lossOfControlStart = true,
 		ccMaster = true,
 		ccStun = true,
 		ccSilence = true,
 		ccFear = true,
 		ccDisarm = true,
 		ccPacify = true,
-		ccIncapacitate = true,
+		ccConfuse = true,
 		focusCastStart = true,
 		focusChannelStart = true,
 		targetCastStopped = true,
@@ -290,12 +288,11 @@ local PROFILE_TRIGGER_OVERRIDES = {
 		bossChatWarning = true,
 		focusCastStart = true,
 		focusChannelStart = true,
-		lossOfControlStart = true,
 		ccMaster = true,
 		ccSilence = true,
 		ccStun = true,
 		ccFear = true,
-		ccIncapacitate = true,
+		ccConfuse = true,
 		rolePoll = true,
 		summonRequest = true,
 		raidTarget = true,
@@ -335,7 +332,6 @@ local PROFILE_TRIGGER_OVERRIDES = {
 		bossChatWarning = true,
 		cooldownReady = true,
 		procGlow = true,
-		lossOfControlStart = true,
 		ccMaster = true,
 		ccStun = true,
 		ccDisarm = true,
@@ -376,7 +372,6 @@ local PROFILE_TRIGGER_OVERRIDES = {
 		targetCastStopped = true,
 		bossAbilityWarning = true,
 		bossChatWarning = true,
-		lossOfControlStart = true,
 		ccMaster = true,
 		ccSilence = true,
 		ccStun = true,
@@ -417,11 +412,10 @@ local PROFILE_TRIGGER_OVERRIDES = {
 		targetCastStopped = true,
 		bossAbilityWarning = true,
 		bossChatWarning = true,
-		lossOfControlStart = true,
 		ccMaster = true,
 		ccStun = true,
 		ccSilence = true,
-		threatWarning = true,
+		threatRising = true,
 		damageTaken = true,
 		lowHealthWarning = true,
 		combatEnter = true,
@@ -484,7 +478,6 @@ local PROFILE_TRIGGER_OVERRIDES = {
 		merchantShow = true,
 		mailShow = true,
 		taxiOpened = true,
-		softTargetInteract = true,
 		softTargetInteraction = true,
 		craftTexture = true,
 		combatEnter = true,
@@ -520,7 +513,7 @@ local PROFILE_TRIGGER_OVERRIDES = {
 		merchantShow = true,
 		mailShow = true,
 		taxiOpened = true,
-		softTargetInteract = true,
+		softTargetInteraction = true,
 		craftTexture = true,
 		combatEnter = true,
 		combatLeave = true,
@@ -558,7 +551,6 @@ local PROFILE_TRIGGER_OVERRIDES = {
 		merchantShow = true,
 		mailShow = true,
 		taxiOpened = true,
-		softTargetInteract = true,
 		softTargetInteraction = true,
 		craftTexture = true,
 		combatEnter = true,
@@ -568,14 +560,13 @@ local PROFILE_TRIGGER_OVERRIDES = {
 	},
 	PvP = {
 		__exclusive = true,
-		lossOfControlStart = true,
 		ccMaster = true,
 		ccStun = true,
 		ccSilence = true,
 		ccFear = true,
 		ccDisarm = true,
 		ccPacify = true,
-		ccIncapacitate = true,
+		ccConfuse = true,
 		focusCastStart = true,
 		focusChannelStart = true,
 		targetCastStopped = true,
@@ -1574,6 +1565,18 @@ function Database:Set(key, value)
 		if not Pulse.HapticSchemas[value] then
 			return
 		end
+	elseif type(default) == "table" and type(value) == "table" then
+		DB[key] = DB[key] or {}
+		for k, v in pairs(value) do
+			if not issecretvalue(v) then
+				DB[key][k] = v
+			end
+		end
+		if Pulse.debug then
+			print(("Pulse: %s table updated"):format(key))
+		end
+		notify(globalListeners, key)
+		return
 	else
 		return
 	end
@@ -1585,6 +1588,13 @@ function Database:Set(key, value)
 		print(("Pulse: %s set to %s"):format(key, tostring(value)))
 	end
 	notify(globalListeners, key)
+end
+
+function Database:SetMinimap(cfg)
+	if type(cfg) ~= "table" then
+		return
+	end
+	self:Set("minimap", cfg)
 end
 
 function Database:GetCue(triggerID)

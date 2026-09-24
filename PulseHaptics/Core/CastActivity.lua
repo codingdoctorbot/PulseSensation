@@ -49,9 +49,13 @@ end
 local function emit(result)
 	result.time = GetTime()
 	for _, callback in ipairs(listeners) do
-		-- pcall per listener: one badly behaved consumer must not stop the others, and
-		-- this runs inside a WoW event handler where an error is noisy.
-		pcall(callback, result)
+		-- xpcall per listener: isolates consumers while reporting real errors to default error handler
+		local errHandler = _G.geterrorhandler and _G.geterrorhandler()
+		if errHandler then
+			xpcall(callback, errHandler, result)
+		else
+			pcall(callback, result)
+		end
 	end
 end
 

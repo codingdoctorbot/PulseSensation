@@ -318,13 +318,14 @@ textFrame:SetScript("OnEvent", function(_, event, ...)
 		if ok then
 			-- When partial resists or absorbs occur, Blizzard's CombatText.lua translates them
 			-- into damage or crit damage if arg3 (amount) is present:
+			local isCrit = not issecretvalue(arg4) and arg4
 			if messageType == "RESIST" or messageType == "ABSORB" then
 				if arg3 and not issecretvalue(arg3) then
-					messageType = arg4 and "DAMAGE_CRIT" or "DAMAGE"
+					messageType = isCrit and "DAMAGE_CRIT" or "DAMAGE"
 				end
 			elseif messageType == "SPELL_RESIST" or messageType == "SPELL_ABSORB" then
 				if arg3 and not issecretvalue(arg3) then
-					messageType = arg4 and "SPELL_DAMAGE_CRIT" or "SPELL_DAMAGE"
+					messageType = isCrit and "SPELL_DAMAGE_CRIT" or "SPELL_DAMAGE"
 				end
 			end
 		end

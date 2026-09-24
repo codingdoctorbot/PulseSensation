@@ -248,7 +248,7 @@ function M:_WatchDefensives()
 			local updateInfo = arg2
 			if updateInfo and type(updateInfo) == "table" and updateInfo.addedAuras then
 				for _, auraData in ipairs(updateInfo.addedAuras) do
-					if auraData and auraData.spellId and isBigDefensiveSpell(auraData.spellId) then
+					if auraData and not issecretvalue(auraData.spellId) and auraData.spellId and isBigDefensiveSpell(auraData.spellId) then
 						Pulse:FireIfEnabled("targetBigDefensive")
 						return
 					end

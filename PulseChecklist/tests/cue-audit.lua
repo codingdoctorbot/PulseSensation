@@ -119,8 +119,10 @@ local MODULE_FILES = {
 	"Core/Registry.lua",
 }
 
+local ROOT = arg[1] or "PulseHaptics"
+
 for _, relPath in ipairs(MODULE_FILES) do
-	local f = io.open(relPath, "r")
+	local f = io.open(ROOT .. "/" .. relPath, "r") or io.open(relPath, "r")
 	if f then
 		local content = f:read("*a")
 		f:close()

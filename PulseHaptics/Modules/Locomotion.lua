@@ -336,7 +336,9 @@ local function resolveGait()
 		end
 	end
 
-	if gait.cadence <= 0 then
+	if gait.cadence > 8.0 then
+		gait.cadence = 8.0
+	elseif gait.cadence <= 0 then
 		gait.cadence = 1.0
 	end
 	gait.valid = true
@@ -397,7 +399,15 @@ local lastJumpAt = -1000
 -- Movement's hook is unaffected.
 if type(hooksecurefunc) == "function" and type(_G.JumpOrAscendStart) == "function" then
 	hooksecurefunc("JumpOrAscendStart", function()
-		lastJumpAt = GetTime()
+		if IsSwimming and IsSwimming() then
+			return
+		end
+		if _G.HasFullControl and not _G.HasFullControl() then
+			return
+		end
+		if not IsFalling() and not IsFlying() then
+			lastJumpAt = GetTime()
+		end
 	end)
 end
 

@@ -20,6 +20,7 @@ local wasFalling, wasFlying = false, false
 -- applied one layer before HoldIfEnabled sees it, absorbing a jump in the raw data into a
 -- gradual slide.
 local smoothedSwimRatio = 0
+local swimPhase = 0
 
 local HARD_LANDING_AIRTIME = 2.5
 local SOFT_LANDING_AIRTIME = 0.8
@@ -111,8 +112,16 @@ end
 -- unconditional.
 if type(hooksecurefunc) == "function" and type(_G.JumpOrAscendStart) == "function" then
 	hooksecurefunc("JumpOrAscendStart", function()
-		fallStartTime = GetTime()
-		Pulse:FireIfEnabled("jumped")
+		if IsSwimming and IsSwimming() then
+			return
+		end
+		if _G.HasFullControl and not _G.HasFullControl() then
+			return
+		end
+		if not IsFalling() and not IsFlying() then
+			fallStartTime = GetTime()
+			Pulse:FireIfEnabled("jumped")
+		end
 	end)
 end
 
@@ -311,7 +320,12 @@ local function pollLandingAndSwim(_, elapsed)
 					-- Stroke rate rises with speed too, so swimming faster strokes faster
 					-- rather than merely harder.
 					local rate = strokeMin + (strokeMax - strokeMin) * ratio
-					local value = Pulse.Waves.Harmonic(peak * ratio, rate, depth, harmonic, 1.2)
+					local dt = elapsed or 0.016
+					if dt > 0.25 then
+						dt = 0.25
+					end
+					swimPhase = (swimPhase + TWO_PI * rate * dt) % TWO_PI
+					local value = Pulse.Waves.Harmonic(peak * ratio, rate, depth, harmonic, 1.2, nil, nil, swimPhase)
 
 					-- HIGH role, which reverses an earlier decision — and the reason it is
 					-- now safe is the calibration layer.
@@ -337,13 +351,17 @@ local function pollLandingAndSwim(_, elapsed)
 						staticLowRole.low = value
 						Pulse:HoldRolesIfEnabled("swimTexture", staticLowRole)
 					end
+				else
+					swimPhase = 0
 				end
 			elseif not wantEffort then
 				smoothedSwimRatio = 0
+				swimPhase = 0
 			end
 		end
 	else
 		smoothedSwimRatio = 0
+		swimPhase = 0
 	end
 end
 

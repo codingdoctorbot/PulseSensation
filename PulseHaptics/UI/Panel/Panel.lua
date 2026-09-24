@@ -530,6 +530,14 @@ local function slashHandler(message)
 		return
 	end
 
+	if command == "stop" or command == "off" or command == "mute" then
+		if Pulse.Engine and Pulse.Engine.StopAll then
+			Pulse.Engine:StopAll()
+			print("Pulse: all haptic vibrations stopped.")
+		end
+		return
+	end
+
 	if command == "profile" then
 		local target = strtrim(rest or "")
 		local db = Pulse.Database
