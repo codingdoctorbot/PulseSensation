@@ -1272,6 +1272,26 @@ do
 		GetTime = origGetTime
 
 		Pulse.Engine:StopAll()
+
+		-- Test 3: Raw Channel Calibration Watchdog Refresh
+		setVibrationCalls = 0
+		Pulse.Engine:RawChannel("Low", 0.5, 2.0)
+		engineOnUpdate(nil, 0.05)
+		check("Raw channel vibration sent on start", setVibrationCalls, 1)
+
+		setVibrationCalls = 0
+		engineOnUpdate(nil, 0.05)
+		check("Raw channel unchanged within 250ms does not re-send", setVibrationCalls, 0)
+
+		mockTime = origGetTime() + 0.35
+		GetTime = function()
+			return mockTime
+		end
+		engineOnUpdate(nil, 0.05)
+		check("Raw channel steady hold past 250ms triggers watchdog refresh", setVibrationCalls, 1)
+		GetTime = origGetTime
+
+		Pulse.Engine:StopAll()
 	end
 end
 

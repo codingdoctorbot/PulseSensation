@@ -261,11 +261,7 @@ function Theme.StyleActionButton(button, isAccent)
 
 	local fs = button:GetFontString()
 	if fs then
-		if isAccent then
-			fs:SetTextColor(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b)
-		else
-			fs:SetTextColor(Theme.COLOR_TEXT_PRIMARY.r, Theme.COLOR_TEXT_PRIMARY.g, Theme.COLOR_TEXT_PRIMARY.b)
-		end
+		fs:SetTextColor(Theme.COLOR_TEXT_PRIMARY.r, Theme.COLOR_TEXT_PRIMARY.g, Theme.COLOR_TEXT_PRIMARY.b)
 	end
 end
 

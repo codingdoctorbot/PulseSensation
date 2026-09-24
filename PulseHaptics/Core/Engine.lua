@@ -217,7 +217,7 @@ function Engine:SetRoles(name, roles, duration, isTransient)
 		target[role] = clamp01(value or 0)
 	end
 	layer.endTime = GetTime() + (duration or 0.1)
-	layer.isTransient = (isTransient == true) or (isTransient == nil and (duration or 0.1) <= 0.15)
+	layer.isTransient = (isTransient == true)
 end
 
 -- Continuous hold: the caller re-invokes this every tick the state is true. Stop calling and
@@ -466,7 +466,11 @@ local function onEngineTick(elapsed)
 			lastSentTimeByChannel[channel] = 0
 		else
 			anyRaw = true
-			if math.abs(hold.magnitude - (lastSetByChannel[channel] or -1)) > 0 then
+			local timeSinceLast = now - (lastSentTimeByChannel[channel] or 0)
+			if
+				math.abs(hold.magnitude - (lastSetByChannel[channel] or -1)) > 0
+				or timeSinceLast >= WATCHDOG_INTERVAL
+			then
 				C_GamePad.SetVibration(channel, hold.magnitude)
 				lastSetByChannel[channel] = hold.magnitude
 				smoothedByChannel[channel] = hold.magnitude
