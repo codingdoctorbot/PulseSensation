@@ -10,9 +10,9 @@ PulseHaptics turns game events into tactile feedback designed to complement what
 
 ## 🎮 Features
 
-### 110+ Haptic Cues
+### 200+ Haptic Cues
 
-A large collection of customizable cues covering:
+A rich collection of customizable cues (202 distinct triggers) covering:
 
 *   Combat and impacts
 *   Damage and healing
@@ -71,10 +71,10 @@ A continuous movement texture can remain active while a combat impact fires on t
 
 Test haptic modes and individual cues directly from the Pulse interface.
 
-Additional companion tools are included for debugging and tracking which cues have been confirmed in-game:
+Additional companion tools are included in the developer suite for debugging and tracking which cues have been confirmed in-game:
 
-*   **PulseDebug** — live event and cue troubleshooting
-*   **PulseChecklist** — testing and verification checklist
+*   **PulseDebug** — live event and cue troubleshooting (`/pdebug`)
+*   **PulseChecklist** — in-game testing and verification checklist for all 202 triggers (`/pcheck`)
 
 ---
 
@@ -101,8 +101,10 @@ Run these two commands once in-game:
 
 ### 2. Installation
 
-Drop the three folders into your `Interface/AddOns/` directory:
+Install the addon into your `Interface/AddOns/` directory:
 
+*   **Core Standalone:** Drop `PulseHaptics` into `Interface/AddOns/`
+*   **Suite Release:** Also includes `PulseDebug` and `PulseChecklist`
 *   **macOS:** `/Applications/World of Warcraft/_classic_beta_/Interface/AddOns/`
 *   **Windows:** `C:\Program Files (x86)\World of Warcraft\_classic_beta_\Interface\AddOns\`
 
@@ -113,11 +115,11 @@ Drop the three folders into your `Interface/AddOns/` directory:
 | `/pulse` | Open the settings window. |
 | `/pulse test <mode>` | Play a vibration mode (e.g. `thud`, `wave`, `surge`, `heartbeat`). |
 | `/pulse profile [name]` | Inspect or switch the active profile. |
-| `/pulse debug` | Toggle verbose logging. |
-| `/pdebug` | Open the real-time diagnostic HUD. |
-| `/pcheck` | Open the cue verification checklist. |
-| `/pcheck export` | Generate a markdown QA report to copy to clipboard. |
-| `/pcheck import` | Restore statuses and notes from a previous export. |
+| `/pulse debug` | Toggle verbose logging and view engine error diagnostics. |
+| `/pdebug` *(PulseDebug)* | Open the real-time diagnostic HUD. |
+| `/pcheck` *(PulseChecklist)* | Open the cue verification checklist (all 202 cues). |
+| `/pcheck export` *(PulseChecklist)* | Generate a markdown QA report to copy to clipboard. |
+| `/pcheck import` *(PulseChecklist)* | Restore statuses and notes from a previous export. |
 
 ---
 
@@ -125,7 +127,7 @@ Drop the three folders into your `Interface/AddOns/` directory:
 
 PulseHaptics is a **free, open-source hobby project** developed independently for the World of Warcraft community.
 
-It is actively developed and still considered **Alpha**. Some cues have been confirmed in-game, while others remain experimental or dependent on Blizzard's evolving addon and controller APIs.
+It is actively developed and currently in **Public Beta (v0.2.0-beta)**. The core engine is fully implemented, while authored cues continue to be tuned in-game against Blizzard's evolving controller APIs.
 
 Feedback, bug reports, testing, and contributions are welcome.
 
@@ -144,7 +146,6 @@ Feedback, bug reports, testing, and contributions are welcome.
 *   LibStub
 *   CallbackHandler-1.0
 *   LibDataBroker-1.1
-*   LibDBIcon-1.0
 
 Their respective authors and license notices are retained with the project.
 
