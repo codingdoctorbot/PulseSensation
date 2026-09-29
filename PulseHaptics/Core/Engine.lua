@@ -116,6 +116,11 @@ end
 -- mechanism, different side of the pipeline, and the two coexist.
 local SILENCE_GATE = 0.004
 
+-- Snap-to-zero cutoff on channel shutoff (wanted == 0). Decaying exponentially below 0.025
+-- only lingers in the motor's physical stall/friction band, causing mechanical coil whine
+-- or firmware watchdog traffic. Snapping to 0 below this threshold guarantees a clean stop.
+local SHUTOFF_DEADBAND = 0.025
+
 -- Per-channel calibration, read live so a slider move is felt on the next frame with no
 -- reload. Falls back to Devices.lua's defaults, every one of which is a no-op or an exact
 -- lift of what the engine did before this layer existed.
@@ -498,6 +503,9 @@ local function driveChannel(channel, wanted, last, dt, epsilon, now, isTransient
 	local releaseTau = channelConfig(channel, "releaseTau")
 
 	local smoothed = smoothTowards(smoothedByChannel[channel] or 0, wanted, dt, attackTau, releaseTau)
+	if wanted == 0 and smoothed < SHUTOFF_DEADBAND then
+		smoothed = 0
+	end
 	smoothedByChannel[channel] = smoothed
 
 	-- When wanted is zero and smoothed decays below the silence gate, explicitly zero the motor.

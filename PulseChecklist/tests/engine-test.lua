@@ -569,4 +569,28 @@ check("engine continues operating normally after calibration error", #Engine:_De
 C_GamePad.SetVibration = origSetVib
 Engine:StopAll()
 
+-- ── Shutoff deadband: decay snaps to 0 below 0.025 on shutoff ───────────────
+Engine:StopAll()
+local lastLowVib = nil
+local origSetVibSnap = C_GamePad.SetVibration
+C_GamePad.SetVibration = function(channel, mag)
+	if channel == "Low" then
+		lastLowVib = mag
+	end
+	origSetVibSnap(channel, mag)
+end
+
+Engine:Set("shutoff_test", 0.3, 0, 1.0)
+frameScripts.OnUpdate(nil, 0.050)
+check("shutoff_test initial rumble sent", (lastLowVib or 0) > 0, true)
+
+-- Stop layer so wanted becomes 0, then let release decay run
+Engine:StopLayer("shutoff_test")
+for _ = 1, 20 do
+	frameScripts.OnUpdate(nil, 0.020)
+end
+check("shutoff_test snapped cleanly to zero", lastLowVib, 0)
+C_GamePad.SetVibration = origSetVibSnap
+Engine:StopAll()
+
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))
