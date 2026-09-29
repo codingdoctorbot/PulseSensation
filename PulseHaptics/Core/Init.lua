@@ -93,8 +93,8 @@ end
 -- role-space target, still scaled by per-cue intensity and gated by the same
 -- masterEnabled/per-trigger checks, so no module duplicates them.
 --
--- `duration` is optional, passed through to Engine:Hold.
-function Pulse:HoldIfEnabled(triggerID, low, high, duration)
+-- `duration` is optional, passed through to Engine:Hold. `isTransient` is optional (CR-012).
+function Pulse:HoldIfEnabled(triggerID, low, high, duration, isTransient)
 	if not self.Database:Get("masterEnabled") then
 		return
 	end
@@ -127,7 +127,7 @@ function Pulse:HoldIfEnabled(triggerID, low, high, duration)
 		end
 		lastHoldLogTime[triggerID] = now
 	end
-	self.Engine:Hold(triggerID, (low or 0) * scale, (high or 0) * scale, duration)
+	self.Engine:Hold(triggerID, (low or 0) * scale, (high or 0) * scale, duration, isTransient)
 end
 
 local staticScaled = {}
@@ -137,7 +137,7 @@ local staticScaled = {}
 -- same intensity scaling; the caller names its roles instead of passing (low, high). Without
 -- it, a module wanting four roles would reach Engine:SetRoles directly and silently skip
 -- masterEnabled, the cue's own switch and its intensity slider.
-function Pulse:HoldRolesIfEnabled(triggerID, roles, duration)
+function Pulse:HoldRolesIfEnabled(triggerID, roles, duration, isTransient)
 	if not self.Database:Get("masterEnabled") then
 		return
 	end
@@ -182,7 +182,7 @@ function Pulse:HoldRolesIfEnabled(triggerID, roles, duration)
 	end
 	-- HoldRoles, not SetRoles: an omitted duration must mean one refresh window, as in
 	-- HoldIfEnabled. SetRoles' own 0.1 default is short enough to stutter against.
-	self.Engine:HoldRoles(triggerID, staticScaled, duration)
+	self.Engine:HoldRoles(triggerID, staticScaled, duration, isTransient)
 end
 
 -- Public convenience aliases for macros, debuggers, and external callers

@@ -2,7 +2,8 @@
 --
 -- The only file that calls C_GamePad. Several textures are legitimately felt at once (an
 -- ambient cast hum with a crit thump over it), so this is a blended/smoothed model — named
--- layers, max-blend, low-pass smoothing — with Tremor's role/schema system on top, so
+-- layers, saturating sum for continuous cues with transient layering (max-blend only for
+-- role->channel routing), low-pass smoothing — with Tremor's role/schema system on top, so
 -- hardware that cannot drive both motors gets something sensible rather than half its
 -- layers going silent. Tremor's own Haptics.lua ran one active cue with preempt-or-drop
 -- arbitration: the right model for "a late buzz is misinformation", the wrong one for
@@ -252,20 +253,20 @@ end
 -- blip rather than a layer a later tick keeps refreshing — Health.lua's lub-dub knocks,
 -- where a duration shorter than the gap between them lets the value decay toward zero in
 -- between instead of stepping from one held target straight to the next.
-function Engine:Hold(name, low, high, duration)
+function Engine:Hold(name, low, high, duration, isTransient)
 	scratchRoles.low = low or 0
 	scratchRoles.high = high or 0
 	local dur = (duration and duration > 0) and duration or REFRESH_WINDOW
-	self:SetRoles(name, scratchRoles, dur, false)
+	self:SetRoles(name, scratchRoles, dur, isTransient)
 end
 
 -- Role-space sibling of Hold, existing so callers get REFRESH_WINDOW by default rather than
 -- SetRoles' raw 0.1. Reaching SetRoles directly for a continuous cue is a trap: a duration
 -- shorter than the caller's own re-arm interval expires between ticks and the texture
 -- stutters, and an explicit 0 gives a layer already dead the moment it is created.
-function Engine:HoldRoles(name, roles, duration)
+function Engine:HoldRoles(name, roles, duration, isTransient)
 	local dur = (duration and duration > 0) and duration or REFRESH_WINDOW
-	self:SetRoles(name, roles, dur, false)
+	self:SetRoles(name, roles, dur, isTransient)
 end
 
 function Engine:StopLayer(name)
@@ -376,18 +377,7 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
 			local duration =
 				math.max(MIN_STEP_DURATION, (step.relDuration or 1) * (mode.baseDuration or 0.25) * durMult)
 			local mag = clamp01((step.relIntensity or 1) * scale * (intensityOverride or 1.0))
-			local stepRoles = getRoleTable()
 			local r = step.role
-			if r == "both" then
-				stepRoles.low = clamp01(mag * lowMult)
-				stepRoles.high = clamp01(mag * highMult)
-			elseif r == "high" then
-				stepRoles.high = clamp01(mag * highMult)
-			elseif r == "ltrigger" or r == "rtrigger" then
-				stepRoles[r] = clamp01(mag * triggerMult)
-			else
-				stepRoles.low = clamp01(mag * lowMult)
-			end
 			local at = offset
 			if lastScheduledAt >= 0 and at <= lastScheduledAt + MIN_STEP_DURATION then
 				at = lastScheduledAt + MIN_STEP_DURATION
@@ -396,17 +386,53 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
 			lastScheduledAt = at
 
 			if at <= 0 then
-				-- Synchronous execution on frame zero: eliminates 16-33ms C_Timer.After input lag on impacts
+				-- Synchronous execution on frame zero: eliminates 16-33ms C_Timer.After input lag
+				-- on impacts. Safe to pull from the pool here: SetRoles reads this table's fields
+				-- before this call returns, so no other PlayMode call can recycle the slot first.
 				if deviceReady then
+					local stepRoles = getRoleTable()
+					if r == "both" then
+						stepRoles.low = clamp01(mag * lowMult)
+						stepRoles.high = clamp01(mag * highMult)
+					elseif r == "high" then
+						stepRoles.high = clamp01(mag * highMult)
+					elseif r == "ltrigger" or r == "rtrigger" then
+						stepRoles[r] = clamp01(mag * triggerMult)
+					else
+						stepRoles.low = clamp01(mag * lowMult)
+					end
 					self:SetRoles(name, stepRoles, duration, true)
 				end
 			else
-				-- Subsequent delayed steps: schedule via timer with recycled role tables
+				-- Subsequent delayed steps: do NOT use the pool. It's shared across every layer,
+				-- and the closure below holds a reference to whatever slot getRoleTable() would
+				-- have returned for 0.1-0.9s (mode-dependent) until the timer fires. A concurrent
+				-- PlayMode on ANY other layer can wipe() and refill that same slot inside that
+				-- window, silently swapping this step's payload for someone else's (ENG-01 / CR-013).
+				-- Capturing plain scalars in the closure removes the shared state.
+				local low, high, ltrigger, rtrigger
+				if r == "both" then
+					low = clamp01(mag * lowMult)
+					high = clamp01(mag * highMult)
+				elseif r == "high" then
+					high = clamp01(mag * highMult)
+				elseif r == "ltrigger" then
+					ltrigger = clamp01(mag * triggerMult)
+				elseif r == "rtrigger" then
+					rtrigger = clamp01(mag * triggerMult)
+				else
+					low = clamp01(mag * lowMult)
+				end
 				C_Timer.After(at, function()
 					if engineGeneration ~= generation or layerTokens[name] ~= token or not deviceReady then
 						return
 					end
-					self:SetRoles(name, stepRoles, duration, true)
+					self:SetRoles(
+						name,
+						{ low = low, high = high, ltrigger = ltrigger, rtrigger = rtrigger },
+						duration,
+						true
+					)
 				end)
 			end
 			offset = offset + duration
@@ -414,11 +440,11 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
 	end
 end
 
--- OnUpdate: blend every live layer into role-space, resolve roles to physical channels
--- through the active schema (a schema that maps both roles to the same channel collapses
--- them there via max, same as two layers colliding on one channel), smooth with the local
--- `smoothTowards` helper above (slower attack, faster release), and only call SetVibration
--- when a channel's value actually moved.
+-- OnUpdate: blend every live layer into role-space via saturating sum (with transients
+-- layered harmoniously on continuous textures), resolve roles to physical channels
+-- through the active schema (a schema that maps multiple roles to the same channel collapses
+-- them there via max), smooth with the local `smoothTowards` helper above (slower attack,
+-- faster release), and only call SetVibration when a channel's value actually moved.
 
 -- Hoisted to file-scope to eliminate closure allocation on every OnUpdate frame tick (Rule 4).
 local function driveChannel(channel, wanted, last, dt, epsilon, now, isTransient)
@@ -428,15 +454,17 @@ local function driveChannel(channel, wanted, last, dt, epsilon, now, isTransient
 
 	if wanted and wanted > 0 then
 		wanted = clamp01(wanted * channelConfig(channel, "gain"))
-		local gamma = channelConfig(channel, "gamma")
-		if gamma and gamma ~= 1.0 then
-			wanted = wanted ^ gamma
+		if wanted > 0 then
+			local gamma = channelConfig(channel, "gamma")
+			if gamma and gamma ~= 1.0 then
+				wanted = wanted ^ gamma
+			end
+			local floor = channelConfig(channel, "floor")
+			if floor and floor > 0 then
+				wanted = floor + (1.0 - floor) * wanted
+			end
+			wanted = clamp01(wanted)
 		end
-		local floor = channelConfig(channel, "floor")
-		if floor and floor > 0 then
-			wanted = floor + (1.0 - floor) * wanted
-		end
-		wanted = clamp01(wanted)
 	else
 		-- Zero in, zero out, unconditionally. The breakaway floor must never turn a
 		-- silent channel into a permanently humming one.
@@ -515,7 +543,12 @@ local function onEngineTick(elapsed)
 	for channel, hold in pairs(rawHolds) do
 		if now >= hold.endTime then
 			rawHolds[channel] = nil
-			C_GamePad.SetVibration(channel, 0)
+			if C_GamePad and C_GamePad.SetVibration then
+				local ok, err = pcall(C_GamePad.SetVibration, channel, 0)
+				if not ok then
+					Engine.calibrationError = tostring(err)
+				end
+			end
 			lastSetByChannel[channel] = 0
 			smoothedByChannel[channel] = 0
 			lastSentTimeByChannel[channel] = 0
@@ -526,10 +559,17 @@ local function onEngineTick(elapsed)
 				math.abs(hold.magnitude - (lastSetByChannel[channel] or -1)) > 0
 				or timeSinceLast >= WATCHDOG_INTERVAL
 			then
-				C_GamePad.SetVibration(channel, hold.magnitude)
-				lastSetByChannel[channel] = hold.magnitude
-				smoothedByChannel[channel] = hold.magnitude
-				lastSentTimeByChannel[channel] = now
+				if C_GamePad and C_GamePad.SetVibration then
+					local ok, err = pcall(C_GamePad.SetVibration, channel, hold.magnitude)
+					if not ok then
+						Engine.calibrationError = tostring(err)
+						rawHolds[channel] = nil
+					else
+						lastSetByChannel[channel] = hold.magnitude
+						smoothedByChannel[channel] = hold.magnitude
+						lastSentTimeByChannel[channel] = now
+					end
+				end
 			end
 		end
 	end
@@ -670,6 +710,10 @@ function Engine:GetLastError()
 	return self.lastError, self.errorCount or 0
 end
 
+function Engine:GetCalibrationError()
+	return self.calibrationError
+end
+
 -- Calibration probe. The addon cannot measure a motor; the person holding it can, so the
 -- job here is to present an unprocessed, predictable stimulus and get out of the way.
 
@@ -680,6 +724,7 @@ function Engine:RawChannel(channel, magnitude, duration)
 	if not deviceReady then
 		return false, "no controller detected"
 	end
+	self.calibrationError = nil
 	rawHolds[channel] = {
 		magnitude = clamp01(magnitude or 0),
 		endTime = GetTime() + (duration or 0.5),
@@ -701,6 +746,7 @@ function Engine:RampChannel(channel, peak)
 	if not deviceReady then
 		return false, "no controller detected"
 	end
+	self.calibrationError = nil
 
 	peak = peak or Pulse.RAMP_PEAK
 	local increment = Pulse.RAMP_STEP
@@ -850,6 +896,7 @@ function Engine:_DebugLayers()
 			high = layer.roles.high,
 			ltrigger = layer.roles.ltrigger,
 			rtrigger = layer.roles.rtrigger,
+			isTransient = layer.isTransient,
 			remaining = layer.endTime - now,
 		}
 	end

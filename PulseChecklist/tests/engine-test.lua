@@ -89,6 +89,8 @@ unpack = unpack or table.unpack
 
 local mockDurMult = nil
 local mockEpsilon = nil
+local mockGain = nil
+local mockFloor = nil
 
 local Pulse = { debug = false }
 Pulse.Database = {
@@ -98,7 +100,13 @@ Pulse.Database = {
 		end
 		return true
 	end,
-	GetChannelTuning = function(_, _, _, default)
+	GetChannelTuning = function(_, _, key, default)
+		if key == "gain" and mockGain ~= nil then
+			return mockGain
+		end
+		if key == "floor" and mockFloor ~= nil then
+			return mockFloor
+		end
 		return default
 	end,
 	GetChangeEpsilon = function()
@@ -446,6 +454,97 @@ frameScripts.OnUpdate(nil, 0.016)
 check("subsequent steady tick within 250ms does not re-send", vibrations, vibAfterOnset)
 
 mockEpsilon = nil
+Engine:StopAll()
+
+-- ── CR-013: Role-Pool Aliasing in PlayMode Delayed Steps (ENG-01) ───────────
+Engine:StopAll()
+-- RISING: step 1 (t=0) is Low 0.5; step 2 (t=0.16) is High 1.0.
+Engine:PlayMode("target_rising", "RISING", 1.0)
+-- Immediately flood the pool with >16 immediate steps from other layers in the same tick
+for i = 1, 20 do
+	Engine:PlayMode("flood_" .. i, "TAP", 0.1)
+end
+-- Advance timers to trigger step 2 of RISING
+runTimersTo(now + 0.20)
+local foundTarget = nil
+for _, l in ipairs(Engine:_DebugLayers()) do
+	if l.name == "target_rising" then
+		foundTarget = l
+		break
+	end
+end
+check("target_rising layer survived delayed step", foundTarget ~= nil, true)
+check("  and captured High magnitude is preserved at 1.0", foundTarget and foundTarget.high, 1.0)
+check("  and role Low was not polluted by flood steps", foundTarget and foundTarget.low, nil)
+Engine:StopAll()
+
+-- ── CR-029: Gain 0 Silences Motor Even with Breakaway Floor > 0 ───────────────
+Engine:StopAll()
+mockGain = 0
+mockFloor = 0.12
+vibrations = 0
+Engine:Set("gain_zero_test", 0.8, 0.8, 1.0)
+frameScripts.OnUpdate(nil, 0.016)
+local chanDebug = Engine:_DebugChannels()
+check("gain 0 with floor 0.12 produces 0 on Low channel", chanDebug["Low"] and chanDebug["Low"].smoothed or 0, 0)
+check("gain 0 with floor 0.12 produces 0 on High channel", chanDebug["High"] and chanDebug["High"].smoothed or 0, 0)
+mockGain = nil
+mockFloor = nil
+Engine:StopAll()
+
+-- ── CR-012: isTransient Support in Engine:Hold and Fast Attack ─────────────────
+Engine:StopAll()
+Engine:Hold("transient_hold", 1.0, 0, 0.05, true)
+local layers = Engine:_DebugLayers()
+local foundTransient = false
+for _, l in ipairs(layers) do
+	if l.name == "transient_hold" then
+		foundTransient = l.isTransient
+	end
+end
+check("Engine:Hold passes isTransient=true to layer", foundTransient, true)
+
+Engine:Hold("sustained_hold", 1.0, 0, 0.05, false)
+layers = Engine:_DebugLayers()
+local foundSustained = true
+for _, l in ipairs(layers) do
+	if l.name == "sustained_hold" then
+		foundSustained = l.isTransient
+	end
+end
+check("Engine:Hold default/false sets isTransient=false", foundSustained, false)
+Engine:StopAll()
+
+-- ── ENG-03: Raw Calibration Error Trapping via pcall ─────────────────────────
+Engine:StopAll()
+local origSetVib = C_GamePad.SetVibration
+C_GamePad.SetVibration = function(channel, mag)
+	if channel == "LTrigger" then
+		error("Hardware does not support LTrigger")
+	end
+	origSetVib(channel, mag)
+end
+
+Engine:RawChannel("LTrigger", 0.75, 0.5)
+check("raw hold was scheduled with clear error state", Engine:GetCalibrationError(), nil)
+
+-- Next tick attempts to send LTrigger to C_GamePad.SetVibration
+local preErrCount = Engine.errorCount or 0
+frameScripts.OnUpdate(nil, 0.016)
+check("pcall trapped calibration error safely without crash", Engine:GetCalibrationError() ~= nil, true)
+check(
+	"  and captured error detail",
+	Engine:GetCalibrationError() and Engine:GetCalibrationError():find("Hardware does not support LTrigger") ~= nil,
+	true
+)
+check("  and engine.errorCount did not increment", Engine.errorCount or 0, preErrCount)
+
+-- Normal layers continue working without interruption
+Engine:Set("continue_layer", 0.5, 0.5, 0.5)
+frameScripts.OnUpdate(nil, 0.016)
+check("engine continues operating normally after calibration error", #Engine:_DebugLayers(), 1)
+
+C_GamePad.SetVibration = origSetVib
 Engine:StopAll()
 
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))

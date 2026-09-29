@@ -65,10 +65,10 @@ local lastPeakTime = 0
 local STOP_GRACE = 1.0
 
 local function cancelPendingStop()
-    if pendingStopTimer then
-        pendingStopTimer:Cancel()
-        pendingStopTimer = nil
-    end
+	if pendingStopTimer then
+		pendingStopTimer:Cancel()
+		pendingStopTimer = nil
+	end
 end
 
 -- Its own lub-dub knock — the same mechanism as lowHealthTexture's lubdub_flash, but on an
@@ -79,15 +79,15 @@ end
 -- BPM rather than a raw seconds-interval so the slider number means something — "20 BPM"
 -- reads as obviously too slow in a way "3.0 seconds" does not.
 local function heartRate()
-    return Pulse.Database:GetTriggerSetting("lowHealthWarning", "heartRate", 56)
+	return Pulse.Database:GetTriggerSetting("lowHealthWarning", "heartRate", 56)
 end
 
 local function beatInterval()
-    local rate = heartRate()
-    if not rate or rate <= 0 then
-        rate = 56
-    end
-    return 60 / math.max(1, rate)
+	local rate = heartRate()
+	if not rate or rate <= 0 then
+		rate = 56
+	end
+	return 60 / math.max(1, rate)
 end
 
 -- One slider instead of lowHealthTexture's four (gap/duration/lub/dub): a simpler
@@ -95,58 +95,58 @@ end
 -- — long gap and duration, lub and dub close in intensity — and 1 toward a sharp, clearly
 -- separated double-knock. The four endpoints below are starting guesses; tune by feel.
 local function distinctiveness()
-    return Pulse.Database:GetTriggerSetting("lowHealthWarning", "distinctiveness", 0.7)
+	return Pulse.Database:GetTriggerSetting("lowHealthWarning", "distinctiveness", 0.7)
 end
 
 local function lerp(from, to, factor)
-    return from + (to - from) * factor
+	return from + (to - from) * factor
 end
 
 local function warningKnockShape()
-    local d = distinctiveness()
-    local gap = lerp(0.06, 0.32, d)
-    local duration = lerp(0.15, 0.05, d)
-    local lub = lerp(0.6, 1.0, d)
-    local dub = lerp(0.55, 0.25, d)
-    return gap, duration, lub, dub
+	local d = distinctiveness()
+	local gap = lerp(0.06, 0.32, d)
+	local duration = lerp(0.15, 0.05, d)
+	local lub = lerp(0.6, 1.0, d)
+	local dub = lerp(0.55, 0.25, d)
+	return gap, duration, lub, dub
 end
 
 local function fireWarningBeat()
-    local gap, duration, lub, dub = warningKnockShape()
-    Pulse:HoldIfEnabled("lowHealthWarning", lub, lub, duration)
-    C_Timer.After(gap, function()
-        Pulse:HoldIfEnabled("lowHealthWarning", dub, dub, duration)
-    end)
+	local gap, duration, lub, dub = warningKnockShape()
+	Pulse:HoldIfEnabled("lowHealthWarning", lub, lub, duration, true)
+	C_Timer.After(gap, function()
+		Pulse:HoldIfEnabled("lowHealthWarning", dub, dub, duration, true)
+	end)
 end
 
 local function stopBeating()
-    if beatTicker then
-        beatTicker:Cancel()
-        beatTicker = nil
-    end
+	if beatTicker then
+		beatTicker:Cancel()
+		beatTicker = nil
+	end
 end
 
 local function startBeating()
-    if beatTicker then
-        return
-    end -- already beating, don't stack a second ticker
-    beatTicker = C_Timer.NewTicker(beatInterval(), fireWarningBeat)
+	if beatTicker then
+		return
+	end -- already beating, don't stack a second ticker
+	beatTicker = C_Timer.NewTicker(beatInterval(), fireWarningBeat)
 end
 
 -- Restarting the ticker on either slider is simplest and costs nothing: it fires at the
 -- same rate either way, only its start-of-period phase resets.
 Pulse.Database:OnTriggerSettingChanged("lowHealthWarning", "heartRate", function()
-    if beatTicker then
-        stopBeating()
-        startBeating()
-    end
+	if beatTicker then
+		stopBeating()
+		startBeating()
+	end
 end)
 
 local function fireLubDub()
-    Pulse:HoldIfEnabled("lowHealthTexture", LUB_INTENSITY, LUB_INTENSITY, KNOCK_DURATION)
-    C_Timer.After(LUB_DUB_GAP, function()
-        Pulse:HoldIfEnabled("lowHealthTexture", DUB_INTENSITY, DUB_INTENSITY, KNOCK_DURATION)
-    end)
+	Pulse:HoldIfEnabled("lowHealthTexture", LUB_INTENSITY, LUB_INTENSITY, KNOCK_DURATION, true)
+	C_Timer.After(LUB_DUB_GAP, function()
+		Pulse:HoldIfEnabled("lowHealthTexture", DUB_INTENSITY, DUB_INTENSITY, KNOCK_DURATION, true)
+	end)
 end
 
 -- lubdub_flash: peak-detects the screen flash's own alpha cycle.
@@ -161,99 +161,99 @@ end
 -- ">.5" never clears again. .3 sits inside both the pre- and post-fade ranges and well clear
 -- of the trough.
 local function isLocalPeak(older, middle, newer)
-    return middle and older and newer and middle > older and middle >= newer and middle > 0.3
+	return middle and older and newer and middle > older and middle >= newer and middle > 0.3
 end
 
 -- RULE B: LowHealthFrame's widget state is confirmed non-secret, but every read still gets
 -- the guard-before-use every other cue gets. The guard IS the test if a patch changes the
 -- answer.
 local function checkFrame()
-    local shown = LowHealthFrame:IsShown()
-    if issecretvalue(shown) then
-        return
-    end
+	local shown = LowHealthFrame:IsShown()
+	if issecretvalue(shown) then
+		return
+	end
 
-    if shown and not wasShown then
-        cancelPendingStop() -- a flicker back to shown cancels any stop still waiting out its grace period
-        if not beatTicker then
-            fireWarningBeat()
-        end -- immediate first beat, but only if the ticker had actually stopped
-        startBeating() -- then repeats for as long as it's still true
-    elseif not shown and wasShown then
-        cancelPendingStop()
-        pendingStopTimer = C_Timer.NewTimer(STOP_GRACE, function()
-            pendingStopTimer = nil
-            stopBeating()
-        end)
-        prevAlpha, prevPrevAlpha = nil, nil -- don't let a stale peak carry into the next crossing
-    end
-    wasShown = shown
+	if shown and not wasShown then
+		cancelPendingStop() -- a flicker back to shown cancels any stop still waiting out its grace period
+		if not beatTicker then
+			fireWarningBeat()
+		end -- immediate first beat, but only if the ticker had actually stopped
+		startBeating() -- then repeats for as long as it's still true
+	elseif not shown and wasShown then
+		cancelPendingStop()
+		pendingStopTimer = C_Timer.NewTimer(STOP_GRACE, function()
+			pendingStopTimer = nil
+			stopBeating()
+		end)
+		prevAlpha, prevPrevAlpha = nil, nil -- don't let a stale peak carry into the next crossing
+	end
+	wasShown = shown
 
-    if not shown then
-        return
-    end
+	if not shown then
+		return
+	end
 
-    local alpha = LowHealthFrame:GetAlpha()
-    if issecretvalue(alpha) then
-        return
-    end
+	local alpha = LowHealthFrame:GetAlpha()
+	if issecretvalue(alpha) then
+		return
+	end
 
-    if HEARTBEAT_STYLE == "lubdub_flash" then
-        if isLocalPeak(prevPrevAlpha, prevAlpha, alpha) then
-            local now = GetTime()
-            if now - lastPeakTime > MIN_PEAK_GAP then
-                lastPeakTime = now
-                fireLubDub()
-            end
-        end
-        prevPrevAlpha, prevAlpha = prevAlpha, alpha
-    else
-        -- "smooth": the flash's alpha straight through, both roles driven equally — one
-        -- continuous throb, not a low/high texture split.
-        Pulse:HoldIfEnabled("lowHealthTexture", alpha, alpha)
-    end
+	if HEARTBEAT_STYLE == "lubdub_flash" then
+		if isLocalPeak(prevPrevAlpha, prevAlpha, alpha) then
+			local now = GetTime()
+			if now - lastPeakTime > MIN_PEAK_GAP then
+				lastPeakTime = now
+				fireLubDub()
+			end
+		end
+		prevPrevAlpha, prevAlpha = prevAlpha, alpha
+	else
+		-- "smooth": the flash's alpha straight through, both roles driven equally — one
+		-- continuous throb, not a low/high texture split.
+		Pulse:HoldIfEnabled("lowHealthTexture", alpha, alpha)
+	end
 end
 
 local function stopPolling()
-    if pollTicker then
-        pollTicker:Cancel()
-        pollTicker = nil
-    end
-    wasShown = false
-    prevAlpha, prevPrevAlpha = nil, nil
-    lastPeakTime = 0
-    cancelPendingStop()
-    stopBeating()
+	if pollTicker then
+		pollTicker:Cancel()
+		pollTicker = nil
+	end
+	wasShown = false
+	prevAlpha, prevPrevAlpha = nil, nil
+	lastPeakTime = 0
+	cancelPendingStop()
+	stopBeating()
 end
 
 local frame = CreateFrame("Frame")
 
 local function sync()
-    frame:UnregisterAllEvents()
-    stopPolling()
-    if not Pulse.Database:Get("masterEnabled") then
-        return
-    end
-    if not (Pulse.Database:GetCue("lowHealthWarning") or Pulse.Database:GetCue("lowHealthTexture")) then
-        return
-    end
-    if not LowHealthFrame then
-        return
-    end -- global not present: stay silent, RULE E
+	frame:UnregisterAllEvents()
+	stopPolling()
+	if not Pulse.Database:Get("masterEnabled") then
+		return
+	end
+	if not (Pulse.Database:GetCue("lowHealthWarning") or Pulse.Database:GetCue("lowHealthTexture")) then
+		return
+	end
+	if not LowHealthFrame then
+		return
+	end -- global not present: stay silent, RULE E
 
-    -- Seed from live state, never from false: arriving already shown starts the beats
-    -- immediately, not on the next crossing.
-    local shown = LowHealthFrame:IsShown()
-    wasShown = (not issecretvalue(shown)) and shown or false
-    if wasShown then
-        startBeating()
-    end
+	-- Seed from live state, never from false: arriving already shown starts the beats
+	-- immediately, not on the next crossing.
+	local shown = LowHealthFrame:IsShown()
+	wasShown = (not issecretvalue(shown)) and shown or false
+	if wasShown then
+		startBeating()
+	end
 
-    pollTicker = C_Timer.NewTicker(POLL_INTERVAL, checkFrame)
+	pollTicker = C_Timer.NewTicker(POLL_INTERVAL, checkFrame)
 end
 
 function M:OnEnable()
-    Pulse:BindFrame({ "lowHealthWarning", "lowHealthTexture" }, sync)
+	Pulse:BindFrame({ "lowHealthWarning", "lowHealthTexture" }, sync)
 end
 
 -- Straight to Engine:Set, bypassing HoldIfEnabled's masterEnabled and cue checks, for the
@@ -263,35 +263,35 @@ end
 -- together. Always the lub-dub shape regardless of HEARTBEAT_STYLE, since "smooth" has
 -- nothing discrete to preview.
 function M:TestHeartbeat()
-    Pulse.Engine:RefreshDevice()
-    if not Pulse.Engine:IsDeviceReady() then
-        return false, "no controller detected"
-    end
-    Pulse.Engine:Set("lowHealthTexture", LUB_INTENSITY, LUB_INTENSITY, KNOCK_DURATION)
-    C_Timer.After(LUB_DUB_GAP, function()
-        Pulse.Engine:Set("lowHealthTexture", DUB_INTENSITY, DUB_INTENSITY, KNOCK_DURATION)
-    end)
-    return true
+	Pulse.Engine:RefreshDevice()
+	if not Pulse.Engine:IsDeviceReady() then
+		return false, "no controller detected"
+	end
+	Pulse.Engine:Set("lowHealthTexture", LUB_INTENSITY, LUB_INTENSITY, KNOCK_DURATION)
+	C_Timer.After(LUB_DUB_GAP, function()
+		Pulse.Engine:Set("lowHealthTexture", DUB_INTENSITY, DUB_INTENSITY, KNOCK_DURATION)
+	end)
+	return true
 end
 
 -- Same reasoning as TestHeartbeat above, for lowHealthWarning's own knock instead.
 -- `/pulse test warningbeat` reaches this.
 function M:TestWarningBeat()
-    Pulse.Engine:RefreshDevice()
-    if not Pulse.Engine:IsDeviceReady() then
-        return false, "no controller detected"
-    end
-    local gap, duration, lub, dub = warningKnockShape()
-    Pulse.Engine:Set("lowHealthWarning", lub, lub, duration)
-    C_Timer.After(gap, function()
-        Pulse.Engine:Set("lowHealthWarning", dub, dub, duration)
-    end)
-    return true
+	Pulse.Engine:RefreshDevice()
+	if not Pulse.Engine:IsDeviceReady() then
+		return false, "no controller detected"
+	end
+	local gap, duration, lub, dub = warningKnockShape()
+	Pulse.Engine:Set("lowHealthWarning", lub, lub, duration)
+	C_Timer.After(gap, function()
+		Pulse.Engine:Set("lowHealthWarning", dub, dub, duration)
+	end)
+	return true
 end
 
 function M:_DebugHealth()
-    return {
-        warningBeatActive = beatTicker ~= nil,
-        pollTickerActive = pollTicker ~= nil,
-    }
+	return {
+		warningBeatActive = beatTicker ~= nil,
+		pollTickerActive = pollTicker ~= nil,
+	}
 end

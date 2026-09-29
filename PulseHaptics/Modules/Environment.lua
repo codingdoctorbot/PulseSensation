@@ -81,7 +81,7 @@ local function startBreathTicker(maxValue)
 			if not submerged then
 				-- Player surfaced! Play relief gasp and stop.
 				isDrowning = false
-				Pulse:HoldIfEnabled("breathTexture", 0.4, 0.4, 0.15)
+				Pulse:HoldIfEnabled("breathTexture", 0.4, 0.4, 0.15, true)
 				stopBreathTicker()
 				return
 			end
@@ -92,7 +92,7 @@ local function startBreathTicker(maxValue)
 			if now - lastDrownDamageTime >= drownInterval then
 				lastDrownDamageTime = now
 				local drownPeak = Pulse.Database:GetTriggerSetting("breathTexture", "drownPeak", 0.85)
-				Pulse:HoldIfEnabled("breathTexture", drownPeak, drownPeak, 0.20)
+				Pulse:HoldIfEnabled("breathTexture", drownPeak, drownPeak, 0.20, true)
 				Pulse:FireIfEnabled("drowningDamage")
 			end
 			return
@@ -149,9 +149,9 @@ local function startBreathTicker(maxValue)
 				local peak = Pulse.Database:GetTriggerSetting("breathTexture", "gaspPeak", 0.6)
 				local lub = peak
 				local dub = peak * (0.2 / 0.7)
-				Pulse:HoldIfEnabled("breathTexture", lub, lub, 0.05)
+				Pulse:HoldIfEnabled("breathTexture", lub, lub, 0.05, true)
 				C_Timer.After(0.36, function()
-					Pulse:HoldIfEnabled("breathTexture", dub, dub, 0.05)
+					Pulse:HoldIfEnabled("breathTexture", dub, dub, 0.05, true)
 				end)
 			end
 		end
