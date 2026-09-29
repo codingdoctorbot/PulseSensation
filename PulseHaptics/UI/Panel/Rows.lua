@@ -563,9 +563,17 @@ function Rows.CreateDropdown(parent, spec)
 		if not dropdown:IsEnabled() then
 			return
 		end
+		local previewScale = nil
+		if spec.previewScale then
+			if type(spec.previewScale) == "function" then
+				previewScale = spec.previewScale()
+			else
+				previewScale = spec.previewScale
+			end
+		end
 		Panel.Popup.OpenList(dropdown, options(), spec.get(), function(value)
 			spec.set(value)
-		end)
+		end, previewScale)
 	end)
 
 	if control.IncrementButton then

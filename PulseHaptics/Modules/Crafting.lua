@@ -409,7 +409,8 @@ function M:_PlayStrike()
 	if not work.mode then
 		return
 	end
-	local strength = clamp01(work.strike * gain * setting("strikeGain", 1.0))
+	local intensity = setting("intensity", 1.0)
+	local strength = clamp01(work.strike * gain * setting("strikeGain", 1.0) * intensity)
 	if strength <= 0 then
 		return
 	end

@@ -612,10 +612,10 @@ local function sanitizeNumber(value, minValue, maxValue)
 	if not value then
 		return nil
 	end
-	if value < minValue then
+	if minValue and value < minValue then
 		return minValue
 	end
-	if value > maxValue then
+	if maxValue and value > maxValue then
 		return maxValue
 	end
 	return value

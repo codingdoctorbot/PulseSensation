@@ -262,29 +262,31 @@ end
 -- rather than a ticker, so mashing the command previews gap, duration and intensity
 -- together. Always the lub-dub shape regardless of HEARTBEAT_STYLE, since "smooth" has
 -- nothing discrete to preview.
-function M:TestHeartbeat()
+function M:TestHeartbeat(scale)
 	Pulse.Engine:RefreshDevice()
 	if not Pulse.Engine:IsDeviceReady() then
 		return false, "no controller detected"
 	end
-	Pulse.Engine:Set("lowHealthTexture", LUB_INTENSITY, LUB_INTENSITY, KNOCK_DURATION)
+	scale = scale or 1.0
+	Pulse.Engine:Set("lowHealthTexture", LUB_INTENSITY * scale, LUB_INTENSITY * scale, KNOCK_DURATION, true)
 	C_Timer.After(LUB_DUB_GAP, function()
-		Pulse.Engine:Set("lowHealthTexture", DUB_INTENSITY, DUB_INTENSITY, KNOCK_DURATION)
+		Pulse.Engine:Set("lowHealthTexture", DUB_INTENSITY * scale, DUB_INTENSITY * scale, KNOCK_DURATION, true)
 	end)
 	return true
 end
 
 -- Same reasoning as TestHeartbeat above, for lowHealthWarning's own knock instead.
 -- `/pulse test warningbeat` reaches this.
-function M:TestWarningBeat()
+function M:TestWarningBeat(scale)
 	Pulse.Engine:RefreshDevice()
 	if not Pulse.Engine:IsDeviceReady() then
 		return false, "no controller detected"
 	end
+	scale = scale or 1.0
 	local gap, duration, lub, dub = warningKnockShape()
-	Pulse.Engine:Set("lowHealthWarning", lub, lub, duration)
+	Pulse.Engine:Set("lowHealthWarning", lub * scale, lub * scale, duration, true)
 	C_Timer.After(gap, function()
-		Pulse.Engine:Set("lowHealthWarning", dub, dub, duration)
+		Pulse.Engine:Set("lowHealthWarning", dub * scale, dub * scale, duration, true)
 	end)
 	return true
 end

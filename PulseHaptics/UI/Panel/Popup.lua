@@ -104,6 +104,7 @@ local function closeList()
 	end
 	listState.onSelect = nil
 	listState.owner = nil
+	listState.previewScale = nil
 end
 
 function Popup.CloseList()
@@ -245,8 +246,18 @@ local function acquireEntry(index)
 	end)
 	entry:SetScript("OnLeave", Theme.HideTooltip)
 	entry:SetScript("OnClick", function(self)
-		if Pulse.TestMode and Pulse.Modes and Pulse.Modes[self.value] then
-			pcall(Pulse.TestMode, Pulse, self.value)
+		if Pulse.Modes and Pulse.Modes[self.value] then
+			local scale = listState.previewScale
+			if scale ~= nil then
+				if Pulse.Engine then
+					Pulse.Engine:RefreshDevice()
+					if Pulse.Engine:IsDeviceReady() then
+						pcall(Pulse.Engine.PlayMode, Pulse.Engine, "preview", self.value, scale)
+					end
+				end
+			elseif Pulse.TestMode then
+				pcall(Pulse.TestMode, Pulse, self.value)
+			end
 		end
 		local handler = listState.onSelect
 		closeList()
@@ -299,7 +310,7 @@ end
 -- options: array of { value, label, tooltip, category? }.
 -- Automatically expands into a zero-scroll 3-Column Categorized Palette when options
 -- contain categories or exceed 8 items.
-function Popup.OpenList(owner, options, selectedValue, onSelect)
+function Popup.OpenList(owner, options, selectedValue, onSelect, previewScale)
 	ensureList()
 
 	if listState.owner == owner and listCatcher:IsShown() then
@@ -309,6 +320,7 @@ function Popup.OpenList(owner, options, selectedValue, onSelect)
 
 	listState.owner = owner
 	listState.onSelect = onSelect
+	listState.previewScale = previewScale
 
 	local hasCategories = false
 	for _, opt in ipairs(options) do
@@ -663,6 +675,11 @@ function Popup.Prompt(text, defaultValue, acceptText, onAccept)
 	dialog:Show()
 	dialog.Edit:SetFocus()
 	dialog.Edit:HighlightText()
+end
+
+-- Test inspection helper
+function Popup._DebugEntry(index)
+	return entries[index]
 end
 
 -- Both overlays belong to the panel and should not outlive it on screen.

@@ -9,8 +9,12 @@
 | `CR-001` | `73ecfc5` | Isolate channel lifecycle: emit `CHANNEL_CONFIRMED` on channel `SUCCEEDED`, emit `CHANNEL_COMPLETE` on un-interrupted `CHANNEL_STOP` | `crafting-test.lua` | Verified by test |
 | `CR-002` | `73ecfc5` | Protect `castTexture` from cross-talk teardown by matching against `activeCastGUID`/`activeSpellID`; track gather/fishing terminal spell ID | `crafting-test.lua` | Verified by test |
 | `CR-003` | `73ecfc5` | Raise baseline fishing bed from 0.07 to 0.12 so rumble clears the breakaway floor | `crafting-test.lua` | Verified by test |
-| `CR-013` | `219bdce` | Isolate delayed PlayMode step roles by capturing scalars to prevent role-pool aliasing corruption | `engine-test.lua` | Verified by test |
-| `CR-029` | `219bdce` | Evaluate gain before breakaway floor in driveChannel so gain 0 silences the motor | `engine-test.lua` | Verified by test |
-| `CR-012` | `219bdce` | Add isTransient parameter to Engine:Hold and Pulse:HoldIfEnabled for fast attack on heartbeat/breath | `engine-test.lua` | Verified by test |
-| `ENG-03` | `219bdce` | Wrap raw calibration SetVibration calls in pcall and isolate calibrationError | `engine-test.lua` | Verified by test |
-| `CR-025` | `219bdce` | Align Engine header comments with saturating mixer architecture | Inspection | Verified by inspection |
+| `CR-013` | `ddb8312` | Isolate delayed PlayMode step roles by capturing scalars to prevent role-pool aliasing corruption | `engine-test.lua` | Verified by test |
+| `CR-029` | `ddb8312` | Evaluate gain before breakaway floor in driveChannel so gain 0 silences the motor | `engine-test.lua` | Verified by test |
+| `CR-012` | `ddb8312` | Add isTransient parameter to Engine:Hold and Pulse:HoldIfEnabled for fast attack on heartbeat/breath | `engine-test.lua` | Verified by test |
+| `ENG-03` | `ddb8312` | Wrap raw calibration SetVibration calls in pcall and isolate calibrationError | `engine-test.lua` | Verified by test |
+| `CR-025` | `ddb8312` | Align Engine header comments with saturating mixer architecture | Inspection | Verified by inspection |
+| `CR-006` | `5962d0a` | Pass configured cue intensity into heartbeat and warningbeat previews; use isTransient for fast attack | `harness.lua` | Verified by test |
+| `CR-014` | `5962d0a` | Scale crafting anvil strike strength by configured trigger intensity setting | `crafting-test.lua` | Verified by test |
+| `CR-018` | `5962d0a` | Dropdown mode selection previews scale by active cue configured intensity | `harness.lua` | Verified by test |
+

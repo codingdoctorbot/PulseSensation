@@ -562,6 +562,7 @@ local FILES = {
 	"Modules/Crafting.lua",
 	"Modules/Interaction.lua",
 	"Modules/AlertUnitWatch.lua",
+	"Modules/Health.lua",
 	"UI/Settings.lua",
 	"UI/Panel/Theme.lua",
 	"UI/Panel/Popup.lua",
@@ -1312,6 +1313,76 @@ do
 		engineOnUpdate(nil, 0.05)
 		check("Decayed channel below silence gate safely zeroed while companion channel is active", true, true)
 
+		-- Test 6: CR-006 - Heartbeat Previews Respect Configured Intensity
+		Pulse.Engine:StopAll()
+		Pulse.Database:SetTriggerSetting("lowHealthWarning", "intensity", 0.4)
+		local okWarning = Pulse:TestCue("lowHealthWarning")
+		check("Pulse:TestCue('lowHealthWarning') succeeded", okWarning, true)
+		local warningLayer = nil
+		for _, l in ipairs(Pulse.Engine:_DebugLayers()) do
+			if l.name == "lowHealthWarning" then
+				warningLayer = l
+				break
+			end
+		end
+		check("lowHealthWarning layer created on preview", warningLayer ~= nil, true)
+		local warningMag04 = warningLayer and warningLayer.low or 0
+
+		Pulse.Engine:StopAll()
+		Pulse.Database:SetTriggerSetting("lowHealthWarning", "intensity", 0.8)
+		Pulse:TestCue("lowHealthWarning")
+		warningLayer = nil
+		for _, l in ipairs(Pulse.Engine:_DebugLayers()) do
+			if l.name == "lowHealthWarning" then
+				warningLayer = l
+				break
+			end
+		end
+		local warningMag08 = warningLayer and warningLayer.low or 0
+		check(
+			"lowHealthWarning preview scaled proportionally with intensity slider (CR-006)",
+			math.abs(warningMag08 - (warningMag04 * 2)) < 0.001,
+			true
+		)
+
+		Pulse.Engine:StopAll()
+		Pulse.Database:SetTriggerSetting("lowHealthTexture", "intensity", 0.5)
+		local okTexture = Pulse:TestCue("lowHealthTexture")
+		check("Pulse:TestCue('lowHealthTexture') succeeded", okTexture, true)
+		local textureLayer = nil
+		for _, l in ipairs(Pulse.Engine:_DebugLayers()) do
+			if l.name == "lowHealthTexture" then
+				textureLayer = l
+				break
+			end
+		end
+		check("lowHealthTexture layer created on preview", textureLayer ~= nil, true)
+		check(
+			"lowHealthTexture preview scaled by 0.5 intensity (CR-006)",
+			math.abs((textureLayer and textureLayer.low or 0) - (0.7 * 0.5)) < 0.001,
+			true
+		)
+		Pulse.Database:SetTriggerSetting("lowHealthWarning", "intensity", 1.0)
+		Pulse.Database:SetTriggerSetting("lowHealthTexture", "intensity", 1.0)
+		Pulse.Engine:StopAll()
+
+		-- Test 7: CR-018 - Dropdown Mode Preview Respects Cue Intensity
+		local capturedPlayScale = nil
+		local origPlayMode = Pulse.Engine.PlayMode
+		Pulse.Engine.PlayMode = function(self, name, modeID, scale, ...)
+			capturedPlayScale = scale
+			return origPlayMode(self, name, modeID, scale, ...)
+		end
+
+		Pulse.UI.Panel.Popup.OpenList(UIParent, { { value = "TAP", label = "Tap" } }, "TAP", function() end, 0.35)
+		local popupEntry = Pulse.UI.Panel.Popup._DebugEntry(1)
+		check("popup entry 1 exists", popupEntry ~= nil, true)
+		if popupEntry and popupEntry:GetScript("OnClick") then
+			popupEntry:GetScript("OnClick")(popupEntry)
+		end
+		check("dropdown mode selection preview scaled by cue intensity 0.35 (CR-018)", capturedPlayScale, 0.35)
+
+		Pulse.Engine.PlayMode = origPlayMode
 		Pulse.Engine:StopAll()
 	end
 end

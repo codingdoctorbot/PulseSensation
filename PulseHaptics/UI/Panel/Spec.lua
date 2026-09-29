@@ -230,6 +230,9 @@ local function cueModeDropdown(trigger)
 			.. trigger.mode
 			.. '".',
 		options = modeOptions,
+		previewScale = function()
+			return database():GetTriggerSetting(trigger.id, "intensity", trigger.defaultIntensity or 1.0)
+		end,
 		get = function()
 			return database():GetTriggerMode(trigger.id) or trigger.mode
 		end,

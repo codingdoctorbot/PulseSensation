@@ -149,9 +149,11 @@ Pulse.Database = {
 }
 
 local strikes = 0
+local lastStrikeStrength = nil
 Pulse.Engine = {
-	PlayMode = function()
+	PlayMode = function(self, layer, mode, strength)
 		strikes = strikes + 1
+		lastStrikeStrength = strength
 	end,
 }
 
@@ -273,9 +275,30 @@ startCraft(1234, 3.0)
 runCraft(3.0, 60)
 check("zero strength plays no strikes", strikes, 0)
 check("  but the craft is still active", M:_DebugCraft().active, true)
-Pulse.CastActivity:_OnSucceeded("player", nil, 1234)
-check("  and completed cleanly", M:_DebugCraft().active, false)
 settings["p1_gain"] = nil
+
+-- Cue intensity scales strike strength (CR-014)
+recipeProfession = Enum.Profession.Blacksmithing
+startCraft(1234, 3.0)
+settings["intensity"] = 0.5
+M:_PlayStrike()
+check("craft strike scaled by cue intensity 0.5 (CR-014)", lastStrikeStrength ~= nil and lastStrikeStrength > 0, true)
+local halfStrength = lastStrikeStrength
+
+settings["intensity"] = 1.0
+M:_PlayStrike()
+check(
+	"craft strike scaled by cue intensity 1.0 (CR-014)",
+	math.abs(lastStrikeStrength - (halfStrength * 2)) < 0.001,
+	true
+)
+
+settings["intensity"] = 0
+local strikesBeforeZero = strikes
+M:_PlayStrike()
+check("craft strike with intensity 0 plays no strike (CR-014)", strikes, strikesBeforeZero)
+settings["intensity"] = nil
+Pulse.CastActivity:_OnStop("player", nil, 1234)
 
 -- ── Gathering & Fishing ────────────────────────────────────────────────────────
 

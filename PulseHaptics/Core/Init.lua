@@ -273,11 +273,13 @@ function Pulse:TestCue(triggerID)
 		return false, "no such cue"
 	end
 
+	local scale = self.Database:GetTriggerSetting(triggerID, "intensity", trigger.defaultIntensity or 1.0)
+
 	local method = BESPOKE_PREVIEW[triggerID]
 	if method then
 		local health = self.modules.Health
 		if health and health[method] then
-			return health[method](health)
+			return health[method](health, scale)
 		end
 	end
 
@@ -285,8 +287,6 @@ function Pulse:TestCue(triggerID)
 	if not self.Engine:IsDeviceReady() then
 		return false, "no controller detected"
 	end
-
-	local scale = self.Database:GetTriggerSetting(triggerID, "intensity", trigger.defaultIntensity or 1.0)
 
 	if trigger.mode then
 		local modeID = self.Database:GetTriggerMode(triggerID) or trigger.mode
