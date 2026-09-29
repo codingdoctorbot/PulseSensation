@@ -137,7 +137,7 @@ body:SetJustifyV("TOP")
 -- refresh loop just calls the current one again and assigns the result.
 
 local views = {}
-local viewOrder = { "state", "layers", "channels", "log", "modules", "schema" }
+local viewOrder = { "state", "layers", "channels", "log", "cast", "modules", "schema" }
 local currentView = "layers"
 
 local function line(label, value)
@@ -270,24 +270,79 @@ function views.channels(P)
 end
 
 ---------------------------------------------------------------------------
--- Event log (rolling buffer with millisecond capture)
+-- Event log (ring buffer with millisecond capture) & Cast trace
 ---------------------------------------------------------------------------
 
-local eventLog = {}
 local MAX_LOG_ENTRIES = 50
-local lastFiredEvents = {}
+local eventLogRing = {}
+for i = 1, MAX_LOG_ENTRIES do
+	eventLogRing[i] = { time = 0, action = "", id = "", extra = "" }
+end
+local logHead = 0
+local logCount = 0
+
+local MAX_LAST_FIRED = 3
+local lastFiredRing = {}
+for i = 1, MAX_LAST_FIRED do
+	lastFiredRing[i] = { time = 0, action = "", id = "", extra = "" }
+end
+local lastFiredHead = 0
+local lastFiredCount = 0
+
+local MAX_CAST_TRACE_ENTRIES = 50
+local castTraceRing = {}
+for i = 1, MAX_CAST_TRACE_ENTRIES do
+	castTraceRing[i] = {
+		order = 0,
+		time = 0,
+		classification = "",
+		spellID = 0,
+		hasGUID = false,
+		guid = "",
+		duration = 0,
+		extra = "",
+	}
+end
+local castTraceHead = 0
+local castTraceCount = 0
+local castTraceOrder = 0
+
+local HOLD_LOG_GAP = 0.5
+local MAGNITUDE_DELTA_THRESHOLD = 0.05
+local lastHoldTime = {}
+local lastHoldLow = {}
+local lastHoldHigh = {}
+
+local function shouldLogHold(triggerID, low, high, now)
+	local lastTime = lastHoldTime[triggerID]
+	if not lastTime then
+		return true
+	end
+	if (now - lastTime) >= HOLD_LOG_GAP then
+		return true
+	end
+	local l = low or 0
+	local h = high or 0
+	local prevL = lastHoldLow[triggerID] or 0
+	local prevH = lastHoldHigh[triggerID] or 0
+	if math.abs(l - prevL) > MAGNITUDE_DELTA_THRESHOLD or math.abs(h - prevH) > MAGNITUDE_DELTA_THRESHOLD then
+		return true
+	end
+	return false
+end
 
 local function updateStickyHud()
 	if not stickyHudText then
 		return
 	end
-	if #lastFiredEvents == 0 then
+	if lastFiredCount == 0 then
 		stickyHudText:SetText(DIM .. "No cues captured yet. Fire any cue in-game or via action buttons." .. R)
 		return
 	end
 	local lines = {}
-	for i = 1, math.min(#lastFiredEvents, 3) do
-		local ev = lastFiredEvents[i]
+	for i = 1, math.min(lastFiredCount, MAX_LAST_FIRED) do
+		local idx = ((lastFiredHead - i) % MAX_LAST_FIRED) + 1
+		local ev = lastFiredRing[idx]
 		local sec = math.floor(ev.time)
 		local ms = math.floor((ev.time - sec) * 1000)
 		local tStr = string.format("%02d.%03d", sec % 60, ms)
@@ -302,20 +357,69 @@ end
 
 local function recordEvent(action, triggerID, extra)
 	local now = (type(GetTime) == "function") and GetTime() or 0
-	local entry = {
-		time = now,
-		action = action,
-		id = tostring(triggerID or "unknown"),
-		extra = extra and tostring(extra) or "",
-	}
-	table.insert(eventLog, 1, entry)
-	if #eventLog > MAX_LOG_ENTRIES then
-		table.remove(eventLog)
+	logHead = (logHead % MAX_LOG_ENTRIES) + 1
+	local entry = eventLogRing[logHead]
+	entry.time = now
+	entry.action = action
+	entry.id = tostring(triggerID or "unknown")
+	entry.extra = extra and tostring(extra) or ""
+	if logCount < MAX_LOG_ENTRIES then
+		logCount = logCount + 1
 	end
-	table.insert(lastFiredEvents, 1, entry)
-	if #lastFiredEvents > 3 then
-		table.remove(lastFiredEvents)
+
+	lastFiredHead = (lastFiredHead % MAX_LAST_FIRED) + 1
+	local lf = lastFiredRing[lastFiredHead]
+	lf.time = entry.time
+	lf.action = entry.action
+	lf.id = entry.id
+	lf.extra = entry.extra
+	if lastFiredCount < MAX_LAST_FIRED then
+		lastFiredCount = lastFiredCount + 1
 	end
+
+	if updateStickyHud then
+		updateStickyHud()
+	end
+end
+
+local function recordCastTrace(activity)
+	if not activity then
+		return
+	end
+	local now = (type(GetTime) == "function") and GetTime() or 0
+	castTraceOrder = castTraceOrder + 1
+	castTraceHead = (castTraceHead % MAX_CAST_TRACE_ENTRIES) + 1
+	local entry = castTraceRing[castTraceHead]
+	entry.order = castTraceOrder
+	entry.time = now
+	entry.classification = tostring(activity.classification or "UNKNOWN")
+	entry.spellID = activity.spellID or 0
+	entry.hasGUID = activity.castGUID ~= nil and activity.castGUID ~= ""
+	entry.guid = entry.hasGUID and tostring(activity.castGUID) or ""
+	entry.duration = activity.duration or 0
+	local extra = ""
+	if activity.isCrafting then
+		extra = "craft"
+	elseif activity.completed ~= nil then
+		extra = activity.completed and "completed" or "incomplete"
+	end
+	entry.extra = extra
+	if castTraceCount < MAX_CAST_TRACE_ENTRIES then
+		castTraceCount = castTraceCount + 1
+	end
+end
+
+local function clearAllLogs()
+	logHead = 0
+	logCount = 0
+	lastFiredHead = 0
+	lastFiredCount = 0
+	castTraceHead = 0
+	castTraceCount = 0
+	castTraceOrder = 0
+	wipe(lastHoldTime)
+	wipe(lastHoldLow)
+	wipe(lastHoldHigh)
 	if updateStickyHud then
 		updateStickyHud()
 	end
@@ -354,57 +458,102 @@ local function ensureHooks()
 	end
 	if type(P.HoldIfEnabled) == "function" then
 		hooksecurefunc(P, "HoldIfEnabled", function(_, triggerID, low, high, duration)
-			local detail = string.format("L:%.2f H:%.2f (%.2fs)", low or 0, high or 0, duration or 0)
-			recordEvent("HOLD", triggerID, detail)
+			local now = (type(GetTime) == "function") and GetTime() or 0
+			if shouldLogHold(triggerID, low, high, now) then
+				lastHoldTime[triggerID] = now
+				lastHoldLow[triggerID] = low or 0
+				lastHoldHigh[triggerID] = high or 0
+				local detail = string.format("L:%.2f H:%.2f (%.2fs)", low or 0, high or 0, duration or 0)
+				recordEvent("HOLD", triggerID, detail)
+			end
 		end)
 	end
 	if type(P.HoldRolesIfEnabled) == "function" then
 		hooksecurefunc(P, "HoldRolesIfEnabled", function(_, triggerID, _, duration)
-			recordEvent("HOLD", triggerID, string.format("roles (%.2fs)", duration or 0))
+			local now = (type(GetTime) == "function") and GetTime() or 0
+			local lastTime = lastHoldTime[triggerID]
+			if not lastTime or (now - lastTime) >= HOLD_LOG_GAP then
+				lastHoldTime[triggerID] = now
+				recordEvent("HOLD", triggerID, string.format("roles (%.2fs)", duration or 0))
+			end
 		end)
 	end
 	if type(P.Hold) == "function" and P.Hold ~= P.HoldIfEnabled then
 		hooksecurefunc(P, "Hold", function(_, triggerID, low, high, duration)
-			local detail = string.format("L:%.2f H:%.2f (%.2fs)", low or 0, high or 0, duration or 0)
-			recordEvent("HOLD", triggerID, detail)
+			local now = (type(GetTime) == "function") and GetTime() or 0
+			if shouldLogHold(triggerID, low, high, now) then
+				lastHoldTime[triggerID] = now
+				lastHoldLow[triggerID] = low or 0
+				lastHoldHigh[triggerID] = high or 0
+				local detail = string.format("L:%.2f H:%.2f (%.2fs)", low or 0, high or 0, duration or 0)
+				recordEvent("HOLD", triggerID, detail)
+			end
 		end)
 	end
 	if type(P.Stop) == "function" then
 		hooksecurefunc(P, "Stop", function(_, triggerID)
+			if triggerID and triggerID ~= "ALL" then
+				lastHoldTime[triggerID] = nil
+				lastHoldLow[triggerID] = nil
+				lastHoldHigh[triggerID] = nil
+			else
+				wipe(lastHoldTime)
+				wipe(lastHoldLow)
+				wipe(lastHoldHigh)
+			end
 			recordEvent("STOP", triggerID or "ALL", "")
 		end)
 	end
 	if type(P.Engine.PlayMode) == "function" then
 		hooksecurefunc(P.Engine, "PlayMode", function(_, name, modeID, scale)
-			if #eventLog > 0 and eventLog[1].action == "FIRE" and eventLog[1].id == tostring(name) then
-				if modeID then
-					local extra = tostring(modeID) .. (scale and string.format(" @%.2f", scale) or "")
-					eventLog[1].extra = (eventLog[1].extra ~= "" and (eventLog[1].extra .. " ") or "") .. extra
-					if lastFiredEvents[1] and lastFiredEvents[1].id == tostring(name) then
-						lastFiredEvents[1].extra = eventLog[1].extra
+			if logCount > 0 then
+				local newest = eventLogRing[logHead]
+				if newest.action == "FIRE" and newest.id == tostring(name) then
+					if modeID then
+						local extra = tostring(modeID) .. (scale and string.format(" @%.2f", scale) or "")
+						newest.extra = (newest.extra ~= "" and (newest.extra .. " ") or "") .. extra
+						if lastFiredCount > 0 then
+							local lf = lastFiredRing[lastFiredHead]
+							if lf.id == tostring(name) then
+								lf.extra = newest.extra
+							end
+						end
+						if updateStickyHud then
+							updateStickyHud()
+						end
 					end
-					if updateStickyHud then
-						updateStickyHud()
-					end
+					return
 				end
-			else
-				local detail = tostring(modeID or "") .. (scale and string.format(" @%.2f", scale) or "")
-				recordEvent("MODE", name, detail)
 			end
+			local detail = tostring(modeID or "") .. (scale and string.format(" @%.2f", scale) or "")
+			recordEvent("MODE", name, detail)
 		end)
 	end
 	if type(P.Engine.StopAll) == "function" then
 		hooksecurefunc(P.Engine, "StopAll", function()
+			wipe(lastHoldTime)
+			wipe(lastHoldLow)
+			wipe(lastHoldHigh)
 			recordEvent("STOP", "ALL", "")
 		end)
 	end
 	if type(P.Engine.StopLayer) == "function" then
 		hooksecurefunc(P.Engine, "StopLayer", function(_, name)
+			if name then
+				lastHoldTime[name] = nil
+				lastHoldLow[name] = nil
+				lastHoldHigh[name] = nil
+			end
 			recordEvent("STOP", tostring(name or "layer"), "")
 		end)
 	end
 	if type(P.Engine.CancelLayer) == "function" then
 		hooksecurefunc(P.Engine, "CancelLayer", function(_, name)
+			if name then
+				lastHoldTime[name] = nil
+				lastHoldLow[name] = nil
+				lastHoldHigh[name] = nil
+			end
 			recordEvent("CANCEL", tostring(name or "layer"), "")
 		end)
 	end
@@ -414,11 +563,16 @@ local function ensureHooks()
 			recordEvent("RAW", channel, string.format("%.2f (%.2fs)", mag or 0, dur or 0))
 		end)
 	end
+	if P.CastActivity and type(P.CastActivity.OnActivity) == "function" then
+		P.CastActivity:OnActivity(function(activity)
+			recordCastTrace(activity)
+		end)
+	end
 end
 
 function views.log(P)
 	ensureHooks()
-	if #eventLog == 0 then
+	if logCount == 0 then
 		return DIM
 			.. "No haptic events recorded yet this session."
 			.. R
@@ -431,9 +585,46 @@ function views.log(P)
 
 	local out = {}
 	out[#out + 1] = HEAD .. string.format("%-10s %-6s %-24s %s", "time", "act", "cue / channel", "detail") .. R
-	for _, entry in ipairs(eventLog) do
-		local detail = (entry.detail and entry.detail ~= "") and entry.detail or (entry.extra or "")
+	for i = 1, logCount do
+		local idx = ((logHead - i) % MAX_LOG_ENTRIES) + 1
+		local entry = eventLogRing[idx]
+		local detail = (entry.extra and entry.extra ~= "") and entry.extra or ""
 		out[#out + 1] = string.format("%-10.3f %-6s %-24s %s", entry.time, entry.action, entry.id, detail)
+	end
+	return table.concat(out, "\n")
+end
+
+function views.cast(P)
+	ensureHooks()
+	if castTraceCount == 0 then
+		return DIM
+			.. "No cast activity recorded yet this session."
+			.. R
+			.. "\n\n"
+			.. DIM
+			.. "Casts, channels, and trade skills will be traced here"
+			.. "\nwith classification, spellID, GUID presence, and arrival order."
+			.. R
+	end
+
+	local out = {}
+	out[#out + 1] = HEAD
+		.. string.format("%-5s %-10s %-18s %-10s %-8s %s", "#", "time", "classification", "spellID", "guid", "detail")
+		.. R
+	for i = 1, castTraceCount do
+		local idx = ((castTraceHead - i) % MAX_CAST_TRACE_ENTRIES) + 1
+		local entry = castTraceRing[idx]
+		local guidStr = entry.hasGUID and (GOOD .. "yes" .. R) or (DIM .. "no" .. R)
+		local durStr = (entry.duration > 0) and string.format("%.2fs", entry.duration) or (entry.extra or "")
+		out[#out + 1] = string.format(
+			"%-5d %-10.3f %-18s %-10d %-8s %s",
+			entry.order,
+			entry.time,
+			entry.classification,
+			entry.spellID,
+			guidStr,
+			durStr
+		)
 	end
 	return table.concat(out, "\n")
 end
@@ -611,6 +802,7 @@ local BUTTON_LABEL = {
 	layers = "Layers",
 	channels = "Channels",
 	log = "Log",
+	cast = "Cast Trace",
 	modules = "Modules",
 	schema = "Schema",
 }
@@ -618,7 +810,7 @@ local BUTTON_LABEL = {
 local previous
 for _, id in ipairs(viewOrder) do
 	local button = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
-	button:SetSize(94, 22)
+	button:SetSize(82, 22)
 	button:SetText(BUTTON_LABEL[id])
 	if previous then
 		button:SetPoint("LEFT", previous, "RIGHT", 6, 0)
@@ -739,12 +931,8 @@ btnClear:SetSize(46, 20)
 btnClear:SetPoint("RIGHT", btnHold, "LEFT", -4, 0)
 btnClear:SetText("Clear")
 btnClear:SetScript("OnClick", function()
-	wipe(eventLog)
+	clearAllLogs()
 	wipe(channelPeaks)
-	wipe(lastFiredEvents)
-	if updateStickyHud then
-		updateStickyHud()
-	end
 	render()
 end)
 attachTooltip(btnClear, "Clear rolling event log, sticky HUD, and channel peaks")
@@ -777,10 +965,9 @@ local function Toggle()
 	frame:Show()
 end
 
--- Hook early if Pulse is already available
-if core() then
+frame:SetScript("OnShow", function()
 	ensureHooks()
-end
+end)
 
 -- Debug.lua's `commands` table is a local, so the slash command there resolves this at call
 -- time through the global rather than the two files sharing a namespace.
@@ -796,11 +983,7 @@ _G.PulseDebugUI = {
 		frame:Show()
 	end,
 	ClearLog = function()
-		wipe(eventLog)
-		wipe(lastFiredEvents)
-		if updateStickyHud then
-			updateStickyHud()
-		end
+		clearAllLogs()
 		render()
 	end,
 	ResetPeaks = function()

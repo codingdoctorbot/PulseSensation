@@ -87,6 +87,7 @@ function commands.help()
 	row("/pdebug schema", "the active schema's role-to-channel map")
 	row("/pdebug ui", "open the window: same readouts, with a live 10Hz refresh")
 	row("/pdebug log", "open the window directly to the rolling event log")
+	row("/pdebug cast", "open the window directly to the cast trace log")
 	row("/pdebug clear", "clear the debug event log and channel peak history")
 end
 
@@ -404,6 +405,15 @@ function commands.log()
 		return
 	end
 	ui.Show("log")
+end
+
+function commands.cast()
+	local ui = _G.PulseDebugUI
+	if not ui then
+		out(BAD .. "UI.lua is not loaded." .. R)
+		return
+	end
+	ui.Show("cast")
 end
 
 function commands.clear()

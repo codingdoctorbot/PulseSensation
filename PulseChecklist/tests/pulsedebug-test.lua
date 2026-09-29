@@ -245,7 +245,23 @@ local fakeState = {
 	cancelledLayer = nil,
 }
 
+local fakeCastListeners = {}
+local fakeCastActivity = {
+	OnActivity = function(self, callback)
+		fakeCastListeners[#fakeCastListeners + 1] = callback
+	end,
+	Emit = function(self, activity)
+		for _, cb in ipairs(fakeCastListeners) do
+			cb(activity)
+		end
+	end,
+	_DebugActive = function()
+		return { active = true, pendingCasts = 0 }
+	end,
+}
+
 local fakePulse = {
+	CastActivity = fakeCastActivity,
 	FireIfEnabled = function(self, triggerID, intensityOverride)
 		self.Engine:PlayMode(triggerID, "THUD", 1.0, intensityOverride)
 	end,
@@ -332,7 +348,12 @@ local fakePulse = {
 			fakeState.playedModes[#fakeState.playedModes + 1] = mode
 		end,
 		Hold = function(_, name, low, high, dur)
-			fakeState.heldLayers[#fakeState.heldLayers + 1] = { name = name, low = low, high = high, dur = dur }
+			local h = fakeState.heldLayers[1]
+			if not h then
+				h = {}
+				fakeState.heldLayers[1] = h
+			end
+			h.name, h.low, h.high, h.dur = name, low, high, dur
 		end,
 		HoldRoles = function(_, name, roles, dur)
 			fakeState.heldRoles[#fakeState.heldRoles + 1] = { name = name, roles = roles, dur = dur }
@@ -414,6 +435,7 @@ local EXPECTED = {
 	{ "layers", "swimTexture" },
 	{ "channels", "Low" },
 	{ "log", "haptic events" },
+	{ "cast", "cast activity" },
 	{ "modules", "cadence" },
 	{ "schema", "standard" },
 }
@@ -468,6 +490,66 @@ _G.PulseDebugUI.ClearLog()
 clearText()
 _G.PulseDebugUI.Show("log")
 check("clear log empties buffer after hooks", contains(renderedText(), "No haptic events recorded"), true)
+
+-- ── Debouncing and Cast Trace (CR-016) ──────────────────────────────────────
+io.write("\n--- debounce & cast trace (CR-016) ---\n")
+
+-- Continuous hold: 100 calls with constant parameters should be debounced to 1 entry
+for _ = 1, 100 do
+	fakePulse:HoldIfEnabled("swimming", 0.35, 0.45, 1.2)
+end
+clearText()
+_G.PulseDebugUI.Show("log")
+local _, swimCount1 = renderedText():gsub("HOLD%s+swimming", "")
+check("continuous hold debounced to 1 entry across 100 calls", swimCount1, 1)
+
+-- Magnitude delta > 0.05 records new entry
+fakePulse:HoldIfEnabled("swimming", 0.70, 0.45, 1.2)
+clearText()
+_G.PulseDebugUI.Show("log")
+local _, swimCount2 = renderedText():gsub("HOLD%s+swimming", "")
+check("magnitude delta > 0.05 records new entry", swimCount2, 2)
+
+-- Stop clears debounce so subsequent hold records immediately
+fakePulse:Stop("swimming")
+fakePulse:HoldIfEnabled("swimming", 0.70, 0.45, 1.2)
+clearText()
+_G.PulseDebugUI.Show("log")
+local _, swimCount3 = renderedText():gsub("HOLD%s+swimming", "")
+check("hold after stop records new entry", swimCount3, 3)
+
+-- Zero-GC during continuous holds (Rule 4 / CR-016)
+collectgarbage("collect")
+local memBefore = collectgarbage("count")
+for _ = 1, 100 do
+	fakePulse:HoldIfEnabled("swimming", 0.70, 0.45, 1.2)
+end
+local memAfter = collectgarbage("count")
+local memDiff = memAfter - memBefore
+check("continuous hold allocates negligible garbage (< 10 KB across 100 ticks)", memDiff < 10.0, true)
+
+-- Cast trace records semantic classifications
+fakeCastActivity:Emit({
+	classification = "CAST_START",
+	spellID = 133,
+	castGUID = "cast-guid-123",
+})
+fakeCastActivity:Emit({
+	classification = "CHANNEL_START",
+	spellID = 5143,
+})
+clearText()
+_G.PulseDebugUI.Show("cast")
+check("cast trace captures CAST_START", contains(renderedText(), "CAST_START"), true)
+check("  and displays spellID 133", contains(renderedText(), "133"), true)
+check("  and shows GUID present", contains(renderedText(), "yes"), true)
+check("cast trace captures CHANNEL_START", contains(renderedText(), "CHANNEL_START"), true)
+check("  and displays spellID 5143", contains(renderedText(), "5143"), true)
+
+_G.PulseDebugUI.ClearLog()
+clearText()
+_G.PulseDebugUI.Show("cast")
+check("ClearLog empties cast trace", contains(renderedText(), "No cast activity recorded"), true)
 
 -- ── Action buttons ────────────────────────────────────────────────────────────
 io.write("\n--- action buttons ---\n")
