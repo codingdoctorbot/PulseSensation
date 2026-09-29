@@ -1672,6 +1672,14 @@ do
 			end
 		end
 
+		-- Test SetAllCues (disable all and enable all in one sweep)
+		local countDisabled = Pulse.Database:SetAllCues(false)
+		check("SetAllCues(false) modified all cues", countDisabled > 150, true)
+		check("random cue is false after SetAllCues(false)", Pulse.Database:GetCue("critLanded"), false)
+		local countEnabled = Pulse.Database:SetAllCues(true)
+		check("SetAllCues(true) modified all cues", countEnabled > 150, true)
+		check("random cue is true after SetAllCues(true)", Pulse.Database:GetCue("critLanded"), true)
+
 		Pulse.Engine:StopAll()
 	end
 end

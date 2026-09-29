@@ -1,0 +1,10 @@
+## Interface: 120100, 110200, 110100
+## Title: Pulse Profile Review
+## Notes: Review which cues belong in each Pulse profile without changing Pulse settings.
+## Author: PulseSensation
+## Version: 0.1.0-prototype
+## Dependencies: PulseHaptics
+## SavedVariables: PulseProfileReviewDB
+## IconTexture: Interface\Icons\INV_Misc_Note_01
+
+Review.lua

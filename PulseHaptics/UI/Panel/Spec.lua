@@ -726,6 +726,28 @@ function Spec.BuildCueIndexPage()
 				#entries
 			),
 		},
+		{
+			kind = "button",
+			label = "Enable all cues",
+			buttonText = "Enable All",
+			tooltip = "Enable every vibration cue in the active profile in one sweep for testing and debugging.",
+			onClick = function()
+				local count = database():SetAllCues(true)
+				print(("Pulse: enabled all %d cues in active profile."):format(count))
+				Panel.Refresh()
+			end,
+		},
+		{
+			kind = "button",
+			label = "Disable all cues",
+			buttonText = "Disable All",
+			tooltip = "Disable every vibration cue in the active profile in one sweep for quiet testing or building a profile from scratch.",
+			onClick = function()
+				local count = database():SetAllCues(false)
+				print(("Pulse: disabled all %d cues in active profile."):format(count))
+				Panel.Refresh()
+			end,
+		},
 	}
 
 	local currentLetter = nil
@@ -1023,6 +1045,30 @@ function Spec.BuildProfilesPage()
 					report(store:ResetProfileToDefaults(name))
 				end
 			)
+		end,
+	}
+
+	rows[#rows + 1] = {
+		kind = "button",
+		label = "Enable all cues in profile",
+		buttonText = "Enable All",
+		tooltip = "Turn on every cue in the active profile in one sweep (useful for testing/debugging).",
+		onClick = function()
+			local count = store:SetAllCues(true)
+			print(("Pulse: enabled all %d cues in profile %s."):format(count, store:GetActiveProfileName()))
+			Panel.Refresh()
+		end,
+	}
+
+	rows[#rows + 1] = {
+		kind = "button",
+		label = "Disable all cues in profile",
+		buttonText = "Disable All",
+		tooltip = "Turn off every cue in the active profile in one sweep (useful for quiet debugging).",
+		onClick = function()
+			local count = store:SetAllCues(false)
+			print(("Pulse: disabled all %d cues in profile %s."):format(count, store:GetActiveProfileName()))
+			Panel.Refresh()
 		end,
 	}
 

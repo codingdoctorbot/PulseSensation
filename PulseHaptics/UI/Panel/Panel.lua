@@ -549,6 +549,30 @@ local function slashHandler(message)
 		return
 	end
 
+	if command == "enableall" then
+		local db = Pulse.Database
+		if db and db.SetAllCues then
+			local count = db:SetAllCues(true)
+			print(('Pulse: enabled all %d cues in profile "%s".'):format(count, db:GetActiveProfileName()))
+			if Panel.Refresh then
+				Panel.Refresh()
+			end
+		end
+		return
+	end
+
+	if command == "disableall" then
+		local db = Pulse.Database
+		if db and db.SetAllCues then
+			local count = db:SetAllCues(false)
+			print(('Pulse: disabled all %d cues in profile "%s".'):format(count, db:GetActiveProfileName()))
+			if Panel.Refresh then
+				Panel.Refresh()
+			end
+		end
+		return
+	end
+
 	if command == "profile" then
 		local target = strtrim(rest or "")
 		local db = Pulse.Database
