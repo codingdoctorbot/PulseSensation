@@ -10,9 +10,9 @@ PulseHaptics turns game events into tactile feedback designed to complement what
 
 ## 🎮 Features
 
-### 200+ Haptic Cues
+### 190 Haptic Cues
 
-A rich collection of customizable cues (202 distinct triggers) covering:
+A rich collection of customizable cues (190 distinct triggers) covering:
 
 *   Combat and impacts
 *   Damage and healing
@@ -25,7 +25,7 @@ A rich collection of customizable cues (202 distinct triggers) covering:
 *   Accessibility-focused feedback
 *   And more
 
-### 36 Haptic Modes
+### 35 Haptic Modes
 
 A reusable library of distinct vibration patterns, including:
 
@@ -74,7 +74,7 @@ Test haptic modes and individual cues directly from the Pulse interface.
 Additional companion tools are included in the developer suite for debugging and tracking which cues have been confirmed in-game:
 
 *   **PulseDebug** — live event and cue troubleshooting (`/pdebug`)
-*   **PulseChecklist** — in-game testing and verification checklist for all 202 triggers (`/pcheck`)
+*   **PulseChecklist** — in-game testing and verification checklist for all 190 triggers (`/pcheck`)
 
 ---
 
@@ -117,7 +117,7 @@ Install the addon into your `Interface/AddOns/` directory:
 | `/pulse profile [name]` | Inspect or switch the active profile. |
 | `/pulse debug` | Toggle verbose logging and view engine error diagnostics. |
 | `/pdebug` *(PulseDebug)* | Open the real-time diagnostic HUD. |
-| `/pcheck` *(PulseChecklist)* | Open the cue verification checklist (all 202 cues). |
+| `/pcheck` *(PulseChecklist)* | Open the cue verification checklist (all 190 cues). |
 | `/pcheck export` *(PulseChecklist)* | Generate a markdown QA report to copy to clipboard. |
 | `/pcheck import` *(PulseChecklist)* | Restore statuses and notes from a previous export. |
 

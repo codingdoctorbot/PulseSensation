@@ -69,7 +69,7 @@ Make sure your gamepad is turned on and try these chat commands to feel your con
 - `/pulse test surge` — Powerful magical energy surge
 
 ### 4. Customization
-Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open the settings window with **over 1,000 interactive controls across 202 distinct triggers and 21 categories**.
+Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open the settings window with **over 1,000 interactive controls across 190 distinct triggers and 16 active categories**.
 
 ---
 
@@ -83,7 +83,7 @@ Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open 
 | `/pulse minimap` | Toggle the minimap button on or off. |
 | `/pulse debug` | Toggle verbose console logging and view engine error diagnostics. |
 | `/pdebug` *(PulseDebug)* | Open the real-time diagnostic and troubleshooting HUD. |
-| `/pcheck` *(PulseChecklist)* | Open the in-game cue verification checklist (all 202 cues). |
+| `/pcheck` *(PulseChecklist)* | Open the in-game cue verification checklist (all 190 cues). |
 | `/pcheck export` *(PulseChecklist)* | Generate a markdown QA status report you can copy to clipboard. |
 | `/pcheck import` *(PulseChecklist)* | Open the import dialog to restore cue verification statuses. |
 | `/console GamePadEnable 1` | Ensure Blizzard gamepad engine subsystem is enabled. |
@@ -97,9 +97,9 @@ PulseSensation is distributed as both a standalone release and a developer suite
 
 | Component | In Standalone ZIP? | Purpose |
 |:---|:---:|:---|
-| **`PulseHaptics`** | ✅ **Yes** | The core haptic engine, 202 authored triggers, 22 module watchers, custom settings UI, and profile manager. |
+| **`PulseHaptics`** | ✅ **Yes** | The core haptic engine, 190 authored triggers, 22 module watchers, custom settings UI, and profile manager. |
 | **`PulseDebug`** | 📦 *Suite ZIP* | Developer & troubleshooting window for real-time channel introspection and trigger auditing (`/pdebug`). |
-| **`PulseChecklist`** | 📦 *Suite ZIP* | In-game QA tracking checklist for all 202 cues with markdown import/export (`/pcheck`). |
+| **`PulseChecklist`** | 📦 *Suite ZIP* | In-game QA tracking checklist for all 190 cues with markdown import/export (`/pcheck`). |
 
 ---
 

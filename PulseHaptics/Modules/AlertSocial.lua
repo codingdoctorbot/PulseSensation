@@ -9,7 +9,7 @@ local ADDON_NAME, Pulse = ...
 local M = {}
 Pulse:RegisterModule("AlertSocial", M)
 
-local CUSTOM = { bgQueue = true, pingPinAdded = true }
+local CUSTOM = { ["bgQueue"] = true, ["pingPinAdded"] = true }
 local wasConfirming = {} -- queue index -> was this queue in the ready-to-enter state
 
 function M:OnEnable()

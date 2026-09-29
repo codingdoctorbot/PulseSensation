@@ -8,7 +8,7 @@
 -- GetCategoryLabel — all already relied on there, not new).
 --
 -- A genuinely custom frame, not the native Settings API this whole addon family otherwise
--- sticks to: a per-row free-text comment field at ~103 rows is exactly the thing Settings
+-- sticks to: a per-row free-text comment field at ~190 rows is exactly the thing Settings
 -- has no widget for, and this tool has no reason to inherit Pulse's own "stay native, look
 -- like Blizzard's own panel" constraint since nobody but the developer ever opens it.
 --
@@ -183,7 +183,7 @@ end
 --
 -- The table stays ACCOUNT-WIDE on purpose: "does swimTexture fire" is a fact about the
 -- addon and the client build, not about who is logged in, and per-character storage would
--- mean re-testing all 110 cues on every alt.
+-- mean re-testing all 190 cues on every alt.
 --
 -- But some cues can only be reached by particular characters — autoShotFired is
 -- Hunter-only (Registry.lua says so in its own caveat), combo points need a rogue or

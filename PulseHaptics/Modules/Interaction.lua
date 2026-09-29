@@ -34,11 +34,11 @@ local CLOSED_CUE = "interactionWindowClosed"
 -- the pattern Modules/Crafting.lua and Modules/Locomotion.lua use. Values CONFIRMED against
 -- PlayerInteractionManagerConstantsDocumentation.lua.
 local function interactionType(name, literal)
-    local value = Enum and Enum.PlayerInteractionType and Enum.PlayerInteractionType[name]
-    if type(value) == "number" then
-        return value
-    end
-    return literal
+	local value = Enum and Enum.PlayerInteractionType and Enum.PlayerInteractionType[name]
+	if type(value) == "number" then
+		return value
+	end
+	return literal
 end
 
 -- interaction type -> cue id. Several types share a cue: a vendor is a merchant, and three
@@ -46,9 +46,9 @@ end
 local TYPE_CUE = {}
 
 local function map(cueID, ...)
-    for _, pair in ipairs({ ... }) do
-        TYPE_CUE[interactionType(pair[1], pair[2])] = cueID
-    end
+	for _, pair in ipairs({ ... }) do
+		TYPE_CUE[interactionType(pair[1], pair[2])] = cueID
+	end
 end
 
 -- Already had cues, already had legacy watchers. Mapped here so they fire on whichever
@@ -71,35 +71,35 @@ map("stableShow", { "StableMaster", 22 }, { "PetUntrainer", 80 })
 map("binderShow", { "Binder", 20 })
 
 local BANK_INTERACTIONS = {
-    [8] = true,
-    [67] = true,
-    [68] = true,
-    [10] = true,
-    [26] = true,
+	[8] = true,
+	[67] = true,
+	[68] = true,
+	[10] = true,
+	[26] = true,
 }
 
 -- Every cue this module can fire, so sync knows whether to register at all.
 local WATCHED = {
-    GENERIC_CUE,
-    CLOSED_CUE,
-    "merchantBuy",
-    "merchantSell",
-    "merchantRepair",
-    "bankClosed",
-    "bankGold",
-    "stackSplit",
+	GENERIC_CUE,
+	CLOSED_CUE,
+	"merchantBuy",
+	"merchantSell",
+	"merchantRepair",
+	"bankClosed",
+	"bankGold",
+	"stackSplit",
 }
 do
-    local seen = {}
-    for _, cueID in ipairs(WATCHED) do
-        seen[cueID] = true
-    end
-    for _, cueID in pairs(TYPE_CUE) do
-        if not seen[cueID] then
-            seen[cueID] = true
-            WATCHED[#WATCHED + 1] = cueID
-        end
-    end
+	local seen = {}
+	for _, cueID in ipairs(WATCHED) do
+		seen[cueID] = true
+	end
+	for _, cueID in pairs(TYPE_CUE) do
+		if not seen[cueID] then
+			seen[cueID] = true
+			WATCHED[#WATCHED + 1] = cueID
+		end
+	end
 end
 
 -- Events & State
@@ -112,176 +112,177 @@ local lastBankMoney = 0
 local wasRepair = false
 
 local function onShow(interaction)
-    if type(interaction) ~= "number" then
-        return
-    end
+	if type(interaction) ~= "number" then
+		return
+	end
 
-    if interaction == 5 or interaction == 12 then
-        inMerchant = true
-        local money = (GetMoney and GetMoney()) or 0
-        lastMerchantMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
-        wasRepair = false
-    elseif BANK_INTERACTIONS[interaction] then
-        inBank = true
-        local money = (GetMoney and GetMoney()) or 0
-        lastBankMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
-    end
+	if interaction == 5 or interaction == 12 then
+		inMerchant = true
+		local money = (GetMoney and GetMoney()) or 0
+		lastMerchantMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
+		wasRepair = false
+	elseif BANK_INTERACTIONS[interaction] then
+		inBank = true
+		local money = (GetMoney and GetMoney()) or 0
+		lastBankMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
+	end
 
-    local cueID = TYPE_CUE[interaction] or GENERIC_CUE
+	local cueID = TYPE_CUE[interaction] or GENERIC_CUE
 
-    if Pulse.debug then
-        print(
-            ("Pulse: interaction window %d -> %s%s"):format(
-                interaction,
-                cueID,
-                TYPE_CUE[interaction] and "" or " (unmapped, generic)"
-            )
-        )
-    end
+	if Pulse.debug then
+		print(
+			("Pulse: interaction window %d -> %s%s"):format(
+				interaction,
+				cueID,
+				TYPE_CUE[interaction] and "" or " (unmapped, generic)"
+			)
+		)
+	end
 
-    Pulse:FireIfEnabled(cueID)
+	Pulse:FireIfEnabled(cueID)
 end
 
 local function onHide(interaction)
-    if Pulse.debug and type(interaction) == "number" then
-        print(("Pulse: interaction window %d closed"):format(interaction))
-    end
+	if Pulse.debug and type(interaction) == "number" then
+		print(("Pulse: interaction window %d closed"):format(interaction))
+	end
 
-    if type(interaction) == "number" then
-        if interaction == 5 or interaction == 12 then
-            inMerchant = false
-            wasRepair = false
-        elseif BANK_INTERACTIONS[interaction] then
-            inBank = false
-            Pulse:FireIfEnabled("bankClosed")
-        end
-    end
+	if type(interaction) == "number" then
+		if interaction == 5 or interaction == 12 then
+			inMerchant = false
+			wasRepair = false
+		elseif BANK_INTERACTIONS[interaction] then
+			inBank = false
+			Pulse:FireIfEnabled("bankClosed")
+		end
+	end
 
-    Pulse:FireIfEnabled(CLOSED_CUE)
+	Pulse:FireIfEnabled(CLOSED_CUE)
 end
 
 frame:SetScript("OnEvent", function(_, event, arg1)
-    if event == "PLAYER_INTERACTION_MANAGER_FRAME_SHOW" then
-        onShow(arg1)
-    elseif event == "PLAYER_INTERACTION_MANAGER_FRAME_HIDE" then
-        onHide(arg1)
-    elseif event == "MERCHANT_SHOW" then
-        inMerchant = true
-        lastMerchantMoney = (GetMoney and GetMoney()) or 0
-        wasRepair = false
-    elseif event == "MERCHANT_CLOSED" then
-        inMerchant = false
-        wasRepair = false
-    elseif event == "UPDATE_INVENTORY_DURABILITY" then
-        if inMerchant then
-            wasRepair = true
-            Pulse:FireIfEnabled("merchantRepair")
-        end
-    elseif event == "PLAYER_MONEY" then
-        if inMerchant then
-            local current = (GetMoney and GetMoney()) or 0
-            if not issecretvalue(current) and type(current) == "number" then
-                local delta = current - lastMerchantMoney
-                lastMerchantMoney = current
-                if wasRepair then
-                    wasRepair = false
-                elseif delta > 0 then
-                    Pulse:FireIfEnabled("merchantSell")
-                elseif delta < 0 then
-                    Pulse:FireIfEnabled("merchantBuy")
-                end
-            end
-        elseif inBank then
-            local current = (GetMoney and GetMoney()) or 0
-            if not issecretvalue(current) and type(current) == "number" then
-                local delta = current - lastBankMoney
-                lastBankMoney = current
-                if delta ~= 0 then
-                    Pulse:FireIfEnabled("bankGold")
-                end
-            end
-        end
-    elseif event == "BANKFRAME_OPENED" or event == "GUILDBANKFRAME_OPENED" then
-        inBank = true
-        local money = (GetMoney and GetMoney()) or 0
-        lastBankMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
-    elseif event == "BANKFRAME_CLOSED" or event == "GUILDBANKFRAME_CLOSED" then
-        inBank = false
-        Pulse:FireIfEnabled("bankClosed")
-    elseif event == "GUILDBANK_UPDATE_MONEY" then
-        Pulse:FireIfEnabled("bankGold")
-    end
+	if event == "PLAYER_INTERACTION_MANAGER_FRAME_SHOW" then
+		onShow(arg1)
+	elseif event == "PLAYER_INTERACTION_MANAGER_FRAME_HIDE" then
+		onHide(arg1)
+	elseif event == "MERCHANT_SHOW" then
+		inMerchant = true
+		local money = (GetMoney and GetMoney()) or 0
+		lastMerchantMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
+		wasRepair = false
+	elseif event == "MERCHANT_CLOSED" then
+		inMerchant = false
+		wasRepair = false
+	elseif event == "UPDATE_INVENTORY_DURABILITY" then
+		if inMerchant then
+			wasRepair = true
+			Pulse:FireIfEnabled("merchantRepair")
+		end
+	elseif event == "PLAYER_MONEY" then
+		if inMerchant then
+			local current = (GetMoney and GetMoney()) or 0
+			if not issecretvalue(current) and type(current) == "number" then
+				local delta = current - lastMerchantMoney
+				lastMerchantMoney = current
+				if wasRepair then
+					wasRepair = false
+				elseif delta > 0 then
+					Pulse:FireIfEnabled("merchantSell")
+				elseif delta < 0 then
+					Pulse:FireIfEnabled("merchantBuy")
+				end
+			end
+		elseif inBank then
+			local current = (GetMoney and GetMoney()) or 0
+			if not issecretvalue(current) and type(current) == "number" then
+				local delta = current - lastBankMoney
+				lastBankMoney = current
+				if delta ~= 0 then
+					Pulse:FireIfEnabled("bankGold")
+				end
+			end
+		end
+	elseif event == "BANKFRAME_OPENED" or event == "GUILDBANKFRAME_OPENED" then
+		inBank = true
+		local money = (GetMoney and GetMoney()) or 0
+		lastBankMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
+	elseif event == "BANKFRAME_CLOSED" or event == "GUILDBANKFRAME_CLOSED" then
+		inBank = false
+		Pulse:FireIfEnabled("bankClosed")
+	elseif event == "GUILDBANK_UPDATE_MONEY" then
+		Pulse:FireIfEnabled("bankGold")
+	end
 end)
 
 local function sync()
-    frame:UnregisterAllEvents()
-    inMerchant = false
-    inBank = false
-    wasRepair = false
-    if not Pulse.Database:Get("masterEnabled") then
-        return
-    end
+	frame:UnregisterAllEvents()
+	inMerchant = false
+	inBank = false
+	wasRepair = false
+	if not Pulse.Database:Get("masterEnabled") then
+		return
+	end
 
-    local any = false
-    for _, cueID in ipairs(WATCHED) do
-        if Pulse.Database:GetCue(cueID) then
-            any = true
-            break
-        end
-    end
-    if not any then
-        return
-    end
+	local any = false
+	for _, cueID in ipairs(WATCHED) do
+		if Pulse.Database:GetCue(cueID) then
+			any = true
+			break
+		end
+	end
+	if not any then
+		return
+	end
 
-    -- Interaction manager events
-    pcall(frame.RegisterEvent, frame, "PLAYER_INTERACTION_MANAGER_FRAME_SHOW")
-    pcall(frame.RegisterEvent, frame, "PLAYER_INTERACTION_MANAGER_FRAME_HIDE")
+	-- Interaction manager events
+	pcall(frame.RegisterEvent, frame, "PLAYER_INTERACTION_MANAGER_FRAME_SHOW")
+	pcall(frame.RegisterEvent, frame, "PLAYER_INTERACTION_MANAGER_FRAME_HIDE")
 
-    -- Merchant physics
-    local wantMerchantPhysics = Pulse.Database:GetCue("merchantBuy")
-        or Pulse.Database:GetCue("merchantSell")
-        or Pulse.Database:GetCue("merchantRepair")
-    if wantMerchantPhysics then
-        pcall(frame.RegisterEvent, frame, "MERCHANT_SHOW")
-        pcall(frame.RegisterEvent, frame, "MERCHANT_CLOSED")
-        pcall(frame.RegisterEvent, frame, "PLAYER_MONEY")
-        pcall(frame.RegisterEvent, frame, "UPDATE_INVENTORY_DURABILITY")
-    end
+	-- Merchant physics
+	local wantMerchantPhysics = Pulse.Database:GetCue("merchantBuy")
+		or Pulse.Database:GetCue("merchantSell")
+		or Pulse.Database:GetCue("merchantRepair")
+	if wantMerchantPhysics then
+		pcall(frame.RegisterEvent, frame, "MERCHANT_SHOW")
+		pcall(frame.RegisterEvent, frame, "MERCHANT_CLOSED")
+		pcall(frame.RegisterEvent, frame, "PLAYER_MONEY")
+		pcall(frame.RegisterEvent, frame, "UPDATE_INVENTORY_DURABILITY")
+	end
 
-    -- Bank close latch & gold transfers
-    local wantBank = Pulse.Database:GetCue("bankClosed") or Pulse.Database:GetCue("bankGold")
-    if wantBank then
-        pcall(frame.RegisterEvent, frame, "BANKFRAME_OPENED")
-        pcall(frame.RegisterEvent, frame, "BANKFRAME_CLOSED")
-        pcall(frame.RegisterEvent, frame, "GUILDBANKFRAME_OPENED")
-        pcall(frame.RegisterEvent, frame, "GUILDBANKFRAME_CLOSED")
-    end
-    if Pulse.Database:GetCue("bankGold") then
-        pcall(frame.RegisterEvent, frame, "PLAYER_MONEY")
-        pcall(frame.RegisterEvent, frame, "GUILDBANK_UPDATE_MONEY")
-    end
+	-- Bank close latch & gold transfers
+	local wantBank = Pulse.Database:GetCue("bankClosed") or Pulse.Database:GetCue("bankGold")
+	if wantBank then
+		pcall(frame.RegisterEvent, frame, "BANKFRAME_OPENED")
+		pcall(frame.RegisterEvent, frame, "BANKFRAME_CLOSED")
+		pcall(frame.RegisterEvent, frame, "GUILDBANKFRAME_OPENED")
+		pcall(frame.RegisterEvent, frame, "GUILDBANKFRAME_CLOSED")
+	end
+	if Pulse.Database:GetCue("bankGold") then
+		pcall(frame.RegisterEvent, frame, "PLAYER_MONEY")
+		pcall(frame.RegisterEvent, frame, "GUILDBANK_UPDATE_MONEY")
+	end
 end
 
 function M:OnEnable()
-    Pulse:BindFrame(WATCHED, sync)
-    if StackSplitFrame and type(StackSplitFrame.UpdateStackText) == "function" then
-        hooksecurefunc(StackSplitFrame, "UpdateStackText", function()
-            Pulse:FireIfEnabled("stackSplit")
-        end)
-    end
+	Pulse:BindFrame(WATCHED, sync)
+	if StackSplitFrame and type(StackSplitFrame.UpdateStackText) == "function" then
+		hooksecurefunc(StackSplitFrame, "UpdateStackText", function()
+			Pulse:FireIfEnabled("stackSplit")
+		end)
+	end
 end
 
 -- Reach-in for PulseDebug, read-only.
 function M:_DebugInteraction()
-    local mapped = 0
-    for _ in pairs(TYPE_CUE) do
-        mapped = mapped + 1
-    end
-    return {
-        mappedTypes = mapped,
-        watchedCues = #WATCHED,
-        inMerchant = inMerchant,
-        inBank = inBank,
-        wasRepair = wasRepair,
-    }
+	local mapped = 0
+	for _ in pairs(TYPE_CUE) do
+		mapped = mapped + 1
+	end
+	return {
+		mappedTypes = mapped,
+		watchedCues = #WATCHED,
+		inMerchant = inMerchant,
+		inBank = inBank,
+		wasRepair = wasRepair,
+	}
 end

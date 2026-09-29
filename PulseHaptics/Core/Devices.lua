@@ -353,12 +353,12 @@ local NAME_PATTERNS = {
 	{ "pro controller", "switchpro" },
 	{ "joy-con", "switchpro" },
 	{ "elite", "xbox_elite" },
-	{ "xbox", "xbox" },
-	{ "xinput", "xbox" },
 	{ "8bitdo", "8bitdo" },
 	{ "sn30", "8bitdo" },
 	{ "pro 2", "8bitdo" },
 	{ "ultimate", "8bitdo" },
+	{ "xbox", "xbox" },
+	{ "xinput", "xbox" },
 }
 
 -- USB vendor ids. Well established and unlikely to move.

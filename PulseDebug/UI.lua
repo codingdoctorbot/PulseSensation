@@ -898,7 +898,7 @@ btnThud:SetScript("OnClick", function()
 	end
 	render()
 end)
-attachTooltip(btnThud, "Play heavy 40ms THUD transient")
+attachTooltip(btnThud, "Play heavy 160ms THUD transient")
 
 local btnTick = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
 btnTick:SetSize(42, 20)
@@ -913,7 +913,7 @@ btnTick:SetScript("OnClick", function()
 	end
 	render()
 end)
-attachTooltip(btnTick, "Play sharp 12ms TICK transient")
+attachTooltip(btnTick, "Play sharp 50ms TICK transient")
 
 local btnHold = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
 btnHold:SetSize(62, 20)

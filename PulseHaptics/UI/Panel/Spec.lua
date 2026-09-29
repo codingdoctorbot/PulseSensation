@@ -453,9 +453,9 @@ function Spec.BuildRootPage()
 		kind = "checkbox",
 		label = "Show per-cue detail controls",
 		tooltip = 'Adds each cue\'s own intensity slider, "Feels like" shape picker and any '
-			.. "bespoke dials to its page. Off by default: a shorter list is easier to read "
-			.. "when you just want to switch cues on and off. Takes effect immediately in "
-			.. "this panel — no /reload needed.",
+			.. "bespoke dials to its page. On by default: uncheck for a compact one-line list "
+			.. "that is easier to read when you just want to switch cues on and off. Takes "
+			.. "effect immediately in this panel — no /reload needed.",
 		get = function()
 			return store:Get("showAdvancedCueControls")
 		end,
@@ -1656,7 +1656,13 @@ function Spec.BuildCalibrationPage()
 			function()
 				return Pulse.Engine:RampChannel(channel)
 			end,
-			"Climbs this motor slowly from silence to half power over eight seconds, "
+			string.format(
+				"Climbs this motor slowly from silence to %d%% power over %d seconds, ",
+				math.floor((Pulse.RAMP_PEAK or 0.40) * 100 + 0.5),
+				math.floor(
+					((Pulse.RAMP_PEAK or 0.40) / (Pulse.RAMP_STEP or 0.01)) * (Pulse.RAMP_STEP_SECONDS or 0.4) + 0.5
+				)
+			)
 				.. "printing each step to chat. Watch the chat, and note the number showing when "
 				.. "you FIRST feel anything — that is this motor's breakaway floor. Type it into "
 				.. "the slider below and quiet cues stop disappearing. Pressing Test cancels a "

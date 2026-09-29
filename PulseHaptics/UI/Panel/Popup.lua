@@ -616,9 +616,16 @@ local function ensureDialog()
 
 	-- Escape closes it when no edit box catches the key. Propagation stays on except for
 	-- the one key actually handled, so the dialog never eats anything else.
+	-- Skip restricted SetPropagateKeyboardInput in combat lockdown to prevent blocked action errors (CR-023).
 	dialog:EnableKeyboard(true)
 	if dialog.SetPropagateKeyboardInput then
 		dialog:SetScript("OnKeyDown", function(self, key)
+			if InCombatLockdown and InCombatLockdown() then
+				if key == "ESCAPE" then
+					closeDialog()
+				end
+				return
+			end
 			if key == "ESCAPE" then
 				self:SetPropagateKeyboardInput(false)
 				closeDialog()
@@ -627,6 +634,13 @@ local function ensureDialog()
 			end
 		end)
 	end
+
+	dialog:RegisterEvent("PLAYER_REGEN_DISABLED")
+	dialog:SetScript("OnEvent", function(self, event)
+		if event == "PLAYER_REGEN_DISABLED" then
+			closeDialog()
+		end
+	end)
 
 	dialog:SetScript("OnHide", function(self)
 		self.onAccept = nil

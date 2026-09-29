@@ -17,14 +17,20 @@
 | `CR-006` | `1a34d9e` | Pass configured cue intensity into heartbeat and warningbeat previews; use isTransient for fast attack | `harness.lua` | Verified by test |
 | `CR-014` | `1a34d9e` | Scale crafting anvil strike strength by configured trigger intensity setting | `crafting-test.lua` | Verified by test |
 | `CR-018` | `1a34d9e` | Dropdown mode selection previews scale by active cue configured intensity | `harness.lua` | Verified by test |
-| `CR-005` | `c7fd05e` | Discrete transient footfall taps (45ms, isTransient=true), real steps/s cadence, single lead+trail per GALLOP stride | `locomotion-test.lua` | Verified by test |
-| `CR-030` | `c7fd05e` | Split feet only when active schema routes trigger roles to trigger channels (prevent Xbox split on Standard) | `locomotion-test.lua` | Verified by test |
-| `CR-020` | `c7fd05e` | Read applied preset from appliedDevicePreset instead of unapplied dropdown selection | `locomotion-test.lua` | Verified by test |
-| `CR-004` | `738e4be` | Module-driven bespoke continuous previews across Movement, PlayerState, Flight, Combat, Crafting, Environment, Locomotion | `harness.lua` | Verified by test |
-| `CR-026` | `738e4be` | Expose weatherTexture tunables (rainLevel, snowLevel, stormLevel, patterRate) in Registry and modulate in Environment | `harness.lua` | Verified by test |
-| `CR-009` | pending | Trust InputUtil.IsGamepadUIEnabled() when available; only use gamepad enabled fallbacks when API is nil | `harness.lua` | Verified by test |
-| `CR-010` | pending | Remove redundant unit comparison in AlertUnitWatch targetBigDefensive handler; guard spellID against secrets | `harness.lua` | Verified by test |
-| `CR-011` | pending | Guard CHAT_MSG_TEXT_EMOTE message/sender against secrets; escape playerName special characters; guard CastActivity:keyFor | `harness.lua` | Verified by test |
-| `CR-031` | pending | Clear events list on pingPinAdded to prevent registration of restricted UNIT_PING_PIN_ADDED | `harness.lua`, `cue-audit.lua` | Verified by test |
-| `CR-024` | pending | Add PulseDebugUIFrame and PulseChecklistFrame to UISpecialFrames; remove dead LEARNED_SPELL_IN_TAB; pcall-guard pdebug watch | `pulsedebug-test.lua`, `checklist-test.lua` | Verified by test |
-| `CR-015` | pending | Match section status keywords only on header lines (^#+); accept work as needswork in compact import | `checklist-test.lua` | Verified by test |
+| `CR-005` | `1f90f27` | Discrete transient footfall taps (45ms, isTransient=true), real steps/s cadence, single lead+trail per GALLOP stride | `locomotion-test.lua` | Verified by test |
+| `CR-030` | `1f90f27` | Split feet only when active schema routes trigger roles to trigger channels (prevent Xbox split on Standard) | `locomotion-test.lua` | Verified by test |
+| `CR-020` | `1f90f27` | Read applied preset from appliedDevicePreset instead of unapplied dropdown selection | `locomotion-test.lua` | Verified by test |
+| `CR-004` | `a8054ab` | Module-driven bespoke continuous previews across Movement, PlayerState, Flight, Combat, Crafting, Environment, Locomotion | `harness.lua` | Verified by test |
+| `CR-026` | `a8054ab` | Expose weatherTexture tunables (rainLevel, snowLevel, stormLevel, patterRate) in Registry and modulate in Environment | `harness.lua` | Verified by test |
+| `CR-009` | `5a2c17e` | Trust InputUtil.IsGamepadUIEnabled() when available; only use gamepad enabled fallbacks when API is nil | `harness.lua` | Verified by test |
+| `CR-010` | `5a2c17e` | Remove redundant unit comparison in AlertUnitWatch targetBigDefensive handler; guard spellID against secrets | `harness.lua` | Verified by test |
+| `CR-011` | `5a2c17e` | Guard CHAT_MSG_TEXT_EMOTE message/sender against secrets; escape playerName special characters; guard CastActivity:keyFor | `harness.lua` | Verified by test |
+| `CR-031` | `5a2c17e` | Clear events list on pingPinAdded to prevent registration of restricted UNIT_PING_PIN_ADDED | `harness.lua`, `cue-audit.lua` | Verified by test |
+| `CR-024` | `5a2c17e` | Add PulseDebugUIFrame and PulseChecklistFrame to UISpecialFrames; remove dead LEARNED_SPELL_IN_TAB; pcall-guard pdebug watch | `pulsedebug-test.lua`, `checklist-test.lua` | Verified by test |
+| `CR-015` | `5a2c17e` | Match section status keywords only on header lines (^#+); accept work as needswork in compact import | `checklist-test.lua` | Verified by test |
+| `CR-021` | pending | Update lastResolved immediately upon profile rename and deletion to eliminate redundant re-sync on PLAYER_REGEN_ENABLED | `harness.lua` | Verified by test |
+| `CR-022` | pending | Validate table structures and types in Database:Init, quarantining malformed entries to __corrupt | `harness.lua` | Verified by test |
+| `CR-023` | pending | Guard SetPropagateKeyboardInput in Popup dialog against InCombatLockdown; dismiss dialog on PLAYER_REGEN_DISABLED | `Popup.lua` | Verified by inspection |
+| `CR-019` | pending | Reorder NAME_PATTERNS in Devices.lua to prioritize 8BitDo models over generic XInput/Xbox | `harness.lua` | Verified by test |
+| `CR-025` | pending | Dynamically calculate Ramp tooltip duration (~16s) and 40% peak; align showAdvancedCueControls default; sync cue and mode counts | `Spec.lua`, `Guide.lua`, `Modes.lua`, `Registry.lua`, `harness.lua` | Verified by test |
+| `CR-028` | pending | Guard GetMoney in MERCHANT_SHOW; allow minimap master toggle during combat; require active connected device for status badge | `Interaction.lua`, `Minimap.lua`, `Panel.lua`, `harness.lua` | Verified by test |

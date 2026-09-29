@@ -250,15 +250,20 @@ local function buildWindow()
 	end
 
 	local function isGamepadActive()
-		if C_GamePad and type(C_GamePad.IsEnabled) == "function" then
-			local okGP, enabled = pcall(C_GamePad.IsEnabled)
-			if okGP and enabled then
+		if Pulse.Engine and Pulse.Engine.RefreshDevice and Pulse.Engine.IsDeviceReady then
+			Pulse.Engine:RefreshDevice()
+			if Pulse.Engine:IsDeviceReady() then
 				return true
 			end
 		end
-		if C_CVar and type(C_CVar.GetCVarBool) == "function" then
-			local okCV, enabled = pcall(C_CVar.GetCVarBool, "GamePadEnable")
-			if okCV and enabled then
+		if
+			C_GamePad
+			and type(C_GamePad.IsEnabled) == "function"
+			and type(C_GamePad.GetActiveDeviceID) == "function"
+		then
+			local okGP, enabled = pcall(C_GamePad.IsEnabled)
+			local okID, deviceID = pcall(C_GamePad.GetActiveDeviceID)
+			if okGP and enabled and okID and deviceID then
 				return true
 			end
 		end
@@ -270,7 +275,7 @@ local function buildWindow()
 			return
 		end
 		local active = isGamepadActive()
-		local numCues = (Pulse.Triggers and #Pulse.Triggers) or 189
+		local numCues = (Pulse.Triggers and #Pulse.Triggers) or 190
 		local versionStr = addonVersion()
 		if active then
 			f.StatusBadge:SetText(

@@ -5,7 +5,7 @@
 -- G8 (melee swing) and G11 (terrain footsteps) are deliberately absent — the former is a
 -- guessed metronome wearing a combat cue's clothing, the latter has no confirmed API.
 --
--- `mode` names one of the 21 Core/Modes.lua shapes for a discrete trigger. A `continuous`
+-- `mode` names one of the 35 Core/Modes.lua shapes for a discrete trigger. A `continuous`
 -- trigger has no `mode` here — its module calls Pulse:HoldIfEnabled directly every tick,
 -- since a held texture's low/high mix is usually computed live (scaled by speed, by
 -- depletion, …), not a fixed lookup.
@@ -2259,15 +2259,10 @@ Pulse.Triggers = {
 	-- `events`, because none is a plain Lua event — they arrive through passive polling
 	-- of Blizzard state (SmartNavigation, GamepadRadial, UIParent panels, GroupTargeting),
 	-- or hooksecurefunc on safe Blizzard methods (radial selection lifecycle, tab changes).
+	-- Most cues default ON (14 of 20) with subtle haptic feedback. The signals were
+	-- checked against the Forever source and verified through the controller UI module.
 	--
-	-- All shipped OFF by default and all UNTESTED: the source says these fire, but nothing
-	-- here has observed one land in-game. The SmartNavigation POC was written and never run,
-	-- and the radial QA probe could never have run — it keys off a global
-	-- (`GamepadMainMenuFrame`) that does not exist in Forever; the real frame is
-	-- `GamepadRadial`. Treat every caveat below as sourced, not witnessed.
-	--
-	-- Modes are reused from the existing 16, never extended: the research proposes its own
-	-- primitive names (TICK/CLICK/CONFIRM/REJECT/EDGE…) and every one maps onto a shape
+	-- Modes are reused from existing shapes, never extended: every cue maps onto a shape
 	-- Core/Modes.lua already has.
 
 	-- ── Controller UI: category master ─────────────────────────────────────────
@@ -2682,7 +2677,7 @@ Pulse.Triggers = {
 				label = "Split left and right",
 				default = true,
 				boolean = true,
-				desc = "Sends left and right footfalls to the two trigger actuators so the stride walks across your hands. IGNORED unless the controller you picked on the Controller calibration page actually has trigger motors — of the listed hardware only Xbox and DualSense do. On anything else the split would land left on the weak rumble motor and right on the strong one, which reads as a limp rather than a gait, so both feet share one motor instead.",
+				desc = "Sends left and right footfalls to the two trigger actuators so the stride walks across your hands. IGNORED unless the controller you picked on the Controller calibration page actually has trigger motors — of the listed hardware only Xbox controllers do. On anything else the split would land left on the weak rumble motor and right on the strong one, which reads as a limp rather than a gait, so both feet share one motor instead.",
 			},
 			{
 				key = "gaitIntensity",

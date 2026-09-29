@@ -11,7 +11,7 @@
 --
 -- Not a ScrollBox, and not even a ScrollFrame. The list is a fixed known length — one root
 -- page, the cue pages from Registry's PAGE_LAYOUT, three tuning pages and the guide, about
--- seventeen rows at 20px — which fits the 569px sidebar with room to spare. A scroll region
+-- seventeen to twenty-one rows at 20px — which fits the 569px sidebar with room to spare. A scroll region
 -- would guard against a case that cannot arise and would add a second scrollable group for
 -- gamepad navigation to reason about. If the page count ever outgrows the height,
 -- CreateButtons is where the scroll region goes.

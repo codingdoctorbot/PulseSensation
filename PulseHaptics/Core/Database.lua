@@ -657,6 +657,7 @@ local cachedCharacterKey = nil
 -- (Database.lua:166, reported 2026-09-22). Same forward-declaration pattern
 -- Modules/Combat.lua already uses for applyParryHaste, and for the same reason.
 local invalidateResolution
+local lastResolved
 
 local function characterKey()
 	if cachedCharacterKey then
@@ -763,12 +764,73 @@ function Database:OnModeTuningChanged(modeID, key, callback)
 end
 
 function Database:Init()
-	PulseDB = PulseDB or {}
+	if type(PulseDB) ~= "table" then
+		local bad = PulseDB
+		PulseDB = { __corrupt = bad }
+	end
 	DB = PulseDB
+
+	if DB.version ~= nil and type(DB.version) ~= "number" then
+		DB.__corrupt_version = DB.version
+		DB.version = 1
+	end
+	if DB.profiles ~= nil and type(DB.profiles) ~= "table" then
+		DB.__corrupt_profiles = DB.profiles
+		DB.profiles = {}
+	end
+	if DB.profiles then
+		for name, prof in pairs(DB.profiles) do
+			if type(prof) ~= "table" then
+				DB.__corrupt_profile_entries = DB.__corrupt_profile_entries or {}
+				DB.__corrupt_profile_entries[name] = prof
+				DB.profiles[name] = nil
+			else
+				if prof.triggers ~= nil and type(prof.triggers) ~= "table" then
+					prof.__corrupt_triggers = prof.triggers
+					prof.triggers = {}
+				end
+				if prof.triggerSettings ~= nil and type(prof.triggerSettings) ~= "table" then
+					prof.__corrupt_triggerSettings = prof.triggerSettings
+					prof.triggerSettings = {}
+				end
+				if prof.masterIntensity ~= nil and type(prof.masterIntensity) ~= "number" then
+					prof.__corrupt_masterIntensity = prof.masterIntensity
+					prof.masterIntensity = PROFILE_DEFAULTS.masterIntensity
+				end
+			end
+		end
+	end
+	if DB.charProfile ~= nil and type(DB.charProfile) ~= "table" then
+		DB.__corrupt_charProfile = DB.charProfile
+		DB.charProfile = {}
+	end
+	if DB.specProfile ~= nil and type(DB.specProfile) ~= "table" then
+		DB.__corrupt_specProfile = DB.specProfile
+		DB.specProfile = {}
+	end
+	if DB.customProfiles ~= nil and type(DB.customProfiles) ~= "table" then
+		DB.__corrupt_customProfiles = DB.customProfiles
+		DB.customProfiles = {}
+	end
+	if DB.accountProfile ~= nil and type(DB.accountProfile) ~= "string" then
+		DB.__corrupt_accountProfile = DB.accountProfile
+		DB.accountProfile = nil
+	end
+	if DB.device ~= nil and type(DB.device) ~= "table" then
+		DB.__corrupt_device = DB.device
+		DB.device = {}
+	end
+	if DB.minimap ~= nil and type(DB.minimap) ~= "table" then
+		DB.__corrupt_minimap = DB.minimap
+		DB.minimap = { hide = false }
+	end
+
 	-- Migrate before ApplyDefaults: migration moves a pre-profiles install's values into
 	-- every slot verbatim, holes and all, then ApplyDefaults fills the holes.
 	self:Migrate()
 	self:ApplyDefaults()
+	invalidateResolution()
+	lastResolved = nil
 end
 
 function Database:ApplyDefaults()
@@ -1250,7 +1312,6 @@ end
 -- Re-resolve after something that could change the answer without changing any rule —
 -- logging in, or changing specialization. Only notifies if the resolved profile actually
 -- moved, so a spec change with no spec rule set costs one string comparison.
-local lastResolved
 
 function Database:RefreshActiveProfile()
 	-- Before reading, not after: a specialization change moves the answer without any
@@ -1448,7 +1509,8 @@ function Database:RenameProfile(oldName, newName)
 	end
 	local wasActive = (self:GetActiveProfileName() == oldName)
 	invalidateResolution()
-	if wasActive or self:GetActiveProfileName() == newName then
+	lastResolved = self:GetActiveProfileName()
+	if wasActive or lastResolved == newName then
 		notifyProfileSwitch()
 	end
 	if Pulse.debug then
@@ -1521,6 +1583,7 @@ function Database:DeleteProfile(name)
 		DB.accountProfile = nil
 	end
 	invalidateResolution()
+	lastResolved = self:GetActiveProfileName()
 	if Pulse.debug then
 		print(('Pulse: deleted profile "%s"'):format(name))
 	end

@@ -18,8 +18,8 @@
 -- Therefore, this module observes all UI, panel, radial, and group targeting states via:
 --   1. Passive Polling (uiPollFrame) — a lightweight 20Hz (0.05s) OnUpdate timer that inspects
 --      read-only properties (SmartNavigation.currentButton, GamepadRadial:IsShown(),
---      GroupTargeting.isTargetingActive, and GetUIPanel). Zero callbacks, zero hooks inside
---      Blizzard managers, and ZERO garbage table allocations in the tick.
+--      GroupTargeting.isTargetingActive, and GetUIPanel). Taint-safe polling and pcall-isolated
+--      callbacks, with ZERO garbage table allocations in the tick.
 --   2. hooksecurefunc — strictly limited to terminal user interactions that execute no protected
 --      operations afterwards:
 --        - GamepadRadial.BeginSelection & EndSelection (last statements in ProcessInput/CancelSelection)

@@ -88,19 +88,6 @@ local function toggleMasterEnabled(owner)
 	end
 	lastToggleTime = now
 
-	-- In-combat protection: changing master state unregisters/registers events across 22 modules
-	if InCombatLockdown and InCombatLockdown() then
-		if DEFAULT_CHAT_FRAME and DEFAULT_CHAT_FRAME.AddMessage then
-			DEFAULT_CHAT_FRAME:AddMessage(
-				"|cff00bfff[Pulse]|r Cannot toggle master haptics while in combat.",
-				1,
-				0.3,
-				0.3
-			)
-		end
-		return
-	end
-
 	local current = Pulse.Database:Get("masterEnabled")
 	Pulse.Database:Set("masterEnabled", not current)
 

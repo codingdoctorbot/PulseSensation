@@ -1051,13 +1051,23 @@ do
 	check("rename follows the spec rule", db:GetProfileRule(SPEC), "Quiet")
 	check("  and stays active", db:GetActiveProfileName(), "Quiet")
 	check("  and active rename notifies listeners", notifies > 0, true)
+	-- CR-021: lastResolved is kept in sync, so subsequent RefreshActiveProfile does not trigger redundant re-sync
+	local countAfterRename = notifies
+	local refreshedRename = db:RefreshActiveProfile()
+	check("  and RefreshActiveProfile after rename is false (CR-021)", refreshedRename, false)
+	check("  and no redundant re-sync after rename (CR-021)", notifies, countAfterRename)
 
 	-- Delete clears rules rather than repointing them.
 	db:SetProfileForScope(CHAR, "Quiet")
+	notifies = 0
 	db:DeleteProfile("Quiet")
 	check("delete clears the spec rule", db:GetProfileRule(SPEC), nil)
 	check("delete clears the character rule", db:GetProfileRule(CHAR), nil)
 	check("  and falls through to account", db:GetActiveProfileName(), "Raiding")
+	local countAfterDelete = notifies
+	local refreshedDelete = db:RefreshActiveProfile()
+	check("  and RefreshActiveProfile after delete is false (CR-021)", refreshedDelete, false)
+	check("  and no redundant re-sync after delete (CR-021)", notifies, countAfterDelete)
 
 	-- Combat defers the re-registration, not the decision.
 	specIndex = nil
@@ -1579,6 +1589,90 @@ do
 		-- CR-031: pingPinAdded has empty events list to avoid restricted registration
 		local pingTrigger = Pulse.Registry:GetTrigger("pingPinAdded")
 		check("pingPinAdded has empty events list (CR-031)", pingTrigger and #pingTrigger.events == 0, true)
+
+		-- WP-8 Tests:
+
+		-- CR-022: SavedVariables type quarantine and corruption recovery
+		local originalDB = PulseDB
+		_G.PulseDB = "completely corrupted string"
+		Pulse.Database:Init()
+		check("Database:Init handles non-table PulseDB (CR-022)", type(_G.PulseDB), "table")
+		check("  and preserves corrupted payload in __corrupt", _G.PulseDB.__corrupt, "completely corrupted string")
+		check("  and seeds Default profile", type(_G.PulseDB.profiles.Default), "table")
+
+		_G.PulseDB = {
+			version = "not a number",
+			profiles = 12345,
+			charProfile = "bad",
+			specProfile = true,
+			customProfiles = false,
+			accountProfile = 999,
+		}
+		Pulse.Database:Init()
+		check("Database:Init handles corrupt sub-tables (CR-022)", type(_G.PulseDB.profiles), "table")
+		check("  and quarantines corrupt version", _G.PulseDB.__corrupt_version, "not a number")
+		check("  and sets valid numeric version", type(_G.PulseDB.version), "number")
+		check("  and active profile name resolves to Default", Pulse.Database:GetActiveProfileName(), "Default")
+		_G.PulseDB = originalDB
+		Pulse.Database:Init()
+
+		-- CR-019: NAME_PATTERNS reordering (8bitdo/sn30/pro 2/ultimate before xinput)
+		local testDeviceID = 99
+		local rawName = "8BitDo Ultimate Wireless Controller (XInput)"
+		C_GamePad.GetActiveDeviceID = function()
+			return testDeviceID
+		end
+		C_GamePad.GetDeviceRawState = function(id)
+			if id == testDeviceID then
+				return { name = rawName, vendorID = 0, productID = 0 }
+			end
+			return nil
+		end
+		local _, detectedPreset = Pulse.DetectDevice()
+		check("8BitDo controller with XInput in name resolves to 8bitdo preset (CR-019)", detectedPreset, "8bitdo")
+		C_GamePad.GetActiveDeviceID = function()
+			return 1
+		end
+		C_GamePad.GetDeviceRawState = nil
+
+		-- CR-025: Ramp calibration tooltip calculates duration dynamically
+		local expectedDuration = math.floor((Pulse.RAMP_PEAK / Pulse.RAMP_STEP) * Pulse.RAMP_STEP_SECONDS + 0.5)
+		check("Ramp calibration duration is 16 seconds (CR-025)", expectedDuration, 16)
+		local calibRows = Pulse.UI.Panel.Spec.BuildCalibrationPage and Pulse.UI.Panel.Spec.BuildCalibrationPage()
+		if calibRows then
+			local foundRamp = false
+			for _, row in ipairs(calibRows) do
+				if row.buttonText == "Ramp" and row.tooltip then
+					foundRamp = true
+					check("Ramp tooltip mentions 16 seconds (CR-025)", row.tooltip:find("16 seconds") ~= nil, true)
+					check("Ramp tooltip mentions 40% power (CR-025)", row.tooltip:find("40%%") ~= nil, true)
+				end
+			end
+			check("Found Ramp button in calibration rows", foundRamp, true)
+		end
+
+		-- CR-028: Interaction module handles MERCHANT_SHOW with secret or nil money
+		local interactMod = Pulse.modules["Interaction"]
+		if interactMod and interactMod.OnEnable then
+			interactMod:OnEnable()
+			local lastFrame = frames[#frames]
+			local interactHandler = lastFrame and lastFrame:GetScript("OnEvent")
+			if interactHandler then
+				local secretMoney = setmetatable({ __is_secret = true }, {
+					__index = function()
+						error("secret money error")
+					end,
+				})
+				GetMoney = function()
+					return secretMoney
+				end
+				local okMerchant = pcall(interactHandler, lastFrame, "MERCHANT_SHOW")
+				check("MERCHANT_SHOW with secret money does not error (CR-028)", okMerchant, true)
+				GetMoney = function()
+					return 50000
+				end
+			end
+		end
 
 		Pulse.Engine:StopAll()
 	end
