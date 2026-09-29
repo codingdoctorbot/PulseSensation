@@ -8,7 +8,7 @@ import os
 import re
 
 REPO_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-REPORTS_DIR = os.path.join(REPO_DIR, "ProfileReviewReports")
+REPORTS_DIR = os.path.join(REPO_DIR, "docs", "ProfileReviewReports")
 os.makedirs(REPORTS_DIR, exist_ok=True)
 import json
 with open(os.path.join(REPO_DIR, "scripts/triggers.json")) as f:
