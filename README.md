@@ -90,11 +90,12 @@ World of Warcraft requires native gamepad input and vibration telemetry to be en
 ```
 
 ### 2. Installation
-Install the addons into your World of Warcraft `Interface/AddOns/` directory:
-- **Core Addon**: `PulseHaptics` (the standalone engine & settings UI)
-- **Suite Extras** (Optional): `PulseDebug` (live diagnostics HUD), `PulseChecklist` (in-game verification checklist), and `PulseProfileReview` (cue review tool)
+Install **PulseHaptics** into your World of Warcraft `Interface/AddOns/` directory:
+- **Download**: Extract `PulseHaptics-v*.zip` into `Interface/AddOns/`
 - **macOS Path**: `/Applications/World of Warcraft/_classic_beta_/Interface/AddOns/`
 - **Windows Path**: `C:\Program Files (x86)\World of Warcraft\_classic_beta_\Interface\AddOns\`
+
+*(Developer tools like `PulseDebug`, `PulseChecklist`, and `PulseProfileReview` are available directly in the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation) for contributors and testers).*
 
 ### 3. Immediate Taste Test
 Make sure your gamepad is turned on and try these chat commands to feel your controller come alive:
@@ -131,16 +132,18 @@ Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open 
 
 ---
 
-## 📦 Addon Components & Distribution
+## 📦 Addon Distribution & Developer Tools
 
-PulseSensation is distributed as both a standalone release and a developer suite:
+PulseHaptics is distributed as a **single, self-contained package** (`PulseHaptics-v*.zip`) for CurseForge, Wago, and GitHub Releases:
 
-| Component | In Standalone ZIP? | Purpose |
+| Component | Distribution | Purpose |
 |:---|:---:|:---|
-| **`PulseHaptics`** | ✅ **Yes** | The core haptic engine, 190 authored triggers, 12 curated profiles, 22 module watchers, custom settings UI, and profile manager. |
-| **`PulseDebug`** | 📦 *Suite ZIP* | Developer & troubleshooting window for real-time channel introspection and trigger auditing (`/pdebug`). |
-| **`PulseChecklist`** | 📦 *Suite ZIP* | In-game QA tracking checklist for all 190 cues with markdown import/export (`/pcheck`). |
-| **`PulseProfileReview`** | 📦 *Suite ZIP* | Companion auditing tool for authoring and vetting profile cue sets (`/pulsereview`). |
+| **`PulseHaptics`** | 📦 **Release ZIP** | The complete haptic engine, 190 authored triggers, 12 curated profiles, 22 module watchers, custom settings UI, and profile manager. |
+| **`PulseDebug`** | 🐙 *GitHub Repo* | Developer HUD for real-time channel telemetry and trigger inspection (`/pdebug`). |
+| **`PulseChecklist`** | 🐙 *GitHub Repo* | In-game QA tracking checklist for verifying all 190 cues with markdown export (`/pcheck`). |
+| **`PulseProfileReview`** | 🐙 *GitHub Repo* | Companion auditing tool for vetting profile cue sets and bulk toggling (`/pulsereview`). |
+
+> *If you are developing, testing, or reviewing cues, simply clone the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation) to access the entire developer suite.*
 
 ---
 

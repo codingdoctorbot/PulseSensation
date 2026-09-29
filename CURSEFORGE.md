@@ -99,12 +99,12 @@ Run these two commands once in-game:
 
 ### 2. Installation
 
-Install the addon into your `Interface/AddOns/` directory:
+Extract the `PulseHaptics` folder into your World of Warcraft `Interface/AddOns/` directory:
 
-*   **Core Standalone:** Drop `PulseHaptics` into `Interface/AddOns/`
-*   **Developer Suite:** Also includes `PulseDebug`, `PulseChecklist`, and `PulseProfileReview`
-*   **macOS:** `/Applications/World of Warcraft/_classic_beta_/Interface/AddOns/`
-*   **Windows:** `C:\Program Files (x86)\World of Warcraft\_classic_beta_\Interface\AddOns\`
+*   **macOS:** `/Applications/World of Warcraft/_classic_beta_/Interface/AddOns/PulseHaptics`
+*   **Windows:** `C:\Program Files (x86)\World of Warcraft\_classic_beta_\Interface\AddOns\PulseHaptics`
+
+*(Note: Developer diagnostic tools like `PulseDebug`, `PulseChecklist`, and `PulseProfileReview` are available directly in the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation) for contributors and testers).*
 
 ### 3. In-Game Commands
 
