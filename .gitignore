@@ -15,6 +15,7 @@
 *.luac
 *.bak
 dist/
+PulseChecklist/tests/locomotion-sim/
 
 # Internal development notes, reviews, proposals & archives
 docs/dev-notes/
