@@ -685,10 +685,10 @@ Pulse.Triggers = {
 	{
 		id = "autoShotFired",
 		category = "COMBAT",
-		mode = "TRIGGER_RECOIL",
+		mode = "RECOIL",
 		default = false,
 		label = "Auto Shot fired",
-		desc = "A tactile trigger recoil kick on every Auto Shot arrow, timed to the real shot, not estimated.",
+		desc = "A tactile recoil kick on every Auto Shot arrow, timed to the real shot, not estimated.",
 		caveat = "Confirmed live 2026-09-17: UNIT_SPELLCAST_SUCCEEDED fires with spellID 75 once per arrow — a genuine per-shot signal, not a prediction. Melee auto-attack has no equivalent: the traditional swing-timer technique reads the combat log, and this same session confirmed COMBAT_LOG_EVENT_UNFILTERED errors on registration for an addon frame under Midnight, full stop. See weaponSwingMain/weaponSwingOff below for the estimated (not measured) melee equivalent, built anyway with that limitation stated plainly. Hunter-specific; other classes' ranged auto-repeat (Shoot, wands) untested.",
 	},
 	{
@@ -2662,7 +2662,7 @@ Pulse.Triggers = {
 		default = false,
 		label = "Footfalls and gait",
 		desc = "A continuous gait texture while moving — footfalls on foot, hoofbeats mounted.",
-		caveat = "Off by default and mounted-only by default, on purpose: a texture that plays whenever you move is the most fatiguing thing in this addon and the most likely to make you switch it off wholesale. Left and right footfalls drive separate roles, so on a controller with working trigger actuators the gait moves across the pad. Race, racial mount and boot weight all shape it — on WoW Forever every race rides its own mount, so race genuinely determines the gait. Speed is read out of combat only and held through a fight; snares and boosts are not tracked there, which is a deliberate trade for never touching a secret value. Goes quiet while swimming, flying, gliding, riding a flight path, or airborne after a jump — each of those has its own cue and footfalls have nothing to add to them. Entirely untested.",
+		caveat = "Off by default and mounted-only by default, on purpose: a texture that plays whenever you move is the most fatiguing thing in this addon and the most likely to make you switch it off wholesale. Uses shaped transient layers with fast-attack kicks and exponential decay to produce crisp, distinct footfalls without motor hum in between. Distinct timbres (boots, hooves, paws, heavy claws/pads, metal) drive both Low (body mass) and High (impact crispness) motors in concert. Speed is read out of combat only and held through a fight; snares and boosts are not tracked there, which is a deliberate trade for never touching a secret value. Goes quiet while swimming, flying, gliding, riding a flight path, or airborne after a jump — each of those has its own cue and footfalls have nothing to add to them.",
 		devTuning = true,
 		tunables = {
 			{
@@ -2677,12 +2677,12 @@ Pulse.Triggers = {
 				label = "Split left and right",
 				default = true,
 				boolean = true,
-				desc = "Sends left and right footfalls to the two trigger actuators so the stride walks across your hands. IGNORED unless the controller you picked on the Controller calibration page actually has trigger motors — of the listed hardware only Xbox controllers do. On anything else the split would land left on the weak rumble motor and right on the strong one, which reads as a limp rather than a gait, so both feet share one motor instead.",
+				desc = "Pans left and right footfalls across the Low and High motors so the stride walks across your hands. Turn off for centered dual-motor footfalls.",
 			},
 			{
 				key = "gaitIntensity",
 				label = "Gait strength",
-				default = 0.35,
+				default = 0.28,
 				min = 0.0,
 				max = 1.0,
 				step = 0.05,

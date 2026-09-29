@@ -13,14 +13,12 @@ Pulse.HapticSchemas = Pulse.HapticSchemas or {}
 -- distinguishable once they share a motor: that is telling roles apart after a collapse,
 -- which is routing, not how strong the motor is.
 Pulse.HapticSchemas["highOnly"] = {
-    id    = "highOnly",
-    order = 2,
-    label = "High Motor Only",
-    desc  = "Use when the low motor produces nothing you can feel at all. Everything collapses onto the high motor. If the low motor works but is just weak, use Standard and raise its Strength on the Controller calibration page instead.",
-    roles = {
-        low      = { channel = "High", intensity = 0.6 },
-        high     = { channel = "High", intensity = 1.0 },
-        ltrigger = { channel = "High", intensity = 0.6 },
-        rtrigger = { channel = "High", intensity = 1.0 },
-    },
+	id = "highOnly",
+	order = 4,
+	label = "High Motor Only",
+	desc = "Use when the low motor produces nothing you can feel at all. Everything collapses onto the high motor. If the low motor works but is just weak, use Standard and raise its Strength on the Controller calibration page instead.",
+	roles = {
+		low = { channel = "High", intensity = 0.6 },
+		high = { channel = "High", intensity = 1.0 },
+	},
 }

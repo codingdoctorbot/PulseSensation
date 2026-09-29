@@ -37,11 +37,11 @@ Feel the heavy, distinct thud of plate boots crushing cobblestone. Feel the visc
 
 Engineered to take full advantage of modern gamepads:
 - **PlayStation 5 DualSense / DualShock 4** (Linear resonance & haptic role routing)
-- **Xbox Wireless & Elite Series Controllers** (Impulse trigger motor mappings)
+- **Xbox Wireless & Elite Series Controllers** (Tuned asymmetrical ERM rumble motors)
 - **Steam Deck & Steam Controller**
 - **Nintendo Switch Pro & 8BitDo Ultimate**
 
-*Includes 6 swappable hardware schemas:* `Standard`, `High Motor Only`, `Low Motor Only`, `Inverted`, `Trigger Emphasis`, and `Rumble & Triggers`.
+*Includes 4 swappable hardware schemas:* `Standard`, `High Motor Only`, `Low Motor Only`, and `Inverted`.
 
 ---
 

@@ -148,19 +148,26 @@ local MODE_CATEGORIES = {
 	BRAKE = "Heavy Impacts",
 	WOBBLE = "Heavy Impacts",
 
-	-- Triggers & Textures (12)
-	TRIGGER_CLICK = "Triggers & Textures",
-	TRIGGER_PULL = "Triggers & Textures",
-	TRIGGER_TAP = "Triggers & Textures",
-	TRIGGER_BURST = "Triggers & Textures",
-	TRIGGER_RECOIL = "Triggers & Textures",
-	TRIGGER_ALTERNATE = "Triggers & Textures",
-	TRIGGER_TENSION = "Triggers & Textures",
-	PATTER = "Triggers & Textures",
-	HUM = "Triggers & Textures",
-	THRUM = "Triggers & Textures",
-	WAVE = "Triggers & Textures",
-	DRIFT = "Triggers & Textures",
+	-- Textures & Patterns (12)
+	SNAP = "Textures & Patterns",
+	DRAW = "Textures & Patterns",
+	MICRO_TAP = "Textures & Patterns",
+	STACCATO = "Textures & Patterns",
+	RECOIL = "Textures & Patterns",
+	SHUTTLE = "Textures & Patterns",
+	TENSION = "Textures & Patterns",
+	TRIGGER_CLICK = "Textures & Patterns",
+	TRIGGER_PULL = "Textures & Patterns",
+	TRIGGER_TAP = "Textures & Patterns",
+	TRIGGER_BURST = "Textures & Patterns",
+	TRIGGER_RECOIL = "Textures & Patterns",
+	TRIGGER_ALTERNATE = "Textures & Patterns",
+	TRIGGER_TENSION = "Textures & Patterns",
+	PATTER = "Textures & Patterns",
+	HUM = "Textures & Patterns",
+	THRUM = "Textures & Patterns",
+	WAVE = "Textures & Patterns",
+	DRIFT = "Textures & Patterns",
 }
 
 local function modeOptions()
@@ -1409,20 +1416,6 @@ function Spec.BuildModeTuningPage()
 						.. "default; the top of this slider is where it stops making any further difference."
 				)
 			end
-			if roleInfo.hasTrigger then
-				rows[#rows + 1] = tuningSlider(
-					modeID,
-					"triggerMult",
-					"Trigger actuator",
-					0.0,
-					roleInfo.triggerCeiling,
-					0.05,
-					"Multiplies "
-						.. modeID
-						.. "'s trigger intensity. 1.0 is the authored "
-						.. "default; the top of this slider is where it stops making any further difference."
-				)
-			end
 			rows[#rows + 1] = tuningSlider(
 				modeID,
 				"durMult",
@@ -1457,11 +1450,11 @@ function Spec.BuildModeTuningPage()
 		kind = "button",
 		label = "Reset motor & timing",
 		buttonText = "Reset...",
-		tooltip = "Reset every mode's motor, trigger, and duration multiplier on this page "
+		tooltip = "Reset every mode's motor and duration multiplier on this page "
 			.. "back to 1.0. Doesn't touch cues, per-cue intensity, or per-trigger mode picks.",
 		onClick = function()
 			confirm(
-				"Reset every mode's motor, trigger, and duration multiplier back to " .. "1.0? This can't be undone.",
+				"Reset every mode's motor and duration multiplier back to " .. "1.0? This can't be undone.",
 				"Reset",
 				function()
 					store:ResetModeTuning()
@@ -1503,7 +1496,7 @@ function Spec.BuildCalibrationPage()
 	rows[#rows + 1] = {
 		kind = "dropdown",
 		label = "Vibration schema",
-		tooltip = "Which physical motors each trigger drives. Start with Standard Rumble or Rumble + Triggers, then calibrate the motors below.",
+		tooltip = "Which physical motors each cue drives. Start with Standard Rumble, then calibrate the motors below.",
 		options = function()
 			local options = {}
 			for _, schema in ipairs(Pulse.Registry:GetSchemaOptions()) do
@@ -1560,8 +1553,7 @@ function Spec.BuildCalibrationPage()
 			if not dev then
 				return ""
 			end
-			local trigText = dev.triggers and "|cff00ff00Supported|r" or "|cff888888None|r"
-			return ("Actuator profile: %s  ·  Triggers: %s\n%s"):format(dev.label or id, trigText, dev.note or "")
+			return ("Actuator profile: %s\n%s"):format(dev.label or id, dev.note or "")
 		end,
 	}
 
@@ -1576,10 +1568,6 @@ function Spec.BuildCalibrationPage()
 				.. "floor, timing and curve with that controller's values — any trimming you "
 				.. "have already done is lost."
 			):format(device and device.label or id)
-			if device and device.triggers and store:Get("defaultHapticSchema") ~= "rumbleAndTriggers" then
-				confirmMsg = confirmMsg
-					.. '\n\n|cff4db8ffTip: Since this controller has trigger actuators, consider setting Vibration schema to "Rumble + Triggers" above to route trigger cues to them.|r'
-			end
 			confirm(confirmMsg, "Apply", function()
 				local ok, reason = store:ApplyDevicePreset(id)
 				report(ok, reason or "could not apply that preset")

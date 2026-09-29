@@ -362,36 +362,11 @@ local pollFrame = CreateFrame("Frame")
 local RESOLVE_INTERVAL = 0.5
 local resolveElapsed = 0
 
--- Split the stride across two actuators only when the controller HAS two suitable ones:
--- asked for by the setting, vetoed by the hardware.
---
--- WHY THE VETO MATTERS. Split sends left to ltrigger and right to rtrigger. On a pad
--- without trigger motors — DualShock 4, Switch Pro, Steam Deck, anything unidentified —
--- Engine.lua's ROLE_FALLBACK sends those to Low and High, and under Standard High is the
--- physically stronger motor, so every right footfall hits harder than every left. A limp
--- rather than a gait, worse than not splitting.
---
--- Defaults to not splitting, because "Generic / unknown" declares no trigger actuators;
--- naming your controller on the calibration page turns it on if the hardware supports it.
+-- Split the stride across the two rumble motors when requested:
+-- Left-side events lean Low (High * 0.7), right-side events lean High (Low * 0.8),
+-- creating a subtle stereo pan across the controller without limp or phantom trigger channels.
 local function shouldSplitFeet()
-	if setting("splitFeet", 1) ~= 1 then
-		return false
-	end
-	local presetID = Pulse.Database.GetAppliedDevicePreset and Pulse.Database:GetAppliedDevicePreset()
-		or Pulse.Database:GetDevicePreset()
-	local preset = Pulse.Devices and Pulse.Devices[presetID]
-	if preset and preset.triggers ~= true then
-		return false
-	end
-	-- Split feet only when the active schema actually routes trigger roles to trigger channels (CR-030).
-	-- Under Standard schema, ltrigger resolves to Low and rtrigger to High via ROLE_FALLBACK.
-	if Pulse.Engine and Pulse.Engine.ResolveRole then
-		local def = Pulse.Engine:ResolveRole("ltrigger")
-		if not def or def.channel == "Low" or def.channel == "High" then
-			return false
-		end
-	end
-	return true
+	return setting("splitFeet", 1) == 1
 end
 
 -- Ground contact
@@ -466,24 +441,89 @@ local function hasGroundContact()
 end
 
 local wasGrounded = true
-local splitRoles = { ltrigger = 0, rtrigger = 0 }
+
+-- Footfall timbres: static tables handed to the engine by reference (Rule 4).
+-- tau per role: Low = heavy mass body, High = contact crispness. kickGain lifts the first
+-- ~20 ms above the body level so the eccentric mass gets going fast.
+local SHAPES = {
+	BOOT = { kickTime = 0.022, kickGain = 1.6, cut = 0.06, tau = { low = 0.040, high = 0.018, default = 0.030 } },
+	HOOF = { kickTime = 0.022, kickGain = 1.6, cut = 0.06, tau = { low = 0.045, high = 0.022, default = 0.030 } },
+	PAW = { kickTime = 0.022, kickGain = 1.5, cut = 0.06, tau = { low = 0.040, high = 0.012, default = 0.030 } },
+	HEAVY = { kickTime = 0.025, kickGain = 1.5, cut = 0.06, tau = { low = 0.070, high = 0.015, default = 0.040 } },
+	CLAW = { kickTime = 0.020, kickGain = 1.6, cut = 0.06, tau = { low = 0.035, high = 0.018, default = 0.030 } },
+	METAL = { kickTime = 0.020, kickGain = 1.6, cut = 0.06, tau = { low = 0.030, high = 0.025, default = 0.030 } },
+}
+local HIGH_MIX = { BOOT = 0.6, HOOF = 0.8, PAW = 0.25, HEAVY = 0.3, CLAW = 0.9, METAL = 1.0 }
+
+-- Merged variants for footfalls closer than MERGE_GAP (a gallop's hoof pair): one heavier, longer strike.
+local MERGE_GAP = 0.080
+local MERGED = {}
+for kind, sh in pairs(SHAPES) do
+	MERGED[kind] = {
+		kickTime = sh.kickTime,
+		kickGain = sh.kickGain,
+		cut = sh.cut,
+		tau = { low = sh.tau.low * 1.5, high = sh.tau.high * 1.5, default = sh.tau.default * 1.5 },
+	}
+end
+
+local MOUNT_TIMBRE = {
+	HORSE = "HOOF",
+	UNDEAD_HORSE = "HOOF",
+	RAM = "HOOF",
+	WOLF = "PAW",
+	SABER = "PAW",
+	KODO = "HEAVY",
+	RAPTOR = "CLAW",
+	HAWKSTRIDER = "CLAW",
+	MECHANOSTRIDER = "METAL",
+}
+
+local function timbreKind()
+	local form = (type(GetShapeshiftFormID) == "function") and GetShapeshiftFormID() or nil
+	if form == BEAR or form == DIRE_BEAR then
+		return "HEAVY"
+	end
+	if form == CAT or form == TRAVEL or form == GHOST_WOLF then
+		return "PAW"
+	end
+	if IsMounted and IsMounted() then
+		local race = RACE_GAITS[character.race] or FALLBACK_RACE
+		return MOUNT_TIMBRE[race.mount] or "HOOF"
+	end
+	return "BOOT"
+end
+
 local TAP_DURATION = 0.045
 local GALLOP_TRAIL_OFFSET = 0.6
 local nextStep = 1
 
-local function fireStep(stepIndex)
+local function fireStep(stepIndex, merged)
 	local intensity = gait.intensity
 	if intensity <= 0 then
 		return
 	end
-
-	if shouldSplitFeet() then
-		splitRoles.ltrigger = (stepIndex == 1) and intensity or 0
-		splitRoles.rtrigger = (stepIndex == 2) and intensity or 0
-		Pulse:HoldRolesIfEnabled(CUE, splitRoles, TAP_DURATION, true)
-	else
-		Pulse:HoldIfEnabled(CUE, intensity, 0, TAP_DURATION, true)
+	local kind = timbreKind()
+	local shape = merged and MERGED[kind] or SHAPES[kind]
+	if merged then
+		intensity = intensity * 1.3
 	end
+
+	local highMix = HIGH_MIX[kind] or 0.5
+	local lowVal, highVal
+	if shouldSplitFeet() then
+		if stepIndex == 1 then
+			lowVal = intensity
+			highVal = intensity * highMix * 0.7
+		else
+			lowVal = intensity * 0.8
+			highVal = intensity * highMix * 1.1
+		end
+	else
+		lowVal = intensity
+		highVal = intensity * highMix
+	end
+	Pulse:HoldIfEnabled(CUE, lowVal, highVal, TAP_DURATION, true, shape)
 end
 
 local function tick(_, elapsed)
@@ -540,9 +580,13 @@ local function tick(_, elapsed)
 		return
 	end
 
+	local isGallopMerged = (gait.mode == "GALLOP") and (GALLOP_TRAIL_OFFSET / (gait.cadence * math.pi) < MERGE_GAP)
 	if runPhase == 0 and nextStep == 1 then
-		fireStep(1)
-		nextStep = 2
+		fireStep(1, isGallopMerged)
+		nextStep = isGallopMerged and 1 or 2
+		if isGallopMerged then
+			runPhase = 1e-9
+		end
 	end
 
 	local dt = elapsed or 0
@@ -555,8 +599,8 @@ local function tick(_, elapsed)
 	local isGallop = (gait.mode == "GALLOP")
 	local step2Threshold = isGallop and GALLOP_TRAIL_OFFSET or math.pi
 
-	if nextStep == 2 and runPhase >= step2Threshold then
-		fireStep(2)
+	if not isGallopMerged and nextStep == 2 and runPhase >= step2Threshold then
+		fireStep(2, false)
 		nextStep = 1
 	end
 
@@ -565,8 +609,8 @@ local function tick(_, elapsed)
 		if runPhase >= (math.pi * 2) then
 			runPhase = runPhase % (math.pi * 2)
 		end
-		fireStep(1)
-		nextStep = 2
+		fireStep(1, isGallopMerged)
+		nextStep = isGallopMerged and 1 or 2
 	end
 end
 
@@ -682,21 +726,30 @@ function M:OnEnable()
 end
 
 function M:PreviewLocomotion(_, scale)
-	scale = scale or 1.0
-	local intensity = setting("intensity", 0.55) * scale
+	local intensity = (scale or 1.0) * setting("gaitIntensity", 0.28)
+	local kind = timbreKind()
+	local shape = SHAPES[kind] or SHAPES.BOOT
+	local highMix = HIGH_MIX[kind] or 0.6
 	local split = shouldSplitFeet()
 	local token = Pulse.GetPreviewToken and Pulse:GetPreviewToken() or 0
 	local function playStep(stepIdx)
 		if Pulse.GetPreviewToken and Pulse:GetPreviewToken() ~= token then
 			return
 		end
+		local lowVal, highVal
 		if split then
-			splitRoles.ltrigger = (stepIdx == 1) and intensity or 0
-			splitRoles.rtrigger = (stepIdx == 2) and intensity or 0
-			Pulse.Engine:SetRoles("preview", splitRoles, TAP_DURATION, true)
+			if stepIdx == 1 then
+				lowVal = intensity
+				highVal = intensity * highMix * 0.7
+			else
+				lowVal = intensity * 0.8
+				highVal = intensity * highMix * 1.1
+			end
 		else
-			Pulse.Engine:Set("preview", intensity, 0, TAP_DURATION, true)
+			lowVal = intensity
+			highVal = intensity * highMix
 		end
+		Pulse.Engine:Hold("preview", lowVal, highVal, TAP_DURATION, true, shape)
 	end
 	playStep(1)
 	C_Timer.After(0.35, function()

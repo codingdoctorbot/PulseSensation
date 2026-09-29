@@ -61,22 +61,18 @@ Pulse.Guide = {
 			.. 'specific cue "Feels like" from its dropdown, or adjust its individual '
 			.. "intensity slider without affecting other cues.\n\n"
 			.. "**Motor & Timing page**: Reshape any vibration mode across the entire "
-			.. "addon — adjust its low motor, high motor, or trigger actuator balance, "
+			.. "addon — adjust its low motor or high motor balance, "
 			.. "and speed up or slow down its duration envelope.",
 	},
 	{
-		heading = "Adaptive triggers & controller fallback",
-		body = "Pulse includes dedicated trigger vibration modes designed specifically for "
-			.. "controllers with independent trigger actuators (such as Xbox One / Series "
-			.. "gamepads).\n\n"
-			.. "On controllers with trigger actuators, selecting the **Rumble + Triggers** "
-			.. "schema routes trigger pulses straight to the physical trigger actuators, "
-			.. "delivering mechanical snaps and pulls directly under your index fingers "
-			.. "while body vibrations stay on the palm motors.\n\n"
-			.. "On standard gamepads (Xbox, Nintendo Switch, generic pads), trigger cues "
-			.. "automatically fall back onto your regular rumble motors (left trigger to "
-			.. "low motor, right trigger to high motor). You will always feel every cue, "
-			.. "regardless of what controller you hold.",
+		heading = "Dual-motor rumble & vibration schemas",
+		body = "Pulse is engineered to drive both the Low (heavy counterweight) and High "
+			.. "(sharp tick) rumble motors in concert across all supported gamepads.\n\n"
+			.. "Vibration schemas define how logical haptic roles map to physical motors: "
+			.. "**Standard Rumble** routes low-frequency signals to the heavy motor and "
+			.. "high-frequency signals to the sharp motor; **High Motor Only** or **Low Motor Only** "
+			.. "collapse signals when a motor is mechanically silent; and **Swapped / Inverted** "
+			.. "reverses the mapping for custom grips.",
 	},
 	{
 		heading = "Two kinds of trigger: pulses and textures",

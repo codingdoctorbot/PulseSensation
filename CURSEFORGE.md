@@ -35,7 +35,7 @@ A reusable library of distinct vibration patterns, including:
 *   Ramps and fades
 *   Stutters and bursts
 *   Alternating and layered patterns
-*   Trigger-focused patterns
+*   Punchy patterns and tactile transients (SNAP, DRAW, MICRO_TAP, STACCATO, RECOIL, SHUTTLE, TENSION)
 *   Continuous textures such as HUM, THRUM, WAVE, PATTER, and DRIFT
 
 Different events can therefore have different physical "feels" instead of everything becoming the same vibration.
@@ -51,7 +51,7 @@ PulseHaptics is built around configurable controller output.
 *   Per-mode motor and duration tuning
 *   Logical haptic channel routing
 *   Controller output testing
-*   Trigger-aware modes with rumble fallback where supported
+*   Punchy transients with dual-motor tactile coordination
 
 The goal is to make the same cue system adaptable to different controllers and different hardware characteristics.
 

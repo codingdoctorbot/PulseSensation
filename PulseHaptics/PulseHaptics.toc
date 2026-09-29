@@ -42,11 +42,9 @@ Core/Devices.lua
 Core/Waves.lua
 
 Core/Schemas/Standard.lua
-Core/Schemas/HighOnly.lua
-Core/Schemas/LowOnly.lua
-Core/Schemas/RumbleAndTriggers.lua
-Core/Schemas/TriggerEmphasis.lua
 Core/Schemas/Inverted.lua
+Core/Schemas/LowOnly.lua
+Core/Schemas/HighOnly.lua
 Core/Engine.lua
 
 # Classifies the player's own spell activity into semantic outcomes (instant vs. completed

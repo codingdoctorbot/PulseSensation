@@ -17,37 +17,23 @@
 
 local ADDON_NAME, Pulse = ...
 
--- The four physical channel names passed to C_GamePad.SetVibration as `vibrationType`.
--- CONFIRMED from Blizzard_APIDocumentationGenerated/GamePadDocumentation.lua that the
--- argument is a bare cstring with NO enum and NO documented value list anywhere in the
--- client source — "LTrigger"/"RTrigger" appear in Blizzard's code only as button-binding
--- labels (Blizzard_SharedXML/SharedConstants.lua:75-76), never as vibration types. So:
+-- The physical channel names passed to C_GamePad.SetVibration as `vibrationType`.
+-- LIVE CLIENT CONFIRMATION (2026-09-29): C_GamePad.SetVibration strictly supports only
+-- "Low" and "High". All calls with "LTrigger" or "RTrigger" fail to vibrate on any hardware.
+-- Both rumble motors work across supported controllers:
 --
---   "Low" / "High"          — confirmed live, every cue in this addon uses them.
---   "LTrigger" / "RTrigger" — NOT CONFIRMED HERE, but reportedly real: the strings Tremor
---                             has always used (Core/Schemas/TriggerEmphasis.lua), reported
---                             listed as valid by community documentation with DualSense
---                             among the responding hardware. Nothing in the source archive
---                             corroborates it, so the UI keeps them labelled unconfirmed
---                             until somebody here actually feels one.
---
--- A wrong string is a no-op rather than an error (SetVibration takes any cstring), so an
--- unsupported channel goes silent — which is why a schema routing to a dead channel needs
--- the fallback in Engine.lua's resolver.
-Pulse.CHANNELS = { "Low", "High", "LTrigger", "RTrigger" }
+--   "Low"  — confirmed live, heavy low-frequency counterweight motor.
+--   "High" — confirmed live, light high-frequency motor.
+Pulse.CHANNELS = { "Low", "High" }
 
 Pulse.CHANNEL_LABELS = {
 	Low = "Low motor (heavy rumble)",
 	High = "High motor (sharp rumble)",
-	LTrigger = "Left trigger",
-	RTrigger = "Right trigger",
 }
 
 Pulse.CHANNEL_CONFIRMED = {
 	Low = true,
 	High = true,
-	LTrigger = false,
-	RTrigger = false,
 }
 
 -- Every value reproduces the engine's pre-calibration behaviour exactly, so installing this
@@ -175,13 +161,10 @@ Pulse.CHANGE_EPSILON_DEFAULT = 0.0015
 -- for a different actuator. Every row is still only a start — the Ramp button measures YOUR
 -- controller and outranks anything here.
 --
--- `triggers` records whether the hardware is reported to have driveable trigger vibration.
--- Xbox One and later have a small dedicated impulse ERM per trigger; DualSense's adaptive
--- trigger assembly is reported to drive as a vibration source as well as resistance, and
--- this project HAS NOT FELT IT. Blizzard's side is unconfirmed either way: the gamepad layer
--- is SDL (C_GamePad.AddSDLMapping exists) and SetVibration takes a bare cstring, so the
--- accepted channel names are client-side and not discoverable from the source archive.
--- Treat the field as "worth trying the Test button", not as a guarantee.
+-- Note on trigger motors: While some hardware (Xbox One/Series) features physical impulse
+-- trigger motors, Blizzard's C_GamePad.SetVibration API strictly addresses only the main
+-- "Low" and "High" rumble motors across all platforms and operating systems. All cues and
+-- modes are designed to fully leverage Low and High motors in concert.
 
 local ERM_LOW = { floor = 0.12, attackTau = 0.090, transientAttackTau = 0.025, releaseTau = 0.060 }
 local ERM_HIGH = { floor = 0.10, attackTau = 0.050, transientAttackTau = 0.012, releaseTau = 0.035 }
@@ -236,7 +219,7 @@ Pulse.Devices = {
 		id = "dualsense",
 		label = "DualSense (PS5)",
 		triggers = false,
-		note = "High-definition voice-coil actuators: instantaneous transient response, wide frequency bandwidth, and near-zero breakaway friction. Note: while the hardware has adaptive trigger resistance, Blizzard's SDL gamepad layer does not drive them as vibration sources. Triggers are disabled so Pulse's role fallback seamlessly drives trigger cues through the voice coils.",
+		note = "High-definition voice-coil actuators: instantaneous transient response, wide frequency bandwidth, and near-zero breakaway friction.",
 		channels = {
 			Low = copy(LRA, { floor = 0.030, gain = 1.15, attackTau = 0.015, releaseTau = 0.012 }),
 			High = copy(LRA, { floor = 0.030, gain = 1.05, attackTau = 0.012, releaseTau = 0.010 }),
@@ -246,26 +229,22 @@ Pulse.Devices = {
 	xbox = {
 		id = "xbox",
 		label = "Xbox (One / Series)",
-		triggers = true,
-		note = "Two ERM main motors plus a small impulse motor in each trigger — the one listed controller where trigger vibration genuinely exists. The trigger motors are tiny, so they start seeded louder and higher-floored than the main pair.",
+		triggers = false,
+		note = "Two asymmetrical ERM main rumble motors: heavy low-frequency counterweight on the left (high breakaway, 90ms spin-up) and light high-frequency motor on the right.",
 		channels = {
 			Low = copy(ERM_LOW),
 			High = copy(ERM_HIGH),
-			LTrigger = { floor = 0.15, gain = 1.20, attackTau = 0.040, releaseTau = 0.030 },
-			RTrigger = { floor = 0.15, gain = 1.20, attackTau = 0.040, releaseTau = 0.030 },
 		},
 	},
 
 	xbox_elite = {
 		id = "xbox_elite",
 		label = "Xbox Elite Series 2",
-		triggers = true,
-		note = "Two heavy ERM body motors plus impulse motors in both triggers. Slightly firmer trigger floor to compensate for weighted trigger stops.",
+		triggers = false,
+		note = "Two heavy ERM body rumble motors with weighted grips. Slightly firmer floor to overcome chassis mass.",
 		channels = {
 			Low = copy(ERM_LOW),
 			High = copy(ERM_HIGH),
-			LTrigger = { floor = 0.16, gain = 1.25, attackTau = 0.035, releaseTau = 0.028 },
-			RTrigger = { floor = 0.16, gain = 1.25, attackTau = 0.035, releaseTau = 0.028 },
 		},
 	},
 

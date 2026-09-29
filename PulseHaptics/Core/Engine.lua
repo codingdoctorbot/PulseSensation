@@ -66,6 +66,9 @@ local roleTransientTotal = {}
 local roleHasTransient = {}
 local channelHasTransient = {}
 local frameTarget = {}
+local roleShapedTotal = {}
+local frameShaped = {}
+local SHAPED_YIELD = 0.35 -- gait-style shaped layers step back while a PlayMode transient hits the same role
 
 local deviceReady = false
 
@@ -183,6 +186,8 @@ function Engine:StopAll()
 	wipe(roleHasTransient)
 	wipe(channelHasTransient)
 	wipe(frameTarget)
+	wipe(roleShapedTotal)
+	wipe(frameShaped)
 	if C_GamePad and C_GamePad.StopVibration then
 		pcall(C_GamePad.StopVibration)
 	end
@@ -228,7 +233,9 @@ end
 -- the resolver rather than erroring, so a typo goes quiet instead of breaking a frame.
 -- `isTransient`: true for sharp discrete clicks/impacts (fast ~10ms attack), false for
 -- sustained immersion textures (smooth 75ms attack).
-function Engine:SetRoles(name, roles, duration, isTransient)
+-- `shape`: optional static envelope table { kickTime, kickGain, cut, tau = { low, high, default } }.
+-- A shaped layer evaluates its own kick and exponential decay, bypassing channel low-pass smoothing.
+function Engine:SetRoles(name, roles, duration, isTransient, shape)
 	if not name or type(roles) ~= "table" then
 		return
 	end
@@ -249,6 +256,11 @@ function Engine:SetRoles(name, roles, duration, isTransient)
 	local dur = (duration and duration > 0) and duration or 0.1
 	layer.endTime = GetTime() + dur
 	layer.isTransient = (isTransient == true)
+	layer.shape = shape
+	layer.t0 = nil
+	if shape then
+		layer.endTime = GetTime() + 1.0 -- safety; normally expires at its cut
+	end
 end
 
 -- Continuous hold: the caller re-invokes this every tick the state is true. Stop calling and
@@ -258,20 +270,20 @@ end
 -- blip rather than a layer a later tick keeps refreshing — Health.lua's lub-dub knocks,
 -- where a duration shorter than the gap between them lets the value decay toward zero in
 -- between instead of stepping from one held target straight to the next.
-function Engine:Hold(name, low, high, duration, isTransient)
+function Engine:Hold(name, low, high, duration, isTransient, shape)
 	scratchRoles.low = low or 0
 	scratchRoles.high = high or 0
 	local dur = (duration and duration > 0) and duration or REFRESH_WINDOW
-	self:SetRoles(name, scratchRoles, dur, isTransient)
+	self:SetRoles(name, scratchRoles, dur, isTransient, shape)
 end
 
 -- Role-space sibling of Hold, existing so callers get REFRESH_WINDOW by default rather than
 -- SetRoles' raw 0.1. Reaching SetRoles directly for a continuous cue is a trap: a duration
 -- shorter than the caller's own re-arm interval expires between ticks and the texture
 -- stutters, and an explicit 0 gives a layer already dead the moment it is created.
-function Engine:HoldRoles(name, roles, duration, isTransient)
+function Engine:HoldRoles(name, roles, duration, isTransient, shape)
 	local dur = (duration and duration > 0) and duration or REFRESH_WINDOW
-	self:SetRoles(name, roles, dur, isTransient)
+	self:SetRoles(name, roles, dur, isTransient, shape)
 end
 
 function Engine:StopLayer(name)
@@ -451,30 +463,32 @@ end
 -- them there via max), smooth with the local `smoothTowards` helper above (slower attack,
 -- faster release), and only call SetVibration when a channel's value actually moved.
 
+local function mapValue(channel, v)
+	if not v or v <= 0 then
+		return 0
+	end
+	v = clamp01(v * channelConfig(channel, "gain"))
+	if v <= 0 then
+		return 0
+	end
+	local gamma = channelConfig(channel, "gamma")
+	if gamma and gamma ~= 1.0 then
+		v = v ^ gamma
+	end
+	local floor = channelConfig(channel, "floor")
+	if floor and floor > 0 then
+		v = floor + (1.0 - floor) * v
+	end
+	return clamp01(v)
+end
+
 -- Hoisted to file-scope to eliminate closure allocation on every OnUpdate frame tick (Rule 4).
-local function driveChannel(channel, wanted, last, dt, epsilon, now, isTransient)
+local function driveChannel(channel, wanted, last, dt, epsilon, now, isTransient, shaped)
 	if rawHolds[channel] then
 		return false
 	end
 
-	if wanted and wanted > 0 then
-		wanted = clamp01(wanted * channelConfig(channel, "gain"))
-		if wanted > 0 then
-			local gamma = channelConfig(channel, "gamma")
-			if gamma and gamma ~= 1.0 then
-				wanted = wanted ^ gamma
-			end
-			local floor = channelConfig(channel, "floor")
-			if floor and floor > 0 then
-				wanted = floor + (1.0 - floor) * wanted
-			end
-			wanted = clamp01(wanted)
-		end
-	else
-		-- Zero in, zero out, unconditionally. The breakaway floor must never turn a
-		-- silent channel into a permanently humming one.
-		wanted = 0
-	end
+	wanted = mapValue(channel, wanted)
 
 	-- Dual-lane adaptive smoothing:
 	-- Transient impacts use fast transientAttackTau (10-12ms) for punchy, immediate tactile feedback.
@@ -488,7 +502,8 @@ local function driveChannel(channel, wanted, last, dt, epsilon, now, isTransient
 
 	-- When wanted is zero and smoothed decays below the silence gate, explicitly zero the motor.
 	-- This prevents sub-threshold residual voltage leaks when another channel is still active.
-	if wanted == 0 and smoothed <= SILENCE_GATE then
+	local shapedOut = mapValue(channel, shaped)
+	if wanted == 0 and smoothed <= SILENCE_GATE and shapedOut == 0 then
 		if (last or 0) > 0 then
 			if C_GamePad and C_GamePad.SetVibration then
 				pcall(C_GamePad.SetVibration, channel, 0)
@@ -499,11 +514,14 @@ local function driveChannel(channel, wanted, last, dt, epsilon, now, isTransient
 		return false
 	end
 
-	local isOn = smoothed > SILENCE_GATE
-	local delta = math.abs(smoothed - (last or -1))
+	local base = (smoothed > SILENCE_GATE) and smoothed or 0
+	local out = clamp01(base + shapedOut * (1.0 - base))
+	local isOn = out > SILENCE_GATE
+	local delta = math.abs(out - (last or -1))
 	local timeSinceLast = now - (lastSentTimeByChannel[channel] or 0)
-	local isOnset = (wanted > 0 and (lastWantedByChannel[channel] or 0) == 0)
-	lastWantedByChannel[channel] = wanted
+	local want = (shapedOut > wanted) and shapedOut or wanted
+	local isOnset = (want > 0 and (lastWantedByChannel[channel] or 0) == 0)
+	lastWantedByChannel[channel] = want
 
 	local forceSend = isOnset
 
@@ -512,9 +530,9 @@ local function driveChannel(channel, wanted, last, dt, epsilon, now, isTransient
 	-- New onsets (transition from 0 to active) always force immediate dispatch to bypass the epsilon deadband.
 	if forceSend or delta > epsilon or (isOn and timeSinceLast >= WATCHDOG_INTERVAL) then
 		if C_GamePad and C_GamePad.SetVibration then
-			pcall(C_GamePad.SetVibration, channel, smoothed)
+			pcall(C_GamePad.SetVibration, channel, out)
 		end
-		lastSetByChannel[channel] = smoothed
+		lastSetByChannel[channel] = out
 		lastSentTimeByChannel[channel] = now
 	end
 	return isOn
@@ -587,11 +605,50 @@ local function onEngineTick(elapsed)
 	wipe(roleTransientTotal)
 	wipe(roleHasTransient)
 	wipe(channelHasTransient)
+	wipe(roleShapedTotal)
+	wipe(frameShaped)
 
 	local hasRoles = false
+	local hasShaped = false
 	for name, layer in pairs(layers) do
 		if now >= layer.endTime then
 			layers[name] = nil
+		elseif layer.shape then
+			local shape = layer.shape
+			if not layer.t0 then
+				layer.t0 = now -- stamped on first evaluation: the kick is never skipped by frame sampling
+			end
+			local age = now - layer.t0
+			local kickTime = shape.kickTime
+			if kickTime < dt * 1.2 then
+				kickTime = dt * 1.2
+			end
+			local cut = shape.cut or 0.06
+			local alive = false
+			for role, value in pairs(layer.roles) do
+				if type(value) == "number" and value > 0 then
+					local v
+					if age < kickTime then
+						v = value * (shape.kickGain or 1.0)
+					else
+						local tauDef = shape.tau
+						local tauVal = (type(tauDef) == "table" and (tauDef[role] or tauDef.default))
+							or (type(tauDef) == "number" and tauDef)
+							or 0.030
+						v = value * math.exp(-(age - kickTime) / tauVal)
+					end
+					if v >= cut then
+						alive = true
+						hasShaped = true
+						if v > (roleShapedTotal[role] or 0) then
+							roleShapedTotal[role] = v
+						end
+					end
+				end
+			end
+			if not alive and age >= kickTime then
+				layers[name] = nil
+			end
 		else
 			local isTransient = layer.isTransient
 			if type(layer.roles) == "table" then
@@ -658,15 +715,48 @@ local function onEngineTick(elapsed)
 		end
 	end
 
+	if hasShaped then
+		for role, magnitude in pairs(roleShapedTotal) do
+			if (roleTransientTotal[role] or 0) > 0 then
+				magnitude = magnitude * SHAPED_YIELD
+			end
+			local def = resolveRole(schema, role)
+			if def and def.channel then
+				local channelMag = clamp01(magnitude * masterIntensity * (def.intensity or 1.0))
+				if channelMag > (frameShaped[def.channel] or 0) then
+					frameShaped[def.channel] = channelMag
+				end
+			end
+		end
+	end
+
 	local epsilon = Pulse.Database:GetChangeEpsilon()
 	local anyOn = false
 
 	if hasTargets then
 		for channel, wanted in pairs(frameTarget) do
 			if
-				driveChannel(channel, wanted, lastSetByChannel[channel], dt, epsilon, now, channelHasTransient[channel])
+				driveChannel(
+					channel,
+					wanted,
+					lastSetByChannel[channel],
+					dt,
+					epsilon,
+					now,
+					channelHasTransient[channel],
+					frameShaped[channel]
+				)
 			then
 				anyOn = true
+			end
+		end
+	end
+	if hasShaped then
+		for channel, shaped in pairs(frameShaped) do
+			if not (hasTargets and frameTarget[channel]) then
+				if driveChannel(channel, 0, lastSetByChannel[channel], dt, epsilon, now, false, shaped) then
+					anyOn = true
+				end
 			end
 		end
 	end
@@ -674,7 +764,7 @@ local function onEngineTick(elapsed)
 	-- Channels that were on and now have no target at all need to decay too, not just
 	-- channels present in this tick's `target` — walk everything we last set.
 	for channel, last in pairs(lastSetByChannel) do
-		if not (hasTargets and frameTarget[channel]) and last > 0 then
+		if not (hasTargets and frameTarget[channel]) and not frameShaped[channel] and last > 0 then
 			if driveChannel(channel, 0, last, dt, epsilon, now, false) then
 				anyOn = true
 			end
@@ -902,6 +992,8 @@ function Engine:_DebugLayers()
 			ltrigger = layer.roles.ltrigger,
 			rtrigger = layer.roles.rtrigger,
 			isTransient = layer.isTransient,
+			shape = (layer.shape ~= nil),
+			age = layer.t0 and (now - layer.t0) or nil,
 			remaining = layer.endTime - now,
 		}
 	end

@@ -220,69 +220,64 @@ Pulse.Modes = {
 		},
 	},
 
-	-- ── Trigger-focused discrete modes (adaptive triggers with rumble fallback) ──
-	--
-	-- Designed specifically for controllers with trigger actuators (e.g. Xbox One/Series under
-	-- the Rumble + Triggers or Triggers Only schemas). Kept as distinct modes because not
-	-- all controllers have triggers: standard pads safely fall back via Engine.lua's
-	-- ROLE_FALLBACK (ltrigger -> low, rtrigger -> high), while players on trigger-capable
-	-- hardware get dedicated trigger snaps, pulls, and bursts.
-	TRIGGER_CLICK = {
-		label = "Crisp mechanical snap on the trigger (falls back to high motor on standard pads).",
+	-- ── Punchy patterns and tactile transients (formerly trigger modes) ──────────
+	-- Reprogrammed from phantom trigger channels to Low and High rumble motors.
+	SNAP = {
+		label = "A crisp mechanical snap on the high motor.",
 		baseDuration = 0.04,
-		steps = { { role = "rtrigger", relIntensity = 0.95, relDuration = 1.0 } },
+		steps = { { role = "high", relIntensity = 0.95, relDuration = 1.0 } },
 	},
-	TRIGGER_PULL = {
-		label = "Progressive pull leading to a trigger break (falls back to low/high rumble on standard pads).",
+	DRAW = {
+		label = "Progressive low build leading to a sharp high break.",
 		baseDuration = 0.10,
 		steps = {
-			{ role = "ltrigger", relIntensity = 0.40, relDuration = 0.8 },
-			{ role = "ltrigger", relIntensity = 0.75, relDuration = 1.0 },
+			{ role = "low", relIntensity = 0.40, relDuration = 0.8 },
+			{ role = "low", relIntensity = 0.75, relDuration = 1.0 },
 			{ gap = 0.03 },
-			{ role = "rtrigger", relIntensity = 1.00, relDuration = 0.6 },
+			{ role = "high", relIntensity = 1.00, relDuration = 0.6 },
 		},
 	},
-	TRIGGER_TAP = {
-		label = "Light micro-tap on the trigger (falls back to high motor on standard pads).",
+	MICRO_TAP = {
+		label = "A light micro-tap on the high motor.",
 		baseDuration = 0.06,
-		steps = { { role = "rtrigger", relIntensity = 0.50, relDuration = 1.0 } },
+		steps = { { role = "high", relIntensity = 0.50, relDuration = 1.0 } },
 	},
-	TRIGGER_BURST = {
-		label = "Rapid staccato triple-click on the trigger (falls back to high motor on standard pads).",
+	STACCATO = {
+		label = "Rapid staccato triple-click on the high motor.",
 		baseDuration = 0.05,
 		steps = {
-			{ role = "rtrigger", relIntensity = 0.90, relDuration = 0.7 },
+			{ role = "high", relIntensity = 0.90, relDuration = 0.7 },
 			{ gap = 0.035 },
-			{ role = "rtrigger", relIntensity = 0.85, relDuration = 0.7 },
+			{ role = "high", relIntensity = 0.85, relDuration = 0.7 },
 			{ gap = 0.035 },
-			{ role = "rtrigger", relIntensity = 1.00, relDuration = 0.8 },
+			{ role = "high", relIntensity = 1.00, relDuration = 0.8 },
 		},
 	},
-	TRIGGER_RECOIL = {
-		label = "Sharp trigger kick layered with heavy palm rumble kick and decay.",
+	RECOIL = {
+		label = "Sharp high kick layered with heavy low kick and rumble decay.",
 		baseDuration = 0.10,
 		steps = {
-			{ role = "rtrigger", relIntensity = 1.00, relDuration = 0.7 },
+			{ role = "high", relIntensity = 1.00, relDuration = 0.7 },
 			{ role = "both", relIntensity = 0.75, relDuration = 0.9 },
 			{ role = "low", relIntensity = 0.30, relDuration = 1.0 },
 		},
 	},
-	TRIGGER_ALTERNATE = {
-		label = "Alternating left and right trigger clicks (falls back to low/high rumble on standard pads).",
+	SHUTTLE = {
+		label = "Alternating low thud and high snap across motors.",
 		baseDuration = 0.08,
 		steps = {
-			{ role = "ltrigger", relIntensity = 0.80, relDuration = 1.0 },
+			{ role = "low", relIntensity = 0.80, relDuration = 1.0 },
 			{ gap = 0.05 },
-			{ role = "rtrigger", relIntensity = 0.80, relDuration = 1.0 },
+			{ role = "high", relIntensity = 0.80, relDuration = 1.0 },
 		},
 	},
-	TRIGGER_TENSION = {
-		label = "Three-stage rising tension on the trigger (falls back to low rumble on standard pads).",
+	TENSION = {
+		label = "Three-stage rising tension building on the low motor.",
 		baseDuration = 0.08,
 		steps = {
-			{ role = "ltrigger", relIntensity = 0.30, relDuration = 0.8 },
-			{ role = "ltrigger", relIntensity = 0.60, relDuration = 0.8 },
-			{ role = "ltrigger", relIntensity = 0.95, relDuration = 1.0 },
+			{ role = "low", relIntensity = 0.30, relDuration = 0.8 },
+			{ role = "low", relIntensity = 0.60, relDuration = 0.8 },
+			{ role = "low", relIntensity = 0.95, relDuration = 1.0 },
 		},
 	},
 
@@ -333,6 +328,16 @@ Pulse.Modes = {
 	},
 }
 
+-- Backward compatibility aliases: existing profiles or external callers requesting
+-- legacy TRIGGER_* mode names seamlessly map to the reprogrammed Low/High shapes.
+Pulse.Modes.TRIGGER_CLICK = Pulse.Modes.SNAP
+Pulse.Modes.TRIGGER_PULL = Pulse.Modes.DRAW
+Pulse.Modes.TRIGGER_TAP = Pulse.Modes.MICRO_TAP
+Pulse.Modes.TRIGGER_BURST = Pulse.Modes.STACCATO
+Pulse.Modes.TRIGGER_RECOIL = Pulse.Modes.RECOIL
+Pulse.Modes.TRIGGER_ALTERNATE = Pulse.Modes.SHUTTLE
+Pulse.Modes.TRIGGER_TENSION = Pulse.Modes.TENSION
+
 -- Ordered list for the settings panel's "Test a mode" picker, not alphabetical — grouped
 -- the way the comments above group them.
 Pulse.ModeOrder = {
@@ -359,13 +364,13 @@ Pulse.ModeOrder = {
 	"BRAKE",
 	"BLIP",
 	"WOBBLE",
-	"TRIGGER_CLICK",
-	"TRIGGER_PULL",
-	"TRIGGER_TAP",
-	"TRIGGER_BURST",
-	"TRIGGER_RECOIL",
-	"TRIGGER_ALTERNATE",
-	"TRIGGER_TENSION",
+	"SNAP",
+	"DRAW",
+	"MICRO_TAP",
+	"STACCATO",
+	"RECOIL",
+	"SHUTTLE",
+	"TENSION",
 	"PATTER",
 	"HUM",
 	"THRUM",

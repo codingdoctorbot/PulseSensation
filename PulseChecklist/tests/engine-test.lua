@@ -214,29 +214,51 @@ Engine:PlayMode("alpha", "STUTTER", 1.0) -- supersedes alpha's first sequence
 runTimersTo(now + 5)
 check("re-firing one cue does not silence the other", recreated > 0, true)
 
--- ── Trigger vibration modes & role fallback ──────────────────────────────────
+-- ── Renamed vibration modes & backward compatibility aliases ─────────────────
 
-assert(loadfile(ROOT .. "/Core/Schemas/RumbleAndTriggers.lua"))("Pulse", Pulse)
-
-check("TRIGGER_CLICK is in Pulse.Modes", type(Pulse.Modes.TRIGGER_CLICK), "table")
-check("TRIGGER_CLICK has hasTrigger", Pulse.ModeRoleInfo.TRIGGER_CLICK.hasTrigger, true)
-check("TRIGGER_CLICK has no low motor", Pulse.ModeRoleInfo.TRIGGER_CLICK.hasLow, false)
-check("TRIGGER_RECOIL has trigger", Pulse.ModeRoleInfo.TRIGGER_RECOIL.hasTrigger, true)
-check("TRIGGER_RECOIL has low rumble", Pulse.ModeRoleInfo.TRIGGER_RECOIL.hasLow, true)
+check("SNAP is in Pulse.Modes", type(Pulse.Modes.SNAP), "table")
+check("TRIGGER_CLICK aliases to SNAP", Pulse.Modes.TRIGGER_CLICK, Pulse.Modes.SNAP)
+check("SNAP has high motor", Pulse.ModeRoleInfo.SNAP.hasHigh, true)
+check("SNAP has no low motor", Pulse.ModeRoleInfo.SNAP.hasLow, false)
+check("RECOIL is in Pulse.Modes", type(Pulse.Modes.RECOIL), "table")
+check("TRIGGER_RECOIL aliases to RECOIL", Pulse.Modes.TRIGGER_RECOIL, Pulse.Modes.RECOIL)
+check("RECOIL has low rumble", Pulse.ModeRoleInfo.RECOIL.hasLow, true)
+check("RECOIL has high motor", Pulse.ModeRoleInfo.RECOIL.hasHigh, true)
 
 local lastRoles = nil
 local spySetRoles = Engine.SetRoles
-Engine.SetRoles = function(self, name, roles, duration)
+Engine.SetRoles = function(self, name, roles, duration, isTransient, shape)
 	lastRoles = roles
-	return spySetRoles(self, name, roles, duration)
+	return spySetRoles(self, name, roles, duration, isTransient, shape)
 end
 
 Engine:RefreshDevice()
-Engine:PlayMode("trigger_test", "TRIGGER_CLICK", 1.0)
+Engine:PlayMode("trigger_test", "SNAP", 1.0)
 runTimersTo(now + 1)
-check("TRIGGER_CLICK emits rtrigger role", (lastRoles and lastRoles.rtrigger ~= nil), true)
+check("SNAP emits high role", (lastRoles and lastRoles.high ~= nil), true)
 
 Engine.SetRoles = spySetRoles
+
+-- ── Shaped layers (kick, decay, cut) ──────────────────────────────────────────
+
+local testShape = {
+	kickTime = 0.022,
+	kickGain = 1.6,
+	cut = 0.06,
+	tau = { low = 0.040, high = 0.018, default = 0.030 },
+}
+Engine:SetRoles("test_shaped", { low = 0.5, high = 0.3 }, 0.045, true, testShape)
+local debugLayers = Engine:_DebugLayers()
+local foundShaped = false
+for _, layer in ipairs(debugLayers) do
+	if layer.name == "test_shaped" then
+		foundShaped = layer.shape
+	end
+end
+check("shaped layer registers shape flag in debug view", foundShaped, true)
+
+Engine:StopAll()
+check("StopAll clears shaped layers", #Engine:_DebugLayers(), 0)
 
 -- ── Inverted Schema & Presets ────────────────────────────────────────────────
 
@@ -265,8 +287,8 @@ check("dualsense low gain", Pulse.Devices.dualsense.channels.Low.gain, 1.15)
 check("dualsense low floor", Pulse.Devices.dualsense.channels.Low.floor, 0.030)
 check("ds4 triggers disabled", Pulse.Devices.ds4.triggers, false)
 check("ds4 low floor", Pulse.Devices.ds4.channels.Low.floor, 0.120)
-check("xbox triggers enabled", Pulse.Devices.xbox.triggers, true)
-check("xbox_elite triggers enabled", Pulse.Devices.xbox_elite.triggers, true)
+check("xbox triggers disabled", Pulse.Devices.xbox.triggers, false)
+check("xbox_elite triggers disabled", Pulse.Devices.xbox_elite.triggers, false)
 
 local mockRawState = {}
 C_GamePad.GetDeviceRawState = function(_)
@@ -519,22 +541,22 @@ Engine:StopAll()
 Engine:StopAll()
 local origSetVib = C_GamePad.SetVibration
 C_GamePad.SetVibration = function(channel, mag)
-	if channel == "LTrigger" then
-		error("Hardware does not support LTrigger")
+	if channel == "Low" and mag == 0.75 then
+		error("Hardware calibration failure on Low")
 	end
 	origSetVib(channel, mag)
 end
 
-Engine:RawChannel("LTrigger", 0.75, 0.5)
+Engine:RawChannel("Low", 0.75, 0.5)
 check("raw hold was scheduled with clear error state", Engine:GetCalibrationError(), nil)
 
--- Next tick attempts to send LTrigger to C_GamePad.SetVibration
+-- Next tick attempts to send Low to C_GamePad.SetVibration
 local preErrCount = Engine.errorCount or 0
 frameScripts.OnUpdate(nil, 0.016)
 check("pcall trapped calibration error safely without crash", Engine:GetCalibrationError() ~= nil, true)
 check(
 	"  and captured error detail",
-	Engine:GetCalibrationError() and Engine:GetCalibrationError():find("Hardware does not support LTrigger") ~= nil,
+	Engine:GetCalibrationError() and Engine:GetCalibrationError():find("Hardware calibration failure on Low") ~= nil,
 	true
 )
 check("  and engine.errorCount did not increment", Engine.errorCount or 0, preErrCount)

@@ -191,13 +191,14 @@ end
 local holdCalls = {}
 local holdRoleCalls = {}
 
-function Pulse:HoldIfEnabled(cue, low, high, duration, isTransient)
+function Pulse:HoldIfEnabled(cue, low, high, duration, isTransient, shape)
 	holdCalls[#holdCalls + 1] = {
 		cue = cue,
 		low = low,
 		high = high,
 		duration = duration,
 		isTransient = isTransient,
+		shape = shape,
 		time = now,
 	}
 end
@@ -292,11 +293,11 @@ if syncFn then
 	syncFn()
 end
 
--- Case 2A: Xbox preset (triggers=true) on STANDARD schema (ltrigger routes to Low)
+-- Case 2A: Footfalls drive both Low and High motors with shaped envelope
 currentSchema = "standard"
 dbStore.appliedDevicePreset = "xbox"
 dbStore.devicePreset = "xbox"
-dbStore.triggerSettings.locomotion.splitFeet = 1
+dbStore.triggerSettings.locomotion.splitFeet = 0
 mounted = false
 playerSpeed = 7.0
 reset()
@@ -306,80 +307,48 @@ local onUpdate = pollFrame:GetScript("OnUpdate")
 check("OnUpdate installed on start moving", onUpdate ~= nil, true)
 
 holdCalls = {}
-holdRoleCalls = {}
 -- Tick for 1 frame
 onUpdate(pollFrame, 1 / 60)
-check("CR-030: under Standard schema, footfalls do NOT split to triggers", #holdRoleCalls == 0 and #holdCalls > 0, true)
-check("CR-030: footfall sent via HoldIfEnabled to Low motor", holdCalls[1] and holdCalls[1].low > 0, true)
-check("CR-030: footfall uses transient fast attack lane", holdCalls[1] and holdCalls[1].isTransient, true)
-check("CR-030: footfall duration is discrete 45ms tap", holdCalls[1] and holdCalls[1].duration, 0.045)
+check("Footfall sent via HoldIfEnabled", #holdCalls > 0, true)
+check("Footfall drives Low motor for body mass", holdCalls[1] and holdCalls[1].low > 0, true)
+check("Footfall drives High motor for contact crispness", holdCalls[1] and holdCalls[1].high > 0, true)
+check("Footfall uses transient fast attack lane", holdCalls[1] and holdCalls[1].isTransient, true)
+check("Footfall duration is discrete 45ms tap", holdCalls[1] and holdCalls[1].duration, 0.045)
+check("Footfall attaches shaped envelope table", holdCalls[1] and type(holdCalls[1].shape) == "table", true)
+check("Footfall shape has kickGain >= 1.5", holdCalls[1] and (holdCalls[1].shape.kickGain or 0) >= 1.5, true)
+check("Footfall shape has cut threshold", holdCalls[1] and (holdCalls[1].shape.cut or 0) > 0, true)
 
 eventFrame:GetScript("OnEvent")(eventFrame, "PLAYER_STOPPED_MOVING")
 
--- Case 2B: Xbox preset on RUMBLE_AND_TRIGGERS schema (ltrigger routes to LTrigger)
-currentSchema = "rumbleAndTriggers"
-dbStore.appliedDevicePreset = "xbox"
-dbStore.devicePreset = "xbox"
+-- ── Part 3: Stereo Timbre Panning (splitFeet) ────────────────────────────────
+
+io.write("\n── Part 3: Stereo Timbre Panning (splitFeet) ──\n")
+
+-- When splitFeet is 1, left foot leans Low (left) and right foot leans High (right)
+dbStore.triggerSettings.locomotion.splitFeet = 1
 reset()
 
 eventFrame:GetScript("OnEvent")(eventFrame, "PLAYER_STARTED_MOVING")
 holdCalls = {}
-holdRoleCalls = {}
+-- First step (stepIndex == 1, left foot)
 onUpdate(pollFrame, 1 / 60)
-check(
-	"CR-030: under Rumble+Triggers schema with Xbox, footfalls split to triggers",
-	#holdRoleCalls > 0 and #holdCalls == 0,
-	true
-)
-check(
-	"CR-030: left footfall sent to ltrigger role",
-	holdRoleCalls[1] and holdRoleCalls[1].roles.ltrigger > 0 and (holdRoleCalls[1].roles.rtrigger or 0) == 0,
-	true
-)
+check("Left footfall sent", #holdCalls == 1, true)
+local leftLow = holdCalls[1].low
+local leftHigh = holdCalls[1].high
 
-eventFrame:GetScript("OnEvent")(eventFrame, "PLAYER_STOPPED_MOVING")
+-- Advance phase to step 2 (right foot)
+local dt = 1 / 60
+while #holdCalls < 2 do
+	now = now + dt
+	onUpdate(pollFrame, dt)
+end
+check("Right footfall sent", #holdCalls >= 2, true)
+local rightLow = holdCalls[2].low
+local rightHigh = holdCalls[2].high
 
--- Case 2C: DualSense preset (triggers=false) on RUMBLE_AND_TRIGGERS schema
-currentSchema = "rumbleAndTriggers"
-dbStore.appliedDevicePreset = "dualsense"
-dbStore.devicePreset = "dualsense"
-reset()
-
-eventFrame:GetScript("OnEvent")(eventFrame, "PLAYER_STARTED_MOVING")
-holdCalls = {}
-holdRoleCalls = {}
-onUpdate(pollFrame, 1 / 60)
-check("CR-030: DualSense (triggers=false) does not split feet", #holdRoleCalls == 0 and #holdCalls > 0, true)
-
-eventFrame:GetScript("OnEvent")(eventFrame, "PLAYER_STOPPED_MOVING")
-
--- ── Part 3: CR-020 Applied vs Dropdown Preset ────────────────────────────────
-
-io.write("\n── Part 3: CR-020 Applied vs Dropdown Preset ──\n")
-
--- User picked "xbox" in dropdown, but has NOT applied it yet (applied is "default")
-currentSchema = "rumbleAndTriggers"
-dbStore.devicePreset = "xbox"
-dbStore.appliedDevicePreset = "default"
-reset()
-
-eventFrame:GetScript("OnEvent")(eventFrame, "PLAYER_STARTED_MOVING")
-holdCalls = {}
-holdRoleCalls = {}
-onUpdate(pollFrame, 1 / 60)
-check("CR-020: unapplied Xbox dropdown selection does NOT split feet", #holdRoleCalls == 0 and #holdCalls > 0, true)
-
-eventFrame:GetScript("OnEvent")(eventFrame, "PLAYER_STOPPED_MOVING")
-
--- Now user clicks Apply
-Pulse.Database:ApplyDevicePreset("xbox")
-check("CR-020: Apply sets appliedDevicePreset to xbox", Pulse.Database:GetAppliedDevicePreset(), "xbox")
-
-eventFrame:GetScript("OnEvent")(eventFrame, "PLAYER_STARTED_MOVING")
-holdCalls = {}
-holdRoleCalls = {}
-onUpdate(pollFrame, 1 / 60)
-check("CR-020: applied Xbox preset now splits feet", #holdRoleCalls > 0 and #holdCalls == 0, true)
+-- Left foot leans Low vs Right foot which leans High
+check("Left foot has higher low motor than right foot", leftLow > rightLow, true)
+check("Right foot has higher high motor than left foot", rightHigh > leftHigh, true)
 
 eventFrame:GetScript("OnEvent")(eventFrame, "PLAYER_STOPPED_MOVING")
 
@@ -442,11 +411,17 @@ end
 
 local mountedFootfalls = #holdCalls
 local mountedStepsPerSec = mountedFootfalls / 10.0
+-- Deliberate gallop merge: trail hoof lands < 80ms after lead, fusing into one heavier strike per stride
+local expectedImpactsPerSec = gaitInfo.cadence * 0.5
 check(
-	"CR-005: mounted footfall rate matches cadence within 0.25",
-	math.abs(mountedStepsPerSec - gaitInfo.cadence) <= 0.25,
+	"Deliberate gallop pair merge: impacts per second matches stride rate (~"
+		.. string.format("%.2f", expectedImpactsPerSec)
+		.. ")",
+	math.abs(mountedStepsPerSec - expectedImpactsPerSec) <= 0.25,
 	true
 )
+check("Merged gallop hoof strike uses HOOF shape", holdCalls[1] and holdCalls[1].shape ~= nil, true)
+check("Merged gallop hoof strike has extended tau", holdCalls[1] and (holdCalls[1].shape.tau.low > 0.05), true)
 
 eventFrame:GetScript("OnEvent")(eventFrame, "PLAYER_STOPPED_MOVING")
 

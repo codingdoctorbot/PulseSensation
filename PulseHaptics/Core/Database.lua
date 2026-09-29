@@ -24,7 +24,7 @@ local Database = {}
 Pulse.Database = Database
 
 local DB
-local DB_VERSION = 7
+local DB_VERSION = 8
 
 local GLOBAL_DEFAULTS = {
 	masterEnabled = true,
@@ -958,7 +958,18 @@ function Database:Migrate()
 	if DB.version < 7 then
 		self:_MigrateRoleAndImmersionProfiles()
 	end
+	if DB.version < 8 then
+		self:_MigrateRetiredSchemas()
+	end
 	DB.version = DB_VERSION
+end
+
+-- One-time, DB_VERSION 7 -> 8: maps retired trigger schemas (rumbleAndTriggers, triggerEmphasis)
+-- to standard following client hardware verification that trigger channels are unsupported.
+function Database:_MigrateRetiredSchemas()
+	if DB and (DB.defaultHapticSchema == "rumbleAndTriggers" or DB.defaultHapticSchema == "triggerEmphasis") then
+		DB.defaultHapticSchema = "standard"
+	end
 end
 
 -- One-time, DB_VERSION 6 -> 7: seeds newly added Dungeon and Immersion role profiles into
@@ -1606,7 +1617,14 @@ function Database:Get(key)
 	if key == "masterIntensity" then
 		return activeProfile().masterIntensity
 	end
-	return DB[key]
+	if key == "defaultHapticSchema" then
+		local schema = DB and DB.defaultHapticSchema
+		if not schema or (Pulse.HapticSchemas and not Pulse.HapticSchemas[schema]) then
+			return "standard"
+		end
+		return schema
+	end
+	return DB and DB[key]
 end
 
 function Database:Set(key, value)

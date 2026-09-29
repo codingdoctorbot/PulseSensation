@@ -9,12 +9,12 @@ local ADDON_NAME, Pulse = ...
 Pulse.HapticSchemas = Pulse.HapticSchemas or {}
 
 Pulse.HapticSchemas["inverted"] = {
-    id = "inverted",
-    order = 6,
-    label = "Swapped / Inverted Rumble",
-    desc = "Reverses the rumble motors: heavy low-frequency thuds go to the High motor, and sharp high-frequency ticks go to the Low motor. For reverse-wired or custom controller grips.",
-    roles = {
-        low = { channel = "High", intensity = 1.0 },
-        high = { channel = "Low", intensity = 1.0 },
-    },
+	id = "inverted",
+	order = 2,
+	label = "Swapped / Inverted Rumble",
+	desc = "Reverses the rumble motors: heavy low-frequency thuds go to the High motor, and sharp high-frequency ticks go to the Low motor. For reverse-wired or custom controller grips.",
+	roles = {
+		low = { channel = "High", intensity = 1.0 },
+		high = { channel = "Low", intensity = 1.0 },
+	},
 }
