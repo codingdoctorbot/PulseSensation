@@ -232,9 +232,10 @@ local function gaitWaveform(mode, phase, intensity, sharpness)
 	end
 
 	if mode == "GALLOP" then
-		-- Two hooves, the trailing one offset, so the pair lands as a rolling double.
-		local lead = math.abs(math.sin(phase))
-		local trail = math.abs(math.sin(phase - 0.6))
+		-- Two hooves per stride: lead hoof, then trailing hoof offset by 0.6 rad (~10% of stride).
+		-- Single peak per 2pi stride cycle (not abs(sin) which quadrupled peaks).
+		local lead = math.max(0, math.sin(phase))
+		local trail = math.max(0, math.sin(phase - 0.6))
 		return (lead ^ sharpness) * peak, (trail ^ sharpness) * peak
 	elseif mode == "MECHANICAL" then
 		-- A sawtooth per half cycle: rises and resets rather than swelling and fading.
@@ -250,6 +251,8 @@ local function gaitWaveform(mode, phase, intensity, sharpness)
 	local right = math.max(0, -math.sin(phase))
 	return (left ^ sharpness) * peak, (right ^ sharpness) * peak
 end
+
+M.CalculateWaveform = gaitWaveform
 
 -- Gait resolution — runs on movement start, not per frame
 
@@ -319,7 +322,7 @@ local function resolveGait()
 		gait.mode = mount.mode
 		gait.sharpness = isWalking and math.max(2, mount.sharpness - 1) or mount.sharpness
 		gait.cadence = isWalking and (walkCadence * 1.1 * (speed / BASE_WALK_SPEED))
-			or (runCadence * mount.cadence * speedRatio * confidence)
+			or (runCadence * (mount.cadence / 1.8) * speedRatio * confidence)
 		gait.intensity = baseIntensity * mount.intensity * setting("mountIntensity", 1.2)
 	else
 		gait.mode = "FOOTSTEP"
@@ -374,9 +377,19 @@ local function shouldSplitFeet()
 	if setting("splitFeet", 1) ~= 1 then
 		return false
 	end
-	local preset = Pulse.Devices and Pulse.Devices[Pulse.Database:GetDevicePreset()]
+	local presetID = Pulse.Database.GetAppliedDevicePreset and Pulse.Database:GetAppliedDevicePreset()
+		or Pulse.Database:GetDevicePreset()
+	local preset = Pulse.Devices and Pulse.Devices[presetID]
 	if preset and preset.triggers ~= true then
 		return false
+	end
+	-- Split feet only when the active schema actually routes trigger roles to trigger channels (CR-030).
+	-- Under Standard schema, ltrigger resolves to Low and rtrigger to High via ROLE_FALLBACK.
+	if Pulse.Engine and Pulse.Engine.ResolveRole then
+		local def = Pulse.Engine:ResolveRole("ltrigger")
+		if not def or def.channel == "Low" or def.channel == "High" then
+			return false
+		end
 	end
 	return true
 end
@@ -454,6 +467,24 @@ end
 
 local wasGrounded = true
 local splitRoles = { ltrigger = 0, rtrigger = 0 }
+local TAP_DURATION = 0.045
+local GALLOP_TRAIL_OFFSET = 0.6
+local nextStep = 1
+
+local function fireStep(stepIndex)
+	local intensity = gait.intensity
+	if intensity <= 0 then
+		return
+	end
+
+	if shouldSplitFeet() then
+		splitRoles.ltrigger = (stepIndex == 1) and intensity or 0
+		splitRoles.rtrigger = (stepIndex == 2) and intensity or 0
+		Pulse:HoldRolesIfEnabled(CUE, splitRoles, TAP_DURATION, true)
+	else
+		Pulse:HoldIfEnabled(CUE, intensity, 0, TAP_DURATION, true)
+	end
+end
 
 local function tick(_, elapsed)
 	if not isMoving then
@@ -494,6 +525,7 @@ local function tick(_, elapsed)
 			return
 		end
 		runPhase = 0 -- begin the stride on a footfall
+		nextStep = 1
 	else
 		resolveElapsed = resolveElapsed + (elapsed or 0)
 		if resolveElapsed >= RESOLVE_INTERVAL then
@@ -508,31 +540,33 @@ local function tick(_, elapsed)
 		return
 	end
 
-	-- Cadence is real steps per second, and the phase accumulates elapsed time rather than
-	-- counting ticks, so the stride holds its rate at any frame rate.
-	runPhase = (runPhase + (elapsed or 0) * gait.cadence * math.pi * 2) % (math.pi * 2)
+	if runPhase == 0 and nextStep == 1 then
+		fireStep(1)
+		nextStep = 2
+	end
 
-	local left, right = gaitWaveform(gait.mode, runPhase, gait.intensity, gait.sharpness)
+	local dt = elapsed or 0
+	-- Cadence is real steps per second. One stride cycle (2*pi radians) comprises 2 steps.
+	-- Stride frequency = gait.cadence * 0.5 strides/sec.
+	-- dPhase = dt * (gait.cadence * 0.5) * (2 * math.pi) = dt * gait.cadence * math.pi
+	local dPhase = dt * gait.cadence * math.pi
+	runPhase = runPhase + dPhase
 
-	if shouldSplitFeet() then
-		-- Left and right to separate roles, so the gait walks across the pad.
-		-- Reused table to prevent GC allocation in high-frequency tick loop (Rule 4).
-		splitRoles.ltrigger = left
-		splitRoles.rtrigger = right
-		Pulse:HoldRolesIfEnabled(CUE, splitRoles, 0.2)
-	else
-		-- Both feet through ONE role, which is what "do not split" has to mean.
-		--
-		-- max() rather than left+right: the two waveforms are opposite halves of one cycle
-		-- and never overlap, so max is "whichever foot is currently down" and keeps every
-		-- footfall the same strength.
-		--
-		-- The LOW role on purpose. A sustained texture runs for as long as you are moving,
-		-- and under Standard the high motor is the physically stronger one — driving it at
-		-- ~3 footfalls a second for a whole journey would be exhausting. The large slow
-		-- mass is the right home for a background gait, and its Strength slider can trim
-		-- it.
-		Pulse:HoldIfEnabled(CUE, math.max(left, right), 0, 0.2)
+	local isGallop = (gait.mode == "GALLOP")
+	local step2Threshold = isGallop and GALLOP_TRAIL_OFFSET or math.pi
+
+	if nextStep == 2 and runPhase >= step2Threshold then
+		fireStep(2)
+		nextStep = 1
+	end
+
+	if nextStep == 1 and runPhase >= (math.pi * 2) then
+		runPhase = runPhase - (math.pi * 2)
+		if runPhase >= (math.pi * 2) then
+			runPhase = runPhase % (math.pi * 2)
+		end
+		fireStep(1)
+		nextStep = 2
 	end
 end
 
@@ -560,6 +594,7 @@ eventFrame:SetScript("OnEvent", function(_, event, arg1)
 	elseif event == "PLAYER_STARTED_MOVING" then
 		isMoving = true
 		runPhase = 0 -- always begin a stride on a footfall, never mid-air
+		nextStep = 1
 		resolveElapsed = 0
 		-- May well fail: GetUnitSpeed still reads 0 at this instant. tick() retries.
 		resolveGait()
@@ -570,7 +605,9 @@ eventFrame:SetScript("OnEvent", function(_, event, arg1)
 		isMoving = false
 		pollFrame:SetScript("OnUpdate", nil)
 		runPhase = 0
+		nextStep = 1
 		gait.valid = false
+		Pulse:Stop(CUE)
 	elseif event == "PLAYER_REGEN_DISABLED" then
 		-- Take one last honest speed reading on the way in, then hold it for the fight.
 		resolveSpeed()
@@ -609,8 +646,10 @@ local function sync()
 	eventFrame:UnregisterAllEvents()
 	pollFrame:SetScript("OnUpdate", nil)
 	isMoving, runPhase = false, 0
+	nextStep = 1
 	gait.valid = false
 	wasGrounded = true
+	Pulse:Stop(CUE)
 
 	if not Pulse.Database:Get("masterEnabled") then
 		return
@@ -660,5 +699,7 @@ function M:_DebugGait()
 		-- Live, not cached: "the gait is valid but you are hearing nothing" is the one
 		-- state that needs explaining, and this is the field that explains it.
 		grounded = hasGroundContact(),
+		runPhase = runPhase,
+		nextStep = nextStep,
 	}
 end

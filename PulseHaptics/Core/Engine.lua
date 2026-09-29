@@ -140,6 +140,11 @@ local function resolveRole(schema, role)
 	return fallback and roles[fallback] or nil
 end
 
+function Engine:ResolveRole(role, schema)
+	schema = schema or self:_ActiveSchema()
+	return resolveRole(schema, role)
+end
+
 -- Device state (ported from Tremor/Core/Haptics.lua — same reasoning, same shape)
 
 function Engine:RefreshDevice()

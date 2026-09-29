@@ -14,7 +14,11 @@
 | `CR-012` | `ddb8312` | Add isTransient parameter to Engine:Hold and Pulse:HoldIfEnabled for fast attack on heartbeat/breath | `engine-test.lua` | Verified by test |
 | `ENG-03` | `ddb8312` | Wrap raw calibration SetVibration calls in pcall and isolate calibrationError | `engine-test.lua` | Verified by test |
 | `CR-025` | `ddb8312` | Align Engine header comments with saturating mixer architecture | Inspection | Verified by inspection |
-| `CR-006` | `5962d0a` | Pass configured cue intensity into heartbeat and warningbeat previews; use isTransient for fast attack | `harness.lua` | Verified by test |
-| `CR-014` | `5962d0a` | Scale crafting anvil strike strength by configured trigger intensity setting | `crafting-test.lua` | Verified by test |
-| `CR-018` | `5962d0a` | Dropdown mode selection previews scale by active cue configured intensity | `harness.lua` | Verified by test |
+| `CR-006` | `1a34d9e` | Pass configured cue intensity into heartbeat and warningbeat previews; use isTransient for fast attack | `harness.lua` | Verified by test |
+| `CR-014` | `1a34d9e` | Scale crafting anvil strike strength by configured trigger intensity setting | `crafting-test.lua` | Verified by test |
+| `CR-018` | `1a34d9e` | Dropdown mode selection previews scale by active cue configured intensity | `harness.lua` | Verified by test |
+| `CR-005` | `c7fd05e` | Discrete transient footfall taps (45ms, isTransient=true), real steps/s cadence, single lead+trail per GALLOP stride | `locomotion-test.lua` | Verified by test |
+| `CR-030` | `c7fd05e` | Split feet only when active schema routes trigger roles to trigger channels (prevent Xbox split on Standard) | `locomotion-test.lua` | Verified by test |
+| `CR-020` | `c7fd05e` | Read applied preset from appliedDevicePreset instead of unapplied dropdown selection | `locomotion-test.lua` | Verified by test |
+
 

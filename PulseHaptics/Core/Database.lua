@@ -1722,6 +1722,7 @@ function Database:ResetChannelTuning()
 	-- "Xbox (One / Series)" selected while every slider is back at CHANNEL_DEFAULTS — a
 	-- dropdown claiming a preset that is not in force.
 	DB.devicePreset = "default"
+	DB.appliedDevicePreset = "default"
 	if Pulse.debug then
 		print("Pulse: controller calibration reset to defaults")
 	end
@@ -1734,6 +1735,17 @@ end
 -- values you cannot see. Global, like the rest of the calibration.
 function Database:GetDevicePreset()
 	local id = DB.devicePreset
+	if not id or not Pulse.Devices[id] then
+		return "default"
+	end
+	return id
+end
+
+-- Which controller preset was actually applied to channelTuning (CR-020). Unlike
+-- GetDevicePreset(), which reflects the pending dropdown selection before Apply is clicked,
+-- this returns the preset whose calibration was actually written into effect.
+function Database:GetAppliedDevicePreset()
+	local id = DB.appliedDevicePreset or DB.devicePreset
 	if not id or not Pulse.Devices[id] then
 		return "default"
 	end
@@ -1767,6 +1779,7 @@ function Database:ApplyDevicePreset(id)
 		DB.channelTuning[channel] = target
 	end
 
+	DB.appliedDevicePreset = id
 	self:SetDevicePreset(id)
 	if Pulse.debug then
 		print(('Pulse: applied controller preset "%s"'):format(device.label or id))
