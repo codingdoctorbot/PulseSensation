@@ -365,4 +365,31 @@ check("disparate spell ID stop terminates craft", M:_DebugCraft().active, false)
 check("  without courtesy strike", strikes, before)
 check("  and frees castTexture", Pulse.IsCrafting(), false)
 
+-- 10-Second Hearthstone / Long Cast Truncation prevention in _Sweep
+Pulse.CastActivity:_OnStart("player", "guid-hearth-1", 8690)
+check("hearthstone cast is pending", Pulse.CastActivity.pending["g:guid-hearth-1"] ~= nil, true)
+now = now + 10.05
+Pulse.CastActivity:_Sweep()
+check(
+	"hearthstone cast preserved past 10s by extended STALE_TIMEOUT",
+	Pulse.CastActivity.pending["g:guid-hearth-1"] ~= nil,
+	true
+)
+UnitCastingInfo = function(unit)
+	if unit == "player" then
+		return "Hearthstone", "Hearthstone", "", 0, 0, false, "guid-hearth-1", false, 8690
+	end
+end
+now = now + 25.0
+Pulse.CastActivity:_Sweep()
+check(
+	"active player cast protected from sweep even past 30s",
+	Pulse.CastActivity.pending["g:guid-hearth-1"] ~= nil,
+	true
+)
+UnitCastingInfo = nil
+now = now + 35.0
+Pulse.CastActivity:_Sweep()
+check("stale orphaned cast cleaned up past hard ceiling", Pulse.CastActivity.pending["g:guid-hearth-1"], nil)
+
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))

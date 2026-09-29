@@ -1446,7 +1446,11 @@ function Database:RenameProfile(oldName, newName)
 	if DB.accountProfile == oldName then
 		DB.accountProfile = newName
 	end
+	local wasActive = (self:GetActiveProfileName() == oldName)
 	invalidateResolution()
+	if wasActive or self:GetActiveProfileName() == newName then
+		notifyProfileSwitch()
+	end
 	if Pulse.debug then
 		print(('Pulse: renamed profile "%s" to "%s"'):format(oldName, newName))
 	end

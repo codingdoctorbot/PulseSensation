@@ -1045,9 +1045,11 @@ do
 
 	-- Rules follow a rename through every scope.
 	db:SetProfileForScope(SPEC, "Raiding quiet")
+	notifies = 0
 	db:RenameProfile("Raiding quiet", "Quiet")
 	check("rename follows the spec rule", db:GetProfileRule(SPEC), "Quiet")
 	check("  and stays active", db:GetActiveProfileName(), "Quiet")
+	check("  and active rename notifies listeners", notifies > 0, true)
 
 	-- Delete clears rules rather than repointing them.
 	db:SetProfileForScope(CHAR, "Quiet")

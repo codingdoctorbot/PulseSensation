@@ -53,6 +53,7 @@ local layerTokens = {} -- name -> token, so PlayMode re-triggers cancel their ow
 local smoothedByChannel = {}
 local lastSetByChannel = {}
 local lastSentTimeByChannel = {}
+local lastWantedByChannel = {}
 
 local WATCHDOG_INTERVAL = 0.250 -- 250ms keep-alive heartbeat to prevent motor firmware sleep
 local ROLES_LIST = { "low", "high", "ltrigger", "rtrigger" }
@@ -169,6 +170,7 @@ function Engine:StopAll()
 	smoothedByChannel = {}
 	lastSetByChannel = {}
 	wipe(lastSentTimeByChannel)
+	wipe(lastWantedByChannel)
 	wipe(frameRoleTotals)
 	wipe(roleContinuousTotal)
 	wipe(roleTransientTotal)
@@ -362,13 +364,18 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
 	local triggerMult = Pulse.Database:GetModeTuning(modeID, "triggerMult", 1.0)
 	local durMult = Pulse.Database:GetModeTuning(modeID, "durMult", 1.0)
 
+	local MIN_STEP_DURATION = 0.020
+	local MIN_GAP_DURATION = 0.025
+
 	local offset = 0
+	local lastScheduledAt = -1
 	for _, step in ipairs(mode.steps) do
 		if step.gap then
-			offset = offset + step.gap * durMult
+			offset = offset + math.max(MIN_GAP_DURATION, (step.gap or 0) * durMult)
 		else
-			local duration = step.relDuration * (mode.baseDuration or 0.25) * durMult
-			local mag = clamp01(step.relIntensity * scale * (intensityOverride or 1.0))
+			local duration =
+				math.max(MIN_STEP_DURATION, (step.relDuration or 1) * (mode.baseDuration or 0.25) * durMult)
+			local mag = clamp01((step.relIntensity or 1) * scale * (intensityOverride or 1.0))
 			local stepRoles = getRoleTable()
 			local r = step.role
 			if r == "both" then
@@ -382,6 +389,11 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
 				stepRoles.low = clamp01(mag * lowMult)
 			end
 			local at = offset
+			if lastScheduledAt >= 0 and at <= lastScheduledAt + MIN_STEP_DURATION then
+				at = lastScheduledAt + MIN_STEP_DURATION
+				offset = at
+			end
+			lastScheduledAt = at
 
 			if at <= 0 then
 				-- Synchronous execution on frame zero: eliminates 16-33ms C_Timer.After input lag on impacts
@@ -457,10 +469,15 @@ local function driveChannel(channel, wanted, last, dt, epsilon, now, isTransient
 	local isOn = smoothed > SILENCE_GATE
 	local delta = math.abs(smoothed - (last or -1))
 	local timeSinceLast = now - (lastSentTimeByChannel[channel] or 0)
+	local isOnset = (wanted > 0 and (lastWantedByChannel[channel] or 0) == 0)
+	lastWantedByChannel[channel] = wanted
+
+	local forceSend = isOnset
 
 	-- Output watchdog: re-send vibration every WATCHDOG_INTERVAL (250ms) even if delta <= epsilon
 	-- to prevent controller hardware firmware timeouts on steady continuous textures.
-	if delta > epsilon or (isOn and timeSinceLast >= WATCHDOG_INTERVAL) then
+	-- Transients and new onsets always force immediate dispatch to bypass the epsilon deadband.
+	if forceSend or delta > epsilon or (isOn and timeSinceLast >= WATCHDOG_INTERVAL) then
 		if C_GamePad and C_GamePad.SetVibration then
 			pcall(C_GamePad.SetVibration, channel, smoothed)
 		end
@@ -626,6 +643,7 @@ local function onEngineTick(elapsed)
 		wipe(smoothedByChannel)
 		wipe(lastSetByChannel)
 		wipe(lastSentTimeByChannel)
+		wipe(lastWantedByChannel)
 	end
 end
 

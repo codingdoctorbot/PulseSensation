@@ -30,8 +30,9 @@ Pulse.CastActivity = CastActivity
 
 -- A pending cast is dropped after this long without an outcome. Without the sweep, a cast
 -- whose STOP is never delivered keeps its entry forever and makes the next cast with the
--- same GUID look like a completion of the old one.
-local STALE_TIMEOUT = 10
+-- same GUID look like a completion of the old one. Raised from 10s to 30s to prevent
+-- premature truncation of 10s casts/channels (Hearthstone, resurrection, long crafts).
+local STALE_TIMEOUT = 30
 local SWEEP_INTERVAL = 2
 
 CastActivity.pending = {}
@@ -329,16 +330,31 @@ end
 
 function CastActivity:_Sweep()
 	local now = GetTime()
+	local isPlayerCasting = false
+	if type(UnitCastingInfo) == "function" and UnitCastingInfo("player") then
+		isPlayerCasting = true
+	end
+	if not isPlayerCasting and type(UnitChannelInfo) == "function" and UnitChannelInfo("player") then
+		isPlayerCasting = true
+	end
+
 	for key, cast in pairs(self.pending) do
-		if now - (cast.startedAt or now) > STALE_TIMEOUT then
+		local age = now - (cast.startedAt or now)
+		if age > 60 or (not isPlayerCasting and age > STALE_TIMEOUT) then
 			self.pending[key] = nil
 		end
 	end
-	if self.activeChannel and now - self.activeChannel.startedAt > STALE_TIMEOUT then
-		self.activeChannel = nil
+	if self.activeChannel then
+		local age = now - (self.activeChannel.startedAt or now)
+		if age > 60 or (not isPlayerCasting and age > STALE_TIMEOUT) then
+			self.activeChannel = nil
+		end
 	end
-	if self.crafting and now - self.crafting.startedAt > STALE_TIMEOUT then
-		self.crafting = nil
+	if self.crafting then
+		local age = now - (self.crafting.startedAt or now)
+		if age > 60 or (not isPlayerCasting and age > STALE_TIMEOUT) then
+			self.crafting = nil
+		end
 	end
 end
 

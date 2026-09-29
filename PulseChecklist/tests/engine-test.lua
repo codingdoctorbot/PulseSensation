@@ -87,6 +87,9 @@ function wipe(t)
 end
 unpack = unpack or table.unpack
 
+local mockDurMult = nil
+local mockEpsilon = nil
+
 local Pulse = { debug = false }
 Pulse.Database = {
 	Get = function(_, key)
@@ -99,9 +102,12 @@ Pulse.Database = {
 		return default
 	end,
 	GetChangeEpsilon = function()
-		return 0.0015
+		return mockEpsilon or 0.0015
 	end,
-	GetModeTuning = function(_, _, _, default)
+	GetModeTuning = function(_, _, key, default)
+		if key == "durMult" and mockDurMult then
+			return mockDurMult
+		end
 		return default
 	end,
 	OnChannelTuningChanged = function() end,
@@ -405,6 +411,41 @@ Engine:Set("healthy_layer", 0.3, 0.3, 1.0)
 frameScripts.OnUpdate(nil, 0.016)
 check("next frame runs cleanly without repeating error", Engine.errorCount, preErrorCount)
 check("  and healthy layer is active", #Engine:_DebugLayers(), 1)
+Engine:StopAll()
+
+-- ── Anti-Collapse Step Floor in PlayMode (Time-Dilation) ──────────────────────
+mockDurMult = 0.001 -- extreme 1000x speedup
+local prevTimerCount = #timers
+Engine:PlayMode("test_anti_collapse", "TRIPLE_TAP")
+-- TRIPLE_TAP has 3 steps separated by 2 gaps.
+-- Step 1 runs synchronously at t=0.
+-- Steps 2 and 3 must be scheduled via C_Timer.After with delay >= 20ms and separated by >= 20ms.
+check("TRIPLE_TAP with 0.001 durMult schedules subsequent steps", #timers - prevTimerCount >= 2, true)
+local timer1 = timers[prevTimerCount + 1]
+local timer2 = timers[prevTimerCount + 2]
+local delay1 = timer1.at - now
+local delay2 = timer2.at - now
+check("first delayed step scheduled at >= 20ms floor", delay1 >= 0.020, true)
+check("second delayed step scheduled with at least 20ms separation", delay2 - delay1 >= 0.020, true)
+mockDurMult = nil
+Engine:StopAll()
+
+-- ── Watchdog Input-Drop Prevention on Onset ──────────────────────────────────
+-- When a channel flips from idle/decay (wanted == 0) to active hold (wanted > 0),
+-- it must force a dispatch even if delta <= epsilon.
+Engine:StopAll()
+mockEpsilon = 0.10 -- large deadband: delta of 0.05 would normally be ignored
+vibrations = 0
+Engine:Set("onset_test", 0.05, 0.05, 1.0)
+frameScripts.OnUpdate(nil, 0.016)
+check("onset forces SetVibration dispatch despite delta <= epsilon", vibrations > 0, true)
+
+-- On the subsequent steady frame (delta == 0, within 250ms), watchdog does NOT re-send
+local vibAfterOnset = vibrations
+frameScripts.OnUpdate(nil, 0.016)
+check("subsequent steady tick within 250ms does not re-send", vibrations, vibAfterOnset)
+
+mockEpsilon = nil
 Engine:StopAll()
 
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))
