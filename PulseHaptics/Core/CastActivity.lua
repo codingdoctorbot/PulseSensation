@@ -33,6 +33,7 @@ Pulse.CastActivity = CastActivity
 -- same GUID look like a completion of the old one. Raised from 10s to 30s to prevent
 -- premature truncation of 10s casts/channels (Hearthstone, resurrection, long crafts).
 local STALE_TIMEOUT = 30
+local HARD_SWEEP_CEILING = 60
 local SWEEP_INTERVAL = 2
 
 CastActivity.pending = {}
@@ -340,19 +341,19 @@ function CastActivity:_Sweep()
 
 	for key, cast in pairs(self.pending) do
 		local age = now - (cast.startedAt or now)
-		if age > 60 or (not isPlayerCasting and age > STALE_TIMEOUT) then
+		if age > HARD_SWEEP_CEILING or (not isPlayerCasting and age > STALE_TIMEOUT) then
 			self.pending[key] = nil
 		end
 	end
 	if self.activeChannel then
 		local age = now - (self.activeChannel.startedAt or now)
-		if age > 60 or (not isPlayerCasting and age > STALE_TIMEOUT) then
+		if age > HARD_SWEEP_CEILING or (not isPlayerCasting and age > STALE_TIMEOUT) then
 			self.activeChannel = nil
 		end
 	end
 	if self.crafting then
 		local age = now - (self.crafting.startedAt or now)
-		if age > 60 or (not isPlayerCasting and age > STALE_TIMEOUT) then
+		if age > HARD_SWEEP_CEILING or (not isPlayerCasting and age > STALE_TIMEOUT) then
 			self.crafting = nil
 		end
 	end

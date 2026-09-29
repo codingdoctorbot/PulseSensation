@@ -68,6 +68,15 @@ for arg in "$@"; do
   esac
 done
 
+LUA_BIN="${LUA:-}"
+if [ -z "${LUA_BIN}" ]; then
+  if command -v luajit >/dev/null 2>&1; then
+    LUA_BIN="luajit"
+  else
+    LUA_BIN="lua"
+  fi
+fi
+
 START_TIME=$(date +%s)
 
 echo -e "${BOLD}${CYAN}╔═════════════════════════════════════════════════════════════════╗${NC}"
@@ -79,14 +88,14 @@ echo ""
 if [ $SKIP_LINT -eq 0 ]; then
   echo -e "${BOLD}[1/2] Static Analysis (luacheck)${NC}"
   if command -v luacheck >/dev/null 2>&1; then
-    LINT_OUT=$(luacheck PulseHaptics/ PulseDebug/ PulseChecklist/ 2>&1)
-    LINT_STATUS=$?
+    LINT_STATUS=0
+    LINT_OUT=$(luacheck PulseHaptics/ PulseDebug/ PulseChecklist/ 2>&1) || LINT_STATUS=$?
     if [ $LINT_STATUS -eq 0 ]; then
-      SUMMARY=$(echo "$LINT_OUT" | tail -n 1)
+      SUMMARY=$(tail -n 1 <<< "$LINT_OUT")
       echo -e "  ${GREEN}✓ PASS${NC}  ${DIM}${SUMMARY}${NC}"
     else
       echo -e "  ${RED}✗ FAIL${NC}  Luacheck reported issues:"
-      echo "$LINT_OUT" | sed 's/^/    /'
+      sed 's/^/    /' <<< "$LINT_OUT"
       exit 1
     fi
   else
@@ -101,7 +110,7 @@ if [ $LINT_ONLY -eq 1 ]; then
 fi
 
 # ── Step 2: Offline Unit & Smoke Harnesses ───────────────────────────────────
-echo -e "${BOLD}[2/2] Offline Unit & Smoke Harnesses${NC}"
+echo -e "${BOLD}[2/2] Offline Unit & Smoke Harnesses (${LUA_BIN})${NC}"
 FAILURES=0
 RAN=0
 
@@ -119,15 +128,15 @@ for entry in "${SUITES[@]}"; do
   RAN=$((RAN + 1))
   printf "  %-24s " "${suite}"
 
-  TEST_OUT=$(lua "PulseChecklist/tests/${suite}.lua" "$dir" 2>&1)
-  TEST_STATUS=$?
+  TEST_STATUS=0
+  TEST_OUT=$("${LUA_BIN}" "PulseChecklist/tests/${suite}.lua" "$dir" 2>&1) || TEST_STATUS=$?
 
-  if [ $TEST_STATUS -eq 0 ] && ! echo "$TEST_OUT" | grep -q "^FAIL"; then
-    LAST_LINE=$(echo "$TEST_OUT" | grep -v '^[[:space:]]*$' | tail -n 1)
+  if [ $TEST_STATUS -eq 0 ] && ! grep -q "^FAIL" <<< "$TEST_OUT"; then
+    LAST_LINE=$(grep -v '^[[:space:]]*$' <<< "$TEST_OUT" | tail -n 1)
     echo -e "${GREEN}✓ PASS${NC}  ${DIM}${LAST_LINE}${NC}"
   else
     echo -e "${RED}✗ FAIL${NC}"
-    echo "$TEST_OUT" | sed 's/^/    /'
+    sed 's/^/    /' <<< "$TEST_OUT"
     FAILURES=$((FAILURES + 1))
   fi
 done

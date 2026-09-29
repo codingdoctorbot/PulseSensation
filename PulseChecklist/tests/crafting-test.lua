@@ -387,9 +387,13 @@ check(
 	Pulse.CastActivity.pending["g:guid-hearth-1"] ~= nil,
 	true
 )
-UnitCastingInfo = nil
-now = now + 35.0
+now = now + 35.0 -- total age is 10.05 + 25.0 + 35.0 = 70.05s, exceeding 60s hard ceiling
 Pulse.CastActivity:_Sweep()
-check("stale orphaned cast cleaned up past hard ceiling", Pulse.CastActivity.pending["g:guid-hearth-1"], nil)
+check(
+	"stale cast cleaned up past 60s hard ceiling despite active casting",
+	Pulse.CastActivity.pending["g:guid-hearth-1"],
+	nil
+)
+UnitCastingInfo = nil
 
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))

@@ -318,11 +318,8 @@ local fakePulse = {
 		IsDeviceReady = function()
 			return true
 		end,
-		CancelAll = function()
-			fakeState.cancelledAll = true
-		end,
 		StopAll = function()
-			fakeState.cancelledAll = true
+			fakeState.stoppedAll = true
 		end,
 		StopLayer = function(_, name)
 			fakeState.stoppedLayer = name
@@ -339,9 +336,6 @@ local fakePulse = {
 		end,
 		HoldRoles = function(_, name, roles, dur)
 			fakeState.heldRoles[#fakeState.heldRoles + 1] = { name = name, roles = roles, dur = dur }
-		end,
-		HoldLayer = function(_, name, low, high, dur)
-			fakeState.heldLayers[#fakeState.heldLayers + 1] = { name = name, low = low, high = high, dur = dur }
 		end,
 		RawChannel = function(_, channel, mag, dur)
 			fakeState.rawChannels[#fakeState.rawChannels + 1] = { channel = channel, mag = mag, dur = dur }
@@ -512,7 +506,7 @@ local btnStop = findButton("Stop All")
 check("Stop All button exists", btnStop ~= nil, true)
 if btnStop and btnStop.__script_OnClick then
 	btnStop.__script_OnClick(btnStop)
-	check("Stop All button calls CancelAll", fakeState.cancelledAll, true)
+	check("Stop All button calls StopAll", fakeState.stoppedAll, true)
 end
 
 local btnClear = findButton("Clear")

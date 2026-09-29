@@ -476,7 +476,7 @@ local function driveChannel(channel, wanted, last, dt, epsilon, now, isTransient
 
 	-- Output watchdog: re-send vibration every WATCHDOG_INTERVAL (250ms) even if delta <= epsilon
 	-- to prevent controller hardware firmware timeouts on steady continuous textures.
-	-- Transients and new onsets always force immediate dispatch to bypass the epsilon deadband.
+	-- New onsets (transition from 0 to active) always force immediate dispatch to bypass the epsilon deadband.
 	if forceSend or delta > epsilon or (isOn and timeSinceLast >= WATCHDOG_INTERVAL) then
 		if C_GamePad and C_GamePad.SetVibration then
 			pcall(C_GamePad.SetVibration, channel, smoothed)

@@ -682,13 +682,8 @@ btnStop:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -32, -74)
 btnStop:SetText("Stop All")
 btnStop:SetScript("OnClick", function()
 	local P = core()
-	if P and P.Engine then
-		if type(P.Engine.StopAll) == "function" then
-			P.Engine:StopAll()
-		end
-		if type(P.Engine.CancelAll) == "function" then
-			P.Engine:CancelAll()
-		end
+	if P and P.Engine and type(P.Engine.StopAll) == "function" then
+		P.Engine:StopAll()
 	end
 	render()
 end)
@@ -730,8 +725,8 @@ btnHold:SetPoint("RIGHT", btnTick, "LEFT", -4, 0)
 btnHold:SetText("Hold 2s")
 btnHold:SetScript("OnClick", function()
 	local P = core()
-	if P and P.Engine and type(P.Engine.HoldLayer) == "function" then
-		P.Engine:HoldLayer("debug_hold", 0.6, 0.6, 2.0)
+	if P and P.Engine and type(P.Engine.Hold) == "function" then
+		P.Engine:Hold("debug_hold", 0.6, 0.6, 2.0)
 	elseif P and type(P.Hold) == "function" then
 		P:Hold("debug_hold", 0.6, 0.6, 2.0)
 	end
