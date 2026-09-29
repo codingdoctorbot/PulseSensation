@@ -449,7 +449,7 @@ local function castTick()
 
 	-- After the craft guard, not before: this runs every frame and nothing below emits
 	-- during a craft.
-	local presence = Pulse.Database:GetTriggerSetting("castTexture", "castPresence", 0.1)
+	local presence = Pulse.Database:GetTriggerSetting("castTexture", "castPresence", 0.06)
 
 	if isCasting then
 		local name, _, _, startTimeMs, endTimeMs = UnitCastingInfo("player")
@@ -471,7 +471,7 @@ local function castTick()
 			and endTimeMs > startTimeMs
 		then
 			local progress = clamp01((GetTime() * 1000 - startTimeMs) / (endTimeMs - startTimeMs))
-			local peak = Pulse.Database:GetTriggerSetting("castTexture", "castSwellPeak", 0.7)
+			local peak = Pulse.Database:GetTriggerSetting("castTexture", "castSwellPeak", 0.40)
 			Pulse:HoldIfEnabled("castTexture", presence, progress * peak)
 		else
 			-- Secret value / missing timestamp fallback: ensure the motor never goes silent
@@ -487,7 +487,7 @@ local function castTick()
 			end
 			return
 		end
-		local name = UnitChannelInfo("player")
+		local name, _, texture, _, _, _, _, spellId = UnitChannelInfo("player")
 		if not name then
 			isChanneling = false
 			activeCastGUID = nil
@@ -497,9 +497,35 @@ local function castTick()
 			end
 			return
 		end
-		local hum = Pulse.Database:GetTriggerSetting("castTexture", "channelHum", 0.2)
-		local value = Pulse.Haptics.MicroFlutter(hum)
-		Pulse:HoldIfEnabled("castTexture", presence, value)
+
+		-- Fishing detection: Fishing is a 20-second channel.
+		-- A fishing rod in water should feel like gentle fluid tension on the heavy motor alone,
+		-- rather than a harsh 70 Hz electric buzzer in the right palm.
+		local isFishing = (name == "Fishing")
+			or (texture and type(texture) == "string" and texture:lower():find("trade_fishing", 1, true))
+			or (
+				spellId
+				and (
+					spellId == 7620
+					or spellId == 7731
+					or spellId == 7732
+					or spellId == 18248
+					or spellId == 33095
+					or spellId == 51294
+					or spellId == 131474
+					or spellId == 131476
+				)
+			)
+
+		if isFishing then
+			Pulse:HoldIfEnabled("castTexture", presence, 0)
+		else
+			local hum = Pulse.Database:GetTriggerSetting("castTexture", "channelHum", 0.12)
+			-- Scale MicroFlutter offset with hum level so low amplitudes don't produce heavy 7 Hz tremors
+			local flutterAmount = math.min(0.01, hum * 0.05)
+			local value = Pulse.Haptics.MicroFlutter(hum, flutterAmount)
+			Pulse:HoldIfEnabled("castTexture", presence, value)
+		end
 	end
 end
 
@@ -1018,8 +1044,8 @@ end
 function M:PreviewCast(seconds, scale)
 	seconds = seconds or 3.5
 	scale = scale or 1.0
-	local presence = Pulse.Database:GetTriggerSetting("castTexture", "castPresence", 0.1) * scale
-	local peak = Pulse.Database:GetTriggerSetting("castTexture", "castSwellPeak", 0.7) * scale
+	local presence = Pulse.Database:GetTriggerSetting("castTexture", "castPresence", 0.06) * scale
+	local peak = Pulse.Database:GetTriggerSetting("castTexture", "castSwellPeak", 0.40) * scale
 	Pulse:StartContinuousPreview(seconds, function(elapsed, duration)
 		local progress = math.min(1.0, elapsed / duration)
 		Pulse.Engine:Set("preview", presence, progress * peak, 0.1)

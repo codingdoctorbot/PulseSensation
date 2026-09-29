@@ -64,6 +64,10 @@ Pulse.CHANNEL_DEFAULTS = {
 	attackTau = 0.075,
 	transientAttackTau = 0.012,
 	releaseTau = 0.028,
+	overdriveBoost = 1.0,
+	overdriveDuration = 0.0,
+	coastCoeff = 0.0,
+	useSCurve = false,
 }
 
 -- Drives the calibration page generically, same discipline as Registry.lua's `tunables`:
@@ -117,6 +121,36 @@ Pulse.CHANNEL_TUNABLES = {
 		step = 0.05,
 		desc = "Bends the relationship between what a cue asks for and what the motor is told. Below 1.0 makes quiet cues louder; above 1.0 makes them quieter and reserves more of the range for strong ones. 1.0 is the unbent default.",
 	},
+	{
+		key = "overdriveBoost",
+		label = "Overdrive kick",
+		min = 1.0,
+		max = 2.0,
+		step = 0.05,
+		desc = "Initial software voltage boost applied during transient onset to accelerate the motor rapidly to target speed. 1.0 is disabled.",
+	},
+	{
+		key = "overdriveDuration",
+		label = "Overdrive time (s)",
+		min = 0.0,
+		max = 0.060,
+		step = 0.005,
+		desc = "Duration of the software overdrive kick. 0.030s on heavy ERM counterweights, 0.0 on LRAs.",
+	},
+	{
+		key = "coastCoeff",
+		label = "Coast cutoff",
+		min = 0.0,
+		max = 0.080,
+		step = 0.005,
+		desc = "Predictive early shutoff coefficient for high-inertia rotors. 0.0 is disabled (relying on natural release filtering).",
+	},
+	{
+		key = "useSCurve",
+		label = "Perceptual S-Curve",
+		kind = "checkbox",
+		desc = "Bends the motor response with a smoothstep curve (3x^2 - 2x^3) to widen contrast between gentle background textures and heavy combat impacts. When unchecked, standard linear scaling is used.",
+	},
 }
 
 -- Shape of the Ramp probe on the calibration page (Core/Engine.lua drives it).
@@ -166,9 +200,39 @@ Pulse.CHANGE_EPSILON_DEFAULT = 0.0015
 -- "Low" and "High" rumble motors across all platforms and operating systems. All cues and
 -- modes are designed to fully leverage Low and High motors in concert.
 
-local ERM_LOW = { floor = 0.12, attackTau = 0.090, transientAttackTau = 0.025, releaseTau = 0.060 }
-local ERM_HIGH = { floor = 0.10, attackTau = 0.050, transientAttackTau = 0.012, releaseTau = 0.035 }
-local LRA = { floor = 0.04, attackTau = 0.020, transientAttackTau = 0.006, releaseTau = 0.015 }
+local ERM_LOW = {
+	floor = 0.125,
+	attackTau = 0.085,
+	transientAttackTau = 0.018,
+	releaseTau = 0.050,
+	overdriveBoost = 1.00,
+	overdriveDuration = 0.000,
+	coastCoeff = 0.000,
+	gamma = 0.88,
+	useSCurve = false,
+}
+local ERM_HIGH = {
+	floor = 0.095,
+	attackTau = 0.045,
+	transientAttackTau = 0.010,
+	releaseTau = 0.030,
+	overdriveBoost = 1.00,
+	overdriveDuration = 0.000,
+	coastCoeff = 0.000,
+	gamma = 0.88,
+	useSCurve = false,
+}
+local LRA = {
+	floor = 0.025,
+	attackTau = 0.015,
+	transientAttackTau = 0.005,
+	releaseTau = 0.012,
+	overdriveBoost = 1.00,
+	overdriveDuration = 0.000,
+	coastCoeff = 0.000,
+	gamma = 1.00,
+	useSCurve = false,
+}
 
 local function copy(src, extra)
 	local t = {}
@@ -211,18 +275,21 @@ Pulse.Devices = {
 		id = "ds4",
 		label = "DualShock 4 (PS4)",
 		triggers = false,
-		note = "Two asymmetrical ERM motors: heavy low-frequency counterweight on the left (high breakaway, 90ms spin-up) and light high-frequency motor on the right. No trigger actuators — L2/R2 are analogue inputs.",
-		channels = { Low = copy(ERM_LOW), High = copy(ERM_HIGH) },
+		note = "Two asymmetrical ERM motors with balanced weight distribution. Fast 75ms spin-up and 0.115 breakaway floor.",
+		channels = {
+			Low = copy(ERM_LOW, { floor = 0.115, attackTau = 0.075, releaseTau = 0.045, gamma = 0.90 }),
+			High = copy(ERM_HIGH, { floor = 0.090, attackTau = 0.040, releaseTau = 0.028, gamma = 0.90 }),
+		},
 	},
 
 	dualsense = {
 		id = "dualsense",
 		label = "DualSense (PS5)",
 		triggers = false,
-		note = "High-definition voice-coil actuators: instantaneous transient response, wide frequency bandwidth, and near-zero breakaway friction.",
+		note = "High-definition voice-coil actuators: near-zero static friction (0.025 floor), instantaneous 5ms transient response, and wideband 20-500 Hz frequency fidelity.",
 		channels = {
-			Low = copy(LRA, { floor = 0.030, gain = 1.15, attackTau = 0.015, releaseTau = 0.012 }),
-			High = copy(LRA, { floor = 0.030, gain = 1.05, attackTau = 0.012, releaseTau = 0.010 }),
+			Low = copy(LRA, { floor = 0.025, gain = 1.15, attackTau = 0.015, releaseTau = 0.012 }),
+			High = copy(LRA, { floor = 0.025, gain = 1.05, attackTau = 0.012, releaseTau = 0.010 }),
 		},
 	},
 
@@ -230,7 +297,7 @@ Pulse.Devices = {
 		id = "xbox",
 		label = "Xbox (One / Series)",
 		triggers = false,
-		note = "Two asymmetrical ERM main rumble motors: heavy low-frequency counterweight on the left (high breakaway, 90ms spin-up) and light high-frequency motor on the right.",
+		note = "Asymmetrical ERM motors: heavy counterweight on left (85ms spin-up, 0.125 floor) and light counterweight on right (45ms spin-up, 0.095 floor). Calibrated with dual-lane smoothing and gamma 0.88.",
 		channels = {
 			Low = copy(ERM_LOW),
 			High = copy(ERM_HIGH),
@@ -241,10 +308,10 @@ Pulse.Devices = {
 		id = "xbox_elite",
 		label = "Xbox Elite Series 2",
 		triggers = false,
-		note = "Two heavy ERM body rumble motors with weighted grips. Slightly firmer floor to overcome chassis mass.",
+		note = "Heavy metal-reinforced chassis (345g vs 280g) and rubberized grips. +10% Low gain compensates for chassis damping.",
 		channels = {
-			Low = copy(ERM_LOW),
-			High = copy(ERM_HIGH),
+			Low = copy(ERM_LOW, { floor = 0.135, gain = 1.10, attackTau = 0.090, releaseTau = 0.055, gamma = 0.85 }),
+			High = copy(ERM_HIGH, { floor = 0.105, gain = 1.05, attackTau = 0.050, releaseTau = 0.032, gamma = 0.85 }),
 		},
 	},
 
@@ -252,10 +319,10 @@ Pulse.Devices = {
 		id = "switchpro",
 		label = "Switch Pro Controller",
 		triggers = false,
-		note = "HD Rumble is a pair of linear resonant actuators. Driven through a generic rumble call rather than Nintendo's own API it tends to read weak, hence the raised strength.",
+		note = "Alps Alpine Haptic Reactor dual LRAs. Generic PC/Mac square-wave rumble underdrives their 160/320 Hz resonance; +30% gain compensation restores native console parity.",
 		channels = {
-			Low = copy(LRA, { floor = 0.06, gain = 1.20 }),
-			High = copy(LRA, { floor = 0.06, gain = 1.20 }),
+			Low = copy(LRA, { floor = 0.055, gain = 1.30, attackTau = 0.020, releaseTau = 0.018 }),
+			High = copy(LRA, { floor = 0.055, gain = 1.30, attackTau = 0.015, releaseTau = 0.015 }),
 		},
 	},
 
@@ -263,10 +330,10 @@ Pulse.Devices = {
 		id = "8bitdo",
 		label = "8BitDo (Ultimate / Pro 2)",
 		triggers = false,
-		note = "Asymmetric ERM rumble motors common on Mac and PC. Stiffer brushes require a slightly higher breakaway floor to overcome initial mechanical friction.",
+		note = "Asymmetrical ERMs with stiff carbon-composite brushes. 0.145 Low floor guarantees reliable breakaway without deadband stutter.",
 		channels = {
-			Low = copy(ERM_LOW, { floor = 0.14, attackTau = 0.080, releaseTau = 0.050 }),
-			High = copy(ERM_HIGH, { floor = 0.12, attackTau = 0.045, releaseTau = 0.030 }),
+			Low = copy(ERM_LOW, { floor = 0.145, attackTau = 0.080, releaseTau = 0.048 }),
+			High = copy(ERM_HIGH, { floor = 0.115, attackTau = 0.045, releaseTau = 0.030 }),
 		},
 	},
 
@@ -274,10 +341,10 @@ Pulse.Devices = {
 		id = "steamdeck",
 		label = "Steam Deck (LCD & OLED)",
 		triggers = false,
-		note = "Dual trackpad LRAs driven by smart haptic drivers. Emulated dual-motor rumble requires elevated Low gain (+20%) to match traditional chassis displacement, while a 35ms attack tau smooths square-wave steps to eliminate audible trackpad chatter.",
+		note = "Cirrus Logic CS40L25 smart amplifier driving dual trackpad LRAs. 35ms Low attack tau eliminates audible trackpad housing clack; +25% Low gain matches traditional body rumble displacement.",
 		channels = {
-			Low = copy(LRA, { floor = 0.050, gain = 1.20, attackTau = 0.035, releaseTau = 0.020, gamma = 0.90 }),
-			High = copy(LRA, { floor = 0.040, gain = 1.05, attackTau = 0.015, releaseTau = 0.015 }),
+			Low = copy(LRA, { floor = 0.045, gain = 1.25, attackTau = 0.035, releaseTau = 0.020, gamma = 0.90 }),
+			High = copy(LRA, { floor = 0.035, gain = 1.05, attackTau = 0.015, releaseTau = 0.015 }),
 		},
 	},
 

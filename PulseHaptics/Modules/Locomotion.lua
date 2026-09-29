@@ -365,8 +365,22 @@ local resolveElapsed = 0
 -- Split the stride across the two rumble motors when requested:
 -- Left-side events lean Low (High * 0.7), right-side events lean High (Low * 0.8),
 -- creating a subtle stereo pan across the controller without limp or phantom trigger channels.
+-- Automatically disables on single-motor schemas (lowOnly, highOnly) to prevent artificial limping.
 local function shouldSplitFeet()
-	return setting("splitFeet", 1) == 1
+	if setting("splitFeet", 1) ~= 1 then
+		return false
+	end
+	if Pulse and Pulse.Engine and Pulse.Engine._ActiveSchema then
+		local schema = Pulse.Engine:_ActiveSchema()
+		if schema and schema.roles then
+			local lowRoute = schema.roles.low and schema.roles.low.channel
+			local highRoute = schema.roles.high and schema.roles.high.channel
+			if lowRoute and highRoute and lowRoute == highRoute then
+				return false
+			end
+		end
+	end
+	return true
 end
 
 -- Ground contact
@@ -598,6 +612,13 @@ local function tick(_, elapsed)
 
 	local isGallop = (gait.mode == "GALLOP")
 	local step2Threshold = isGallop and GALLOP_TRAIL_OFFSET or math.pi
+
+	-- Bug H1 fix: If cadence jumped above the merge threshold while nextStep was waiting for step 2,
+	-- the gallop became permanently silent because step 2 would never fire and step 1 only fired when nextStep == 1.
+	-- When merged, a stride has only one combined footfall, so advance nextStep to 1 immediately.
+	if isGallopMerged and nextStep == 2 then
+		nextStep = 1
+	end
 
 	if not isGallopMerged and nextStep == 2 and runPhase >= step2Threshold then
 		fireStep(2, false)

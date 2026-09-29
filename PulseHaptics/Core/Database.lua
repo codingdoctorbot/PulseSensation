@@ -24,7 +24,7 @@ local Database = {}
 Pulse.Database = Database
 
 local DB
-local DB_VERSION = 8
+local DB_VERSION = 10
 
 local GLOBAL_DEFAULTS = {
 	masterEnabled = true,
@@ -1441,7 +1441,656 @@ function Database:Migrate()
 	if DB.version < 8 then
 		self:_MigrateRetiredSchemas()
 	end
+	if DB.version < 9 then
+		self:_MigrateLegacyTriggerModes()
+		self:_MigrateCuratedProfilesOptionB()
+	end
+	if DB.version < 10 then
+		self:_MigrateSwimSettings()
+	end
 	DB.version = DB_VERSION
+end
+
+-- One-time, DB_VERSION 8 -> 9: migrates legacy TRIGGER_* mode tunings and per-cue mode overrides
+-- to their new standardized mode names, and purges retired LTrigger/RTrigger channel tuning.
+function Database:_MigrateLegacyTriggerModes()
+	local TRIGGER_MODE_MAPPING = {
+		TRIGGER_CLICK = "SNAP",
+		TRIGGER_PULL = "DRAW",
+		TRIGGER_TAP = "MICRO_TAP",
+		TRIGGER_BURST = "STACCATO",
+		TRIGGER_RECOIL = "RECOIL",
+		TRIGGER_ALTERNATE = "SHUTTLE",
+		TRIGGER_TENSION = "TENSION",
+	}
+	if DB then
+		if DB.modeTuning then
+			for oldID, newID in pairs(TRIGGER_MODE_MAPPING) do
+				if DB.modeTuning[oldID] then
+					if not DB.modeTuning[newID] then
+						DB.modeTuning[newID] = DB.modeTuning[oldID]
+					end
+					DB.modeTuning[oldID] = nil
+				end
+			end
+		end
+		if DB.channelTuning then
+			DB.channelTuning.LTrigger = nil
+			DB.channelTuning.RTrigger = nil
+		end
+		if DB.profiles then
+			for _, prof in pairs(DB.profiles) do
+				if prof.triggerSettings then
+					for _, settings in pairs(prof.triggerSettings) do
+						if settings and settings.__mode and TRIGGER_MODE_MAPPING[settings.__mode] then
+							settings.__mode = TRIGGER_MODE_MAPPING[settings.__mode]
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+-- Prior v8 profile overrides used to detect untouched built-in profiles during Option B migration.
+local LEGACY_V8_OVERRIDES = {
+	Raiding = {
+		bossAbilityWarning = true,
+		cooldownReady = true,
+		lowHealthWarning = true,
+		combatLeave = true,
+		playerAlive = true,
+		encounterStart = true,
+		encounterEnd = true,
+		focusCastStart = true,
+		focusChannelStart = true,
+		rolePoll = true,
+		summonRequest = true,
+		raidTarget = true,
+		lootRoll = true,
+		lootReceived = true,
+		selfChannelInterrupted = true,
+	},
+	Questing = {
+		damageTaken = true,
+		castTexture = true,
+		comboPoint = true,
+		lowHealthWarning = true,
+		breathTexture = true,
+		weatherChanged = true,
+		dismount = true,
+		jumped = true,
+		swimTexture = true,
+		taxiRide = true,
+		lootGold = true,
+		itemObtained = true,
+		bagItemAdded = true,
+		bagFull = true,
+		equipChanged = true,
+		emote = true,
+		combatLeave = true,
+		partyInvite = true,
+		whisper = true,
+		duelRequest = true,
+		lootOpened = true,
+		lootRoll = true,
+		lootConfirm = true,
+		lootReceived = true,
+		merchantShow = true,
+		mailShow = true,
+		taxiOpened = true,
+		questDetail = true,
+		questComplete = true,
+		questTurnedIn = true,
+		zoneChanged = true,
+		enteringWorld = true,
+		achievement = true,
+		selfCastSucceeded = true,
+	},
+	["Dungeon: Tank"] = {
+		__exclusive = true,
+		threatLost = true,
+		threatRising = true,
+		threatAggro = true,
+		damageTaken = true,
+		deflect = true,
+		bossAbilityWarning = true,
+		bossChatWarning = true,
+		cooldownReady = true,
+		ccMaster = true,
+		ccStun = true,
+		ccSilence = true,
+		ccFear = true,
+		ccDisarm = true,
+		ccPacify = true,
+		ccConfuse = true,
+		focusCastStart = true,
+		focusChannelStart = true,
+		targetCastStopped = true,
+		targetedByEnemy = true,
+		combatEnter = true,
+		combatLeave = true,
+		playerAlive = true,
+		lowHealthWarning = true,
+		lowHealthTexture = true,
+		raidTarget = true,
+		rolePoll = true,
+		summonRequest = true,
+		durabilityLow = true,
+		targetBigDefensive = true,
+		controllerUIMaster = true,
+		uiNavigate = true,
+		groupTargetingStart = true,
+		groupTargetingStop = true,
+		uiTabChanged = true,
+		panelOpen = true,
+		panelClose = true,
+		radialOpen = true,
+		radialClose = true,
+		radialTick = true,
+		radialSelect = true,
+		radialPage = true,
+		popupShown = true,
+		popupHidden = true,
+	},
+	["Dungeon: Healer"] = {
+		__exclusive = true,
+		lowHealthWarning = true,
+		lowHealthTexture = true,
+		healCrit = true,
+		healReceived = true,
+		selfCastSucceeded = true,
+		selfCastFailed = true,
+		selfChannelInterrupted = true,
+		castTexture = true,
+		cooldownReady = true,
+		procGlow = true,
+		bossAbilityWarning = true,
+		bossChatWarning = true,
+		focusCastStart = true,
+		focusChannelStart = true,
+		ccMaster = true,
+		ccSilence = true,
+		ccStun = true,
+		ccFear = true,
+		ccConfuse = true,
+		rolePoll = true,
+		summonRequest = true,
+		raidTarget = true,
+		combatEnter = true,
+		combatLeave = true,
+		playerAlive = true,
+		damageTaken = true,
+		targetBigDefensive = true,
+		controllerUIMaster = true,
+		uiNavigate = true,
+		groupTargetingStart = true,
+		groupTargetingStop = true,
+		uiTabChanged = true,
+		panelOpen = true,
+		panelClose = true,
+		radialOpen = true,
+		radialClose = true,
+		radialTick = true,
+		radialSelect = true,
+		radialPage = true,
+		popupShown = true,
+		popupHidden = true,
+	},
+	["Dungeon: Melee"] = {
+		__exclusive = true,
+		comboPoint = true,
+		resourceCapped = true,
+		critLanded = true,
+		deflect = true,
+		weaponSwingMain = true,
+		weaponSwingOff = true,
+		targetDied = true,
+		focusCastStart = true,
+		focusChannelStart = true,
+		targetCastStopped = true,
+		bossAbilityWarning = true,
+		bossChatWarning = true,
+		cooldownReady = true,
+		procGlow = true,
+		ccMaster = true,
+		ccStun = true,
+		ccDisarm = true,
+		damageTaken = true,
+		combatEnter = true,
+		combatLeave = true,
+		playerAlive = true,
+		lowHealthWarning = true,
+		raidTarget = true,
+		targetBigDefensive = true,
+		controllerUIMaster = true,
+		uiNavigate = true,
+		groupTargetingStart = true,
+		groupTargetingStop = true,
+		uiTabChanged = true,
+		panelOpen = true,
+		panelClose = true,
+		radialOpen = true,
+		radialClose = true,
+		radialTick = true,
+		radialSelect = true,
+		radialPage = true,
+		popupShown = true,
+		popupHidden = true,
+	},
+	["Dungeon: Caster"] = {
+		__exclusive = true,
+		castTexture = true,
+		selfCastSucceeded = true,
+		selfCastFailed = true,
+		selfChannelInterrupted = true,
+		critLanded = true,
+		procGlow = true,
+		cooldownReady = true,
+		resourceCapped = true,
+		focusCastStart = true,
+		focusChannelStart = true,
+		targetCastStopped = true,
+		bossAbilityWarning = true,
+		bossChatWarning = true,
+		ccMaster = true,
+		ccSilence = true,
+		ccStun = true,
+		damageTaken = true,
+		lowHealthWarning = true,
+		combatEnter = true,
+		combatLeave = true,
+		playerAlive = true,
+		raidTarget = true,
+		targetBigDefensive = true,
+		controllerUIMaster = true,
+		uiNavigate = true,
+		groupTargetingStart = true,
+		groupTargetingStop = true,
+		uiTabChanged = true,
+		panelOpen = true,
+		panelClose = true,
+		radialOpen = true,
+		radialClose = true,
+		radialTick = true,
+		radialSelect = true,
+		radialPage = true,
+		popupShown = true,
+		popupHidden = true,
+	},
+	["Dungeon: Hunter"] = {
+		__exclusive = true,
+		autoShotFired = true,
+		autoRepeatStart = true,
+		autoRepeatStop = true,
+		weaponSwingMain = true,
+		weaponSwingOff = true,
+		procGlow = true,
+		cooldownReady = true,
+		critLanded = true,
+		focusCastStart = true,
+		focusChannelStart = true,
+		targetCastStopped = true,
+		bossAbilityWarning = true,
+		bossChatWarning = true,
+		ccMaster = true,
+		ccStun = true,
+		ccSilence = true,
+		threatRising = true,
+		damageTaken = true,
+		lowHealthWarning = true,
+		combatEnter = true,
+		combatLeave = true,
+		playerAlive = true,
+		raidTarget = true,
+		targetBigDefensive = true,
+		controllerUIMaster = true,
+		uiNavigate = true,
+		groupTargetingStart = true,
+		groupTargetingStop = true,
+		uiTabChanged = true,
+		panelOpen = true,
+		panelClose = true,
+		radialOpen = true,
+		radialClose = true,
+		radialTick = true,
+		radialSelect = true,
+		radialPage = true,
+		popupShown = true,
+		popupHidden = true,
+	},
+	["Immersion: Melee"] = {
+		locomotion = true,
+		landingSoft = true,
+		landingHard = true,
+		jumped = true,
+		swimTexture = true,
+		waterTexture = true,
+		oceanTexture = true,
+		breathWarning = true,
+		breathTexture = true,
+		weatherChanged = true,
+		weatherTexture = true,
+		taxiRide = true,
+		taxiTakeoff = true,
+		taxiLanding = true,
+		mountUp = true,
+		dismount = true,
+		glideThrust = true,
+		lootGold = true,
+		itemObtained = true,
+		bagItemAdded = true,
+		bagFull = true,
+		harvestComplete = true,
+		durabilityLow = true,
+		equipChanged = true,
+		emote = true,
+		achievement = true,
+		damageTaken = true,
+		deflect = true,
+		critLanded = true,
+		weaponSwingMain = true,
+		weaponSwingOff = true,
+		comboPoint = true,
+		cooldownReady = true,
+		questDetail = true,
+		questComplete = true,
+		questTurnedIn = true,
+		merchantShow = true,
+		mailShow = true,
+		taxiOpened = true,
+		softTargetInteraction = true,
+		craftTexture = true,
+		combatEnter = true,
+		combatLeave = true,
+	},
+	["Immersion: Caster"] = {
+		castTexture = true,
+		selfCastSucceeded = true,
+		critLanded = true,
+		procGlow = true,
+		locomotion = true,
+		landingSoft = true,
+		landingHard = true,
+		glideThrust = true,
+		taxiRide = true,
+		mountUp = true,
+		dismount = true,
+		swimTexture = true,
+		waterTexture = true,
+		oceanTexture = true,
+		breathTexture = true,
+		weatherChanged = true,
+		weatherTexture = true,
+		lootGold = true,
+		itemObtained = true,
+		bagItemAdded = true,
+		bagFull = true,
+		equipChanged = true,
+		achievement = true,
+		questDetail = true,
+		questComplete = true,
+		questTurnedIn = true,
+		merchantShow = true,
+		mailShow = true,
+		taxiOpened = true,
+		softTargetInteraction = true,
+		craftTexture = true,
+		combatEnter = true,
+		combatLeave = true,
+		weaponSwingMain = false,
+		weaponSwingOff = false,
+		autoShotFired = false,
+	},
+	["Immersion: Ranged"] = {
+		autoShotFired = true,
+		critLanded = true,
+		procGlow = true,
+		locomotion = true,
+		landingSoft = true,
+		landingHard = true,
+		jumped = true,
+		glideThrust = true,
+		mountUp = true,
+		dismount = true,
+		taxiRide = true,
+		swimTexture = true,
+		waterTexture = true,
+		oceanTexture = true,
+		weatherChanged = true,
+		weatherTexture = true,
+		lootGold = true,
+		itemObtained = true,
+		bagItemAdded = true,
+		bagFull = true,
+		harvestComplete = true,
+		equipChanged = true,
+		achievement = true,
+		questDetail = true,
+		questComplete = true,
+		questTurnedIn = true,
+		merchantShow = true,
+		mailShow = true,
+		taxiOpened = true,
+		softTargetInteraction = true,
+		craftTexture = true,
+		combatEnter = true,
+		combatLeave = true,
+		weaponSwingMain = true,
+		weaponSwingOff = true,
+	},
+	PvP = {
+		__exclusive = true,
+		ccMaster = true,
+		ccStun = true,
+		ccSilence = true,
+		ccFear = true,
+		ccDisarm = true,
+		ccPacify = true,
+		ccConfuse = true,
+		focusCastStart = true,
+		focusChannelStart = true,
+		targetCastStopped = true,
+		targetedByEnemy = true,
+		selfCastFailed = true,
+		selfChannelInterrupted = true,
+		damageTaken = true,
+		cooldownReady = true,
+		lowHealthWarning = true,
+		lowHealthTexture = true,
+		targetBigDefensive = true,
+		targetDied = true,
+		combatEnter = true,
+		combatLeave = true,
+		duelRequest = true,
+		raidTarget = true,
+	},
+}
+
+-- One-time, DB_VERSION 8 -> 9 (Option B): automatically updates untouched built-in profiles
+-- to their new curated trigger overrides while preserving any profiles modified by the user.
+function Database:_MigrateCuratedProfilesOptionB()
+	if not DB or not DB.profiles then
+		return
+	end
+
+	local function isProfileUntouched(name, profile)
+		if type(profile) ~= "table" then
+			return false
+		end
+
+		-- Check 1: triggerSettings customization
+		if profile.triggerSettings then
+			for triggerID, settings in pairs(profile.triggerSettings) do
+				if type(settings) == "table" then
+					if settings.__mode ~= nil then
+						return false
+					end
+					local trigger = Pulse.Registry and Pulse.Registry:GetTrigger(triggerID)
+					if settings.intensity ~= nil then
+						local defInt = (trigger and trigger.defaultIntensity) or 1.0
+						if math.abs(settings.intensity - defInt) > 0.001 then
+							return false
+						end
+					end
+					local knownKeys = { intensity = true, __mode = true }
+					if trigger and trigger.tunables then
+						for _, tunable in ipairs(trigger.tunables) do
+							knownKeys[tunable.key] = true
+							local val = settings[tunable.key]
+							if val ~= nil then
+								local defVal = tunable.default
+								if tunable.boolean then
+									defVal = defVal and 1 or 0
+								end
+								if val ~= defVal then
+									return false
+								end
+							end
+						end
+					end
+					for k, _ in pairs(settings) do
+						if not knownKeys[k] then
+							return false
+						end
+					end
+				end
+			end
+		end
+
+		-- Check 2: masterIntensity customization
+		local meta = self:GetDefaultProfileMeta(name)
+		local metaInt = meta and meta.intensity or 0.70
+		if profile.masterIntensity ~= nil then
+			if
+				math.abs(profile.masterIntensity - metaInt) > 0.001
+				and math.abs(profile.masterIntensity - 0.70) > 0.001
+			then
+				return false
+			end
+		end
+
+		-- Check 3: triggers customization
+		if not profile.triggers or not next(profile.triggers) then
+			return true
+		end
+
+		-- A. Matches current curated set (already up to date)
+		local currentOverrides = PROFILE_TRIGGER_OVERRIDES[name]
+		local matchesCurrent = true
+		for _, trigger in ipairs(Pulse.Triggers or {}) do
+			local currentVal = profile.triggers[trigger.id] and true or false
+			local expected
+			if currentOverrides then
+				expected = currentOverrides[trigger.id]
+				if expected == nil then
+					expected = not currentOverrides.__exclusive and (trigger.default and true or false) or false
+				else
+					expected = expected and true or false
+				end
+			else
+				expected = trigger.default and true or false
+			end
+			if currentVal ~= expected then
+				matchesCurrent = false
+				break
+			end
+		end
+		if matchesCurrent then
+			return true
+		end
+
+		-- B. Matches legacy v8 overrides
+		local legacyOverrides = LEGACY_V8_OVERRIDES[name]
+		local matchesLegacy = true
+		for _, trigger in ipairs(Pulse.Triggers or {}) do
+			local currentVal = profile.triggers[trigger.id] and true or false
+			local expected
+			if legacyOverrides then
+				expected = legacyOverrides[trigger.id]
+				if expected == nil then
+					expected = not legacyOverrides.__exclusive and (trigger.default and true or false) or false
+				else
+					expected = expected and true or false
+				end
+			else
+				expected = trigger.default and true or false
+			end
+			if currentVal ~= expected then
+				matchesLegacy = false
+				break
+			end
+		end
+		if matchesLegacy then
+			return true
+		end
+
+		-- C. Matches pre-curation stock defaults (all trigger.default, e.g. v1-v6)
+		local matchesStock = true
+		for _, trigger in ipairs(Pulse.Triggers or {}) do
+			local currentVal = profile.triggers[trigger.id] and true or false
+			local expected = trigger.default and true or false
+			if currentVal ~= expected then
+				matchesStock = false
+				break
+			end
+		end
+		if matchesStock then
+			return true
+		end
+
+		return false
+	end
+
+	for _, name in ipairs(BUILTIN_PROFILE_NAMES) do
+		local profile = DB.profiles[name]
+		if profile then
+			if isProfileUntouched(name, profile) then
+				local overrides = PROFILE_TRIGGER_OVERRIDES[name]
+				profile.triggers = {}
+				self:_SeedProfileTriggerDefaults(profile, overrides)
+				local meta = self:GetDefaultProfileMeta(name)
+				if meta and meta.intensity then
+					profile.masterIntensity = meta.intensity
+				end
+			end
+			profile.__curatedVersion = 1
+		end
+	end
+end
+
+-- One-time, DB_VERSION 9 -> 10: migrate swimTexture and castTexture defaults
+-- to eliminate high-RPM motor buzzing and allow continuous textures to fade cleanly to quiet.
+function Database:_MigrateSwimSettings()
+	if not DB or not DB.profiles then
+		return
+	end
+	for _, profile in pairs(DB.profiles) do
+		if profile.triggerSettings and profile.triggerSettings.swimTexture then
+			local s = profile.triggerSettings.swimTexture
+			-- If user had the old default (1 / true), migrate to 0 (low motor)
+			if s.separateMotors == 1 or s.separateMotors == true then
+				s.separateMotors = 0
+			end
+			-- If user had the old default stroke depth (0.55), migrate to 0.85
+			if s.strokeDepth == 0.55 or s.strokeDepth == nil then
+				s.strokeDepth = 0.85
+			end
+		end
+		if profile.triggerSettings and profile.triggerSettings.castTexture then
+			local c = profile.triggerSettings.castTexture
+			-- If user had the old defaults, migrate them to tuned values
+			if c.castPresence == 0.10 then
+				c.castPresence = 0.06
+			end
+			if c.castSwellPeak == 0.70 then
+				c.castSwellPeak = 0.40
+			end
+			if c.channelHum == 0.20 then
+				c.channelHum = 0.12
+			end
+		end
+	end
 end
 
 -- One-time, DB_VERSION 7 -> 8: maps retired trigger schemas (rumbleAndTriggers, triggerEmphasis)
@@ -2199,7 +2848,11 @@ function Database:SetAllCues(enabled, profileName)
 		end
 	end
 	if not profileName or profileName == self:GetActiveProfileName() then
-		notifyAll(cueListeners)
+		if InCombatLockdown and InCombatLockdown() then
+			pendingProfileNotify = true
+		else
+			notifyAll(cueListeners)
+		end
 	end
 	return count
 end
@@ -2289,15 +2942,21 @@ function Database:GetChannelTuning(channel, key, default)
 end
 
 function Database:SetChannelTuning(channel, key, value, minValue, maxValue)
-	value = sanitizeNumber(value, minValue, maxValue)
-	if value == nil then
-		return
+	if type(value) ~= "boolean" then
+		value = sanitizeNumber(value, minValue, maxValue)
+		if value == nil then
+			return
+		end
 	end
 	DB.channelTuning = DB.channelTuning or {}
 	DB.channelTuning[channel] = DB.channelTuning[channel] or {}
 	DB.channelTuning[channel][key] = value
 	if Pulse.debug then
-		print(("Pulse: channel %s %s set to %.3f"):format(channel, key, value))
+		if type(value) == "boolean" then
+			print(("Pulse: channel %s %s set to %s"):format(channel, key, tostring(value)))
+		else
+			print(("Pulse: channel %s %s set to %.3f"):format(channel, key, value))
+		end
 	end
 	notify(channelTuningListeners, channel .. ":" .. key)
 end

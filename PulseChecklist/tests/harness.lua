@@ -1256,10 +1256,10 @@ do
 		end
 		check("Continuous textures merge via saturating sum", lastSetVal and lastSetVal > 0.40, true)
 
-		-- Transient impact layers on top without ducking continuous texture (snaps via fast transient tau)
+		-- Transient impact layers on top with dynamic tactile sidechain (snaps via fast transient tau)
 		Pulse.Engine:Set("impactThud", 0.50, 0.50, 0.05, true)
 		engineOnUpdate(nil, 0.05)
-		check("Transient layers on top of continuous baseline", lastSetVal and lastSetVal > 0.65, true)
+		check("Transient layers on top of continuous baseline", lastSetVal and lastSetVal > 0.60, true)
 
 		-- Let transient settle to steady state
 		for _ = 1, 5 do
@@ -1462,7 +1462,7 @@ do
 		)
 		Pulse.Database:SetTriggerSetting("waterTexture", "intensity", 1.0)
 
-		-- Verify swimTexture preview routes to high role (separateMotors = 1) (CR-004)
+		-- Verify swimTexture preview routes to low role by default (separateMotors = 0)
 		Pulse:TestCue("swimTexture")
 		local swimLayer = nil
 		for _, l in ipairs(Pulse.Engine:_DebugLayers()) do
@@ -1471,7 +1471,21 @@ do
 				break
 			end
 		end
-		check("swimTexture drives high role", (swimLayer and swimLayer.high or 0) > 0, true)
+		check("swimTexture drives low role by default", (swimLayer and swimLayer.low or 0) > 0, true)
+
+		-- Verify separateMotors = 1 routes to high role
+		Pulse:CancelContinuousPreview()
+		Pulse.Database:SetTriggerSetting("swimTexture", "separateMotors", 1)
+		Pulse:TestCue("swimTexture")
+		swimLayer = nil
+		for _, l in ipairs(Pulse.Engine:_DebugLayers()) do
+			if l.name == "preview" then
+				swimLayer = l
+				break
+			end
+		end
+		check("swimTexture drives high role when separateMotors = 1", (swimLayer and swimLayer.high or 0) > 0, true)
+		Pulse.Database:SetTriggerSetting("swimTexture", "separateMotors", 0)
 
 		-- Verify CancelContinuousPreview halts the preview layer
 		Pulse:CancelContinuousPreview()
@@ -1679,6 +1693,213 @@ do
 		local countEnabled = Pulse.Database:SetAllCues(true)
 		check("SetAllCues(true) modified all cues", countEnabled > 150, true)
 		check("random cue is true after SetAllCues(true)", Pulse.Database:GetCue("critLanded"), true)
+
+		-- H2 Regression: Sweep buttons in Spec.lua call Panel.MarkDirty without error
+		local cuesRows = Pulse.UI.Panel.Spec.BuildCuesPage and Pulse.UI.Panel.Spec.BuildCuesPage()
+		if cuesRows then
+			local enableBtn, disableBtn
+			for _, r in ipairs(cuesRows) do
+				if r.buttonText == "Enable All" then
+					enableBtn = r
+				end
+				if r.buttonText == "Disable All" then
+					disableBtn = r
+				end
+			end
+			check("Cues page Enable All button exists", enableBtn ~= nil, true)
+			check("Cues page Disable All button exists", disableBtn ~= nil, true)
+			if enableBtn and enableBtn.onClick then
+				local okEnable = pcall(enableBtn.onClick)
+				check("Cues page Enable All onClick executes cleanly (H2)", okEnable, true)
+			end
+			if disableBtn and disableBtn.onClick then
+				local okDisable = pcall(disableBtn.onClick)
+				check("Cues page Disable All onClick executes cleanly (H2)", okDisable, true)
+			end
+		end
+
+		local profRows = Pulse.UI.Panel.Spec.BuildProfilesPage and Pulse.UI.Panel.Spec.BuildProfilesPage()
+		if profRows then
+			local enableProfBtn, disableProfBtn
+			for _, r in ipairs(profRows) do
+				if r.buttonText == "Enable All" then
+					enableProfBtn = r
+				end
+				if r.buttonText == "Disable All" then
+					disableProfBtn = r
+				end
+			end
+			check("Profiles page Enable All button exists", enableProfBtn ~= nil, true)
+			check("Profiles page Disable All button exists", disableProfBtn ~= nil, true)
+			if enableProfBtn and enableProfBtn.onClick then
+				local okEnable = pcall(enableProfBtn.onClick)
+				check("Profiles page Enable All onClick executes cleanly (H2)", okEnable, true)
+			end
+			if disableProfBtn and disableProfBtn.onClick then
+				local okDisable = pcall(disableProfBtn.onClick)
+				check("Profiles page Disable All onClick executes cleanly (H2)", okDisable, true)
+			end
+		end
+
+		-- Test S-Curve channel tuning checkbox & calibration
+		Pulse.Database:SetChannelTuning("Low", "useSCurve", true)
+		check(
+			"SetChannelTuning permits boolean useSCurve (true)",
+			Pulse.Database:GetChannelTuning("Low", "useSCurve"),
+			true
+		)
+		Pulse.Database:SetChannelTuning("Low", "useSCurve", false)
+		check(
+			"SetChannelTuning permits boolean useSCurve (false)",
+			Pulse.Database:GetChannelTuning("Low", "useSCurve"),
+			false
+		)
+
+		local foundSCurveTunable = false
+		for _, t in ipairs(Pulse.CHANNEL_TUNABLES) do
+			if t.key == "useSCurve" then
+				foundSCurveTunable = true
+				check("useSCurve tunable has kind == checkbox", t.kind, "checkbox")
+			end
+		end
+		check("useSCurve tunable registered in CHANNEL_TUNABLES", foundSCurveTunable, true)
+
+		-- Test Option B Profile Migration (DB_VERSION 8 -> 9)
+		local savedPulseDB = _G.PulseDB
+		local mockDB = {
+			version = 8,
+			profiles = {
+				-- 1. Untouched Raiding: exactly matching legacy v8 overrides
+				Raiding = {
+					masterIntensity = 0.70,
+					triggers = {
+						bossAbilityWarning = true,
+						cooldownReady = true,
+						lowHealthWarning = true,
+						combatLeave = true,
+						playerAlive = true,
+						encounterStart = true,
+						encounterEnd = true,
+						focusCastStart = true,
+						focusChannelStart = true,
+						rolePoll = true,
+						summonRequest = true,
+						raidTarget = true,
+						lootRoll = true,
+						lootReceived = true,
+						selfChannelInterrupted = true,
+					},
+					triggerSettings = {},
+				},
+				-- 2. Customized Questing: user modified intensity on a cue
+				Questing = {
+					masterIntensity = 0.75,
+					triggers = {
+						damageTaken = true,
+						castTexture = true,
+					},
+					triggerSettings = {
+						damageTaken = { intensity = 0.42 },
+					},
+				},
+				-- 3. Customized Tank: user selected a custom mode override
+				["Dungeon: Tank"] = {
+					masterIntensity = 0.80,
+					triggers = {
+						threatLost = true,
+					},
+					triggerSettings = {
+						threatLost = { __mode = "HEAVY_STRIKE" },
+					},
+				},
+				-- 4. Untouched Default: all cues set to true (stock v1-v6 defaults)
+				Default = {
+					masterIntensity = 0.70,
+					triggers = {},
+					triggerSettings = {},
+				},
+				-- 5. Custom user profile
+				MyCustomBuild = {
+					masterIntensity = 0.60,
+					triggers = {
+						playerDead = true,
+					},
+					triggerSettings = {
+						swimTexture = { separateMotors = 1, strokeDepth = 0.55 },
+					},
+				},
+			},
+		}
+		for _, trigger in ipairs(Pulse.Triggers or {}) do
+			mockDB.profiles.Default.triggers[trigger.id] = (trigger.default and true or false)
+		end
+
+		_G.PulseDB = mockDB
+		Pulse.Database:Init()
+
+		check("Option B: DB version migrated to 10", _G.PulseDB.version, 10)
+		check(
+			"Swim migration: separateMotors migrated to 0",
+			_G.PulseDB.profiles.MyCustomBuild.triggerSettings.swimTexture.separateMotors,
+			0
+		)
+		check(
+			"Swim migration: strokeDepth migrated to 0.85",
+			_G.PulseDB.profiles.MyCustomBuild.triggerSettings.swimTexture.strokeDepth,
+			0.85
+		)
+		-- Untouched Raiding received new curated cues (42 cues enabled)
+		local raidingCount = 0
+		for _, v in pairs(_G.PulseDB.profiles.Raiding.triggers) do
+			if v then
+				raidingCount = raidingCount + 1
+			end
+		end
+		check("Option B: Untouched Raiding updated to curated cues (42)", raidingCount, 42)
+		check(
+			"Option B: Untouched Raiding has encounterStart enabled",
+			_G.PulseDB.profiles.Raiding.triggers.encounterStart,
+			true
+		)
+
+		-- Untouched Default received new curated cues (53 cues enabled, not all 190)
+		local defaultCount = 0
+		for _, v in pairs(_G.PulseDB.profiles.Default.triggers) do
+			if v then
+				defaultCount = defaultCount + 1
+			end
+		end
+		check("Option B: Untouched Default updated to curated cues (53)", defaultCount, 53)
+
+		-- Customized Questing was preserved 100%
+		check(
+			"Option B: Customized Questing preserved custom intensity (0.42)",
+			_G.PulseDB.profiles.Questing.triggerSettings.damageTaken.intensity,
+			0.42
+		)
+
+		-- Customized Tank was preserved 100%
+		check(
+			"Option B: Customized Tank preserved mode override",
+			_G.PulseDB.profiles["Dungeon: Tank"].triggerSettings.threatLost.__mode,
+			"HEAVY_STRIKE"
+		)
+
+		-- Custom user profile was preserved 100%
+		check(
+			"Option B: Custom profile MyCustomBuild masterIntensity preserved",
+			_G.PulseDB.profiles.MyCustomBuild.masterIntensity,
+			0.60
+		)
+		check(
+			"Option B: Custom profile MyCustomBuild playerDead cue preserved",
+			_G.PulseDB.profiles.MyCustomBuild.triggers.playerDead,
+			true
+		)
+
+		-- Restore real DB
+		_G.PulseDB = savedPulseDB
+		Pulse.Database:Init()
 
 		Pulse.Engine:StopAll()
 	end

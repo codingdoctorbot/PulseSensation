@@ -734,7 +734,7 @@ function Spec.BuildCueIndexPage()
 			onClick = function()
 				local count = database():SetAllCues(true)
 				print(("Pulse: enabled all %d cues in active profile."):format(count))
-				Panel.Refresh()
+				Panel.MarkDirty()
 			end,
 		},
 		{
@@ -745,7 +745,7 @@ function Spec.BuildCueIndexPage()
 			onClick = function()
 				local count = database():SetAllCues(false)
 				print(("Pulse: disabled all %d cues in active profile."):format(count))
-				Panel.Refresh()
+				Panel.MarkDirty()
 			end,
 		},
 	}
@@ -1056,7 +1056,7 @@ function Spec.BuildProfilesPage()
 		onClick = function()
 			local count = store:SetAllCues(true)
 			print(("Pulse: enabled all %d cues in profile %s."):format(count, store:GetActiveProfileName()))
-			Panel.Refresh()
+			Panel.MarkDirty()
 		end,
 	}
 
@@ -1068,7 +1068,7 @@ function Spec.BuildProfilesPage()
 		onClick = function()
 			local count = store:SetAllCues(false)
 			print(("Pulse: disabled all %d cues in profile %s."):format(count, store:GetActiveProfileName()))
-			Panel.Refresh()
+			Panel.MarkDirty()
 		end,
 	}
 
@@ -1730,21 +1730,37 @@ function Spec.BuildCalibrationPage()
 
 		for _, tunable in ipairs(Pulse.CHANNEL_TUNABLES) do
 			local default = Pulse.CHANNEL_DEFAULTS[tunable.key]
-			rows[#rows + 1] = {
-				kind = "slider",
-				child = true,
-				label = tunable.label,
-				tooltip = tunable.desc or "",
-				min = tunable.min,
-				max = tunable.max,
-				step = tunable.step,
-				get = function()
-					return store:GetChannelTuning(channel, tunable.key, default)
-				end,
-				set = function(value)
-					store:SetChannelTuning(channel, tunable.key, value, tunable.min, tunable.max)
-				end,
-			}
+			if tunable.kind == "checkbox" then
+				rows[#rows + 1] = {
+					kind = "checkbox",
+					child = true,
+					label = tunable.label,
+					tooltip = tunable.desc or "",
+					get = function()
+						local val = store:GetChannelTuning(channel, tunable.key, default)
+						return (val == true or val == 1 or val == "1")
+					end,
+					set = function(value)
+						store:SetChannelTuning(channel, tunable.key, value and true or false)
+					end,
+				}
+			else
+				rows[#rows + 1] = {
+					kind = "slider",
+					child = true,
+					label = tunable.label,
+					tooltip = tunable.desc or "",
+					min = tunable.min,
+					max = tunable.max,
+					step = tunable.step,
+					get = function()
+						return store:GetChannelTuning(channel, tunable.key, default)
+					end,
+					set = function(value)
+						store:SetChannelTuning(channel, tunable.key, value, tunable.min, tunable.max)
+					end,
+				}
+			end
 		end
 	end
 

@@ -72,6 +72,9 @@ function Panel.MarkDirty()
 	C_Timer.After(0, processDirty)
 end
 
+-- Backward compatibility alias: ensures any callers expecting Panel.Refresh trigger a dirty refresh
+Panel.Refresh = Panel.MarkDirty
+
 -- ── Database subscriptions ────────────────────────────────────────────────────
 
 -- Everything up front rather than per row, for one reason: Database's notifyAll visits only
@@ -554,9 +557,7 @@ local function slashHandler(message)
 		if db and db.SetAllCues then
 			local count = db:SetAllCues(true)
 			print(('Pulse: enabled all %d cues in profile "%s".'):format(count, db:GetActiveProfileName()))
-			if Panel.Refresh then
-				Panel.Refresh()
-			end
+			Panel.MarkDirty()
 		end
 		return
 	end
@@ -566,9 +567,7 @@ local function slashHandler(message)
 		if db and db.SetAllCues then
 			local count = db:SetAllCues(false)
 			print(('Pulse: disabled all %d cues in profile "%s".'):format(count, db:GetActiveProfileName()))
-			if Panel.Refresh then
-				Panel.Refresh()
-			end
+			Panel.MarkDirty()
 		end
 		return
 	end

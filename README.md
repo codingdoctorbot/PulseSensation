@@ -47,8 +47,8 @@ Tailor your sensory experience to your exact playstyle with curated default prof
 
 ### 👣 Shaped Locomotion Engine
 - **Transient Shaped Layers**: Footfalls bypass continuous low-pass smoothing entirely using an exponential decay envelope and initial kick gain, delivering crisp, punchy steps that never mush into a continuous rumble.
-- **6 Movement Timbres**: Tailored profiles for Walk, Run, Sprint, Mount Gallop, Swimming, and Glide.
-- **Stereo Pan / Split-Feet**: Alternates left and right footstep weight across low and high rumble motors on dual-motor gamepads.
+- **6 Movement Timbres**: Tailored physical impact profiles for Boot, Hoof, Paw, Heavy, Claw, and Metal.
+- **Stereo Pan / Split-Feet**: Alternates left and right footstep weight across low and high rumble motors on dual-motor gamepads (automatically disengages on single-motor schemas to prevent artificial limping).
 - **Authentic Mount Gallop**: Detects quadrupeds and merges galloping footfall pairs under 80ms into authentic "ba-dump... ba-dump" gait rhythms.
 
 ### 🎛️ 35 Authorable Vibration Modes

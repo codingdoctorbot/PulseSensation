@@ -55,9 +55,24 @@ local smoothedByChannel = {}
 local lastSetByChannel = {}
 local lastSentTimeByChannel = {}
 local lastWantedByChannel = {}
+local overdriveUntilByChannel = { Low = 0, High = 0 }
+local lastWantedRawByChannel = { Low = 0, High = 0 }
 
 local WATCHDOG_INTERVAL = 0.250 -- 250ms keep-alive heartbeat to prevent motor firmware sleep
+local MIN_TELEMETRY_INTERVAL = 0.0125 -- 80 Hz cap (12.5ms) to protect Bluetooth bandwidth and battery
 local ROLES_LIST = { "low", "high", "ltrigger", "rtrigger" }
+
+-- Table recycling pool for dynamic layers (Rule 4: Zero-GC)
+local layerPool = {}
+local function recycleLayer(layer)
+	if layer and #layerPool < 32 then
+		wipe(layer.roles)
+		layer.shape = nil
+		layer.t0 = nil
+		layer.isTransient = nil
+		layerPool[#layerPool + 1] = layer
+	end
+end
 
 -- Scratch tables for OnUpdate blending (recycled via wipe to ensure zero GC in tight loops - Rule 4)
 local frameRoleTotals = {}
@@ -179,12 +194,19 @@ function Engine:StopAll()
 	engineGeneration = engineGeneration + 1
 	rampToken = (rampToken or 0) + 1
 	self.activeRamp = nil
-	layers = {}
+	for name, layer in pairs(layers) do
+		recycleLayer(layer)
+		layers[name] = nil
+	end
 	rawHolds = {}
 	smoothedByChannel = {}
 	lastSetByChannel = {}
 	wipe(lastSentTimeByChannel)
 	wipe(lastWantedByChannel)
+	overdriveUntilByChannel.Low = 0
+	overdriveUntilByChannel.High = 0
+	lastWantedRawByChannel.Low = 0
+	lastWantedRawByChannel.High = 0
 	wipe(frameRoleTotals)
 	wipe(roleContinuousTotal)
 	wipe(roleTransientTotal)
@@ -246,7 +268,12 @@ function Engine:SetRoles(name, roles, duration, isTransient, shape)
 	end
 	local layer = layers[name]
 	if not layer then
-		layer = { roles = {} }
+		if #layerPool > 0 then
+			layer = layerPool[#layerPool]
+			layerPool[#layerPool] = nil
+		else
+			layer = { roles = {} }
+		end
 		layers[name] = layer
 	end
 	local target = layer.roles
@@ -292,7 +319,11 @@ function Engine:HoldRoles(name, roles, duration, isTransient, shape)
 end
 
 function Engine:StopLayer(name)
-	layers[name] = nil
+	local layer = layers[name]
+	if layer then
+		layers[name] = nil
+		recycleLayer(layer)
+	end
 end
 
 -- StopLayer's stronger sibling: also bumps the layer's PlayMode token, so steps a previous
@@ -302,7 +333,11 @@ end
 -- discrete shape and then a continuous hold is exactly where a stale step lands on top.
 function Engine:CancelLayer(name)
 	layerTokens[name] = (layerTokens[name] or 0) + 1
-	layers[name] = nil
+	local layer = layers[name]
+	if layer then
+		layers[name] = nil
+		recycleLayer(layer)
+	end
 end
 
 -- Discrete shapes: Core/Modes.lua supplies the vocabulary. PlayMode schedules one shape's
@@ -468,7 +503,7 @@ end
 -- them there via max), smooth with the local `smoothTowards` helper above (slower attack,
 -- faster release), and only call SetVibration when a channel's value actually moved.
 
-local function mapValue(channel, v)
+local function mapValue(channel, v, isTransient)
 	if not v or v <= 0 then
 		return 0
 	end
@@ -476,13 +511,30 @@ local function mapValue(channel, v)
 	if v <= 0 then
 		return 0
 	end
-	local gamma = channelConfig(channel, "gamma")
-	if gamma and gamma ~= 1.0 then
-		v = v ^ gamma
+	local useSCurve = channelConfig(channel, "useSCurve")
+	if useSCurve then
+		-- Smoothstep perceptual linearization: 3x^2 - 2x^3 (WP4)
+		v = v * v * (3.0 - 2.0 * v)
+	else
+		local gamma = channelConfig(channel, "gamma")
+		if gamma and gamma ~= 1.0 then
+			v = v ^ gamma
+		end
 	end
 	local floor = channelConfig(channel, "floor")
 	if floor and floor > 0 then
-		v = floor + (1.0 - floor) * v
+		if isTransient then
+			v = floor + (1.0 - floor) * v
+		else
+			-- Soft floor for continuous immersion textures (CR-008 b):
+			-- Transients need the hard breakaway floor immediately to kick over static friction.
+			-- Continuous textures use a smoothstep knee so low slider values (0.01-0.10) can
+			-- fade to whisper-quiet or silence instead of hitting an inescapable 10-12% motor buzz.
+			local knee = channelConfig(channel, "floorKnee") or 0.20
+			local t = clamp01(v / knee)
+			local effFloor = floor * t * t * (3.0 - 2.0 * t)
+			v = effFloor + (1.0 - floor) * v
+		end
 	end
 	return clamp01(v)
 end
@@ -493,11 +545,40 @@ local function driveChannel(channel, wanted, last, dt, epsilon, now, isTransient
 		return false
 	end
 
-	wanted = mapValue(channel, wanted)
+	wanted = wanted or 0
+	shaped = shaped or 0
+
+	-- Software Overdrive:
+	-- Brief voltage boost on transient onset from a stopped motor state (>70ms silence).
+	local boost = channelConfig(channel, "overdriveBoost") or 1.0
+	local dur = channelConfig(channel, "overdriveDuration") or 0.0
+	local rawWanted = (shaped > wanted) and shaped or wanted
+	local prevWanted = lastWantedRawByChannel[channel] or 0
+	lastWantedRawByChannel[channel] = rawWanted
+
+	local timeSinceDrive = now - (lastSentTimeByChannel[channel] or 0)
+	if
+		isTransient
+		and dur > 0
+		and rawWanted > 0
+		and ((prevWanted == 0 and timeSinceDrive >= 0.070) or (rawWanted - prevWanted) > 0.40)
+	then
+		overdriveUntilByChannel[channel] = now + dur
+	end
+
+	local isOverdriving = (now < (overdriveUntilByChannel[channel] or 0))
+	if isOverdriving and boost > 1.0 then
+		wanted = clamp01(wanted * boost)
+		if shaped > 0 then
+			shaped = clamp01(shaped * boost)
+		end
+	end
+
+	wanted = mapValue(channel, wanted, isTransient)
 
 	-- Dual-lane adaptive smoothing:
-	-- Transient impacts use fast transientAttackTau (10-12ms) for punchy, immediate tactile feedback.
-	-- Continuous immersion textures use attackTau (75ms) for smooth, non-fatiguing rumble.
+	-- Transient impacts use fast transientAttackTau (10-18ms) for punchy, immediate tactile feedback.
+	-- Continuous immersion textures use attackTau (45-85ms) for smooth, non-fatiguing rumble.
 	local attackTau = isTransient and channelConfig(channel, "transientAttackTau")
 		or channelConfig(channel, "attackTau")
 	local releaseTau = channelConfig(channel, "releaseTau")
@@ -510,7 +591,7 @@ local function driveChannel(channel, wanted, last, dt, epsilon, now, isTransient
 
 	-- When wanted is zero and smoothed decays below the silence gate, explicitly zero the motor.
 	-- This prevents sub-threshold residual voltage leaks when another channel is still active.
-	local shapedOut = mapValue(channel, shaped)
+	local shapedOut = mapValue(channel, shaped, true)
 	if wanted == 0 and smoothed <= SILENCE_GATE and shapedOut == 0 then
 		if (last or 0) > 0 then
 			if C_GamePad and C_GamePad.SetVibration then
@@ -531,12 +612,14 @@ local function driveChannel(channel, wanted, last, dt, epsilon, now, isTransient
 	local isOnset = (want > 0 and (lastWantedByChannel[channel] or 0) == 0)
 	lastWantedByChannel[channel] = want
 
-	local forceSend = isOnset
+	-- Bluetooth telemetry rate-limiting & power optimization (WP5):
+	-- Continuous updates are capped at 80 Hz (12.5ms interval) to prevent BLE stack saturation.
+	-- Critical onsets, large amplitude jumps (>0.20), and shutoffs dispatch immediately with zero latency.
+	local isCriticalChange = isOnset or (delta > 0.20) or (not isOn and (last or 0) > 0)
+	local isWatchdog = (isOn and timeSinceLast >= WATCHDOG_INTERVAL)
+	local timeReady = (now <= 0) or (timeSinceLast >= MIN_TELEMETRY_INTERVAL)
 
-	-- Output watchdog: re-send vibration every WATCHDOG_INTERVAL (250ms) even if delta <= epsilon
-	-- to prevent controller hardware firmware timeouts on steady continuous textures.
-	-- New onsets (transition from 0 to active) always force immediate dispatch to bypass the epsilon deadband.
-	if forceSend or delta > epsilon or (isOn and timeSinceLast >= WATCHDOG_INTERVAL) then
+	if isCriticalChange or isWatchdog or (delta > epsilon and timeReady) then
 		if C_GamePad and C_GamePad.SetVibration then
 			pcall(C_GamePad.SetVibration, channel, out)
 		end
@@ -620,6 +703,7 @@ local function onEngineTick(elapsed)
 	local hasShaped = false
 	for name, layer in pairs(layers) do
 		if now >= layer.endTime then
+			recycleLayer(layer)
 			layers[name] = nil
 		elseif layer.shape then
 			local shape = layer.shape
@@ -627,10 +711,7 @@ local function onEngineTick(elapsed)
 				layer.t0 = now -- stamped on first evaluation: the kick is never skipped by frame sampling
 			end
 			local age = now - layer.t0
-			local kickTime = shape.kickTime
-			if kickTime < dt * 1.2 then
-				kickTime = dt * 1.2
-			end
+			local kickTime = shape.kickTime or 0.025
 			local cut = shape.cut or 0.06
 			local alive = false
 			for role, value in pairs(layer.roles) do
@@ -655,6 +736,7 @@ local function onEngineTick(elapsed)
 				end
 			end
 			if not alive and age >= kickTime then
+				recycleLayer(layer)
 				layers[name] = nil
 			end
 		else
@@ -680,15 +762,14 @@ local function onEngineTick(elapsed)
 	end
 
 	-- Combine continuous immersion baseline with punchy transients.
-	-- Immersion-first: continuous baseline is NEVER muted or ducked!
-	-- Transients layer harmoniously on top:
+	-- Transients layer with clean headroom addition on top of the continuous baseline,
+	-- guaranteeing positive felt step height without amplitude dips.
 	if hasRoles then
 		for _, role in ipairs(ROLES_LIST) do
 			local cont = roleContinuousTotal[role] or 0
 			local trans = roleTransientTotal[role] or 0
 			if trans > 0 and cont > 0 then
-				-- Transient rides directly on top of the immersion baseline:
-				frameRoleTotals[role] = clamp01(cont + trans * (1.0 - cont))
+				frameRoleTotals[role] = clamp01(cont + trans)
 			elseif trans > 0 then
 				frameRoleTotals[role] = clamp01(trans)
 			elseif cont > 0 then

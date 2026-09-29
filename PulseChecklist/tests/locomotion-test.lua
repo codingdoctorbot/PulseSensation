@@ -77,8 +77,9 @@ end
 function GetUnitSpeed()
 	return playerSpeed
 end
+local currentForm = nil
 function GetShapeshiftFormID()
-	return nil
+	return currentForm
 end
 function GetInventoryItemID()
 	return nil
@@ -160,6 +161,18 @@ local Pulse = {
 				high = { channel = "High" },
 				ltrigger = { channel = "LTrigger" },
 				rtrigger = { channel = "RTrigger" },
+			},
+		},
+		lowOnly = {
+			roles = {
+				low = { channel = "Low" },
+				high = { channel = "Low" },
+			},
+		},
+		highOnly = {
+			roles = {
+				low = { channel = "High" },
+				high = { channel = "High" },
 			},
 		},
 	},
@@ -424,6 +437,90 @@ check("Merged gallop hoof strike uses HOOF shape", holdCalls[1] and holdCalls[1]
 check("Merged gallop hoof strike has extended tau", holdCalls[1] and (holdCalls[1].shape.tau.low > 0.05), true)
 
 eventFrame:GetScript("OnEvent")(eventFrame, "PLAYER_STOPPED_MOVING")
+
+-- ── Part 6: H1 Gallop Merge Desync & Shape Transition Regressions ─────────────
+
+io.write("\n── Part 6: H1 Gallop Merge Desync & Shape Transitions ──\n")
+
+-- Reproduction A: Mounted Walk -> Run Gallop Merge Transition
+mounted = true
+playerSpeed = 2.5
+reset()
+eventFrame:GetScript("OnEvent")(eventFrame, "PLAYER_STARTED_MOVING")
+holdCalls = {}
+
+for _ = 1, 180 do
+	now = now + dt
+	onUpdate(pollFrame, dt)
+end
+local walkSteps = #holdCalls
+check("Mounted walk produces steps", walkSteps > 0, true)
+
+-- Transition immediately mid-stride to full gallop speed (isGallopMerged = true)
+playerSpeed = 11.2
+holdCalls = {}
+for _ = 1, 300 do
+	now = now + dt
+	onUpdate(pollFrame, dt)
+end
+check("H1 Fix: Footfalls continue firing after walk->gallop transition (no cadence lock)", #holdCalls >= 8, true)
+
+eventFrame:GetScript("OnEvent")(eventFrame, "PLAYER_STOPPED_MOVING")
+
+-- Reproduction B: On-Foot Run -> Druid Cat Form Transition
+mounted = false
+playerSpeed = 7.0
+currentForm = nil
+reset()
+eventFrame:GetScript("OnEvent")(eventFrame, "PLAYER_STARTED_MOVING")
+holdCalls = {}
+
+for _ = 1, 120 do
+	now = now + dt
+	onUpdate(pollFrame, dt)
+end
+check("On-foot run produces steps", #holdCalls > 0, true)
+
+-- Shift into Cat Form (form ID 1)
+currentForm = 1
+holdCalls = {}
+for _ = 1, 180 do
+	now = now + dt
+	onUpdate(pollFrame, dt)
+end
+check("Footfalls continue firing after shifting into Cat Form", #holdCalls >= 4, true)
+
+eventFrame:GetScript("OnEvent")(eventFrame, "PLAYER_STOPPED_MOVING")
+currentForm = nil
+
+-- ── Part 7: M1 Single-Motor Schema splitFeet Guard ────────────────────────────
+
+io.write("\n── Part 7: M1 Single-Motor Schema splitFeet Guard ──\n")
+
+currentSchema = "lowOnly"
+dbStore.triggerSettings.locomotion.splitFeet = 1
+mounted = false
+playerSpeed = 7.0
+reset()
+eventFrame:GetScript("OnEvent")(eventFrame, "PLAYER_STARTED_MOVING")
+holdCalls = {}
+
+onUpdate(pollFrame, dt)
+local s1Low = holdCalls[1] and holdCalls[1].low
+local s1High = holdCalls[1].high
+
+while #holdCalls < 2 do
+	now = now + dt
+	onUpdate(pollFrame, dt)
+end
+local s2Low = holdCalls[2] and holdCalls[2].low
+local s2High = holdCalls[2].high
+
+check("M1 Fix: Low-only schema does not split Low motor between feet", s1Low, s2Low)
+check("M1 Fix: Low-only schema does not split High motor between feet", s1High, s2High)
+
+eventFrame:GetScript("OnEvent")(eventFrame, "PLAYER_STOPPED_MOVING")
+currentSchema = "standard"
 
 -- ── Summary ───────────────────────────────────────────────────────────────────
 

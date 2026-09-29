@@ -16,7 +16,7 @@ A rich collection of customizable cues across 16 distinct categories:
 
 *   **Combat & Defense:** Weapon swings, crits, parries, blocks, damage taken, combo points, and execute alerts.
 *   **Spellcasting & Channels:** Cast build-up crescendo, channel hum, instant casts, interrupt and failure alerts.
-*   **Shaped Locomotion:** Footfalls with 6 movement timbres (Walk, Run, Sprint, Mount Gallop, Swimming, Glide) and stereo left/right motor split.
+*   **Shaped Locomotion:** Footfalls with 6 physical surface timbres (Boot, Hoof, Paw, Heavy, Claw, Metal) and stereo left/right motor split.
 *   **Mounts & Flight:** Gallop rhythm, takeoff thrust, landing impact, taxi flights, and dragonriding speed turbulence.
 *   **Environment & Weather:** Rain patter, blizzard biting chatter, storm rumbles, breath loss, and swimming drag.
 *   **Tradeskills & Economy:** Anvil hammer beats, mining pick taps, skinning, herbalism, fishing bobber rumble, and loot pulses.
@@ -43,7 +43,7 @@ Tailor your haptic feedback to your exact activity without manual configuration:
 ### 👣 Shaped Locomotion & Authentic Gait
 
 *   **Zero-Smoothing Bypass:** Discrete footstep taps bypass the continuous low-pass filter entirely using an exponential decay envelope, ensuring footsteps feel crisp and punchy rather than turning into a muddy drone.
-*   **Stereo Pan / Split-Feet:** Alternates left and right footstep weights across low and high rumble motors on dual-motor gamepads.
+*   **Stereo Pan / Split-Feet:** Alternates left and right footstep weights across low and high rumble motors on dual-motor gamepads (automatically disengages on single-motor schemas to maintain perfect balance).
 *   **Mount Gallop Cadence:** Quadruped gaits merge footfall pairs under 80ms into authentic "ba-dump... ba-dump" stride rhythms.
 
 ### 🎛️ 35 Haptic Modes & Dual-Motor Transients

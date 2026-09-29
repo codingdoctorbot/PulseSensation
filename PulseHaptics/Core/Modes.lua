@@ -21,8 +21,8 @@ Pulse.Modes = {
 	-- ── Discrete, single or few pulses ──────────────────────────────────────────
 	TAP = {
 		label = "A soft, quick tick.",
-		baseDuration = 0.12,
-		steps = { { role = "low", relIntensity = 0.6, relDuration = 1.0 } },
+		baseDuration = 0.055,
+		steps = { { role = "high", relIntensity = 0.55, relDuration = 1.0 } },
 	},
 	DOUBLE_TAP = {
 		label = "Two soft ticks.",
@@ -56,19 +56,19 @@ Pulse.Modes = {
 	-- reserved for HEAVY.
 	HEAVY = {
 		label = "One strong, sustained pulse.",
-		baseDuration = 0.55,
-		steps = { { role = "high", relIntensity = 1.0, relDuration = 1.0 } },
+		baseDuration = 0.45,
+		steps = { { role = "both", relIntensity = 1.0, relDuration = 1.0 } },
 	},
 	STUTTER = {
 		label = "Four rapid, sharp ticks.",
-		baseDuration = 0.07,
+		baseDuration = 0.040,
 		steps = {
 			{ role = "high", relIntensity = 0.9, relDuration = 1.0 },
-			{ gap = 0.05 },
+			{ gap = 0.060 },
 			{ role = "high", relIntensity = 0.9, relDuration = 1.0 },
-			{ gap = 0.05 },
+			{ gap = 0.060 },
 			{ role = "high", relIntensity = 0.9, relDuration = 1.0 },
-			{ gap = 0.05 },
+			{ gap = 0.060 },
 			{ role = "high", relIntensity = 0.9, relDuration = 1.0 },
 		},
 	},
@@ -90,23 +90,29 @@ Pulse.Modes = {
 	},
 	THUD = {
 		label = "One sharp, heavy impact — fast attack, fast decay.",
-		baseDuration = 0.16,
-		steps = { { role = "high", relIntensity = 0.85, relDuration = 1.0 } },
+		baseDuration = 0.12,
+		steps = {
+			{ role = "both", relIntensity = 0.85, relDuration = 0.5 },
+			{ role = "low", relIntensity = 0.75, relDuration = 0.8 },
+		},
 	},
 	THUMP = {
 		label = "One full-bodied hit on both motors.",
-		baseDuration = 0.18,
+		baseDuration = 0.14,
 		steps = { { role = "both", relIntensity = 0.85, relDuration = 1.0 } },
 	},
 	DEFLECT = {
-		label = "A very short, sharp tick.",
-		baseDuration = 0.06,
-		steps = { { role = "high", relIntensity = 0.5, relDuration = 1.0 } },
+		label = "A sharp metallic parry clang.",
+		baseDuration = 0.050,
+		steps = {
+			{ role = "high", relIntensity = 0.95, relDuration = 0.6 },
+			{ role = "high", relIntensity = 0.35, relDuration = 0.8 },
+		},
 	},
 	TICK = {
 		label = "A very light micro-pulse.",
-		baseDuration = 0.05,
-		steps = { { role = "low", relIntensity = 0.2, relDuration = 1.0 } },
+		baseDuration = 0.040,
+		steps = { { role = "high", relIntensity = 0.28, relDuration = 1.0 } },
 	},
 	CHIME = {
 		label = "A soft tick followed by a brighter one.",
@@ -137,13 +143,12 @@ Pulse.Modes = {
 		},
 	},
 	PULSE_BEAT = {
-		label = "A soft beat followed by a stronger one — a heartbeat.",
-		baseDuration = 0.22,
+		label = "Anatomical lub-dub cardiac rhythm.",
+		baseDuration = 0.16,
 		steps = {
-			{ role = "low", relIntensity = 0.4, relDuration = 1.0 },
-			{ gap = 0.10 },
-			{ role = "high", relIntensity = 1.0, relDuration = 1.0 },
-			{ gap = 0.4 },
+			{ role = "low", relIntensity = 0.65, relDuration = 0.55 },
+			{ gap = 0.075 },
+			{ role = "both", relIntensity = 0.90, relDuration = 0.60 },
 		},
 	},
 
@@ -153,18 +158,14 @@ Pulse.Modes = {
 	-- mode. Every shape below is a starting point, UNFELT, and distinctness partly depends
 	-- on breakaway floor and response time — judge them on a calibrated pad.
 	BURST = {
-		label = "A dense flurry of rapid ticks.",
-		baseDuration = 0.045,
+		label = "A dense 3-pulse tactical flurry.",
+		baseDuration = 0.050,
 		steps = {
-			{ role = "high", relIntensity = 0.65, relDuration = 1.0 },
-			{ gap = 0.03 },
-			{ role = "low", relIntensity = 0.45, relDuration = 1.0 },
-			{ gap = 0.025 },
-			{ role = "high", relIntensity = 0.65, relDuration = 1.0 },
-			{ gap = 0.035 },
-			{ role = "low", relIntensity = 0.45, relDuration = 1.0 },
-			{ gap = 0.025 },
-			{ role = "high", relIntensity = 0.65, relDuration = 1.0 },
+			{ role = "high", relIntensity = 0.95, relDuration = 0.8 },
+			{ gap = 0.055 },
+			{ role = "both", relIntensity = 0.80, relDuration = 0.8 },
+			{ gap = 0.055 },
+			{ role = "high", relIntensity = 1.00, relDuration = 1.0 },
 		},
 	},
 	-- Deliberately shorter and harder than THUD: THUD is an impact you feel land, IMPACT
@@ -188,8 +189,8 @@ Pulse.Modes = {
 	-- still too much. Sits below TICK deliberately.
 	CLICK = {
 		label = "A single dry click, lighter than a tick.",
-		baseDuration = 0.035,
-		steps = { { role = "high", relIntensity = 0.30, relDuration = 1.0 } },
+		baseDuration = 0.030,
+		steps = { { role = "high", relIntensity = 0.38, relDuration = 1.0 } },
 	},
 	-- Starts firm and decays in two steps: deceleration, not impact.
 	BRAKE = {
@@ -198,15 +199,15 @@ Pulse.Modes = {
 		steps = {
 			{ role = "both", relIntensity = 0.75, relDuration = 1.0 },
 			{ role = "low", relIntensity = 0.40, relDuration = 1.6 },
-			{ role = "low", relIntensity = 0.15, relDuration = 2.0 },
+			{ role = "low", relIntensity = 0.22, relDuration = 1.8 },
 		},
 	},
 	-- One low blip. For high-frequency, low-importance signals where even TICK would
 	-- accumulate into noise.
 	BLIP = {
 		label = "A tiny low blip, for things that happen often.",
-		baseDuration = 0.04,
-		steps = { { role = "low", relIntensity = 0.22, relDuration = 1.0 } },
+		baseDuration = 0.050,
+		steps = { { role = "low", relIntensity = 0.48, relDuration = 1.0 } },
 	},
 	-- Alternates motors so the sensation moves across the pad rather than sitting still.
 	WOBBLE = {
@@ -233,23 +234,23 @@ Pulse.Modes = {
 		steps = {
 			{ role = "low", relIntensity = 0.40, relDuration = 0.8 },
 			{ role = "low", relIntensity = 0.75, relDuration = 1.0 },
-			{ gap = 0.03 },
+			{ gap = 0.050 },
 			{ role = "high", relIntensity = 1.00, relDuration = 0.6 },
 		},
 	},
 	MICRO_TAP = {
-		label = "A light micro-tap on the high motor.",
-		baseDuration = 0.06,
-		steps = { { role = "high", relIntensity = 0.50, relDuration = 1.0 } },
+		label = "A firm mechanical detent on the high motor.",
+		baseDuration = 0.040,
+		steps = { { role = "high", relIntensity = 0.65, relDuration = 1.0 } },
 	},
 	STACCATO = {
 		label = "Rapid staccato triple-click on the high motor.",
-		baseDuration = 0.05,
+		baseDuration = 0.050,
 		steps = {
+			{ role = "high", relIntensity = 0.80, relDuration = 0.7 },
+			{ gap = 0.050 },
 			{ role = "high", relIntensity = 0.90, relDuration = 0.7 },
-			{ gap = 0.035 },
-			{ role = "high", relIntensity = 0.85, relDuration = 0.7 },
-			{ gap = 0.035 },
+			{ gap = 0.050 },
 			{ role = "high", relIntensity = 1.00, relDuration = 0.8 },
 		},
 	},

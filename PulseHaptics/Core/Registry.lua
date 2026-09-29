@@ -139,16 +139,16 @@ Pulse.Triggers = {
 		continuous = true,
 		default = false,
 		label = "Swimming resistance",
-		desc = "The effort of pulling yourself through water — a stroke rhythm that quickens and hardens with how fast you are actually moving.",
-		caveat = 'Effort only, and it drives the SHARP motor while "In water" drives the slow one, so the two are felt as separate sensations rather than max-blended into one. Enable both. Scales on your speed relative to your own swim speed, so it is silent while floating. Goes quiet rather than erroring if speed comes back as a secret value (RULE B — this cue caused a real 766-repeat live error before that guard existed).',
+		desc = "The effort of pulling yourself through water — a rhythmic hydrodynamic stroke that quickens and hardens with movement speed.",
+		caveat = 'Effort only, routed by default to the heavy motor alongside "In water", so the two merge into natural fluid resistance with clean glide coast-down between strokes. Turn on "Own motor" only if you want the stroke isolated on the high-frequency motor. Scales on your speed relative to your own swim speed, so it is silent while floating.',
 		devTuning = true,
 		tunables = {
 			{
 				key = "separateMotors",
 				label = "Own motor",
-				default = true,
+				default = false,
 				boolean = true,
-				desc = 'Puts the stroke on the sharp motor and leaves the slow one to "In water", so the two layers are felt separately instead of colliding on one motor. Turn off to put both back on the slow motor together — which is what the combined cue used to do, and why it read as choppy: a slow swell and a fast stroke max-blended onto one actuator beat against each other.',
+				desc = "Puts the stroke on the sharp motor. Turn off (recommended) to route swimming resistance to the heavy motor alongside ambient water, producing deep hydrodynamic drag instead of high-frequency motor buzz.",
 			},
 			{
 				key = "peak",
@@ -157,7 +157,7 @@ Pulse.Triggers = {
 				min = 0.0,
 				max = 0.5,
 				step = 0.01,
-				desc = "Strength at full swimming speed. Slightly lower than the old default because the stroke now drives the sharp motor, which is the physically stronger one under the Standard schema — trim it further with that channel's Strength slider on the Controller calibration page if it shouts. Replaces the old swimLowPeak/swimHighPeak pair, which were blended with max() and were therefore algebraically one knob: the smaller never did anything.",
+				desc = "Strength at full swimming speed. Replaces the old swimLowPeak/swimHighPeak pair, which were blended with max() and were therefore algebraically one knob: the smaller never did anything.",
 			},
 			{
 				key = "strokeRateMin",
@@ -180,11 +180,11 @@ Pulse.Triggers = {
 			{
 				key = "strokeDepth",
 				label = "Stroke depth",
-				default = 0.55,
+				default = 0.85,
 				min = 0.0,
 				max = 1.0,
 				step = 0.05,
-				desc = "How pronounced each stroke is against its own baseline. 0 is a flat drag with no rhythm at all.",
+				desc = "How pronounced each stroke is against its own baseline. Higher values (0.80-1.0) allow the counterweight to physically spin down during the glide phase between strokes. 0 is a flat drag with no rhythm at all.",
 			},
 			{
 				key = "strokeAsymmetry",
@@ -477,7 +477,7 @@ Pulse.Triggers = {
 			{
 				key = "castPresence",
 				label = "Cast presence (low)",
-				default = 0.1,
+				default = 0.06,
 				min = 0.0,
 				max = 0.5,
 				step = 0.01,
@@ -486,7 +486,7 @@ Pulse.Triggers = {
 			{
 				key = "castSwellPeak",
 				label = "Cast swell peak (high)",
-				default = 0.7,
+				default = 0.40,
 				min = 0.0,
 				max = 1.0,
 				step = 0.05,
@@ -495,7 +495,7 @@ Pulse.Triggers = {
 			{
 				key = "channelHum",
 				label = "Channel hum (high)",
-				default = 0.2,
+				default = 0.12,
 				min = 0.0,
 				max = 1.0,
 				step = 0.05,

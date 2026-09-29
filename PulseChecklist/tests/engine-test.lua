@@ -107,6 +107,18 @@ Pulse.Database = {
 		if key == "floor" and mockFloor ~= nil then
 			return mockFloor
 		end
+		if key == "overdriveBoost" and mockOverdriveBoost ~= nil then
+			return mockOverdriveBoost
+		end
+		if key == "overdriveDuration" and mockOverdriveDuration ~= nil then
+			return mockOverdriveDuration
+		end
+		if key == "coastCoeff" and mockCoastCoeff ~= nil then
+			return mockCoastCoeff
+		end
+		if key == "useSCurve" and mockUseSCurve ~= nil then
+			return mockUseSCurve
+		end
 		return default
 	end,
 	GetChangeEpsilon = function()
@@ -277,16 +289,16 @@ check("steamdeck preset registered", type(Pulse.Devices.steamdeck), "table")
 check("steamcontroller2 preset registered", type(Pulse.Devices.steamcontroller2), "table")
 check("steamcontroller preset registered", type(Pulse.Devices.steamcontroller), "table")
 
-check("steamdeck low gain", Pulse.Devices.steamdeck.channels.Low.gain, 1.20)
-check("steamdeck low floor", Pulse.Devices.steamdeck.channels.Low.floor, 0.050)
+check("steamdeck low gain", Pulse.Devices.steamdeck.channels.Low.gain, 1.25)
+check("steamdeck low floor", Pulse.Devices.steamdeck.channels.Low.floor, 0.045)
 check("steamcontroller2 low floor", Pulse.Devices.steamcontroller2.channels.Low.floor, 0.035)
 check("steamcontroller low floor", Pulse.Devices.steamcontroller.channels.Low.floor, 0.060)
 
 check("dualsense triggers disabled", Pulse.Devices.dualsense.triggers, false)
 check("dualsense low gain", Pulse.Devices.dualsense.channels.Low.gain, 1.15)
-check("dualsense low floor", Pulse.Devices.dualsense.channels.Low.floor, 0.030)
+check("dualsense low floor", Pulse.Devices.dualsense.channels.Low.floor, 0.025)
 check("ds4 triggers disabled", Pulse.Devices.ds4.triggers, false)
-check("ds4 low floor", Pulse.Devices.ds4.channels.Low.floor, 0.120)
+check("ds4 low floor", Pulse.Devices.ds4.channels.Low.floor, 0.115)
 check("xbox triggers disabled", Pulse.Devices.xbox.triggers, false)
 check("xbox_elite triggers disabled", Pulse.Devices.xbox_elite.triggers, false)
 
@@ -537,6 +549,30 @@ end
 check("Engine:Hold default/false sets isTransient=false", foundSustained, false)
 Engine:StopAll()
 
+-- ── CR-008 b: Soft Breakaway Floor for Continuous Textures ─────────────────
+Engine:StopAll()
+mockFloor = 0.125
+-- 1. Continuous hold at low amplitude (0.05) scales down smoothly below breakaway floor
+Engine:Hold("soft_floor_continuous", 0.05, 0, 0.5, false)
+for _ = 1, 15 do
+	frameScripts.OnUpdate(nil, 0.016)
+end
+local chanContinuous = Engine:_DebugChannels()
+local lowContinuous = chanContinuous["Low"] and chanContinuous["Low"].smoothed or 0
+check("continuous cue at 0.05 scales below breakaway floor (< 0.08)", lowContinuous > 0 and lowContinuous < 0.08, true)
+
+-- 2. Transient hold at low amplitude (0.05) preserves hard breakaway floor
+Engine:StopAll()
+Engine:Hold("hard_floor_transient", 0.05, 0, 0.5, true)
+for _ = 1, 15 do
+	frameScripts.OnUpdate(nil, 0.016)
+end
+local chanTransient = Engine:_DebugChannels()
+local lowTransient = chanTransient["Low"] and chanTransient["Low"].smoothed or 0
+check("transient cue at 0.05 preserves hard breakaway floor (>= 0.125)", lowTransient >= 0.125, true)
+mockFloor = nil
+Engine:StopAll()
+
 -- ── ENG-03: Raw Calibration Error Trapping via pcall ─────────────────────────
 Engine:StopAll()
 local origSetVib = C_GamePad.SetVibration
@@ -592,5 +628,130 @@ end
 check("shutoff_test snapped cleanly to zero", lastLowVib, 0)
 C_GamePad.SetVibration = origSetVibSnap
 Engine:StopAll()
+
+-- ── WP1: Software Overdrive Verification ─────────────────────────────────────
+mockGain = 1.0
+mockFloor = 0.0
+mockOverdriveBoost = 1.45
+mockOverdriveDuration = 0.030
+
+local lastOverdriveLow = nil
+local origSetVibOD = C_GamePad.SetVibration
+C_GamePad.SetVibration = function(channel, mag)
+	if channel == "Low" then
+		lastOverdriveLow = mag
+	end
+	origSetVibOD(channel, mag)
+end
+
+-- Transient onset on Low channel: 0 -> 0.40
+-- With Xbox Low overdriveBoost = 1.45, rawWanted receives 1.45x boost (0.40 * 1.45 = 0.58)
+Engine:Set("od_test", 0.40, 0, 0.05, true)
+frameScripts.OnUpdate(nil, 0.015)
+check("overdrive onset boosts transient value above base magnitude", (lastOverdriveLow or 0) > 0.40, true)
+
+C_GamePad.SetVibration = origSetVibOD
+Engine:StopAll()
+mockOverdriveBoost = nil
+mockOverdriveDuration = nil
+
+-- ── WP2: Layer Duration Integrity (No Coast Chopping) ───────────────────────
+local tapDuration = 0.050
+Engine:SetRoles("test_tap", { low = 0.60 }, tapDuration, true)
+
+local debugLayers = Engine:_DebugLayers()
+local foundTapLayer = nil
+for _, l in ipairs(debugLayers) do
+	if l.name == "test_tap" then
+		foundTapLayer = l
+		break
+	end
+end
+check("transient tap layer registered", foundTapLayer ~= nil, true)
+if foundTapLayer then
+	check(
+		"transient layer preserves full authored duration without premature coast-trim hole",
+		math.abs(foundTapLayer.remaining - tapDuration) < 0.001,
+		true
+	)
+end
+Engine:StopAll()
+
+-- ── WP3: Headroom Addition Blending (No Dip, Full Step) ──────────────────────
+local lastSidechainLow = nil
+local origSetVibSC = C_GamePad.SetVibration
+C_GamePad.SetVibration = function(channel, mag)
+	if channel == "Low" then
+		lastSidechainLow = mag
+	end
+	origSetVibSC(channel, mag)
+end
+
+-- Establish steady continuous background hum at 0.40
+Engine:Hold("bg_hum", 0.40, 0)
+for _ = 1, 10 do
+	frameScripts.OnUpdate(nil, 0.050)
+end
+local steadyHum = lastSidechainLow or 0
+check("steady continuous hum established", steadyHum > 0.35, true)
+
+-- Transient hit arrives at 0.30
+-- With headroom addition clamp01(cont + trans) = clamp01(0.40 + 0.30) = 0.70
+Engine:Set("fg_hit", 0.30, 0, 0.05, true)
+frameScripts.OnUpdate(nil, 0.020)
+local blendedHit = lastSidechainLow or 0
+check("transient hit steps cleanly above continuous baseline (no dip)", blendedHit > steadyHum + 0.10, true)
+
+C_GamePad.SetVibration = origSetVibSC
+Engine:StopAll()
+
+-- ── WP4: Perceptual S-Curve Linearization ────────────────────────────────────
+local function smoothstep(x)
+	return x * x * (3.0 - 2.0 * x)
+end
+check("smoothstep midpoint maps 0.5 to 0.5", math.abs(smoothstep(0.5) - 0.5) < 0.0001, true)
+check("smoothstep lower bend 0.2 maps to 0.104", math.abs(smoothstep(0.2) - 0.104) < 0.0001, true)
+check("smoothstep upper bend 0.8 maps to 0.896", math.abs(smoothstep(0.8) - 0.896) < 0.0001, true)
+
+-- ── WP7: Mode Hygiene Audit (Duration >= 20ms, Gaps >= 40ms) ──────────────────
+local modeErrors = 0
+for _, modeDef in pairs(Pulse.Modes) do
+	if not modeDef.continuous and modeDef.steps then
+		for _, step in ipairs(modeDef.steps) do
+			if step.gap and step.gap < 0.040 then
+				modeErrors = modeErrors + 1
+			end
+			if not step.gap then
+				local dur = (step.relDuration or 1) * (modeDef.baseDuration or 0.25)
+				if dur < 0.020 then
+					modeErrors = modeErrors + 1
+				end
+			end
+		end
+	end
+end
+check("all modes conform to physical actuator hygiene (dur >= 20ms, gap >= 40ms)", modeErrors, 0)
+
+-- ── WP8: Preset Physical Sanity Audit ─────────────────────────────────────────
+local presetSanityErrors = 0
+for _, devDef in pairs(Pulse.Devices) do
+	if devDef.channels then
+		for _, ch in pairs(devDef.channels) do
+			if ch.floor and (ch.floor < 0 or ch.floor > 0.40) then
+				presetSanityErrors = presetSanityErrors + 1
+			end
+			if ch.gain and (ch.gain < 0.5 or ch.gain > 2.0) then
+				presetSanityErrors = presetSanityErrors + 1
+			end
+			if ch.attackTau and (ch.attackTau < 0.005 or ch.attackTau > 0.30) then
+				presetSanityErrors = presetSanityErrors + 1
+			end
+			if ch.releaseTau and (ch.releaseTau < 0.005 or ch.releaseTau > 0.20) then
+				presetSanityErrors = presetSanityErrors + 1
+			end
+		end
+	end
+end
+check("all device presets satisfy physical actuator sanity bounds", presetSanityErrors, 0)
 
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))

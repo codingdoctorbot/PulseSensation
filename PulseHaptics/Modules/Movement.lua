@@ -307,15 +307,14 @@ local function pollLandingAndSwim(_, elapsed)
 					local peak = Pulse.Database:GetTriggerSetting("swimTexture", "peak", 0.10)
 					local strokeMin = Pulse.Database:GetTriggerSetting("swimTexture", "strokeRateMin", 0.45)
 					local strokeMax = Pulse.Database:GetTriggerSetting("swimTexture", "strokeRateMax", 0.95)
-					local depth = Pulse.Database:GetTriggerSetting("swimTexture", "strokeDepth", 0.55)
+					local depth = Pulse.Database:GetTriggerSetting("swimTexture", "strokeDepth", 0.85)
 					local harmonic = Pulse.Database:GetTriggerSetting("swimTexture", "strokeAsymmetry", 0.35)
 
-					-- The one real change of character, and the reason to expect this to
-					-- succeed where six earlier rounds felt "rough". Every previous version
-					-- was amplitude modulation of a constant — a swell. A swim stroke is not
-					-- a swell, it is pull, glide, pull: hard on one side of the cycle, soft
-					-- on the other. A pure sine cannot express that asymmetry; a second
-					-- harmonic can, which is exactly what Waves.Harmonic exists for.
+					-- The one real change of character: every previous version was amplitude
+					-- modulation of a constant — a swell. A swim stroke is not a swell, it is
+					-- pull, glide, pull: hard on one side of the cycle, soft on the other.
+					-- A pure sine cannot express that asymmetry; a second harmonic can,
+					-- which is exactly what Waves.Harmonic exists for.
 					--
 					-- Stroke rate rises with speed too, so swimming faster strokes faster
 					-- rather than merely harder.
@@ -327,24 +326,15 @@ local function pollLandingAndSwim(_, elapsed)
 					swimPhase = (swimPhase + TWO_PI * rate * dt) % TWO_PI
 					local value = Pulse.Waves.Harmonic(peak * ratio, rate, depth, harmonic, 1.2, nil, nil, swimPhase)
 
-					-- HIGH role, which reverses an earlier decision — and the reason it is
-					-- now safe is the calibration layer.
+					-- Actuator role assignment:
+					-- Default is `low` role (separateMotors = 0): routes stroke effort to the heavy
+					-- counterweight alongside ambient water (waterTexture), where saturating sum
+					-- blends them into viscous hydrodynamic drag.
+					-- High strokeDepth (0.85) allows the motor to spin down during the glide phase.
 					--
-					-- The old code deliberately kept swimming off `high`, because `high`
-					-- resolves to the physically STRONGER motor under Standard and there
-					-- was no way to trim it; that is what made swimming feel loud and
-					-- choppy in 2026-09-16 testing. Core/Devices.lua now gives every
-					-- channel its own Strength slider, so an over-loud motor is a knob
-					-- rather than a reason to avoid a channel entirely.
-					--
-					-- And the small fast mass is the right actuator for a stroke: it can
-					-- start and stop inside one pull, which the large one cannot. Buoyancy
-					-- on the slow motor, effort on the quick one, one sensation each, no
-					-- max-blend collision between them.
-					--
-					-- separateMotors = false puts it back on `low` beside the ambient
-					-- layer, for anyone whose high motor is unbearable or dead.
-					if Pulse.Database:GetTriggerSetting("swimTexture", "separateMotors", 1) == 1 then
+					-- separateMotors = 1 is an opt-in for users who want stroke effort isolated
+					-- on the fast/sharp `high` motor.
+					if Pulse.Database:GetTriggerSetting("swimTexture", "separateMotors", 0) == 1 then
 						staticHighRole.high = value
 						Pulse:HoldRolesIfEnabled("swimTexture", staticHighRole)
 					else
@@ -532,9 +522,9 @@ function M:PreviewSwim(seconds, scale)
 	scale = scale or 1.0
 	local peak = Pulse.Database:GetTriggerSetting("swimTexture", "peak", 0.10) * scale
 	local strokeMax = Pulse.Database:GetTriggerSetting("swimTexture", "strokeRateMax", 0.95)
-	local depth = Pulse.Database:GetTriggerSetting("swimTexture", "strokeDepth", 0.55)
+	local depth = Pulse.Database:GetTriggerSetting("swimTexture", "strokeDepth", 0.85)
 	local harmonic = Pulse.Database:GetTriggerSetting("swimTexture", "strokeAsymmetry", 0.35)
-	local separate = Pulse.Database:GetTriggerSetting("swimTexture", "separateMotors", 1) == 1
+	local separate = Pulse.Database:GetTriggerSetting("swimTexture", "separateMotors", 0) == 1
 	local rate = strokeMax
 	Pulse:StartContinuousPreview(seconds, function(elapsed)
 		local phase = (TWO_PI * rate * elapsed) % TWO_PI
