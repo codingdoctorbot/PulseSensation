@@ -16,20 +16,55 @@ Feel the heavy, distinct thud of plate boots crushing cobblestone. Feel the visc
 
 | Sensation Family | What You Physically Feel |
 |:---|:---|
-| 🛡️ **Locomotion & Armor Weight** | Heavy plate footfalls deliver low-frequency physical inertia; leather and cloth whisper; mounted gaits authentically mirror horse, wolf, and kodo stride rhythms. |
+| 🛡️ **Locomotion & Gait** | Shaped, fast-attack footfalls with 6 distinct movement timbres; stereo split-feet emulation alternating across left and right motors; authentic hooved gallop cadence for mounts; zero muddy drone. |
 | ⚔️ **Living Combat Texture** | Dual-wield weapon swings alternate dynamically with your character's real melee haste; parries and blocks kick back through the controller with crisp deflection snaps. |
 | 🔮 **Spellcasting & Channels** | Spells build from an ambient micro-flutter into a powerful crescendo at completion. Channels maintain a steady, hypnotic hum. |
 | 🔨 **Tradeskill & Gathering** | Crafting is no longer a silent progress bar. Blacksmithing strikes rhythmically on the beat; mining picks chip stone with sharp percussive taps; herbalism, skinning, and fishing each carry their own distinct gather texture and a crisp harvest-complete pulse on loot. |
 | 🌧️ **Environmental Immersion** | Distant thunderstorms rumble gently in your grip before lightning strikes; blizzards bite with icy high-frequency chatter; breath loss triggers an urgent, rising heartbeat. |
-| ♿ **Tactile Accessibility** | Full situational awareness without watching UI frames: loss-of-control stuns, interrupts, threat transitions, and execution procs felt instantly. |
+| ♿ **Tactile Accessibility & Radar** | Full situational awareness without watching UI frames: loss-of-control stuns, kick windows, incoming telegraphs, threat transitions, and execution procs felt instantly. |
 
 ---
 
-## 🚀 Why PulseHaptics Is Architecturally Different
+## 🚀 Key Features
 
-- **Continuous Multi-Layer Blending**: PulseHaptics never drops sensations. You can ride your mount, channel a spell, endure a rainstorm, and absorb an incoming hit *all at the same time*. The engine blends 4 logical roles across hardware channels in real time.
-- **Zero-GC Engine Discipline (0 FPS Drops)**: Built with obsessive performance discipline for WoW's embedded Lua 5.1 runtime. Continuous oscillators allocate **zero throwaway tables per frame**, eliminating garbage collection frame drops in 40-man raids and intense battlegrounds.
-- **100% Taint-Immune Gamepad UI**: Never triggers `ADDON_ACTION_BLOCKED`. Uses passive 20Hz state polling and Classic aperture framing rather than dangerous Blizzard UI hooks.
+### 🎯 190 Granular Haptic Cues
+Every moment of the game has been mapped to tactile telemetry across 16 distinct categories: Combat, Spells, Health, Movement, Locomotion, Environment, World, Inventory, Crafting, Encounter, Alert Loss Of Control, Alert Threat, Alert Unit Watch, Alert World, Alert Social, and Controller UI.
+
+### 🎭 12 Curated Built-in Profiles
+Tailor your sensory experience to your exact playstyle with curated default profiles vetted across all 190 cues:
+- **`Default`** — Balanced baseline across combat, environment, movement, and alerts (42 active cues, avoiding motor fatigue).
+- **`Dungeon: Tank`** — Commanding protection archetype. Emphasizes threat alerts, active mitigation, crowd control, and kick windows; 100% stripped of footfalls, weather, and world clutter.
+- **`Dungeon: Healer`** — Attentive triage archetype. Prioritizes low-health alarms, heal completion confirmations, dispels, and interrupt warnings.
+- **`Dungeon: Melee`** — High-tempo physical execution. Snappy combo points, resource spenders, execute range alerts, boss telegraphs, and kick windows.
+- **`Dungeon: Caster`** — Fluid spellcasting pacing. Continuous channel beds during casts, crisp completion snaps, lockout warnings, and proc notifications.
+- **`Dungeon: Hunter`** — Paced ranged rhythm with melee-weaving support. Auto-shot timing, weapon swings, feign-death threat warning, and boss mechanics.
+- **`Immersion: Melee`** — Visceral physical game-feel. Armor-weighted footstep gait, terrain landings, parry/block impacts, weather, and rich world looting.
+- **`Immersion: Caster`** — Atmospheric and arcane. Flowing spellcast textures, elemental channeling, environmental weather, and magical world interactions.
+- **`Immersion: Ranged`** — Paced ranged cadence, auto-shots, bows and guns, bag handling, dialogue, and exploration.
+- **`PvP (Tactical Radar)`** — Pure competitive reaction radar. Instant tactical alerts for crowd control, enemy casts, defensive activations, and life-threatening danger; zero ambient noise.
+- **`Raiding`** — Boss encounter clarity. Telegraph alarms, tank swaps, phase transitions, defensive cooldowns, and raid coordination with zero environmental clutter.
+- **`Questing`** — Open-world adventure and progression. Footsteps, mount gallop, weather shifts, quest turn-ins, dialogue, level up, bag/item management, and crisp mob kills.
+
+### 👣 Shaped Locomotion Engine
+- **Transient Shaped Layers**: Footfalls bypass continuous low-pass smoothing entirely using an exponential decay envelope and initial kick gain, delivering crisp, punchy steps that never mush into a continuous rumble.
+- **6 Movement Timbres**: Tailored profiles for Walk, Run, Sprint, Mount Gallop, Swimming, and Glide.
+- **Stereo Pan / Split-Feet**: Alternates left and right footstep weight across low and high rumble motors on dual-motor gamepads.
+- **Authentic Mount Gallop**: Detects quadrupeds and merges galloping footfall pairs under 80ms into authentic "ba-dump... ba-dump" gait rhythms.
+
+### 🎛️ 35 Authorable Vibration Modes
+A rich library of tactile waveforms, from organic pulses to punchy transients:
+- **Punchy Transients**: `SNAP`, `DRAW`, `MICRO_TAP`, `STACCATO`, `RECOIL`, `SHUTTLE`, `TENSION` (reprogrammed for dual-motor coordination).
+- **Physical Impacts & Pulses**: `THUD`, `CLICK`, `TAP`, `HEARTBEAT`, `WARNINGBEAT`, `PULSE`, `DOUBLE_PULSE`, `TRIPLE_PULSE`, `CRACK`, `BURST`, `CRESCENDO`, `FLUTTER`, `RUMBLE`, `STUTTER`, `HEAVY_IMPACT`, `SURGE`, `PING`.
+- **Continuous Textures**: `HUM`, `THRUM`, `WAVE`, `PATTER`, `DRIFT`.
+- **Ramps & Fades**: Dynamic duration and envelope shaping.
+
+### ⚡ One-Click Cue Sweeps
+- **Enable All / Disable All**: Instantly turn all 190 cues on or off in a single click from the Cue Index or Profiles page, or via chat commands (`/pulse enableall` and `/pulse disableall`). Perfect for isolated debugging or starting fresh profiles from scratch.
+
+### 🛡️ Zero-GC Engine & 100% Taint Immunity
+- **Zero-GC in Tight Loops**: Continuous oscillators and high-frequency frames allocate zero throwaway tables per frame, eliminating garbage collection micro-stutters during intense 40-man raids and battlegrounds.
+- **Taint-Immune Gamepad UI**: Never triggers `ADDON_ACTION_BLOCKED`. Uses passive state polling and Classic aperture framing rather than dangerous Blizzard protected UI hooks.
+- **Zero-Deadband Shutoff**: Automatically snaps decaying continuous rumble to 0 below 0.025 to eliminate mechanical motor stall whine and reduce telemetry overhead.
 
 ---
 
@@ -57,13 +92,14 @@ World of Warcraft requires native gamepad input and vibration telemetry to be en
 ### 2. Installation
 Install the addons into your World of Warcraft `Interface/AddOns/` directory:
 - **Core Addon**: `PulseHaptics` (the standalone engine & settings UI)
-- **Suite Extras** (Optional): `PulseDebug` (live diagnostics HUD) and `PulseChecklist` (in-game verification checklist)
+- **Suite Extras** (Optional): `PulseDebug` (live diagnostics HUD), `PulseChecklist` (in-game verification checklist), and `PulseProfileReview` (cue review tool)
 - **macOS Path**: `/Applications/World of Warcraft/_classic_beta_/Interface/AddOns/`
 - **Windows Path**: `C:\Program Files (x86)\World of Warcraft\_classic_beta_\Interface\AddOns\`
 
 ### 3. Immediate Taste Test
 Make sure your gamepad is turned on and try these chat commands to feel your controller come alive:
 - `/pulse test thud` — Heavy physical impact (boots, hammer, mace)
+- `/pulse test snap` — Crisp, sharp tactile transient snap
 - `/pulse test heartbeat` — Urgent cardiac rhythm
 - `/pulse test wave` — Smooth environmental ocean swell
 - `/pulse test surge` — Powerful magical energy surge
@@ -78,7 +114,10 @@ Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open 
 | Command | Action |
 |:---|:---|
 | `/pulse` or `/pulsehaptics` (or `/pulseui`) | Toggle the main settings window. |
-| `/pulse test <mode>` | Play any authored vibration mode (e.g. `thud`, `wave`, `surge`, `heartbeat`, `crack`). |
+| `/pulse test <mode>` | Play any authored vibration mode (e.g. `thud`, `snap`, `wave`, `surge`, `heartbeat`). |
+| `/pulse enableall` | Enable all 190 cues in the active profile in one sweep. |
+| `/pulse disableall` | Disable all 190 cues in the active profile in one sweep. |
+| `/pulse stop` (or `/pulse off`, `/pulse mute`) | Immediately stop all active haptic vibrations. |
 | `/pulse profile [name]` | Inspect or switch the active profile via chat. |
 | `/pulse minimap` | Toggle the minimap button on or off. |
 | `/pulse debug` | Toggle verbose console logging and view engine error diagnostics. |
@@ -86,6 +125,7 @@ Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open 
 | `/pcheck` *(PulseChecklist)* | Open the in-game cue verification checklist (all 190 cues). |
 | `/pcheck export` *(PulseChecklist)* | Generate a markdown QA status report you can copy to clipboard. |
 | `/pcheck import` *(PulseChecklist)* | Open the import dialog to restore cue verification statuses. |
+| `/pulsereview` *(PulseProfileReview)* | Open the profile cue review and auditing tool. |
 | `/console GamePadEnable 1` | Ensure Blizzard gamepad engine subsystem is enabled. |
 | `/console GamePadVibration 1` | Ensure Blizzard gamepad vibration output is enabled. |
 
@@ -97,9 +137,10 @@ PulseSensation is distributed as both a standalone release and a developer suite
 
 | Component | In Standalone ZIP? | Purpose |
 |:---|:---:|:---|
-| **`PulseHaptics`** | ✅ **Yes** | The core haptic engine, 190 authored triggers, 22 module watchers, custom settings UI, and profile manager. |
+| **`PulseHaptics`** | ✅ **Yes** | The core haptic engine, 190 authored triggers, 12 curated profiles, 22 module watchers, custom settings UI, and profile manager. |
 | **`PulseDebug`** | 📦 *Suite ZIP* | Developer & troubleshooting window for real-time channel introspection and trigger auditing (`/pdebug`). |
 | **`PulseChecklist`** | 📦 *Suite ZIP* | In-game QA tracking checklist for all 190 cues with markdown import/export (`/pcheck`). |
+| **`PulseProfileReview`** | 📦 *Suite ZIP* | Companion auditing tool for authoring and vetting profile cue sets (`/pulsereview`). |
 
 ---
 
