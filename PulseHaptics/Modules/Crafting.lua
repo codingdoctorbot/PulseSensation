@@ -84,7 +84,7 @@ local PROFESSION_WORK = {
 	[TAILORING] = { label = "Tailoring", bed = 0.09, cadence = 0.0, mode = nil, strike = 0.0 },
 	[INSCRIPTION] = { label = "Inscription", bed = 0.08, cadence = 0.0, mode = nil, strike = 0.0 },
 	[HERBALISM] = { label = "Herbalism", bed = 0.07, cadence = 0.0, mode = nil, strike = 0.0 },
-	[FISHING] = { label = "Fishing", bed = 0.07, cadence = 0.0, mode = nil, strike = 0.0 },
+	[FISHING] = { label = "Fishing", bed = 0.12, cadence = 0.0, mode = nil, strike = 0.0 },
 	[FIRSTAID] = { label = "First Aid", bed = 0.08, cadence = 0.0, mode = nil, strike = 0.0 },
 }
 
@@ -478,17 +478,20 @@ end
 -- Wiring
 
 local isGathering = false
+local trackedCraftSpellID = nil
 
 local function onActivity(result)
 	local classification = result.classification
 	if classification == "CRAFT_START" then
 		isGathering = false
+		trackedCraftSpellID = result.spellID
 		beginCraft(result.spellID)
 	elseif classification == "CAST_START" then
 		if not active or isGathering then
 			local prof = resolveGatherOrFishing(result.spellID)
 			if prof and (prof == MINING or prof == HERBALISM or prof == SKINNING) then
 				isGathering = true
+				trackedCraftSpellID = result.spellID
 				beginCraft(result.spellID, prof)
 			end
 		end
@@ -497,29 +500,34 @@ local function onActivity(result)
 			local prof = resolveGatherOrFishing(result.spellID)
 			if prof and prof == FISHING then
 				isGathering = true
+				trackedCraftSpellID = result.spellID
 				beginCraft(result.spellID, prof)
 			end
 		end
 	elseif classification == "CRAFT_COMPLETE" then
 		endCraft(true)
 		isGathering = false
+		trackedCraftSpellID = nil
 	elseif classification == "CAST_COMPLETE" or classification == "CHANNEL_COMPLETE" then
-		if isGathering then
+		if isGathering and (not result.spellID or not trackedCraftSpellID or result.spellID == trackedCraftSpellID) then
 			endCraft(true)
 			isGathering = false
+			trackedCraftSpellID = nil
 		end
 	elseif classification == "CRAFT_STOPPED" then
 		endCraft(false)
 		isGathering = false
+		trackedCraftSpellID = nil
 	elseif
 		classification == "CAST_STOPPED"
 		or classification == "CHANNEL_STOP"
 		or classification == "INTERRUPTED"
 		or classification == "FAILED"
 	then
-		if isGathering then
+		if isGathering and (not result.spellID or not trackedCraftSpellID or result.spellID == trackedCraftSpellID) then
 			endCraft(false)
 			isGathering = false
+			trackedCraftSpellID = nil
 		end
 	end
 end

@@ -106,9 +106,11 @@ function CastActivity:_OnChannelStart(unit, castGUID, spellID)
 	end
 	self.activeChannel = {
 		key = keyFor(castGUID, spellID),
+		castGUID = castGUID,
 		spellID = spellID,
 		startedAt = GetTime(),
-		succeeded = false,
+		confirmed = false,
+		interruptedBy = nil,
 	}
 	emit({ classification = "CHANNEL_START", spellID = spellID, castGUID = castGUID })
 end
@@ -156,11 +158,18 @@ function CastActivity:_OnSucceeded(unit, castGUID, spellID)
 		return
 	end
 
-	-- A channel that reached its end. Checked before the pending table because a channel
-	-- can also have had a START.
-	if self.activeChannel and self.activeChannel.key == key then
-		self.activeChannel.succeeded = true
-		emit({ classification = "CHANNEL_COMPLETE", spellID = spellID, castGUID = castGUID })
+	-- A channel receiving SUCCEEDED confirms the channel on modern 12.x engines.
+	-- It must NEVER be treated as CHANNEL_COMPLETE (which happens exclusively on CHANNEL_STOP).
+	if
+		self.activeChannel
+		and (
+			self.activeChannel.spellID == spellID
+			or (castGUID and self.activeChannel.castGUID == castGUID)
+			or self.activeChannel.key == key
+		)
+	then
+		self.activeChannel.confirmed = true
+		emit({ classification = "CHANNEL_CONFIRMED", spellID = spellID, castGUID = castGUID })
 		return
 	end
 
@@ -187,6 +196,16 @@ function CastActivity:_OnInterrupted(unit, castGUID, spellID)
 		return
 	end
 	local key = keyFor(castGUID, spellID)
+	if
+		self.activeChannel
+		and (
+			self.activeChannel.spellID == spellID
+			or (castGUID and self.activeChannel.castGUID == castGUID)
+			or self.activeChannel.key == key
+		)
+	then
+		self.activeChannel.interruptedBy = "interrupt"
+	end
 	self.pending[key] = nil
 	if
 		self.crafting
@@ -219,6 +238,16 @@ function CastActivity:_OnFailed(unit, castGUID, spellID)
 		return
 	end
 	local key = keyFor(castGUID, spellID)
+	if
+		self.activeChannel
+		and (
+			self.activeChannel.spellID == spellID
+			or (castGUID and self.activeChannel.castGUID == castGUID)
+			or self.activeChannel.key == key
+		)
+	then
+		self.activeChannel.interruptedBy = "failed"
+	end
 	self.pending[key] = nil
 	if
 		self.crafting
@@ -245,6 +274,16 @@ function CastActivity:_OnStop(unit, castGUID, spellID)
 	local key = keyFor(castGUID, spellID)
 	local pending = self.pending[key]
 	self.pending[key] = nil
+	if
+		self.activeChannel
+		and (
+			self.activeChannel.spellID == spellID
+			or (castGUID and self.activeChannel.castGUID == castGUID)
+			or self.activeChannel.key == key
+		)
+	then
+		self.activeChannel.interruptedBy = "stop"
+	end
 
 	-- A craft whose cast stopped without succeeding was abandoned.
 	local isCrafting = false
@@ -283,19 +322,38 @@ function CastActivity:_OnStop(unit, castGUID, spellID)
 	end
 end
 
-function CastActivity:_OnChannelStop(unit, castGUID, spellID)
+function CastActivity:_OnChannelStop(unit, castGUID, spellID, interruptedBy)
 	if not isPlayer(unit) then
 		return
 	end
 	local channel = self.activeChannel
 	self.activeChannel = nil
-	emit({
-		classification = "CHANNEL_STOP",
-		spellID = spellID,
-		castGUID = castGUID,
-		completed = channel and channel.succeeded or false,
-		duration = channel and (GetTime() - channel.startedAt) or nil,
-	})
+	local isInterrupted = false
+	if interruptedBy ~= nil then
+		isInterrupted = true
+	elseif channel and channel.interruptedBy ~= nil then
+		isInterrupted = true
+	end
+	local completed = not isInterrupted
+	local resolvedSpellID = spellID or (channel and channel.spellID)
+	local resolvedGUID = castGUID or (channel and channel.castGUID)
+	local duration = channel and (GetTime() - channel.startedAt) or nil
+	if completed then
+		emit({
+			classification = "CHANNEL_COMPLETE",
+			spellID = resolvedSpellID,
+			castGUID = resolvedGUID,
+			duration = duration,
+		})
+	else
+		emit({
+			classification = "CHANNEL_STOP",
+			spellID = resolvedSpellID,
+			castGUID = resolvedGUID,
+			completed = false,
+			duration = duration,
+		})
+	end
 end
 
 function CastActivity:_OnCraftBegin(recipeSpellID)

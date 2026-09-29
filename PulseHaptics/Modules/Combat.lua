@@ -415,6 +415,8 @@ end)
 local castFrame = CreateFrame("Frame")
 local isCasting = false
 local isChanneling = false
+local activeCastGUID = nil
+local activeSpellID = nil
 
 -- Hand-rolled fallback implementation since native math.clamp is unavailable on this client
 
@@ -454,6 +456,8 @@ local function castTick()
 		if not name then
 			-- Cast has ended or was cancelled: prevent state desync and buzzing
 			isCasting = false
+			activeCastGUID = nil
+			activeSpellID = nil
 			if not isChanneling then
 				castFrame:SetScript("OnUpdate", nil)
 			end
@@ -476,6 +480,8 @@ local function castTick()
 	elseif isChanneling then
 		if not UnitChannelInfo then
 			isChanneling = false
+			activeCastGUID = nil
+			activeSpellID = nil
 			if not isCasting then
 				castFrame:SetScript("OnUpdate", nil)
 			end
@@ -484,6 +490,8 @@ local function castTick()
 		local name = UnitChannelInfo("player")
 		if not name then
 			isChanneling = false
+			activeCastGUID = nil
+			activeSpellID = nil
 			if not isCasting then
 				castFrame:SetScript("OnUpdate", nil)
 			end
@@ -495,9 +503,24 @@ local function castTick()
 	end
 end
 
+local function isCurrentCast(activity)
+	if not activity then
+		return false
+	end
+	if activeCastGUID and activity.castGUID then
+		return activeCastGUID == activity.castGUID
+	end
+	if activeSpellID and activity.spellID then
+		return activeSpellID == activity.spellID
+	end
+	return true
+end
+
 local function syncCast()
 	isCasting = false
 	isChanneling = false
+	activeCastGUID = nil
+	activeSpellID = nil
 	castFrame:SetScript("OnUpdate", nil)
 	if not Pulse.Database:Get("masterEnabled") or not Pulse.Database:GetCue("castTexture") then
 		if Pulse.CastActivity and Pulse.CastActivity.SetActive then
@@ -528,12 +551,16 @@ if Pulse.CastActivity and Pulse.CastActivity.OnActivity then
 		if c == "CAST_START" or c == "CRAFT_CAST_START" then
 			isCasting = true
 			isChanneling = false
+			activeCastGUID = activity.castGUID
+			activeSpellID = activity.spellID
 			if Pulse.Database:Get("masterEnabled") and Pulse.Database:GetCue("castTexture") then
 				castFrame:SetScript("OnUpdate", castTick)
 			end
 		elseif c == "CHANNEL_START" then
 			isCasting = false
 			isChanneling = true
+			activeCastGUID = activity.castGUID
+			activeSpellID = activity.spellID
 			if Pulse.Database:Get("masterEnabled") and Pulse.Database:GetCue("castTexture") then
 				castFrame:SetScript("OnUpdate", castTick)
 			end
@@ -541,14 +568,19 @@ if Pulse.CastActivity and Pulse.CastActivity.OnActivity then
 			c == "CAST_COMPLETE"
 			or c == "CAST_STOPPED"
 			or c == "INSTANT"
+			or c == "CHANNEL_COMPLETE"
 			or c == "CHANNEL_STOP"
 			or c == "FAILED"
 			or c == "INTERRUPTED"
 			or c == "CRAFT_STOPPED"
 		then
-			isCasting = false
-			isChanneling = false
-			castFrame:SetScript("OnUpdate", nil)
+			if isCurrentCast(activity) then
+				isCasting = false
+				isChanneling = false
+				activeCastGUID = nil
+				activeSpellID = nil
+				castFrame:SetScript("OnUpdate", nil)
+			end
 		end
 	end)
 end

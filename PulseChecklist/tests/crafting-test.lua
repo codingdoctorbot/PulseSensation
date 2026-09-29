@@ -396,4 +396,104 @@ check(
 )
 UnitCastingInfo = nil
 
+-- ── CR-001, CR-002, CR-003: Channel Lifecycle, Cross-Talk Isolation, Fishing Bed ─
+
+local activityLog = {}
+Pulse.CastActivity:OnActivity(function(act)
+	table.insert(activityLog, {
+		classification = act.classification,
+		spellID = act.spellID,
+		castGUID = act.castGUID,
+		completed = act.completed,
+	})
+end)
+
+local function lastActivity()
+	return activityLog[#activityLog]
+end
+
+-- 1. CHANNEL_START -> SUCCEEDED (same GUID) -> CHANNEL_STOP
+-- (channel confirmed, survives SUCCEEDED, completes on STOP)
+wipe(activityLog)
+Pulse.CastActivity:_OnChannelStart("player", "guid-chan-1", 12051)
+check("channel 1 starts", lastActivity().classification, "CHANNEL_START")
+check("channel 1 active in CastActivity", Pulse.CastActivity.activeChannel ~= nil, true)
+
+Pulse.CastActivity:_OnSucceeded("player", "guid-chan-1", 12051)
+check("channel 1 SUCCEEDED emits CHANNEL_CONFIRMED", lastActivity().classification, "CHANNEL_CONFIRMED")
+check("channel 1 not ended by SUCCEEDED", Pulse.CastActivity.activeChannel ~= nil, true)
+check("channel 1 confirmed flag set", Pulse.CastActivity.activeChannel.confirmed, true)
+
+Pulse.CastActivity:_OnChannelStop("player", "guid-chan-1", 12051)
+check("channel 1 completes on CHANNEL_STOP", lastActivity().classification, "CHANNEL_COMPLETE")
+check("channel 1 cleared from CastActivity", Pulse.CastActivity.activeChannel, nil)
+
+-- 2. CHANNEL_START -> SUCCEEDED (different GUID, matches by spellID) -> CHANNEL_STOP
+wipe(activityLog)
+Pulse.CastActivity:_OnChannelStart("player", "guid-chan-2a", 12051)
+check("channel 2 starts", lastActivity().classification, "CHANNEL_START")
+
+Pulse.CastActivity:_OnSucceeded("player", "guid-chan-2b", 12051)
+check("channel 2 SUCCEEDED diff GUID emits CHANNEL_CONFIRMED", lastActivity().classification, "CHANNEL_CONFIRMED")
+check("channel 2 confirmed flag set", Pulse.CastActivity.activeChannel.confirmed, true)
+
+Pulse.CastActivity:_OnChannelStop("player", "guid-chan-2a", 12051)
+check("channel 2 completes on CHANNEL_STOP", lastActivity().classification, "CHANNEL_COMPLETE")
+
+-- 3. Channel start -> spam FAILED (different spellID) -> channel continues
+wipe(activityLog)
+Pulse.CastActivity:_OnChannelStart("player", "guid-chan-3", 12051)
+check("channel 3 starts", Pulse.CastActivity.activeChannel ~= nil, true)
+
+Pulse.CastActivity:_OnFailed("player", "guid-other", 99999)
+check("unrelated FAILED does not interrupt channel", Pulse.CastActivity.activeChannel.interruptedBy, nil)
+check("unrelated FAILED does not close channel", Pulse.CastActivity.activeChannel ~= nil, true)
+
+Pulse.CastActivity:_OnChannelStop("player", "guid-chan-3", 12051)
+check("channel 3 completes cleanly despite spammed FAILED", lastActivity().classification, "CHANNEL_COMPLETE")
+
+-- 4. Channel start -> instant SUCCEEDED (different spellID) -> emits INSTANT, channel continues
+wipe(activityLog)
+Pulse.CastActivity:_OnChannelStart("player", "guid-chan-4", 12051)
+Pulse.CastActivity:_OnSucceeded("player", "guid-instant-1", 2139)
+check("instant cast emits INSTANT during channel", lastActivity().classification, "INSTANT")
+check("channel 4 still active after instant cast", Pulse.CastActivity.activeChannel ~= nil, true)
+
+Pulse.CastActivity:_OnChannelStop("player", "guid-chan-4", 12051)
+check("channel 4 completes cleanly after instant cast", lastActivity().classification, "CHANNEL_COMPLETE")
+
+-- 5. Cast start -> instant SUCCEEDED for off-GCD ability -> cast continues; matching SUCCEEDED completes cast
+wipe(activityLog)
+Pulse.CastActivity:_OnStart("player", "guid-cast-5", 116)
+check("cast 5 is pending", Pulse.CastActivity.pending["g:guid-cast-5"] ~= nil, true)
+
+Pulse.CastActivity:_OnSucceeded("player", "guid-offgcd", 2139)
+check("off-GCD SUCCEEDED emits INSTANT", lastActivity().classification, "INSTANT")
+check("cast 5 remains pending", Pulse.CastActivity.pending["g:guid-cast-5"] ~= nil, true)
+
+Pulse.CastActivity:_OnSucceeded("player", "guid-cast-5", 116)
+check("cast 5 completes cleanly", lastActivity().classification, "CAST_COMPLETE")
+check("cast 5 cleared from pending", Pulse.CastActivity.pending["g:guid-cast-5"], nil)
+
+-- 6. Fishing channel start -> spam FAILED / other cast stop -> fishing continues; matching CHANNEL_STOP ends fishing craft
+wipe(activityLog)
+startChannel(7620, 20.0)
+check("fishing is active", M:_DebugCraft().active, true)
+check("  isCrafting agrees", Pulse.IsCrafting(), true)
+
+Pulse.CastActivity:_OnFailed("player", "guid-spam-fail", 99999)
+check("fishing survives unrelated FAILED", M:_DebugCraft().active, true)
+
+Pulse.CastActivity:_OnStop("player", "guid-spam-stop", 88888)
+check("fishing survives unrelated CAST_STOPPED", M:_DebugCraft().active, true)
+
+Pulse.CastActivity:_OnChannelStop("player", "guid-channel", 7620)
+check("matching fishing CHANNEL_STOP ends fishing craft", M:_DebugCraft().active, false)
+check("  and frees castTexture", Pulse.IsCrafting(), false)
+
+-- 7. Fishing baseline bed assertion == 0.12 (CR-003)
+startChannel(7620, 20.0)
+check("fishing baseline bed is 0.12 (CR-003)", M:_DebugCraft().bed, 0.12)
+Pulse.CastActivity:_OnChannelStop("player", "guid-channel", 7620)
+
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))
