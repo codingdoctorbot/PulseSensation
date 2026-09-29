@@ -38,3 +38,4 @@
 | `LOCO-SHAPE` | `8a67a43` | Implement shaped layers in Engine (exponential decay envelope, kick gain, zero-smoothing bypass) and shaped locomotion footfalls with 6 surface/mount timbres, stereo pan splitFeet, and gallop pair merge under 80ms | `locomotion-test.lua`, `engine-test.lua` | Verified by test |
 | `ENG-DEADBAND` | `46e9d9e` | Snap decaying continuous rumble to 0 below 0.025 on shutoff to eliminate mechanical stall whine and watchdog traffic | `engine-test.lua` | Verified by test |
 | `PROF-REVIEW` | `04b6638` | Curate all 190 cues across 12 default profiles, add sweep enable/disable buttons to Spec/Panel/PulseProfileReview, and generate review reports | `harness.lua` | Verified by test |
+| `ORG-DOCS` | `194b9fe` | Clean up repository root directory by moving review reports, proposals, and bug notes into docs/; update script paths and .gitignore | `test.sh` | Verified by test |
