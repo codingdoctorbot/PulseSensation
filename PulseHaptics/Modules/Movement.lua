@@ -510,6 +510,82 @@ function M:OnEnable()
 	updateOceanZone()
 end
 
+function M:PreviewWater(seconds, scale)
+	seconds = seconds or 3.5
+	scale = scale or 1.0
+	local baseline = Pulse.Database:GetTriggerSetting("waterTexture", "baseline", 0.04) * scale
+	local rate = Pulse.Database:GetTriggerSetting("waterTexture", "waveRate", 0.15)
+	local depth = Pulse.Database:GetTriggerSetting("waterTexture", "waveDepth", 0.0)
+	Pulse:StartContinuousPreview(seconds, function(elapsed)
+		local value = Pulse.Waves.Sine(baseline, rate, depth, 0, elapsed)
+		staticLowRole.low = Pulse.Haptics.MicroFlutter(value)
+		Pulse.Engine:SetRoles("preview", staticLowRole, 0.1)
+	end)
+	return true
+end
+
+function M:PreviewSwim(seconds, scale)
+	seconds = seconds or 3.5
+	scale = scale or 1.0
+	local peak = Pulse.Database:GetTriggerSetting("swimTexture", "peak", 0.10) * scale
+	local strokeMax = Pulse.Database:GetTriggerSetting("swimTexture", "strokeRateMax", 0.95)
+	local depth = Pulse.Database:GetTriggerSetting("swimTexture", "strokeDepth", 0.55)
+	local harmonic = Pulse.Database:GetTriggerSetting("swimTexture", "strokeAsymmetry", 0.35)
+	local separate = Pulse.Database:GetTriggerSetting("swimTexture", "separateMotors", 1) == 1
+	local rate = strokeMax
+	Pulse:StartContinuousPreview(seconds, function(elapsed)
+		local phase = (TWO_PI * rate * elapsed) % TWO_PI
+		local value = Pulse.Waves.Harmonic(peak, rate, depth, harmonic, 1.2, nil, nil, phase)
+		if separate then
+			staticHighRole.high = value
+			Pulse.Engine:SetRoles("preview", staticHighRole, 0.1)
+		else
+			staticLowRole.low = value
+			Pulse.Engine:SetRoles("preview", staticLowRole, 0.1)
+		end
+	end)
+	return true
+end
+
+function M:PreviewOcean(seconds, scale)
+	seconds = seconds or 3.5
+	scale = scale or 1.0
+	local strength = Pulse.Database:GetTriggerSetting("oceanTexture", "swellStrength", 0.14) * scale
+	local harmonic = Pulse.Database:GetTriggerSetting("oceanTexture", "harmonicCrest", 0.35)
+	local spray = Pulse.Database:GetTriggerSetting("oceanTexture", "surfaceSpray", 0.08) * scale
+	local freq = 1.0 / 2.5
+	Pulse:StartContinuousPreview(seconds, function(elapsed)
+		local swellValue = Pulse.Waves.Harmonic(strength, freq, 0.75, harmonic, 0, 0, elapsed)
+		staticOceanRole.low = Pulse.Haptics.MicroFlutter(swellValue)
+		local sprayValue = 0
+		if spray > 0 then
+			local theta = TWO_PI * freq * elapsed
+			local crestFactor = math.sin(theta)
+			if crestFactor > 0.5 then
+				local crestIntensity = (crestFactor - 0.5) * 2.0
+				sprayValue = Pulse.Haptics.MicroFlutter(spray * crestIntensity)
+			end
+		end
+		staticOceanRole.high = sprayValue
+		Pulse.Engine:SetRoles("preview", staticOceanRole, 0.1)
+	end)
+	return true
+end
+
+function M:PreviewTaxi(seconds, scale)
+	seconds = seconds or 3.5
+	scale = scale or 1.0
+	local amplitude = Pulse.Database:GetTriggerSetting("taxiRide", "windAmplitude", 0.1) * scale
+	local cycleSeconds = Pulse.Database:GetTriggerSetting("taxiRide", "waveCycleSeconds", 1.75)
+	local frequency = (cycleSeconds > 0) and (1.0 / cycleSeconds) or 0.57
+	Pulse:StartContinuousPreview(seconds, function(elapsed)
+		local value = Pulse.Waves.Sine(amplitude * 0.75, frequency, 0.33, 0, elapsed)
+		value = Pulse.Haptics.MicroFlutter(value)
+		Pulse.Engine:Set("preview", value, value, 0.1)
+	end)
+	return true
+end
+
 function M:_DebugMovement()
 	return {
 		onTaxiRide = onTaxiRide,

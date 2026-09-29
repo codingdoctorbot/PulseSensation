@@ -239,27 +239,32 @@ local function weatherTick()
 	end
 
 	local intensity = currentWeatherIntensity
+	local rainLevel = Pulse.Database:GetTriggerSetting("weatherTexture", "rainLevel", 0.12)
+	local snowLevel = Pulse.Database:GetTriggerSetting("weatherTexture", "snowLevel", 0.08)
+	local stormLevel = Pulse.Database:GetTriggerSetting("weatherTexture", "stormLevel", 0.18)
+	local patterRate = Pulse.Database:GetTriggerSetting("weatherTexture", "patterRate", 4.0)
+
 	if currentWeatherType == 1 then
 		-- Rain: high motor micro-drops patter
-		local flutter = Pulse.Waves.Sine(0.04 * intensity, 8.0, 0.4)
+		local flutter = Pulse.Waves.Sine(rainLevel * intensity, patterRate, 0.45)
 		flutter = Pulse.Haptics.MicroFlutter(flutter)
 		staticWeatherRole.low = 0
 		staticWeatherRole.high = flutter
 	elseif currentWeatherType == 2 then
 		-- Snow: gentle crystalline drift
-		local drift = Pulse.Waves.Sine(0.02 * intensity, 0.1, 0.2)
+		local drift = Pulse.Waves.Sine(snowLevel * intensity, 0.15, 0.25)
 		drift = Pulse.Haptics.MicroFlutter(drift)
 		staticWeatherRole.low = 0
 		staticWeatherRole.high = drift
 	elseif currentWeatherType == 3 then
 		-- Sandstorm: heavy abrasive gusts on both motors
-		local gust = Pulse.Waves.Sine(0.06 * intensity, 0.25, 0.5)
+		local gust = Pulse.Waves.Sine(stormLevel * intensity, 0.25, 0.5)
 		gust = Pulse.Haptics.MicroFlutter(gust)
 		staticWeatherRole.low = gust
 		staticWeatherRole.high = gust * 0.7
 	else
 		-- Miscellaneous / atmospheric wind rumble
-		local wind = Pulse.Waves.Sine(0.03 * intensity, 0.2, 0.3)
+		local wind = Pulse.Waves.Sine((stormLevel * 0.6) * intensity, 0.2, 0.3)
 		wind = Pulse.Haptics.MicroFlutter(wind)
 		staticWeatherRole.low = wind
 		staticWeatherRole.high = 0
@@ -321,6 +326,34 @@ end)
 function M:OnEnable()
 	Pulse:BindFrame({ "breathWarning", "breathTexture", "drowningDamage" }, syncBreath)
 	Pulse:BindFrame({ "weatherChanged", "weatherTexture" }, syncWeather)
+end
+
+function M:PreviewBreath(_, scale)
+	scale = scale or 1.0
+	local peak = Pulse.Database:GetTriggerSetting("breathTexture", "gaspPeak", 0.6) * scale
+	local lub = peak
+	local dub = peak * (0.2 / 0.7)
+	Pulse.Engine:Set("preview", lub, lub, 0.05, true)
+	C_Timer.After(0.36, function()
+		if Pulse.Engine then
+			Pulse.Engine:Set("preview", dub, dub, 0.05, true)
+		end
+	end)
+	return true
+end
+
+function M:PreviewWeather(seconds, scale)
+	seconds = seconds or 3.5
+	scale = scale or 1.0
+	local rainLevel = Pulse.Database:GetTriggerSetting("weatherTexture", "rainLevel", 0.12) * scale
+	local patterRate = Pulse.Database:GetTriggerSetting("weatherTexture", "patterRate", 4.0)
+	Pulse:StartContinuousPreview(seconds, function(elapsed)
+		local flutter = Pulse.Waves.Sine(rainLevel, patterRate, 0.45, elapsed)
+		staticWeatherRole.low = 0
+		staticWeatherRole.high = Pulse.Haptics.MicroFlutter(flutter)
+		Pulse.Engine:SetRoles("preview", staticWeatherRole, 0.1)
+	end)
+	return true
 end
 
 function M:_DebugEnvironment()

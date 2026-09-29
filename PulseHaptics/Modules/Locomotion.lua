@@ -681,6 +681,36 @@ function M:OnEnable()
 	Pulse:BindFrame({ CUE }, sync)
 end
 
+function M:PreviewLocomotion(_, scale)
+	scale = scale or 1.0
+	local intensity = setting("intensity", 0.55) * scale
+	local split = shouldSplitFeet()
+	local token = Pulse.GetPreviewToken and Pulse:GetPreviewToken() or 0
+	local function playStep(stepIdx)
+		if Pulse.GetPreviewToken and Pulse:GetPreviewToken() ~= token then
+			return
+		end
+		if split then
+			splitRoles.ltrigger = (stepIdx == 1) and intensity or 0
+			splitRoles.rtrigger = (stepIdx == 2) and intensity or 0
+			Pulse.Engine:SetRoles("preview", splitRoles, TAP_DURATION, true)
+		else
+			Pulse.Engine:Set("preview", intensity, 0, TAP_DURATION, true)
+		end
+	end
+	playStep(1)
+	C_Timer.After(0.35, function()
+		playStep(2)
+	end)
+	C_Timer.After(0.70, function()
+		playStep(1)
+	end)
+	C_Timer.After(1.05, function()
+		playStep(2)
+	end)
+	return true
+end
+
 -- Reach-in for PulseDebug, read-only: the only way to see what the gait resolved to
 -- without instrumenting the tick loop.
 function M:_DebugGait()

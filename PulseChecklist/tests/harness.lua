@@ -1384,6 +1384,128 @@ do
 
 		Pulse.Engine.PlayMode = origPlayMode
 		Pulse.Engine:StopAll()
+
+		-- Test 8: CR-004 & CR-026 - Continuous Cues Bespoke Previews and Weather Tunables
+		local testModules = {
+			"Modules/Movement.lua",
+			"Modules/Environment.lua",
+			"Modules/PlayerState.lua",
+			"Modules/Flight.lua",
+			"Modules/Combat.lua",
+			"Modules/Locomotion.lua",
+		}
+		for _, modPath in ipairs(testModules) do
+			local chunk = loadfile(ROOT .. "/" .. modPath)
+			if chunk then
+				chunk("Pulse", Pulse)
+			end
+		end
+
+		local continuousCues = {
+			"waterTexture",
+			"swimTexture",
+			"oceanTexture",
+			"taxiRide",
+			"stealthTexture",
+			"glideThrust",
+			"castTexture",
+			"craftTexture",
+			"breathTexture",
+			"weatherTexture",
+			"locomotion",
+			"lowHealthWarning",
+			"lowHealthTexture",
+		}
+		for _, cueID in ipairs(continuousCues) do
+			check("Pulse:CanTestCue('" .. cueID .. "') is true", Pulse:CanTestCue(cueID), true)
+			local ok = Pulse:TestCue(cueID)
+			check("Pulse:TestCue('" .. cueID .. "') succeeds", ok, true)
+		end
+
+		-- Verify waterTexture preview routes to low role, NOT high role (CR-004)
+		Pulse.Database:SetTriggerSetting("waterTexture", "intensity", 1.0)
+		Pulse:TestCue("waterTexture")
+		local previewLayer = nil
+		for _, l in ipairs(Pulse.Engine:_DebugLayers()) do
+			if l.name == "preview" then
+				previewLayer = l
+				break
+			end
+		end
+		check("waterTexture preview layer created", previewLayer ~= nil, true)
+		check("waterTexture drives low role", (previewLayer and previewLayer.low or 0) > 0, true)
+		check("waterTexture leaves high role silent", (previewLayer and previewLayer.high or 0) == 0, true)
+
+		-- Verify waterTexture scales with intensity
+		Pulse:CancelContinuousPreview()
+		Pulse.Database:SetTriggerSetting("waterTexture", "intensity", 0.5)
+		Pulse:TestCue("waterTexture")
+		local halfPreview = nil
+		for _, l in ipairs(Pulse.Engine:_DebugLayers()) do
+			if l.name == "preview" then
+				halfPreview = l
+				break
+			end
+		end
+		check(
+			"waterTexture preview scales with intensity",
+			halfPreview and previewLayer and (halfPreview.low < previewLayer.low),
+			true
+		)
+		Pulse.Database:SetTriggerSetting("waterTexture", "intensity", 1.0)
+
+		-- Verify swimTexture preview routes to high role (separateMotors = 1) (CR-004)
+		Pulse:TestCue("swimTexture")
+		local swimLayer = nil
+		for _, l in ipairs(Pulse.Engine:_DebugLayers()) do
+			if l.name == "preview" then
+				swimLayer = l
+				break
+			end
+		end
+		check("swimTexture drives high role", (swimLayer and swimLayer.high or 0) > 0, true)
+
+		-- Verify CancelContinuousPreview halts the preview layer
+		Pulse:CancelContinuousPreview()
+		local activePreview = nil
+		for _, l in ipairs(Pulse.Engine:_DebugLayers()) do
+			if l.name == "preview" then
+				activePreview = l
+				break
+			end
+		end
+		check("CancelContinuousPreview clears preview layer", activePreview == nil, true)
+
+		-- Verify weatherTexture has tunables (CR-026)
+		local weatherTrigger = Pulse.Registry:GetTrigger("weatherTexture")
+		check(
+			"weatherTexture has tunables defined (CR-026)",
+			weatherTrigger and type(weatherTrigger.tunables) == "table",
+			true
+		)
+		local hasRain, hasSnow, hasStorm, hasPatter = false, false, false, false
+		if weatherTrigger and weatherTrigger.tunables then
+			for _, t in ipairs(weatherTrigger.tunables) do
+				if t.key == "rainLevel" then
+					hasRain = true
+				end
+				if t.key == "snowLevel" then
+					hasSnow = true
+				end
+				if t.key == "stormLevel" then
+					hasStorm = true
+				end
+				if t.key == "patterRate" then
+					hasPatter = true
+				end
+			end
+		end
+		check(
+			"weatherTexture includes rainLevel, snowLevel, stormLevel, patterRate tunables",
+			hasRain and hasSnow and hasStorm and hasPatter,
+			true
+		)
+		Pulse.Engine:StopAll()
 	end
 end
 

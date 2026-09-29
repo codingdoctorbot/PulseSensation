@@ -241,19 +241,72 @@ local PREVIEW_LAYER = "preview"
 -- sustained rather than a blip, and short enough not to outlast the button press by much.
 local PREVIEW_HOLD_SECONDS = 3.5
 
--- What level a continuous preview holds at. A flat value rather than each texture's live
--- curve, which its own module computes from speed, depletion or cast progress — none of
--- which exist while standing in a settings panel. An honest sample, not a simulation, and
--- each cue's tooltip says so.
+-- Fallback level for continuous cues without bespoke preview handlers.
 local PREVIEW_CONTINUOUS_LEVEL = 0.45
 
--- The two heartbeat cues own purpose-built previews reproducing their real lub-dub shape
--- (Modules/Health.lua, also reached by /pulse test heartbeat|warningbeat). Routed to those
--- rather than approximated with a flat hold.
+-- Bespoke module preview routing for continuous textures and specialized cues (CR-004, CR-006).
+-- Routes directly to the owning module to reproduce authentic physical waveforms.
 local BESPOKE_PREVIEW = {
-	lowHealthWarning = "TestWarningBeat",
-	lowHealthTexture = "TestHeartbeat",
+	lowHealthWarning = { module = "Health", method = "TestWarningBeat" },
+	lowHealthTexture = { module = "Health", method = "TestHeartbeat" },
+	breathTexture = { module = "Environment", method = "PreviewBreath" },
+	weatherTexture = { module = "Environment", method = "PreviewWeather" },
+	waterTexture = { module = "Movement", method = "PreviewWater" },
+	swimTexture = { module = "Movement", method = "PreviewSwim" },
+	oceanTexture = { module = "Movement", method = "PreviewOcean" },
+	taxiRide = { module = "Movement", method = "PreviewTaxi" },
+	stealthTexture = { module = "PlayerState", method = "PreviewStealth" },
+	glideThrust = { module = "Flight", method = "PreviewGlide" },
+	castTexture = { module = "Combat", method = "PreviewCast" },
+	craftTexture = { module = "Crafting", method = "PreviewCraft" },
+	locomotion = { module = "Locomotion", method = "PreviewLocomotion" },
 }
+
+local previewContinuousFrame = CreateFrame("Frame")
+local previewContinuousToken = 0
+local previewDuration = 0
+local previewStartTime = 0
+local previewUpdateFn = nil
+
+local function previewOnUpdate()
+	local elapsed = GetTime() - previewStartTime
+	if elapsed >= previewDuration then
+		Pulse:CancelContinuousPreview()
+		return
+	end
+	if previewUpdateFn then
+		previewUpdateFn(elapsed, previewDuration)
+	end
+end
+
+function Pulse:CancelContinuousPreview()
+	previewContinuousToken = previewContinuousToken + 1
+	previewContinuousFrame:SetScript("OnUpdate", nil)
+	previewUpdateFn = nil
+	if self.Engine then
+		self.Engine:CancelLayer(PREVIEW_LAYER)
+	end
+end
+
+function Pulse:StartContinuousPreview(duration, updateFn)
+	self:CancelContinuousPreview()
+	previewDuration = (duration and duration > 0) and duration or PREVIEW_HOLD_SECONDS
+	previewStartTime = GetTime()
+	previewUpdateFn = updateFn
+	previewContinuousFrame:SetScript("OnUpdate", previewOnUpdate)
+	if previewUpdateFn then
+		previewUpdateFn(0, previewDuration)
+	end
+	return true
+end
+
+function Pulse:IsContinuousPreviewActive()
+	return previewUpdateFn ~= nil
+end
+
+function Pulse:GetPreviewToken()
+	return previewContinuousToken
+end
 
 -- Does this cue have anything to preview? A gate-only trigger that plays nothing itself
 -- (padDisconnected) has no button. Next to TestCue so the panel never re-derives the rule.
@@ -273,13 +326,23 @@ function Pulse:TestCue(triggerID)
 		return false, "no such cue"
 	end
 
+	self:CancelContinuousPreview()
+
 	local scale = self.Database:GetTriggerSetting(triggerID, "intensity", trigger.defaultIntensity or 1.0)
 
-	local method = BESPOKE_PREVIEW[triggerID]
-	if method then
-		local health = self.modules.Health
-		if health and health[method] then
-			return health[method](health, scale)
+	local bespoke = BESPOKE_PREVIEW[triggerID]
+	if bespoke then
+		local mod = self.modules and self.modules[bespoke.module]
+		if mod and mod[bespoke.method] then
+			self.Engine:RefreshDevice()
+			if not self.Engine:IsDeviceReady() then
+				return false, "no controller detected"
+			end
+			if bespoke.module == "Health" then
+				return mod[bespoke.method](mod, scale)
+			else
+				return mod[bespoke.method](mod, PREVIEW_HOLD_SECONDS, scale)
+			end
 		end
 	end
 
@@ -298,8 +361,6 @@ function Pulse:TestCue(triggerID)
 	end
 
 	if trigger.continuous then
-		-- Cancel rather than Stop: a discrete preview played a moment ago may still have
-		-- steps in flight that would otherwise land on top of this hold (Engine.lua).
 		self.Engine:CancelLayer(PREVIEW_LAYER)
 		local level = PREVIEW_CONTINUOUS_LEVEL * scale
 		self.Engine:Set(PREVIEW_LAYER, level, level, PREVIEW_HOLD_SECONDS)

@@ -191,3 +191,17 @@ function M:OnEnable()
 	Pulse:BindFrame({ "stealthTexture" }, syncStealth)
 	Pulse:BindFrame({ "controllerUIMaster", "popupShown", "popupHidden" }, syncPopup)
 end
+
+function M:PreviewStealth(seconds, scale)
+	seconds = seconds or 3.5
+	scale = scale or 1.0
+	local baseline = Pulse.Database:GetTriggerSetting("stealthTexture", "baseline", 0.06) * scale
+	local rate = Pulse.Database:GetTriggerSetting("stealthTexture", "breathRate", 0.30)
+	local depth = Pulse.Database:GetTriggerSetting("stealthTexture", "breathDepth", 0.35)
+	Pulse:StartContinuousPreview(seconds, function(elapsed)
+		local value = Pulse.Waves.Sine(baseline, rate, depth, 0, elapsed)
+		value = Pulse.Haptics.MicroFlutter(value)
+		Pulse.Engine:Set("preview", value, 0, 0.1)
+	end)
+	return true
+end

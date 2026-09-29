@@ -20,5 +20,5 @@
 | `CR-005` | `c7fd05e` | Discrete transient footfall taps (45ms, isTransient=true), real steps/s cadence, single lead+trail per GALLOP stride | `locomotion-test.lua` | Verified by test |
 | `CR-030` | `c7fd05e` | Split feet only when active schema routes trigger roles to trigger channels (prevent Xbox split on Standard) | `locomotion-test.lua` | Verified by test |
 | `CR-020` | `c7fd05e` | Read applied preset from appliedDevicePreset instead of unapplied dropdown selection | `locomotion-test.lua` | Verified by test |
-
-
+| `CR-004` | `738e4be` | Module-driven bespoke continuous previews across Movement, PlayerState, Flight, Combat, Crafting, Environment, Locomotion | `harness.lua` | Verified by test |
+| `CR-026` | `738e4be` | Expose weatherTexture tunables (rainLevel, snowLevel, stormLevel, patterRate) in Registry and modulate in Environment | `harness.lua` | Verified by test |

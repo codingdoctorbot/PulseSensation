@@ -15,39 +15,39 @@ local wasMounted = false
 local mountStateReady = false
 
 local function syncMount()
-    mountFrame:UnregisterAllEvents()
-    if not Pulse.Database:Get("masterEnabled") then
-        return
-    end
-    if not (Pulse.Database:GetCue("mountUp") or Pulse.Database:GetCue("dismount")) then
-        return
-    end
+	mountFrame:UnregisterAllEvents()
+	if not Pulse.Database:Get("masterEnabled") then
+		return
+	end
+	if not (Pulse.Database:GetCue("mountUp") or Pulse.Database:GetCue("dismount")) then
+		return
+	end
 
-    -- Re-seed live state on sync so toggling the cue or profile while mounted
-    -- does not misfire or stay unseeded until the next zoning event.
-    wasMounted = IsMounted()
-    mountStateReady = true
+	-- Re-seed live state on sync so toggling the cue or profile while mounted
+	-- does not misfire or stay unseeded until the next zoning event.
+	wasMounted = IsMounted()
+	mountStateReady = true
 
-    mountFrame:RegisterEvent("PLAYER_MOUNT_DISPLAY_CHANGED")
-    mountFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+	mountFrame:RegisterEvent("PLAYER_MOUNT_DISPLAY_CHANGED")
+	mountFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
 
 mountFrame:SetScript("OnEvent", function(_, event)
-    if event == "PLAYER_ENTERING_WORLD" then
-        wasMounted = IsMounted()
-        mountStateReady = true
-        return
-    end
-    local mounted = IsMounted()
-    if mountStateReady then
-        if mounted and not wasMounted then
-            Pulse:FireIfEnabled("mountUp")
-        elseif wasMounted and not mounted then
-            Pulse:FireIfEnabled("dismount")
-        end
-    end
-    wasMounted = mounted
-    mountStateReady = true
+	if event == "PLAYER_ENTERING_WORLD" then
+		wasMounted = IsMounted()
+		mountStateReady = true
+		return
+	end
+	local mounted = IsMounted()
+	if mountStateReady then
+		if mounted and not wasMounted then
+			Pulse:FireIfEnabled("mountUp")
+		elseif wasMounted and not mounted then
+			Pulse:FireIfEnabled("dismount")
+		end
+	end
+	wasMounted = mounted
+	mountStateReady = true
 end)
 
 -- Skyriding / dragonriding thrust
@@ -57,13 +57,13 @@ local glideFrame = CreateFrame("Frame")
 -- Hand-rolled: native math.clamp is CONFIRMED absent on this client (Core/Engine.lua).
 
 local function clamp01(v)
-    if v < 0 then
-        return 0
-    end
-    if v > 1 then
-        return 1
-    end
-    return v
+	if v < 0 then
+		return 0
+	end
+	if v > 1 then
+		return 1
+	end
+	return v
 end
 
 -- Low = Constant baseline "flying" presence (floored, lightly nudged by speed).
@@ -73,68 +73,83 @@ local isCurrentlyGliding = false
 local glideIdleElapsed = 0
 
 local function glideTick(_, elapsed)
-    if not isCurrentlyGliding then
-        glideIdleElapsed = glideIdleElapsed + (elapsed or 0)
-        if glideIdleElapsed < 0.1 then
-            return
-        end
-        glideIdleElapsed = 0
-    end
+	if not isCurrentlyGliding then
+		glideIdleElapsed = glideIdleElapsed + (elapsed or 0)
+		if glideIdleElapsed < 0.1 then
+			return
+		end
+		glideIdleElapsed = 0
+	end
 
-    if not C_PlayerInfo or type(C_PlayerInfo.GetGlidingInfo) ~= "function" then
-        isCurrentlyGliding = false
-        return
-    end
-    local isGliding, _, forwardSpeed = C_PlayerInfo.GetGlidingInfo()
+	if not C_PlayerInfo or type(C_PlayerInfo.GetGlidingInfo) ~= "function" then
+		isCurrentlyGliding = false
+		return
+	end
+	local isGliding, _, forwardSpeed = C_PlayerInfo.GetGlidingInfo()
 
-    -- Guard against protected or secret combat stats, which throw if compared directly. A
-    -- hidden value aborts the tick.
+	-- Guard against protected or secret combat stats, which throw if compared directly. A
+	-- hidden value aborts the tick.
 
-    if issecretvalue(isGliding) or issecretvalue(forwardSpeed) then
-        isCurrentlyGliding = false
-        return
-    end
-    if not isGliding or not forwardSpeed or forwardSpeed < 65 then
-        isCurrentlyGliding = false
-        return
-    end
+	if issecretvalue(isGliding) or issecretvalue(forwardSpeed) then
+		isCurrentlyGliding = false
+		return
+	end
+	if not isGliding or not forwardSpeed or forwardSpeed < 65 then
+		isCurrentlyGliding = false
+		return
+	end
 
-    isCurrentlyGliding = true
+	isCurrentlyGliding = true
 
-    -- forwardSpeed ranges 65 (min gliding) to 100 (max boost).
+	-- forwardSpeed ranges 65 (min gliding) to 100 (max boost).
 
-    local ratio = clamp01((forwardSpeed - 65) * (1 / 35))
-    local presenceFloor = Pulse.Database:GetTriggerSetting("glideThrust", "presenceFloor", 0.15)
-    local thrillPeak = Pulse.Database:GetTriggerSetting("glideThrust", "thrillPeak", 0.7)
-    local thrillCurve = Pulse.Database:GetTriggerSetting("glideThrust", "thrillCurve", 2.0)
-    local low = presenceFloor + (1 - presenceFloor) * (ratio * 0.3)
-    local high = (ratio ^ thrillCurve) * thrillPeak
-    Pulse:HoldIfEnabled("glideThrust", low, high)
+	local ratio = clamp01((forwardSpeed - 65) * (1 / 35))
+	local presenceFloor = Pulse.Database:GetTriggerSetting("glideThrust", "presenceFloor", 0.15)
+	local thrillPeak = Pulse.Database:GetTriggerSetting("glideThrust", "thrillPeak", 0.7)
+	local thrillCurve = Pulse.Database:GetTriggerSetting("glideThrust", "thrillCurve", 2.0)
+	local low = presenceFloor + (1 - presenceFloor) * (ratio * 0.3)
+	local high = (ratio ^ thrillCurve) * thrillPeak
+	Pulse:HoldIfEnabled("glideThrust", low, high)
 end
 
 local function syncGlide()
-    glideFrame:SetScript("OnUpdate", nil)
-    isCurrentlyGliding = false
-    glideIdleElapsed = 0
-    if not Pulse.Database:Get("masterEnabled") then
-        return
-    end
-    if not Pulse.Database:GetCue("glideThrust") then
-        return
-    end
-    glideFrame:SetScript("OnUpdate", glideTick)
+	glideFrame:SetScript("OnUpdate", nil)
+	isCurrentlyGliding = false
+	glideIdleElapsed = 0
+	if not Pulse.Database:Get("masterEnabled") then
+		return
+	end
+	if not Pulse.Database:GetCue("glideThrust") then
+		return
+	end
+	glideFrame:SetScript("OnUpdate", glideTick)
 end
 
 function M:OnEnable()
-    Pulse:BindFrame({ "mountUp", "dismount" }, syncMount)
-    Pulse:BindFrame({ "glideThrust" }, syncGlide)
+	Pulse:BindFrame({ "mountUp", "dismount" }, syncMount)
+	Pulse:BindFrame({ "glideThrust" }, syncGlide)
+end
+
+function M:PreviewGlide(seconds, scale)
+	seconds = seconds or 3.5
+	scale = scale or 1.0
+	local presenceFloor = Pulse.Database:GetTriggerSetting("glideThrust", "presenceFloor", 0.15) * scale
+	local thrillPeak = Pulse.Database:GetTriggerSetting("glideThrust", "thrillPeak", 0.7) * scale
+	local thrillCurve = Pulse.Database:GetTriggerSetting("glideThrust", "thrillCurve", 2.0)
+	Pulse:StartContinuousPreview(seconds, function(elapsed, duration)
+		local ratio = 0.2 + 0.8 * math.min(1.0, elapsed / duration)
+		local low = presenceFloor + (1 - presenceFloor) * (ratio * 0.3)
+		local high = (ratio ^ thrillCurve) * thrillPeak
+		Pulse.Engine:Set("preview", low, high, 0.1)
+	end)
+	return true
 end
 
 -- Reach-in for PulseDebug, read-only
 function M:_DebugFlight()
-    return {
-        wasMounted = wasMounted,
-        mountStateReady = mountStateReady,
-        isMounted = IsMounted and IsMounted() or false,
-    }
+	return {
+		wasMounted = wasMounted,
+		mountStateReady = mountStateReady,
+		isMounted = IsMounted and IsMounted() or false,
+	}
 end

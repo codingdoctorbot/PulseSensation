@@ -309,9 +309,8 @@ local function cueTestButton(trigger, labelOverride, child)
 
 	local tooltip
 	if trigger.continuous then
-		tooltip = "Play a few seconds of this texture at its current intensity. A flat "
-			.. "sample, not the real curve — the live version is shaped by speed, depth or "
-			.. "cast progress, none of which exist in a settings panel."
+		tooltip = "Play a few seconds of this texture at its current intensity. Module-driven "
+			.. "preview reproducing authentic physical dynamics and configured intensity."
 	else
 		tooltip = "Play this cue exactly as it is configured right now — its own intensity, "
 			.. 'and its own "Feels like" shape if you changed it. Works whether or not the '

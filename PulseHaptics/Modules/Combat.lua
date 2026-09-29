@@ -1015,6 +1015,18 @@ function M:OnEnable()
 	Pulse:BindFrame({ "meleeRangeIn", "meleeRangeOut" }, syncMeleeRange)
 end
 
+function M:PreviewCast(seconds, scale)
+	seconds = seconds or 3.5
+	scale = scale or 1.0
+	local presence = Pulse.Database:GetTriggerSetting("castTexture", "castPresence", 0.1) * scale
+	local peak = Pulse.Database:GetTriggerSetting("castTexture", "castSwellPeak", 0.7) * scale
+	Pulse:StartContinuousPreview(seconds, function(elapsed, duration)
+		local progress = math.min(1.0, elapsed / duration)
+		Pulse.Engine:Set("preview", presence, progress * peak, 0.1)
+	end)
+	return true
+end
+
 function M:_DebugCombat()
 	return {
 		inCombat = InCombatLockdown() and true or false,
