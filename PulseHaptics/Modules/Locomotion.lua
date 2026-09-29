@@ -588,7 +588,7 @@ eventFrame:SetScript("OnEvent", function(_, event, arg1)
 				resolveGait()
 			end
 		end
-	elseif event == "LEARNED_SPELL_IN_TAB" or event == "SPELLS_CHANGED" then
+	elseif event == "SPELLS_CHANGED" then
 		refreshRidingTier()
 		persist()
 	elseif event == "PLAYER_STARTED_MOVING" then

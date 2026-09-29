@@ -68,6 +68,10 @@ frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
 frame:SetBackdrop(BACKDROP_DIALOG_32_32)
 frame:Hide()
 
+if UISpecialFrames then
+	tinsert(UISpecialFrames, "PulseDebugUIFrame")
+end
+
 local title = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
 title:SetPoint("TOP", frame, "TOP", 0, -16)
 title:SetText("Pulse Debug")

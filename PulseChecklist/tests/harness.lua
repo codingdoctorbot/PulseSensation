@@ -1505,6 +1505,81 @@ do
 			hasRain and hasSnow and hasStorm and hasPatter,
 			true
 		)
+
+		-- Test 9: WP-7 Secret Safety & Gating (CR-009, CR-010, CR-011, CR-031)
+		-- CR-009: ControllerUI gating trusts InputUtil.IsGamepadUIEnabled()
+		local chunkCUI = loadfile(ROOT .. "/Modules/ControllerUI.lua")
+		if chunkCUI then
+			chunkCUI("Pulse", Pulse)
+			InputUtil = {
+				IsGamepadUIEnabled = function()
+					return false
+				end,
+			}
+			local cui = Pulse.modules["ControllerUI"]
+			if cui and cui._DebugControllerUI then
+				local debugState = cui:_DebugControllerUI()
+				check(
+					"ControllerUI gating respects false from IsGamepadUIEnabled (CR-009)",
+					debugState and debugState.gamepadUIActive,
+					false
+				)
+			end
+		end
+
+		-- CR-010: AlertUnitWatch handles UNIT_SPELLCAST_SUCCEEDED with secret unit
+		local secretUnit = setmetatable({ __is_secret = true }, {
+			__eq = function()
+				error("secret comparison error")
+			end,
+		})
+		local okCast = pcall(function()
+			for _, f in ipairs(frames) do
+				local fn = f:GetScript("OnEvent")
+				if fn then
+					fn(f, "UNIT_SPELLCAST_SUCCEEDED", secretUnit, nil, 1000)
+				end
+			end
+		end)
+		check("UNIT_SPELLCAST_SUCCEEDED with secret unit token does not error (CR-010)", okCast, true)
+
+		-- CR-011: World.lua emote handler secret safety and punctuation in name
+		local chunkWorld = loadfile(ROOT .. "/Modules/World.lua")
+		if chunkWorld then
+			chunkWorld("Pulse", Pulse)
+			local worldMod = Pulse.modules["World"]
+			if worldMod and worldMod.OnEnable then
+				worldMod:OnEnable()
+			end
+			local framesCount = #frames
+			local worldFrame = frames[framesCount]
+			local worldHandler = worldFrame and worldFrame:GetScript("OnEvent")
+			if worldHandler then
+				local secretMsg = setmetatable({ __is_secret = true }, {
+					__index = function()
+						error("secret index error")
+					end,
+				})
+				local okEmoteSec = pcall(worldHandler, worldFrame, "CHAT_MSG_TEXT_EMOTE", secretMsg, "Someone")
+				check("CHAT_MSG_TEXT_EMOTE with secret message does not error (CR-011)", okEmoteSec, true)
+
+				-- Test hyphenated name matching without pattern errors
+				UnitName = function()
+					return "Hero-Realm"
+				end
+				local okEmoteName =
+					pcall(worldHandler, worldFrame, "CHAT_MSG_TEXT_EMOTE", "waves at Hero-Realm.", "Someone")
+				check("CHAT_MSG_TEXT_EMOTE with hyphenated player name does not error (CR-011)", okEmoteName, true)
+				UnitName = function()
+					return "Tester"
+				end
+			end
+		end
+
+		-- CR-031: pingPinAdded has empty events list to avoid restricted registration
+		local pingTrigger = Pulse.Registry:GetTrigger("pingPinAdded")
+		check("pingPinAdded has empty events list (CR-031)", pingTrigger and #pingTrigger.events == 0, true)
+
 		Pulse.Engine:StopAll()
 	end
 end

@@ -464,10 +464,14 @@ function commands.watch(P, arg)
 	watchFrame:UnregisterAllEvents()
 	watching = trigger.id
 	for _, event in ipairs(trigger.events) do
+		local ok
 		if trigger.unit then
-			watchFrame:RegisterUnitEvent(event, trigger.unit)
+			ok = pcall(watchFrame.RegisterUnitEvent, watchFrame, event, trigger.unit)
 		else
-			watchFrame:RegisterEvent(event)
+			ok = pcall(watchFrame.RegisterEvent, watchFrame, event)
+		end
+		if not ok then
+			out(WARN .. "Failed to register event: " .. tostring(event) .. R)
 		end
 	end
 	out(string.format("watching %s%s%s  %s", HEAD, trigger.id, R, DIM .. table.concat(trigger.events, ", ") .. R))

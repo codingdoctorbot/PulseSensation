@@ -1771,8 +1771,8 @@ Pulse.Triggers = {
 		default = false,
 		label = "Ping placed",
 		desc = "A clear tactical chime when a waypoint ping pin is placed on the terrain or map.",
-		caveat = "Requires client ping API support.",
-		events = { "UNIT_PING_PIN_ADDED", "PING_PIN_ADDED" },
+		caveat = "Temporarily disabled: UNIT_PING_PIN_ADDED is registration-restricted by Blizzard on WoW Forever / 12.x.",
+		events = {},
 		unit = nil,
 	},
 

@@ -250,14 +250,10 @@ function M:_WatchDefensives()
 		end
 	end
 
-	frame:SetScript("OnEvent", function(_, event, unit, arg2, arg3)
-		if unit ~= "target" then
-			return
-		end
-
+	frame:SetScript("OnEvent", function(_, event, _, arg2, arg3)
 		if event == "UNIT_SPELLCAST_SUCCEEDED" then
 			local spellID = arg3
-			if isBigDefensiveSpell(spellID) then
+			if spellID and not issecretvalue(spellID) and isBigDefensiveSpell(spellID) then
 				Pulse:FireIfEnabled("targetBigDefensive")
 			end
 			return

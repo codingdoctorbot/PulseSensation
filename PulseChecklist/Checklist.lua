@@ -237,6 +237,10 @@ frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
 frame:SetBackdrop(BACKDROP_DIALOG_32_32)
 frame:Hide()
 
+if UISpecialFrames then
+	tinsert(UISpecialFrames, "PulseChecklistFrame")
+end
+
 local title = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
 title:SetPoint("TOP", frame, "TOP", 0, -14)
 title:SetText("Pulse Checklist")
@@ -756,19 +760,21 @@ local function parseAndApplyImport(text)
 	for rawLine in (text or ""):gmatch("[^\r\n]+") do
 		local line = strtrim(rawLine)
 		if line ~= "" then
-			local lowerLine = string.lower(line)
-			if lowerLine:find("needs work", 1, true) or lowerLine:find("⚠️", 1, true) then
-				currentStatus = "needswork"
-			elseif
-				lowerLine:find("non%-functioning", 1)
-				or lowerLine:find("failed", 1, true)
-				or lowerLine:find("❌", 1, true)
-			then
-				currentStatus = "nonfunctioning"
-			elseif lowerLine:find("functioning", 1, true) or lowerLine:find("✅", 1, true) then
-				currentStatus = "functioning"
-			elseif lowerLine:find("untested", 1, true) or lowerLine:find("⏳", 1, true) then
-				currentStatus = "untested"
+			if line:match("^#+") then
+				local lowerLine = string.lower(line)
+				if lowerLine:find("needs work", 1, true) or lowerLine:find("⚠️", 1, true) then
+					currentStatus = "needswork"
+				elseif
+					lowerLine:find("non%-functioning", 1)
+					or lowerLine:find("failed", 1, true)
+					or lowerLine:find("❌", 1, true)
+				then
+					currentStatus = "nonfunctioning"
+				elseif lowerLine:find("functioning", 1, true) or lowerLine:find("✅", 1, true) then
+					currentStatus = "functioning"
+				elseif lowerLine:find("untested", 1, true) or lowerLine:find("⏳", 1, true) then
+					currentStatus = "untested"
+				end
 			end
 
 			-- Check markdown single-item line: "- `triggerID`: comment" or "- `triggerID`"
@@ -791,6 +797,7 @@ local function parseAndApplyImport(text)
 						compactStatus == "untested"
 						or compactStatus == "functioning"
 						or compactStatus == "needswork"
+						or compactStatus == "work"
 						or compactStatus == "nonfunctioning"
 						or compactStatus == "failed"
 						or compactStatus == "pass"
@@ -799,10 +806,11 @@ local function parseAndApplyImport(text)
 					)
 				then
 					local s = string.lower(compactStatus)
-					if s == "pass" or s == "ok" or s == "work" then
+					if s == "pass" or s == "ok" then
 						s = "functioning"
-					end
-					if s == "fail" or s == "failed" then
+					elseif s == "work" then
+						s = "needswork"
+					elseif s == "fail" or s == "failed" then
 						s = "nonfunctioning"
 					end
 					if STATUS_INFO[s] then

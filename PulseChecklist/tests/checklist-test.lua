@@ -17,41 +17,45 @@ local ROOT = arg[1] or "PulseChecklist"
 
 local failures = 0
 local function check(label, got, want)
-    if got ~= want then
-        failures = failures + 1
-        io.write(("FAIL  %-50s got %s, wanted %s\n"):format(label, tostring(got), tostring(want)))
-    else
-        io.write(("ok    %s\n"):format(label))
-    end
+	if got ~= want then
+		failures = failures + 1
+		io.write(("FAIL  %-50s got %s, wanted %s\n"):format(label, tostring(got), tostring(want)))
+	else
+		io.write(("ok    %s\n"):format(label))
+	end
 end
 
 -- ── Stub WoW API ──────────────────────────────────────────────────────────────
 
 local METHOD_PREFIXES = {
-    "Set",
-    "Get",
-    "Is",
-    "Register",
-    "Unregister",
-    "Enable",
-    "Disable",
-    "Show",
-    "Hide",
-    "Start",
-    "Stop",
-    "Create",
-    "Click",
-    "Clear",
-    "Add",
-    "Highlight",
+	"Set",
+	"Get",
+	"Is",
+	"Register",
+	"Unregister",
+	"Enable",
+	"Disable",
+	"Show",
+	"Hide",
+	"Start",
+	"Stop",
+	"Create",
+	"Click",
+	"Clear",
+	"Add",
+	"Highlight",
 }
 
 local function looksLikeMethod(key)
-    if type(key) ~= "string" then return false end
-    for _, prefix in ipairs(METHOD_PREFIXES) do
-        if key:sub(1, #prefix) == prefix then return true end
-    end
-    return false
+	if type(key) ~= "string" then
+		return false
+	end
+	for _, prefix in ipairs(METHOD_PREFIXES) do
+		if key:sub(1, #prefix) == prefix then
+			return true
+		end
+	end
+	return false
 end
 
 -- Status buttons are the ones carrying both OnClick and OnEnter; nothing else on the frame
@@ -60,60 +64,100 @@ local buttons = {}
 
 local FrameMT = {}
 FrameMT.__index = function(tbl, key)
-    if not looksLikeMethod(key) then return nil end
-    local fn = function() return nil end
-    rawset(tbl, key, fn)
-    return fn
+	if not looksLikeMethod(key) then
+		return nil
+	end
+	local fn = function()
+		return nil
+	end
+	rawset(tbl, key, fn)
+	return fn
 end
 
 local function newFrame(frameType, name, parent, template)
-    local f = setmetatable({}, FrameMT)
-    f.__frameType, f.__template, f.__shown = frameType, template, false
-    rawset(f, "Show", function() f.__shown = true end)
-    rawset(f, "Hide", function() f.__shown = false end)
-    rawset(f, "IsShown", function() return f.__shown end)
-    rawset(f, "SetScript", function(_, script, fn)
-        f["__script_" .. script] = fn
-        if frameType == "Button" and f.__script_OnClick and f.__script_OnEnter then buttons[f] = true end
-    end)
-    rawset(f, "GetScript", function(_, script) return f["__script_" .. script] end)
-    rawset(f, "SetText", function(_, text) f.__text = text end)
-    rawset(f, "GetText", function() return f.__text or "" end)
-    rawset(f, "GetWidth", function() return 560 end)
-    rawset(f, "GetFontString", function()
-        f.__fontString = f.__fontString or newFrame("FontString")
-        return f.__fontString
-    end)
-    rawset(f, "CreateFontString", function() return newFrame("FontString") end)
-    rawset(f, "CreateTexture", function() return newFrame("Texture") end)
-    return f
+	local f = setmetatable({}, FrameMT)
+	f.__frameType, f.__template, f.__shown = frameType, template, false
+	rawset(f, "Show", function()
+		f.__shown = true
+	end)
+	rawset(f, "Hide", function()
+		f.__shown = false
+	end)
+	rawset(f, "IsShown", function()
+		return f.__shown
+	end)
+	rawset(f, "SetScript", function(_, script, fn)
+		f["__script_" .. script] = fn
+		if frameType == "Button" and f.__script_OnClick and f.__script_OnEnter then
+			buttons[f] = true
+		end
+	end)
+	rawset(f, "GetScript", function(_, script)
+		return f["__script_" .. script]
+	end)
+	rawset(f, "SetText", function(_, text)
+		f.__text = text
+	end)
+	rawset(f, "GetText", function()
+		return f.__text or ""
+	end)
+	rawset(f, "GetWidth", function()
+		return 560
+	end)
+	rawset(f, "GetFontString", function()
+		f.__fontString = f.__fontString or newFrame("FontString")
+		return f.__fontString
+	end)
+	rawset(f, "CreateFontString", function()
+		return newFrame("FontString")
+	end)
+	rawset(f, "CreateTexture", function()
+		return newFrame("Texture")
+	end)
+	return f
 end
 
 _G = _G or _ENV
 UIParent = newFrame("Frame", "UIParent")
 BACKDROP_DIALOG_32_32 = { bgFile = "stub" }
 SlashCmdList = {}
+UISpecialFrames = {}
+tinsert = tinsert or table.insert
 
 function CreateFrame(frameType, name, parent, template)
-    local f = newFrame(frameType, name, parent, template)
-    if name then _G[name] = f end
-    return f
+	local f = newFrame(frameType, name, parent, template)
+	if name then
+		_G[name] = f
+	end
+	return f
 end
 
 -- The character this test is "logged in as". Swapped later to prove the elsewhere marker.
 local who = { name = "Testchar", realm = "Testrealm", class = "HUNTER" }
 
-function UnitName() return who.name end
-function GetRealmName() return who.realm end
-function UnitClass() return "Hunter", who.class end
-function date() return "2026-09-22" end
+function UnitName()
+	return who.name
+end
+function GetRealmName()
+	return who.realm
+end
+function UnitClass()
+	return "Hunter", who.class
+end
+function date()
+	return "2026-09-22"
+end
 
 local tooltipLines = {}
 GameTooltip = {
-    SetOwner = function() tooltipLines = {} end,
-    AddLine = function(_, text) tooltipLines[#tooltipLines + 1] = text end,
-    Show = function() end,
-    Hide = function() end,
+	SetOwner = function()
+		tooltipLines = {}
+	end,
+	AddLine = function(_, text)
+		tooltipLines[#tooltipLines + 1] = text
+	end,
+	Show = function() end,
+	Hide = function() end,
 }
 
 -- ── Fake Pulse ────────────────────────────────────────────────────────────────
@@ -121,11 +165,17 @@ GameTooltip = {
 local TRIGGER = { id = "autoShotFired", label = "Auto Shot", category = "COMBAT" }
 
 _G.Pulse = {
-    Registry = {
-        GetCategories = function() return { "COMBAT" } end,
-        GetCategoryLabel = function() return "Combat texture" end,
-        GetTriggersByCategory = function() return { TRIGGER } end,
-    },
+	Registry = {
+		GetCategories = function()
+			return { "COMBAT" }
+		end,
+		GetCategoryLabel = function()
+			return "Combat texture"
+		end,
+		GetTriggersByCategory = function()
+			return { TRIGGER }
+		end,
+	},
 }
 
 -- ── Load ──────────────────────────────────────────────────────────────────────
@@ -133,16 +183,16 @@ _G.Pulse = {
 io.write("--- loading ---\n")
 local chunk, err = loadfile(ROOT .. "/Checklist.lua")
 if not chunk then
-    failures = failures + 1
-    io.write("LOAD FAIL  " .. tostring(err) .. "\n")
+	failures = failures + 1
+	io.write("LOAD FAIL  " .. tostring(err) .. "\n")
 else
-    local ok, runErr = pcall(chunk, "PulseChecklist")
-    if not ok then
-        failures = failures + 1
-        io.write("RUN FAIL   " .. tostring(runErr) .. "\n")
-    else
-        io.write("loaded     Checklist.lua\n")
-    end
+	local ok, runErr = pcall(chunk, "PulseChecklist")
+	if not ok then
+		failures = failures + 1
+		io.write("RUN FAIL   " .. tostring(runErr) .. "\n")
+	else
+		io.write("loaded     Checklist.lua\n")
+	end
 end
 
 -- The addon builds rows lazily on first open, so the slash handler is what gets us there.
@@ -208,9 +258,9 @@ PulseChecklistDB.autoShotFired = { status = "functioning", comment = "worked on 
 local okEnter = pcall(statusButton.__script_OnEnter, statusButton)
 check("tooltip copes with no stamp", okEnter, true)
 check(
-    "  and says so plainly",
-    table.concat(tooltipLines, "\n"):find("before this build recorded", 1, true) ~= nil,
-    true
+	"  and says so plainly",
+	table.concat(tooltipLines, "\n"):find("before this build recorded", 1, true) ~= nil,
+	true
 )
 check("comment survived untouched", PulseChecklistDB.autoShotFired.comment, "worked on the hunter")
 
@@ -223,23 +273,23 @@ PulseChecklistDB = {}
 who = { name = "Testchar", realm = "Testrealm", class = "HUNTER" }
 
 local C = _G.PulseChecklist
-check("PulseChecklist global exposed",       type(C), "table")
-check("  GetEntry function present",         type(C and C.GetEntry), "function")
-check("  BASELINE table present",            type(C and C.BASELINE), "table")
+check("PulseChecklist global exposed", type(C), "table")
+check("  GetEntry function present", type(C and C.GetEntry), "function")
+check("  BASELINE table present", type(C and C.BASELINE), "table")
 
 -- locomotion is in BASELINE_ENTRIES as "functioning"
 local locoEntry = C.GetEntry("locomotion")
-check("baseline entry returns functioning",  locoEntry and locoEntry.status, "functioning")
-check("  isBaseline flag set",               locoEntry and locoEntry.isBaseline, true)
-check("  has comment",                       type(locoEntry and locoEntry.comment), "string")
+check("baseline entry returns functioning", locoEntry and locoEntry.status, "functioning")
+check("  isBaseline flag set", locoEntry and locoEntry.isBaseline, true)
+check("  has comment", type(locoEntry and locoEntry.comment), "string")
 
 -- A trigger not in the baseline should return untested
 local unknownEntry = C.GetEntry("__not_a_real_trigger__")
-check("unknown trigger returns untested",    unknownEntry and unknownEntry.status, "untested")
-check("  isBaseline not set",                unknownEntry and unknownEntry.isBaseline, nil)
+check("unknown trigger returns untested", unknownEntry and unknownEntry.status, "untested")
+check("  isBaseline not set", unknownEntry and unknownEntry.isBaseline, nil)
 
 -- Baseline entries must NOT be written to DB just by reading
-check("read does not pollute DB",            PulseChecklistDB.locomotion, nil)
+check("read does not pollute DB", PulseChecklistDB.locomotion, nil)
 
 -- ── Import parser ─────────────────────────────────────────────────────────────
 
@@ -262,28 +312,38 @@ local MARKDOWN_IMPORT = [[
 ]]
 
 local imported = C.Import(MARKDOWN_IMPORT)
-check("import returns count > 0",            imported > 0, true)
+check("import returns count > 0", imported > 0, true)
 
 -- Section header context propagation: needswork section
-check("needswork entry written",             PulseChecklistDB.damageTaken ~= nil, true)
-check("  correct status",                    PulseChecklistDB.damageTaken and PulseChecklistDB.damageTaken.status, "needswork")
-check("  comment preserved",                 PulseChecklistDB.damageTaken and PulseChecklistDB.damageTaken.comment, "floats only fire with FCT on")
+check("needswork entry written", PulseChecklistDB.damageTaken ~= nil, true)
+check("  correct status", PulseChecklistDB.damageTaken and PulseChecklistDB.damageTaken.status, "needswork")
+check(
+	"  comment preserved",
+	PulseChecklistDB.damageTaken and PulseChecklistDB.damageTaken.comment,
+	"floats only fire with FCT on"
+)
 
 -- Nonfunctioning section
-check("nonfunctioning entry written",        PulseChecklistDB.somebrokenCue ~= nil, true)
-check("  correct status",                    PulseChecklistDB.somebrokenCue and PulseChecklistDB.somebrokenCue.status, "nonfunctioning")
+check("nonfunctioning entry written", PulseChecklistDB.somebrokenCue ~= nil, true)
+check("  correct status", PulseChecklistDB.somebrokenCue and PulseChecklistDB.somebrokenCue.status, "nonfunctioning")
 
 -- Comma-separated backtick list under functioning header
-check("functioning locomotion written",      PulseChecklistDB.locomotion ~= nil, true)
-check("  correct status",                    PulseChecklistDB.locomotion and PulseChecklistDB.locomotion.status, "functioning")
-check("functioning jumpLand written",        PulseChecklistDB.jumpLand ~= nil, true)
-check("  correct status",                    PulseChecklistDB.jumpLand and PulseChecklistDB.jumpLand.status, "functioning")
-check("functioning craftTexture written",    PulseChecklistDB.craftTexture ~= nil, true)
-check("  correct status",                    PulseChecklistDB.craftTexture and PulseChecklistDB.craftTexture.status, "functioning")
+check("functioning locomotion written", PulseChecklistDB.locomotion ~= nil, true)
+check("  correct status", PulseChecklistDB.locomotion and PulseChecklistDB.locomotion.status, "functioning")
+check("functioning jumpLand written", PulseChecklistDB.jumpLand ~= nil, true)
+check("  correct status", PulseChecklistDB.jumpLand and PulseChecklistDB.jumpLand.status, "functioning")
+check("functioning craftTexture written", PulseChecklistDB.craftTexture ~= nil, true)
+check("  correct status", PulseChecklistDB.craftTexture and PulseChecklistDB.craftTexture.status, "functioning")
 
 -- Imported entries are stamped with the current character
-check("imported entry stamped",              PulseChecklistDB.locomotion and type(PulseChecklistDB.locomotion.confirmedBy), "table")
-check("  stamp has character name",          PulseChecklistDB.locomotion and PulseChecklistDB.locomotion.confirmedBy and PulseChecklistDB.locomotion.confirmedBy.name, "Testchar")
+check("imported entry stamped", PulseChecklistDB.locomotion and type(PulseChecklistDB.locomotion.confirmedBy), "table")
+check(
+	"  stamp has character name",
+	PulseChecklistDB.locomotion
+		and PulseChecklistDB.locomotion.confirmedBy
+		and PulseChecklistDB.locomotion.confirmedBy.name,
+	"Testchar"
+)
 
 -- ── Baseline promotion on click ───────────────────────────────────────────────
 
@@ -295,17 +355,67 @@ io.write("\n--- baseline promotion on click ---\n")
 PulseChecklistDB = {}
 
 -- autoShotFired is not in BASELINE, so clicking the button starts from untested
-statusButton.__script_OnClick(statusButton)  -- untested -> functioning
+statusButton.__script_OnClick(statusButton) -- untested -> functioning
 check("non-baseline click creates DB entry", type(PulseChecklistDB.autoShotFired), "table")
-check("  status is functioning",             PulseChecklistDB.autoShotFired and PulseChecklistDB.autoShotFired.status, "functioning")
-check("  stamped on click",                  PulseChecklistDB.autoShotFired and type(PulseChecklistDB.autoShotFired.confirmedBy), "table")
+check(
+	"  status is functioning",
+	PulseChecklistDB.autoShotFired and PulseChecklistDB.autoShotFired.status,
+	"functioning"
+)
+check(
+	"  stamped on click",
+	PulseChecklistDB.autoShotFired and type(PulseChecklistDB.autoShotFired.confirmedBy),
+	"table"
+)
 
 -- Now simulate a baseline trigger being clicked via Import with compact format:
 -- ensureEntry will seed from BASELINE first, then click overwrites.
-PulseChecklistDB.locomotion = nil  -- ensure baseline path
+PulseChecklistDB.locomotion = nil -- ensure baseline path
 local compactImported = C.Import("locomotion:needswork:felt weak")
-check("compact import written",              PulseChecklistDB.locomotion ~= nil, true)
-check("  compact status correct",            PulseChecklistDB.locomotion and PulseChecklistDB.locomotion.status, "needswork")
-check("  compact comment correct",           PulseChecklistDB.locomotion and PulseChecklistDB.locomotion.comment, "felt weak")
+check("compact import written", PulseChecklistDB.locomotion ~= nil, true)
+check("  compact status correct", PulseChecklistDB.locomotion and PulseChecklistDB.locomotion.status, "needswork")
+check("  compact comment correct", PulseChecklistDB.locomotion and PulseChecklistDB.locomotion.comment, "felt weak")
+
+-- CR-015: Status keywords inside item comment text must NOT switch section status
+PulseChecklistDB = {}
+local mdText = [[
+# Functioning cues
+- `cueOne`: works great
+- `cueTwo`: this failed on first test but works now
+- `cueThree`: definitely works
+]]
+C.Import(mdText)
+check("cueOne is functioning", PulseChecklistDB.cueOne and PulseChecklistDB.cueOne.status, "functioning")
+check(
+	"cueTwo comment has 'failed' but status remains functioning (CR-015)",
+	PulseChecklistDB.cueTwo and PulseChecklistDB.cueTwo.status,
+	"functioning"
+)
+check(
+	"cueThree is functioning (not infected by cueTwo comment)",
+	PulseChecklistDB.cueThree and PulseChecklistDB.cueThree.status,
+	"functioning"
+)
+
+-- Compact import with 'work' maps to 'needswork'
+PulseChecklistDB = {}
+C.Import("cueWork:work:in progress")
+check(
+	"compact 'work' maps to needswork (CR-015)",
+	PulseChecklistDB.cueWork and PulseChecklistDB.cueWork.status,
+	"needswork"
+)
+
+-- CR-024: UISpecialFrames registration
+local inSpecial = false
+if UISpecialFrames then
+	for _, f in ipairs(UISpecialFrames) do
+		if f == "PulseChecklistFrame" then
+			inSpecial = true
+			break
+		end
+	end
+end
+check("PulseChecklistFrame in UISpecialFrames (CR-024)", inSpecial, true)
 
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))

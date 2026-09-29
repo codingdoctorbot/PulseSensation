@@ -22,3 +22,9 @@
 | `CR-020` | `c7fd05e` | Read applied preset from appliedDevicePreset instead of unapplied dropdown selection | `locomotion-test.lua` | Verified by test |
 | `CR-004` | `738e4be` | Module-driven bespoke continuous previews across Movement, PlayerState, Flight, Combat, Crafting, Environment, Locomotion | `harness.lua` | Verified by test |
 | `CR-026` | `738e4be` | Expose weatherTexture tunables (rainLevel, snowLevel, stormLevel, patterRate) in Registry and modulate in Environment | `harness.lua` | Verified by test |
+| `CR-009` | pending | Trust InputUtil.IsGamepadUIEnabled() when available; only use gamepad enabled fallbacks when API is nil | `harness.lua` | Verified by test |
+| `CR-010` | pending | Remove redundant unit comparison in AlertUnitWatch targetBigDefensive handler; guard spellID against secrets | `harness.lua` | Verified by test |
+| `CR-011` | pending | Guard CHAT_MSG_TEXT_EMOTE message/sender against secrets; escape playerName special characters; guard CastActivity:keyFor | `harness.lua` | Verified by test |
+| `CR-031` | pending | Clear events list on pingPinAdded to prevent registration of restricted UNIT_PING_PIN_ADDED | `harness.lua`, `cue-audit.lua` | Verified by test |
+| `CR-024` | pending | Add PulseDebugUIFrame and PulseChecklistFrame to UISpecialFrames; remove dead LEARNED_SPELL_IN_TAB; pcall-guard pdebug watch | `pulsedebug-test.lua`, `checklist-test.lua` | Verified by test |
+| `CR-015` | pending | Match section status keywords only on header lines (^#+); accept work as needswork in compact import | `checklist-test.lua` | Verified by test |

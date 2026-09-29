@@ -33,21 +33,26 @@ local function syncMount()
 end
 
 mountFrame:SetScript("OnEvent", function(_, event)
+	if type(IsMounted) ~= "function" then
+		return
+	end
 	if event == "PLAYER_ENTERING_WORLD" then
 		wasMounted = IsMounted()
 		mountStateReady = true
 		return
 	end
-	local mounted = IsMounted()
-	if mountStateReady then
-		if mounted and not wasMounted then
-			Pulse:FireIfEnabled("mountUp")
-		elseif wasMounted and not mounted then
-			Pulse:FireIfEnabled("dismount")
+	if event == "PLAYER_MOUNT_DISPLAY_CHANGED" then
+		local mounted = IsMounted()
+		if mountStateReady then
+			if mounted and not wasMounted then
+				Pulse:FireIfEnabled("mountUp")
+			elseif wasMounted and not mounted then
+				Pulse:FireIfEnabled("dismount")
+			end
 		end
+		wasMounted = mounted
+		mountStateReady = true
 	end
-	wasMounted = mounted
-	mountStateReady = true
 end)
 
 -- Skyriding / dragonriding thrust

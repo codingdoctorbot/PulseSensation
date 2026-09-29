@@ -47,16 +47,33 @@ function M:_WatchEmote()
 		frame:RegisterEvent("CHAT_MSG_TEXT_EMOTE")
 	end
 
-	frame:SetScript("OnEvent", function(_, event, message, sender)
+	frame:SetScript("OnEvent", function(_, _, message, sender)
+		if issecretvalue(message) or issecretvalue(sender) then
+			return
+		end
+		if not message or not sender then
+			return
+		end
 		local playerName = UnitName("player")
+		if not playerName or issecretvalue(playerName) or playerName == "" then
+			return
+		end
 		local senderName = (Ambiguate and sender) and Ambiguate(sender, "none") or sender
 		if senderName == playerName then
 			Pulse:FireIfEnabled("emote")
-		elseif message and playerName and playerName ~= "" then
+		else
 			-- Frontier pattern: match whole word only so "Ana" does not match "Anakin"
-			local pattern = "%f[%a]" .. playerName .. "%f[%A]"
-			if message:find(pattern) then
+			-- Escape magic characters in playerName to handle realm suffixes or punctuation
+			local escapedName = playerName:gsub("%p", "%%%0")
+			local pattern = "%f[%a]" .. escapedName .. "%f[%A]"
+			local ok, found = pcall(string.find, message, pattern)
+			if ok and found then
 				Pulse:FireIfEnabled("emote")
+			elseif not ok then
+				-- Fallback plain substring match if pattern matching fails (e.g. non-ASCII)
+				if message:find(playerName, 1, true) then
+					Pulse:FireIfEnabled("emote")
+				end
 			end
 		end
 	end)

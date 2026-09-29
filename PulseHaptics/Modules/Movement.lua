@@ -480,11 +480,14 @@ local function syncForm()
 	if not Pulse.Database:GetCue("formChanged") then
 		return
 	end
-	lastForm = GetShapeshiftForm()
+	lastForm = type(GetShapeshiftForm) == "function" and GetShapeshiftForm() or 0
 	formFrame:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
 end
 
 formFrame:SetScript("OnEvent", function()
+	if type(GetShapeshiftForm) ~= "function" then
+		return
+	end
 	local current = GetShapeshiftForm()
 	if current ~= lastForm then
 		lastForm = current

@@ -50,8 +50,8 @@ end
 local function gamepadUIActive()
 	if InputUtil and type(InputUtil.IsGamepadUIEnabled) == "function" then
 		local ok, enabled = pcall(InputUtil.IsGamepadUIEnabled)
-		if ok and enabled then
-			return true
+		if ok then
+			return (not issecretvalue(enabled)) and (enabled and true or false) or false
 		end
 	end
 	if C_GamePad and type(C_GamePad.IsEnabled) == "function" then
@@ -551,4 +551,10 @@ function M:OnEnable()
 		syncUIPoll()
 		syncEdge()
 	end)
+end
+
+function M:_DebugControllerUI()
+	return {
+		gamepadUIActive = gamepadUIActive(),
+	}
 end

@@ -158,6 +158,8 @@ _G = _G or _ENV
 UIParent = newFrame("Frame", "UIParent")
 BACKDROP_DIALOG_32_32 = { bgFile = "stub", edgeFile = "stub" }
 SlashCmdList = {}
+UISpecialFrames = {}
+tinsert = tinsert or table.insert
 
 function CreateFrame(frameType, name, parent, template)
 	local f = newFrame(frameType, name, parent, template)
@@ -637,5 +639,17 @@ clearText()
 check("survives a reach-in that errors", pcall(_G.PulseDebugUI.Show, "modules"), true)
 check("  and reports it inline", contains(renderedText(), "errored"), true)
 check("  while still showing the healthy one", contains(renderedText(), "cadence"), true)
+
+-- CR-024: UISpecialFrames registration
+local inSpecial = false
+if UISpecialFrames then
+	for _, f in ipairs(UISpecialFrames) do
+		if f == "PulseDebugUIFrame" then
+			inSpecial = true
+			break
+		end
+	end
+end
+check("PulseDebugUIFrame in UISpecialFrames (CR-024)", inSpecial, true)
 
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))

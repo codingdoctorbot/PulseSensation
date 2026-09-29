@@ -64,10 +64,13 @@ end
 -- A cast is identified by its GUID where one exists. castGUID is unique per cast attempt;
 -- spellID alone is not, since the same spell cast twice in a row would collide.
 local function keyFor(castGUID, spellID)
-	if castGUID then
+	if castGUID and not issecretvalue(castGUID) then
 		return "g:" .. tostring(castGUID)
 	end
-	return "s:" .. tostring(spellID or 0)
+	if spellID and not issecretvalue(spellID) then
+		return "s:" .. tostring(spellID)
+	end
+	return "unknown"
 end
 
 local function isPlayer(unit)
