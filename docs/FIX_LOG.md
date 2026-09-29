@@ -28,9 +28,9 @@
 | `CR-031` | `5a2c17e` | Clear events list on pingPinAdded to prevent registration of restricted UNIT_PING_PIN_ADDED | `harness.lua`, `cue-audit.lua` | Verified by test |
 | `CR-024` | `5a2c17e` | Add PulseDebugUIFrame and PulseChecklistFrame to UISpecialFrames; remove dead LEARNED_SPELL_IN_TAB; pcall-guard pdebug watch | `pulsedebug-test.lua`, `checklist-test.lua` | Verified by test |
 | `CR-015` | `5a2c17e` | Match section status keywords only on header lines (^#+); accept work as needswork in compact import | `checklist-test.lua` | Verified by test |
-| `CR-021` | pending | Update lastResolved immediately upon profile rename and deletion to eliminate redundant re-sync on PLAYER_REGEN_ENABLED | `harness.lua` | Verified by test |
-| `CR-022` | pending | Validate table structures and types in Database:Init, quarantining malformed entries to __corrupt | `harness.lua` | Verified by test |
-| `CR-023` | pending | Guard SetPropagateKeyboardInput in Popup dialog against InCombatLockdown; dismiss dialog on PLAYER_REGEN_DISABLED | `Popup.lua` | Verified by inspection |
-| `CR-019` | pending | Reorder NAME_PATTERNS in Devices.lua to prioritize 8BitDo models over generic XInput/Xbox | `harness.lua` | Verified by test |
-| `CR-025` | pending | Dynamically calculate Ramp tooltip duration (~16s) and 40% peak; align showAdvancedCueControls default; sync cue and mode counts | `Spec.lua`, `Guide.lua`, `Modes.lua`, `Registry.lua`, `harness.lua` | Verified by test |
-| `CR-028` | pending | Guard GetMoney in MERCHANT_SHOW; allow minimap master toggle during combat; require active connected device for status badge | `Interaction.lua`, `Minimap.lua`, `Panel.lua`, `harness.lua` | Verified by test |
+| `CR-021` | `b5fc335` | Update lastResolved immediately upon profile rename and deletion to eliminate redundant re-sync on PLAYER_REGEN_ENABLED | `harness.lua` | Verified by test |
+| `CR-022` | `b5fc335` | Validate table structures and types in Database:Init, quarantining malformed entries to __corrupt | `harness.lua` | Verified by test |
+| `CR-023` | `b5fc335` | Guard SetPropagateKeyboardInput in Popup dialog against InCombatLockdown; dismiss dialog on PLAYER_REGEN_DISABLED | `Popup.lua` | Verified by inspection |
+| `CR-019` | `b5fc335` | Reorder NAME_PATTERNS in Devices.lua to prioritize 8BitDo models over generic XInput/Xbox | `harness.lua` | Verified by test |
+| `CR-025` | `b5fc335` | Dynamically calculate Ramp tooltip duration (~16s) and 40% peak; align showAdvancedCueControls default; sync cue and mode counts | `Spec.lua`, `Guide.lua`, `Modes.lua`, `Registry.lua`, `harness.lua` | Verified by test |
+| `CR-028` | `b5fc335` | Guard GetMoney in MERCHANT_SHOW; allow minimap master toggle during combat; require active connected device for status badge | `Interaction.lua`, `Minimap.lua`, `Panel.lua`, `harness.lua` | Verified by test |
