@@ -549,28 +549,36 @@ end
 check("Engine:Hold default/false sets isTransient=false", foundSustained, false)
 Engine:StopAll()
 
--- ── CR-008 b / F-01: Soft Breakaway Floor for Continuous Textures ───────────
-Engine:StopAll()
-mockFloor = 0.125
--- 1. Continuous hold at low amplitude (0.02) scales down smoothly below breakaway floor (< 0.08)
-Engine:Hold("soft_floor_continuous", 0.02, 0, 0.5, false)
-for _ = 1, 15 do
-	frameScripts.OnUpdate(nil, 0.016)
+-- ── CR-008 b / F-01: breakaway floor, exact values ─────────────────────────
+-- Exact outputs, not bounds. With gamma 1.0 and gain 1.0 (the mock's defaults), mapValue is:
+--   discrete:   floor + (1 - floor) * v
+--   continuous: floor * smoothstep(clamp(v / knee)) + (1 - floor) * v,  knee = max(0.02, floor * 0.5)
+-- 120 frames at 16 ms settle both smoothing lanes to within 1e-6 of their target, so the
+-- smoothed channel value IS the mapped value. Bounds (< 0.08, >= 0.125) cannot pin the
+-- discrete path: f623a8a's missing else applied the floor twice (0.05 -> 0.2727) and still
+-- passed >= 0.125. Exact values catch both halves of that regression.
+local function settledLow(name, low, isTransient)
+	Engine:StopAll()
+	Engine:Hold(name, low, 0, 5.0, isTransient)
+	for _ = 1, 120 do
+		frameScripts.OnUpdate(nil, 0.016)
+	end
+	local ch = Engine:_DebugChannels()["Low"]
+	return ch and ch.smoothed or 0
 end
-local chanContinuous = Engine:_DebugChannels()
-local lowContinuous = chanContinuous["Low"] and chanContinuous["Low"].smoothed or 0
-check("continuous cue at 0.02 scales below breakaway floor (< 0.08)", lowContinuous > 0 and lowContinuous < 0.08, true)
+local function near(got, want)
+	return math.abs(got - want) < 1e-4
+end
 
--- 2. Transient hold at low amplitude (0.05) preserves hard breakaway floor
-Engine:StopAll()
-Engine:Hold("hard_floor_transient", 0.05, 0, 0.5, true)
-for _ = 1, 15 do
-	frameScripts.OnUpdate(nil, 0.016)
-end
-local chanTransient = Engine:_DebugChannels()
-local lowTransient = chanTransient["Low"] and chanTransient["Low"].smoothed or 0
-check("transient cue at 0.05 preserves hard breakaway floor (>= 0.125)", lowTransient >= 0.125, true)
+mockFloor = 0.125
+check("discrete 0.05 on floor 0.125 = 0.16875", near(settledLow("floor_d05", 0.05, true), 0.16875), true)
+check("discrete 0.50 on floor 0.125 = 0.5625", near(settledLow("floor_d50", 0.50, true), 0.5625), true)
+check("continuous 0.02 fades below floor = 0.047708", near(settledLow("floor_c02", 0.02, false), 0.047708), true)
+check("continuous 0.05 on floor 0.125 = 0.15575", near(settledLow("floor_c05", 0.05, false), 0.15575), true)
+check("continuous 0.10 clears the floor = 0.2125", near(settledLow("floor_c10", 0.10, false), 0.2125), true)
+check("  and an authored default stays >= floor", settledLow("floor_c10b", 0.10, false) >= 0.125, true)
 mockFloor = nil
+check("no floor configured: continuous 0.05 passes through", near(settledLow("floor_none", 0.05, false), 0.05), true)
 Engine:StopAll()
 
 -- ── ENG-03: Raw Calibration Error Trapping via pcall ─────────────────────────
