@@ -4,7 +4,7 @@
 Plain Python 3, no dependencies. Reproduces every table in this folder:
 
     python3 haptics-model/model.py            # all report sections
-    python3 haptics-model/model.py transfer   # one section: transfer | erm | lra | sweep
+    python3 haptics-model/model.py transfer   # one section: transfer | erm | lra | suggest
 
 The engine half mirrors PulseHaptics/Core/Engine.lua (PlayMode scheduling, layer blending,
 overdrive, mapValue, smoothing, shut-off, rate limit). The actuator half is a model with
@@ -771,6 +771,52 @@ def section_lra():
     print("```")
 
 
+SUGGESTED = {
+    # ERM: floors back near their pre-72950f5 level, release short, software attack near zero.
+    "xbox → suggested": ("xbox", dict(floor=0.10, releaseTau=0.012, transientAttackTau=0.003, attackTau=0.030)),
+    # LRA: gamma to widen the ladder; Switch Pro gain trimmed so the top does not clip.
+    "dualsense → suggested": ("dualsense", dict(gamma=1.5)),
+    "switchpro → suggested": ("switchpro", dict(gamma=1.5, gain=1.15)),
+}
+
+
+def section_suggestions():
+    for name, (base, kw) in SUGGESTED.items():
+        variant(base, name, **kw)
+    erm = ["xbox", "xbox → suggested"]
+    lra = ["dualsense", "dualsense → suggested", "switchpro", "switchpro → suggested"]
+    print("\n## Suggested tuning directions: ERM (xbox)")
+    summary("erm", erm, modes=["TAP", "TICK", "CLICK", "DOUBLE_TAP", "CHIME", "STUTTER", "THUD", "HEAVY"])
+    slow = {ch: dict(v, tau_up=v["tau_up"] * 1.6, tau_down=v["tau_down"] * 1.6) for ch, v in ERM_HW.items()}
+    summary("erm", erm, modes=["DOUBLE_TAP", "CHIME", "STUTTER"], hw=slow, title="slow motors: ")
+    print()
+    ladder_rows("erm", erm)
+    print("\n| Profile | census u_b 0.03 | 0.06 | 0.10 | 0.15 | HUM steady | HUM 90% rise |")
+    print("|---|---|---|---|---|---|---|")
+    for p in erm:
+        cells = []
+        for u in (0.03, 0.06, 0.10, 0.15):
+            _, d, f = cue_census("erm", p, erm_hw_with(u, u))
+            _, d2, f2 = cue_census("erm", p, erm_hw_with(u, u), only_on=True)
+            cells.append(f"{len(d) + len(f)} ({len(d2) + len(f2)})")
+        h = hold_metrics("erm", p, CONTINUOUS["HUM"]["low"], 0)
+        print(f"| {p} | " + " | ".join(cells) + f" | {db(h['ss']):.0f} dB | {fmt(h['t90'], 'ms')} |")
+    print("\n## Suggested tuning directions: LRA")
+    summary("lra", lra, modes=["TAP", "TICK", "CLICK", "STUTTER", "HEAVY"])
+    print()
+    ladder_rows("lra", lra)
+    print("\n| Profile | weakest cue | HUM steady | DRIFT steady | THUMP = HEAVY from master |")
+    print("|---|---|---|---|---|")
+    for p in lra:
+        w = lra_census(p)
+        h = hold_metrics("lra", p, CONTINUOUS["HUM"]["low"], 0)
+        d = hold_metrics("lra", p, CONTINUOUS["DRIFT"]["low"], 0)
+        g = max(PRESETS[p]["Low"]["gain"], PRESETS[p]["High"]["gain"])
+        clip = 1.0 / (0.85 * g)
+        print(f"| {p} | {w[0][1]['id']} {db(w[0][0]):.0f} dB | {db(h['ss']):.0f} dB | {db(d['ss']):.0f} dB | "
+              + (f"{clip:.2f}" if clip <= 1.0 else "never") + " |")
+
+
 if __name__ == "__main__":
     which = sys.argv[1] if len(sys.argv) > 1 else "all"
     if which in ("all", "transfer"):
@@ -783,3 +829,5 @@ if __name__ == "__main__":
         section_erm()
     if which in ("all", "lra"):
         section_lra()
+    if which in ("all", "suggest"):
+        section_suggestions()

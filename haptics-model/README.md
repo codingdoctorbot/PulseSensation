@@ -17,6 +17,9 @@ This folder contains only analysis. **No addon code has been changed.** Every nu
 from a model, not from a measurement on real hardware. Each document says what it assumes, and which
 conclusions still hold when those assumptions change.
 
+**Start with [06-findings.md](06-findings.md)** for the ranked results. Sections 1–5 are the
+evidence behind them.
+
 ## Documents
 
 | # | File | Contents | Status |
@@ -26,8 +29,19 @@ conclusions still hold when those assumptions change.
 | 3 | [03-static-transfer.md](03-static-transfer.md) | Each profile's input→command curve: floor, gamma, gain, clipping, dead zones | ✅ done |
 | 4 | [04-erm-dynamics.md](04-erm-dynamics.md) | Selected modes simulated on ERM hardware, per profile | ✅ done |
 | 5 | [05-lra-dynamics.md](05-lra-dynamics.md) | Selected modes simulated on LRA hardware, per profile | ✅ done |
-| 6 | [06-findings.md](06-findings.md) | Negative effects, ranked, with suggested tuning directions | ⏳ next |
-| — | [model.py](model.py) | The simulator that produces every table (plain Python 3, no dependencies) | ✅ engine + actuators |
+| 6 | [06-findings.md](06-findings.md) | Negative effects, ranked, with suggested tuning directions | ✅ done |
+| — | [model.py](model.py) | The simulator that produces every table (plain Python 3, no dependencies) | ✅ done |
+
+## Reproducing the numbers
+
+```
+python3 haptics-model/model.py            # everything (~6 s)
+python3 haptics-model/model.py transfer   # §3   (also: erm, lra, suggest)
+```
+
+The model reads the modes and cues directly from `Core/Modes.lua` and `Core/Registry.lua`, so
+it keeps up with changes to either. The device presets are copied into `model.py`, and have to
+be updated there if `Core/Devices.lua` changes.
 
 ## Modes selected
 
@@ -77,3 +91,6 @@ vocabulary (lightest, heaviest, fastest rhythm, continuous):
   1.0 leaves an LRA's intensity ladder at about half an ERM's, and textures play 11–18 dB
   stronger than on ERM pads. A gamma of about 1.4–1.6 would restore most of the ladder without
   losing any cue (assuming the driver's mapping is linear).
+- **Step 6:** findings (`06-findings.md`). Four problems are ranked, each with a tuning
+  direction and a way to check it on a real pad using only the existing calibration sliders.
+  The suggested directions were checked together in the model (`model.py suggest`).
