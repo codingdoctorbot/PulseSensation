@@ -94,6 +94,23 @@ local function newFrame(frameType, name, parent, template)
 	rawset(f, "GetScript", function(_, script)
 		return f["__script_" .. script]
 	end)
+	rawset(f, "SetHeight", function(_, h)
+		f.__height = h
+	end)
+	rawset(f, "GetHeight", function()
+		return f.__height or 200
+	end)
+
+	rawset(f, "SetWidth", function(_, w)
+		f.__width = w
+	end)
+	rawset(f, "GetWidth", function()
+		return f.__width or 300
+	end)
+	rawset(f, "SetSize", function(_, w, h)
+		f.__width = w
+		f.__height = h
+	end)
 	-- Text is stored rather than dropped: the whole point is reading back what a view put
 	-- on the frame.
 	rawset(f, "SetText", function(_, text)
@@ -375,6 +392,17 @@ local fakePulse = {
 				},
 			}
 		end,
+		GetChannelOutputs = function(_, dest)
+			dest = dest or {}
+			dest.low = 0.30
+			dest.high = 0.15
+			dest.ltrigger = 0
+			dest.rtrigger = 0
+			return dest
+		end,
+		GetActiveLayerCount = function(_)
+			return 1
+		end,
 		_DebugChannels = function()
 			return { Low = { smoothed = 0.31, lastSet = 0.30 } }
 		end,
@@ -391,7 +419,7 @@ local fakePulse = {
 -- ── Load ──────────────────────────────────────────────────────────────────────
 
 io.write("--- loading ---\n")
-for _, relative in ipairs({ "Debug.lua", "UI.lua" }) do
+for _, relative in ipairs({ "Debug.lua", "Oscilloscope.lua", "UI.lua" }) do
 	local chunk, err = loadfile(ROOT .. "/" .. relative)
 	if not chunk then
 		failures = failures + 1
@@ -651,5 +679,47 @@ if UISpecialFrames then
 	end
 end
 check("PulseDebugUIFrame in UISpecialFrames (CR-024)", inSpecial, true)
+
+-- ── Oscilloscope ──────────────────────────────────────────────────────────────
+
+io.write("\n--- oscilloscope ---\n")
+check("Oscilloscope exported", type(_G.PulseOscilloscope), "table")
+check("Show(scope) is safe", pcall(_G.PulseDebugUI.Show, "scope"), true)
+
+local osc = _G.PulseOscilloscope
+check("oscilloscope initially not frozen", osc.IsFrozen(), false)
+osc.SetFrozen(true)
+check("freeze sets frozen state", osc.IsFrozen(), true)
+osc.SetFrozen(false)
+check("unfreeze restores run state", osc.IsFrozen(), false)
+
+check("default display mode is split", osc.GetDisplayMode(), "split")
+osc.SetDisplayMode("overlay")
+check("set display mode overlay", osc.GetDisplayMode(), "overlay")
+osc.SetDisplayMode("split")
+check("restore split mode", osc.GetDisplayMode(), "split")
+
+local hudShown = osc.ToggleHUD()
+check("ToggleHUD shows floating HUD", hudShown, true)
+local hud = _G["PulseOscilloscopeHUD"]
+check("PulseOscilloscopeHUD frame created", hud ~= nil, true)
+local hudInSpecial = false
+if UISpecialFrames then
+	for _, f in ipairs(UISpecialFrames) do
+		if f == "PulseOscilloscopeHUD" then
+			hudInSpecial = true
+			break
+		end
+	end
+end
+check("HUD in UISpecialFrames", hudInSpecial, true)
+local hudHidden = osc.ToggleHUD()
+check("ToggleHUD hides floating HUD", hudHidden, false)
+
+-- Test /pdebug scope command
+local pdebugCmd = SlashCmdList["PULSEDEBUG"]
+check("pdebug handler present", type(pdebugCmd), "function")
+local okScopeCmd = pcall(pdebugCmd, "scope")
+check("/pdebug scope executes without error", okScopeCmd, true)
 
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))

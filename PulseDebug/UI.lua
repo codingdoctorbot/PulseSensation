@@ -141,11 +141,16 @@ body:SetJustifyV("TOP")
 -- refresh loop just calls the current one again and assigns the result.
 
 local views = {}
-local viewOrder = { "state", "layers", "channels", "log", "cast", "modules", "schema" }
+local viewOrder = { "scope", "state", "layers", "channels", "log", "cast", "modules", "schema" }
 local currentView = "layers"
 
 local function line(label, value)
 	return string.format("%-28s %s", label, value or "")
+end
+
+function views.scope(P)
+	-- Scope renders visually via its own embedded canvas.
+	return ""
 end
 
 function views.state(P)
@@ -384,6 +389,9 @@ local function recordEvent(action, triggerID, extra)
 	if updateStickyHud then
 		updateStickyHud()
 	end
+	if _G.PulseOscilloscope and type(_G.PulseOscilloscope.RecordCue) == "function" then
+		_G.PulseOscilloscope.RecordCue(action, entry.id)
+	end
 end
 
 local function recordCastTrace(activity)
@@ -426,6 +434,9 @@ local function clearAllLogs()
 	wipe(lastHoldHigh)
 	if updateStickyHud then
 		updateStickyHud()
+	end
+	if _G.PulseOscilloscope and type(_G.PulseOscilloscope.Clear) == "function" then
+		_G.PulseOscilloscope.Clear()
 	end
 end
 
@@ -763,6 +774,8 @@ end
 -- Render
 ---------------------------------------------------------------------------
 
+local embeddedScope = nil
+
 local function render()
 	local P = core()
 	if not P then
@@ -773,12 +786,32 @@ local function render()
 	if updateStickyHud then
 		updateStickyHud()
 	end
-	local view = views[currentView]
-	local ok, text = pcall(view, P)
-	body:SetText(ok and text or (BAD .. "view errored: " .. R .. tostring(text)))
-	-- The scroll child has to match the text or UIPanelScrollFrameTemplate has nothing to
-	-- scroll against and the bar sits dead at the top.
-	scrollChild:SetHeight(math.max(body:GetStringHeight() + 8, 1))
+
+	if currentView == "scope" then
+		scrollFrame:Hide()
+		if not embeddedScope and _G.PulseOscilloscope and type(_G.PulseOscilloscope.MountEmbedded) == "function" then
+			embeddedScope = _G.PulseOscilloscope.MountEmbedded(frame)
+			embeddedScope:SetPoint("TOPLEFT", frame, "TOPLEFT", 20, -156)
+			embeddedScope:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -32, 18)
+		end
+		if embeddedScope then
+			embeddedScope:Show()
+			if embeddedScope.canvas and embeddedScope.canvas.Render then
+				embeddedScope.canvas.Render()
+			end
+		end
+	else
+		if embeddedScope then
+			embeddedScope:Hide()
+		end
+		scrollFrame:Show()
+		local view = views[currentView]
+		local ok, text = pcall(view, P)
+		body:SetText(ok and text or (BAD .. "view errored: " .. R .. tostring(text)))
+		-- The scroll child has to match the text or UIPanelScrollFrameTemplate has nothing to
+		-- scroll against and the bar sits dead at the top.
+		scrollChild:SetHeight(math.max(body:GetStringHeight() + 8, 1))
+	end
 end
 
 ---------------------------------------------------------------------------
@@ -802,6 +835,7 @@ local function selectView(id)
 end
 
 local BUTTON_LABEL = {
+	scope = "Scope",
 	state = "State",
 	layers = "Layers",
 	channels = "Channels",
@@ -814,10 +848,10 @@ local BUTTON_LABEL = {
 local previous
 for _, id in ipairs(viewOrder) do
 	local button = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
-	button:SetSize(82, 22)
+	button:SetSize(71, 22)
 	button:SetText(BUTTON_LABEL[id])
 	if previous then
-		button:SetPoint("LEFT", previous, "RIGHT", 6, 0)
+		button:SetPoint("LEFT", previous, "RIGHT", 5, 0)
 	else
 		button:SetPoint("TOPLEFT", frame, "TOPLEFT", 20, -48)
 	end
@@ -995,6 +1029,11 @@ _G.PulseDebugUI = {
 		render()
 	end,
 	RecordEvent = recordEvent,
+	ToggleScopeHUD = function()
+		if _G.PulseOscilloscope and type(_G.PulseOscilloscope.ToggleHUD) == "function" then
+			return _G.PulseOscilloscope.ToggleHUD()
+		end
+	end,
 }
 
 SLASH_PULSEDEBUGUI1 = "/pdui"

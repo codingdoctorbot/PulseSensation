@@ -86,6 +86,7 @@ function commands.help()
 	row("/pdebug modes", "every mode id, discrete or continuous")
 	row("/pdebug schema", "the active schema's role-to-channel map")
 	row("/pdebug ui", "open the window: same readouts, with a live 10Hz refresh")
+	row("/pdebug scope", "toggle the live floating haptic oscilloscope HUD")
 	row("/pdebug log", "open the window directly to the rolling event log")
 	row("/pdebug cast", "open the window directly to the cast trace log")
 	row("/pdebug clear", "clear the debug event log and channel peak history")
@@ -415,6 +416,22 @@ function commands.cast()
 	end
 	ui.Show("cast")
 end
+
+function commands.scope()
+	local osc = _G.PulseOscilloscope
+	if osc and type(osc.ToggleHUD) == "function" then
+		local shown = osc.ToggleHUD()
+		out(string.format("Oscilloscope HUD %s", shown and (GOOD .. "shown" .. R) or (DIM .. "hidden" .. R)))
+		return
+	end
+	local ui = _G.PulseDebugUI
+	if ui and type(ui.Show) == "function" then
+		ui.Show("scope")
+		return
+	end
+	out(BAD .. "Oscilloscope is not loaded." .. R)
+end
+commands.osc = commands.scope
 
 function commands.clear()
 	local ui = _G.PulseDebugUI

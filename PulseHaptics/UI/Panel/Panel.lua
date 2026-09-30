@@ -552,6 +552,17 @@ local function slashHandler(message)
 		return
 	end
 
+	if command == "scope" or command == "osc" then
+		if _G.PulseOscilloscope and type(_G.PulseOscilloscope.ToggleHUD) == "function" then
+			_G.PulseOscilloscope.ToggleHUD()
+		elseif _G.PulseDebugUI and type(_G.PulseDebugUI.Show) == "function" then
+			_G.PulseDebugUI.Show("scope")
+		else
+			print("Pulse: live oscilloscope is provided by the companion addon PulseDebug (/pdebug scope).")
+		end
+		return
+	end
+
 	if command == "enableall" then
 		local db = Pulse.Database
 		if db and db.SetAllCues then

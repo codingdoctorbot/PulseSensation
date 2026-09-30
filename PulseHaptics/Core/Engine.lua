@@ -1103,3 +1103,47 @@ function Engine:_DebugChannels()
 	end
 	return snapshot
 end
+
+-- Reusable buffer for zero-GC channel output sampling (Oscilloscope telemetry).
+local channelOutputsBuffer = {
+	low = 0,
+	high = 0,
+	ltrigger = 0,
+	rtrigger = 0,
+	smoothedLow = 0,
+	smoothedHigh = 0,
+	anyActive = false,
+}
+
+--- Allocation-free channel sample into a caller-supplied or internal static buffer.
+-- Adheres to Rule 4 (Zero Garbage in Tight Loops) and Rule B (issecretvalue guarded).
+function Engine:GetChannelOutputs(dest)
+	local out = dest or channelOutputsBuffer
+	local low = lastSetByChannel.low or 0
+	local high = lastSetByChannel.high or 0
+	local ltrig = lastSetByChannel.ltrigger or 0
+	local rtrig = lastSetByChannel.rtrigger or 0
+	local sLow = smoothedByChannel.low or 0
+	local sHigh = smoothedByChannel.high or 0
+
+	out.low = (not issecretvalue(low) and type(low) == "number") and low or 0
+	out.high = (not issecretvalue(high) and type(high) == "number") and high or 0
+	out.ltrigger = (not issecretvalue(ltrig) and type(ltrig) == "number") and ltrig or 0
+	out.rtrigger = (not issecretvalue(rtrig) and type(rtrig) == "number") and rtrig or 0
+	out.smoothedLow = (not issecretvalue(sLow) and type(sLow) == "number") and sLow or 0
+	out.smoothedHigh = (not issecretvalue(sHigh) and type(sHigh) == "number") and sHigh or 0
+	out.anyActive = (out.low > 0 or out.high > 0 or out.ltrigger > 0 or out.rtrigger > 0)
+	return out
+end
+
+--- Allocation-free count of active layers blending in the engine.
+function Engine:GetActiveLayerCount()
+	local now = (type(GetTime) == "function") and GetTime() or 0
+	local count = 0
+	for _, layer in pairs(layers) do
+		if layer.endTime and layer.endTime > now then
+			count = count + 1
+		end
+	end
+	return count
+end

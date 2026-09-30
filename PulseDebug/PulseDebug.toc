@@ -8,7 +8,9 @@
 ## X-Credits: Anthropic (Claude Code), Google DeepMind (Antigravity)
 
 Debug.lua
+Oscilloscope.lua
 
 # The window. Loaded after Debug.lua, but resolves its command through _G at call
 # time, so neither file depends on the other's load order.
 UI.lua
+
