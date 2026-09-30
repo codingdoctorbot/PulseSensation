@@ -1,5 +1,0 @@
-## Interface: 11504
-## Title: SwimHapticsTest
-## Notes: Test addon for modelling swimming haptic continuous cue.
-## Version: 1.0
-SwimHapticsTest.lua

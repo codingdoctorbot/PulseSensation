@@ -17,19 +17,6 @@
 dist/
 PulseChecklist/tests/locomotion-sim/
 
-# Internal development notes, reviews, proposals & archives
-docs/dev-notes/
-docs/ReviewsofReviews/
-docs/Archive/
-docs/Archive*.zip
-docs/PulseHaptics*.md
-docs/Fix Locomotion Proposed/
-docs/Ongoing Bugs/
-
-# Local WoW API reference, agent docs, and Blizzard source code (large files)
-docs/DevelopmentplusReference/
-docs/WoWAddonAPIAgents-main/
-docs/wow-addon-dev-main/
-docs/reference/
-docs/Reference/
+# Docs & internal development archives
+docs/
 
