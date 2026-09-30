@@ -2,7 +2,7 @@
 ## Title: PulseProbe |cff00ccff[Cue Lab]|r
 ## Notes: Telemetry probe, safety auditor, and sensory lab for experimental World of Warcraft Forever cues.
 ## Author: Pulse Team
-## Version: 0.1.0
+## Version: 0.3.0-beta
 ## SavedVariables: PulseProbeDB
 
 Core.lua
