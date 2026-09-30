@@ -171,6 +171,8 @@ read_globals = {
     "GetLootSlotType",
     "GetLootSlotLink",
     "GetInventoryAlertStatus",
+    "GetLootSlotInfo",
+    "INVENTORY_ALERT_STATUS_SLOTS",
     "GetTimePreciseSec",
     "debugprofilestop",
     "OpenAllMail",

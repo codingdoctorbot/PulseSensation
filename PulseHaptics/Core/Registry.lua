@@ -90,6 +90,31 @@ Registry.ALERT_CATEGORY_MASTER = {
 	CONTROLLER_UI = "controllerUIMaster",
 }
 
+-- Owner-aware arbitration (Core/Arbiter.lua). Data, not code, so cue-audit can check it.
+--
+-- OWNER RULE: a yielder stands down only while its episode is open AND at least one of the
+-- episode's owners is live (enabled, gated open, intensity > 0) in the active profile. A
+-- disabled owner never silences its yielders — the Default profile has merchantBuy off and
+-- bagItemAdded on, and its players must still feel a purchase.
+--
+-- NOT HERE: semantic exclusions, where the secondary cue is simply the wrong meaning (a
+-- sale is not "consuming" an item — Inventory.lua keeps that unconditional guard).
+Registry.EPISODES = {
+	vendor = {
+		owners = { "merchantBuy" },
+		yielders = { "bagItemAdded", "itemObtained" },
+	},
+	loot = {
+		-- Precedence: the first live cue here speaks for the whole loot window's items.
+		intake = { "itemObtained", "lootReceived", "bagItemAdded" },
+		-- Coins speak only for a coin-only window, or when no item cue is live.
+		coin = "lootGold",
+		-- The window opening: lootOpened owns it; harvestComplete (LOOT_READY) yields.
+		openOwner = "lootOpened",
+		openYielders = { "harvestComplete" },
+	},
+}
+
 Pulse.Triggers = {
 
 	-- ── Movement (alphafeatures.md G1, G3, G16) ────────────────────────────────
@@ -961,6 +986,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "lootGold",
+		bus = "intake",
+		busPriority = 2,
 		category = "WORLD",
 		mode = "TICK",
 		default = false,
@@ -969,6 +996,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "itemObtained",
+		bus = "intake",
+		busPriority = 2,
 		category = "WORLD",
 		mode = "CHIME",
 		default = false,
@@ -978,6 +1007,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "bagItemAdded",
+		bus = "intake",
+		busPriority = 1,
 		category = "WORLD",
 		mode = "TICK",
 		throttle = 0.2,
@@ -1008,6 +1039,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "harvestComplete",
+		bus = "intake",
+		busPriority = 1,
 		category = "WORLD",
 		mode = "CHIME",
 		throttle = 1.0,
@@ -1686,6 +1719,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "tradeRequest",
+		bus = "window",
+		busPriority = 3,
 		category = "ALERT_SOCIAL",
 		mode = "DOUBLE_TAP",
 		throttle = 1.0,
@@ -1790,6 +1825,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "lootOpened",
+		bus = "intake",
+		busPriority = 1,
 		category = "ALERT_WORLD",
 		mode = "TAP",
 		throttle = 0.5,
@@ -1823,6 +1860,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "lootReceived",
+		bus = "intake",
+		busPriority = 2,
 		category = "ALERT_WORLD",
 		mode = "TAP",
 		throttle = 0.5,
@@ -1835,6 +1874,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "merchantShow",
+		bus = "window",
+		busPriority = 3,
 		category = "ALERT_WORLD",
 		mode = "TAP",
 		throttle = 1.0,
@@ -1879,6 +1920,8 @@ Pulse.Triggers = {
 	-- Enum.PlayerInteractionType path. Both may fire; throttle = 1.0 means one is felt.
 	{
 		id = "guildBankOpened",
+		bus = "window",
+		busPriority = 3,
 		category = "ALERT_WORLD",
 		mode = "DOUBLE_TAP",
 		throttle = 1.0,
@@ -1891,6 +1934,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "auctionHouseShow",
+		bus = "window",
+		busPriority = 3,
 		category = "ALERT_WORLD",
 		mode = "CHIME",
 		throttle = 1.0,
@@ -1903,6 +1948,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "stableShow",
+		bus = "window",
+		busPriority = 3,
 		category = "ALERT_WORLD",
 		mode = "TAP",
 		throttle = 1.0,
@@ -1915,6 +1962,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "binderShow",
+		bus = "window",
+		busPriority = 3,
 		category = "ALERT_WORLD",
 		mode = "TAP",
 		throttle = 1.0,
@@ -1927,6 +1976,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "spiritHealerShow",
+		bus = "window",
+		busPriority = 3,
 		category = "ALERT_WORLD",
 		mode = "LONG",
 		throttle = 1.0,
@@ -1938,6 +1989,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "gossipShow",
+		bus = "window",
+		busPriority = 2,
 		category = "ALERT_WORLD",
 		mode = "TICK",
 		throttle = 1.0,
@@ -1962,6 +2015,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "interactionWindow",
+		bus = "window",
+		busPriority = 2,
 		category = "ALERT_WORLD",
 		mode = "TAP",
 		throttle = 1.0,
@@ -1973,6 +2028,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "interactionWindowClosed",
+		bus = "window",
+		busPriority = 1,
 		category = "ALERT_WORLD",
 		mode = "TICK",
 		throttle = 1.0,
@@ -1984,6 +2041,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "mailShow",
+		bus = "window",
+		busPriority = 3,
 		category = "ALERT_WORLD",
 		mode = "TAP",
 		throttle = 1.0,
@@ -1995,6 +2054,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "bankOpened",
+		bus = "window",
+		busPriority = 3,
 		category = "ALERT_WORLD",
 		mode = "TAP",
 		throttle = 1.0,
@@ -2006,6 +2067,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "bankClosed",
+		bus = "window",
+		busPriority = 2,
 		category = "ALERT_WORLD",
 		mode = "THUD",
 		throttle = 0.5,
@@ -2036,6 +2099,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "taxiOpened",
+		bus = "window",
+		busPriority = 3,
 		category = "ALERT_WORLD",
 		mode = "TAP",
 		throttle = 1.0,
@@ -2047,6 +2112,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "questDetail",
+		bus = "window",
+		busPriority = 3,
 		category = "ALERT_WORLD",
 		mode = "TAP",
 		throttle = 0.5,
@@ -2152,6 +2219,8 @@ Pulse.Triggers = {
 	-- any of them. All five are plain events, so none carries the radial taint risk.
 	{
 		id = "trainerShow",
+		bus = "window",
+		busPriority = 3,
 		category = "ALERT_WORLD",
 		mode = "TAP",
 		throttle = 1.0,
@@ -2165,6 +2234,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "tradeSkillShow",
+		bus = "window",
+		busPriority = 3,
 		category = "ALERT_WORLD",
 		mode = "TAP",
 		throttle = 1.0,
@@ -2742,6 +2813,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "panelOpen",
+		bus = "window",
+		busPriority = 1,
 		category = "CONTROLLER_UI",
 		mode = "TAP",
 		throttle = 0.2,
@@ -2753,6 +2826,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "panelClose",
+		bus = "window",
+		busPriority = 1,
 		category = "CONTROLLER_UI",
 		mode = "CLICK",
 		throttle = 0.2,

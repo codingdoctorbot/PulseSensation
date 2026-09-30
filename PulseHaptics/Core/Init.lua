@@ -49,31 +49,65 @@ local lastHoldLogTime = {}
 -- between two ticks.
 local HOLD_LOG_GAP = 0.5
 
+-- Every gate standing between a cue and the motor, other than the cue's own switch: its
+-- category master (ALERT_CATEGORY_MASTER) and, since Phase 2, its page gate (CUE_GATE).
+-- Non-destructive by construction: it reads the gates, it never writes the cue.
+function Pulse:GatesOpen(triggerID, trigger)
+	local registry = self.Registry
+	trigger = trigger or registry:GetTrigger(triggerID)
+	if not trigger then
+		return false
+	end
+	local catMaster = registry.ALERT_CATEGORY_MASTER and registry.ALERT_CATEGORY_MASTER[trigger.category]
+	if catMaster and catMaster ~= triggerID and not self.Database:GetCue(catMaster) then
+		return false
+	end
+	local gate = registry.CUE_GATE and registry.CUE_GATE[triggerID]
+	if gate and gate ~= triggerID and not self.Database:GetCue(gate) then
+		return false
+	end
+	return true
+end
+
 -- The shared path from "a trigger's condition happened" to "play its mode". Every
--- discrete (non-continuous) trigger ends here.
+-- discrete (non-continuous) trigger ends here. Returns true when the cue actually played,
+-- so an episode owner can tell "I spoke" from "I was switched off or throttled".
 function Pulse:FireIfEnabled(triggerID, intensityOverride)
 	if not self.Database:Get("masterEnabled") then
-		return
+		return false
 	end
 	if not self.Database:GetCue(triggerID) then
-		return
+		return false
 	end
 	local trigger = self.Registry:GetTrigger(triggerID)
 	if not trigger or not trigger.mode then
-		return
+		return false
+	end
+	if not self:GatesOpen(triggerID, trigger) then
+		return false
 	end
 
-	local catMaster = self.Registry.ALERT_CATEGORY_MASTER and self.Registry.ALERT_CATEGORY_MASTER[trigger.category]
-	if catMaster and catMaster ~= triggerID and not self.Database:GetCue(catMaster) then
-		return
-	end
-
+	-- Throttle is CHECKED here but only STAMPED once the bus has agreed, so a cue the bus
+	-- dropped does not also lose its next legitimate firing to its own throttle.
+	local now
 	if trigger.throttle and trigger.throttle > 0 then
-		local now = GetTime()
+		now = GetTime()
 		local last = lastFireTime[triggerID]
 		if last and (now - last) < trigger.throttle then
-			return
+			return false
 		end
+	end
+
+	local layerName = triggerID
+	if trigger.bus then
+		local ok, layer = self.Arbiter:ClaimBus(trigger.bus, trigger.busPriority, trigger.busWindow, triggerID)
+		if not ok then
+			return false
+		end
+		layerName = layer
+	end
+
+	if now then
 		lastFireTime[triggerID] = now
 	end
 
@@ -86,7 +120,8 @@ function Pulse:FireIfEnabled(triggerID, intensityOverride)
 	if self.debug then
 		print(("Pulse: %s fired -> %s (intensity %.2f)"):format(trigger.label or triggerID, modeID, scale))
 	end
-	self.Engine:PlayMode(triggerID, modeID, scale, intensityOverride)
+	self.Engine:PlayMode(layerName, modeID, scale, intensityOverride)
+	return true
 end
 
 -- Continuous triggers skip the mode-shape scheduler and go straight to the engine's
@@ -107,8 +142,7 @@ function Pulse:HoldIfEnabled(triggerID, low, high, duration, isTransient, shape)
 		return
 	end
 
-	local catMaster = self.Registry.ALERT_CATEGORY_MASTER and self.Registry.ALERT_CATEGORY_MASTER[trigger.category]
-	if catMaster and catMaster ~= triggerID and not self.Database:GetCue(catMaster) then
+	if not self:GatesOpen(triggerID, trigger) then
 		return
 	end
 	local scale = self.Database:GetTriggerSetting(triggerID, "intensity", 1.0)
@@ -149,8 +183,7 @@ function Pulse:HoldRolesIfEnabled(triggerID, roles, duration, isTransient, shape
 	if not trigger then
 		return
 	end
-	local catMaster = self.Registry.ALERT_CATEGORY_MASTER and self.Registry.ALERT_CATEGORY_MASTER[trigger.category]
-	if catMaster and catMaster ~= triggerID and not self.Database:GetCue(catMaster) then
+	if not self:GatesOpen(triggerID, trigger) then
 		return
 	end
 	local scale = self.Database:GetTriggerSetting(triggerID, "intensity", 1.0)

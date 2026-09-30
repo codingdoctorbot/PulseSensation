@@ -117,6 +117,7 @@ local MODULE_FILES = {
 	"Modules/ControllerUI.lua",
 	"Core/CastActivity.lua",
 	"Core/Registry.lua",
+	"Core/Arbiter.lua",
 }
 
 local ROOT = arg[1] or "PulseHaptics"

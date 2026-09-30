@@ -22,6 +22,7 @@ SUITES=(
   "locomotion-test PulseHaptics"
   "crafting-test PulseHaptics"
   "engine-test PulseHaptics"
+  "arbitration-test PulseHaptics"
   "cue-audit PulseHaptics"
   "pulsedebug-test PulseDebug"
   "checklist-test PulseChecklist"

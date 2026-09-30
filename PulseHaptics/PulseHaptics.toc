@@ -53,6 +53,7 @@ Core/Engine.lua
 Core/CastActivity.lua
 
 Core/Registry.lua
+Core/Arbiter.lua
 Core/Guide.lua
 Modules/Movement.lua
 Modules/Flight.lua

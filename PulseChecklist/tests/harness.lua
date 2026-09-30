@@ -556,6 +556,7 @@ local FILES = {
 	"Core/Engine.lua",
 	"Core/CastActivity.lua",
 	"Core/Registry.lua",
+	"Core/Arbiter.lua",
 	"Core/Guide.lua",
 	"Modules/Crafting.lua",
 	"Modules/Interaction.lua",

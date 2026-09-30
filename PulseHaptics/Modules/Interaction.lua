@@ -109,18 +109,108 @@ local inMerchant = false
 local inBank = false
 local lastMerchantMoney = 0
 local lastBankMoney = 0
-local wasRepair = false
+
+-- Repair recognition (replaces the old `wasRepair` latch, which could swallow the next buy
+-- or sell after a guild-funded repair, a durability update from equipping at a vendor, or
+-- money arriving before durability). Every flag here expires; none can outlive its window.
+local REPAIR_WINDOW = 2.0 -- [measure, §11] RepairAllItems() call -> server confirmation
+local DEBIT_WINDOW = 1.0 -- [measure, §11] durability confirmation -> PLAYER_MONEY
+local knownRepairCost = 0 -- GetRepairAllCost(), refreshed at open and on every durability update
+local armedUntil = 0 -- set by the RepairAllItems post-hook
+local armedGuild = false
+local armedCost = 0
+local debitCost = 0 -- copper a personal repair will take; -1 = unknown (cursor repair)
+local debitUntil = 0
+local repairFiredAt = -100
+
+-- One-frame deferred close (window bus, Core/Arbiter.lua): a close is dropped when an
+-- interaction SHOW arrives before the deferred close runs.
+local showSerial = 0
+local pendingCloseSerial = -1
+local pendingBankClose = false
+
+local function readRepairCost()
+	if type(GetRepairAllCost) ~= "function" then
+		return 0
+	end
+	local cost = GetRepairAllCost()
+	if issecretvalue(cost) or type(cost) ~= "number" or cost < 0 then
+		return 0
+	end
+	return cost
+end
+
+local function resetRepair()
+	armedUntil, armedGuild, armedCost = 0, false, 0
+	debitCost, debitUntil = 0, 0
+end
+
+local function fireRepairOnce(now)
+	if (now - repairFiredAt) < DEBIT_WINDOW then
+		return
+	end
+	repairFiredAt = now
+	Pulse:FireIfEnabled("merchantRepair")
+end
+
+-- hooksecurefunc post-hook: runs after RepairAllItems has sent its request, catches every
+-- caller (Blizzard's button, auto-repair addons), taints nothing. `useGuildFunds` is the
+-- argument Blizzard's guild-repair button passes (Vanilla/MerchantFrame.xml:318).
+local function onRepairAllItems(useGuildFunds)
+	if not inMerchant then
+		return
+	end
+	local cost = knownRepairCost > 0 and knownRepairCost or readRepairCost()
+	if cost <= 0 then
+		return
+	end
+	armedUntil = GetTime() + REPAIR_WINDOW
+	armedGuild = (useGuildFunds == true)
+	armedCost = cost
+end
+
+local function flushDeferredClose()
+	if pendingCloseSerial < 0 then
+		return
+	end
+	local transition = (showSerial ~= pendingCloseSerial)
+	local bank = pendingBankClose
+	pendingCloseSerial, pendingBankClose = -1, false
+	if transition then
+		return -- a window opened before this frame ended: the close was part of a chain
+	end
+	if bank then
+		Pulse:FireIfEnabled("bankClosed")
+	end
+	Pulse:FireIfEnabled(CLOSED_CUE)
+end
+
+local function deferClose(isBank)
+	if pendingCloseSerial < 0 then
+		pendingCloseSerial = showSerial
+		C_Timer.After(0, flushDeferredClose) -- static function: no closure per close
+	end
+	if isBank then
+		pendingBankClose = true
+	end
+end
+
+local function openMerchant()
+	inMerchant = true
+	local money = (GetMoney and GetMoney()) or 0
+	lastMerchantMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
+	knownRepairCost = readRepairCost()
+	resetRepair()
+end
 
 local function onShow(interaction)
 	if type(interaction) ~= "number" then
 		return
 	end
 
+	showSerial = showSerial + 1
 	if interaction == 5 or interaction == 12 then
-		inMerchant = true
-		local money = (GetMoney and GetMoney()) or 0
-		lastMerchantMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
-		wasRepair = false
+		openMerchant()
 	elseif BANK_INTERACTIONS[interaction] then
 		inBank = true
 		local money = (GetMoney and GetMoney()) or 0
@@ -147,17 +237,18 @@ local function onHide(interaction)
 		print(("Pulse: interaction window %d closed"):format(interaction))
 	end
 
+	local isBank = false
 	if type(interaction) == "number" then
 		if interaction == 5 or interaction == 12 then
 			inMerchant = false
-			wasRepair = false
+			resetRepair()
 		elseif BANK_INTERACTIONS[interaction] then
 			inBank = false
-			Pulse:FireIfEnabled("bankClosed")
+			isBank = true
 		end
 	end
 
-	Pulse:FireIfEnabled(CLOSED_CUE)
+	deferClose(isBank)
 end
 
 frame:SetScript("OnEvent", function(_, event, arg1)
@@ -166,17 +257,29 @@ frame:SetScript("OnEvent", function(_, event, arg1)
 	elseif event == "PLAYER_INTERACTION_MANAGER_FRAME_HIDE" then
 		onHide(arg1)
 	elseif event == "MERCHANT_SHOW" then
-		inMerchant = true
-		local money = (GetMoney and GetMoney()) or 0
-		lastMerchantMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
-		wasRepair = false
+		showSerial = showSerial + 1
+		openMerchant()
 	elseif event == "MERCHANT_CLOSED" then
 		inMerchant = false
-		wasRepair = false
+		resetRepair()
 	elseif event == "UPDATE_INVENTORY_DURABILITY" then
 		if inMerchant then
-			wasRepair = true
-			Pulse:FireIfEnabled("merchantRepair")
+			local now = GetTime()
+			local armed = now < armedUntil
+			local cursor = (type(InRepairMode) == "function") and InRepairMode() and true or false
+			if armed or cursor then
+				-- Confirmed repair. Equipping gear at a vendor also sends this event, but
+				-- without an armed RepairAllItems call or the repair cursor it is ignored:
+				-- nothing fires and nothing latches.
+				fireRepairOnce(now)
+				if armed and not armedGuild then
+					debitCost, debitUntil = armedCost, now + DEBIT_WINDOW
+				elseif cursor then
+					debitCost, debitUntil = -1, now + DEBIT_WINDOW
+				end
+				armedUntil = 0
+			end
+			knownRepairCost = readRepairCost()
 		end
 	elseif event == "PLAYER_MONEY" then
 		if inMerchant then
@@ -184,8 +287,13 @@ frame:SetScript("OnEvent", function(_, event, arg1)
 			if not issecretvalue(current) and type(current) == "number" then
 				local delta = current - lastMerchantMoney
 				lastMerchantMoney = current
-				if wasRepair then
-					wasRepair = false
+				local now = GetTime()
+				if delta < 0 and now < debitUntil and (debitCost < 0 or -delta == debitCost) then
+					debitCost, debitUntil = 0, 0 -- the repair's own payment, already felt
+				elseif delta < 0 and now < armedUntil and not armedGuild and -delta == armedCost then
+					-- Money beat the durability update: this IS the repair.
+					fireRepairOnce(now)
+					armedUntil = 0
 				elseif delta > 0 then
 					Pulse:FireIfEnabled("merchantSell")
 				elseif delta < 0 then
@@ -203,12 +311,13 @@ frame:SetScript("OnEvent", function(_, event, arg1)
 			end
 		end
 	elseif event == "BANKFRAME_OPENED" or event == "GUILDBANKFRAME_OPENED" then
+		showSerial = showSerial + 1
 		inBank = true
 		local money = (GetMoney and GetMoney()) or 0
 		lastBankMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
 	elseif event == "BANKFRAME_CLOSED" or event == "GUILDBANKFRAME_CLOSED" then
 		inBank = false
-		Pulse:FireIfEnabled("bankClosed")
+		deferClose(true)
 	elseif event == "GUILDBANK_UPDATE_MONEY" then
 		Pulse:FireIfEnabled("bankGold")
 	end
@@ -218,7 +327,7 @@ local function sync()
 	frame:UnregisterAllEvents()
 	inMerchant = false
 	inBank = false
-	wasRepair = false
+	resetRepair()
 	if not Pulse.Database:Get("masterEnabled") then
 		return
 	end
@@ -265,6 +374,9 @@ end
 
 function M:OnEnable()
 	Pulse:BindFrame(WATCHED, sync)
+	if type(RepairAllItems) == "function" then
+		hooksecurefunc("RepairAllItems", onRepairAllItems)
+	end
 	if StackSplitFrame and type(StackSplitFrame.UpdateStackText) == "function" then
 		hooksecurefunc(StackSplitFrame, "UpdateStackText", function()
 			Pulse:FireIfEnabled("stackSplit")
@@ -283,6 +395,8 @@ function M:_DebugInteraction()
 		watchedCues = #WATCHED,
 		inMerchant = inMerchant,
 		inBank = inBank,
-		wasRepair = wasRepair,
+		repairArmed = GetTime() < armedUntil,
+		repairDebitPending = GetTime() < debitUntil,
+		pendingClose = pendingCloseSerial >= 0,
 	}
 end

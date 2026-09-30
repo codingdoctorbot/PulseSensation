@@ -11,7 +11,8 @@ local ADDON_NAME, Pulse = ...
 local M = {}
 Pulse:RegisterModule("AlertWorld", M)
 
-local CUSTOM = { afkToggle = true }
+-- lootReceived is watched by Modules/World.lua's loot episode (own loot only, Core/Arbiter.lua).
+local CUSTOM = { afkToggle = true, lootReceived = true }
 local wasFlagged = false
 
 local function currentFlagged()
