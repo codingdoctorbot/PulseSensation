@@ -247,6 +247,7 @@ Pulse.DEVICE_ORDER = {
 	"steamdeck",
 	"steamcontroller2",
 	"steamcontroller",
+	"lra_classic",
 }
 
 Pulse.Devices = {
@@ -356,6 +357,31 @@ Pulse.Devices = {
 		channels = {
 			Low = copy(LRA, { floor = 0.060, gain = 1.10, attackTau = 0.040, releaseTau = 0.030 }),
 			High = copy(LRA, { floor = 0.040, gain = 1.00, attackTau = 0.020, releaseTau = 0.020 }),
+		},
+	},
+
+	lra_classic = {
+		id = "lra_classic",
+		label = "LRA (Classic ERM Emulation)",
+		triggers = false,
+		note = "Synthesizes rotating-mass inertia, stiction breakaway, and coast-down rumble on voice-coil / HD Rumble pads (DualSense, Switch Pro, Steam Deck). Provides a warmer, blunt rumble without sharp casing clicks.",
+		channels = {
+			Low = copy(ERM_LOW, {
+				floor = 0.065,
+				gain = 1.20,
+				attackTau = 0.075,
+				transientAttackTau = 0.025,
+				releaseTau = 0.045,
+				gamma = 0.88,
+			}),
+			High = copy(ERM_HIGH, {
+				floor = 0.050,
+				gain = 1.10,
+				attackTau = 0.040,
+				transientAttackTau = 0.012,
+				releaseTau = 0.028,
+				gamma = 0.88,
+			}),
 		},
 	},
 }

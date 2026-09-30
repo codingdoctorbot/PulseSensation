@@ -294,6 +294,12 @@ check("steamdeck low floor", Pulse.Devices.steamdeck.channels.Low.floor, 0.045)
 check("steamcontroller2 low floor", Pulse.Devices.steamcontroller2.channels.Low.floor, 0.035)
 check("steamcontroller low floor", Pulse.Devices.steamcontroller.channels.Low.floor, 0.060)
 
+check("lra_classic preset registered", type(Pulse.Devices.lra_classic), "table")
+check("lra_classic low floor", Pulse.Devices.lra_classic.channels.Low.floor, 0.065)
+check("lra_classic low gain", Pulse.Devices.lra_classic.channels.Low.gain, 1.20)
+check("lra_classic low attackTau", Pulse.Devices.lra_classic.channels.Low.attackTau, 0.075)
+check("lra_classic high floor", Pulse.Devices.lra_classic.channels.High.floor, 0.050)
+
 check("dualsense triggers disabled", Pulse.Devices.dualsense.triggers, false)
 check("dualsense low gain", Pulse.Devices.dualsense.channels.Low.gain, 1.15)
 check("dualsense low floor", Pulse.Devices.dualsense.channels.Low.floor, 0.025)
