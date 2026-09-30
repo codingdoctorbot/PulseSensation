@@ -220,6 +220,10 @@ globals = {
     "PulseDebugUI",
     "PulseProbe",
     "PulseProbeDB",
+    "PulseBridge",
+    "PulseBridgeDB",
+    "PulseStudio",
+    "PulseStudioDB",
     "SlashCmdList",
     "SLASH_PULSE1",
     "SLASH_PULSEUI1",
@@ -231,6 +235,10 @@ globals = {
     "SLASH_PULSEDEBUGUI1",
     "SLASH_PULSEPROBE1",
     "SLASH_PULSEPROBE2",
+    "SLASH_PULSEBRIDGE1",
+    "SLASH_PULSEBRIDGE2",
+    "SLASH_PULSESTUDIO1",
+    "SLASH_PULSESTUDIO2",
 }
 
 exclude_files = {

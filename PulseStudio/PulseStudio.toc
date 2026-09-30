@@ -1,0 +1,12 @@
+## Interface: 120100, 110200, 110100
+## Title: PulseStudio |cffffaa00[Waveform Sequencer]|r
+## Notes: Visual multi-track haptic timeline and waveform synthesizer for PulseHaptics.
+## Author: Pulse Team
+## Version: 0.3.0-beta
+## Dependencies: PulseHaptics
+## SavedVariables: PulseStudioDB
+## IconTexture: Interface\Icons\Trade_Engineering
+
+Core.lua
+Sequencer.lua
+UI.lua

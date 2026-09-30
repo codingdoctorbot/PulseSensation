@@ -1,0 +1,14 @@
+## Interface: 120100, 110200, 110100
+## Title: PulseBridge |cff00ffcc[WeakAuras & BossMod Hook]|r
+## Notes: Direct haptic dispatcher connecting WeakAuras, BigWigs, DBM, and custom macros to PulseHaptics without taint.
+## Author: Pulse Team
+## Version: 0.3.0-beta
+## Dependencies: PulseHaptics
+## OptionalDeps: WeakAuras, BigWigs, DBM-Core
+## SavedVariables: PulseBridgeDB
+## IconTexture: Interface\Icons\Spell_Nature_Invisibilty
+
+Core.lua
+WeakAuras.lua
+BossMods.lua
+UI.lua
