@@ -22,12 +22,12 @@ conclusions still hold when those assumptions change.
 | # | File | Contents | Status |
 |---|---|---|---|
 | 1 | [01-pipeline.md](01-pipeline.md) | The engine's signal chain exactly as the code implements it, with line references | ✅ done |
-| 2 | [02-actuator-models.md](02-actuator-models.md) | ERM and LRA physical models, parameters and assumptions | ⏳ next |
-| 3 | [03-static-transfer.md](03-static-transfer.md) | Each profile's input→command curve: floor, gamma, gain, clipping, dead zones | ⏳ |
+| 2 | [02-actuator-models.md](02-actuator-models.md) | ERM and LRA physical models, parameters and assumptions | ✅ done |
+| 3 | [03-static-transfer.md](03-static-transfer.md) | Each profile's input→command curve: floor, gamma, gain, clipping, dead zones | ⏳ next |
 | 4 | [04-erm-dynamics.md](04-erm-dynamics.md) | Selected modes simulated on ERM hardware, per profile | ⏳ |
 | 5 | [05-lra-dynamics.md](05-lra-dynamics.md) | Selected modes simulated on LRA hardware, per profile | ⏳ |
 | 6 | [06-findings.md](06-findings.md) | Negative effects, ranked, with suggested tuning directions | ⏳ |
-| — | [model.py](model.py) | The simulator that produces every table (plain Python 3, no dependencies) | ⏳ |
+| — | [model.py](model.py) | The simulator that produces every table (plain Python 3, no dependencies) | ✅ engine + actuators |
 
 ## Modes selected
 
@@ -57,3 +57,7 @@ vocabulary (lightest, heaviest, fastest rhythm, continuous):
 ## Progress log
 
 - **Step 1:** folder, plan and signal-chain document (`01-pipeline.md`).
+- **Step 2:** simulator (`model.py`) and actuator models (`02-actuator-models.md`). First run:
+  observation O2 (overdrive on a rhythm's later pulses depends on intensity) is real but small.
+  The second tap comes out 0.3–0.9 dB stronger, mostly because the motor is still spinning from
+  the first.
