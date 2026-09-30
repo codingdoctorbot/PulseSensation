@@ -1,0 +1,3400 @@
+diff --git a/.luacheckrc b/.luacheckrc
+index f510122..55956fa 100644
+--- a/.luacheckrc
++++ b/.luacheckrc
+@@ -171,6 +171,14 @@ read_globals = {
+     "GetLootSlotType",
+     "GetLootSlotLink",
+     "GetInventoryAlertStatus",
++    "GetLootSlotInfo",
++    "INVENTORY_ALERT_STATUS_SLOTS",
++    "GetTimePreciseSec",
++    "debugprofilestop",
++    "OpenAllMail",
++    "GetRepairAllCost",
++    "InRepairMode",
++    "RepairAllItems",
+     "GetPetHappiness",
+     "UnitIsDead",
+     "ChatFontNormal",
+diff --git a/PulseChecklist/tests/arbitration-test.lua b/PulseChecklist/tests/arbitration-test.lua
+new file mode 100644
+index 0000000..ff990b4
+--- /dev/null
++++ b/PulseChecklist/tests/arbitration-test.lua
+@@ -0,0 +1,495 @@
++-- PulseChecklist/tests/arbitration-test.lua
++--
++-- Phase 1 arbitration: owner-aware vendor guard, loot episode, repair recognition,
++-- durability worsening edge, window bus and deferred close. Drives the REAL Core/Init.lua
++-- FireIfEnabled, Core/Registry.lua, Core/Arbiter.lua and the three modules through stubbed
++-- events; only the Database and the Engine are fakes.
++
++local ROOT = arg[1] or "PulseHaptics"
++
++-- ── Stubs ─────────────────────────────────────────────────────────────────────
++
++local now = 1000
++function GetTime()
++	return now
++end
++
++local timers = {}
++C_Timer = {
++	After = function(delay, fn)
++		timers[#timers + 1] = { at = now + delay, fn = fn }
++	end,
++}
++local function nextFrame(dt)
++	now = now + (dt or 0.016)
++	local due = timers
++	timers = {}
++	for _, t in ipairs(due) do
++		if t.at <= now then
++			t.fn()
++		else
++			timers[#timers + 1] = t
++		end
++	end
++end
++
++function wipe(t)
++	for k in pairs(t) do
++		t[k] = nil
++	end
++	return t
++end
++function print() end
++
++local frames = {}
++function CreateFrame()
++	local f = { events = {}, scripts = {} }
++	function f:RegisterEvent(e)
++		self.events[e] = true
++	end
++	function f:RegisterUnitEvent(e)
++		self.events[e] = true
++	end
++	function f:UnregisterAllEvents()
++		wipe(self.events)
++	end
++	function f:SetScript(name, fn)
++		self.scripts[name] = fn
++	end
++	function f:GetScript(name)
++		return self.scripts[name]
++	end
++	frames[#frames + 1] = f
++	return f
++end
++local function fire(event, ...)
++	for _, f in ipairs(frames) do
++		if f.events[event] and f.scripts.OnEvent then
++			f.scripts.OnEvent(f, event, ...)
++		end
++	end
++end
++
++function hooksecurefunc(a, b, c)
++	if type(a) == "string" then
++		local orig = _G[a]
++		_G[a] = function(...)
++			orig(...)
++			b(...)
++		end
++	else
++		local orig = a[b]
++		a[b] = function(...)
++			orig(...)
++			c(...)
++		end
++	end
++end
++
++-- Game state the tests move.
++local freeSlots, merchantOpen, money, repairCost, repairMode = 20, false, 100000, 0, false
++local alertStatus = {}
++local lootSlots = {} -- { quality, locked, isQuest, isCoin }
++C_Container = {
++	CalculateTotalNumberOfFreeBagSlots = function()
++		return freeSlots
++	end,
++}
++C_PlayerInteractionManager = {
++	IsInteractingWithNpcOfType = function(kind)
++		return merchantOpen and (kind == 5 or kind == 12)
++	end,
++}
++function GetMoney()
++	return money
++end
++function GetRepairAllCost()
++	return repairCost, repairCost > 0
++end
++function InRepairMode()
++	return repairMode
++end
++function RepairAllItems() end
++function GetInventoryAlertStatus(i)
++	return alertStatus[i] or 0
++end
++function GetNumLootItems()
++	return #lootSlots
++end
++function GetLootSlotInfo(slot)
++	local s = lootSlots[slot]
++	return nil, nil, 1, nil, s.quality, s.locked, s.isQuest, nil, nil, s.isCoin
++end
++function UnitGUID()
++	return "Player-1"
++end
++function UnitName()
++	return "Tester"
++end
++
++-- ── Fakes: Database and Engine ────────────────────────────────────────────────
++
++local cues = {}
++local syncs = {} -- every BindFrame sync, called on a profile change like the real notifier
++local Pulse = { debug = false }
++Pulse.Database = {
++	Get = function(_, key)
++		if key == "masterEnabled" then
++			return true
++		end
++		return nil
++	end,
++	GetCue = function(_, id)
++		return cues[id] and true or false
++	end,
++	GetTriggerSetting = function(_, _, _, default)
++		return default
++	end,
++	GetTriggerMode = function()
++		return nil
++	end,
++	OnCueChanged = function(_, _, cb)
++		syncs[cb] = true
++	end,
++	OnGlobalChanged = function(_, _, cb)
++		syncs[cb] = true
++	end,
++}
++local plays = {}
++Pulse.Engine = {
++	PlayMode = function(_, layer, modeID, scale, override)
++		plays[#plays + 1] = { layer = layer, mode = modeID, override = override }
++	end,
++}
++
++for _, file in ipairs({ "Core/Init.lua", "Core/Registry.lua", "Core/Arbiter.lua" }) do
++	assert(loadfile(ROOT .. "/" .. file))("Pulse", Pulse)
++end
++
++-- Record what actually played, through the real FireIfEnabled.
++local fired = {}
++local realFire = Pulse.FireIfEnabled
++Pulse.FireIfEnabled = function(self, id, override)
++	local played = realFire(self, id, override)
++	if played then
++		fired[#fired + 1] = { id = id, override = override }
++	end
++	return played
++end
++
++for _, file in ipairs({ "Modules/Inventory.lua", "Modules/World.lua", "Modules/Interaction.lua" }) do
++	assert(loadfile(ROOT .. "/" .. file))("Pulse", Pulse)
++end
++
++for _, name in ipairs({ "Inventory", "World", "Interaction" }) do
++	Pulse.modules[name]:OnEnable()
++end
++
++local function setProfile(list)
++	wipe(cues)
++	-- Page switches default ON in every profile (Database:_SeedProfileTriggerDefaults).
++	for _, trigger in ipairs(Pulse.Triggers) do
++		if trigger.gate then
++			cues[trigger.id] = true
++		end
++	end
++	for _, id in ipairs(list) do
++		cues[id] = true
++	end
++	for cb in pairs(syncs) do
++		cb()
++	end
++end
++
++local function count(id)
++	local n = 0
++	for _, f in ipairs(fired) do
++		if f.id == id then
++			n = n + 1
++		end
++	end
++	return n
++end
++local function reset()
++	wipe(fired)
++	wipe(plays)
++	now = now + 5 -- clear every throttle and bus window
++end
++
++local failures = 0
++local function check(label, got, want)
++	local ok = (got == want)
++	if not ok then
++		failures = failures + 1
++	end
++	io.write(("%-68s %-6s %s\n"):format(label, tostring(got), ok and "ok" or ("FAIL want " .. tostring(want))))
++end
++
++-- Every scenario starts from 20 free slots, baselined by the modules' own sync.
++local function fresh(list)
++	merchantOpen, repairMode, freeSlots = false, false, 20
++	setProfile(list)
++	reset()
++end
++
++-- ── Vendor ────────────────────────────────────────────────────────────────────
++
++fresh({ "bagItemAdded" }) -- Default profile shape: merchantBuy OFF
++merchantOpen = true
++fire("PLAYER_INTERACTION_MANAGER_FRAME_SHOW", 5)
++freeSlots = 19
++fire("BAG_UPDATE_DELAYED")
++check("V1 Default: purchase still felt through bagItemAdded", count("bagItemAdded"), 1)
++
++fresh({ "bagItemAdded", "merchantBuy" }) -- Immersion shape
++merchantOpen = true
++fire("PLAYER_INTERACTION_MANAGER_FRAME_SHOW", 5)
++fire("MERCHANT_SHOW")
++freeSlots = 19
++fire("BAG_UPDATE_DELAYED") -- bag BEFORE money: order must not matter
++money = money - 100
++fire("PLAYER_MONEY")
++check("V2 owner live: bagItemAdded yields", count("bagItemAdded"), 0)
++check("V2 owner live: merchantBuy plays once", count("merchantBuy"), 1)
++
++reset()
++merchantOpen = false
++fire("PLAYER_INTERACTION_MANAGER_FRAME_HIDE", 5)
++freeSlots = 18
++fire("BAG_UPDATE_DELAYED")
++check("V3 no vendor (bank withdrawal): bagItemAdded plays", count("bagItemAdded"), 1)
++
++-- ── Loot ──────────────────────────────────────────────────────────────────────
++
++fresh({ "itemObtained", "bagItemAdded", "lootReceived", "lootGold", "lootOpened" })
++lootSlots = { { quality = 2 }, { quality = 1 } }
++fire("LOOT_READY", true)
++fire("LOOT_OPENED", true, false)
++fire("LOOT_SLOT_CLEARED", 1)
++fire("ITEM_PUSH", 1, 0)
++fire("CHAT_MSG_LOOT", "You receive loot", "Tester", "", "", "", "", 0, 0, "", 0, 1, "Player-1")
++fire("LOOT_SLOT_CLEARED", 2)
++fire("ITEM_PUSH", 1, 0)
++freeSlots = 18
++fire("BAG_UPDATE_DELAYED")
++fire("LOOT_CLOSED")
++check("L1 autoloot: itemObtained speaks exactly once", count("itemObtained"), 1)
++check("L1   at the best quality's gain (Uncommon 1.00)", fired[1] and fired[1].override, 1.0)
++check("L1   bagItemAdded stands down", count("bagItemAdded"), 0)
++check("L1   lootReceived stands down", count("lootReceived"), 0)
++nextFrame(0.1)
++freeSlots = 17
++fire("BAG_UPDATE_DELAYED")
++check("L1   a bag settle inside the tail still stands down", count("bagItemAdded"), 0)
++nextFrame(0.5)
++freeSlots = 16
++fire("BAG_UPDATE_DELAYED")
++check("L1   after the tail, bag cues are back to normal", count("bagItemAdded"), 1)
++
++fresh({ "bagItemAdded" }) -- Default: the only intake cue becomes the speaker
++lootSlots = { { quality = 3 }, { quality = 1 } }
++fire("LOOT_READY", true)
++fire("LOOT_OPENED", true, false)
++freeSlots = 19
++fire("BAG_UPDATE_DELAYED")
++now = now + 0.25 -- past bagItemAdded's own 0.2 s throttle, so only the episode can merge these
++freeSlots = 18
++fire("BAG_UPDATE_DELAYED")
++fire("LOOT_CLOSED")
++check("L2 Default autoloot: one bagItemAdded per corpse", count("bagItemAdded"), 1)
++
++fresh({ "itemObtained", "lootGold" })
++lootSlots = { { quality = 0, isCoin = true }, { quality = 2 }, { quality = 1, isQuest = true } }
++fire("LOOT_READY", false)
++fire("LOOT_OPENED", false, false)
++fire("LOOT_SLOT_CLEARED", 1)
++fire("CHAT_MSG_MONEY", "You loot 5 Copper")
++fire("LOOT_SLOT_CLEARED", 2)
++fire("ITEM_PUSH", 1, 0)
++now = now + 0.4
++fire("LOOT_SLOT_CLEARED", 3)
++fire("ITEM_PUSH", 1, 0)
++fire("LOOT_CLOSED")
++check("L3 manual: coin click -> lootGold once", count("lootGold"), 1)
++check("L3 manual: one itemObtained per item click", count("itemObtained"), 2)
++check("L3   quest item gets the quest gain (1.15)", fired[#fired] and fired[#fired].override, 1.15)
++
++fresh({ "itemObtained" })
++lootSlots = { { quality = 2 }, { quality = 2 } }
++fire("LOOT_OPENED", false, false) -- a client that never sends LOOT_SLOT_CLEARED
++fire("ITEM_PUSH", 1, 0)
++now = now + 0.4
++fire("ITEM_PUSH", 1, 0)
++fire("LOOT_CLOSED")
++check("L4 manual without LOOT_SLOT_CLEARED: never silent", count("itemObtained"), 2)
++
++fresh({ "lootReceived" })
++fire("CHAT_MSG_LOOT", "Someone receives loot", "Other", "", "", "", "", 0, 0, "", 0, 1, "Player-2")
++check("L5 another player's loot: silent", count("lootReceived"), 0)
++fire("CHAT_MSG_LOOT", "You receive loot", "Tester", "", "", "", "", 0, 0, "", 0, 2, "Player-1")
++check("L5 own loot outside a loot window: plays", count("lootReceived"), 1)
++
++fresh({ "itemObtained" })
++lootSlots = { { quality = 4, locked = true }, { quality = 1 } }
++fire("LOOT_OPENED", false, false)
++fire("LOOT_SLOT_CLEARED", 1)
++check("L6 roll (locked) slot cleared: silent", count("itemObtained"), 0)
++fire("LOOT_CLOSED")
++
++-- ── Repair ────────────────────────────────────────────────────────────────────
++
++local function openVendor()
++	merchantOpen = true
++	fire("MERCHANT_SHOW")
++end
++
++fresh({ "merchantBuy", "merchantSell", "merchantRepair" })
++repairCost = 500
++openVendor()
++RepairAllItems()
++fire("UPDATE_INVENTORY_DURABILITY")
++repairCost = 0
++money = money - 500
++fire("PLAYER_MONEY")
++check("R1 personal repair: merchantRepair once", count("merchantRepair"), 1)
++check("R1   its payment is not a purchase", count("merchantBuy"), 0)
++now = now + 0.3
++money = money - 100
++fire("PLAYER_MONEY")
++check("R1   the next real purchase is felt", count("merchantBuy"), 1)
++
++fresh({ "merchantBuy", "merchantSell", "merchantRepair" })
++repairCost = 500
++openVendor()
++RepairAllItems()
++money = money - 500
++fire("PLAYER_MONEY") -- money before durability
++fire("UPDATE_INVENTORY_DURABILITY")
++check("R2 money first: merchantRepair once, not twice", count("merchantRepair"), 1)
++check("R2   and not a purchase", count("merchantBuy"), 0)
++now = now + 0.3
++money = money - 100
++fire("PLAYER_MONEY")
++check("R2   next purchase felt", count("merchantBuy"), 1)
++
++fresh({ "merchantBuy", "merchantSell", "merchantRepair" })
++repairCost = 500
++openVendor()
++RepairAllItems(true) -- guild funds: personal money never moves
++fire("UPDATE_INVENTORY_DURABILITY")
++check("R3 guild repair: merchantRepair once", count("merchantRepair"), 1)
++now = now + 0.3
++money = money + 50
++fire("PLAYER_MONEY")
++check("R3   the next sale is NOT swallowed", count("merchantSell"), 1)
++
++fresh({ "merchantBuy", "merchantSell", "merchantRepair" })
++repairCost = 500
++openVendor()
++fire("UPDATE_INVENTORY_DURABILITY") -- equipping gear at the vendor
++check("R4 durability update without a repair: silent", count("merchantRepair"), 0)
++money = money - 100
++fire("PLAYER_MONEY")
++check("R4   next purchase felt", count("merchantBuy"), 1)
++
++fresh({ "merchantBuy", "merchantSell", "merchantRepair" })
++repairCost = 500
++openVendor()
++RepairAllItems() -- request never confirmed (not enough money)
++now = now + 3
++money = money - 500 -- same amount, long after the window
++fire("PLAYER_MONEY")
++check("R5 expired arm cannot swallow a later purchase", count("merchantBuy"), 1)
++
++fresh({ "merchantBuy", "merchantSell", "merchantRepair" })
++repairCost = 500
++openVendor()
++repairMode = true -- single-item repair cursor
++fire("UPDATE_INVENTORY_DURABILITY")
++money = money - 120
++fire("PLAYER_MONEY")
++repairMode = false
++check(
++	"R6 cursor repair: merchantRepair once, payment absorbed",
++	count("merchantRepair") == 1 and count("merchantBuy") == 0,
++	true
++)
++
++-- ── Durability ────────────────────────────────────────────────────────────────
++
++fresh({ "durabilityLow" })
++wipe(alertStatus)
++fire("PLAYER_ENTERING_WORLD")
++alertStatus[5] = 1
++fire("UPDATE_INVENTORY_ALERTS")
++check("D1 none -> yellow fires", count("durabilityLow"), 1)
++fire("UPDATE_INVENTORY_ALERTS")
++check("D1 yellow -> yellow is silent", count("durabilityLow"), 1)
++alertStatus[5] = 0
++fire("UPDATE_INVENTORY_ALERTS")
++check("D1 repair (yellow -> none) is silent", count("durabilityLow"), 1)
++alertStatus[9] = 2
++fire("UPDATE_INVENTORY_ALERTS")
++check("D1 none -> red fires again", count("durabilityLow"), 2)
++check("D1   with the broken gain", fired[#fired].override, 1.25)
++
++-- ── Window bus and deferred close ─────────────────────────────────────────────
++
++fresh({ "interactionWindowClosed", "merchantShow", "mailShow" })
++merchantOpen = false
++fire("PLAYER_INTERACTION_MANAGER_FRAME_SHOW", 17) -- mail
++reset()
++fire("PLAYER_INTERACTION_MANAGER_FRAME_HIDE", 17) -- click a vendor while the mailbox is open
++fire("PLAYER_INTERACTION_MANAGER_FRAME_SHOW", 5)
++nextFrame()
++check("B1 chained mail -> vendor: close dropped", count("interactionWindowClosed"), 0)
++check("B1   vendor arrival felt", count("merchantShow"), 1)
++
++reset()
++fire("PLAYER_INTERACTION_MANAGER_FRAME_HIDE", 5)
++nextFrame()
++check("B2 a plain close still plays", count("interactionWindowClosed"), 1)
++
++fresh({ "interactionWindowClosed", "bankClosed" })
++fire("PLAYER_INTERACTION_MANAGER_FRAME_SHOW", 8)
++reset()
++fire("PLAYER_INTERACTION_MANAGER_FRAME_HIDE", 8)
++fire("BANKFRAME_CLOSED")
++nextFrame()
++check("B3 bank close: bankClosed plays once", count("bankClosed"), 1)
++check("B3   generic close yields to it on the bus", count("interactionWindowClosed"), 0)
++
++fresh({ "interactionWindowClosed", "merchantShow", "gossipShow" })
++reset()
++Pulse:FireIfEnabled("interactionWindowClosed")
++Pulse:FireIfEnabled("merchantShow")
++check(
++	"B4 higher priority replaces on the same layer",
++	plays[1].layer == plays[2].layer and plays[2].layer == "bus:window",
++	true
++)
++Pulse:FireIfEnabled("gossipShow")
++check("B4 lower priority inside the window is dropped", #plays, 2)
++now = now + 0.2
++check("B4 dropped cue's throttle was not consumed", Pulse:FireIfEnabled("gossipShow"), true)
++
++-- ── Intake outside any episode (mail, quest reward) ───────────────────────────
++
++fresh({ "itemObtained", "bagItemAdded" })
++fire("ITEM_PUSH", 1, 0) -- a mail attachment arrives
++freeSlots = 19
++fire("BAG_UPDATE_DELAYED")
++check("I1 mail item: itemObtained plays", count("itemObtained"), 1)
++check("I1   bagItemAdded yields to it on the intake bus", count("bagItemAdded"), 0)
++reset()
++freeSlots = 18
++fire("BAG_UPDATE_DELAYED") -- bag first this time
++fire("ITEM_PUSH", 1, 0)
++check(
++	"I2 order reversed: both played, same layer (item replaced bag)",
++	plays[1] and plays[2] and plays[1].layer == plays[2].layer,
++	true
++)
++
++io.write(failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n"))
++os.exit(failures == 0 and 0 or 1)
+diff --git a/PulseChecklist/tests/cue-audit.lua b/PulseChecklist/tests/cue-audit.lua
+index 7abe6dd..5eea4be 100755
+--- a/PulseChecklist/tests/cue-audit.lua
++++ b/PulseChecklist/tests/cue-audit.lua
+@@ -117,6 +117,7 @@ local MODULE_FILES = {
+ 	"Modules/ControllerUI.lua",
+ 	"Core/CastActivity.lua",
+ 	"Core/Registry.lua",
++	"Core/Arbiter.lua",
+ }
+ 
+ local ROOT = arg[1] or "PulseHaptics"
+diff --git a/PulseChecklist/tests/engine-test.lua b/PulseChecklist/tests/engine-test.lua
+index 6ae428c..996f90c 100755
+--- a/PulseChecklist/tests/engine-test.lua
++++ b/PulseChecklist/tests/engine-test.lua
+@@ -549,28 +549,36 @@ end
+ check("Engine:Hold default/false sets isTransient=false", foundSustained, false)
+ Engine:StopAll()
+ 
+--- ── CR-008 b / F-01: Soft Breakaway Floor for Continuous Textures ───────────
+-Engine:StopAll()
+-mockFloor = 0.125
+--- 1. Continuous hold at low amplitude (0.02) scales down smoothly below breakaway floor (< 0.08)
+-Engine:Hold("soft_floor_continuous", 0.02, 0, 0.5, false)
+-for _ = 1, 15 do
+-	frameScripts.OnUpdate(nil, 0.016)
++-- ── CR-008 b / F-01: breakaway floor, exact values ─────────────────────────
++-- Exact outputs, not bounds. With gamma 1.0 and gain 1.0 (the mock's defaults), mapValue is:
++--   discrete:   floor + (1 - floor) * v
++--   continuous: floor * smoothstep(clamp(v / knee)) + (1 - floor) * v,  knee = max(0.02, floor * 0.5)
++-- 120 frames at 16 ms settle both smoothing lanes to within 1e-6 of their target, so the
++-- smoothed channel value IS the mapped value. Bounds (< 0.08, >= 0.125) cannot pin the
++-- discrete path: f623a8a's missing else applied the floor twice (0.05 -> 0.2727) and still
++-- passed >= 0.125. Exact values catch both halves of that regression.
++local function settledLow(name, low, isTransient)
++	Engine:StopAll()
++	Engine:Hold(name, low, 0, 5.0, isTransient)
++	for _ = 1, 120 do
++		frameScripts.OnUpdate(nil, 0.016)
++	end
++	local ch = Engine:_DebugChannels()["Low"]
++	return ch and ch.smoothed or 0
+ end
+-local chanContinuous = Engine:_DebugChannels()
+-local lowContinuous = chanContinuous["Low"] and chanContinuous["Low"].smoothed or 0
+-check("continuous cue at 0.02 scales below breakaway floor (< 0.08)", lowContinuous > 0 and lowContinuous < 0.08, true)
+-
+--- 2. Transient hold at low amplitude (0.05) preserves hard breakaway floor
+-Engine:StopAll()
+-Engine:Hold("hard_floor_transient", 0.05, 0, 0.5, true)
+-for _ = 1, 15 do
+-	frameScripts.OnUpdate(nil, 0.016)
++local function near(got, want)
++	return math.abs(got - want) < 1e-4
+ end
+-local chanTransient = Engine:_DebugChannels()
+-local lowTransient = chanTransient["Low"] and chanTransient["Low"].smoothed or 0
+-check("transient cue at 0.05 preserves hard breakaway floor (>= 0.125)", lowTransient >= 0.125, true)
++
++mockFloor = 0.125
++check("discrete 0.05 on floor 0.125 = 0.16875", near(settledLow("floor_d05", 0.05, true), 0.16875), true)
++check("discrete 0.50 on floor 0.125 = 0.5625", near(settledLow("floor_d50", 0.50, true), 0.5625), true)
++check("continuous 0.02 fades below floor = 0.047708", near(settledLow("floor_c02", 0.02, false), 0.047708), true)
++check("continuous 0.05 on floor 0.125 = 0.15575", near(settledLow("floor_c05", 0.05, false), 0.15575), true)
++check("continuous 0.10 clears the floor = 0.2125", near(settledLow("floor_c10", 0.10, false), 0.2125), true)
++check("  and an authored default stays >= floor", settledLow("floor_c10b", 0.10, false) >= 0.125, true)
+ mockFloor = nil
++check("no floor configured: continuous 0.05 passes through", near(settledLow("floor_none", 0.05, false), 0.05), true)
+ Engine:StopAll()
+ 
+ -- ── ENG-03: Raw Calibration Error Trapping via pcall ─────────────────────────
+diff --git a/PulseChecklist/tests/harness.lua b/PulseChecklist/tests/harness.lua
+index b3f9c55..7f1a8a3 100755
+--- a/PulseChecklist/tests/harness.lua
++++ b/PulseChecklist/tests/harness.lua
+@@ -556,6 +556,7 @@ local FILES = {
+ 	"Core/Engine.lua",
+ 	"Core/CastActivity.lua",
+ 	"Core/Registry.lua",
++	"Core/Arbiter.lua",
+ 	"Core/Guide.lua",
+ 	"Modules/Crafting.lua",
+ 	"Modules/Interaction.lua",
+@@ -1850,8 +1851,9 @@ do
+ 		)
+ 		-- Untouched Raiding received new curated cues (42 cues enabled)
+ 		local raidingCount = 0
+-		for _, v in pairs(_G.PulseDB.profiles.Raiding.triggers) do
+-			if v then
++		for k, v in pairs(_G.PulseDB.profiles.Raiding.triggers) do
++			local t = Pulse.Registry:GetTrigger(k)
++			if v and not (t and t.gate) then
+ 				raidingCount = raidingCount + 1
+ 			end
+ 		end
+@@ -1864,8 +1866,9 @@ do
+ 
+ 		-- Untouched Default received new curated cues (53 cues enabled, not all 190)
+ 		local defaultCount = 0
+-		for _, v in pairs(_G.PulseDB.profiles.Default.triggers) do
+-			if v then
++		for k, v in pairs(_G.PulseDB.profiles.Default.triggers) do
++			local t = Pulse.Registry:GetTrigger(k)
++			if v and not (t and t.gate) then
+ 				defaultCount = defaultCount + 1
+ 			end
+ 		end
+diff --git a/PulseChecklist/tests/phase2-test.lua b/PulseChecklist/tests/phase2-test.lua
+new file mode 100644
+index 0000000..4d2c220
+--- /dev/null
++++ b/PulseChecklist/tests/phase2-test.lua
+@@ -0,0 +1,154 @@
++-- PulseChecklist/tests/phase2-test.lua
++--
++-- Phase 2: page switches (non-destructive group gates), fold state, one-line cue rows and
++-- simple view. Runs on top of harness.lua's full mock environment (real Database, Registry,
++-- Init, Spec, Content, Rows, Sidebar, Panel), the way cue-audit.lua does.
++
++local scriptDir = arg[0]:match("^(.-)[^/\\]*$")
++if scriptDir == "" then
++	scriptDir = "./"
++end
++dofile(scriptDir .. "harness.lua")
++
++io.write("\n================== PHASE 2 ==================\n")
++
++local failures = 0
++local function check(label, got, want)
++	local ok = (got == want)
++	if not ok then
++		failures = failures + 1
++	end
++	io.write(("%-66s %-8s %s\n"):format(label, tostring(got), ok and "ok" or ("FAIL want " .. tostring(want))))
++end
++
++local P = _G.Pulse
++local DB = P.Database
++local R = P.Registry
++
++-- ── Gate data ─────────────────────────────────────────────────────────────────
++
++local gates, pageGates = 0, 0
++for _, t in ipairs(P.Triggers) do
++	if t.gate then
++		gates = gates + 1
++		check("gate " .. t.id .. " plays nothing (no mode)", t.mode == nil and not t.continuous, true)
++	end
++end
++check("10 new page switches", gates, 10)
++for pageID, gateID in pairs(R.PAGE_GATES) do
++	pageGates = pageGates + 1
++	check("PAGE_GATES." .. pageID .. " resolves to a trigger", R:GetTrigger(gateID) ~= nil, true)
++end
++check("11 pages gated (CONTROLLER deliberately not)", pageGates, 11)
++check("padDisconnected is never behind a switch", R.CUE_GATE.padDisconnected, nil)
++check("CONTROLLER_UI cues rely on controllerUIMaster, not a second gate", R.CUE_GATE.uiNavigate, nil)
++check("bagItemAdded sits behind gateWorld", R.CUE_GATE.bagItemAdded, "gateWorld")
++
++-- ── Seeding: every profile starts with every switch ON, __exclusive included ──
++
++local allOn = true
++for _, name in ipairs(DB:GetProfileNames()) do
++	local prof = _G.PulseDB.profiles[name]
++	for _, t in ipairs(P.Triggers) do
++		if t.gate and prof.triggers[t.id] ~= true then
++			allOn = false
++			io.write("  gate OFF: " .. name .. " / " .. t.id .. "\n")
++		end
++	end
++end
++check("every built-in and custom profile seeds every switch ON", allOn, true)
++
++DB:SetAllCues(false)
++check("'Disable all cues' leaves page switches alone", DB:GetCue("gateWorld"), true)
++DB:SetAllCues(true)
++
++-- ── Non-destructive runtime gate ──────────────────────────────────────────────
++
++-- critLanded: no throttle of its own, so every call below is decided by the gate alone.
++DB:SetCue("critLanded", true)
++check("gate open: critLanded plays", P:FireIfEnabled("critLanded"), true)
++DB:SetCue("gateCombat", false)
++check("gate closed: critLanded dropped", P:FireIfEnabled("critLanded"), false)
++check("  the cue's own switch is untouched", DB:GetCue("critLanded"), true)
++check("  IsCueActive reports it inactive (so modules unregister)", P:IsCueActive("critLanded"), false)
++check("  a cue on another page is unaffected", P:GatesOpen("bagItemAdded"), true)
++DB:SetCue("gateCombat", true)
++check("gate reopened: critLanded plays again", P:FireIfEnabled("critLanded"), true)
++
++-- ── Fold state and one-line rows ──────────────────────────────────────────────
++
++local Panel = P.UI.Panel
++local window = Panel.EnsureBuilt()
++check("window builds", window ~= nil, true)
++Panel.GoToPage("WORLD")
++local page = window.Content.page
++local sections, cueRows, oldStyleRows = 0, 0, 0
++for _, row in ipairs(page.rows) do
++	local kind = row.spec and row.spec.kind
++	if kind == "section" then
++		sections = sections + 1
++	elseif kind == "cue" then
++		cueRows = cueRows + 1
++	elseif kind == "slider" and row.spec.label == "Intensity" then
++		oldStyleRows = oldStyleRows + 1
++	end
++end
++local worldCues = 0
++for _, s in ipairs(page.sections or {}) do
++	worldCues = worldCues + #s.triggers
++end
++check("WORLD page: one section header per section", sections > 0, true)
++check("WORLD page: exactly one cue row per cue", cueRows, 31 - sections)
++check("WORLD page: no separate Intensity rows remain", oldStyleRows, 0)
++
++local key = "WORLD/Loot & inventory"
++local header, member
++for _, row in ipairs(page.rows) do
++	if row.spec and row.spec.sectionKey == key then
++		if row.isSectionHeader then
++			header = row
++		elseif not member and row.spec.kind == "cue" then
++			member = row
++		end
++	end
++end
++check("found the Loot & inventory header and a cue under it", header ~= nil and member ~= nil, true)
++
++DB:SetSectionCollapsed(key, true)
++window.Content:LayoutRows()
++check("folded: header still shown", header:IsShown(), true)
++check("folded: its cues hidden", member:IsShown(), false)
++window.Content:SetFilter(member.spec.label)
++check("search reaches into a folded section", member:IsShown(), true)
++window.Content:SetFilter("")
++window.Content:LayoutRows()
++check("search cleared: folded again", member:IsShown(), false)
++DB:SetSectionCollapsed(key, false)
++window.Content:LayoutRows()
++check("unfolded: cue shown", member:IsShown(), true)
++check("fold state is global, not per profile", _G.PulseDB.collapsedSections ~= nil, true)
++
++-- ── Simple view ───────────────────────────────────────────────────────────────
++
++local function visibleSidebarPages()
++	local n = 0
++	for _, button in ipairs(window.Sidebar.buttons) do
++		if button:IsShown() then
++			n = n + 1
++		end
++	end
++	return n
++end
++local allPages = visibleSidebarPages()
++local advancedBefore = DB:Get("showAdvancedCueControls")
++DB:Set("simpleView", true)
++Panel.ApplySimpleView()
++check("simple view: sidebar trimmed", visibleSidebarPages() < allPages, true)
++check("simple view: lands on the switches page", window.Sidebar.selectedPage.id, "switches")
++check("simple view never rewrites showAdvancedCueControls", DB:Get("showAdvancedCueControls"), advancedBefore)
++DB:Set("simpleView", false)
++Panel.ApplySimpleView()
++check("simple view off: every page back", visibleSidebarPages(), allPages)
++
++io.write(failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n"))
++os.exit(failures == 0 and 0 or 1)
+diff --git a/PulseHaptics/Core/Arbiter.lua b/PulseHaptics/Core/Arbiter.lua
+new file mode 100644
+index 0000000..61e8f5f
+--- /dev/null
++++ b/PulseHaptics/Core/Arbiter.lua
+@@ -0,0 +1,317 @@
++-- Pulse — Core/Arbiter.lua
++--
++-- Cross-module cue arbitration: which cue speaks when one game action fires several.
++--
++-- Three mechanisms, all driven by data in Core/Registry.lua (Registry.EPISODES and the
++-- per-trigger `bus` / `busPriority` fields), and none of them allocating per event:
++--
++--   1. Liveness. Is a cue actually audible right now — master switch, its own switch, its
++--      gates, and a non-zero intensity? The owner rule below is only ever asked about a
++--      cue that is live: a disabled owner must never silence the cue standing in for it.
++--   2. Episodes. A vendor visit and a loot window. A yielder steps aside only while its
++--      episode is open AND one of that episode's owners is live.
++--   3. Buses. Cue families that chain inside a frame (one window closing as another opens)
++--      share one engine layer. A lower-priority cue arriving inside the bus window after a
++--      higher one is dropped; a higher one arriving after a lower one replaces it, because
++--      Engine:PlayMode on the same layer name bumps that layer's token (Engine.lua:354-355).
++--
++-- Reads game state only. Calls no protected API, hooks nothing, writes no SavedVariables.
++
++local ADDON_NAME, Pulse = ...
++
++local Arbiter = {}
++Pulse.Arbiter = Arbiter
++
++-- ── Liveness ──────────────────────────────────────────────────────────────────
++
++function Arbiter:IsLive(cueID)
++	local db = Pulse.Database
++	if not db:Get("masterEnabled") or not db:GetCue(cueID) then
++		return false
++	end
++	if not Pulse:GatesOpen(cueID) then
++		return false
++	end
++	local intensity = db:GetTriggerSetting(cueID, "intensity", 1.0)
++	return type(intensity) == "number" and intensity > 0
++end
++
++local function anyLive(list)
++	if not list then
++		return false
++	end
++	for i = 1, #list do
++		if Arbiter:IsLive(list[i]) then
++			return true
++		end
++	end
++	return false
++end
++
++local function firstLive(list)
++	if not list then
++		return false
++	end
++	for i = 1, #list do
++		if Arbiter:IsLive(list[i]) then
++			return list[i]
++		end
++	end
++	return false
++end
++
++-- ── Vendor episode ────────────────────────────────────────────────────────────
++
++-- Read through Enum where the client defines it, with the confirmed literal as fallback —
++-- the same pattern as Modules/Interaction.lua:36-42.
++local function interactionType(name, literal)
++	local value = Enum and Enum.PlayerInteractionType and Enum.PlayerInteractionType[name]
++	if type(value) == "number" then
++		return value
++	end
++	return literal
++end
++local PIM_MERCHANT = interactionType("Merchant", 5)
++local PIM_VENDOR = interactionType("Vendor", 12)
++
++local function interacting(kind)
++	local pim = C_PlayerInteractionManager
++	if not (pim and type(pim.IsInteractingWithNpcOfType) == "function") then
++		return false
++	end
++	local value = pim.IsInteractingWithNpcOfType(kind)
++	if issecretvalue(value) then
++		return false
++	end
++	return value and true or false
++end
++
++-- The single source of truth for "a vendor is open". Interaction-manager state first:
++-- bag and merchant replacement addons hide MerchantFrame, the interaction does not end.
++function Arbiter:IsMerchantOpen()
++	if interacting(PIM_MERCHANT) or interacting(PIM_VENDOR) then
++		return true
++	end
++	return (MerchantFrame and MerchantFrame:IsShown()) and true or false
++end
++
++-- True while a vendor is open and something that speaks for a purchase is live.
++function Arbiter:VendorOwnsIntake()
++	local episode = Pulse.Registry.EPISODES.vendor
++	return self:IsMerchantOpen() and anyLive(episode.owners)
++end
++
++-- ── Loot episode ──────────────────────────────────────────────────────────────
++
++local LOOT_TAIL = 0.30 -- [measure, §11] last BAG_UPDATE_DELAYED may trail LOOT_CLOSED
++local LOOT_STALE = 60 -- a missed LOOT_CLOSED can never pin the episode open
++local COIN_CUE = "lootGold"
++
++-- Quality -> intensity multiplier on the speaking cue. Starting values, tuned in game.
++local QUALITY_GAIN = { [0] = 0.70, 0.85, 1.00, 1.15, 1.30, 1.45, 1.45, 1.30, 1.00 }
++local QUEST_GAIN = 1.15
++
++-- Scalars and three reused arrays: nothing allocated after the first episode.
++local loot = {
++	open = false,
++	autoLoot = false,
++	openedAt = 0,
++	closedAt = -100,
++	speaker = false,
++	spoke = false,
++	sawSlotCleared = false,
++	best = -1,
++	quest = false,
++	items = 0,
++	coins = 0,
++}
++local slotGain, slotIsCoin, slotLocked = {}, {}, {}
++
++local function gainFor(quality, isQuest)
++	local gain = QUALITY_GAIN[quality] or 1.0
++	if isQuest and gain < QUEST_GAIN then
++		gain = QUEST_GAIN
++	end
++	return gain
++end
++
++local function scan()
++	wipe(slotGain)
++	wipe(slotIsCoin)
++	wipe(slotLocked)
++	loot.best, loot.quest, loot.items, loot.coins = -1, false, 0, 0
++	local n = GetNumLootItems and GetNumLootItems() or 0
++	if issecretvalue(n) or type(n) ~= "number" then
++		return
++	end
++	for slot = 1, n do
++		local _, _, _, _, quality, locked, isQuestItem, _, _, isCoin = GetLootSlotInfo(slot)
++		if issecretvalue(quality) or type(quality) ~= "number" then
++			quality = 1
++		end
++		if issecretvalue(locked) then
++			locked = true -- unknown ownership: treat as a roll item, never ours to announce
++		end
++		if issecretvalue(isQuestItem) then
++			isQuestItem = false
++		end
++		if issecretvalue(isCoin) then
++			isCoin = false
++		end
++		if isCoin == nil and GetLootSlotType then
++			local kind = GetLootSlotType(slot)
++			isCoin = (not issecretvalue(kind)) and kind == 2
++		end
++		slotLocked[slot] = locked and true or false
++		slotIsCoin[slot] = isCoin and true or false
++		slotGain[slot] = gainFor(quality, isQuestItem)
++		if not locked then
++			if isCoin then
++				loot.coins = loot.coins + 1
++			else
++				loot.items = loot.items + 1
++				if quality > loot.best then
++					loot.best = quality
++				end
++				if isQuestItem then
++					loot.quest = true
++				end
++			end
++		end
++	end
++end
++
++local function chooseSpeaker()
++	if loot.items > 0 then
++		local cue = firstLive(Pulse.Registry.EPISODES.loot.intake)
++		if cue then
++			return cue
++		end
++	end
++	if loot.coins > 0 and Arbiter:IsLive(COIN_CUE) then
++		return COIN_CUE
++	end
++	return false
++end
++
++local function lootLive()
++	if loot.open then
++		if (GetTime() - loot.openedAt) > LOOT_STALE then
++			loot.open = false
++			loot.closedAt = -100
++			return false
++		end
++		return true
++	end
++	return (GetTime() - loot.closedAt) < LOOT_TAIL
++end
++
++-- LOOT_READY and LOOT_OPENED both land here; the first opens the episode, a second call
++-- inside the same episode only rescans (autoloot can empty slots between the two).
++function Arbiter:LootOpened(autoLoot)
++	if not loot.open then
++		loot.open = true
++		loot.openedAt = GetTime()
++		loot.spoke = false
++		loot.sawSlotCleared = false
++	end
++	if not issecretvalue(autoLoot) then
++		loot.autoLoot = autoLoot and true or false
++	end
++	scan()
++	if loot.items + loot.coins > 0 or not loot.speaker then
++		loot.speaker = chooseSpeaker()
++	end
++end
++
++function Arbiter:LootClosed()
++	if loot.open then
++		loot.open = false
++		loot.closedAt = GetTime()
++	end
++end
++
++function Arbiter:LootReset()
++	loot.open, loot.speaker, loot.spoke = false, false, false
++	loot.closedAt = -100
++end
++
++-- Every intake handler (ITEM_PUSH, BAG_UPDATE_DELAYED gain, own CHAT_MSG_LOOT,
++-- CHAT_MSG_MONEY) asks this first. true = "handled, do not fire your own cue".
++function Arbiter:LootIntake()
++	if not lootLive() or not loot.speaker then
++		return false
++	end
++	if loot.autoLoot then
++		if not loot.spoke then
++			loot.spoke = true
++			Pulse:FireIfEnabled(loot.speaker, gainFor(loot.best, loot.quest))
++		end
++		return true
++	end
++	-- Manual looting speaks per click from LootSlotCleared. Until the first click has been
++	-- seen, intake falls through, so a client that never sends LOOT_SLOT_CLEARED is never
++	-- silent.
++	return loot.sawSlotCleared
++end
++
++-- LOOT_SLOT_CLEARED(slot). Manual looting: one cue per deliberate click, at that slot's
++-- own quality. Autoloot: the first clear is simply the earliest intake.
++function Arbiter:LootSlotCleared(slot)
++	if not loot.open or not loot.speaker then
++		return
++	end
++	if issecretvalue(slot) or type(slot) ~= "number" or slotLocked[slot] then
++		return
++	end
++	if loot.autoLoot then
++		self:LootIntake()
++		return
++	end
++	loot.sawSlotCleared = true
++	local cue = loot.speaker
++	if slotIsCoin[slot] and self:IsLive(COIN_CUE) then
++		cue = COIN_CUE
++	end
++	Pulse:FireIfEnabled(cue, slotGain[slot] or 1.0)
++end
++
++function Arbiter:_DebugLoot()
++	return loot
++end
++
++-- ── Buses ─────────────────────────────────────────────────────────────────────
++
++local DEFAULT_BUS_WINDOW = 0.15 -- [measure, §11]; covers ControllerUI's 20 Hz panel poll
++local busTime, busPriority, busLayer = {}, {}, {}
++
++-- Pre-seeded from the Registry once, so no key is ever created at event time.
++function Arbiter:SeedBuses()
++	for _, trigger in ipairs(Pulse.Triggers) do
++		local bus = trigger.bus
++		if bus and not busLayer[bus] then
++			busTime[bus] = -100
++			busPriority[bus] = -1
++			busLayer[bus] = "bus:" .. bus
++		end
++	end
++end
++
++-- Returns ok, layerName. ok = false when a more important cue on the same bus spoke inside
++-- the window. An unknown bus name degrades to "no bus" rather than erroring.
++function Arbiter:ClaimBus(bus, priority, window, fallbackLayer)
++	local layer = busLayer[bus]
++	if not layer then
++		return true, fallbackLayer
++	end
++	local now = GetTime()
++	priority = priority or 0
++	if (now - busTime[bus]) < (window or DEFAULT_BUS_WINDOW) and priority < busPriority[bus] then
++		return false, nil
++	end
++	busTime[bus] = now
++	busPriority[bus] = priority
++	return true, layer
++end
++
++Arbiter:SeedBuses()
+diff --git a/PulseHaptics/Core/Database.lua b/PulseHaptics/Core/Database.lua
+index 46d425f..b0f79eb 100755
+--- a/PulseHaptics/Core/Database.lua
++++ b/PulseHaptics/Core/Database.lua
+@@ -40,6 +40,10 @@ local GLOBAL_DEFAULTS = {
+ 	-- default because previews are useful while tuning; one click gets a clean list.
+ 	showCueTestButtons = true,
+ 	minimap = { hide = false },
++	-- Phase 2. Panel presentation, not playstyle, so global like the two toggles above:
++	-- a spec-driven profile switch must never re-fold the window or change its view.
++	simpleView = false,
++	collapsedSections = {}, -- "PAGEID/Section label" -> true while that section is folded
+ }
+ 
+ -- The shape of one profile slot. These fields used to live flat on DB; DB_VERSION 2's
+@@ -1403,6 +1407,12 @@ function Database:_SeedProfileTriggerDefaults(profile, overrides)
+ 	for _, trigger in ipairs(Pulse.Triggers) do
+ 		if profile.triggers[trigger.id] == nil then
+ 			local default = overrides and overrides[trigger.id]
++			-- Page switches start ON in every profile. An __exclusive curated profile seeds
++			-- every cue it does not list as OFF, which for a gate would silently mute a whole
++			-- page on the first load after this ships.
++			if trigger.gate then
++				default = true
++			end
+ 			if default == nil then
+ 				if overrides and overrides.__exclusive then
+ 					default = false
+@@ -2018,21 +2028,25 @@ function Database:_MigrateCuratedProfilesOptionB()
+ 		local currentOverrides = PROFILE_TRIGGER_OVERRIDES[name]
+ 		local matchesCurrent = true
+ 		for _, trigger in ipairs(Pulse.Triggers or {}) do
+-			local currentVal = profile.triggers[trigger.id] and true or false
+-			local expected
+-			if currentOverrides then
+-				expected = currentOverrides[trigger.id]
+-				if expected == nil then
+-					expected = not currentOverrides.__exclusive and (trigger.default and true or false) or false
++			-- Page switches are not curated content: a gate the player left ON must not make
++			-- an untouched curated profile look customised and miss its migration.
++			if not trigger.gate then
++				local currentVal = profile.triggers[trigger.id] and true or false
++				local expected
++				if currentOverrides then
++					expected = currentOverrides[trigger.id]
++					if expected == nil then
++						expected = not currentOverrides.__exclusive and (trigger.default and true or false) or false
++					else
++						expected = expected and true or false
++					end
+ 				else
+-					expected = expected and true or false
++					expected = trigger.default and true or false
++				end
++				if currentVal ~= expected then
++					matchesCurrent = false
++					break
+ 				end
+-			else
+-				expected = trigger.default and true or false
+-			end
+-			if currentVal ~= expected then
+-				matchesCurrent = false
+-				break
+ 			end
+ 		end
+ 		if matchesCurrent then
+@@ -2043,21 +2057,25 @@ function Database:_MigrateCuratedProfilesOptionB()
+ 		local legacyOverrides = LEGACY_V8_OVERRIDES[name]
+ 		local matchesLegacy = true
+ 		for _, trigger in ipairs(Pulse.Triggers or {}) do
+-			local currentVal = profile.triggers[trigger.id] and true or false
+-			local expected
+-			if legacyOverrides then
+-				expected = legacyOverrides[trigger.id]
+-				if expected == nil then
+-					expected = not legacyOverrides.__exclusive and (trigger.default and true or false) or false
++			-- Page switches are not curated content: a gate the player left ON must not make
++			-- an untouched curated profile look customised and miss its migration.
++			if not trigger.gate then
++				local currentVal = profile.triggers[trigger.id] and true or false
++				local expected
++				if legacyOverrides then
++					expected = legacyOverrides[trigger.id]
++					if expected == nil then
++						expected = not legacyOverrides.__exclusive and (trigger.default and true or false) or false
++					else
++						expected = expected and true or false
++					end
+ 				else
+-					expected = expected and true or false
++					expected = trigger.default and true or false
++				end
++				if currentVal ~= expected then
++					matchesLegacy = false
++					break
+ 				end
+-			else
+-				expected = trigger.default and true or false
+-			end
+-			if currentVal ~= expected then
+-				matchesLegacy = false
+-				break
+ 			end
+ 		end
+ 		if matchesLegacy then
+@@ -2850,6 +2868,25 @@ function Database:SetMinimap(cfg)
+ 	self:Set("minimap", cfg)
+ end
+ 
++-- Section fold state (Phase 2). Booleans under addon-authored string keys: RULE D-clean.
++function Database:IsSectionCollapsed(key)
++	local t = DB and DB.collapsedSections
++	return (t and t[key]) and true or false
++end
++
++function Database:SetSectionCollapsed(key, collapsed)
++	if type(key) ~= "string" then
++		return
++	end
++	collapsed = sanitizeBool(collapsed)
++	if collapsed == nil then
++		return
++	end
++	DB.collapsedSections = DB.collapsedSections or {}
++	DB.collapsedSections[key] = collapsed or nil
++	notify(globalListeners, "collapsedSections")
++end
++
+ function Database:GetCue(triggerID)
+ 	return activeProfile().triggers[triggerID] and true or false
+ end
+@@ -2860,10 +2897,17 @@ function Database:SetCue(triggerID, enabled)
+ 		return
+ 	end
+ 	activeProfile().triggers[triggerID] = enabled
++	local trigger = Pulse.Registry:GetTrigger(triggerID)
+ 	if Pulse.debug then
+-		local trigger = Pulse.Registry:GetTrigger(triggerID)
+ 		print(("Pulse: %s %s"):format(trigger and trigger.label or triggerID, enabled and "enabled" or "disabled"))
+ 	end
++	-- A page switch re-syncs every module on its page. The gate itself takes effect at once
++	-- (Pulse:GatesOpen reads it on every fire); only the event re-registration waits for
++	-- the end of combat, the same deferral a profile switch uses.
++	if trigger and trigger.gate and InCombatLockdown and InCombatLockdown() then
++		pendingProfileNotify = true
++		return
++	end
+ 	notify(cueListeners, triggerID)
+ end
+ 
+@@ -2882,8 +2926,11 @@ function Database:SetAllCues(enabled, profileName)
+ 	local count = 0
+ 	if Pulse.Triggers then
+ 		for _, trigger in ipairs(Pulse.Triggers) do
+-			prof.triggers[trigger.id] = b
+-			count = count + 1
++			-- "Disable all cues" means cues. Page switches are left where the player put them.
++			if not trigger.gate then
++				prof.triggers[trigger.id] = b
++				count = count + 1
++			end
+ 		end
+ 	end
+ 	if not profileName or profileName == self:GetActiveProfileName() then
+diff --git a/PulseHaptics/Core/Init.lua b/PulseHaptics/Core/Init.lua
+index 005eca5..3c105e0 100755
+--- a/PulseHaptics/Core/Init.lua
++++ b/PulseHaptics/Core/Init.lua
+@@ -49,31 +49,65 @@ local lastHoldLogTime = {}
+ -- between two ticks.
+ local HOLD_LOG_GAP = 0.5
+ 
++-- Every gate standing between a cue and the motor, other than the cue's own switch: its
++-- category master (ALERT_CATEGORY_MASTER) and, since Phase 2, its page gate (CUE_GATE).
++-- Non-destructive by construction: it reads the gates, it never writes the cue.
++function Pulse:GatesOpen(triggerID, trigger)
++	local registry = self.Registry
++	trigger = trigger or registry:GetTrigger(triggerID)
++	if not trigger then
++		return false
++	end
++	local catMaster = registry.ALERT_CATEGORY_MASTER and registry.ALERT_CATEGORY_MASTER[trigger.category]
++	if catMaster and catMaster ~= triggerID and not self.Database:GetCue(catMaster) then
++		return false
++	end
++	local gate = registry.CUE_GATE and registry.CUE_GATE[triggerID]
++	if gate and gate ~= triggerID and not self.Database:GetCue(gate) then
++		return false
++	end
++	return true
++end
++
+ -- The shared path from "a trigger's condition happened" to "play its mode". Every
+--- discrete (non-continuous) trigger ends here.
++-- discrete (non-continuous) trigger ends here. Returns true when the cue actually played,
++-- so an episode owner can tell "I spoke" from "I was switched off or throttled".
+ function Pulse:FireIfEnabled(triggerID, intensityOverride)
+ 	if not self.Database:Get("masterEnabled") then
+-		return
++		return false
+ 	end
+ 	if not self.Database:GetCue(triggerID) then
+-		return
++		return false
+ 	end
+ 	local trigger = self.Registry:GetTrigger(triggerID)
+ 	if not trigger or not trigger.mode then
+-		return
++		return false
+ 	end
+-
+-	local catMaster = self.Registry.ALERT_CATEGORY_MASTER and self.Registry.ALERT_CATEGORY_MASTER[trigger.category]
+-	if catMaster and catMaster ~= triggerID and not self.Database:GetCue(catMaster) then
+-		return
++	if not self:GatesOpen(triggerID, trigger) then
++		return false
+ 	end
+ 
++	-- Throttle is CHECKED here but only STAMPED once the bus has agreed, so a cue the bus
++	-- dropped does not also lose its next legitimate firing to its own throttle.
++	local now
+ 	if trigger.throttle and trigger.throttle > 0 then
+-		local now = GetTime()
++		now = GetTime()
+ 		local last = lastFireTime[triggerID]
+ 		if last and (now - last) < trigger.throttle then
+-			return
++			return false
+ 		end
++	end
++
++	local layerName = triggerID
++	if trigger.bus then
++		local ok, layer = self.Arbiter:ClaimBus(trigger.bus, trigger.busPriority, trigger.busWindow, triggerID)
++		if not ok then
++			return false
++		end
++		layerName = layer
++	end
++
++	if now then
+ 		lastFireTime[triggerID] = now
+ 	end
+ 
+@@ -86,7 +120,8 @@ function Pulse:FireIfEnabled(triggerID, intensityOverride)
+ 	if self.debug then
+ 		print(("Pulse: %s fired -> %s (intensity %.2f)"):format(trigger.label or triggerID, modeID, scale))
+ 	end
+-	self.Engine:PlayMode(triggerID, modeID, scale, intensityOverride)
++	self.Engine:PlayMode(layerName, modeID, scale, intensityOverride)
++	return true
+ end
+ 
+ -- Continuous triggers skip the mode-shape scheduler and go straight to the engine's
+@@ -107,8 +142,7 @@ function Pulse:HoldIfEnabled(triggerID, low, high, duration, isTransient, shape)
+ 		return
+ 	end
+ 
+-	local catMaster = self.Registry.ALERT_CATEGORY_MASTER and self.Registry.ALERT_CATEGORY_MASTER[trigger.category]
+-	if catMaster and catMaster ~= triggerID and not self.Database:GetCue(catMaster) then
++	if not self:GatesOpen(triggerID, trigger) then
+ 		return
+ 	end
+ 	local scale = self.Database:GetTriggerSetting(triggerID, "intensity", 1.0)
+@@ -149,8 +183,7 @@ function Pulse:HoldRolesIfEnabled(triggerID, roles, duration, isTransient, shape
+ 	if not trigger then
+ 		return
+ 	end
+-	local catMaster = self.Registry.ALERT_CATEGORY_MASTER and self.Registry.ALERT_CATEGORY_MASTER[trigger.category]
+-	if catMaster and catMaster ~= triggerID and not self.Database:GetCue(catMaster) then
++	if not self:GatesOpen(triggerID, trigger) then
+ 		return
+ 	end
+ 	local scale = self.Database:GetTriggerSetting(triggerID, "intensity", 1.0)
+@@ -372,11 +405,32 @@ function Pulse:TestCue(triggerID)
+ 	return false, "this cue plays nothing on its own"
+ end
+ 
++-- The registration-time question: is this cue switched on AND not behind a closed gate?
++-- Module sync functions use it so a page switched off costs nothing, not just plays nothing.
++function Pulse:IsCueActive(triggerID)
++	return self.Database:GetCue(triggerID) and self:GatesOpen(triggerID) or false
++end
++
+ -- cueIDs: array of trigger ids whose enabled-state affects this frame's registration.
+ -- sync:   function that registers or unregisters events based on current settings.
++-- Also subscribes to each cue's page gate and category master, once each, so flipping a
++-- gate re-syncs the frames behind it.
+ function Pulse:BindFrame(cueIDs, sync)
++	local registry = self.Registry
++	local seen = {} -- bind time only, never per event
+ 	for _, cueID in ipairs(cueIDs) do
+ 		self.Database:OnCueChanged(cueID, sync)
++		local trigger = registry and registry:GetTrigger(cueID)
++		local gate = registry and registry.CUE_GATE and registry.CUE_GATE[cueID]
++		local master = trigger and registry.ALERT_CATEGORY_MASTER[trigger.category]
++		if gate and not seen[gate] then
++			seen[gate] = true
++			self.Database:OnCueChanged(gate, sync)
++		end
++		if master and master ~= cueID and not seen[master] then
++			seen[master] = true
++			self.Database:OnCueChanged(master, sync)
++		end
+ 	end
+ 	self.Database:OnGlobalChanged("masterEnabled", sync)
+ 	sync()
+@@ -393,7 +447,7 @@ function Pulse:WatchTrigger(trigger)
+ 		if not Pulse.Database:Get("masterEnabled") then
+ 			return
+ 		end
+-		if not Pulse.Database:GetCue(trigger.id) then
++		if not Pulse:IsCueActive(trigger.id) then
+ 			return
+ 		end
+ 		for _, event in ipairs(trigger.events) do
+diff --git a/PulseHaptics/Core/Registry.lua b/PulseHaptics/Core/Registry.lua
+index 8b495f0..c01f2b8 100755
+--- a/PulseHaptics/Core/Registry.lua
++++ b/PulseHaptics/Core/Registry.lua
+@@ -43,6 +43,7 @@ local CATEGORY_ORDER = {
+ 	"ALERT_SELF_CAST",
+ 	"CONTROLLER_UI",
+ 	"GAMEPAD_INTERACT",
++	"PAGE_GATE",
+ }
+ local CATEGORY_LABELS = {
+ 	MOVEMENT = "Movement",
+@@ -79,6 +80,9 @@ local CATEGORY_LABELS = {
+ 	-- reticle, on the cursor, which bar is live, which input device drives. Separate
+ 	-- category so PulseDebug and PulseChecklist list the two apart.
+ 	GAMEPAD_INTERACT = "Controller Interactions",
++
++	-- Phase 2 page switches: pure gates, no mode, one per settings page (Registry.PAGE_GATES).
++	PAGE_GATE = "Page switches",
+ }
+ 
+ -- Every trigger from ALERT_CC parents to this gate in the settings panel — the only
+@@ -90,6 +94,31 @@ Registry.ALERT_CATEGORY_MASTER = {
+ 	CONTROLLER_UI = "controllerUIMaster",
+ }
+ 
++-- Owner-aware arbitration (Core/Arbiter.lua). Data, not code, so cue-audit can check it.
++--
++-- OWNER RULE: a yielder stands down only while its episode is open AND at least one of the
++-- episode's owners is live (enabled, gated open, intensity > 0) in the active profile. A
++-- disabled owner never silences its yielders — the Default profile has merchantBuy off and
++-- bagItemAdded on, and its players must still feel a purchase.
++--
++-- NOT HERE: semantic exclusions, where the secondary cue is simply the wrong meaning (a
++-- sale is not "consuming" an item — Inventory.lua keeps that unconditional guard).
++Registry.EPISODES = {
++	vendor = {
++		owners = { "merchantBuy" },
++		yielders = { "bagItemAdded", "itemObtained" },
++	},
++	loot = {
++		-- Precedence: the first live cue here speaks for the whole loot window's items.
++		intake = { "itemObtained", "lootReceived", "bagItemAdded" },
++		-- Coins speak only for a coin-only window, or when no item cue is live.
++		coin = "lootGold",
++		-- The window opening: lootOpened owns it; harvestComplete (LOOT_READY) yields.
++		openOwner = "lootOpened",
++		openYielders = { "harvestComplete" },
++	},
++}
++
+ Pulse.Triggers = {
+ 
+ 	-- ── Movement (alphafeatures.md G1, G3, G16) ────────────────────────────────
+@@ -961,6 +990,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "lootGold",
++		bus = "intake",
++		busPriority = 2,
+ 		category = "WORLD",
+ 		mode = "TICK",
+ 		default = false,
+@@ -969,6 +1000,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "itemObtained",
++		bus = "intake",
++		busPriority = 2,
+ 		category = "WORLD",
+ 		mode = "CHIME",
+ 		default = false,
+@@ -978,6 +1011,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "bagItemAdded",
++		bus = "intake",
++		busPriority = 1,
+ 		category = "WORLD",
+ 		mode = "TICK",
+ 		throttle = 0.2,
+@@ -1008,6 +1043,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "harvestComplete",
++		bus = "intake",
++		busPriority = 1,
+ 		category = "WORLD",
+ 		mode = "CHIME",
+ 		throttle = 1.0,
+@@ -1686,6 +1723,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "tradeRequest",
++		bus = "window",
++		busPriority = 3,
+ 		category = "ALERT_SOCIAL",
+ 		mode = "DOUBLE_TAP",
+ 		throttle = 1.0,
+@@ -1790,6 +1829,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "lootOpened",
++		bus = "intake",
++		busPriority = 1,
+ 		category = "ALERT_WORLD",
+ 		mode = "TAP",
+ 		throttle = 0.5,
+@@ -1823,6 +1864,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "lootReceived",
++		bus = "intake",
++		busPriority = 2,
+ 		category = "ALERT_WORLD",
+ 		mode = "TAP",
+ 		throttle = 0.5,
+@@ -1835,6 +1878,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "merchantShow",
++		bus = "window",
++		busPriority = 3,
+ 		category = "ALERT_WORLD",
+ 		mode = "TAP",
+ 		throttle = 1.0,
+@@ -1879,6 +1924,8 @@ Pulse.Triggers = {
+ 	-- Enum.PlayerInteractionType path. Both may fire; throttle = 1.0 means one is felt.
+ 	{
+ 		id = "guildBankOpened",
++		bus = "window",
++		busPriority = 3,
+ 		category = "ALERT_WORLD",
+ 		mode = "DOUBLE_TAP",
+ 		throttle = 1.0,
+@@ -1891,6 +1938,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "auctionHouseShow",
++		bus = "window",
++		busPriority = 3,
+ 		category = "ALERT_WORLD",
+ 		mode = "CHIME",
+ 		throttle = 1.0,
+@@ -1903,6 +1952,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "stableShow",
++		bus = "window",
++		busPriority = 3,
+ 		category = "ALERT_WORLD",
+ 		mode = "TAP",
+ 		throttle = 1.0,
+@@ -1915,6 +1966,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "binderShow",
++		bus = "window",
++		busPriority = 3,
+ 		category = "ALERT_WORLD",
+ 		mode = "TAP",
+ 		throttle = 1.0,
+@@ -1927,6 +1980,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "spiritHealerShow",
++		bus = "window",
++		busPriority = 3,
+ 		category = "ALERT_WORLD",
+ 		mode = "LONG",
+ 		throttle = 1.0,
+@@ -1938,6 +1993,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "gossipShow",
++		bus = "window",
++		busPriority = 2,
+ 		category = "ALERT_WORLD",
+ 		mode = "TICK",
+ 		throttle = 1.0,
+@@ -1962,6 +2019,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "interactionWindow",
++		bus = "window",
++		busPriority = 2,
+ 		category = "ALERT_WORLD",
+ 		mode = "TAP",
+ 		throttle = 1.0,
+@@ -1973,6 +2032,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "interactionWindowClosed",
++		bus = "window",
++		busPriority = 1,
+ 		category = "ALERT_WORLD",
+ 		mode = "TICK",
+ 		throttle = 1.0,
+@@ -1984,6 +2045,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "mailShow",
++		bus = "window",
++		busPriority = 3,
+ 		category = "ALERT_WORLD",
+ 		mode = "TAP",
+ 		throttle = 1.0,
+@@ -1995,6 +2058,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "bankOpened",
++		bus = "window",
++		busPriority = 3,
+ 		category = "ALERT_WORLD",
+ 		mode = "TAP",
+ 		throttle = 1.0,
+@@ -2006,6 +2071,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "bankClosed",
++		bus = "window",
++		busPriority = 2,
+ 		category = "ALERT_WORLD",
+ 		mode = "THUD",
+ 		throttle = 0.5,
+@@ -2036,6 +2103,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "taxiOpened",
++		bus = "window",
++		busPriority = 3,
+ 		category = "ALERT_WORLD",
+ 		mode = "TAP",
+ 		throttle = 1.0,
+@@ -2047,6 +2116,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "questDetail",
++		bus = "window",
++		busPriority = 3,
+ 		category = "ALERT_WORLD",
+ 		mode = "TAP",
+ 		throttle = 0.5,
+@@ -2152,6 +2223,8 @@ Pulse.Triggers = {
+ 	-- any of them. All five are plain events, so none carries the radial taint risk.
+ 	{
+ 		id = "trainerShow",
++		bus = "window",
++		busPriority = 3,
+ 		category = "ALERT_WORLD",
+ 		mode = "TAP",
+ 		throttle = 1.0,
+@@ -2165,6 +2238,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "tradeSkillShow",
++		bus = "window",
++		busPriority = 3,
+ 		category = "ALERT_WORLD",
+ 		mode = "TAP",
+ 		throttle = 1.0,
+@@ -2742,6 +2817,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "panelOpen",
++		bus = "window",
++		busPriority = 1,
+ 		category = "CONTROLLER_UI",
+ 		mode = "TAP",
+ 		throttle = 0.2,
+@@ -2753,6 +2830,8 @@ Pulse.Triggers = {
+ 	},
+ 	{
+ 		id = "panelClose",
++		bus = "window",
++		busPriority = 1,
+ 		category = "CONTROLLER_UI",
+ 		mode = "CLICK",
+ 		throttle = 0.2,
+@@ -2784,6 +2863,89 @@ Pulse.Triggers = {
+ 		desc = "A soft tick when releasing the group targeting modifier back to normal navigation.",
+ 		caveat = "Passively polled via GroupTargeting.isTargetingActive. Fires when the group targeting modifier is released.",
+ 	},
++	-- ── Page switches (Phase 2) ─────────────────────────────────────────────────
++	-- Pure gates: no mode, play nothing, never overwrite the cues they gate. Seeded ON in every
++	-- profile regardless of __exclusive (Database:_SeedProfileTriggerDefaults).
++	{
++		id = "gateCombat",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Combat",
++		desc = "Switches every cue on the Combat page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateCasting",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Casting",
++		desc = "Switches every cue on the Casting page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateMovement",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Movement & Travel",
++		desc = "Switches every cue on the Movement & Travel page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateCharacter",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Character & Status",
++		desc = "Switches every cue on the Character & Status page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateControl",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Control & Threat",
++		desc = "Switches every cue on the Control & Threat page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateTarget",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Target & Focus",
++		desc = "Switches every cue on the Target & Focus page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateWorld",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "World & Environment",
++		desc = "Switches every cue on the World & Environment page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateSocial",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Social & Group",
++		desc = "Switches every cue on the Social & Group page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateInterface",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Interface & Accessibility",
++		desc = "Switches every cue on the Interface & Accessibility page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateInteract",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Controller Interactions",
++		desc = "Switches every cue on the Controller Interactions page on or off at once. Each cue keeps its own setting underneath.",
++	},
+ }
+ 
+ -- Presentation layout (2026-09-21) — which settings page and section each cue renders
+@@ -3246,6 +3408,43 @@ for _, page in ipairs(PAGE_LAYOUT) do
+ 	end
+ end
+ 
++-- Page switches (Phase 2): which gate governs each settings page. CONTROLLER has none on
++-- purpose — padDisconnected is the safety stop and must never sit behind a switch.
++-- CONTROLLER_UI reuses its existing category master instead of adding a second switch.
++Registry.PAGE_GATES = {
++	COMBAT = "gateCombat",
++	CASTING = "gateCasting",
++	MOVEMENT = "gateMovement",
++	CHARACTER = "gateCharacter",
++	CONTROL = "gateControl",
++	TARGET = "gateTarget",
++	WORLD = "gateWorld",
++	SOCIAL = "gateSocial",
++	INTERFACE = "gateInterface",
++	CONTROLLER_UI = "controllerUIMaster",
++	GAMEPAD_INTERACT = "gateInteract",
++}
++
++-- cue id -> page gate id, resolved once. A cue whose category master IS the page gate
++-- (the CONTROLLER_UI page) is left out: Pulse:GatesOpen already checks that master.
++Registry.CUE_GATE = {}
++for _, page in ipairs(PAGE_LAYOUT) do
++	local gateID = Registry.PAGE_GATES[page.id]
++	if gateID then
++		for _, section in ipairs(page.sections) do
++			for _, trigger in ipairs(section.triggers) do
++				if Registry.ALERT_CATEGORY_MASTER[trigger.category] ~= gateID then
++					Registry.CUE_GATE[trigger.id] = gateID
++				end
++			end
++		end
++	end
++end
++
++function Registry:GetPageGate(pageID)
++	return self.PAGE_GATES[pageID]
++end
++
+ -- A category master (currently only ccMaster) deliberately has no page: it renders on the
+ -- root page next to "Enable Pulse", not inside the section it gates.
+ local isCategoryMaster = {}
+@@ -3263,7 +3462,7 @@ for _, page in ipairs(PAGE_LAYOUT) do
+ end
+ 
+ for _, trigger in ipairs(Pulse.Triggers) do
+-	if not placed[trigger.id] and not isCategoryMaster[trigger.id] then
++	if not placed[trigger.id] and not isCategoryMaster[trigger.id] and not trigger.gate then
+ 		print(("Pulse: cue %q has no settings page — add it to PAGE_LAYOUT (Core/Registry.lua)"):format(trigger.id))
+ 	end
+ end
+diff --git a/PulseHaptics/Modules/AlertWorld.lua b/PulseHaptics/Modules/AlertWorld.lua
+index 199a165..898f334 100755
+--- a/PulseHaptics/Modules/AlertWorld.lua
++++ b/PulseHaptics/Modules/AlertWorld.lua
+@@ -11,7 +11,8 @@ local ADDON_NAME, Pulse = ...
+ local M = {}
+ Pulse:RegisterModule("AlertWorld", M)
+ 
+-local CUSTOM = { afkToggle = true }
++-- lootReceived is watched by Modules/World.lua's loot episode (own loot only, Core/Arbiter.lua).
++local CUSTOM = { afkToggle = true, lootReceived = true }
+ local wasFlagged = false
+ 
+ local function currentFlagged()
+diff --git a/PulseHaptics/Modules/Interaction.lua b/PulseHaptics/Modules/Interaction.lua
+index 0202ba5..48c52d2 100755
+--- a/PulseHaptics/Modules/Interaction.lua
++++ b/PulseHaptics/Modules/Interaction.lua
+@@ -109,18 +109,108 @@ local inMerchant = false
+ local inBank = false
+ local lastMerchantMoney = 0
+ local lastBankMoney = 0
+-local wasRepair = false
++
++-- Repair recognition (replaces the old `wasRepair` latch, which could swallow the next buy
++-- or sell after a guild-funded repair, a durability update from equipping at a vendor, or
++-- money arriving before durability). Every flag here expires; none can outlive its window.
++local REPAIR_WINDOW = 2.0 -- [measure, §11] RepairAllItems() call -> server confirmation
++local DEBIT_WINDOW = 1.0 -- [measure, §11] durability confirmation -> PLAYER_MONEY
++local knownRepairCost = 0 -- GetRepairAllCost(), refreshed at open and on every durability update
++local armedUntil = 0 -- set by the RepairAllItems post-hook
++local armedGuild = false
++local armedCost = 0
++local debitCost = 0 -- copper a personal repair will take; -1 = unknown (cursor repair)
++local debitUntil = 0
++local repairFiredAt = -100
++
++-- One-frame deferred close (window bus, Core/Arbiter.lua): a close is dropped when an
++-- interaction SHOW arrives before the deferred close runs.
++local showSerial = 0
++local pendingCloseSerial = -1
++local pendingBankClose = false
++
++local function readRepairCost()
++	if type(GetRepairAllCost) ~= "function" then
++		return 0
++	end
++	local cost = GetRepairAllCost()
++	if issecretvalue(cost) or type(cost) ~= "number" or cost < 0 then
++		return 0
++	end
++	return cost
++end
++
++local function resetRepair()
++	armedUntil, armedGuild, armedCost = 0, false, 0
++	debitCost, debitUntil = 0, 0
++end
++
++local function fireRepairOnce(now)
++	if (now - repairFiredAt) < DEBIT_WINDOW then
++		return
++	end
++	repairFiredAt = now
++	Pulse:FireIfEnabled("merchantRepair")
++end
++
++-- hooksecurefunc post-hook: runs after RepairAllItems has sent its request, catches every
++-- caller (Blizzard's button, auto-repair addons), taints nothing. `useGuildFunds` is the
++-- argument Blizzard's guild-repair button passes (Vanilla/MerchantFrame.xml:318).
++local function onRepairAllItems(useGuildFunds)
++	if not inMerchant then
++		return
++	end
++	local cost = knownRepairCost > 0 and knownRepairCost or readRepairCost()
++	if cost <= 0 then
++		return
++	end
++	armedUntil = GetTime() + REPAIR_WINDOW
++	armedGuild = (useGuildFunds == true)
++	armedCost = cost
++end
++
++local function flushDeferredClose()
++	if pendingCloseSerial < 0 then
++		return
++	end
++	local transition = (showSerial ~= pendingCloseSerial)
++	local bank = pendingBankClose
++	pendingCloseSerial, pendingBankClose = -1, false
++	if transition then
++		return -- a window opened before this frame ended: the close was part of a chain
++	end
++	if bank then
++		Pulse:FireIfEnabled("bankClosed")
++	end
++	Pulse:FireIfEnabled(CLOSED_CUE)
++end
++
++local function deferClose(isBank)
++	if pendingCloseSerial < 0 then
++		pendingCloseSerial = showSerial
++		C_Timer.After(0, flushDeferredClose) -- static function: no closure per close
++	end
++	if isBank then
++		pendingBankClose = true
++	end
++end
++
++local function openMerchant()
++	inMerchant = true
++	local money = (GetMoney and GetMoney()) or 0
++	lastMerchantMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
++	knownRepairCost = readRepairCost()
++	resetRepair()
++end
+ 
+ local function onShow(interaction)
+ 	if type(interaction) ~= "number" then
+ 		return
+ 	end
+ 
++	showSerial = showSerial + 1
+ 	if interaction == 5 or interaction == 12 then
+-		inMerchant = true
+-		local money = (GetMoney and GetMoney()) or 0
+-		lastMerchantMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
+-		wasRepair = false
++		openMerchant()
+ 	elseif BANK_INTERACTIONS[interaction] then
+ 		inBank = true
+ 		local money = (GetMoney and GetMoney()) or 0
+@@ -147,17 +237,18 @@ local function onHide(interaction)
+ 		print(("Pulse: interaction window %d closed"):format(interaction))
+ 	end
+ 
++	local isBank = false
+ 	if type(interaction) == "number" then
+ 		if interaction == 5 or interaction == 12 then
+ 			inMerchant = false
+-			wasRepair = false
++			resetRepair()
+ 		elseif BANK_INTERACTIONS[interaction] then
+ 			inBank = false
+-			Pulse:FireIfEnabled("bankClosed")
++			isBank = true
+ 		end
+ 	end
+ 
+-	Pulse:FireIfEnabled(CLOSED_CUE)
++	deferClose(isBank)
+ end
+ 
+ frame:SetScript("OnEvent", function(_, event, arg1)
+@@ -166,17 +257,29 @@ frame:SetScript("OnEvent", function(_, event, arg1)
+ 	elseif event == "PLAYER_INTERACTION_MANAGER_FRAME_HIDE" then
+ 		onHide(arg1)
+ 	elseif event == "MERCHANT_SHOW" then
+-		inMerchant = true
+-		local money = (GetMoney and GetMoney()) or 0
+-		lastMerchantMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
+-		wasRepair = false
++		showSerial = showSerial + 1
++		openMerchant()
+ 	elseif event == "MERCHANT_CLOSED" then
+ 		inMerchant = false
+-		wasRepair = false
++		resetRepair()
+ 	elseif event == "UPDATE_INVENTORY_DURABILITY" then
+ 		if inMerchant then
+-			wasRepair = true
+-			Pulse:FireIfEnabled("merchantRepair")
++			local now = GetTime()
++			local armed = now < armedUntil
++			local cursor = (type(InRepairMode) == "function") and InRepairMode() and true or false
++			if armed or cursor then
++				-- Confirmed repair. Equipping gear at a vendor also sends this event, but
++				-- without an armed RepairAllItems call or the repair cursor it is ignored:
++				-- nothing fires and nothing latches.
++				fireRepairOnce(now)
++				if armed and not armedGuild then
++					debitCost, debitUntil = armedCost, now + DEBIT_WINDOW
++				elseif cursor then
++					debitCost, debitUntil = -1, now + DEBIT_WINDOW
++				end
++				armedUntil = 0
++			end
++			knownRepairCost = readRepairCost()
+ 		end
+ 	elseif event == "PLAYER_MONEY" then
+ 		if inMerchant then
+@@ -184,8 +287,13 @@ frame:SetScript("OnEvent", function(_, event, arg1)
+ 			if not issecretvalue(current) and type(current) == "number" then
+ 				local delta = current - lastMerchantMoney
+ 				lastMerchantMoney = current
+-				if wasRepair then
+-					wasRepair = false
++				local now = GetTime()
++				if delta < 0 and now < debitUntil and (debitCost < 0 or -delta == debitCost) then
++					debitCost, debitUntil = 0, 0 -- the repair's own payment, already felt
++				elseif delta < 0 and now < armedUntil and not armedGuild and -delta == armedCost then
++					-- Money beat the durability update: this IS the repair.
++					fireRepairOnce(now)
++					armedUntil = 0
+ 				elseif delta > 0 then
+ 					Pulse:FireIfEnabled("merchantSell")
+ 				elseif delta < 0 then
+@@ -203,12 +311,13 @@ frame:SetScript("OnEvent", function(_, event, arg1)
+ 			end
+ 		end
+ 	elseif event == "BANKFRAME_OPENED" or event == "GUILDBANKFRAME_OPENED" then
++		showSerial = showSerial + 1
+ 		inBank = true
+ 		local money = (GetMoney and GetMoney()) or 0
+ 		lastBankMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
+ 	elseif event == "BANKFRAME_CLOSED" or event == "GUILDBANKFRAME_CLOSED" then
+ 		inBank = false
+-		Pulse:FireIfEnabled("bankClosed")
++		deferClose(true)
+ 	elseif event == "GUILDBANK_UPDATE_MONEY" then
+ 		Pulse:FireIfEnabled("bankGold")
+ 	end
+@@ -218,7 +327,7 @@ local function sync()
+ 	frame:UnregisterAllEvents()
+ 	inMerchant = false
+ 	inBank = false
+-	wasRepair = false
++	resetRepair()
+ 	if not Pulse.Database:Get("masterEnabled") then
+ 		return
+ 	end
+@@ -265,6 +374,9 @@ end
+ 
+ function M:OnEnable()
+ 	Pulse:BindFrame(WATCHED, sync)
++	if type(RepairAllItems) == "function" then
++		hooksecurefunc("RepairAllItems", onRepairAllItems)
++	end
+ 	if StackSplitFrame and type(StackSplitFrame.UpdateStackText) == "function" then
+ 		hooksecurefunc(StackSplitFrame, "UpdateStackText", function()
+ 			Pulse:FireIfEnabled("stackSplit")
+@@ -283,6 +395,8 @@ function M:_DebugInteraction()
+ 		watchedCues = #WATCHED,
+ 		inMerchant = inMerchant,
+ 		inBank = inBank,
+-		wasRepair = wasRepair,
++		repairArmed = GetTime() < armedUntil,
++		repairDebitPending = GetTime() < debitUntil,
++		pendingClose = pendingCloseSerial >= 0,
+ 	}
+ end
+diff --git a/PulseHaptics/Modules/Inventory.lua b/PulseHaptics/Modules/Inventory.lua
+index 19fb8a8..7eaa88c 100755
+--- a/PulseHaptics/Modules/Inventory.lua
++++ b/PulseHaptics/Modules/Inventory.lua
+@@ -144,7 +144,12 @@ function M:OnEnable()
+ 			end
+ 
+ 			if free < lastFreeSlots then
+-				Pulse:FireIfEnabled("bagItemAdded")
++				-- Owner rule (Registry.EPISODES): a purchase speaks through merchantBuy when
++				-- that cue is live, a loot window through its episode speaker. Otherwise
++				-- this tick is the only feedback for the item, so it plays.
++				if not Pulse.Arbiter:VendorOwnsIntake() and not Pulse.Arbiter:LootIntake() then
++					Pulse:FireIfEnabled("bagItemAdded")
++				end
+ 			elseif free > lastFreeSlots then
+ 				if not isInteractingWithStorageOrMerchant() then
+ 					Pulse:FireIfEnabled("bagItemUsed")
+diff --git a/PulseHaptics/Modules/World.lua b/PulseHaptics/Modules/World.lua
+index 1cd89b8..7216af2 100755
+--- a/PulseHaptics/Modules/World.lua
++++ b/PulseHaptics/Modules/World.lua
+@@ -11,10 +11,11 @@ Pulse:RegisterModule("World", M)
+ 
+ function M:OnEnable()
+ 	Pulse:WatchTrigger({ id = "resting", events = { "PLAYER_UPDATE_RESTING" } })
+-	Pulse:WatchTrigger({ id = "lootGold", events = { "CHAT_MSG_MONEY" } })
+-	Pulse:WatchTrigger({ id = "itemObtained", events = { "ITEM_PUSH" } })
+-	Pulse:WatchTrigger({ id = "harvestComplete", events = { "LOOT_READY" } })
+-	Pulse:WatchTrigger({ id = "durabilityLow", events = { "UPDATE_INVENTORY_ALERTS" } })
++	-- lootGold, itemObtained, harvestComplete and lootReceived: one loot-episode frame
++	-- (Core/Arbiter.lua) instead of four independent watchers. durabilityLow: worsening
++	-- edge only.
++	self:_WatchLoot()
++	self:_WatchDurability()
+ 	Pulse:WatchTrigger({ id = "equipChanged", events = { "PLAYER_EQUIPMENT_CHANGED" } })
+ 	-- Sibling to the player's own emote below. Unlike CHAT_MSG_TEXT_EMOTE these three
+ 	-- carry no player name to match against, so no filtering is needed and the generic
+@@ -80,3 +81,152 @@ function M:_WatchEmote()
+ 
+ 	Pulse:BindFrame({ "emote" }, sync)
+ end
++
++-- ── Loot episode (Core/Arbiter.lua) ───────────────────────────────────────────
++--
++-- LOOT_READY .. LOOT_CLOSED is one episode. Every intake event asks the Arbiter first; the
++-- episode's speaker plays once (autoloot) or once per click (manual), everything else in
++-- the episode stands down. Outside an episode each cue behaves exactly as before.
++
++local LOOT_WATCHED = { "lootOpened", "harvestComplete", "itemObtained", "lootReceived", "lootGold", "bagItemAdded" }
++
++function M:_WatchLoot()
++	local frame = CreateFrame("Frame")
++	local Arbiter = Pulse.Arbiter
++	local playerGUID = nil
++
++	local function sync()
++		frame:UnregisterAllEvents()
++		Arbiter:LootReset()
++		if not Pulse.Database:Get("masterEnabled") then
++			return
++		end
++		local any = false
++		for _, cueID in ipairs(LOOT_WATCHED) do
++			if Pulse.Database:GetCue(cueID) then
++				any = true
++				break
++			end
++		end
++		if not any then
++			return
++		end
++		frame:RegisterEvent("LOOT_READY")
++		frame:RegisterEvent("LOOT_OPENED")
++		frame:RegisterEvent("LOOT_SLOT_CLEARED")
++		frame:RegisterEvent("LOOT_CLOSED")
++		frame:RegisterEvent("PLAYER_ENTERING_WORLD")
++		if Pulse.Database:GetCue("itemObtained") then
++			frame:RegisterEvent("ITEM_PUSH")
++		end
++		if Pulse.Database:GetCue("lootReceived") then
++			frame:RegisterEvent("CHAT_MSG_LOOT")
++		end
++		if Pulse.Database:GetCue("lootGold") then
++			frame:RegisterEvent("CHAT_MSG_MONEY")
++		end
++	end
++
++	-- CHAT_MSG_LOOT fires for every group member's loot and roll. Own loot only: the 12th
++	-- payload field is the looter's GUID (ChatInfoDocumentation.lua, CHAT_MSG_LOOT).
++	local function isOwnLoot(guid)
++		if issecretvalue(guid) or type(guid) ~= "string" then
++			return false
++		end
++		if not playerGUID then
++			local mine = UnitGUID("player")
++			if issecretvalue(mine) then
++				return false
++			end
++			playerGUID = mine
++		end
++		return guid == playerGUID
++	end
++
++	frame:SetScript("OnEvent", function(_, event, ...)
++		if event == "LOOT_READY" then
++			Arbiter:LootOpened((...))
++			if not Arbiter:IsLive("lootOpened") then
++				Pulse:FireIfEnabled("harvestComplete")
++			end
++		elseif event == "LOOT_OPENED" then
++			Arbiter:LootOpened((...))
++		elseif event == "LOOT_SLOT_CLEARED" then
++			Arbiter:LootSlotCleared((...))
++		elseif event == "LOOT_CLOSED" then
++			Arbiter:LootClosed()
++		elseif event == "ITEM_PUSH" then
++			if not Arbiter:VendorOwnsIntake() and not Arbiter:LootIntake() then
++				Pulse:FireIfEnabled("itemObtained")
++			end
++		elseif event == "CHAT_MSG_LOOT" then
++			local guid = select(12, ...)
++			if isOwnLoot(guid) and not Arbiter:LootIntake() then
++				Pulse:FireIfEnabled("lootReceived")
++			end
++		elseif event == "CHAT_MSG_MONEY" then
++			if not Arbiter:LootIntake() then
++				Pulse:FireIfEnabled("lootGold")
++			end
++		elseif event == "PLAYER_ENTERING_WORLD" then
++			playerGUID = nil
++			Arbiter:LootReset()
++		end
++	end)
++
++	Pulse:BindFrame(LOOT_WATCHED, sync)
++end
++
++-- ── Durability: worsening edge only ───────────────────────────────────────────
++--
++-- UPDATE_INVENTORY_ALERTS also fires when a repair CLEARS an alert, and on zoning. The cue
++-- means "your gear got worse", so it fires only when the worst slot status rises
++-- (0 none -> 1 yellow -> 2 red), read the way Blizzard's own DurabilityFrame reads it.
++
++local ALERT_SLOT_FALLBACK = 11 -- INVENTORY_ALERT_STATUS_SLOTS, DurabilityFrame.lua:1-12
++local BROKEN_GAIN = 1.25
++
++function M:_WatchDurability()
++	local frame = CreateFrame("Frame")
++	local lastWorst = -1 -- unseeded: the first reading is a baseline, never a cue
++
++	local function worstAlert()
++		if type(GetInventoryAlertStatus) ~= "function" then
++			return 0
++		end
++		local slots = (type(INVENTORY_ALERT_STATUS_SLOTS) == "table" and #INVENTORY_ALERT_STATUS_SLOTS)
++			or ALERT_SLOT_FALLBACK
++		if slots <= 0 then
++			slots = ALERT_SLOT_FALLBACK
++		end
++		local worst = 0
++		for index = 1, slots do
++			local status = GetInventoryAlertStatus(index)
++			if not issecretvalue(status) and type(status) == "number" and status > worst then
++				worst = status
++			end
++		end
++		return worst
++	end
++
++	local function sync()
++		frame:UnregisterAllEvents()
++		lastWorst = -1
++		if not Pulse.Database:Get("masterEnabled") or not Pulse.Database:GetCue("durabilityLow") then
++			return
++		end
++		frame:RegisterEvent("UPDATE_INVENTORY_ALERTS")
++		frame:RegisterEvent("PLAYER_ENTERING_WORLD")
++		lastWorst = worstAlert()
++	end
++
++	frame:SetScript("OnEvent", function(_, event)
++		local worst = worstAlert()
++		if event == "UPDATE_INVENTORY_ALERTS" and lastWorst >= 0 and worst > lastWorst then
++			Pulse:FireIfEnabled("durabilityLow", worst >= 2 and BROKEN_GAIN or 1.0)
++		end
++		lastWorst = worst
++	end)
++
++	Pulse:BindFrame({ "durabilityLow" }, sync)
++end
+diff --git a/PulseHaptics/PulseHaptics.toc b/PulseHaptics/PulseHaptics.toc
+index ef6b42b..25b522a 100755
+--- a/PulseHaptics/PulseHaptics.toc
++++ b/PulseHaptics/PulseHaptics.toc
+@@ -53,6 +53,7 @@ Core/Engine.lua
+ Core/CastActivity.lua
+ 
+ Core/Registry.lua
++Core/Arbiter.lua
+ Core/Guide.lua
+ Modules/Movement.lua
+ Modules/Flight.lua
+diff --git a/PulseHaptics/UI/Panel/Content.lua b/PulseHaptics/UI/Panel/Content.lua
+index 89f3529..5083ea1 100755
+--- a/PulseHaptics/UI/Panel/Content.lua
++++ b/PulseHaptics/UI/Panel/Content.lua
+@@ -178,10 +178,21 @@ end
+ -- every cue" — which needed a /reload when the old panel decided at registration time
+ -- whether a control existed. Here the row is always built and simply left out of the
+ -- layout, so both toggles are instant.
++--
++-- Phase 2 adds a third reason, a folded section, and it yields to search: a match inside a
++-- folded section is shown, or the search box would find things it then hides.
++local db = nil
++local function sectionFolded(key)
++    db = db or Pulse.Database
++    return key ~= nil and db:IsSectionCollapsed(key)
++end
++
+ local function rowVisible(row, filter)
+     local spec = row.spec
+     if spec and spec.visibleWhen and not spec.visibleWhen() then return false end
+-    if not filter then return true end
++    if not filter then
++        return not (spec and spec.sectionKey and not row.isSectionHeader and sectionFolded(spec.sectionKey))
++    end
+     if row.isHeader then return false end   -- decided by its section, below
+     return row.searchText and string.find(row.searchText, filter, 1, true) ~= nil
+ end
+@@ -209,7 +220,9 @@ function ContentMixin:LayoutRows()
+                 shown[lastHeaderIndex] = false
+             end
+             lastHeaderIndex = index
+-            headerHasContent = false
++            -- A folded section keeps its heading (it is how you unfold it) unless a search
++            -- is running, when headings follow their visible rows as before.
++            headerHasContent = (row.isSectionHeader and not filter and sectionFolded(row.sectionKey)) or false
+             shown[index] = true
+         else
+             local visible = rowVisible(row, filter)
+@@ -245,7 +258,17 @@ function ContentMixin:LayoutRows()
+         end
+     end
+ 
+-    self.Child:SetHeight(math.max(y + Theme.LIST_VERTICAL_PAD, 1))
++    local childHeight = math.max(y + Theme.LIST_VERTICAL_PAD, 1)
++    self.Child:SetHeight(childHeight)
++
++    -- Folding a section above the viewport shortens the child under the current scroll
++    -- offset. Clamp from the heights just set rather than GetVerticalScrollRange, which
++    -- only catches up after the scroll frame's next layout pass.
++    local viewHeight = self.Scroll:GetHeight() or 0
++    local maxScroll = math.max(0, childHeight - viewHeight)
++    if (self.Scroll:GetVerticalScroll() or 0) > maxScroll then
++        self.Scroll:SetVerticalScroll(maxScroll)
++    end
+ end
+ 
+ -- ── Refresh ───────────────────────────────────────────────────────────────────
+diff --git a/PulseHaptics/UI/Panel/Panel.lua b/PulseHaptics/UI/Panel/Panel.lua
+index 2d53a25..8f0f971 100755
+--- a/PulseHaptics/UI/Panel/Panel.lua
++++ b/PulseHaptics/UI/Panel/Panel.lua
+@@ -415,10 +415,32 @@ function Panel.EnsureBuilt()
+ 	tinsert(UISpecialFrames, FRAME_NAME)
+ 
+ 	frame.Sidebar:Select(pages[1])
++	Panel.ApplySimpleView()
+ 
+ 	return frame
+ end
+ 
++-- ── Simple view (Phase 2) ─────────────────────────────────────────────────────
++
++local function keepInSimpleView(page)
++	return page.simple and true or false
++end
++
++-- Filters the sidebar to the simple pages and, if the page in view just disappeared, moves
++-- to the switches page. Presentation only: no cue, gate or profile value is written.
++function Panel.ApplySimpleView()
++	if not frame or not frame.pageList then
++		return
++	end
++	local simple = Pulse.Database:Get("simpleView") and true or false
++	frame.Sidebar:ApplyFilter(simple and keepInSimpleView or nil)
++	local current = frame.Sidebar.selectedPage
++	if simple and current and not current.simple then
++		Panel.GoToPage("switches")
++	end
++	Panel.MarkDirty()
++end
++
+ -- ── Open / close ──────────────────────────────────────────────────────────────
+ 
+ -- Switch the page in view by id. Public because the cue index needs it: an index entry's
+diff --git a/PulseHaptics/UI/Panel/Rows.lua b/PulseHaptics/UI/Panel/Rows.lua
+index 603d4ed..7a09d11 100755
+--- a/PulseHaptics/UI/Panel/Rows.lua
++++ b/PulseHaptics/UI/Panel/Rows.lua
+@@ -293,7 +293,10 @@ function Rows.CreateCheckbox(parent, spec)
+ 		local val = spec.get() and true or false
+ 		box:SetChecked(val)
+ 		if statusBadge then
+-			statusBadge:SetText(val and "|cff2dd4bf[ACTIVE]|r" or "|cff64748b[MUTED]|r")
++			-- A page switch shows how much of its page is on ("12 of 35 on") rather than a
++			-- bare ACTIVE/MUTED; everything else keeps the original badge.
++			local text = spec.badge and spec.badge(val)
++			statusBadge:SetText(text or (val and "|cff2dd4bf[ACTIVE]|r" or "|cff64748b[MUTED]|r"))
+ 		end
+ 	end
+ 
+@@ -724,6 +727,205 @@ function Rows.CreateIndex(parent, spec)
+ 	return row
+ end
+ 
++-- ── Collapsible section header (Phase 2) ──────────────────────────────────────
++
++-- A heading you can click. A Button, not the plain Frame CreateHeader makes, and marked
++-- ignored for SmartNavigation like every header: the panel is mouse-driven by design
++-- (UI/Panel/Gamepad.lua:40-69), so nothing here adds controller navigation.
++local PLUS = "Interface\\Buttons\\UI-PlusButton-Up"
++local MINUS = "Interface\\Buttons\\UI-MinusButton-Up"
++
++function Rows.CreateSectionHeader(parent, spec)
++	local row = CreateFrame("Button", nil, parent)
++	row:SetHeight(Theme.HEADER_ROW_H)
++	row.rowHeight = Theme.HEADER_ROW_H
++	row.spec = spec
++	row.isHeader = true
++	row.isSectionHeader = true
++	row.sectionKey = spec.sectionKey
++
++	row.Toggle = row:CreateTexture(nil, "ARTWORK")
++	row.Toggle:SetSize(14, 14)
++	row.Toggle:SetPoint("TOPLEFT", row, "TOPLEFT", 7, -18)
++
++	row.Title = row:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
++	row.Title:SetJustifyH("LEFT")
++	row.Title:SetPoint("LEFT", row.Toggle, "RIGHT", 6, 0)
++	row.Title:SetText(spec.label or "")
++
++	row.Badge = row:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
++	row.Badge:SetPoint("LEFT", row.Title, "RIGHT", 10, 0)
++
++	local rule = row:CreateTexture(nil, "ARTWORK")
++	rule:SetHeight(1)
++	rule:SetPoint("TOPLEFT", row.Toggle, "BOTTOMLEFT", 0, -6)
++	rule:SetPoint("RIGHT", row, "RIGHT", -20, 0)
++	rule:SetColorTexture(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b, 0.25)
++
++	row:SetScript("OnClick", function()
++		spec.onToggle()
++	end)
++
++	row.searchText = string.lower(spec.label or "")
++	Theme.MarkIgnored(row)
++
++	row.RefreshValue = function()
++		row.Toggle:SetTexture(spec.isCollapsed() and PLUS or MINUS)
++		row.Badge:SetText(spec.badge and spec.badge() or "")
++	end
++	row.SetRowEnabled = function() end
++
++	row:RefreshValue()
++	return row
++end
++
++-- ── One-line cue row (Phase 2) ────────────────────────────────────────────────
++
++-- Everything a cue used to spread over three to five rows, on one: switch, name, intensity,
++-- shape, preview. Bespoke tunables stay as indented rows below it. The inline slider and
++-- dropdown honour the same "Show per-cue detail controls" switch the old rows did.
++function Rows.CreateCueRow(parent, spec)
++	local row = createBaseRow(parent, spec, "Frame")
++	row.Text:ClearAllPoints()
++	row.Text:SetPoint("LEFT", row, "LEFT", Theme.CUE_LABEL_LEFT, 0)
++	row.Text:SetWidth(Theme.CUE_LABEL_WIDTH)
++
++	local box = CreateFrame("CheckButton", nil, row)
++	box:SetSize(Theme.CHECKBOX_SIZE_X, Theme.CHECKBOX_SIZE_Y)
++	box:SetPoint("LEFT", row, "LEFT", Theme.CUE_CHECK_LEFT, 0)
++	box:SetMotionScriptsWhileDisabled(true)
++	box:SetNormalAtlas("checkbox-minimal")
++	box:SetPushedAtlas("checkbox-minimal")
++	box:SetCheckedTexture("checkmark-minimal")
++	box:SetDisabledCheckedTexture("checkmark-minimal-disabled")
++	box:SetScript("OnClick", function(self)
++		local value = self:GetChecked() and true or false
++		Theme.PlayCheckSound(value)
++		spec.check.set(value)
++		self:SetChecked(spec.check.get() and true or false)
++	end)
++	row.Hit:SetScript("OnMouseUp", function()
++		if box:IsEnabled() then
++			box:Click()
++		end
++	end)
++
++	local slider
++	if spec.intensity then
++		slider = CreateFrame("Frame", nil, row, "MinimalSliderWithSteppersTemplate")
++		slider:SetWidth(Theme.CUE_SLIDER_WIDTH)
++		slider:SetPoint("LEFT", row, "LEFT", Theme.CUE_SLIDER_LEFT, Theme.SLIDER_OFFSET_Y)
++		local s = spec.intensity
++		local steps = math.max(1, ((s.max or 1.5) - (s.min or 0)) / (s.step or 0.05))
++		slider:Init(s.get() or 1.0, s.min or 0, s.max or 1.5, steps, {})
++		local applying = false
++		slider:RegisterCallback(MinimalSliderWithSteppersMixin.Event.OnValueChanged, function(_, value)
++			if applying then
++				return
++			end
++			applying = true
++			s.set(value)
++			applying = false
++		end, row)
++		attachControlTooltip(row, slider.Slider, s)
++		row.Slider = slider
++		row.applyingSlider = function(v)
++			applying = v
++		end
++	end
++
++	local dropdown
++	if spec.mode then
++		local ok, dd = pcall(CreateFrame, "DropdownButton", nil, row, "WowStyle2DropdownTemplate")
++		if ok and dd then
++			dropdown = dd
++			dropdown:SetWidth(Theme.CUE_DROPDOWN_WIDTH)
++			dropdown:SetPoint("LEFT", row, "LEFT", Theme.CUE_DROPDOWN_LEFT, 0)
++			-- No SetupMenu: Blizzard's Menu ends at a protected binding call. Popup.OpenList
++			-- supplies the behaviour, exactly as Rows.CreateDropdown does.
++			dropdown:HookScript("OnMouseDown", function()
++				if dropdown:IsEnabled() then
++					Panel.Popup.OpenList(dropdown, spec.mode.options(), spec.mode.get(), function(value)
++						spec.mode.set(value)
++					end, spec.mode.previewScale and spec.mode.previewScale())
++				end
++			end)
++			attachControlTooltip(row, dropdown, spec.mode)
++			row.Dropdown = dropdown
++		end
++	end
++
++	local play
++	if spec.test then
++		play = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
++		play:SetSize(Theme.CUE_PLAY_WIDTH, 20)
++		play:SetPoint("LEFT", row, "LEFT", Theme.CUE_PLAY_LEFT, 0)
++		play:SetText(">")
++		play:SetScript("OnClick", function()
++			spec.test.onClick()
++		end)
++		attachControlTooltip(row, play, spec.test)
++		row.Play = play
++	end
++
++	row.Control = box
++
++	local function setText(value)
++		if not dropdown then
++			return
++		end
++		if dropdown.Text then
++			dropdown.Text:SetText(value or "")
++		elseif dropdown.SetText then
++			dropdown:SetText(value or "")
++		end
++	end
++
++	-- The inline controls follow the cue's OWN switch as well as the gates. Content.lua only
++	-- re-applies SetRowEnabled when the gate result changes, so the cue-switch half is
++	-- re-evaluated here on every refresh.
++	local function applySubEnabled()
++		local sub = (not spec.enabledWhen or spec.enabledWhen()) and spec.check.get() and true or false
++		if slider then
++			slider:SetEnabled(sub)
++		end
++		if dropdown then
++			dropdown:SetEnabled(sub)
++		end
++	end
++
++	row.RefreshValue = function()
++		box:SetChecked(spec.check.get() and true or false)
++		applySubEnabled()
++		local detail = spec.detailShown()
++		if slider then
++			slider:SetShown(detail)
++			local value = spec.intensity.get()
++			if type(value) == "number" and slider.Slider and slider.Slider:GetValue() ~= value then
++				row.applyingSlider(true)
++				slider:SetValue(value)
++				row.applyingSlider(false)
++			end
++		end
++		if dropdown then
++			dropdown:SetShown(detail)
++			setText(spec.mode.get())
++		end
++		if play then
++			play:SetShown(spec.testShown())
++		end
++	end
++	row.SetRowEnabled = function(_, enabled)
++		box:SetEnabled(enabled)
++		applySubEnabled()
++		Theme.DisplayEnabled(row, enabled)
++	end
++
++	row.searchText = string.lower((spec.label or "") .. " " .. (spec.tooltip or ""))
++	row:RefreshValue()
++	return row
++end
++
+ -- ── Dispatch ──────────────────────────────────────────────────────────────────
+ 
+ local builders = {
+@@ -734,6 +936,8 @@ local builders = {
+ 	dropdown = Rows.CreateDropdown,
+ 	button = Rows.CreateButton,
+ 	index = Rows.CreateIndex,
++	section = Rows.CreateSectionHeader,
++	cue = Rows.CreateCueRow,
+ }
+ 
+ -- Every write from a row marks the panel dirty on top of whatever the database notifies.
+diff --git a/PulseHaptics/UI/Panel/Sidebar.lua b/PulseHaptics/UI/Panel/Sidebar.lua
+index c981f74..73767fd 100755
+--- a/PulseHaptics/UI/Panel/Sidebar.lua
++++ b/PulseHaptics/UI/Panel/Sidebar.lua
+@@ -208,6 +208,27 @@ function SidebarMixin:CreateButtons(pages)
+ 	end
+ end
+ 
++-- Simple view (Phase 2): hide some buttons and close the gaps. Re-anchors the buttons
++-- built once by CreateButtons; creates nothing. `keep(page)` nil shows every page.
++function SidebarMixin:ApplyFilter(keep)
++	local previous = nil
++	for _, button in ipairs(self.buttons) do
++		local visible = (keep == nil) or keep(button.page)
++		button:SetShown(visible)
++		if visible then
++			button:ClearAllPoints()
++			button:SetPoint("LEFT", self, "LEFT", 0, 0)
++			button:SetPoint("RIGHT", self, "RIGHT", 0, 0)
++			if previous then
++				button:SetPoint("TOP", previous, "BOTTOM", 0, 0)
++			else
++				button:SetPoint("TOP", self, "TOP", 0, 0)
++			end
++			previous = button
++		end
++	end
++end
++
+ function SidebarMixin:Select(page)
+ 	for _, button in ipairs(self.buttons) do
+ 		button.selected = (button.page == page)
+diff --git a/PulseHaptics/UI/Panel/Spec.lua b/PulseHaptics/UI/Panel/Spec.lua
+index 9ba6cb8..d76a859 100755
+--- a/PulseHaptics/UI/Panel/Spec.lua
++++ b/PulseHaptics/UI/Panel/Spec.lua
+@@ -88,18 +88,14 @@ local function masterOn()
+ 	return database():Get("masterEnabled") and true or false
+ end
+ 
+--- A cue is editable when the master switch is on and, if its category has a master cue of
+--- its own (currently only ccMaster for ALERT_CC), that one is on too. The master lookup is
+--- keyed on trigger.category, not on the page: a page can mix categories, and ccMaster must
+--- keep gating only the loss-of-control cues.
++-- A cue is editable when the master switch is on and every gate in front of it is open:
++-- its category master (ccMaster, controllerUIMaster) and, since Phase 2, its page switch.
++-- One rule, shared with the runtime (Pulse:GatesOpen), so the panel can never grey a cue
++-- the engine would play or leave live a cue the engine would drop.
+ local function cueGate(trigger)
+-	local masterID = Pulse.Registry.ALERT_CATEGORY_MASTER[trigger.category]
+-	if masterID and trigger.id ~= masterID then
+-		return function()
+-			return masterOn() and (database():GetCue(masterID) and true or false)
+-		end
++	return function()
++		return masterOn() and Pulse:GatesOpen(trigger.id, trigger)
+ 	end
+-	return masterOn
+ end
+ 
+ -- A cue's subordinate rows need the cue itself switched on as well.
+@@ -110,8 +106,11 @@ local function subordinateGate(trigger)
+ 	end
+ end
+ 
++-- Simple view (Phase 2) hides the per-cue detail without touching the stored
++-- showAdvancedCueControls choice, so leaving simple view restores exactly what was there.
+ local function advancedShown()
+-	return database():Get("showAdvancedCueControls") and true or false
++	local store = database()
++	return (store:Get("showAdvancedCueControls") and not store:Get("simpleView")) and true or false
+ end
+ 
+ local function testButtonsShown()
+@@ -456,6 +455,20 @@ function Spec.BuildRootPage()
+ 		end,
+ 	}
+ 
++	rows[#rows + 1] = {
++		kind = "checkbox",
++		label = "Simple view",
++		tooltip = "Shows only the page switches and this page. Every cue keeps its own settings; "
++			.. "turn this off to get every page back exactly as it was.",
++		get = function()
++			return store:Get("simpleView")
++		end,
++		set = function(value)
++			store:Set("simpleView", value)
++			Panel.ApplySimpleView()
++		end,
++	}
++
+ 	rows[#rows + 1] = {
+ 		kind = "checkbox",
+ 		label = "Show per-cue detail controls",
+@@ -591,33 +604,77 @@ end
+ 
+ -- ── Cue pages ─────────────────────────────────────────────────────────────────
+ 
+--- One cue and everything that belongs to it: the checkbox, then its intensity, its mode
+--- override, any bespoke tunables, and its preview button, as indented subordinate rows.
+-local function cueBlock(rows, trigger)
+-	rows[#rows + 1] = cueCheckbox(trigger)
++-- ── One-line cue rows and folding sections (Phase 2) ──────────────────────────
+ 
+-	-- A gate-only trigger with neither a mode nor a texture (padDisconnected) has nothing
+-	-- to scale, so it gets no intensity dial.
+-	if trigger.mode or trigger.continuous then
+-		rows[#rows + 1] = cueIntensitySlider(trigger)
++local function sectionKeyFor(page, section)
++	return page.id .. "/" .. section.label
++end
++
++local function countOn(triggers)
++	local store = database()
++	local on = 0
++	for _, trigger in ipairs(triggers) do
++		if store:GetCue(trigger.id) then
++			on = on + 1
++		end
+ 	end
++	return on
++end
+ 
++local function sectionHeader(page, section)
++	local key = sectionKeyFor(page, section)
++	return {
++		kind = "section",
++		label = section.label,
++		sectionKey = key,
++		isCollapsed = function()
++			return database():IsSectionCollapsed(key)
++		end,
++		onToggle = function()
++			Panel.Popup.CloseList() -- a list anchored to a row that is about to hide
++			database():SetSectionCollapsed(key, not database():IsSectionCollapsed(key))
++		end,
++		badge = function()
++			return ("%d of %d on"):format(countOn(section.triggers), #section.triggers)
++		end,
++	}
++end
++
++-- The composed row: the same get/set closures the old checkbox, slider, dropdown and Play
++-- rows used, so the saved values and their tooltips do not move.
++local function cueRow(trigger, key)
++	local check = cueCheckbox(trigger)
++	local row = {
++		kind = "cue",
++		label = check.label,
++		tooltip = check.tooltip,
++		sectionKey = key,
++		check = check,
++		enabledWhen = check.enabledWhen,
++		detailShown = advancedShown,
++		testShown = testButtonsShown,
++	}
++	if trigger.mode or trigger.continuous then
++		row.intensity = cueIntensitySlider(trigger)
++	end
+ 	if trigger.mode then
+-		rows[#rows + 1] = cueModeDropdown(trigger)
++		row.mode = cueModeDropdown(trigger)
++	end
++	if Pulse:CanTestCue(trigger.id) then
++		row.test = cueTestButton(trigger)
+ 	end
++	return row
++end
+ 
+-	-- Tunables marked devTuning render on the Continuous textures page instead, not
+-	-- doubled up here too.
++local function cueBlockCompact(rows, trigger, key)
++	rows[#rows + 1] = cueRow(trigger, key)
+ 	if trigger.tunables and not trigger.devTuning then
+ 		for _, tunable in ipairs(trigger.tunables) do
+-			rows[#rows + 1] = tunableRow(trigger, tunable)
++			local spec = tunableRow(trigger, tunable)
++			spec.sectionKey = key
++			rows[#rows + 1] = spec
+ 		end
+ 	end
+-
+-	local test = cueTestButton(trigger)
+-	if test then
+-		rows[#rows + 1] = test
+-	end
+ end
+ 
+ function Spec.BuildCuePage(page)
+@@ -637,15 +694,51 @@ function Spec.BuildCuePage(page)
+ 	end
+ 	for _, section in ipairs(page.sections) do
+ 		if #section.triggers > 0 then
+-			rows[#rows + 1] = { kind = "header", label = section.label }
++			local key = sectionKeyFor(page, section)
++			rows[#rows + 1] = sectionHeader(page, section)
+ 			for _, trigger in ipairs(section.triggers) do
+-				cueBlock(rows, trigger)
++				cueBlockCompact(rows, trigger, key)
+ 			end
+ 		end
+ 	end
+ 	return rows
+ end
+ 
++-- ── Switches page (Phase 2 simple view) ───────────────────────────────────────
++
++-- One switch per settings page. Each is a real trigger (Registry.PAGE_GATES) stored per
++-- profile like any cue, so it follows profile switches; none of them writes a cue.
++function Spec.BuildSwitchesPage()
++	local rows = {}
++	rows[#rows + 1] = {
++		kind = "text",
++		gap = 8,
++		body = "Turn whole pages of cues on or off. Each cue keeps its own setting underneath: "
++			.. "switching a page back on restores exactly what was there.",
++	}
++	for _, page in ipairs(Pulse.Registry:GetPages()) do
++		local gateID = page.hasCues and Pulse.Registry:GetPageGate(page.id)
++		local trigger = gateID and Pulse.Registry:GetTrigger(gateID)
++		if trigger then
++			local spec = cueCheckbox(trigger)
++			spec.isMaster = true
++			spec.label = page.label
++			local triggers = {}
++			for _, section in ipairs(page.sections) do
++				for _, t in ipairs(section.triggers) do
++					triggers[#triggers + 1] = t
++				end
++			end
++			spec.badge = function(on)
++				local text = ("%d of %d cues on"):format(countOn(triggers), #triggers)
++				return on and ("|cff2dd4bf" .. text .. "|r") or ("|cff64748b" .. text .. " (page off)|r")
++			end
++			rows[#rows + 1] = spec
++		end
++	end
++	return rows
++end
++
+ -- ── Cue index ─────────────────────────────────────────────────────────────────
+ 
+ -- Every cue in the addon on one page, alphabetically, each saying where its own controls
+@@ -1871,11 +1964,19 @@ end
+ function Spec.BuildPages()
+ 	local pages = {}
+ 
+-	pages[#pages + 1] = { id = "root", label = "Pulse", indent = 0, build = Spec.BuildRootPage }
++	pages[#pages + 1] = { id = "root", label = "Pulse", indent = 0, simple = true, build = Spec.BuildRootPage }
++	pages[#pages + 1] = {
++		id = "switches",
++		label = "Page switches",
++		indent = 1,
++		simple = true,
++		build = Spec.BuildSwitchesPage,
++	}
+ 
+ 	-- First of the children, before the cue pages it indexes.
+ 	pages[#pages + 1] = { id = "cueIndex", label = "Cue index", indent = 1, build = Spec.BuildCueIndexPage }
+-	pages[#pages + 1] = { id = "profiles", label = "Profiles", indent = 1, build = Spec.BuildProfilesPage }
++	pages[#pages + 1] =
++		{ id = "profiles", label = "Profiles", indent = 1, simple = true, build = Spec.BuildProfilesPage }
+ 	pages[#pages + 1] = {
+ 		id = "defaultProfiles",
+ 		label = "Default profiles",
+@@ -1912,7 +2013,7 @@ function Spec.BuildPages()
+ 	}
+ 
+ 	if Pulse.Guide and #Pulse.Guide > 0 then
+-		pages[#pages + 1] = { id = "guide", label = "Guide", indent = 1, build = Spec.BuildGuidePage }
++		pages[#pages + 1] = { id = "guide", label = "Guide", indent = 1, simple = true, build = Spec.BuildGuidePage }
+ 	end
+ 
+ 	return pages
+diff --git a/PulseHaptics/UI/Panel/Theme.lua b/PulseHaptics/UI/Panel/Theme.lua
+index 4e0d01f..3fcab0d 100755
+--- a/PulseHaptics/UI/Panel/Theme.lua
++++ b/PulseHaptics/UI/Panel/Theme.lua
+@@ -98,6 +98,18 @@ Theme.DROPDOWN_WIDTH = 220
+ Theme.BUTTON_WIDTH = 200
+ Theme.BUTTON_LEFT = -40
+ 
++-- One-line cue row (Phase 2). Left-anchored offsets inside a ~605 px row at the stock
++-- 920 px window. [verify in game at 1280x800 and UI scale 0.64-1.0]
++Theme.CUE_CHECK_LEFT = 4
++Theme.CUE_LABEL_LEFT = 38
++Theme.CUE_LABEL_WIDTH = 190
++Theme.CUE_SLIDER_LEFT = 232
++Theme.CUE_SLIDER_WIDTH = 150
++Theme.CUE_DROPDOWN_LEFT = 392
++Theme.CUE_DROPDOWN_WIDTH = 150
++Theme.CUE_PLAY_LEFT = 550
++Theme.CUE_PLAY_WIDTH = 28
++
+ -- Blizzard_CategoryList.xml:47-49 and :63-68.
+ Theme.CATEGORY_HEIGHT = 20
+ Theme.CATEGORY_LABEL_X = 36
+diff --git a/PulseProbe/Core.lua b/PulseProbe/Core.lua
+index 62d9125..4e99964 100644
+--- a/PulseProbe/Core.lua
++++ b/PulseProbe/Core.lua
+@@ -86,6 +86,125 @@ function Probe:ClearLogs()
+ 	end
+ end
+ 
++---------------------------------------------------------------------------
++-- Event-order trace (Phase 0 measurement)
++---------------------------------------------------------------------------
++--
++-- A second, much larger ring for ordering questions the 100-entry display log cannot
++-- answer: which event of a pair arrives first, whether two arrive in the same frame, and
++-- how far apart they are in wall time. Struct-of-arrays, sized once, overwritten in
++-- place: recording an event stores references and numbers, never builds a table or a
++-- string (Rule 4).
++--
++-- Three clocks, because none is sufficient alone:
++--   frame    increments once per OnUpdate. Same value = delivered between the same two frames.
++--   arrival  1, 2, 3 ... within one frame: delivery order inside that frame.
++--   precise  GetTimePreciseSec() (OsDocumentation.lua) — monotonic, sub-millisecond.
++--   profile  debugprofilestop() (FrameScriptDocumentation.lua) — ms since the LAST
++--            debugprofilestart() by ANY addon, so kept only as a cross-check; this file
++--            never calls debugprofilestart(), which would reset every other profiler.
++-- GetTime() is deliberately absent: it is frame-cached, so it cannot order same-frame events.
++
++local TRACE_CAP = 4096
++local tEvent, tFrame, tArrival, tPrecise, tProfile = {}, {}, {}, {}, {}
++local tA1, tA2, tA3 = {}, {}, {}
++for i = 1, TRACE_CAP do
++	tEvent[i], tFrame[i], tArrival[i], tPrecise[i], tProfile[i] = "", 0, 0, 0, 0
++	tA1[i], tA2[i], tA3[i] = false, false, false
++end
++
++local trace = { head = 0, count = 0, running = false, scenario = "", frame = 0, arrival = 0 }
++Probe.TraceState = trace
++
++local SECRET = "<secret>"
++local preciseClock = (type(GetTimePreciseSec) == "function") and GetTimePreciseSec or GetTime
++local profileClock = (type(debugprofilestop) == "function") and debugprofilestop or function()
++	return 0
++end
++
++-- Numbers, booleans and strings are stored as-is (a string the client passed in already
++-- exists; keeping a reference allocates nothing). Anything else is reduced to its type
++-- name; secret values are masked, never compared or formatted.
++local function scalar(v)
++	if v == nil then
++		return false
++	end
++	if issecretvalue and issecretvalue(v) then
++		return SECRET
++	end
++	local kind = type(v)
++	if kind == "number" or kind == "boolean" or kind == "string" then
++		return v
++	end
++	return kind
++end
++
++local clockFrame = CreateFrame("Frame")
++clockFrame:SetScript("OnUpdate", function()
++	trace.frame = trace.frame + 1
++	trace.arrival = 0
++end)
++
++function Probe:Record(event, a1, a2, a3)
++	if not trace.running then
++		return
++	end
++	trace.arrival = trace.arrival + 1
++	local i = (trace.head % TRACE_CAP) + 1
++	trace.head = i
++	if trace.count < TRACE_CAP then
++		trace.count = trace.count + 1
++	end
++	tEvent[i] = event
++	tFrame[i] = trace.frame
++	tArrival[i] = trace.arrival
++	tPrecise[i] = preciseClock()
++	tProfile[i] = profileClock()
++	tA1[i], tA2[i], tA3[i] = scalar(a1), scalar(a2), scalar(a3)
++end
++
++function Probe:TraceStart(scenario)
++	trace.head, trace.count = 0, 0
++	trace.scenario = scenario or "unnamed"
++	trace.running = true
++end
++
++function Probe:TraceStop()
++	trace.running = false
++end
++
++-- The only place that allocates: copies the ring, oldest first, into SavedVariables for
++-- offline analysis (scripts/probe-trace-report.lua). Player-initiated, never in play.
++function Probe:TraceDump()
++	local db = self.DB
++	if not db then
++		return 0
++	end
++	db.traces = db.traces or {}
++	local rows = {}
++	local first = (trace.count < TRACE_CAP) and 1 or ((trace.head % TRACE_CAP) + 1)
++	for n = 0, trace.count - 1 do
++		local i = ((first - 1 + n) % TRACE_CAP) + 1
++		rows[#rows + 1] = {
++			tEvent[i],
++			tFrame[i],
++			tArrival[i],
++			tPrecise[i],
++			tProfile[i],
++			tA1[i],
++			tA2[i],
++			tA3[i],
++		}
++	end
++	db.traces[#db.traces + 1] = {
++		scenario = trace.scenario,
++		build = select(2, GetBuildInfo()),
++		interface = select(4, GetBuildInfo()),
++		rows = rows,
++	}
++	return #rows
++end
++
+ ---------------------------------------------------------------------------
+ -- Probe Module Registration
+ ---------------------------------------------------------------------------
+@@ -164,6 +283,27 @@ SLASH_PULSEPROBE1 = "/probe"
+ SLASH_PULSEPROBE2 = "/pulselab"
+ SlashCmdList["PULSEPROBE"] = function(msg)
+ 	local cmd = msg and msg:trim():lower() or ""
++	local verb, rest = cmd:match("^trace%s*(%S*)%s*(.*)$")
++	if verb then
++		if verb == "start" then
++			Probe:TraceStart(rest ~= "" and rest or "unnamed")
++			print(Probe.Colors.PRIMARY .. "[PulseProbe]" .. Probe.Colors.RESET .. " trace started: " .. rest)
++		elseif verb == "stop" then
++			Probe:TraceStop()
++			print(Probe.Colors.PRIMARY .. "[PulseProbe]" .. Probe.Colors.RESET .. " trace stopped")
++		elseif verb == "mark" then
++			Probe:Record("MARK", rest)
++		elseif verb == "dump" then
++			local n = Probe:TraceDump()
++			print(
++				Probe.Colors.PRIMARY
++					.. "[PulseProbe]"
++					.. Probe.Colors.RESET
++					.. (" dumped %d rows; /reload to write"):format(n)
++			)
++		end
++		return
++	end
+ 	if cmd == "clear" then
+ 		Probe:ClearLogs()
+ 		print(Probe.Colors.PRIMARY .. "[PulseProbe]" .. Probe.Colors.RESET .. " Log cleared.")
+diff --git a/PulseProbe/Probes/Sequencer.lua b/PulseProbe/Probes/Sequencer.lua
+new file mode 100644
+index 0000000..0cf0e44
+--- /dev/null
++++ b/PulseProbe/Probes/Sequencer.lua
+@@ -0,0 +1,169 @@
++-- PulseProbe — Probes/Sequencer.lua
++--
++-- Phase 0 event-order capture for PulseHaptics' arbitration constants. Records every event
++-- the Phase 1 design depends on, with one or two state samples taken at arrival, into the
++-- trace ring (Core.lua, Probe:Record). Start with /probe trace start <scenario>, act, then
++-- /probe trace stop and /probe trace dump.
++--
++-- Read-only: registers events, reads state, post-hooks two Blizzard functions with
++-- hooksecurefunc. Never calls a protected function, never calls debugprofilestart.
++
++local ADDON_NAME, Probe = ...
++
++local SQ = {}
++Probe.Sequencer = SQ
++
++local frame = CreateFrame("Frame")
++
++local EVENTS = {
++	-- vendor & repair
++	"MERCHANT_SHOW",
++	"MERCHANT_CLOSED",
++	"PLAYER_MONEY",
++	"UPDATE_INVENTORY_DURABILITY",
++	"UPDATE_INVENTORY_ALERTS",
++	-- bags & intake
++	"BAG_UPDATE",
++	"BAG_UPDATE_DELAYED",
++	"ITEM_PUSH",
++	"CHAT_MSG_LOOT",
++	"CHAT_MSG_MONEY",
++	-- loot window
++	"LOOT_READY",
++	"LOOT_OPENED",
++	"LOOT_SLOT_CLEARED",
++	"LOOT_CLOSED",
++	"START_LOOT_ROLL",
++	-- windows
++	"PLAYER_INTERACTION_MANAGER_FRAME_SHOW",
++	"PLAYER_INTERACTION_MANAGER_FRAME_HIDE",
++	"GOSSIP_SHOW",
++	"GOSSIP_CLOSED",
++	"MAIL_SHOW",
++	"MAIL_CLOSED",
++	"MAIL_INBOX_UPDATE",
++	"BANKFRAME_OPENED",
++	"BANKFRAME_CLOSED",
++	-- pull & swing
++	"PLAYER_REGEN_DISABLED",
++	"PLAYER_REGEN_ENABLED",
++	"UNIT_THREAT_SITUATION_UPDATE",
++	"PLAYER_ENTER_COMBAT",
++	"PLAYER_SWING",
++	-- equipment
++	"PLAYER_EQUIPMENT_CHANGED",
++}
++
++local function freeSlots()
++	if C_Container and C_Container.CalculateTotalNumberOfFreeBagSlots then
++		return C_Container.CalculateTotalNumberOfFreeBagSlots()
++	end
++	return nil
++end
++
++-- One or two state samples per event, chosen to answer a specific §11 question.
++frame:SetScript("OnEvent", function(_, event, a1, a2, ...)
++	if event == "PLAYER_MONEY" then
++		Probe:Record(event, GetMoney and GetMoney())
++	elseif event == "BAG_UPDATE_DELAYED" then
++		Probe:Record(event, freeSlots())
++	elseif event == "UPDATE_INVENTORY_DURABILITY" then
++		Probe:Record(event, GetRepairAllCost and GetRepairAllCost(), InRepairMode and InRepairMode())
++	elseif event == "UPDATE_INVENTORY_ALERTS" then
++		local worst = 0
++		for i = 1, 11 do
++			local s = GetInventoryAlertStatus and GetInventoryAlertStatus(i)
++			if type(s) == "number" and not issecretvalue(s) and s > worst then
++				worst = s
++			end
++		end
++		Probe:Record(event, worst)
++	elseif event == "LOOT_READY" or event == "LOOT_OPENED" then
++		-- Is the loot list already readable at LOOT_READY? (Arbiter scans at both.)
++		Probe:Record(event, a1, GetNumLootItems and GetNumLootItems())
++	elseif event == "CHAT_MSG_LOOT" then
++		Probe:Record(event, select(10, ...)) -- 12th payload field: looter GUID
++	elseif event == "PLAYER_REGEN_DISABLED" or event == "PLAYER_REGEN_ENABLED" then
++		Probe:Record(event, InCombatLockdown(), UnitAffectingCombat("player"))
++	else
++		Probe:Record(event, a1, a2)
++	end
++end)
++
++-- Next-frame timer probe: when an interaction window hides, schedule a C_Timer.After(0)
++-- and record when it runs relative to a following SHOW — the deferred-close assumption.
++local function onTimer0()
++	Probe:Record("TIMER0")
++end
++
++local hooked = false
++local function hookOnce()
++	if hooked then
++		return
++	end
++	hooked = true
++	if type(RepairAllItems) == "function" then
++		hooksecurefunc("RepairAllItems", function(useGuild)
++			Probe:Record("HOOK_RepairAllItems", useGuild, GetRepairAllCost and GetRepairAllCost())
++		end)
++	end
++end
++
++local mailHooked = false
++local function hookMail()
++	if mailHooked or type(OpenAllMail) ~= "table" then
++		return
++	end
++	mailHooked = true
++	if type(OpenAllMail.StartOpening) == "function" then
++		hooksecurefunc(OpenAllMail, "StartOpening", function()
++			Probe:Record("HOOK_OpenAllMail_Start")
++		end)
++	end
++	if type(OpenAllMail.StopOpening) == "function" then
++		hooksecurefunc(OpenAllMail, "StopOpening", function()
++			Probe:Record("HOOK_OpenAllMail_Stop")
++		end)
++	end
++end
++
++-- UI panel poll at frame rate (ControllerUI polls at 20 Hz): records when the left panel
++-- changes, to measure panelOpen's lag against the interaction events.
++local lastLeft = false
++local pollFrame = CreateFrame("Frame")
++pollFrame:SetScript("OnUpdate", function()
++	if not Probe.TraceState.running or type(GetUIPanel) ~= "function" then
++		return
++	end
++	local left = GetUIPanel("left") or false
++	if left ~= lastLeft then
++		lastLeft = left
++		Probe:Record("UIPANEL_LEFT", left and left.GetName and left:GetName() or false)
++	end
++end)
++
++local timerFrame = CreateFrame("Frame")
++timerFrame:SetScript("OnEvent", function()
++	C_Timer.After(0, onTimer0)
++end)
++
++function SQ:OnInit() end
++
++function SQ:OnEnable()
++	for _, event in ipairs(EVENTS) do
++		pcall(frame.RegisterEvent, frame, event)
++	end
++	pcall(timerFrame.RegisterEvent, timerFrame, "PLAYER_INTERACTION_MANAGER_FRAME_HIDE")
++	hookOnce()
++	hookMail()
++	-- Blizzard_MailFrame may load on demand; try again when it does.
++	frame:RegisterEvent("ADDON_LOADED")
++end
++
++frame:HookScript("OnEvent", function(_, event, name)
++	if event == "ADDON_LOADED" and name == "Blizzard_MailFrame" then
++		hookMail()
++	end
++end)
++
++Probe:RegisterProbe("Sequencer", SQ)
+diff --git a/PulseProbe/PulseProbe.toc b/PulseProbe/PulseProbe.toc
+index b045797..98f0184 100644
+--- a/PulseProbe/PulseProbe.toc
++++ b/PulseProbe/PulseProbe.toc
+@@ -14,3 +14,4 @@ Probes/WorldHazards.lua
+ Probes/Navigation.lua
+ Probes/EconomyLoot.lua
+ Probes/ErrorsErgo.lua
++Probes/Sequencer.lua
+diff --git a/scripts/probe-trace-report.lua b/scripts/probe-trace-report.lua
+new file mode 100644
+index 0000000..5470db5
+--- /dev/null
++++ b/scripts/probe-trace-report.lua
+@@ -0,0 +1,112 @@
++-- scripts/probe-trace-report.lua
++--
++-- Offline report for PulseProbe event-order traces (Phase 0). Usage:
++--   luajit scripts/probe-trace-report.lua <path to SavedVariables/PulseProbe.lua>
++-- Prints, per dumped scenario, the gap distribution (ms, from GetTimePreciseSec) and the
++-- same-frame rate for every event pair the Phase 1 constants depend on.
++
++local path = assert(arg[1], "usage: probe-trace-report.lua <PulseProbe.lua>")
++local env = {}
++local chunk = assert(loadfile(path))
++setfenv(chunk, env)
++chunk()
++local db = assert(env.PulseProbeDB, "no PulseProbeDB in file")
++
++-- A -> B: for each A, the first B after it within WITHIN seconds. `signed` also counts how
++-- often B arrived shortly BEFORE A (an ordering check, not a gap).
++local PAIRS = {
++	{ "PLAYER_MONEY", "BAG_UPDATE_DELAYED", "vendor: money -> bag settle (sign tells order)", signed = true },
++	{ "HOOK_RepairAllItems", "UPDATE_INVENTORY_DURABILITY", "repair: call -> confirmation (REPAIR_WINDOW)" },
++	{ "UPDATE_INVENTORY_DURABILITY", "PLAYER_MONEY", "repair: confirmation -> debit (DEBIT_WINDOW)" },
++	{ "LOOT_CLOSED", "BAG_UPDATE_DELAYED", "loot: close -> trailing bag settle (LOOT_TAIL)" },
++	{ "LOOT_SLOT_CLEARED", "LOOT_SLOT_CLEARED", "loot: slot -> next slot (autoloot spacing)" },
++	{
++		"PLAYER_INTERACTION_MANAGER_FRAME_HIDE",
++		"PLAYER_INTERACTION_MANAGER_FRAME_SHOW",
++		"window: hide -> show (chain)",
++	},
++	{ "PLAYER_INTERACTION_MANAGER_FRAME_HIDE", "TIMER0", "window: hide -> next-frame timer (deferral)" },
++	{ "PLAYER_INTERACTION_MANAGER_FRAME_SHOW", "UIPANEL_LEFT", "window: show -> panel poll sees it (bus window)" },
++	{ "MAIL_INBOX_UPDATE", "ITEM_PUSH", "mail: inbox update -> item arrives" },
++	{ "ITEM_PUSH", "ITEM_PUSH", "intake: item -> next item (bulk spacing)" },
++	{ "PLAYER_REGEN_DISABLED", "UNIT_THREAT_SITUATION_UPDATE", "pull: regen -> threat (pull bus)" },
++}
++local WITHIN = 2.0
++
++local function quantile(sorted, q)
++	if #sorted == 0 then
++		return nil
++	end
++	local i = math.max(1, math.min(#sorted, math.floor(q * #sorted + 0.5)))
++	return sorted[i]
++end
++
++for _, t in ipairs(db.traces or {}) do
++	print(
++		("\n== %s  (build %s, interface %s, %d rows)"):format(
++			t.scenario,
++			tostring(t.build),
++			tostring(t.interface),
++			#t.rows
++		)
++	)
++	for _, pair in ipairs(PAIRS) do
++		local a, b, label = pair[1], pair[2], pair[3]
++		local gaps, sameFrame, before = {}, 0, 0
++		for i, row in ipairs(t.rows) do
++			if row[1] == a then
++				for j = i + 1, #t.rows do
++					local other = t.rows[j]
++					if other[4] - row[4] > WITHIN then
++						break
++					end
++					if other[1] == b then
++						gaps[#gaps + 1] = (other[4] - row[4]) * 1000
++						if other[2] == row[2] then
++							sameFrame = sameFrame + 1
++						end
++						break
++					end
++				end
++				if pair.signed then -- does B also occur BEFORE this A, closer than after?
++					for j = i - 1, 1, -1 do
++						local other = t.rows[j]
++						if row[4] - other[4] > WITHIN then
++							break
++						end
++						if other[1] == b then
++							before = before + 1
++							break
++						end
++					end
++				end
++			end
++		end
++		if #gaps > 0 then
++			table.sort(gaps)
++			print(
++				("  %-52s n=%-3d p50=%7.1f  p95=%7.1f  max=%7.1f ms  same-frame=%d%s"):format(
++					label,
++					#gaps,
++					quantile(gaps, 0.5),
++					quantile(gaps, 0.95),
++					gaps[#gaps],
++					sameFrame,
++					pair.signed and ("  B-before-A=" .. before) or ""
++				)
++			)
++		end
++	end
++	for _, row in ipairs(t.rows) do
++		if row[1] == "PLAYER_REGEN_DISABLED" then
++			print(
++				("  REGEN_DISABLED: InCombatLockdown()=%s UnitAffectingCombat=%s"):format(
++					tostring(row[6]),
++					tostring(row[7])
++				)
++			)
++		elseif row[1] == "LOOT_READY" then
++			print(("  LOOT_READY: autoloot=%s GetNumLootItems()=%s"):format(tostring(row[6]), tostring(row[7])))
++		end
++	end
++end
+diff --git a/scripts/test.sh b/scripts/test.sh
+index 2676fb3..ddb384f 100755
+--- a/scripts/test.sh
++++ b/scripts/test.sh
+@@ -22,6 +22,8 @@ SUITES=(
+   "locomotion-test PulseHaptics"
+   "crafting-test PulseHaptics"
+   "engine-test PulseHaptics"
++  "arbitration-test PulseHaptics"
++  "phase2-test PulseHaptics"
+   "cue-audit PulseHaptics"
+   "pulsedebug-test PulseDebug"
+   "checklist-test PulseChecklist"

@@ -1,0 +1,13 @@
+COMBAT             now=113  one-line= 35  (-69%)
+CASTING            now= 74  one-line= 25  (-66%)
+MOVEMENT           now= 63  one-line= 19  (-70%)
+CHARACTER          now= 55  one-line= 19  (-65%)
+CONTROL            now= 42  one-line= 12  (-71%)
+TARGET             now= 42  one-line= 12  (-71%)
+WORLD              now=108  one-line= 31  (-71%)
+SOCIAL             now= 68  one-line= 20  (-71%)
+INTERFACE          now= 96  one-line= 27  (-72%)
+CONTROLLER         now= 10  one-line=  4  (-60%)
+CONTROLLER_UI      now= 80  one-line= 23  (-71%)
+GAMEPAD_INTERACT   now= 36  one-line= 12  (-67%)
+TOTAL 188 cues: 787 rows now, 239 one-line, -70%

@@ -1,0 +1,76 @@
+baseline: 0c74dc3 (+ working-tree .luacheckrc, PulseProbe/)
+
+=== after baseline (no patch) ===
+  ✓ PASS  Total: 0 warnings / 0 errors in 52 files
+  harness                  ✓ PASS  NO FAILURES
+  locomotion-test          ✓ PASS  NO FAILURES
+  crafting-test            ✓ PASS  NO FAILURES
+  engine-test              ✓ PASS  NO FAILURES
+  cue-audit                ✓ PASS  ================== AUDIT FINISHED ==================	
+  pulsedebug-test          ✓ PASS  NO FAILURES
+  checklist-test           ✓ PASS  NO FAILURES
+✓ ALL 7 SUITES PASSED CLEANLY (3s)
+
+applied 01-P0.1-engine-floor
+
+=== after 01-P0.1-engine-floor ===
+  ✓ PASS  Total: 0 warnings / 0 errors in 52 files
+  harness                  ✓ PASS  NO FAILURES
+  locomotion-test          ✓ PASS  NO FAILURES
+  crafting-test            ✓ PASS  NO FAILURES
+  engine-test              ✓ PASS  NO FAILURES
+  cue-audit                ✓ PASS  ================== AUDIT FINISHED ==================	
+  pulsedebug-test          ✓ PASS  NO FAILURES
+  checklist-test           ✓ PASS  NO FAILURES
+✓ ALL 7 SUITES PASSED CLEANLY (2s)
+
+applied 02-P0.2-probe-trace
+lint PulseProbe: Total: 0 warnings / 0 errors in 10 files
+lint scripts/probe-trace-report.lua: Total: 0 warnings / 0 errors in 1 file
+compiles: PulseProbe/Core.lua
+compiles: PulseProbe/Probes/Sequencer.lua
+compiles: scripts/probe-trace-report.lua
+
+=== after 02-P0.2-probe-trace ===
+  ✓ PASS  Total: 0 warnings / 0 errors in 52 files
+  harness                  ✓ PASS  NO FAILURES
+  locomotion-test          ✓ PASS  NO FAILURES
+  crafting-test            ✓ PASS  NO FAILURES
+  engine-test              ✓ PASS  NO FAILURES
+  cue-audit                ✓ PASS  ================== AUDIT FINISHED ==================	
+  pulsedebug-test          ✓ PASS  NO FAILURES
+  checklist-test           ✓ PASS  NO FAILURES
+✓ ALL 7 SUITES PASSED CLEANLY (2s)
+
+applied 03-P1-arbitration
+
+=== after 03-P1-arbitration ===
+  ✓ PASS  Total: 0 warnings / 0 errors in 53 files
+  harness                  ✓ PASS  NO FAILURES
+  locomotion-test          ✓ PASS  NO FAILURES
+  crafting-test            ✓ PASS  NO FAILURES
+  engine-test              ✓ PASS  NO FAILURES
+  arbitration-test         ✓ PASS  NO FAILURES
+  cue-audit                ✓ PASS  ================== AUDIT FINISHED ==================	
+  pulsedebug-test          ✓ PASS  NO FAILURES
+  checklist-test           ✓ PASS  NO FAILURES
+✓ ALL 8 SUITES PASSED CLEANLY (2s)
+
+applied 04-P2-panel-and-gates
+
+=== after 04-P2-panel-and-gates ===
+  ✓ PASS  Total: 0 warnings / 0 errors in 53 files
+  harness                  ✓ PASS  NO FAILURES
+  locomotion-test          ✓ PASS  NO FAILURES
+  crafting-test            ✓ PASS  NO FAILURES
+  engine-test              ✓ PASS  NO FAILURES
+  arbitration-test         ✓ PASS  NO FAILURES
+  phase2-test              ✓ PASS  NO FAILURES
+  cue-audit                ✓ PASS  ================== AUDIT FINISHED ==================	
+  pulsedebug-test          ✓ PASS  NO FAILURES
+  checklist-test           ✓ PASS  NO FAILURES
+✓ ALL 9 SUITES PASSED CLEANLY (2s)
+
+stylua: clean
+
+VERIFY: every step green

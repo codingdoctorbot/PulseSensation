@@ -1,0 +1,1216 @@
+diff --git a/PulseChecklist/tests/arbitration-test.lua b/PulseChecklist/tests/arbitration-test.lua
+index c19085d..ff990b4 100644
+--- a/PulseChecklist/tests/arbitration-test.lua
++++ b/PulseChecklist/tests/arbitration-test.lua
+@@ -187,6 +187,12 @@ end
+ 
+ local function setProfile(list)
+ 	wipe(cues)
++	-- Page switches default ON in every profile (Database:_SeedProfileTriggerDefaults).
++	for _, trigger in ipairs(Pulse.Triggers) do
++		if trigger.gate then
++			cues[trigger.id] = true
++		end
++	end
+ 	for _, id in ipairs(list) do
+ 		cues[id] = true
+ 	end
+diff --git a/PulseChecklist/tests/harness.lua b/PulseChecklist/tests/harness.lua
+index b5da44d..7f1a8a3 100755
+--- a/PulseChecklist/tests/harness.lua
++++ b/PulseChecklist/tests/harness.lua
+@@ -1851,8 +1851,9 @@ do
+ 		)
+ 		-- Untouched Raiding received new curated cues (42 cues enabled)
+ 		local raidingCount = 0
+-		for _, v in pairs(_G.PulseDB.profiles.Raiding.triggers) do
+-			if v then
++		for k, v in pairs(_G.PulseDB.profiles.Raiding.triggers) do
++			local t = Pulse.Registry:GetTrigger(k)
++			if v and not (t and t.gate) then
+ 				raidingCount = raidingCount + 1
+ 			end
+ 		end
+@@ -1865,8 +1866,9 @@ do
+ 
+ 		-- Untouched Default received new curated cues (53 cues enabled, not all 190)
+ 		local defaultCount = 0
+-		for _, v in pairs(_G.PulseDB.profiles.Default.triggers) do
+-			if v then
++		for k, v in pairs(_G.PulseDB.profiles.Default.triggers) do
++			local t = Pulse.Registry:GetTrigger(k)
++			if v and not (t and t.gate) then
+ 				defaultCount = defaultCount + 1
+ 			end
+ 		end
+diff --git a/PulseChecklist/tests/phase2-test.lua b/PulseChecklist/tests/phase2-test.lua
+new file mode 100644
+index 0000000..4d2c220
+--- /dev/null
++++ b/PulseChecklist/tests/phase2-test.lua
+@@ -0,0 +1,154 @@
++-- PulseChecklist/tests/phase2-test.lua
++--
++-- Phase 2: page switches (non-destructive group gates), fold state, one-line cue rows and
++-- simple view. Runs on top of harness.lua's full mock environment (real Database, Registry,
++-- Init, Spec, Content, Rows, Sidebar, Panel), the way cue-audit.lua does.
++
++local scriptDir = arg[0]:match("^(.-)[^/\\]*$")
++if scriptDir == "" then
++	scriptDir = "./"
++end
++dofile(scriptDir .. "harness.lua")
++
++io.write("\n================== PHASE 2 ==================\n")
++
++local failures = 0
++local function check(label, got, want)
++	local ok = (got == want)
++	if not ok then
++		failures = failures + 1
++	end
++	io.write(("%-66s %-8s %s\n"):format(label, tostring(got), ok and "ok" or ("FAIL want " .. tostring(want))))
++end
++
++local P = _G.Pulse
++local DB = P.Database
++local R = P.Registry
++
++-- ── Gate data ─────────────────────────────────────────────────────────────────
++
++local gates, pageGates = 0, 0
++for _, t in ipairs(P.Triggers) do
++	if t.gate then
++		gates = gates + 1
++		check("gate " .. t.id .. " plays nothing (no mode)", t.mode == nil and not t.continuous, true)
++	end
++end
++check("10 new page switches", gates, 10)
++for pageID, gateID in pairs(R.PAGE_GATES) do
++	pageGates = pageGates + 1
++	check("PAGE_GATES." .. pageID .. " resolves to a trigger", R:GetTrigger(gateID) ~= nil, true)
++end
++check("11 pages gated (CONTROLLER deliberately not)", pageGates, 11)
++check("padDisconnected is never behind a switch", R.CUE_GATE.padDisconnected, nil)
++check("CONTROLLER_UI cues rely on controllerUIMaster, not a second gate", R.CUE_GATE.uiNavigate, nil)
++check("bagItemAdded sits behind gateWorld", R.CUE_GATE.bagItemAdded, "gateWorld")
++
++-- ── Seeding: every profile starts with every switch ON, __exclusive included ──
++
++local allOn = true
++for _, name in ipairs(DB:GetProfileNames()) do
++	local prof = _G.PulseDB.profiles[name]
++	for _, t in ipairs(P.Triggers) do
++		if t.gate and prof.triggers[t.id] ~= true then
++			allOn = false
++			io.write("  gate OFF: " .. name .. " / " .. t.id .. "\n")
++		end
++	end
++end
++check("every built-in and custom profile seeds every switch ON", allOn, true)
++
++DB:SetAllCues(false)
++check("'Disable all cues' leaves page switches alone", DB:GetCue("gateWorld"), true)
++DB:SetAllCues(true)
++
++-- ── Non-destructive runtime gate ──────────────────────────────────────────────
++
++-- critLanded: no throttle of its own, so every call below is decided by the gate alone.
++DB:SetCue("critLanded", true)
++check("gate open: critLanded plays", P:FireIfEnabled("critLanded"), true)
++DB:SetCue("gateCombat", false)
++check("gate closed: critLanded dropped", P:FireIfEnabled("critLanded"), false)
++check("  the cue's own switch is untouched", DB:GetCue("critLanded"), true)
++check("  IsCueActive reports it inactive (so modules unregister)", P:IsCueActive("critLanded"), false)
++check("  a cue on another page is unaffected", P:GatesOpen("bagItemAdded"), true)
++DB:SetCue("gateCombat", true)
++check("gate reopened: critLanded plays again", P:FireIfEnabled("critLanded"), true)
++
++-- ── Fold state and one-line rows ──────────────────────────────────────────────
++
++local Panel = P.UI.Panel
++local window = Panel.EnsureBuilt()
++check("window builds", window ~= nil, true)
++Panel.GoToPage("WORLD")
++local page = window.Content.page
++local sections, cueRows, oldStyleRows = 0, 0, 0
++for _, row in ipairs(page.rows) do
++	local kind = row.spec and row.spec.kind
++	if kind == "section" then
++		sections = sections + 1
++	elseif kind == "cue" then
++		cueRows = cueRows + 1
++	elseif kind == "slider" and row.spec.label == "Intensity" then
++		oldStyleRows = oldStyleRows + 1
++	end
++end
++local worldCues = 0
++for _, s in ipairs(page.sections or {}) do
++	worldCues = worldCues + #s.triggers
++end
++check("WORLD page: one section header per section", sections > 0, true)
++check("WORLD page: exactly one cue row per cue", cueRows, 31 - sections)
++check("WORLD page: no separate Intensity rows remain", oldStyleRows, 0)
++
++local key = "WORLD/Loot & inventory"
++local header, member
++for _, row in ipairs(page.rows) do
++	if row.spec and row.spec.sectionKey == key then
++		if row.isSectionHeader then
++			header = row
++		elseif not member and row.spec.kind == "cue" then
++			member = row
++		end
++	end
++end
++check("found the Loot & inventory header and a cue under it", header ~= nil and member ~= nil, true)
++
++DB:SetSectionCollapsed(key, true)
++window.Content:LayoutRows()
++check("folded: header still shown", header:IsShown(), true)
++check("folded: its cues hidden", member:IsShown(), false)
++window.Content:SetFilter(member.spec.label)
++check("search reaches into a folded section", member:IsShown(), true)
++window.Content:SetFilter("")
++window.Content:LayoutRows()
++check("search cleared: folded again", member:IsShown(), false)
++DB:SetSectionCollapsed(key, false)
++window.Content:LayoutRows()
++check("unfolded: cue shown", member:IsShown(), true)
++check("fold state is global, not per profile", _G.PulseDB.collapsedSections ~= nil, true)
++
++-- ── Simple view ───────────────────────────────────────────────────────────────
++
++local function visibleSidebarPages()
++	local n = 0
++	for _, button in ipairs(window.Sidebar.buttons) do
++		if button:IsShown() then
++			n = n + 1
++		end
++	end
++	return n
++end
++local allPages = visibleSidebarPages()
++local advancedBefore = DB:Get("showAdvancedCueControls")
++DB:Set("simpleView", true)
++Panel.ApplySimpleView()
++check("simple view: sidebar trimmed", visibleSidebarPages() < allPages, true)
++check("simple view: lands on the switches page", window.Sidebar.selectedPage.id, "switches")
++check("simple view never rewrites showAdvancedCueControls", DB:Get("showAdvancedCueControls"), advancedBefore)
++DB:Set("simpleView", false)
++Panel.ApplySimpleView()
++check("simple view off: every page back", visibleSidebarPages(), allPages)
++
++io.write(failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n"))
++os.exit(failures == 0 and 0 or 1)
+diff --git a/PulseHaptics/Core/Database.lua b/PulseHaptics/Core/Database.lua
+index 46d425f..b0f79eb 100755
+--- a/PulseHaptics/Core/Database.lua
++++ b/PulseHaptics/Core/Database.lua
+@@ -40,6 +40,10 @@ local GLOBAL_DEFAULTS = {
+ 	-- default because previews are useful while tuning; one click gets a clean list.
+ 	showCueTestButtons = true,
+ 	minimap = { hide = false },
++	-- Phase 2. Panel presentation, not playstyle, so global like the two toggles above:
++	-- a spec-driven profile switch must never re-fold the window or change its view.
++	simpleView = false,
++	collapsedSections = {}, -- "PAGEID/Section label" -> true while that section is folded
+ }
+ 
+ -- The shape of one profile slot. These fields used to live flat on DB; DB_VERSION 2's
+@@ -1403,6 +1407,12 @@ function Database:_SeedProfileTriggerDefaults(profile, overrides)
+ 	for _, trigger in ipairs(Pulse.Triggers) do
+ 		if profile.triggers[trigger.id] == nil then
+ 			local default = overrides and overrides[trigger.id]
++			-- Page switches start ON in every profile. An __exclusive curated profile seeds
++			-- every cue it does not list as OFF, which for a gate would silently mute a whole
++			-- page on the first load after this ships.
++			if trigger.gate then
++				default = true
++			end
+ 			if default == nil then
+ 				if overrides and overrides.__exclusive then
+ 					default = false
+@@ -2018,21 +2028,25 @@ function Database:_MigrateCuratedProfilesOptionB()
+ 		local currentOverrides = PROFILE_TRIGGER_OVERRIDES[name]
+ 		local matchesCurrent = true
+ 		for _, trigger in ipairs(Pulse.Triggers or {}) do
+-			local currentVal = profile.triggers[trigger.id] and true or false
+-			local expected
+-			if currentOverrides then
+-				expected = currentOverrides[trigger.id]
+-				if expected == nil then
+-					expected = not currentOverrides.__exclusive and (trigger.default and true or false) or false
++			-- Page switches are not curated content: a gate the player left ON must not make
++			-- an untouched curated profile look customised and miss its migration.
++			if not trigger.gate then
++				local currentVal = profile.triggers[trigger.id] and true or false
++				local expected
++				if currentOverrides then
++					expected = currentOverrides[trigger.id]
++					if expected == nil then
++						expected = not currentOverrides.__exclusive and (trigger.default and true or false) or false
++					else
++						expected = expected and true or false
++					end
+ 				else
+-					expected = expected and true or false
++					expected = trigger.default and true or false
++				end
++				if currentVal ~= expected then
++					matchesCurrent = false
++					break
+ 				end
+-			else
+-				expected = trigger.default and true or false
+-			end
+-			if currentVal ~= expected then
+-				matchesCurrent = false
+-				break
+ 			end
+ 		end
+ 		if matchesCurrent then
+@@ -2043,21 +2057,25 @@ function Database:_MigrateCuratedProfilesOptionB()
+ 		local legacyOverrides = LEGACY_V8_OVERRIDES[name]
+ 		local matchesLegacy = true
+ 		for _, trigger in ipairs(Pulse.Triggers or {}) do
+-			local currentVal = profile.triggers[trigger.id] and true or false
+-			local expected
+-			if legacyOverrides then
+-				expected = legacyOverrides[trigger.id]
+-				if expected == nil then
+-					expected = not legacyOverrides.__exclusive and (trigger.default and true or false) or false
++			-- Page switches are not curated content: a gate the player left ON must not make
++			-- an untouched curated profile look customised and miss its migration.
++			if not trigger.gate then
++				local currentVal = profile.triggers[trigger.id] and true or false
++				local expected
++				if legacyOverrides then
++					expected = legacyOverrides[trigger.id]
++					if expected == nil then
++						expected = not legacyOverrides.__exclusive and (trigger.default and true or false) or false
++					else
++						expected = expected and true or false
++					end
+ 				else
+-					expected = expected and true or false
++					expected = trigger.default and true or false
++				end
++				if currentVal ~= expected then
++					matchesLegacy = false
++					break
+ 				end
+-			else
+-				expected = trigger.default and true or false
+-			end
+-			if currentVal ~= expected then
+-				matchesLegacy = false
+-				break
+ 			end
+ 		end
+ 		if matchesLegacy then
+@@ -2850,6 +2868,25 @@ function Database:SetMinimap(cfg)
+ 	self:Set("minimap", cfg)
+ end
+ 
++-- Section fold state (Phase 2). Booleans under addon-authored string keys: RULE D-clean.
++function Database:IsSectionCollapsed(key)
++	local t = DB and DB.collapsedSections
++	return (t and t[key]) and true or false
++end
++
++function Database:SetSectionCollapsed(key, collapsed)
++	if type(key) ~= "string" then
++		return
++	end
++	collapsed = sanitizeBool(collapsed)
++	if collapsed == nil then
++		return
++	end
++	DB.collapsedSections = DB.collapsedSections or {}
++	DB.collapsedSections[key] = collapsed or nil
++	notify(globalListeners, "collapsedSections")
++end
++
+ function Database:GetCue(triggerID)
+ 	return activeProfile().triggers[triggerID] and true or false
+ end
+@@ -2860,10 +2897,17 @@ function Database:SetCue(triggerID, enabled)
+ 		return
+ 	end
+ 	activeProfile().triggers[triggerID] = enabled
++	local trigger = Pulse.Registry:GetTrigger(triggerID)
+ 	if Pulse.debug then
+-		local trigger = Pulse.Registry:GetTrigger(triggerID)
+ 		print(("Pulse: %s %s"):format(trigger and trigger.label or triggerID, enabled and "enabled" or "disabled"))
+ 	end
++	-- A page switch re-syncs every module on its page. The gate itself takes effect at once
++	-- (Pulse:GatesOpen reads it on every fire); only the event re-registration waits for
++	-- the end of combat, the same deferral a profile switch uses.
++	if trigger and trigger.gate and InCombatLockdown and InCombatLockdown() then
++		pendingProfileNotify = true
++		return
++	end
+ 	notify(cueListeners, triggerID)
+ end
+ 
+@@ -2882,8 +2926,11 @@ function Database:SetAllCues(enabled, profileName)
+ 	local count = 0
+ 	if Pulse.Triggers then
+ 		for _, trigger in ipairs(Pulse.Triggers) do
+-			prof.triggers[trigger.id] = b
+-			count = count + 1
++			-- "Disable all cues" means cues. Page switches are left where the player put them.
++			if not trigger.gate then
++				prof.triggers[trigger.id] = b
++				count = count + 1
++			end
+ 		end
+ 	end
+ 	if not profileName or profileName == self:GetActiveProfileName() then
+diff --git a/PulseHaptics/Core/Init.lua b/PulseHaptics/Core/Init.lua
+index 4970015..3c105e0 100755
+--- a/PulseHaptics/Core/Init.lua
++++ b/PulseHaptics/Core/Init.lua
+@@ -405,11 +405,32 @@ function Pulse:TestCue(triggerID)
+ 	return false, "this cue plays nothing on its own"
+ end
+ 
++-- The registration-time question: is this cue switched on AND not behind a closed gate?
++-- Module sync functions use it so a page switched off costs nothing, not just plays nothing.
++function Pulse:IsCueActive(triggerID)
++	return self.Database:GetCue(triggerID) and self:GatesOpen(triggerID) or false
++end
++
+ -- cueIDs: array of trigger ids whose enabled-state affects this frame's registration.
+ -- sync:   function that registers or unregisters events based on current settings.
++-- Also subscribes to each cue's page gate and category master, once each, so flipping a
++-- gate re-syncs the frames behind it.
+ function Pulse:BindFrame(cueIDs, sync)
++	local registry = self.Registry
++	local seen = {} -- bind time only, never per event
+ 	for _, cueID in ipairs(cueIDs) do
+ 		self.Database:OnCueChanged(cueID, sync)
++		local trigger = registry and registry:GetTrigger(cueID)
++		local gate = registry and registry.CUE_GATE and registry.CUE_GATE[cueID]
++		local master = trigger and registry.ALERT_CATEGORY_MASTER[trigger.category]
++		if gate and not seen[gate] then
++			seen[gate] = true
++			self.Database:OnCueChanged(gate, sync)
++		end
++		if master and master ~= cueID and not seen[master] then
++			seen[master] = true
++			self.Database:OnCueChanged(master, sync)
++		end
+ 	end
+ 	self.Database:OnGlobalChanged("masterEnabled", sync)
+ 	sync()
+@@ -426,7 +447,7 @@ function Pulse:WatchTrigger(trigger)
+ 		if not Pulse.Database:Get("masterEnabled") then
+ 			return
+ 		end
+-		if not Pulse.Database:GetCue(trigger.id) then
++		if not Pulse:IsCueActive(trigger.id) then
+ 			return
+ 		end
+ 		for _, event in ipairs(trigger.events) do
+diff --git a/PulseHaptics/Core/Registry.lua b/PulseHaptics/Core/Registry.lua
+index 318473f..c01f2b8 100755
+--- a/PulseHaptics/Core/Registry.lua
++++ b/PulseHaptics/Core/Registry.lua
+@@ -43,6 +43,7 @@ local CATEGORY_ORDER = {
+ 	"ALERT_SELF_CAST",
+ 	"CONTROLLER_UI",
+ 	"GAMEPAD_INTERACT",
++	"PAGE_GATE",
+ }
+ local CATEGORY_LABELS = {
+ 	MOVEMENT = "Movement",
+@@ -79,6 +80,9 @@ local CATEGORY_LABELS = {
+ 	-- reticle, on the cursor, which bar is live, which input device drives. Separate
+ 	-- category so PulseDebug and PulseChecklist list the two apart.
+ 	GAMEPAD_INTERACT = "Controller Interactions",
++
++	-- Phase 2 page switches: pure gates, no mode, one per settings page (Registry.PAGE_GATES).
++	PAGE_GATE = "Page switches",
+ }
+ 
+ -- Every trigger from ALERT_CC parents to this gate in the settings panel — the only
+@@ -2859,6 +2863,89 @@ Pulse.Triggers = {
+ 		desc = "A soft tick when releasing the group targeting modifier back to normal navigation.",
+ 		caveat = "Passively polled via GroupTargeting.isTargetingActive. Fires when the group targeting modifier is released.",
+ 	},
++	-- ── Page switches (Phase 2) ─────────────────────────────────────────────────
++	-- Pure gates: no mode, play nothing, never overwrite the cues they gate. Seeded ON in every
++	-- profile regardless of __exclusive (Database:_SeedProfileTriggerDefaults).
++	{
++		id = "gateCombat",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Combat",
++		desc = "Switches every cue on the Combat page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateCasting",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Casting",
++		desc = "Switches every cue on the Casting page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateMovement",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Movement & Travel",
++		desc = "Switches every cue on the Movement & Travel page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateCharacter",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Character & Status",
++		desc = "Switches every cue on the Character & Status page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateControl",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Control & Threat",
++		desc = "Switches every cue on the Control & Threat page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateTarget",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Target & Focus",
++		desc = "Switches every cue on the Target & Focus page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateWorld",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "World & Environment",
++		desc = "Switches every cue on the World & Environment page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateSocial",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Social & Group",
++		desc = "Switches every cue on the Social & Group page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateInterface",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Interface & Accessibility",
++		desc = "Switches every cue on the Interface & Accessibility page on or off at once. Each cue keeps its own setting underneath.",
++	},
++	{
++		id = "gateInteract",
++		category = "PAGE_GATE",
++		gate = true,
++		default = true,
++		label = "Controller Interactions",
++		desc = "Switches every cue on the Controller Interactions page on or off at once. Each cue keeps its own setting underneath.",
++	},
+ }
+ 
+ -- Presentation layout (2026-09-21) — which settings page and section each cue renders
+@@ -3321,6 +3408,43 @@ for _, page in ipairs(PAGE_LAYOUT) do
+ 	end
+ end
+ 
++-- Page switches (Phase 2): which gate governs each settings page. CONTROLLER has none on
++-- purpose — padDisconnected is the safety stop and must never sit behind a switch.
++-- CONTROLLER_UI reuses its existing category master instead of adding a second switch.
++Registry.PAGE_GATES = {
++	COMBAT = "gateCombat",
++	CASTING = "gateCasting",
++	MOVEMENT = "gateMovement",
++	CHARACTER = "gateCharacter",
++	CONTROL = "gateControl",
++	TARGET = "gateTarget",
++	WORLD = "gateWorld",
++	SOCIAL = "gateSocial",
++	INTERFACE = "gateInterface",
++	CONTROLLER_UI = "controllerUIMaster",
++	GAMEPAD_INTERACT = "gateInteract",
++}
++
++-- cue id -> page gate id, resolved once. A cue whose category master IS the page gate
++-- (the CONTROLLER_UI page) is left out: Pulse:GatesOpen already checks that master.
++Registry.CUE_GATE = {}
++for _, page in ipairs(PAGE_LAYOUT) do
++	local gateID = Registry.PAGE_GATES[page.id]
++	if gateID then
++		for _, section in ipairs(page.sections) do
++			for _, trigger in ipairs(section.triggers) do
++				if Registry.ALERT_CATEGORY_MASTER[trigger.category] ~= gateID then
++					Registry.CUE_GATE[trigger.id] = gateID
++				end
++			end
++		end
++	end
++end
++
++function Registry:GetPageGate(pageID)
++	return self.PAGE_GATES[pageID]
++end
++
+ -- A category master (currently only ccMaster) deliberately has no page: it renders on the
+ -- root page next to "Enable Pulse", not inside the section it gates.
+ local isCategoryMaster = {}
+@@ -3338,7 +3462,7 @@ for _, page in ipairs(PAGE_LAYOUT) do
+ end
+ 
+ for _, trigger in ipairs(Pulse.Triggers) do
+-	if not placed[trigger.id] and not isCategoryMaster[trigger.id] then
++	if not placed[trigger.id] and not isCategoryMaster[trigger.id] and not trigger.gate then
+ 		print(("Pulse: cue %q has no settings page — add it to PAGE_LAYOUT (Core/Registry.lua)"):format(trigger.id))
+ 	end
+ end
+diff --git a/PulseHaptics/UI/Panel/Content.lua b/PulseHaptics/UI/Panel/Content.lua
+index 89f3529..5083ea1 100755
+--- a/PulseHaptics/UI/Panel/Content.lua
++++ b/PulseHaptics/UI/Panel/Content.lua
+@@ -178,10 +178,21 @@ end
+ -- every cue" — which needed a /reload when the old panel decided at registration time
+ -- whether a control existed. Here the row is always built and simply left out of the
+ -- layout, so both toggles are instant.
++--
++-- Phase 2 adds a third reason, a folded section, and it yields to search: a match inside a
++-- folded section is shown, or the search box would find things it then hides.
++local db = nil
++local function sectionFolded(key)
++    db = db or Pulse.Database
++    return key ~= nil and db:IsSectionCollapsed(key)
++end
++
+ local function rowVisible(row, filter)
+     local spec = row.spec
+     if spec and spec.visibleWhen and not spec.visibleWhen() then return false end
+-    if not filter then return true end
++    if not filter then
++        return not (spec and spec.sectionKey and not row.isSectionHeader and sectionFolded(spec.sectionKey))
++    end
+     if row.isHeader then return false end   -- decided by its section, below
+     return row.searchText and string.find(row.searchText, filter, 1, true) ~= nil
+ end
+@@ -209,7 +220,9 @@ function ContentMixin:LayoutRows()
+                 shown[lastHeaderIndex] = false
+             end
+             lastHeaderIndex = index
+-            headerHasContent = false
++            -- A folded section keeps its heading (it is how you unfold it) unless a search
++            -- is running, when headings follow their visible rows as before.
++            headerHasContent = (row.isSectionHeader and not filter and sectionFolded(row.sectionKey)) or false
+             shown[index] = true
+         else
+             local visible = rowVisible(row, filter)
+@@ -245,7 +258,17 @@ function ContentMixin:LayoutRows()
+         end
+     end
+ 
+-    self.Child:SetHeight(math.max(y + Theme.LIST_VERTICAL_PAD, 1))
++    local childHeight = math.max(y + Theme.LIST_VERTICAL_PAD, 1)
++    self.Child:SetHeight(childHeight)
++
++    -- Folding a section above the viewport shortens the child under the current scroll
++    -- offset. Clamp from the heights just set rather than GetVerticalScrollRange, which
++    -- only catches up after the scroll frame's next layout pass.
++    local viewHeight = self.Scroll:GetHeight() or 0
++    local maxScroll = math.max(0, childHeight - viewHeight)
++    if (self.Scroll:GetVerticalScroll() or 0) > maxScroll then
++        self.Scroll:SetVerticalScroll(maxScroll)
++    end
+ end
+ 
+ -- ── Refresh ───────────────────────────────────────────────────────────────────
+diff --git a/PulseHaptics/UI/Panel/Panel.lua b/PulseHaptics/UI/Panel/Panel.lua
+index 2d53a25..8f0f971 100755
+--- a/PulseHaptics/UI/Panel/Panel.lua
++++ b/PulseHaptics/UI/Panel/Panel.lua
+@@ -415,10 +415,32 @@ function Panel.EnsureBuilt()
+ 	tinsert(UISpecialFrames, FRAME_NAME)
+ 
+ 	frame.Sidebar:Select(pages[1])
++	Panel.ApplySimpleView()
+ 
+ 	return frame
+ end
+ 
++-- ── Simple view (Phase 2) ─────────────────────────────────────────────────────
++
++local function keepInSimpleView(page)
++	return page.simple and true or false
++end
++
++-- Filters the sidebar to the simple pages and, if the page in view just disappeared, moves
++-- to the switches page. Presentation only: no cue, gate or profile value is written.
++function Panel.ApplySimpleView()
++	if not frame or not frame.pageList then
++		return
++	end
++	local simple = Pulse.Database:Get("simpleView") and true or false
++	frame.Sidebar:ApplyFilter(simple and keepInSimpleView or nil)
++	local current = frame.Sidebar.selectedPage
++	if simple and current and not current.simple then
++		Panel.GoToPage("switches")
++	end
++	Panel.MarkDirty()
++end
++
+ -- ── Open / close ──────────────────────────────────────────────────────────────
+ 
+ -- Switch the page in view by id. Public because the cue index needs it: an index entry's
+diff --git a/PulseHaptics/UI/Panel/Rows.lua b/PulseHaptics/UI/Panel/Rows.lua
+index 603d4ed..7a09d11 100755
+--- a/PulseHaptics/UI/Panel/Rows.lua
++++ b/PulseHaptics/UI/Panel/Rows.lua
+@@ -293,7 +293,10 @@ function Rows.CreateCheckbox(parent, spec)
+ 		local val = spec.get() and true or false
+ 		box:SetChecked(val)
+ 		if statusBadge then
+-			statusBadge:SetText(val and "|cff2dd4bf[ACTIVE]|r" or "|cff64748b[MUTED]|r")
++			-- A page switch shows how much of its page is on ("12 of 35 on") rather than a
++			-- bare ACTIVE/MUTED; everything else keeps the original badge.
++			local text = spec.badge and spec.badge(val)
++			statusBadge:SetText(text or (val and "|cff2dd4bf[ACTIVE]|r" or "|cff64748b[MUTED]|r"))
+ 		end
+ 	end
+ 
+@@ -724,6 +727,205 @@ function Rows.CreateIndex(parent, spec)
+ 	return row
+ end
+ 
++-- ── Collapsible section header (Phase 2) ──────────────────────────────────────
++
++-- A heading you can click. A Button, not the plain Frame CreateHeader makes, and marked
++-- ignored for SmartNavigation like every header: the panel is mouse-driven by design
++-- (UI/Panel/Gamepad.lua:40-69), so nothing here adds controller navigation.
++local PLUS = "Interface\\Buttons\\UI-PlusButton-Up"
++local MINUS = "Interface\\Buttons\\UI-MinusButton-Up"
++
++function Rows.CreateSectionHeader(parent, spec)
++	local row = CreateFrame("Button", nil, parent)
++	row:SetHeight(Theme.HEADER_ROW_H)
++	row.rowHeight = Theme.HEADER_ROW_H
++	row.spec = spec
++	row.isHeader = true
++	row.isSectionHeader = true
++	row.sectionKey = spec.sectionKey
++
++	row.Toggle = row:CreateTexture(nil, "ARTWORK")
++	row.Toggle:SetSize(14, 14)
++	row.Toggle:SetPoint("TOPLEFT", row, "TOPLEFT", 7, -18)
++
++	row.Title = row:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
++	row.Title:SetJustifyH("LEFT")
++	row.Title:SetPoint("LEFT", row.Toggle, "RIGHT", 6, 0)
++	row.Title:SetText(spec.label or "")
++
++	row.Badge = row:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
++	row.Badge:SetPoint("LEFT", row.Title, "RIGHT", 10, 0)
++
++	local rule = row:CreateTexture(nil, "ARTWORK")
++	rule:SetHeight(1)
++	rule:SetPoint("TOPLEFT", row.Toggle, "BOTTOMLEFT", 0, -6)
++	rule:SetPoint("RIGHT", row, "RIGHT", -20, 0)
++	rule:SetColorTexture(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b, 0.25)
++
++	row:SetScript("OnClick", function()
++		spec.onToggle()
++	end)
++
++	row.searchText = string.lower(spec.label or "")
++	Theme.MarkIgnored(row)
++
++	row.RefreshValue = function()
++		row.Toggle:SetTexture(spec.isCollapsed() and PLUS or MINUS)
++		row.Badge:SetText(spec.badge and spec.badge() or "")
++	end
++	row.SetRowEnabled = function() end
++
++	row:RefreshValue()
++	return row
++end
++
++-- ── One-line cue row (Phase 2) ────────────────────────────────────────────────
++
++-- Everything a cue used to spread over three to five rows, on one: switch, name, intensity,
++-- shape, preview. Bespoke tunables stay as indented rows below it. The inline slider and
++-- dropdown honour the same "Show per-cue detail controls" switch the old rows did.
++function Rows.CreateCueRow(parent, spec)
++	local row = createBaseRow(parent, spec, "Frame")
++	row.Text:ClearAllPoints()
++	row.Text:SetPoint("LEFT", row, "LEFT", Theme.CUE_LABEL_LEFT, 0)
++	row.Text:SetWidth(Theme.CUE_LABEL_WIDTH)
++
++	local box = CreateFrame("CheckButton", nil, row)
++	box:SetSize(Theme.CHECKBOX_SIZE_X, Theme.CHECKBOX_SIZE_Y)
++	box:SetPoint("LEFT", row, "LEFT", Theme.CUE_CHECK_LEFT, 0)
++	box:SetMotionScriptsWhileDisabled(true)
++	box:SetNormalAtlas("checkbox-minimal")
++	box:SetPushedAtlas("checkbox-minimal")
++	box:SetCheckedTexture("checkmark-minimal")
++	box:SetDisabledCheckedTexture("checkmark-minimal-disabled")
++	box:SetScript("OnClick", function(self)
++		local value = self:GetChecked() and true or false
++		Theme.PlayCheckSound(value)
++		spec.check.set(value)
++		self:SetChecked(spec.check.get() and true or false)
++	end)
++	row.Hit:SetScript("OnMouseUp", function()
++		if box:IsEnabled() then
++			box:Click()
++		end
++	end)
++
++	local slider
++	if spec.intensity then
++		slider = CreateFrame("Frame", nil, row, "MinimalSliderWithSteppersTemplate")
++		slider:SetWidth(Theme.CUE_SLIDER_WIDTH)
++		slider:SetPoint("LEFT", row, "LEFT", Theme.CUE_SLIDER_LEFT, Theme.SLIDER_OFFSET_Y)
++		local s = spec.intensity
++		local steps = math.max(1, ((s.max or 1.5) - (s.min or 0)) / (s.step or 0.05))
++		slider:Init(s.get() or 1.0, s.min or 0, s.max or 1.5, steps, {})
++		local applying = false
++		slider:RegisterCallback(MinimalSliderWithSteppersMixin.Event.OnValueChanged, function(_, value)
++			if applying then
++				return
++			end
++			applying = true
++			s.set(value)
++			applying = false
++		end, row)
++		attachControlTooltip(row, slider.Slider, s)
++		row.Slider = slider
++		row.applyingSlider = function(v)
++			applying = v
++		end
++	end
++
++	local dropdown
++	if spec.mode then
++		local ok, dd = pcall(CreateFrame, "DropdownButton", nil, row, "WowStyle2DropdownTemplate")
++		if ok and dd then
++			dropdown = dd
++			dropdown:SetWidth(Theme.CUE_DROPDOWN_WIDTH)
++			dropdown:SetPoint("LEFT", row, "LEFT", Theme.CUE_DROPDOWN_LEFT, 0)
++			-- No SetupMenu: Blizzard's Menu ends at a protected binding call. Popup.OpenList
++			-- supplies the behaviour, exactly as Rows.CreateDropdown does.
++			dropdown:HookScript("OnMouseDown", function()
++				if dropdown:IsEnabled() then
++					Panel.Popup.OpenList(dropdown, spec.mode.options(), spec.mode.get(), function(value)
++						spec.mode.set(value)
++					end, spec.mode.previewScale and spec.mode.previewScale())
++				end
++			end)
++			attachControlTooltip(row, dropdown, spec.mode)
++			row.Dropdown = dropdown
++		end
++	end
++
++	local play
++	if spec.test then
++		play = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
++		play:SetSize(Theme.CUE_PLAY_WIDTH, 20)
++		play:SetPoint("LEFT", row, "LEFT", Theme.CUE_PLAY_LEFT, 0)
++		play:SetText(">")
++		play:SetScript("OnClick", function()
++			spec.test.onClick()
++		end)
++		attachControlTooltip(row, play, spec.test)
++		row.Play = play
++	end
++
++	row.Control = box
++
++	local function setText(value)
++		if not dropdown then
++			return
++		end
++		if dropdown.Text then
++			dropdown.Text:SetText(value or "")
++		elseif dropdown.SetText then
++			dropdown:SetText(value or "")
++		end
++	end
++
++	-- The inline controls follow the cue's OWN switch as well as the gates. Content.lua only
++	-- re-applies SetRowEnabled when the gate result changes, so the cue-switch half is
++	-- re-evaluated here on every refresh.
++	local function applySubEnabled()
++		local sub = (not spec.enabledWhen or spec.enabledWhen()) and spec.check.get() and true or false
++		if slider then
++			slider:SetEnabled(sub)
++		end
++		if dropdown then
++			dropdown:SetEnabled(sub)
++		end
++	end
++
++	row.RefreshValue = function()
++		box:SetChecked(spec.check.get() and true or false)
++		applySubEnabled()
++		local detail = spec.detailShown()
++		if slider then
++			slider:SetShown(detail)
++			local value = spec.intensity.get()
++			if type(value) == "number" and slider.Slider and slider.Slider:GetValue() ~= value then
++				row.applyingSlider(true)
++				slider:SetValue(value)
++				row.applyingSlider(false)
++			end
++		end
++		if dropdown then
++			dropdown:SetShown(detail)
++			setText(spec.mode.get())
++		end
++		if play then
++			play:SetShown(spec.testShown())
++		end
++	end
++	row.SetRowEnabled = function(_, enabled)
++		box:SetEnabled(enabled)
++		applySubEnabled()
++		Theme.DisplayEnabled(row, enabled)
++	end
++
++	row.searchText = string.lower((spec.label or "") .. " " .. (spec.tooltip or ""))
++	row:RefreshValue()
++	return row
++end
++
+ -- ── Dispatch ──────────────────────────────────────────────────────────────────
+ 
+ local builders = {
+@@ -734,6 +936,8 @@ local builders = {
+ 	dropdown = Rows.CreateDropdown,
+ 	button = Rows.CreateButton,
+ 	index = Rows.CreateIndex,
++	section = Rows.CreateSectionHeader,
++	cue = Rows.CreateCueRow,
+ }
+ 
+ -- Every write from a row marks the panel dirty on top of whatever the database notifies.
+diff --git a/PulseHaptics/UI/Panel/Sidebar.lua b/PulseHaptics/UI/Panel/Sidebar.lua
+index c981f74..73767fd 100755
+--- a/PulseHaptics/UI/Panel/Sidebar.lua
++++ b/PulseHaptics/UI/Panel/Sidebar.lua
+@@ -208,6 +208,27 @@ function SidebarMixin:CreateButtons(pages)
+ 	end
+ end
+ 
++-- Simple view (Phase 2): hide some buttons and close the gaps. Re-anchors the buttons
++-- built once by CreateButtons; creates nothing. `keep(page)` nil shows every page.
++function SidebarMixin:ApplyFilter(keep)
++	local previous = nil
++	for _, button in ipairs(self.buttons) do
++		local visible = (keep == nil) or keep(button.page)
++		button:SetShown(visible)
++		if visible then
++			button:ClearAllPoints()
++			button:SetPoint("LEFT", self, "LEFT", 0, 0)
++			button:SetPoint("RIGHT", self, "RIGHT", 0, 0)
++			if previous then
++				button:SetPoint("TOP", previous, "BOTTOM", 0, 0)
++			else
++				button:SetPoint("TOP", self, "TOP", 0, 0)
++			end
++			previous = button
++		end
++	end
++end
++
+ function SidebarMixin:Select(page)
+ 	for _, button in ipairs(self.buttons) do
+ 		button.selected = (button.page == page)
+diff --git a/PulseHaptics/UI/Panel/Spec.lua b/PulseHaptics/UI/Panel/Spec.lua
+index 9ba6cb8..d76a859 100755
+--- a/PulseHaptics/UI/Panel/Spec.lua
++++ b/PulseHaptics/UI/Panel/Spec.lua
+@@ -88,18 +88,14 @@ local function masterOn()
+ 	return database():Get("masterEnabled") and true or false
+ end
+ 
+--- A cue is editable when the master switch is on and, if its category has a master cue of
+--- its own (currently only ccMaster for ALERT_CC), that one is on too. The master lookup is
+--- keyed on trigger.category, not on the page: a page can mix categories, and ccMaster must
+--- keep gating only the loss-of-control cues.
++-- A cue is editable when the master switch is on and every gate in front of it is open:
++-- its category master (ccMaster, controllerUIMaster) and, since Phase 2, its page switch.
++-- One rule, shared with the runtime (Pulse:GatesOpen), so the panel can never grey a cue
++-- the engine would play or leave live a cue the engine would drop.
+ local function cueGate(trigger)
+-	local masterID = Pulse.Registry.ALERT_CATEGORY_MASTER[trigger.category]
+-	if masterID and trigger.id ~= masterID then
+-		return function()
+-			return masterOn() and (database():GetCue(masterID) and true or false)
+-		end
++	return function()
++		return masterOn() and Pulse:GatesOpen(trigger.id, trigger)
+ 	end
+-	return masterOn
+ end
+ 
+ -- A cue's subordinate rows need the cue itself switched on as well.
+@@ -110,8 +106,11 @@ local function subordinateGate(trigger)
+ 	end
+ end
+ 
++-- Simple view (Phase 2) hides the per-cue detail without touching the stored
++-- showAdvancedCueControls choice, so leaving simple view restores exactly what was there.
+ local function advancedShown()
+-	return database():Get("showAdvancedCueControls") and true or false
++	local store = database()
++	return (store:Get("showAdvancedCueControls") and not store:Get("simpleView")) and true or false
+ end
+ 
+ local function testButtonsShown()
+@@ -456,6 +455,20 @@ function Spec.BuildRootPage()
+ 		end,
+ 	}
+ 
++	rows[#rows + 1] = {
++		kind = "checkbox",
++		label = "Simple view",
++		tooltip = "Shows only the page switches and this page. Every cue keeps its own settings; "
++			.. "turn this off to get every page back exactly as it was.",
++		get = function()
++			return store:Get("simpleView")
++		end,
++		set = function(value)
++			store:Set("simpleView", value)
++			Panel.ApplySimpleView()
++		end,
++	}
++
+ 	rows[#rows + 1] = {
+ 		kind = "checkbox",
+ 		label = "Show per-cue detail controls",
+@@ -591,33 +604,77 @@ end
+ 
+ -- ── Cue pages ─────────────────────────────────────────────────────────────────
+ 
+--- One cue and everything that belongs to it: the checkbox, then its intensity, its mode
+--- override, any bespoke tunables, and its preview button, as indented subordinate rows.
+-local function cueBlock(rows, trigger)
+-	rows[#rows + 1] = cueCheckbox(trigger)
++-- ── One-line cue rows and folding sections (Phase 2) ──────────────────────────
+ 
+-	-- A gate-only trigger with neither a mode nor a texture (padDisconnected) has nothing
+-	-- to scale, so it gets no intensity dial.
+-	if trigger.mode or trigger.continuous then
+-		rows[#rows + 1] = cueIntensitySlider(trigger)
++local function sectionKeyFor(page, section)
++	return page.id .. "/" .. section.label
++end
++
++local function countOn(triggers)
++	local store = database()
++	local on = 0
++	for _, trigger in ipairs(triggers) do
++		if store:GetCue(trigger.id) then
++			on = on + 1
++		end
+ 	end
++	return on
++end
+ 
++local function sectionHeader(page, section)
++	local key = sectionKeyFor(page, section)
++	return {
++		kind = "section",
++		label = section.label,
++		sectionKey = key,
++		isCollapsed = function()
++			return database():IsSectionCollapsed(key)
++		end,
++		onToggle = function()
++			Panel.Popup.CloseList() -- a list anchored to a row that is about to hide
++			database():SetSectionCollapsed(key, not database():IsSectionCollapsed(key))
++		end,
++		badge = function()
++			return ("%d of %d on"):format(countOn(section.triggers), #section.triggers)
++		end,
++	}
++end
++
++-- The composed row: the same get/set closures the old checkbox, slider, dropdown and Play
++-- rows used, so the saved values and their tooltips do not move.
++local function cueRow(trigger, key)
++	local check = cueCheckbox(trigger)
++	local row = {
++		kind = "cue",
++		label = check.label,
++		tooltip = check.tooltip,
++		sectionKey = key,
++		check = check,
++		enabledWhen = check.enabledWhen,
++		detailShown = advancedShown,
++		testShown = testButtonsShown,
++	}
++	if trigger.mode or trigger.continuous then
++		row.intensity = cueIntensitySlider(trigger)
++	end
+ 	if trigger.mode then
+-		rows[#rows + 1] = cueModeDropdown(trigger)
++		row.mode = cueModeDropdown(trigger)
++	end
++	if Pulse:CanTestCue(trigger.id) then
++		row.test = cueTestButton(trigger)
+ 	end
++	return row
++end
+ 
+-	-- Tunables marked devTuning render on the Continuous textures page instead, not
+-	-- doubled up here too.
++local function cueBlockCompact(rows, trigger, key)
++	rows[#rows + 1] = cueRow(trigger, key)
+ 	if trigger.tunables and not trigger.devTuning then
+ 		for _, tunable in ipairs(trigger.tunables) do
+-			rows[#rows + 1] = tunableRow(trigger, tunable)
++			local spec = tunableRow(trigger, tunable)
++			spec.sectionKey = key
++			rows[#rows + 1] = spec
+ 		end
+ 	end
+-
+-	local test = cueTestButton(trigger)
+-	if test then
+-		rows[#rows + 1] = test
+-	end
+ end
+ 
+ function Spec.BuildCuePage(page)
+@@ -637,15 +694,51 @@ function Spec.BuildCuePage(page)
+ 	end
+ 	for _, section in ipairs(page.sections) do
+ 		if #section.triggers > 0 then
+-			rows[#rows + 1] = { kind = "header", label = section.label }
++			local key = sectionKeyFor(page, section)
++			rows[#rows + 1] = sectionHeader(page, section)
+ 			for _, trigger in ipairs(section.triggers) do
+-				cueBlock(rows, trigger)
++				cueBlockCompact(rows, trigger, key)
+ 			end
+ 		end
+ 	end
+ 	return rows
+ end
+ 
++-- ── Switches page (Phase 2 simple view) ───────────────────────────────────────
++
++-- One switch per settings page. Each is a real trigger (Registry.PAGE_GATES) stored per
++-- profile like any cue, so it follows profile switches; none of them writes a cue.
++function Spec.BuildSwitchesPage()
++	local rows = {}
++	rows[#rows + 1] = {
++		kind = "text",
++		gap = 8,
++		body = "Turn whole pages of cues on or off. Each cue keeps its own setting underneath: "
++			.. "switching a page back on restores exactly what was there.",
++	}
++	for _, page in ipairs(Pulse.Registry:GetPages()) do
++		local gateID = page.hasCues and Pulse.Registry:GetPageGate(page.id)
++		local trigger = gateID and Pulse.Registry:GetTrigger(gateID)
++		if trigger then
++			local spec = cueCheckbox(trigger)
++			spec.isMaster = true
++			spec.label = page.label
++			local triggers = {}
++			for _, section in ipairs(page.sections) do
++				for _, t in ipairs(section.triggers) do
++					triggers[#triggers + 1] = t
++				end
++			end
++			spec.badge = function(on)
++				local text = ("%d of %d cues on"):format(countOn(triggers), #triggers)
++				return on and ("|cff2dd4bf" .. text .. "|r") or ("|cff64748b" .. text .. " (page off)|r")
++			end
++			rows[#rows + 1] = spec
++		end
++	end
++	return rows
++end
++
+ -- ── Cue index ─────────────────────────────────────────────────────────────────
+ 
+ -- Every cue in the addon on one page, alphabetically, each saying where its own controls
+@@ -1871,11 +1964,19 @@ end
+ function Spec.BuildPages()
+ 	local pages = {}
+ 
+-	pages[#pages + 1] = { id = "root", label = "Pulse", indent = 0, build = Spec.BuildRootPage }
++	pages[#pages + 1] = { id = "root", label = "Pulse", indent = 0, simple = true, build = Spec.BuildRootPage }
++	pages[#pages + 1] = {
++		id = "switches",
++		label = "Page switches",
++		indent = 1,
++		simple = true,
++		build = Spec.BuildSwitchesPage,
++	}
+ 
+ 	-- First of the children, before the cue pages it indexes.
+ 	pages[#pages + 1] = { id = "cueIndex", label = "Cue index", indent = 1, build = Spec.BuildCueIndexPage }
+-	pages[#pages + 1] = { id = "profiles", label = "Profiles", indent = 1, build = Spec.BuildProfilesPage }
++	pages[#pages + 1] =
++		{ id = "profiles", label = "Profiles", indent = 1, simple = true, build = Spec.BuildProfilesPage }
+ 	pages[#pages + 1] = {
+ 		id = "defaultProfiles",
+ 		label = "Default profiles",
+@@ -1912,7 +2013,7 @@ function Spec.BuildPages()
+ 	}
+ 
+ 	if Pulse.Guide and #Pulse.Guide > 0 then
+-		pages[#pages + 1] = { id = "guide", label = "Guide", indent = 1, build = Spec.BuildGuidePage }
++		pages[#pages + 1] = { id = "guide", label = "Guide", indent = 1, simple = true, build = Spec.BuildGuidePage }
+ 	end
+ 
+ 	return pages
+diff --git a/PulseHaptics/UI/Panel/Theme.lua b/PulseHaptics/UI/Panel/Theme.lua
+index 4e0d01f..3fcab0d 100755
+--- a/PulseHaptics/UI/Panel/Theme.lua
++++ b/PulseHaptics/UI/Panel/Theme.lua
+@@ -98,6 +98,18 @@ Theme.DROPDOWN_WIDTH = 220
+ Theme.BUTTON_WIDTH = 200
+ Theme.BUTTON_LEFT = -40
+ 
++-- One-line cue row (Phase 2). Left-anchored offsets inside a ~605 px row at the stock
++-- 920 px window. [verify in game at 1280x800 and UI scale 0.64-1.0]
++Theme.CUE_CHECK_LEFT = 4
++Theme.CUE_LABEL_LEFT = 38
++Theme.CUE_LABEL_WIDTH = 190
++Theme.CUE_SLIDER_LEFT = 232
++Theme.CUE_SLIDER_WIDTH = 150
++Theme.CUE_DROPDOWN_LEFT = 392
++Theme.CUE_DROPDOWN_WIDTH = 150
++Theme.CUE_PLAY_LEFT = 550
++Theme.CUE_PLAY_WIDTH = 28
++
+ -- Blizzard_CategoryList.xml:47-49 and :63-68.
+ Theme.CATEGORY_HEIGHT = 20
+ Theme.CATEGORY_LABEL_X = 36
+diff --git a/scripts/test.sh b/scripts/test.sh
+index ce80b80..ddb384f 100755
+--- a/scripts/test.sh
++++ b/scripts/test.sh
+@@ -23,6 +23,7 @@ SUITES=(
+   "crafting-test PulseHaptics"
+   "engine-test PulseHaptics"
+   "arbitration-test PulseHaptics"
++  "phase2-test PulseHaptics"
+   "cue-audit PulseHaptics"
+   "pulsedebug-test PulseDebug"
+   "checklist-test PulseChecklist"
