@@ -23,6 +23,7 @@ SUITES=(
   "crafting-test PulseHaptics"
   "engine-test PulseHaptics"
   "arbitration-test PulseHaptics"
+  "phase2-test PulseHaptics"
   "cue-audit PulseHaptics"
   "pulsedebug-test PulseDebug"
   "checklist-test PulseChecklist"

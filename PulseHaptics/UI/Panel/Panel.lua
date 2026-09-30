@@ -415,8 +415,30 @@ function Panel.EnsureBuilt()
 	tinsert(UISpecialFrames, FRAME_NAME)
 
 	frame.Sidebar:Select(pages[1])
+	Panel.ApplySimpleView()
 
 	return frame
+end
+
+-- ── Simple view (Phase 2) ─────────────────────────────────────────────────────
+
+local function keepInSimpleView(page)
+	return page.simple and true or false
+end
+
+-- Filters the sidebar to the simple pages and, if the page in view just disappeared, moves
+-- to the switches page. Presentation only: no cue, gate or profile value is written.
+function Panel.ApplySimpleView()
+	if not frame or not frame.pageList then
+		return
+	end
+	local simple = Pulse.Database:Get("simpleView") and true or false
+	frame.Sidebar:ApplyFilter(simple and keepInSimpleView or nil)
+	local current = frame.Sidebar.selectedPage
+	if simple and current and not current.simple then
+		Panel.GoToPage("switches")
+	end
+	Panel.MarkDirty()
 end
 
 -- ── Open / close ──────────────────────────────────────────────────────────────

@@ -293,7 +293,10 @@ function Rows.CreateCheckbox(parent, spec)
 		local val = spec.get() and true or false
 		box:SetChecked(val)
 		if statusBadge then
-			statusBadge:SetText(val and "|cff2dd4bf[ACTIVE]|r" or "|cff64748b[MUTED]|r")
+			-- A page switch shows how much of its page is on ("12 of 35 on") rather than a
+			-- bare ACTIVE/MUTED; everything else keeps the original badge.
+			local text = spec.badge and spec.badge(val)
+			statusBadge:SetText(text or (val and "|cff2dd4bf[ACTIVE]|r" or "|cff64748b[MUTED]|r"))
 		end
 	end
 
@@ -724,6 +727,205 @@ function Rows.CreateIndex(parent, spec)
 	return row
 end
 
+-- ── Collapsible section header (Phase 2) ──────────────────────────────────────
+
+-- A heading you can click. A Button, not the plain Frame CreateHeader makes, and marked
+-- ignored for SmartNavigation like every header: the panel is mouse-driven by design
+-- (UI/Panel/Gamepad.lua:40-69), so nothing here adds controller navigation.
+local PLUS = "Interface\\Buttons\\UI-PlusButton-Up"
+local MINUS = "Interface\\Buttons\\UI-MinusButton-Up"
+
+function Rows.CreateSectionHeader(parent, spec)
+	local row = CreateFrame("Button", nil, parent)
+	row:SetHeight(Theme.HEADER_ROW_H)
+	row.rowHeight = Theme.HEADER_ROW_H
+	row.spec = spec
+	row.isHeader = true
+	row.isSectionHeader = true
+	row.sectionKey = spec.sectionKey
+
+	row.Toggle = row:CreateTexture(nil, "ARTWORK")
+	row.Toggle:SetSize(14, 14)
+	row.Toggle:SetPoint("TOPLEFT", row, "TOPLEFT", 7, -18)
+
+	row.Title = row:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
+	row.Title:SetJustifyH("LEFT")
+	row.Title:SetPoint("LEFT", row.Toggle, "RIGHT", 6, 0)
+	row.Title:SetText(spec.label or "")
+
+	row.Badge = row:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
+	row.Badge:SetPoint("LEFT", row.Title, "RIGHT", 10, 0)
+
+	local rule = row:CreateTexture(nil, "ARTWORK")
+	rule:SetHeight(1)
+	rule:SetPoint("TOPLEFT", row.Toggle, "BOTTOMLEFT", 0, -6)
+	rule:SetPoint("RIGHT", row, "RIGHT", -20, 0)
+	rule:SetColorTexture(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b, 0.25)
+
+	row:SetScript("OnClick", function()
+		spec.onToggle()
+	end)
+
+	row.searchText = string.lower(spec.label or "")
+	Theme.MarkIgnored(row)
+
+	row.RefreshValue = function()
+		row.Toggle:SetTexture(spec.isCollapsed() and PLUS or MINUS)
+		row.Badge:SetText(spec.badge and spec.badge() or "")
+	end
+	row.SetRowEnabled = function() end
+
+	row:RefreshValue()
+	return row
+end
+
+-- ── One-line cue row (Phase 2) ────────────────────────────────────────────────
+
+-- Everything a cue used to spread over three to five rows, on one: switch, name, intensity,
+-- shape, preview. Bespoke tunables stay as indented rows below it. The inline slider and
+-- dropdown honour the same "Show per-cue detail controls" switch the old rows did.
+function Rows.CreateCueRow(parent, spec)
+	local row = createBaseRow(parent, spec, "Frame")
+	row.Text:ClearAllPoints()
+	row.Text:SetPoint("LEFT", row, "LEFT", Theme.CUE_LABEL_LEFT, 0)
+	row.Text:SetWidth(Theme.CUE_LABEL_WIDTH)
+
+	local box = CreateFrame("CheckButton", nil, row)
+	box:SetSize(Theme.CHECKBOX_SIZE_X, Theme.CHECKBOX_SIZE_Y)
+	box:SetPoint("LEFT", row, "LEFT", Theme.CUE_CHECK_LEFT, 0)
+	box:SetMotionScriptsWhileDisabled(true)
+	box:SetNormalAtlas("checkbox-minimal")
+	box:SetPushedAtlas("checkbox-minimal")
+	box:SetCheckedTexture("checkmark-minimal")
+	box:SetDisabledCheckedTexture("checkmark-minimal-disabled")
+	box:SetScript("OnClick", function(self)
+		local value = self:GetChecked() and true or false
+		Theme.PlayCheckSound(value)
+		spec.check.set(value)
+		self:SetChecked(spec.check.get() and true or false)
+	end)
+	row.Hit:SetScript("OnMouseUp", function()
+		if box:IsEnabled() then
+			box:Click()
+		end
+	end)
+
+	local slider
+	if spec.intensity then
+		slider = CreateFrame("Frame", nil, row, "MinimalSliderWithSteppersTemplate")
+		slider:SetWidth(Theme.CUE_SLIDER_WIDTH)
+		slider:SetPoint("LEFT", row, "LEFT", Theme.CUE_SLIDER_LEFT, Theme.SLIDER_OFFSET_Y)
+		local s = spec.intensity
+		local steps = math.max(1, ((s.max or 1.5) - (s.min or 0)) / (s.step or 0.05))
+		slider:Init(s.get() or 1.0, s.min or 0, s.max or 1.5, steps, {})
+		local applying = false
+		slider:RegisterCallback(MinimalSliderWithSteppersMixin.Event.OnValueChanged, function(_, value)
+			if applying then
+				return
+			end
+			applying = true
+			s.set(value)
+			applying = false
+		end, row)
+		attachControlTooltip(row, slider.Slider, s)
+		row.Slider = slider
+		row.applyingSlider = function(v)
+			applying = v
+		end
+	end
+
+	local dropdown
+	if spec.mode then
+		local ok, dd = pcall(CreateFrame, "DropdownButton", nil, row, "WowStyle2DropdownTemplate")
+		if ok and dd then
+			dropdown = dd
+			dropdown:SetWidth(Theme.CUE_DROPDOWN_WIDTH)
+			dropdown:SetPoint("LEFT", row, "LEFT", Theme.CUE_DROPDOWN_LEFT, 0)
+			-- No SetupMenu: Blizzard's Menu ends at a protected binding call. Popup.OpenList
+			-- supplies the behaviour, exactly as Rows.CreateDropdown does.
+			dropdown:HookScript("OnMouseDown", function()
+				if dropdown:IsEnabled() then
+					Panel.Popup.OpenList(dropdown, spec.mode.options(), spec.mode.get(), function(value)
+						spec.mode.set(value)
+					end, spec.mode.previewScale and spec.mode.previewScale())
+				end
+			end)
+			attachControlTooltip(row, dropdown, spec.mode)
+			row.Dropdown = dropdown
+		end
+	end
+
+	local play
+	if spec.test then
+		play = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
+		play:SetSize(Theme.CUE_PLAY_WIDTH, 20)
+		play:SetPoint("LEFT", row, "LEFT", Theme.CUE_PLAY_LEFT, 0)
+		play:SetText(">")
+		play:SetScript("OnClick", function()
+			spec.test.onClick()
+		end)
+		attachControlTooltip(row, play, spec.test)
+		row.Play = play
+	end
+
+	row.Control = box
+
+	local function setText(value)
+		if not dropdown then
+			return
+		end
+		if dropdown.Text then
+			dropdown.Text:SetText(value or "")
+		elseif dropdown.SetText then
+			dropdown:SetText(value or "")
+		end
+	end
+
+	-- The inline controls follow the cue's OWN switch as well as the gates. Content.lua only
+	-- re-applies SetRowEnabled when the gate result changes, so the cue-switch half is
+	-- re-evaluated here on every refresh.
+	local function applySubEnabled()
+		local sub = (not spec.enabledWhen or spec.enabledWhen()) and spec.check.get() and true or false
+		if slider then
+			slider:SetEnabled(sub)
+		end
+		if dropdown then
+			dropdown:SetEnabled(sub)
+		end
+	end
+
+	row.RefreshValue = function()
+		box:SetChecked(spec.check.get() and true or false)
+		applySubEnabled()
+		local detail = spec.detailShown()
+		if slider then
+			slider:SetShown(detail)
+			local value = spec.intensity.get()
+			if type(value) == "number" and slider.Slider and slider.Slider:GetValue() ~= value then
+				row.applyingSlider(true)
+				slider:SetValue(value)
+				row.applyingSlider(false)
+			end
+		end
+		if dropdown then
+			dropdown:SetShown(detail)
+			setText(spec.mode.get())
+		end
+		if play then
+			play:SetShown(spec.testShown())
+		end
+	end
+	row.SetRowEnabled = function(_, enabled)
+		box:SetEnabled(enabled)
+		applySubEnabled()
+		Theme.DisplayEnabled(row, enabled)
+	end
+
+	row.searchText = string.lower((spec.label or "") .. " " .. (spec.tooltip or ""))
+	row:RefreshValue()
+	return row
+end
+
 -- ── Dispatch ──────────────────────────────────────────────────────────────────
 
 local builders = {
@@ -734,6 +936,8 @@ local builders = {
 	dropdown = Rows.CreateDropdown,
 	button = Rows.CreateButton,
 	index = Rows.CreateIndex,
+	section = Rows.CreateSectionHeader,
+	cue = Rows.CreateCueRow,
 }
 
 -- Every write from a row marks the panel dirty on top of whatever the database notifies.

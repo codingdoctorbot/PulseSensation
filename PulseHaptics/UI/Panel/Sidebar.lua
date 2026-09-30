@@ -208,6 +208,27 @@ function SidebarMixin:CreateButtons(pages)
 	end
 end
 
+-- Simple view (Phase 2): hide some buttons and close the gaps. Re-anchors the buttons
+-- built once by CreateButtons; creates nothing. `keep(page)` nil shows every page.
+function SidebarMixin:ApplyFilter(keep)
+	local previous = nil
+	for _, button in ipairs(self.buttons) do
+		local visible = (keep == nil) or keep(button.page)
+		button:SetShown(visible)
+		if visible then
+			button:ClearAllPoints()
+			button:SetPoint("LEFT", self, "LEFT", 0, 0)
+			button:SetPoint("RIGHT", self, "RIGHT", 0, 0)
+			if previous then
+				button:SetPoint("TOP", previous, "BOTTOM", 0, 0)
+			else
+				button:SetPoint("TOP", self, "TOP", 0, 0)
+			end
+			previous = button
+		end
+	end
+end
+
 function SidebarMixin:Select(page)
 	for _, button in ipairs(self.buttons) do
 		button.selected = (button.page == page)

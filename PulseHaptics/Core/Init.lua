@@ -405,11 +405,32 @@ function Pulse:TestCue(triggerID)
 	return false, "this cue plays nothing on its own"
 end
 
+-- The registration-time question: is this cue switched on AND not behind a closed gate?
+-- Module sync functions use it so a page switched off costs nothing, not just plays nothing.
+function Pulse:IsCueActive(triggerID)
+	return self.Database:GetCue(triggerID) and self:GatesOpen(triggerID) or false
+end
+
 -- cueIDs: array of trigger ids whose enabled-state affects this frame's registration.
 -- sync:   function that registers or unregisters events based on current settings.
+-- Also subscribes to each cue's page gate and category master, once each, so flipping a
+-- gate re-syncs the frames behind it.
 function Pulse:BindFrame(cueIDs, sync)
+	local registry = self.Registry
+	local seen = {} -- bind time only, never per event
 	for _, cueID in ipairs(cueIDs) do
 		self.Database:OnCueChanged(cueID, sync)
+		local trigger = registry and registry:GetTrigger(cueID)
+		local gate = registry and registry.CUE_GATE and registry.CUE_GATE[cueID]
+		local master = trigger and registry.ALERT_CATEGORY_MASTER[trigger.category]
+		if gate and not seen[gate] then
+			seen[gate] = true
+			self.Database:OnCueChanged(gate, sync)
+		end
+		if master and master ~= cueID and not seen[master] then
+			seen[master] = true
+			self.Database:OnCueChanged(master, sync)
+		end
 	end
 	self.Database:OnGlobalChanged("masterEnabled", sync)
 	sync()
@@ -426,7 +447,7 @@ function Pulse:WatchTrigger(trigger)
 		if not Pulse.Database:Get("masterEnabled") then
 			return
 		end
-		if not Pulse.Database:GetCue(trigger.id) then
+		if not Pulse:IsCueActive(trigger.id) then
 			return
 		end
 		for _, event in ipairs(trigger.events) do

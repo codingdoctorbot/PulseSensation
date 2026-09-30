@@ -43,6 +43,7 @@ local CATEGORY_ORDER = {
 	"ALERT_SELF_CAST",
 	"CONTROLLER_UI",
 	"GAMEPAD_INTERACT",
+	"PAGE_GATE",
 }
 local CATEGORY_LABELS = {
 	MOVEMENT = "Movement",
@@ -79,6 +80,9 @@ local CATEGORY_LABELS = {
 	-- reticle, on the cursor, which bar is live, which input device drives. Separate
 	-- category so PulseDebug and PulseChecklist list the two apart.
 	GAMEPAD_INTERACT = "Controller Interactions",
+
+	-- Phase 2 page switches: pure gates, no mode, one per settings page (Registry.PAGE_GATES).
+	PAGE_GATE = "Page switches",
 }
 
 -- Every trigger from ALERT_CC parents to this gate in the settings panel — the only
@@ -2859,6 +2863,89 @@ Pulse.Triggers = {
 		desc = "A soft tick when releasing the group targeting modifier back to normal navigation.",
 		caveat = "Passively polled via GroupTargeting.isTargetingActive. Fires when the group targeting modifier is released.",
 	},
+	-- ── Page switches (Phase 2) ─────────────────────────────────────────────────
+	-- Pure gates: no mode, play nothing, never overwrite the cues they gate. Seeded ON in every
+	-- profile regardless of __exclusive (Database:_SeedProfileTriggerDefaults).
+	{
+		id = "gateCombat",
+		category = "PAGE_GATE",
+		gate = true,
+		default = true,
+		label = "Combat",
+		desc = "Switches every cue on the Combat page on or off at once. Each cue keeps its own setting underneath.",
+	},
+	{
+		id = "gateCasting",
+		category = "PAGE_GATE",
+		gate = true,
+		default = true,
+		label = "Casting",
+		desc = "Switches every cue on the Casting page on or off at once. Each cue keeps its own setting underneath.",
+	},
+	{
+		id = "gateMovement",
+		category = "PAGE_GATE",
+		gate = true,
+		default = true,
+		label = "Movement & Travel",
+		desc = "Switches every cue on the Movement & Travel page on or off at once. Each cue keeps its own setting underneath.",
+	},
+	{
+		id = "gateCharacter",
+		category = "PAGE_GATE",
+		gate = true,
+		default = true,
+		label = "Character & Status",
+		desc = "Switches every cue on the Character & Status page on or off at once. Each cue keeps its own setting underneath.",
+	},
+	{
+		id = "gateControl",
+		category = "PAGE_GATE",
+		gate = true,
+		default = true,
+		label = "Control & Threat",
+		desc = "Switches every cue on the Control & Threat page on or off at once. Each cue keeps its own setting underneath.",
+	},
+	{
+		id = "gateTarget",
+		category = "PAGE_GATE",
+		gate = true,
+		default = true,
+		label = "Target & Focus",
+		desc = "Switches every cue on the Target & Focus page on or off at once. Each cue keeps its own setting underneath.",
+	},
+	{
+		id = "gateWorld",
+		category = "PAGE_GATE",
+		gate = true,
+		default = true,
+		label = "World & Environment",
+		desc = "Switches every cue on the World & Environment page on or off at once. Each cue keeps its own setting underneath.",
+	},
+	{
+		id = "gateSocial",
+		category = "PAGE_GATE",
+		gate = true,
+		default = true,
+		label = "Social & Group",
+		desc = "Switches every cue on the Social & Group page on or off at once. Each cue keeps its own setting underneath.",
+	},
+	{
+		id = "gateInterface",
+		category = "PAGE_GATE",
+		gate = true,
+		default = true,
+		label = "Interface & Accessibility",
+		desc = "Switches every cue on the Interface & Accessibility page on or off at once. Each cue keeps its own setting underneath.",
+	},
+	{
+		id = "gateInteract",
+		category = "PAGE_GATE",
+		gate = true,
+		default = true,
+		label = "Controller Interactions",
+		desc = "Switches every cue on the Controller Interactions page on or off at once. Each cue keeps its own setting underneath.",
+	},
 }
 
 -- Presentation layout (2026-09-21) — which settings page and section each cue renders
@@ -3321,6 +3408,43 @@ for _, page in ipairs(PAGE_LAYOUT) do
 	end
 end
 
+-- Page switches (Phase 2): which gate governs each settings page. CONTROLLER has none on
+-- purpose — padDisconnected is the safety stop and must never sit behind a switch.
+-- CONTROLLER_UI reuses its existing category master instead of adding a second switch.
+Registry.PAGE_GATES = {
+	COMBAT = "gateCombat",
+	CASTING = "gateCasting",
+	MOVEMENT = "gateMovement",
+	CHARACTER = "gateCharacter",
+	CONTROL = "gateControl",
+	TARGET = "gateTarget",
+	WORLD = "gateWorld",
+	SOCIAL = "gateSocial",
+	INTERFACE = "gateInterface",
+	CONTROLLER_UI = "controllerUIMaster",
+	GAMEPAD_INTERACT = "gateInteract",
+}
+
+-- cue id -> page gate id, resolved once. A cue whose category master IS the page gate
+-- (the CONTROLLER_UI page) is left out: Pulse:GatesOpen already checks that master.
+Registry.CUE_GATE = {}
+for _, page in ipairs(PAGE_LAYOUT) do
+	local gateID = Registry.PAGE_GATES[page.id]
+	if gateID then
+		for _, section in ipairs(page.sections) do
+			for _, trigger in ipairs(section.triggers) do
+				if Registry.ALERT_CATEGORY_MASTER[trigger.category] ~= gateID then
+					Registry.CUE_GATE[trigger.id] = gateID
+				end
+			end
+		end
+	end
+end
+
+function Registry:GetPageGate(pageID)
+	return self.PAGE_GATES[pageID]
+end
+
 -- A category master (currently only ccMaster) deliberately has no page: it renders on the
 -- root page next to "Enable Pulse", not inside the section it gates.
 local isCategoryMaster = {}
@@ -3338,7 +3462,7 @@ for _, page in ipairs(PAGE_LAYOUT) do
 end
 
 for _, trigger in ipairs(Pulse.Triggers) do
-	if not placed[trigger.id] and not isCategoryMaster[trigger.id] then
+	if not placed[trigger.id] and not isCategoryMaster[trigger.id] and not trigger.gate then
 		print(("Pulse: cue %q has no settings page — add it to PAGE_LAYOUT (Core/Registry.lua)"):format(trigger.id))
 	end
 end

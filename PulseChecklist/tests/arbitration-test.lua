@@ -187,6 +187,12 @@ end
 
 local function setProfile(list)
 	wipe(cues)
+	-- Page switches default ON in every profile (Database:_SeedProfileTriggerDefaults).
+	for _, trigger in ipairs(Pulse.Triggers) do
+		if trigger.gate then
+			cues[trigger.id] = true
+		end
+	end
 	for _, id in ipairs(list) do
 		cues[id] = true
 	end

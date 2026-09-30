@@ -1851,8 +1851,9 @@ do
 		)
 		-- Untouched Raiding received new curated cues (42 cues enabled)
 		local raidingCount = 0
-		for _, v in pairs(_G.PulseDB.profiles.Raiding.triggers) do
-			if v then
+		for k, v in pairs(_G.PulseDB.profiles.Raiding.triggers) do
+			local t = Pulse.Registry:GetTrigger(k)
+			if v and not (t and t.gate) then
 				raidingCount = raidingCount + 1
 			end
 		end
@@ -1865,8 +1866,9 @@ do
 
 		-- Untouched Default received new curated cues (53 cues enabled, not all 190)
 		local defaultCount = 0
-		for _, v in pairs(_G.PulseDB.profiles.Default.triggers) do
-			if v then
+		for k, v in pairs(_G.PulseDB.profiles.Default.triggers) do
+			local t = Pulse.Registry:GetTrigger(k)
+			if v and not (t and t.gate) then
 				defaultCount = defaultCount + 1
 			end
 		end

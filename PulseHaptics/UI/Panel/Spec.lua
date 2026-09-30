@@ -88,18 +88,14 @@ local function masterOn()
 	return database():Get("masterEnabled") and true or false
 end
 
--- A cue is editable when the master switch is on and, if its category has a master cue of
--- its own (currently only ccMaster for ALERT_CC), that one is on too. The master lookup is
--- keyed on trigger.category, not on the page: a page can mix categories, and ccMaster must
--- keep gating only the loss-of-control cues.
+-- A cue is editable when the master switch is on and every gate in front of it is open:
+-- its category master (ccMaster, controllerUIMaster) and, since Phase 2, its page switch.
+-- One rule, shared with the runtime (Pulse:GatesOpen), so the panel can never grey a cue
+-- the engine would play or leave live a cue the engine would drop.
 local function cueGate(trigger)
-	local masterID = Pulse.Registry.ALERT_CATEGORY_MASTER[trigger.category]
-	if masterID and trigger.id ~= masterID then
-		return function()
-			return masterOn() and (database():GetCue(masterID) and true or false)
-		end
+	return function()
+		return masterOn() and Pulse:GatesOpen(trigger.id, trigger)
 	end
-	return masterOn
 end
 
 -- A cue's subordinate rows need the cue itself switched on as well.
@@ -110,8 +106,11 @@ local function subordinateGate(trigger)
 	end
 end
 
+-- Simple view (Phase 2) hides the per-cue detail without touching the stored
+-- showAdvancedCueControls choice, so leaving simple view restores exactly what was there.
 local function advancedShown()
-	return database():Get("showAdvancedCueControls") and true or false
+	local store = database()
+	return (store:Get("showAdvancedCueControls") and not store:Get("simpleView")) and true or false
 end
 
 local function testButtonsShown()
@@ -458,6 +457,20 @@ function Spec.BuildRootPage()
 
 	rows[#rows + 1] = {
 		kind = "checkbox",
+		label = "Simple view",
+		tooltip = "Shows only the page switches and this page. Every cue keeps its own settings; "
+			.. "turn this off to get every page back exactly as it was.",
+		get = function()
+			return store:Get("simpleView")
+		end,
+		set = function(value)
+			store:Set("simpleView", value)
+			Panel.ApplySimpleView()
+		end,
+	}
+
+	rows[#rows + 1] = {
+		kind = "checkbox",
 		label = "Show per-cue detail controls",
 		tooltip = 'Adds each cue\'s own intensity slider, "Feels like" shape picker and any '
 			.. "bespoke dials to its page. On by default: uncheck for a compact one-line list "
@@ -591,32 +604,76 @@ end
 
 -- ── Cue pages ─────────────────────────────────────────────────────────────────
 
--- One cue and everything that belongs to it: the checkbox, then its intensity, its mode
--- override, any bespoke tunables, and its preview button, as indented subordinate rows.
-local function cueBlock(rows, trigger)
-	rows[#rows + 1] = cueCheckbox(trigger)
+-- ── One-line cue rows and folding sections (Phase 2) ──────────────────────────
 
-	-- A gate-only trigger with neither a mode nor a texture (padDisconnected) has nothing
-	-- to scale, so it gets no intensity dial.
-	if trigger.mode or trigger.continuous then
-		rows[#rows + 1] = cueIntensitySlider(trigger)
-	end
+local function sectionKeyFor(page, section)
+	return page.id .. "/" .. section.label
+end
 
-	if trigger.mode then
-		rows[#rows + 1] = cueModeDropdown(trigger)
-	end
-
-	-- Tunables marked devTuning render on the Continuous textures page instead, not
-	-- doubled up here too.
-	if trigger.tunables and not trigger.devTuning then
-		for _, tunable in ipairs(trigger.tunables) do
-			rows[#rows + 1] = tunableRow(trigger, tunable)
+local function countOn(triggers)
+	local store = database()
+	local on = 0
+	for _, trigger in ipairs(triggers) do
+		if store:GetCue(trigger.id) then
+			on = on + 1
 		end
 	end
+	return on
+end
 
-	local test = cueTestButton(trigger)
-	if test then
-		rows[#rows + 1] = test
+local function sectionHeader(page, section)
+	local key = sectionKeyFor(page, section)
+	return {
+		kind = "section",
+		label = section.label,
+		sectionKey = key,
+		isCollapsed = function()
+			return database():IsSectionCollapsed(key)
+		end,
+		onToggle = function()
+			Panel.Popup.CloseList() -- a list anchored to a row that is about to hide
+			database():SetSectionCollapsed(key, not database():IsSectionCollapsed(key))
+		end,
+		badge = function()
+			return ("%d of %d on"):format(countOn(section.triggers), #section.triggers)
+		end,
+	}
+end
+
+-- The composed row: the same get/set closures the old checkbox, slider, dropdown and Play
+-- rows used, so the saved values and their tooltips do not move.
+local function cueRow(trigger, key)
+	local check = cueCheckbox(trigger)
+	local row = {
+		kind = "cue",
+		label = check.label,
+		tooltip = check.tooltip,
+		sectionKey = key,
+		check = check,
+		enabledWhen = check.enabledWhen,
+		detailShown = advancedShown,
+		testShown = testButtonsShown,
+	}
+	if trigger.mode or trigger.continuous then
+		row.intensity = cueIntensitySlider(trigger)
+	end
+	if trigger.mode then
+		row.mode = cueModeDropdown(trigger)
+	end
+	if Pulse:CanTestCue(trigger.id) then
+		row.test = cueTestButton(trigger)
+	end
+	return row
+end
+
+local function cueBlockCompact(rows, trigger, key)
+	rows[#rows + 1] = cueRow(trigger, key)
+	if trigger.tunables and not trigger.devTuning then
+		for _, tunable in ipairs(trigger.tunables) do
+			local spec = tunableRow(trigger, tunable)
+			spec.sectionKey = key
+			rows[#rows + 1] = spec
+		end
 	end
 end
 
@@ -637,10 +694,46 @@ function Spec.BuildCuePage(page)
 	end
 	for _, section in ipairs(page.sections) do
 		if #section.triggers > 0 then
-			rows[#rows + 1] = { kind = "header", label = section.label }
+			local key = sectionKeyFor(page, section)
+			rows[#rows + 1] = sectionHeader(page, section)
 			for _, trigger in ipairs(section.triggers) do
-				cueBlock(rows, trigger)
+				cueBlockCompact(rows, trigger, key)
 			end
+		end
+	end
+	return rows
+end
+
+-- ── Switches page (Phase 2 simple view) ───────────────────────────────────────
+
+-- One switch per settings page. Each is a real trigger (Registry.PAGE_GATES) stored per
+-- profile like any cue, so it follows profile switches; none of them writes a cue.
+function Spec.BuildSwitchesPage()
+	local rows = {}
+	rows[#rows + 1] = {
+		kind = "text",
+		gap = 8,
+		body = "Turn whole pages of cues on or off. Each cue keeps its own setting underneath: "
+			.. "switching a page back on restores exactly what was there.",
+	}
+	for _, page in ipairs(Pulse.Registry:GetPages()) do
+		local gateID = page.hasCues and Pulse.Registry:GetPageGate(page.id)
+		local trigger = gateID and Pulse.Registry:GetTrigger(gateID)
+		if trigger then
+			local spec = cueCheckbox(trigger)
+			spec.isMaster = true
+			spec.label = page.label
+			local triggers = {}
+			for _, section in ipairs(page.sections) do
+				for _, t in ipairs(section.triggers) do
+					triggers[#triggers + 1] = t
+				end
+			end
+			spec.badge = function(on)
+				local text = ("%d of %d cues on"):format(countOn(triggers), #triggers)
+				return on and ("|cff2dd4bf" .. text .. "|r") or ("|cff64748b" .. text .. " (page off)|r")
+			end
+			rows[#rows + 1] = spec
 		end
 	end
 	return rows
@@ -1871,11 +1964,19 @@ end
 function Spec.BuildPages()
 	local pages = {}
 
-	pages[#pages + 1] = { id = "root", label = "Pulse", indent = 0, build = Spec.BuildRootPage }
+	pages[#pages + 1] = { id = "root", label = "Pulse", indent = 0, simple = true, build = Spec.BuildRootPage }
+	pages[#pages + 1] = {
+		id = "switches",
+		label = "Page switches",
+		indent = 1,
+		simple = true,
+		build = Spec.BuildSwitchesPage,
+	}
 
 	-- First of the children, before the cue pages it indexes.
 	pages[#pages + 1] = { id = "cueIndex", label = "Cue index", indent = 1, build = Spec.BuildCueIndexPage }
-	pages[#pages + 1] = { id = "profiles", label = "Profiles", indent = 1, build = Spec.BuildProfilesPage }
+	pages[#pages + 1] =
+		{ id = "profiles", label = "Profiles", indent = 1, simple = true, build = Spec.BuildProfilesPage }
 	pages[#pages + 1] = {
 		id = "defaultProfiles",
 		label = "Default profiles",
@@ -1912,7 +2013,7 @@ function Spec.BuildPages()
 	}
 
 	if Pulse.Guide and #Pulse.Guide > 0 then
-		pages[#pages + 1] = { id = "guide", label = "Guide", indent = 1, build = Spec.BuildGuidePage }
+		pages[#pages + 1] = { id = "guide", label = "Guide", indent = 1, simple = true, build = Spec.BuildGuidePage }
 	end
 
 	return pages

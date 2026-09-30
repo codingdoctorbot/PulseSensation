@@ -40,6 +40,10 @@ local GLOBAL_DEFAULTS = {
 	-- default because previews are useful while tuning; one click gets a clean list.
 	showCueTestButtons = true,
 	minimap = { hide = false },
+	-- Phase 2. Panel presentation, not playstyle, so global like the two toggles above:
+	-- a spec-driven profile switch must never re-fold the window or change its view.
+	simpleView = false,
+	collapsedSections = {}, -- "PAGEID/Section label" -> true while that section is folded
 }
 
 -- The shape of one profile slot. These fields used to live flat on DB; DB_VERSION 2's
@@ -1403,6 +1407,12 @@ function Database:_SeedProfileTriggerDefaults(profile, overrides)
 	for _, trigger in ipairs(Pulse.Triggers) do
 		if profile.triggers[trigger.id] == nil then
 			local default = overrides and overrides[trigger.id]
+			-- Page switches start ON in every profile. An __exclusive curated profile seeds
+			-- every cue it does not list as OFF, which for a gate would silently mute a whole
+			-- page on the first load after this ships.
+			if trigger.gate then
+				default = true
+			end
 			if default == nil then
 				if overrides and overrides.__exclusive then
 					default = false
@@ -2018,21 +2028,25 @@ function Database:_MigrateCuratedProfilesOptionB()
 		local currentOverrides = PROFILE_TRIGGER_OVERRIDES[name]
 		local matchesCurrent = true
 		for _, trigger in ipairs(Pulse.Triggers or {}) do
-			local currentVal = profile.triggers[trigger.id] and true or false
-			local expected
-			if currentOverrides then
-				expected = currentOverrides[trigger.id]
-				if expected == nil then
-					expected = not currentOverrides.__exclusive and (trigger.default and true or false) or false
+			-- Page switches are not curated content: a gate the player left ON must not make
+			-- an untouched curated profile look customised and miss its migration.
+			if not trigger.gate then
+				local currentVal = profile.triggers[trigger.id] and true or false
+				local expected
+				if currentOverrides then
+					expected = currentOverrides[trigger.id]
+					if expected == nil then
+						expected = not currentOverrides.__exclusive and (trigger.default and true or false) or false
+					else
+						expected = expected and true or false
+					end
 				else
-					expected = expected and true or false
+					expected = trigger.default and true or false
 				end
-			else
-				expected = trigger.default and true or false
-			end
-			if currentVal ~= expected then
-				matchesCurrent = false
-				break
+				if currentVal ~= expected then
+					matchesCurrent = false
+					break
+				end
 			end
 		end
 		if matchesCurrent then
@@ -2043,21 +2057,25 @@ function Database:_MigrateCuratedProfilesOptionB()
 		local legacyOverrides = LEGACY_V8_OVERRIDES[name]
 		local matchesLegacy = true
 		for _, trigger in ipairs(Pulse.Triggers or {}) do
-			local currentVal = profile.triggers[trigger.id] and true or false
-			local expected
-			if legacyOverrides then
-				expected = legacyOverrides[trigger.id]
-				if expected == nil then
-					expected = not legacyOverrides.__exclusive and (trigger.default and true or false) or false
+			-- Page switches are not curated content: a gate the player left ON must not make
+			-- an untouched curated profile look customised and miss its migration.
+			if not trigger.gate then
+				local currentVal = profile.triggers[trigger.id] and true or false
+				local expected
+				if legacyOverrides then
+					expected = legacyOverrides[trigger.id]
+					if expected == nil then
+						expected = not legacyOverrides.__exclusive and (trigger.default and true or false) or false
+					else
+						expected = expected and true or false
+					end
 				else
-					expected = expected and true or false
+					expected = trigger.default and true or false
 				end
-			else
-				expected = trigger.default and true or false
-			end
-			if currentVal ~= expected then
-				matchesLegacy = false
-				break
+				if currentVal ~= expected then
+					matchesLegacy = false
+					break
+				end
 			end
 		end
 		if matchesLegacy then
@@ -2850,6 +2868,25 @@ function Database:SetMinimap(cfg)
 	self:Set("minimap", cfg)
 end
 
+-- Section fold state (Phase 2). Booleans under addon-authored string keys: RULE D-clean.
+function Database:IsSectionCollapsed(key)
+	local t = DB and DB.collapsedSections
+	return (t and t[key]) and true or false
+end
+
+function Database:SetSectionCollapsed(key, collapsed)
+	if type(key) ~= "string" then
+		return
+	end
+	collapsed = sanitizeBool(collapsed)
+	if collapsed == nil then
+		return
+	end
+	DB.collapsedSections = DB.collapsedSections or {}
+	DB.collapsedSections[key] = collapsed or nil
+	notify(globalListeners, "collapsedSections")
+end
+
 function Database:GetCue(triggerID)
 	return activeProfile().triggers[triggerID] and true or false
 end
@@ -2860,9 +2897,16 @@ function Database:SetCue(triggerID, enabled)
 		return
 	end
 	activeProfile().triggers[triggerID] = enabled
+	local trigger = Pulse.Registry:GetTrigger(triggerID)
 	if Pulse.debug then
-		local trigger = Pulse.Registry:GetTrigger(triggerID)
 		print(("Pulse: %s %s"):format(trigger and trigger.label or triggerID, enabled and "enabled" or "disabled"))
+	end
+	-- A page switch re-syncs every module on its page. The gate itself takes effect at once
+	-- (Pulse:GatesOpen reads it on every fire); only the event re-registration waits for
+	-- the end of combat, the same deferral a profile switch uses.
+	if trigger and trigger.gate and InCombatLockdown and InCombatLockdown() then
+		pendingProfileNotify = true
+		return
 	end
 	notify(cueListeners, triggerID)
 end
@@ -2882,8 +2926,11 @@ function Database:SetAllCues(enabled, profileName)
 	local count = 0
 	if Pulse.Triggers then
 		for _, trigger in ipairs(Pulse.Triggers) do
-			prof.triggers[trigger.id] = b
-			count = count + 1
+			-- "Disable all cues" means cues. Page switches are left where the player put them.
+			if not trigger.gate then
+				prof.triggers[trigger.id] = b
+				count = count + 1
+			end
 		end
 	end
 	if not profileName or profileName == self:GetActiveProfileName() then

@@ -98,6 +98,18 @@ Theme.DROPDOWN_WIDTH = 220
 Theme.BUTTON_WIDTH = 200
 Theme.BUTTON_LEFT = -40
 
+-- One-line cue row (Phase 2). Left-anchored offsets inside a ~605 px row at the stock
+-- 920 px window. [verify in game at 1280x800 and UI scale 0.64-1.0]
+Theme.CUE_CHECK_LEFT = 4
+Theme.CUE_LABEL_LEFT = 38
+Theme.CUE_LABEL_WIDTH = 190
+Theme.CUE_SLIDER_LEFT = 232
+Theme.CUE_SLIDER_WIDTH = 150
+Theme.CUE_DROPDOWN_LEFT = 392
+Theme.CUE_DROPDOWN_WIDTH = 150
+Theme.CUE_PLAY_LEFT = 550
+Theme.CUE_PLAY_WIDTH = 28
+
 -- Blizzard_CategoryList.xml:47-49 and :63-68.
 Theme.CATEGORY_HEIGHT = 20
 Theme.CATEGORY_LABEL_X = 36
