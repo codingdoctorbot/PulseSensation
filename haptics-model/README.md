@@ -24,8 +24,8 @@ conclusions still hold when those assumptions change.
 | 1 | [01-pipeline.md](01-pipeline.md) | The engine's signal chain exactly as the code implements it, with line references | ✅ done |
 | 2 | [02-actuator-models.md](02-actuator-models.md) | ERM and LRA physical models, parameters and assumptions | ✅ done |
 | 3 | [03-static-transfer.md](03-static-transfer.md) | Each profile's input→command curve: floor, gamma, gain, clipping, dead zones | ✅ done |
-| 4 | [04-erm-dynamics.md](04-erm-dynamics.md) | Selected modes simulated on ERM hardware, per profile | ⏳ next |
-| 5 | [05-lra-dynamics.md](05-lra-dynamics.md) | Selected modes simulated on LRA hardware, per profile | ⏳ |
+| 4 | [04-erm-dynamics.md](04-erm-dynamics.md) | Selected modes simulated on ERM hardware, per profile | ✅ done |
+| 5 | [05-lra-dynamics.md](05-lra-dynamics.md) | Selected modes simulated on LRA hardware, per profile | ⏳ next |
 | 6 | [06-findings.md](06-findings.md) | Negative effects, ranked, with suggested tuning directions | ⏳ |
 | — | [model.py](model.py) | The simulator that produces every table (plain Python 3, no dependencies) | ✅ engine + actuators |
 
@@ -67,3 +67,8 @@ vocabulary (lightest, heaviest, fastest rhythm, continuous):
     panelClose). With the previous floors, 0–4 were.
   - **LRA pads get about half an ERM's dB range**, because an LRA's strength is linear in the
     command while an ERM's is quadratic, and every LRA preset keeps gamma at 1.0.
+- **Step 4:** ERM dynamics (`04-erm-dynamics.md`). The ERM presets' attack and release times
+  are applied in software **in front of** a motor that already has that inertia, so the lag is
+  counted twice. CHIME goes from crisp to soft (14 → 8–9 dB), and fuses completely on slow
+  motors. DOUBLE_TAP loses 6–9 dB of separation, and tails grow 30–65 ms. Setting release
+  to 12 ms fixes the rhythms with no loss of strength. Overdrive helps a little.

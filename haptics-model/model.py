@@ -590,6 +590,123 @@ def section_dynamics(kind, profiles, scale=1.0, master=0.7, fps=60.0, hw=None, m
             print(line)
 
 
+def variant(base, name, **per_channel):
+    """Register a what-if preset: base preset with overrides on both channels, or
+    Low=dict(...)/High=dict(...) for per-channel overrides."""
+    new = {}
+    for ch in ("Low", "High"):
+        cfg = dict(PRESETS[base][ch])
+        if ch in per_channel:
+            cfg.update(per_channel[ch])
+        cfg.update({k: v for k, v in per_channel.items() if k not in ("Low", "High")})
+        new[ch] = cfg
+    PRESETS[name] = new
+    return name
+
+
+def has_gaps(m):
+    return any(s[0] == "gap" for s in MODES[m]["steps"])
+
+
+def evaluate(kind, p, m, hw=None, fps=60.0, scale=1.0, master=0.7):
+    end = authored_end(MODES[m])
+    rows = run_engine(p, m, scale=scale, master=master, fps=fps, T=end + 0.5)
+    sim = actuate(rows, kind, hw)
+    return metrics(sim, end, pulse_windows(m) if has_gaps(m) else None), sim
+
+
+def summary(kind, profiles, modes=SELECTED, hw=None, fps=60.0, scale=1.0, master=0.7, title=""):
+    res = {(p, m): evaluate(kind, p, m, hw, fps, scale, master)[0] for p in profiles for m in modes}
+    for label, key, f in (
+        ("Peak strength (dB re full scale, both channels summed)", "peak", lambda r: f"{db(r['peak']):.0f}" if r["peak"] >= E_TH else "**not felt**"),
+        ("First felt (ms after the cue fires)", "t_det", lambda r: fmt(r["t_det"], "ms")),
+        ("Tail: felt past the authored end (ms)", "tail", lambda r: fmt(r["tail"], "ms")),
+    ):
+        print(f"\n#### {title}{label}\n")
+        print("| Profile | " + " | ".join(modes) + " |")
+        print("|---|" + "---|" * len(modes))
+        for p in profiles:
+            print(f"| {p} | " + " | ".join(f(res[(p, m)]) for m in modes) + " |")
+    gm = [m for m in modes if has_gaps(m)]
+    if gm:
+        print(f"\n#### {title}Dip between pulses (dB; ≥12 crisp, 6–12 soft, <6 fused)\n")
+        print("| Profile | " + " | ".join(gm) + " |")
+        print("|---|" + "---|" * len(gm))
+        for p in profiles:
+            print(f"| {p} | " + " | ".join(", ".join(f"{d:.0f}" for d in res[(p, m)]["dips"]) for m in gm) + " |")
+    return res
+
+
+BARS = " ▁▂▃▄▅▆▇█"
+
+
+def envelope(kind, p, m, hw=None, step=0.010, T=None, floor_db=-40.0, scale=1.0):
+    """One-line strength envelope, 10 ms per character, -40..0 dB."""
+    end = authored_end(MODES[m])
+    T = T or end + 0.25
+    rows = run_engine(p, m, scale=scale, T=T)
+    sim = actuate(rows, kind, hw, T=T)
+    out, n = [], int(round(step / PHYS_DT))
+    for i in range(0, len(sim), n):
+        e = max(l + h for _, l, h in sim[i:i + n])
+        lvl = 0 if e < 10 ** (floor_db / 20) else min(8, 1 + int((db(e) - floor_db) / (-floor_db) * 8))
+        out.append(BARS[lvl])
+    return "".join(out)
+
+
+def authored_bar(m, step=0.010, T=None):
+    end = authored_end(MODES[m])
+    T = T or end + 0.25
+    ev = schedule(MODES[m], 1.0)
+    s = []
+    for i in range(int(round(T / step)) + 1):
+        t = i * step + step / 2
+        s.append("█" if any(at <= t < at + d for at, d, _ in ev) else "·")
+    return "".join(s)
+
+
+def hold_metrics(kind, p, low, high, secs=1.0, hw=None, scale=1.0, master=0.7):
+    rows = run_engine(p, None, scale=1.0, master=master, T=secs + 1.0, hold=(low * scale, high * scale, secs))
+    sim = actuate(rows, kind, hw)
+    E = [(t, l + h) for t, l, h in sim]
+    ss = max(e for t, e in E if t <= secs)
+    t90 = next((t for t, e in E if e >= 0.9 * ss), None) if ss >= E_TH else None
+    last = max((t for t, e in E if e >= E_TH), default=None)
+    return dict(ss=ss, t90=t90, tail=(last - secs) if last is not None else None)
+
+
+def section_erm():
+    print("\n## ERM: baseline (nominal hardware, 60 fps, master 0.7, intensity 1.0)")
+    summary("erm", ERM_PROFILES)
+    print("\n## ERM: what-ifs")
+    wf = [variant("xbox", "xbox, release τ 12 ms", Low=dict(releaseTau=0.012), High=dict(releaseTau=0.012)),
+          variant("xbox", "xbox, no overdrive", overdriveDuration=0.0)]
+    summary("erm", ["xbox"] + wf, modes=["DOUBLE_TAP", "CHIME", "STUTTER", "THUD", "TAP"], title="What-if: ")
+    print("\n## ERM: sensitivity to hardware (xbox preset)")
+    for lab, f in (("fast motors (τ ×0.6)", 0.6), ("slow motors (τ ×1.6)", 1.6)):
+        hw = {ch: dict(v, tau_up=v["tau_up"] * f, tau_down=v["tau_down"] * f) for ch, v in ERM_HW.items()}
+        summary("erm", ["default", "xbox"], modes=["DOUBLE_TAP", "CHIME", "STUTTER", "TICK"], hw=hw, title=f"{lab}: ")
+    print("\n## ERM: frame rate")
+    for fps in (30.0, 144.0):
+        summary("erm", ["default", "xbox"], modes=["DOUBLE_TAP", "STUTTER", "CLICK", "TICK"], fps=fps, title=f"{fps:.0f} fps: ")
+    print("\n## ERM: continuous holds (1 s)\n")
+    print("| Profile | HUM steady | HUM 90% rise | HUM felt after state ends | DRIFT steady |")
+    print("|---|---|---|---|---|")
+    for p in ERM_PROFILES:
+        h = hold_metrics("erm", p, CONTINUOUS["HUM"]["low"], 0)
+        d = hold_metrics("erm", p, CONTINUOUS["DRIFT"]["low"], 0)
+        print(f"| {p} | {db(h['ss']):.0f} dB | {fmt(h['t90'], 'ms')} | {fmt(h['tail'], 'ms')} | "
+              + (f"{db(d['ss']):.0f} dB" if d["ss"] >= E_TH else "**not felt**") + " |")
+    print("\n## ERM: envelopes (10 ms per character, −40…0 dB)\n")
+    print("```")
+    for m in ("DOUBLE_TAP", "STUTTER", "CHIME"):
+        print(f"{m:11s}{'authored':10s}{authored_bar(m)}")
+        for p, lab in (("default", "default"), ("xbox", "xbox"), ("xbox, release τ 12 ms", "xbox rel12")):
+            print(f"{'':11s}{lab:10s}" + envelope("erm", p, m))
+        print()
+    print("```")
+
+
 if __name__ == "__main__":
     which = sys.argv[1] if len(sys.argv) > 1 else "all"
     if which in ("all", "transfer"):
@@ -599,8 +716,7 @@ if __name__ == "__main__":
         section_continuous()
         section_census()
     if which in ("all", "erm"):
-        print("\n## ERM hardware\n")
-        section_dynamics("erm", ERM_PROFILES)
+        section_erm()
     if which in ("all", "lra"):
         print("\n## LRA hardware\n")
         section_dynamics("lra", LRA_PROFILES)
