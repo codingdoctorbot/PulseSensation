@@ -4,7 +4,7 @@ set -euo pipefail
 # PulseHaptics release packaging script
 # Generates a clean distribution zip archive for CurseForge, Wago, and GitHub Releases.
 
-VERSION="0.2.0-beta"
+VERSION="0.2.1-beta"
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DIST_DIR="${REPO_DIR}/dist"
 STAGE_DIR="${DIST_DIR}/stage"
