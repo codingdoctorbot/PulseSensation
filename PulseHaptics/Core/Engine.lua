@@ -525,6 +525,7 @@ local function mapValue(channel, v, isTransient)
 	if floor and floor > 0 then
 		if isTransient then
 			v = floor + (1.0 - floor) * v
+		else
 			-- Soft floor for continuous immersion textures (CR-008 b / F-01):
 			-- Transients need the hard breakaway floor immediately to kick over static friction.
 			-- Continuous textures scale the knee with the floor (default floor * 0.5) so that

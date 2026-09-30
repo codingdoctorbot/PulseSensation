@@ -549,17 +549,17 @@ end
 check("Engine:Hold default/false sets isTransient=false", foundSustained, false)
 Engine:StopAll()
 
--- ── CR-008 b: Soft Breakaway Floor for Continuous Textures ─────────────────
+-- ── CR-008 b / F-01: Soft Breakaway Floor for Continuous Textures ───────────
 Engine:StopAll()
 mockFloor = 0.125
--- 1. Continuous hold at low amplitude (0.05) scales down smoothly below breakaway floor
-Engine:Hold("soft_floor_continuous", 0.05, 0, 0.5, false)
+-- 1. Continuous hold at low amplitude (0.02) scales down smoothly below breakaway floor (< 0.08)
+Engine:Hold("soft_floor_continuous", 0.02, 0, 0.5, false)
 for _ = 1, 15 do
 	frameScripts.OnUpdate(nil, 0.016)
 end
 local chanContinuous = Engine:_DebugChannels()
 local lowContinuous = chanContinuous["Low"] and chanContinuous["Low"].smoothed or 0
-check("continuous cue at 0.05 scales below breakaway floor (< 0.08)", lowContinuous > 0 and lowContinuous < 0.08, true)
+check("continuous cue at 0.02 scales below breakaway floor (< 0.08)", lowContinuous > 0 and lowContinuous < 0.08, true)
 
 -- 2. Transient hold at low amplitude (0.05) preserves hard breakaway floor
 Engine:StopAll()
