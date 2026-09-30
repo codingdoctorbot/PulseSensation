@@ -1,0 +1,12 @@
+## Interface: 120100, 110200, 110100
+## Title: PulseAudio |cff33ccff[Earcon & Speaker Synthesizer]|r
+## Notes: Translates Pulse tactile waveforms into audible mechanical earcons and controller-speaker sound cues.
+## Author: Pulse Team
+## Version: 0.3.0-beta
+## Dependencies: PulseHaptics
+## SavedVariables: PulseAudioDB
+## IconTexture: Interface\Icons\INV_Misc_Ear_Human_01
+
+SoundBank.lua
+Core.lua
+UI.lua

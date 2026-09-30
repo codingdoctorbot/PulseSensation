@@ -100,6 +100,8 @@ read_globals = {
     "C_LossOfControl",
     "C_CooldownViewer",
     "C_SwingTimer",
+    "C_Map",
+    "C_DeathInfo",
     "EventRegistry",
 
     -- Classic & Unit APIs
@@ -144,6 +146,7 @@ read_globals = {
     "IsSubmerged",
     "IsSpellKnown",
     "GetUnitSpeed",
+    "GetPlayerFacing",
     "GetInventoryItemID",
     "GetShapeshiftFormID",
     "GetShapeshiftForm",
@@ -224,6 +227,15 @@ globals = {
     "PulseBridgeDB",
     "PulseStudio",
     "PulseStudioDB",
+    "PulseAudio",
+    "PulseAudioDB",
+    "PulseAudioFrame",
+    "PulseSync",
+    "PulseSyncDB",
+    "PulseSyncFrame",
+    "PulseCompass",
+    "PulseCompassDB",
+    "PulseCompassFrame",
     "SlashCmdList",
     "SLASH_PULSE1",
     "SLASH_PULSEUI1",
@@ -239,6 +251,12 @@ globals = {
     "SLASH_PULSEBRIDGE2",
     "SLASH_PULSESTUDIO1",
     "SLASH_PULSESTUDIO2",
+    "SLASH_PULSEAUDIO1",
+    "SLASH_PULSEAUDIO2",
+    "SLASH_PULSESYNC1",
+    "SLASH_PULSESYNC2",
+    "SLASH_PULSECOMPASS1",
+    "SLASH_PULSECOMPASS2",
 }
 
 exclude_files = {
