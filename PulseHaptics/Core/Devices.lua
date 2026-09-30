@@ -148,19 +148,33 @@ Pulse.CHANNEL_TUNABLES = {
 -- Shape of the Ramp probe on the calibration page (Core/Engine.lua drives it).
 --
 -- Proportioned against where the answer plausibly lives rather than across the whole range.
--- The first version used peak 0.5, step 0.025: a third of the sweep sat above any plausible
--- breakaway point, and the reading landed on a 0.025 grid, so a floor of "about 0.15" could
--- only be reported as ±0.0125 — ±8% of the figure being measured.
+-- Preset floors sit at 0.025-0.065, so the first two shapes both measured in the wrong place:
+-- peak 0.5 / step 0.025, then peak 0.40 / step 0.01, the latter still reporting a 0.03 floor
+-- only to ±0.005, about ±17% of the figure being measured.
 --
--- No measurement backs the 0.40 ceiling; it is an instrument-design choice, not a claim
--- about hardware. Resolution belongs where the reading is, and anything still silent at 40%
--- is a dead motor rather than a high floor, which the Test button answers faster.
+-- The step matches the Breakaway floor slider (0.005), so every reading can be entered
+-- exactly. Finer is not worth it: rumble drivers commonly quantise intensity to 8 bits.
 --
--- 40 steps at 0.4s is about sixteen seconds. Long for a button, trivial for something
--- pressed once per controller.
-Pulse.RAMP_PEAK = 0.40
-Pulse.RAMP_STEP = 0.01
-Pulse.RAMP_STEP_SECONDS = 0.4
+-- No measurement backs the 0.20 ceiling; it is an instrument-design choice, roughly three
+-- times the highest preset floor. Anything still silent at 20% is a dead motor rather than a
+-- high floor, which the Test button answers faster. The slider still reaches 0.40.
+--
+-- 0.5s per step, because near breakaway an ERM has almost no spare torque and spins up
+-- slowly, and the person then has to notice it. At 0.4s the felt step and the printed step
+-- came apart often enough to read one step high.
+--
+-- 40 steps at 0.5s is twenty seconds. Long for a button, trivial for something pressed once
+-- per controller.
+Pulse.RAMP_PEAK = 0.20
+Pulse.RAMP_STEP = 0.005
+Pulse.RAMP_STEP_SECONDS = 0.5
+
+-- How long after first feeling the motor a person typically clicks Set Floor. Set Floor
+-- credits the step that was running this long before the click, not the one running at it.
+-- An estimate, not a measurement: touch reaction time plus a click. Too high and the reading
+-- comes out one step (0.005) low, which is the cheaper error: a floor slightly under
+-- breakaway still lets the next step up start the motor.
+Pulse.RAMP_REACTION_SECONDS = 0.35
 
 -- Anti-spam threshold: how far a channel has to move before it is worth another
 -- SetVibration call. Global rather than per-channel — it is a call-rate optimisation, not a

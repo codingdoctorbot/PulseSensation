@@ -1650,15 +1650,15 @@ do
 
 		-- CR-025: Ramp calibration tooltip calculates duration dynamically
 		local expectedDuration = math.floor((Pulse.RAMP_PEAK / Pulse.RAMP_STEP) * Pulse.RAMP_STEP_SECONDS + 0.5)
-		check("Ramp calibration duration is 16 seconds (CR-025)", expectedDuration, 16)
+		check("Ramp calibration duration is 20 seconds (CR-025)", expectedDuration, 20)
 		local calibRows = Pulse.UI.Panel.Spec.BuildCalibrationPage and Pulse.UI.Panel.Spec.BuildCalibrationPage()
 		if calibRows then
 			local foundRamp = false
 			for _, row in ipairs(calibRows) do
 				if row.buttonText == "Ramp" and row.tooltip then
 					foundRamp = true
-					check("Ramp tooltip mentions 16 seconds (CR-025)", row.tooltip:find("16 seconds") ~= nil, true)
-					check("Ramp tooltip mentions 40% power (CR-025)", row.tooltip:find("40%%") ~= nil, true)
+					check("Ramp tooltip mentions 20 seconds (CR-025)", row.tooltip:find("20 seconds") ~= nil, true)
+					check("Ramp tooltip mentions 20% power (CR-025)", row.tooltip:find("20%%") ~= nil, true)
 				end
 			end
 			check("Found Ramp button in calibration rows", foundRamp, true)

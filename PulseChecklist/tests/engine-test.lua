@@ -420,6 +420,32 @@ check("active ramp channel is Low", activeRamp and activeRamp.channel, "Low")
 Engine:StopRamp("Low")
 check("active ramp cleared by StopRamp", Engine:GetActiveRamp(), nil)
 
+-- ── Set Floor credits the felt step, not the clicked one ─────────────────────
+
+Engine:RampChannel("Low")
+local t0 = now
+local dt, inc = Pulse.RAMP_STEP_SECONDS, Pulse.RAMP_STEP
+local function near(a, b)
+	return a ~= nil and math.abs(a - b) < 1e-9
+end
+
+-- 0.1s into step 3: within the reaction window, so step 2 is credited.
+runTimersTo(t0 + 2 * dt + 0.1)
+check("reading steps back inside the reaction window", near(Engine:GetRampReading(), 2 * inc), true)
+check("  while the ramp itself is on step 3", Engine:GetActiveRamp().step, 3)
+
+-- Past the reaction window into step 3: step 3 is credited.
+runTimersTo(t0 + 2 * dt + Pulse.RAMP_REACTION_SECONDS + 0.01)
+check("reading holds once the window has passed", near(Engine:GetRampReading(), 3 * inc), true)
+
+-- Very early click on step 1 never goes below step 1.
+Engine:StopRamp("Low")
+Engine:RampChannel("Low")
+runTimersTo(now + 0.01)
+check("reading never drops below the first step", near(Engine:GetRampReading(), inc), true)
+Engine:StopRamp("Low")
+check("no reading without a ramp", Engine:GetRampReading(), nil)
+
 -- ── Defensive C_GamePad guards on RefreshDevice ──────────────────────────────
 local savedGamePad = C_GamePad
 C_GamePad = nil

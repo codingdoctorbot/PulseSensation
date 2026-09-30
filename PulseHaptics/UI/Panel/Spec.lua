@@ -1785,10 +1785,8 @@ function Spec.BuildCalibrationPage()
 			end,
 			string.format(
 				"Climbs this motor slowly from silence to %d%% power over %d seconds, ",
-				math.floor((Pulse.RAMP_PEAK or 0.40) * 100 + 0.5),
-				math.floor(
-					((Pulse.RAMP_PEAK or 0.40) / (Pulse.RAMP_STEP or 0.01)) * (Pulse.RAMP_STEP_SECONDS or 0.4) + 0.5
-				)
+				math.floor(Pulse.RAMP_PEAK * 100 + 0.5),
+				math.floor((Pulse.RAMP_PEAK / Pulse.RAMP_STEP) * Pulse.RAMP_STEP_SECONDS + 0.5)
 			)
 				.. "printing each step to chat. Watch the chat, and note the number showing when "
 				.. "you FIRST feel anything — that is this motor's breakaway floor. Type it into "
@@ -1801,12 +1799,17 @@ function Spec.BuildCalibrationPage()
 			"Mark floor from ramp",
 			"Set Floor",
 			function()
-				local ramp = Pulse.Engine:GetActiveRamp()
+				local floorVal, ramp = Pulse.Engine:GetRampReading()
 				if ramp and ramp.channel == channel then
-					local floorVal = ramp.magnitude
 					store:SetChannelTuning(channel, "floor", floorVal, 0.0, 0.40)
 					Pulse.Engine:StopRamp(channel)
-					print(("Pulse: captured %s breakaway floor at %.3f"):format(channel, floorVal))
+					print(
+						("Pulse: captured %s breakaway floor at %.3f (ramp was at %.3f when clicked)"):format(
+							channel,
+							floorVal,
+							ramp.magnitude
+						)
+					)
 					return true
 				elseif ramp then
 					return false, ("a ramp is currently running on " .. ramp.channel .. ", not " .. channel)

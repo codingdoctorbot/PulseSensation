@@ -941,6 +941,7 @@ function Engine:RampChannel(channel, peak)
 	rampToken = (rampToken or 0) + 1
 	local token = rampToken
 	local generation = engineGeneration
+	local startedAt = GetTime()
 
 	print(
 		("Pulse: ramping %s from 0 to %d%% in steps of %.3f, about %d seconds. Say when you FIRST feel anything and use the number on that line."):format(
@@ -966,6 +967,9 @@ function Engine:RampChannel(channel, peak)
 				step = step,
 				steps = steps,
 				token = token,
+				startedAt = startedAt,
+				increment = increment,
+				interval = interval,
 			}
 			-- Held slightly longer than the interval so there is no silent gap between
 			-- steps for the mass to coast down through — a gap would read as a pulse train
@@ -999,6 +1003,21 @@ function Engine:GetActiveRamp()
 	return self.activeRamp
 end
 
+-- The step the person FELT, not the one showing when they clicked. Set Floor lands a
+-- reaction time after the sensation, and every step of that lag used to be written into the
+-- floor. Steps are evenly spaced, so the step at any earlier moment is arithmetic rather
+-- than history. Never later than the step running now.
+function Engine:GetRampReading()
+	local ramp = self.activeRamp
+	if not ramp then
+		return nil
+	end
+	local felt = GetTime() - ramp.startedAt - (Pulse.RAMP_REACTION_SECONDS or 0)
+	local step = math.floor(felt / ramp.interval) + 1
+	step = math.max(1, math.min(ramp.step, step))
+	return ramp.increment * step, ramp
+end
+
 -- What the calibration page's Test button calls. Distinct from RawChannel because a ramp
 -- drives RawChannel internally every step — if RawChannel cancelled ramps it would cancel
 -- its own. Pressing Test during a ramp should stop the ramp, so that lives here.
@@ -1011,10 +1030,9 @@ end
 -- Releases one channel's raw hold and silences just that channel. Used by the ramp's own
 -- terminator and by StopRamp; neither has business stopping the rest of the addon.
 --
--- Nothing currently calls StopRamp: the calibration page's Test button interrupts a ramp
--- through ProbeChannel, which bumps rampToken so the remaining timers no-op and then drives
--- the channel itself. StopRamp is kept as the explicit "stop and go quiet" that
--- ProbeChannel is not.
+-- StopRamp is the explicit "stop and go quiet": Set Floor calls it once it has taken its
+-- reading. The Test button does not — it interrupts a ramp through ProbeChannel, which
+-- bumps rampToken so the remaining timers no-op and then drives the channel itself.
 function Engine:_StopRawChannel(channel)
 	rawHolds[channel] = nil
 	smoothedByChannel[channel] = nil
