@@ -308,6 +308,9 @@ end
 local lastCraftSeen = 0
 
 function M:IsCrafting()
+	if not (Pulse.Database and Pulse.Database:Get("masterEnabled") and Pulse.Database:GetCue(CUE)) then
+		return false
+	end
 	if active then
 		-- Failsafe: if no cast or channel is active, craft suppression auto-clears after 0.5s
 		local hasCast = false
@@ -373,7 +376,14 @@ local function beginCraft(recipeSpellID, explicitProfessionID)
 		return
 	end
 
+	-- If the craftTexture cue itself is off, do not claim the craft or suppress castTexture
+	if not (Pulse.Database:Get("masterEnabled") and Pulse.Database:GetCue(CUE)) then
+		active = false
+		return
+	end
+
 	work = resolved or GENERIC_WORK
+
 	gain = professionID and setting(Pulse.Professions.GainKey(professionID), 1.0) or 1.0
 	strikesTotal = 0
 	nextStrike = 1
@@ -591,20 +601,20 @@ function M:PreviewCraft(seconds, scale)
 	scale = scale or 1.0
 	local bed = (setting("bedGain", 1.0) * 0.10) * scale
 	local strikeStrength = clamp01(0.75 * setting("strikeGain", 1.0) * scale)
-	local token = Pulse.GetPreviewToken and Pulse:GetPreviewToken() or 0
 	Pulse:StartContinuousPreview(seconds, function(_)
 		bedRoles.low = clamp01(bed)
 		Pulse.Engine:SetRoles("preview", bedRoles, 0.1)
 	end)
+	local token = Pulse.GetPreviewToken and Pulse:GetPreviewToken() or 0
 	if strikeStrength > 0 then
 		C_Timer.After(1.0, function()
 			if Pulse.GetPreviewToken and Pulse:GetPreviewToken() == token then
-				Pulse.Engine:PlayMode("preview", "THUD", strikeStrength)
+				Pulse.Engine:PlayMode("previewStrike", "THUD", strikeStrength)
 			end
 		end)
 		C_Timer.After(2.2, function()
 			if Pulse.GetPreviewToken and Pulse:GetPreviewToken() == token then
-				Pulse.Engine:PlayMode("preview", "THUD", strikeStrength)
+				Pulse.Engine:PlayMode("previewStrike", "THUD", strikeStrength)
 			end
 		end)
 	end

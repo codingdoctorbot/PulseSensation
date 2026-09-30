@@ -725,8 +725,10 @@ local function OnOscilloscopeTick(elapsed)
 	else
 		-- Fallback to _DebugChannels if older engine version
 		local channels = P.Engine:_DebugChannels()
-		local l = channels.low and channels.low.lastSet or 0
-		local h = channels.high and channels.high.lastSet or 0
+		local lowInfo = channels.Low or channels.low
+		local highInfo = channels.High or channels.high
+		local l = lowInfo and lowInfo.lastSet or 0
+		local h = highInfo and highInfo.lastSet or 0
 		telemetryBuffer.low = (not issecretvalue(l) and type(l) == "number") and l or 0
 		telemetryBuffer.high = (not issecretvalue(h) and type(h) == "number") and h or 0
 		telemetryBuffer.ltrig = 0

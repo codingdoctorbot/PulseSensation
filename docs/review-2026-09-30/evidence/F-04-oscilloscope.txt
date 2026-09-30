@@ -1,0 +1,6 @@
+
+===== scope.lua (1ca6a24): real engine output vs GetChannelOutputs / _DebugChannels =====
+SetVibration sent: Low=0.349 High=0.209
+GetChannelOutputs: low=0.000 high=0.000 anyActive=false
+_DebugChannels keys: High,Low  (Oscilloscope fallback reads .low/.high: nil,nil)
+GetActiveLayerCount: 1

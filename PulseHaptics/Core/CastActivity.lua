@@ -189,6 +189,11 @@ function CastActivity:_OnSucceeded(unit, castGUID, spellID)
 		return
 	end
 
+	-- Auto Shot (75) and Shoot wand (5019) are cyclic ranged attacks handled by autoShotFired
+	if spellID == 75 or spellID == 5019 then
+		return
+	end
+
 	-- No START, no channel: it happened instantly. This is the distinction the old
 	-- selfCastSucceeded cue could never make.
 	emit({ classification = "INSTANT", spellID = spellID, castGUID = castGUID })

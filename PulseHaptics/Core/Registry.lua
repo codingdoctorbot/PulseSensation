@@ -408,7 +408,7 @@ Pulse.Triggers = {
 				default = 0.15,
 				min = 0.0,
 				max = 0.5,
-				step = 0.02,
+				step = 0.01,
 				desc = "How steady the low motor stays regardless of speed. Only audible while actually gliding.",
 			},
 			{
@@ -498,7 +498,7 @@ Pulse.Triggers = {
 				default = 0.12,
 				min = 0.0,
 				max = 1.0,
-				step = 0.05,
+				step = 0.01,
 				desc = "Flat sustained level while channelling, distinct from a regular cast's swell.",
 			},
 		},
@@ -2685,7 +2685,7 @@ Pulse.Triggers = {
 				default = 0.28,
 				min = 0.0,
 				max = 1.0,
-				step = 0.05,
+				step = 0.01,
 				desc = "Overall strength of each footfall before speed and state scaling.",
 			},
 			{

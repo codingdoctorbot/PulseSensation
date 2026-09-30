@@ -24,7 +24,7 @@ local Database = {}
 Pulse.Database = Database
 
 local DB
-local DB_VERSION = 10
+local DB_VERSION = 11
 
 local GLOBAL_DEFAULTS = {
 	masterEnabled = true,
@@ -158,6 +158,26 @@ Pulse.DEFAULT_PROFILE_METADATA = {
 		intensity = 0.75,
 	},
 	{
+		id = "Raiding",
+		name = "Raiding",
+		category = "raid",
+		label = "Raiding (Encounter Focus)",
+		summary = "High-clarity encounter triage. Critical raid mechanics, debuffs, boss abilities, and personal survival alerts with world clutter silenced.",
+		emphasizes = "Boss mechanics, heavy damage taken, personal cooldowns, debuffs, execute range, interrupt windows",
+		silences = "Footsteps, weather, swimming, quest dialogs, merchant/mail, world interaction",
+		intensity = 0.75,
+	},
+	{
+		id = "Questing",
+		name = "Questing",
+		category = "questing",
+		label = "Questing & Exploration",
+		summary = "Immersive open-world adventures. Terrain footsteps, swimming, mount travel, weather, item discovery, and quest interactions.",
+		emphasizes = "Footsteps, mount strides, weather, water presence, looting, quest dialogs, tracking",
+		silences = "Excessive combat telegraph alarms",
+		intensity = 0.75,
+	},
+	{
 		id = "Default",
 		name = "Default",
 		category = "general",
@@ -285,9 +305,9 @@ local PROFILE_TRIGGER_OVERRIDES = {
 		resurrectRequest = true,
 		rolePoll = true,
 		selfCastFailed = true,
-		selfCastInstant = true,
 		selfCastInterrupted = true,
 		selfCastSucceeded = true,
+
 		selfChannelInterrupted = true,
 		selfChannelStart = true,
 		selfChannelStop = true,
@@ -399,9 +419,9 @@ local PROFILE_TRIGGER_OVERRIDES = {
 		resourceCapped = true,
 		rolePoll = true,
 		selfCastFailed = true,
-		selfCastInstant = true,
 		selfCastInterrupted = true,
 		selfCastSucceeded = true,
+
 		selfChannelInterrupted = true,
 		selfChannelStart = true,
 		selfChannelStop = true,
@@ -670,9 +690,9 @@ local PROFILE_TRIGGER_OVERRIDES = {
 		recipeLearned = true,
 		resurrectRequest = true,
 		rolePoll = true,
-		selfCastInstant = true,
 		selfCastInterrupted = true,
 		selfCastSucceeded = true,
+
 		selfChannelStart = true,
 		selfChannelStop = true,
 		skillUp = true,
@@ -789,8 +809,8 @@ local PROFILE_TRIGGER_OVERRIDES = {
 		recipeLearned = true,
 		resurrectRequest = true,
 		rolePoll = true,
-		selfCastInstant = true,
 		selfCastInterrupted = true,
+
 		skillUp = true,
 		softEnemyChanged = true,
 		softFriendChanged = true,
@@ -1304,6 +1324,14 @@ function Database:Init()
 		DB.__corrupt_minimap = DB.minimap
 		DB.minimap = { hide = false }
 	end
+	if DB.modeTuning ~= nil and type(DB.modeTuning) ~= "table" then
+		DB.__corrupt_modeTuning = DB.modeTuning
+		DB.modeTuning = {}
+	end
+	if DB.channelTuning ~= nil and type(DB.channelTuning) ~= "table" then
+		DB.__corrupt_channelTuning = DB.channelTuning
+		DB.channelTuning = {}
+	end
 
 	-- Migrate before ApplyDefaults: migration moves a pre-profiles install's values into
 	-- every slot verbatim, holes and all, then ApplyDefaults fills the holes.
@@ -1448,6 +1476,9 @@ function Database:Migrate()
 	if DB.version < 10 then
 		self:_MigrateSwimSettings()
 	end
+	if DB.version < 11 then
+		self:_MigrateCuratedProfilesOptionB()
+	end
 	DB.version = DB_VERSION
 end
 
@@ -1521,7 +1552,9 @@ local LEGACY_V8_OVERRIDES = {
 		dismount = true,
 		jumped = true,
 		swimTexture = true,
+		waterTexture = true,
 		taxiRide = true,
+
 		lootGold = true,
 		itemObtained = true,
 		bagItemAdded = true,
@@ -1934,6 +1967,10 @@ function Database:_MigrateCuratedProfilesOptionB()
 						end
 					end
 					local knownKeys = { intensity = true, __mode = true }
+					local V8_LEGACY_TUNABLES = {
+						swimTexture = { strokeDepth = 0.55, separateMotors = 1 },
+						castTexture = { castPresence = 0.10, castSwellPeak = 0.70, channelHum = 0.20 },
+					}
 					if trigger and trigger.tunables then
 						for _, tunable in ipairs(trigger.tunables) do
 							knownKeys[tunable.key] = true
@@ -1943,7 +1980,9 @@ function Database:_MigrateCuratedProfilesOptionB()
 								if tunable.boolean then
 									defVal = defVal and 1 or 0
 								end
-								if val ~= defVal then
+								local v8Def = V8_LEGACY_TUNABLES[triggerID]
+									and V8_LEGACY_TUNABLES[triggerID][tunable.key]
+								if val ~= defVal and (v8Def == nil or val ~= v8Def) then
 									return false
 								end
 							end

@@ -66,7 +66,6 @@ Pulse.CHANNEL_DEFAULTS = {
 	releaseTau = 0.028,
 	overdriveBoost = 1.0,
 	overdriveDuration = 0.0,
-	coastCoeff = 0.0,
 	useSCurve = false,
 }
 
@@ -138,16 +137,9 @@ Pulse.CHANNEL_TUNABLES = {
 		desc = "Duration of the software overdrive kick. 0.030s on heavy ERM counterweights, 0.0 on LRAs.",
 	},
 	{
-		key = "coastCoeff",
-		label = "Coast cutoff",
-		min = 0.0,
-		max = 0.080,
-		step = 0.005,
-		desc = "Predictive early shutoff coefficient for high-inertia rotors. 0.0 is disabled (relying on natural release filtering).",
-	},
-	{
 		key = "useSCurve",
 		label = "Perceptual S-Curve",
+
 		kind = "checkbox",
 		desc = "Bends the motor response with a smoothstep curve (3x^2 - 2x^3) to widen contrast between gentle background textures and heavy combat impacts. When unchecked, standard linear scaling is used.",
 	},
@@ -207,7 +199,6 @@ local ERM_LOW = {
 	releaseTau = 0.050,
 	overdriveBoost = 1.00,
 	overdriveDuration = 0.000,
-	coastCoeff = 0.000,
 	gamma = 0.88,
 	useSCurve = false,
 }
@@ -218,7 +209,6 @@ local ERM_HIGH = {
 	releaseTau = 0.030,
 	overdriveBoost = 1.00,
 	overdriveDuration = 0.000,
-	coastCoeff = 0.000,
 	gamma = 0.88,
 	useSCurve = false,
 }
@@ -229,7 +219,6 @@ local LRA = {
 	releaseTau = 0.012,
 	overdriveBoost = 1.00,
 	overdriveDuration = 0.000,
-	coastCoeff = 0.000,
 	gamma = 1.00,
 	useSCurve = false,
 }

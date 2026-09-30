@@ -505,7 +505,7 @@ function Rows.CreateDropdown(parent, spec)
 					local catColor = "|cff88c0d0"
 					if option.category == "Heavy Impacts" then
 						catColor = "|cffff9944"
-					elseif option.category == "Triggers & Textures" then
+					elseif option.category == "Textures & Patterns" or option.category == "Triggers & Textures" then
 						catColor = "|cffa077ff"
 					end
 					return catColor .. "• |r" .. (option.label or tostring(value))

@@ -286,6 +286,7 @@ function Pulse:CancelContinuousPreview()
 	previewUpdateFn = nil
 	if self.Engine then
 		self.Engine:CancelLayer(PREVIEW_LAYER)
+		self.Engine:CancelLayer("previewStrike")
 	end
 end
 

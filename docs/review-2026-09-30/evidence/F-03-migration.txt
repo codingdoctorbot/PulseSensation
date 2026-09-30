@@ -1,0 +1,60 @@
+
+===== migrate.lua make-v8: fresh install with dace2ab code (pre-curation, DB_VERSION 8) =====
+v8 source tree=v8 version=8
+
+===== migrate.lua make-head: fresh install with ad0ef89 code (the curated reference) =====
+head version=10
+
+===== migrate.lua upgrade: v8 DB loaded into ad0ef89 code =====
+after upgrade version=10
+profile                v8on  nowon  curOn   differ curatedVersion
+Default                  53     53     53        0 1
+Dungeon: Tank            43     43     58       19 1
+Dungeon: Healer          41     41     63       26 1
+Dungeon: Melee           38     38     52       18 1
+Dungeon: Caster          37     37     57       24 1
+Dungeon: Hunter          38     38     51       21 1
+Immersion: Melee         83     83    115       72 1
+Immersion: Caster        77     77    115       74 1
+Immersion: Ranged        79     79    113       74 1
+PvP                      23     23     36       13 1
+Raiding                  68     68     42       40 1
+Questing                 86     86    101       69 1
+v8 Default swimTexture.separateMotors=1 strokeDepth=0.55 castTexture.castPresence=0.1
+after Default swimTexture.separateMotors=0 strokeDepth=0.85 castTexture.castPresence=0.06 castSwellPeak=0.4 channelHum=0.12
+
+===== migrate_ab.lua: same upgrade with the five pre-ad0ef89 tunable defaults restored in memory =====
+B (old tunable defaults restored): Dungeon: Tank      differ=0
+B (old tunable defaults restored): Immersion: Melee   differ=0
+B (old tunable defaults restored): PvP                differ=0
+B (old tunable defaults restored): Raiding            differ=0
+B (old tunable defaults restored): Questing           differ=69
+
+===== questing.lua: v8 profiles vs LEGACY_V8_OVERRIDES (why Questing still fails) =====
+Questing legacy-table=true exclusive=nil mismatches vs legacy=1: waterTexture(on)
+   masterIntensity v8=0.7
+Raiding legacy-table=true exclusive=nil mismatches vs legacy=0: 
+   masterIntensity v8=0.7
+PvP legacy-table=true exclusive=true mismatches vs legacy=0: 
+   masterIntensity v8=0.7
+Default legacy-table=false exclusive=nil mismatches vs legacy=0: 
+   masterIntensity v8=0.7
+
+===== control: fresh install with db2ffa5 code (v8, curation already present), upgraded the same way =====
+v8 source tree=pre version=8
+after upgrade version=10
+profile                v8on  nowon  curOn   differ curatedVersion
+Default                  53     53     53        0 1
+Dungeon: Tank            58     58     58        0 1
+Dungeon: Healer          63     63     63        0 1
+Dungeon: Melee           52     52     52        0 1
+Dungeon: Caster          57     57     57        0 1
+Dungeon: Hunter          51     51     51        0 1
+Immersion: Melee        115    115    115        0 1
+Immersion: Caster       115    115    115        0 1
+Immersion: Ranged       113    113    113        0 1
+PvP                      36     36     36        0 1
+Raiding                  42     42     42        0 1
+Questing                101    101    101        0 1
+v8 Default swimTexture.separateMotors=1 strokeDepth=0.55 castTexture.castPresence=0.1
+after Default swimTexture.separateMotors=0 strokeDepth=0.85 castTexture.castPresence=0.06 castSwellPeak=0.4 channelHum=0.12

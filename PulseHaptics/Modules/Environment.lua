@@ -348,7 +348,7 @@ function M:PreviewWeather(seconds, scale)
 	local rainLevel = Pulse.Database:GetTriggerSetting("weatherTexture", "rainLevel", 0.12) * scale
 	local patterRate = Pulse.Database:GetTriggerSetting("weatherTexture", "patterRate", 4.0)
 	Pulse:StartContinuousPreview(seconds, function(elapsed)
-		local flutter = Pulse.Waves.Sine(rainLevel, patterRate, 0.45, elapsed)
+		local flutter = Pulse.Waves.Sine(rainLevel, patterRate, 0.45, 0, elapsed)
 		staticWeatherRole.low = 0
 		staticWeatherRole.high = Pulse.Haptics.MicroFlutter(flutter)
 		Pulse.Engine:SetRoles("preview", staticWeatherRole, 0.1)

@@ -525,12 +525,12 @@ local function mapValue(channel, v, isTransient)
 	if floor and floor > 0 then
 		if isTransient then
 			v = floor + (1.0 - floor) * v
-		else
-			-- Soft floor for continuous immersion textures (CR-008 b):
+			-- Soft floor for continuous immersion textures (CR-008 b / F-01):
 			-- Transients need the hard breakaway floor immediately to kick over static friction.
-			-- Continuous textures use a smoothstep knee so low slider values (0.01-0.10) can
-			-- fade to whisper-quiet or silence instead of hitting an inescapable 10-12% motor buzz.
-			local knee = channelConfig(channel, "floorKnee") or 0.20
+			-- Continuous textures scale the knee with the floor (default floor * 0.5) so that
+			-- authored defaults (~0.06-0.10) stay comfortably above breakaway, while low user
+			-- slider settings (<0.04) fade smoothly to whisper-quiet or dead silence.
+			local knee = channelConfig(channel, "floorKnee") or math.max(0.02, floor * 0.5)
 			local t = clamp01(v / knee)
 			local effFloor = floor * t * t * (3.0 - 2.0 * t)
 			v = effFloor + (1.0 - floor) * v
@@ -1119,12 +1119,12 @@ local channelOutputsBuffer = {
 -- Adheres to Rule 4 (Zero Garbage in Tight Loops) and Rule B (issecretvalue guarded).
 function Engine:GetChannelOutputs(dest)
 	local out = dest or channelOutputsBuffer
-	local low = lastSetByChannel.low or 0
-	local high = lastSetByChannel.high or 0
-	local ltrig = lastSetByChannel.ltrigger or 0
-	local rtrig = lastSetByChannel.rtrigger or 0
-	local sLow = smoothedByChannel.low or 0
-	local sHigh = smoothedByChannel.high or 0
+	local low = lastSetByChannel.Low or lastSetByChannel.low or 0
+	local high = lastSetByChannel.High or lastSetByChannel.high or 0
+	local ltrig = lastSetByChannel.LTrigger or lastSetByChannel.ltrigger or 0
+	local rtrig = lastSetByChannel.RTrigger or lastSetByChannel.rtrigger or 0
+	local sLow = smoothedByChannel.Low or smoothedByChannel.low or 0
+	local sHigh = smoothedByChannel.High or smoothedByChannel.high or 0
 
 	out.low = (not issecretvalue(low) and type(low) == "number") and low or 0
 	out.high = (not issecretvalue(high) and type(high) == "number") and high or 0
@@ -1133,6 +1133,7 @@ function Engine:GetChannelOutputs(dest)
 	out.smoothedLow = (not issecretvalue(sLow) and type(sLow) == "number") and sLow or 0
 	out.smoothedHigh = (not issecretvalue(sHigh) and type(sHigh) == "number") and sHigh or 0
 	out.anyActive = (out.low > 0 or out.high > 0 or out.ltrigger > 0 or out.rtrigger > 0)
+
 	return out
 end
 

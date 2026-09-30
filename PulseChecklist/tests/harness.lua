@@ -1837,7 +1837,7 @@ do
 		_G.PulseDB = mockDB
 		Pulse.Database:Init()
 
-		check("Option B: DB version migrated to 10", _G.PulseDB.version, 10)
+		check("Option B: DB version migrated to 11", _G.PulseDB.version, 11)
 		check(
 			"Swim migration: separateMotors migrated to 0",
 			_G.PulseDB.profiles.MyCustomBuild.triggerSettings.swimTexture.separateMotors,

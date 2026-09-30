@@ -1,6 +1,6 @@
 -- Pulse — Core/Modes.lua
 --
--- The 21-mode vocabulary. Tremor capped at 6 because accessibility tops out at three or
+-- The 35-mode vocabulary. Tremor capped at 6 because accessibility tops out at three or
 -- four reliably distinguishable signals under pressure; Pulse is not asking anyone to tell
 -- cues apart in a crisis, so a richer palette is right. Every shape is an author-tuned
 -- constant in a reusable named vocabulary rather than one baked number per cue — reuse

@@ -359,7 +359,7 @@ function Popup.OpenList(owner, options, selectedValue, onSelect, previewScale)
 					bullet = " |cff88c0d0•|r "
 				elseif option.category == "Heavy Impacts" then
 					bullet = " |cffff9944•|r "
-				elseif option.category == "Triggers & Textures" then
+				elseif option.category == "Textures & Patterns" or option.category == "Triggers & Textures" then
 					bullet = " |cffa077ff•|r "
 				end
 				entry.Text:SetText(bullet .. (option.label or tostring(option.value)))
@@ -468,7 +468,7 @@ function Popup.OpenList(owner, options, selectedValue, onSelect, previewScale)
 					header.Text:SetText("|cff88c0d0" .. titleUpper .. "|r")
 				elseif col.title == "Heavy Impacts" then
 					header.Text:SetText("|cffff9944" .. titleUpper .. "|r")
-				elseif col.title == "Triggers & Textures" then
+				elseif col.title == "Textures & Patterns" or col.title == "Triggers & Textures" then
 					header.Text:SetText("|cffa077ff" .. titleUpper .. "|r")
 				else
 					header.Text:SetText(titleUpper)
@@ -496,7 +496,7 @@ function Popup.OpenList(owner, options, selectedValue, onSelect, previewScale)
 						bullet = " |cff88c0d0•|r "
 					elseif option.category == "Heavy Impacts" then
 						bullet = " |cffff9944•|r "
-					elseif option.category == "Triggers & Textures" then
+					elseif option.category == "Textures & Patterns" or option.category == "Triggers & Textures" then
 						bullet = " |cffa077ff•|r "
 					end
 					entry.Text:SetText(bullet .. (option.label or tostring(option.value)))
@@ -666,6 +666,9 @@ end
 -- A yes/no confirmation. `acceptText` names the action rather than saying "Okay": a button
 -- that says what it does is the difference between reading the dialog and not.
 function Popup.Confirm(text, acceptText, onAccept)
+	if InCombatLockdown and InCombatLockdown() then
+		return
+	end
 	ensureDialog()
 	dialog.Message:SetText(text)
 	dialog.Accept:SetText(acceptText or OKAY or "Okay")
@@ -678,6 +681,9 @@ end
 
 -- A confirmation that also wants a line of text.
 function Popup.Prompt(text, defaultValue, acceptText, onAccept)
+	if InCombatLockdown and InCombatLockdown() then
+		return
+	end
 	ensureDialog()
 	dialog.Message:SetText(text)
 	dialog.Accept:SetText(acceptText or ACCEPT or "Accept")

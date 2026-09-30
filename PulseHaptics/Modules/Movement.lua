@@ -46,6 +46,30 @@ local function safeGetText(fn)
 	return ""
 end
 
+local OCEAN_PATTERNS = {
+	"%f[%a]seas?%f[%A]",
+	"%f[%a]oceans?%f[%A]",
+	"%f[%a]coastal?%f[%A]",
+	"%f[%a]shores?%f[%A]",
+	"%f[%a]bays?%f[%A]",
+	"%f[%a]coves?%f[%A]",
+	"%f[%a]beach%f[%A]",
+	"%f[%a]tides?%f[%A]",
+	"%f[%a]abyssal%f[%A]",
+	"%f[%a]reefs?%f[%A]",
+	"%f[%a]capes?%f[%A]",
+	"%f[%a]gulfs?%f[%A]",
+	"%f[%a]channels?%f[%A]",
+	"%f[%a]straits?%f[%A]",
+	"%f[%a]sounds?%f[%A]",
+	"%f[%a]fjords?%f[%A]",
+	"%f[%a]harbors?%f[%A]",
+	"%f[%a]harbours?%f[%A]",
+	"%f[%a]ports?%f[%A]",
+	"%f[%a]deep ocean%f[%A]",
+	"%f[%a]deep sea%f[%A]",
+}
+
 local function updateOceanZone()
 	local subZone = safeGetText(GetSubZoneText)
 	local zone = safeGetText(GetZoneText)
@@ -53,31 +77,13 @@ local function updateOceanZone()
 
 	local combined = (subZone .. " " .. zone .. " " .. minimapZone):lower()
 
-	if
-		combined:find("sea")
-		or combined:find("ocean")
-		or combined:find("coast")
-		or combined:find("shore")
-		or combined:find("bay")
-		or combined:find("cove")
-		or combined:find("beach")
-		or combined:find("tide")
-		or combined:find("deep")
-		or combined:find("abyssal")
-		or combined:find("reef")
-		or combined:find("cape")
-		or combined:find("gulf")
-		or combined:find("channel")
-		or combined:find("strait")
-		or combined:find("sound")
-		or combined:find("fjord")
-		or combined:find("harbor")
-		or combined:find("port")
-	then
-		isOceanZone = true
-	else
-		isOceanZone = false
+	for _, pattern in ipairs(OCEAN_PATTERNS) do
+		if combined:find(pattern) then
+			isOceanZone = true
+			return
+		end
 	end
+	isOceanZone = false
 end
 
 zoneFrame:SetScript("OnEvent", function(_, event, timerName)
