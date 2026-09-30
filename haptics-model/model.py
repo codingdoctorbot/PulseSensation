@@ -13,6 +13,8 @@ measurements.
 """
 
 import math
+import os
+import re
 import sys
 
 # ── Presets: copied from PulseHaptics/Core/Devices.lua ─────────────────────────────────────
@@ -59,25 +61,65 @@ PRESETS = {
                                 releaseTau=0.028, gamma=0.88)),
 }
 
+# Counterfactual: the ERM floors as they were before commit 72950f5 (same day as this model).
+# Not presets in the addon; used only to compare "then vs now".
+PREV_FLOORS = {"xbox": (0.125, 0.095), "xbox_elite": (0.135, 0.105), "ds4": (0.115, 0.090), "8bitdo": (0.145, 0.115)}
+for _p, (_fl, _fh) in PREV_FLOORS.items():
+    PRESETS[_p + "@prev"] = dict(Low=dict(PRESETS[_p]["Low"], floor=_fl), High=dict(PRESETS[_p]["High"], floor=_fh))
+
 ERM_PROFILES = ["default", "xbox", "xbox_elite", "ds4", "8bitdo"]
 LRA_PROFILES = ["default", "dualsense", "switchpro", "steamdeck", "steamcontroller2", "steamcontroller",
                 "lra_classic"]
 
-# ── Modes: copied from PulseHaptics/Core/Modes.lua (selected subset) ──────────────────────
+# ── Modes and cues: parsed from the addon source so the model cannot drift from it ─────────
 
-MODES = {
-    "TAP": dict(base=0.055, steps=[("high", 0.55, 1.0)]),
-    "DOUBLE_TAP": dict(base=0.12, steps=[("low", 0.6, 1.0), ("gap", 0.12), ("low", 0.6, 1.0)]),
-    "TICK": dict(base=0.040, steps=[("high", 0.35, 1.0)]),
-    "CHIME": dict(base=0.1, steps=[("low", 0.5, 1.0), ("gap", 0.08), ("high", 0.6, 1.0)]),
-    "THUD": dict(base=0.12, steps=[("both", 0.85, 0.5), ("low", 0.75, 0.8)]),
-    "STUTTER": dict(base=0.040, steps=[("high", 0.9, 1.0), ("gap", 0.060)] * 3 + [("high", 0.9, 1.0)]),
-    "CLICK": dict(base=0.030, steps=[("high", 0.20, 1.0)]),
-    "HEAVY": dict(base=0.45, steps=[("both", 1.0, 1.0)]),
-    "THUMP": dict(base=0.14, steps=[("both", 0.85, 1.0)]),
-    "IMPACT": dict(base=0.07, steps=[("both", 1.0, 1.0)]),
-}
-CONTINUOUS = {"HUM": dict(low=0.25, high=0.0), "DRIFT": dict(low=0.08, high=0.0)}
+ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "PulseHaptics", "Core")
+
+
+def _num(block, key):
+    m = re.search(r"\b" + key + r"\s*=\s*([0-9.]+)", block)
+    return float(m.group(1)) if m else None
+
+
+def load_modes():
+    """Core/Modes.lua -> {id: dict(base, steps=[(role, relI, relD) | ("gap", secs)])}."""
+    src = open(os.path.join(ROOT, "Modes.lua")).read()
+    body = src[src.index("Pulse.Modes = {"):src.index("Pulse.Modes.TRIGGER_CLICK")]
+    modes, cont = {}, {}
+    for m in re.finditer(r"\n\t([A-Z_]+) = \{(.*?)\n\t\},", body, re.S):
+        mid, blk = m.group(1), m.group(2)
+        if "continuous = true" in blk:
+            cont[mid] = dict(low=_num(blk, "low") or 0.0, high=_num(blk, "high") or 0.0)
+            continue
+        steps = []
+        for s in re.finditer(r"\{([^{}]*)\}", blk[blk.index("steps"):]):
+            st = s.group(1)
+            if "gap" in st:
+                steps.append(("gap", _num(st, "gap")))
+            else:
+                role = re.search(r'role\s*=\s*"(\w+)"', st).group(1)
+                steps.append((role, _num(st, "relIntensity") or 1.0, _num(st, "relDuration") or 1.0))
+        modes[mid] = dict(base=_num(blk, "baseDuration") or 0.25, steps=steps)
+    return modes, cont
+
+
+def load_cues():
+    """Core/Registry.lua -> [dict(id, mode, intensity, on)] for every trigger with a mode."""
+    src = open(os.path.join(ROOT, "Registry.lua")).read()
+    cues = []
+    for blk in re.split(r"\n\t\{\n", src):
+        i = re.search(r'^\t\tid = "([^"]+)"', blk, re.M)
+        mo = re.search(r'^\t\tmode = "([A-Z_]+)"', blk, re.M)
+        if not (i and mo):
+            continue
+        di = re.search(r"^\t\tdefaultIntensity = ([0-9.]+)", blk, re.M)
+        de = re.search(r"^\t\tdefault = (true|false)", blk, re.M)
+        cues.append(dict(id=i.group(1), mode=mo.group(1), intensity=float(di.group(1)) if di else 1.0,
+                         on=bool(de and de.group(1) == "true")))
+    return cues
+
+
+MODES, CONTINUOUS = load_modes()
 SELECTED = ["TAP", "DOUBLE_TAP", "TICK", "CHIME", "THUD", "STUTTER", "CLICK", "HEAVY"]
 
 # ── Engine constants: PulseHaptics/Core/Engine.lua ────────────────────────────────────────
@@ -418,6 +460,113 @@ def section_transfer():
             print(f"| {p} | {ch} | " + " | ".join(cells) + " |")
 
 
+def steady_E(kind, ch, u, hw=None):
+    """Steady-state strength for a held command u (no dynamics)."""
+    if kind == "lra":
+        return u
+    h = (hw or ERM_HW)[ch]
+    if u <= h["ub"]:
+        return 0.0
+    w = (u - h["uc"]) / (1.0 - h["uc"])
+    return w * w
+
+
+LADDER = [("CLICK", 0.20), ("TICK", 0.35), ("TAP", 0.55), ("THUMP", 0.85), ("HEAVY", 1.00)]
+
+
+def section_contrast(master=0.7):
+    print(f"\n## Steady strength on the High channel, dB relative to HEAVY (master {master})\n")
+    print("| Hardware | Profile | " + " | ".join(m for m, _ in LADDER) + " | CLICK→HEAVY range | THUMP vs HEAVY |")
+    print("|---|---|" + "---|" * (len(LADDER) + 2))
+    for kind, profs in (("erm", ERM_PROFILES), ("lra", LRA_PROFILES)):
+        for p in profs:
+            cfg = PRESETS[p]["High"]
+            E = [steady_E(kind, "High", map_value(cfg, v * master, True)) for _, v in LADDER]
+            ref = E[-1]
+            cells = [("silent" if e <= 0 else f"{db(e) - db(ref):+.1f}") for e in E]
+            rng = (db(ref) - db(E[0])) if E[0] > 0 else float("inf")
+            print(f"| {kind.upper()} | {p} | " + " | ".join(cells) + f" | {rng:.1f} dB | {db(E[-1]) - db(E[-2]):.1f} dB |")
+
+
+def section_clip():
+    print("\n## Top-of-range collapse: THUMP (0.85) vs HEAVY (1.0) command, Low channel, with overdrive\n")
+    print("| Profile | master 0.7 | master 0.85 | master 1.0 |")
+    print("|---|---|---|---|")
+    for p in PRESETS:
+        cfg = PRESETS[p]["Low"]
+        cells = []
+        for master in (0.7, 0.85, 1.0):
+            b = cfg["overdriveBoost"] if cfg["overdriveDuration"] > 0 else 1.0
+            a = map_value(cfg, clamp01(0.85 * master * b), True)
+            h = map_value(cfg, clamp01(1.0 * master * b), True)
+            tag = " **same**" if abs(h - a) < 1e-9 else ""
+            cells.append(f"{a:.2f} vs {h:.2f}{tag}")
+        print(f"| {p} | " + " | ".join(cells) + " |")
+
+
+def section_continuous():
+    print("\n## Continuous (soft-floor) command for quiet texture inputs (after master)\n")
+    ins = [0.005, 0.01, 0.02, 0.03, 0.05, 0.08]
+    print("| Profile | Ch | floor | knee | " + " | ".join(f"in {v:.3f}" for v in ins) + " |")
+    print("|---|---|---|---|" + "---|" * len(ins))
+    for p in ERM_PROFILES[1:] + ["lra_classic"]:
+        cfg = PRESETS[p]["Low"]
+        knee = cfg.get("floorKnee") or max(0.02, cfg["floor"] * 0.5)
+        cells = [f"{map_value(cfg, v, False):.3f}" for v in ins]
+        print(f"| {p} | Low | {cfg['floor']:.3f} | {knee:.3f} | " + " | ".join(cells) + " |")
+
+
+_ROWS = {}
+
+
+def cue_rows(p, mode, scale, master=0.7):
+    key = (p, mode, round(scale, 3), master)
+    if key not in _ROWS:
+        _ROWS[key] = run_engine(p, mode, scale=scale, master=master, T=authored_end(MODES[mode]) + 0.4)
+    return _ROWS[key]
+
+
+def cue_census(kind, profile, hw, master=0.7, only_on=False):
+    """Count cues that never start a motor, or are never detectable."""
+    dead, faint, total = [], [], 0
+    for c in load_cues():
+        if c["mode"] not in MODES or (only_on and not c["on"]):
+            continue
+        total += 1
+        rows = cue_rows(profile, c["mode"], c["intensity"], master)
+        sim = actuate(rows, kind, hw)
+        peak = max(l + h for _, l, h in sim)
+        if peak <= 0:
+            dead.append(c)
+        elif peak < E_TH:
+            faint.append(c)
+    return total, dead, faint
+
+
+def erm_hw_with(ub_low, ub_high):
+    hw = {ch: dict(v) for ch, v in ERM_HW.items()}
+    hw["Low"].update(ub=ub_low, uc=0.7 * ub_low)
+    hw["High"].update(ub=ub_high, uc=0.7 * ub_high)
+    return hw
+
+
+def section_census():
+    print("\n## Cue census on ERM hardware: cues with no felt output (master 0.7, shipped intensities)\n")
+    ubs = [0.03, 0.06, 0.10, 0.15]
+    print("| Profile | " + " | ".join(f"breakaway {u:.2f}" for u in ubs) + " |")
+    print("|---|" + "---|" * len(ubs))
+    detail = {}
+    for p in ERM_PROFILES:
+        cells = []
+        for u in ubs:
+            tot, dead, faint = cue_census("erm", p, erm_hw_with(u, u))
+            ton, deadon, fainton = cue_census("erm", p, erm_hw_with(u, u), only_on=True)
+            cells.append(f"{len(dead)} dead + {len(faint)} faint / {tot} (on by default: {len(deadon) + len(fainton)} / {ton})")
+            detail[(p, u)] = dead + faint
+        print(f"| {p} | " + " | ".join(cells) + " |")
+    return detail
+
+
 def section_dynamics(kind, profiles, scale=1.0, master=0.7, fps=60.0, hw=None, modes=SELECTED):
     for m in modes:
         end = authored_end(MODES[m])
@@ -445,6 +594,10 @@ if __name__ == "__main__":
     which = sys.argv[1] if len(sys.argv) > 1 else "all"
     if which in ("all", "transfer"):
         section_transfer()
+        section_contrast()
+        section_clip()
+        section_continuous()
+        section_census()
     if which in ("all", "erm"):
         print("\n## ERM hardware\n")
         section_dynamics("erm", ERM_PROFILES)
