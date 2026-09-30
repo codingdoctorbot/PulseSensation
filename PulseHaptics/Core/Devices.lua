@@ -193,7 +193,7 @@ Pulse.CHANGE_EPSILON_DEFAULT = 0.0015
 -- modes are designed to fully leverage Low and High motors in concert.
 
 local ERM_LOW = {
-	floor = 0.125,
+	floor = 0.025,
 	attackTau = 0.085,
 	transientAttackTau = 0.018,
 	releaseTau = 0.050,
@@ -203,7 +203,7 @@ local ERM_LOW = {
 	useSCurve = false,
 }
 local ERM_HIGH = {
-	floor = 0.095,
+	floor = 0.025,
 	attackTau = 0.045,
 	transientAttackTau = 0.010,
 	releaseTau = 0.024,
@@ -265,10 +265,10 @@ Pulse.Devices = {
 		id = "ds4",
 		label = "DualShock 4 (PS4)",
 		triggers = false,
-		note = "Two asymmetrical ERM motors with balanced weight distribution. Fast 75ms spin-up and 0.115 breakaway floor.",
+		note = "Two asymmetrical ERM motors with balanced weight distribution. Fast 75ms spin-up and 0.040 breakaway floor.",
 		channels = {
-			Low = copy(ERM_LOW, { floor = 0.115, attackTau = 0.075, releaseTau = 0.045, gamma = 0.90 }),
-			High = copy(ERM_HIGH, { floor = 0.090, attackTau = 0.040, releaseTau = 0.024, gamma = 0.90 }),
+			Low = copy(ERM_LOW, { floor = 0.040, attackTau = 0.075, releaseTau = 0.045, gamma = 0.90 }),
+			High = copy(ERM_HIGH, { floor = 0.040, attackTau = 0.040, releaseTau = 0.024, gamma = 0.90 }),
 		},
 	},
 
@@ -287,7 +287,7 @@ Pulse.Devices = {
 		id = "xbox",
 		label = "Xbox (One / Series)",
 		triggers = false,
-		note = "Asymmetrical ERM motors: heavy counterweight on left (85ms spin-up, 0.125 floor) and light counterweight on right (45ms spin-up, 0.095 floor). Calibrated with dual-lane smoothing and gamma 0.88.",
+		note = "Asymmetrical ERM motors: heavy counterweight on left (85ms spin-up, 0.025 floor) and light counterweight on right (45ms spin-up, 0.025 floor). Calibrated with dual-lane smoothing and gamma 0.88.",
 		channels = {
 			Low = copy(ERM_LOW),
 			High = copy(ERM_HIGH),
@@ -298,10 +298,10 @@ Pulse.Devices = {
 		id = "xbox_elite",
 		label = "Xbox Elite Series 2",
 		triggers = false,
-		note = "Heavy metal-reinforced chassis (345g vs 280g) and rubberized grips. +10% Low gain compensates for chassis damping.",
+		note = "Heavy metal-reinforced chassis (345g vs 280g) and rubberized grips. +10% Low gain compensates for chassis damping, calibrated with 0.040 floor.",
 		channels = {
-			Low = copy(ERM_LOW, { floor = 0.135, gain = 1.10, attackTau = 0.090, releaseTau = 0.055, gamma = 0.85 }),
-			High = copy(ERM_HIGH, { floor = 0.105, gain = 1.05, attackTau = 0.050, releaseTau = 0.026, gamma = 0.85 }),
+			Low = copy(ERM_LOW, { floor = 0.040, gain = 1.10, attackTau = 0.090, releaseTau = 0.055, gamma = 0.85 }),
+			High = copy(ERM_HIGH, { floor = 0.040, gain = 1.05, attackTau = 0.050, releaseTau = 0.026, gamma = 0.85 }),
 		},
 	},
 
@@ -320,10 +320,10 @@ Pulse.Devices = {
 		id = "8bitdo",
 		label = "8BitDo (Ultimate / Pro 2)",
 		triggers = false,
-		note = "Asymmetrical ERMs with stiff carbon-composite brushes. 0.145 Low floor guarantees reliable breakaway without deadband stutter.",
+		note = "Asymmetrical ERMs with stiff carbon-composite brushes. 0.040 Low floor guarantees reliable breakaway without deadband stutter.",
 		channels = {
-			Low = copy(ERM_LOW, { floor = 0.145, attackTau = 0.080, releaseTau = 0.048 }),
-			High = copy(ERM_HIGH, { floor = 0.115, attackTau = 0.045, releaseTau = 0.024 }),
+			Low = copy(ERM_LOW, { floor = 0.040, attackTau = 0.080, releaseTau = 0.048 }),
+			High = copy(ERM_HIGH, { floor = 0.040, attackTau = 0.045, releaseTau = 0.024 }),
 		},
 	},
 

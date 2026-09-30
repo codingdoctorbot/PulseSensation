@@ -304,7 +304,7 @@ check("dualsense triggers disabled", Pulse.Devices.dualsense.triggers, false)
 check("dualsense low gain", Pulse.Devices.dualsense.channels.Low.gain, 1.15)
 check("dualsense low floor", Pulse.Devices.dualsense.channels.Low.floor, 0.025)
 check("ds4 triggers disabled", Pulse.Devices.ds4.triggers, false)
-check("ds4 low floor", Pulse.Devices.ds4.channels.Low.floor, 0.115)
+check("ds4 low floor", Pulse.Devices.ds4.channels.Low.floor, 0.040)
 check("xbox triggers disabled", Pulse.Devices.xbox.triggers, false)
 check("xbox_elite triggers disabled", Pulse.Devices.xbox_elite.triggers, false)
 
