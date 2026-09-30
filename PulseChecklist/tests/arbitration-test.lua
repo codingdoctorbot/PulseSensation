@@ -162,7 +162,7 @@ Pulse.Engine = {
 	end,
 }
 
-for _, file in ipairs({ "Core/Init.lua", "Core/Registry.lua", "Core/Arbiter.lua" }) do
+for _, file in ipairs({ "Core/Init.lua", "Core/Registry.lua", "Core/Modes.lua", "Core/Arbiter.lua" }) do
 	assert(loadfile(ROOT .. "/" .. file))("Pulse", Pulse)
 end
 
@@ -259,6 +259,30 @@ freeSlots = 18
 fire("BAG_UPDATE_DELAYED")
 check("V3 no vendor (bank withdrawal): bagItemAdded plays", count("bagItemAdded"), 1)
 
+fresh({ "bagItemAdded", "itemObtained", "merchantBuy" })
+merchantOpen = true
+fire("PLAYER_INTERACTION_MANAGER_FRAME_SHOW", 5)
+fire("MERCHANT_SHOW")
+fire("ITEM_PUSH", 1, 0)
+freeSlots = 19
+fire("BAG_UPDATE_DELAYED")
+-- Non-gold currency purchase: no PLAYER_MONEY
+nextFrame(0.35)
+check("V4 currency purchase felt through deferred intake", #fired, 1)
+
+fresh({ "bagItemAdded", "itemObtained", "merchantBuy" })
+merchantOpen = true
+fire("PLAYER_INTERACTION_MANAGER_FRAME_SHOW", 5)
+fire("MERCHANT_SHOW")
+fire("ITEM_PUSH", 1, 0)
+freeSlots = 19
+fire("BAG_UPDATE_DELAYED")
+money = money - 100
+fire("PLAYER_MONEY")
+nextFrame(0.35)
+check("V5 gold purchase: exactly one cue (merchantBuy)", #fired, 1)
+check("V5   merchantBuy was the speaker", fired[1] and fired[1].id, "merchantBuy")
+
 -- ── Loot ──────────────────────────────────────────────────────────────────────
 
 fresh({ "itemObtained", "bagItemAdded", "lootReceived", "lootGold", "lootOpened" })
@@ -335,6 +359,14 @@ fire("LOOT_OPENED", false, false)
 fire("LOOT_SLOT_CLEARED", 1)
 check("L6 roll (locked) slot cleared: silent", count("itemObtained"), 0)
 fire("LOOT_CLOSED")
+
+fresh({ "itemObtained" })
+lootSlots = { { quality = 4 } } -- Epic -> gain 1.30
+fire("LOOT_READY", true)
+lootSlots = {} -- autoloot emptied window before LOOT_OPENED
+fire("LOOT_OPENED", true, false)
+fire("ITEM_PUSH", 1, 0)
+check("L7 autoloot emptied before LOOT_OPENED keeps Epic gain (1.30)", fired[1] and fired[1].override, 1.3)
 
 -- ── Repair ────────────────────────────────────────────────────────────────────
 
@@ -415,6 +447,21 @@ check(
 	true
 )
 
+fresh({ "merchantBuy", "merchantRepair" })
+repairCost = 500
+openVendor()
+repairMode = true
+money = money - 500
+fire("PLAYER_MONEY") -- repair money arrives before durability
+check("R7 repair payment not misread as merchantBuy", count("merchantBuy"), 0)
+fire("UPDATE_INVENTORY_DURABILITY")
+now = now + 0.4
+repairMode = false
+money = money - 100
+fire("PLAYER_MONEY") -- real purchase after repair
+check("R7 cursor repair felt once", count("merchantRepair"), 1)
+check("R7 purchase after repair felt as merchantBuy", fired[#fired] and fired[#fired].id, "merchantBuy")
+
 -- ── Durability ────────────────────────────────────────────────────────────────
 
 fresh({ "durabilityLow" })
@@ -472,6 +519,12 @@ Pulse:FireIfEnabled("gossipShow")
 check("B4 lower priority inside the window is dropped", #plays, 2)
 now = now + 0.2
 check("B4 dropped cue's throttle was not consumed", Pulse:FireIfEnabled("gossipShow"), true)
+
+fresh({ "guildBankOpened", "interactionWindowClosed" })
+Pulse:FireIfEnabled("guildBankOpened") -- window bus prio 3, DOUBLE_TAP ~0.36 s
+now = now + 0.2
+Pulse:FireIfEnabled("interactionWindowClosed") -- window bus prio 1
+check("B5 lower-prio cue does not cut off DOUBLE_TAP while playing", #plays, 1)
 
 -- ── Intake outside any episode (mail, quest reward) ───────────────────────────
 

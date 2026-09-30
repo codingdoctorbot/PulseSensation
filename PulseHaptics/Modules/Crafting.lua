@@ -308,7 +308,7 @@ end
 local lastCraftSeen = 0
 
 function M:IsCrafting()
-	if not (Pulse.Database and Pulse.Database:Get("masterEnabled") and Pulse.Database:GetCue(CUE)) then
+	if not (Pulse.Database and Pulse.Database:Get("masterEnabled") and Pulse:IsCueActive(CUE)) then
 		return false
 	end
 	if active then
@@ -377,7 +377,7 @@ local function beginCraft(recipeSpellID, explicitProfessionID)
 	end
 
 	-- If the craftTexture cue itself is off, do not claim the craft or suppress castTexture
-	if not (Pulse.Database:Get("masterEnabled") and Pulse.Database:GetCue(CUE)) then
+	if not (Pulse.Database:Get("masterEnabled") and Pulse:IsCueActive(CUE)) then
 		active = false
 		return
 	end
@@ -390,7 +390,7 @@ local function beginCraft(recipeSpellID, explicitProfessionID)
 	active = true
 	lastCraftSeen = GetTime()
 
-	if Pulse.Database:Get("masterEnabled") and Pulse.Database:GetCue(CUE) then
+	if Pulse.Database:Get("masterEnabled") and Pulse:IsCueActive(CUE) then
 		pollFrame:SetScript("OnUpdate", tick)
 	end
 
@@ -417,6 +417,11 @@ end
 
 function M:_PlayStrike()
 	if not work.mode then
+		return
+	end
+	-- Straight-to-engine path: re-check the gates, which can close mid-craft (a page switch
+	-- flipped in combat defers the module re-sync, not the gate itself).
+	if not Pulse:IsCueActive(CUE) then
 		return
 	end
 	local intensity = setting("intensity", 1.0)
@@ -544,7 +549,7 @@ local function onActivity(result)
 end
 
 local function sync()
-	local wanted = (Pulse.Database:Get("masterEnabled") and Pulse.Database:GetCue(CUE)) or false
+	local wanted = (Pulse.Database:Get("masterEnabled") and Pulse:IsCueActive(CUE)) or false
 
 	-- CastActivity only registers its events while something wants them; keyed by consumer
 	-- so toggling casting cues does not unregister crafting, and disabling crafting clears its hold.

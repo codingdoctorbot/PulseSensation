@@ -1838,7 +1838,7 @@ do
 		_G.PulseDB = mockDB
 		Pulse.Database:Init()
 
-		check("Option B: DB version migrated to 11", _G.PulseDB.version, 11)
+		check("Option B: DB version migrated to 12", _G.PulseDB.version, 12)
 		check(
 			"Swim migration: separateMotors migrated to 0",
 			_G.PulseDB.profiles.MyCustomBuild.triggerSettings.swimTexture.separateMotors,
@@ -1899,6 +1899,50 @@ do
 			_G.PulseDB.profiles.MyCustomBuild.triggers.playerDead,
 			true
 		)
+
+		-- Option B v10/v11 upgrade verification (B-02, B-03)
+		do
+			local healerTriggers = {}
+			for k, v in pairs(_G.PulseDB.profiles["Dungeon: Healer"].triggers) do
+				healerTriggers[k] = v
+			end
+			healerTriggers.selfCastInstant = true -- v9-10 delta
+
+			local rangedTriggers = {}
+			for k, v in pairs(_G.PulseDB.profiles["Immersion: Ranged"].triggers) do
+				rangedTriggers[k] = v
+			end
+			rangedTriggers.selfCastInstant = false -- v11 delta
+
+			local upgradeDB = {
+				version = 10,
+				activeProfile = "Default",
+				profiles = {
+					["Dungeon: Healer"] = {
+						triggers = healerTriggers,
+						triggerSettings = {},
+					},
+					["Immersion: Ranged"] = {
+						triggers = rangedTriggers,
+						triggerSettings = {},
+					},
+				},
+			}
+			_G.PulseDB = upgradeDB
+			Pulse.Database:Init()
+
+			check("Option B: v10 -> 12 upgrade migrated to version 12", _G.PulseDB.version, 12)
+			check(
+				"Option B: v10 Dungeon: Healer had selfCastInstant cleaned up",
+				_G.PulseDB.profiles["Dungeon: Healer"].triggers.selfCastInstant or false,
+				false
+			)
+			check(
+				"Option B: v11 Immersion: Ranged had selfCastInstant restored",
+				_G.PulseDB.profiles["Immersion: Ranged"].triggers.selfCastInstant and true or false,
+				true
+			)
+		end
 
 		-- Restore real DB
 		_G.PulseDB = savedPulseDB

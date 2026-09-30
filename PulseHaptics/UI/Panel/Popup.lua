@@ -663,10 +663,24 @@ local function layoutDialog(withEdit)
 	dialog:SetHeight(height + 22 + 18)
 end
 
+local function refuseInCombat()
+	if InCombatLockdown and InCombatLockdown() then
+		local errorsFrame = _G.UIErrorsFrame
+		local msg = _G.ERR_NOT_IN_COMBAT or "You cannot do that while in combat."
+		if errorsFrame and errorsFrame.AddMessage then
+			errorsFrame:AddMessage(msg, 1, 0.1, 0.1)
+		else
+			print("Pulse: not available in combat. Try again after combat.")
+		end
+		return true
+	end
+	return false
+end
+
 -- A yes/no confirmation. `acceptText` names the action rather than saying "Okay": a button
 -- that says what it does is the difference between reading the dialog and not.
 function Popup.Confirm(text, acceptText, onAccept)
-	if InCombatLockdown and InCombatLockdown() then
+	if refuseInCombat() then
 		return
 	end
 	ensureDialog()
@@ -681,7 +695,7 @@ end
 
 -- A confirmation that also wants a line of text.
 function Popup.Prompt(text, defaultValue, acceptText, onAccept)
-	if InCombatLockdown and InCombatLockdown() then
+	if refuseInCombat() then
 		return
 	end
 	ensureDialog()

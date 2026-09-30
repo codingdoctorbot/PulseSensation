@@ -132,6 +132,10 @@ function Pulse:HoldRolesIfEnabled(_, roles)
 end
 
 local cues, settings = { craftTexture = true }, {}
+-- Mirrors Core/Init.lua: switched on AND its page gate (gateCasting) open.
+function Pulse:IsCueActive(id)
+	return (cues[id] and cues.gateCasting ~= false) and true or false
+end
 Pulse.Database = {
 	Get = function(_, key)
 		return key == "masterEnabled"
@@ -518,5 +522,14 @@ check("  and frees castTexture", Pulse.IsCrafting(), false)
 startChannel(7620, 20.0)
 check("fishing baseline bed is 0.12 (CR-003)", M:_DebugCraft().bed, 0.12)
 Pulse.CastActivity:_OnChannelStop("player", "guid-channel", 7620)
+
+-- 8. Casting page switch off: craft not claimed, strikes = 0 (B-04)
+cues.gateCasting = false
+recipeProfession = Enum.Profession.Blacksmithing
+startCraft(1234, 3.0)
+check("gateCasting off: craft not claimed", Pulse.IsCrafting(), false)
+runCraft(3.0, 60)
+check("gateCasting off: 0 strikes played", strikes, 0)
+cues.gateCasting = true
 
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))

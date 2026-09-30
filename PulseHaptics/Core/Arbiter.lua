@@ -95,10 +95,44 @@ function Arbiter:IsMerchantOpen()
 	return (MerchantFrame and MerchantFrame:IsShown()) and true or false
 end
 
--- True while a vendor is open and something that speaks for a purchase is live.
-function Arbiter:VendorOwnsIntake()
+-- A purchase paid in gold produces PLAYER_MONEY (merchantBuy) and a bag/ITEM_PUSH intake,
+-- in either order. A purchase paid in another currency produces only the intake. So the
+-- intake yields only when the owner actually spoke within VENDOR_SETTLE of it; otherwise it
+-- is deferred for that long and plays if the owner stayed silent.
+local VENDOR_SETTLE = 0.30 -- [measure] PLAYER_MONEY vs BAG_UPDATE_DELAYED spread
+local vendorOwnerAt = -100
+local vendorPendingCue, vendorPendingAt = false, 0
+
+-- Interaction.lua calls this on every gold debit at an open vendor, throttled or not.
+function Arbiter:VendorOwnerSpoke()
+	vendorOwnerAt = GetTime()
+	vendorPendingCue = false
+end
+
+local function flushVendorIntake()
+	local cue = vendorPendingCue
+	vendorPendingCue = false
+	if cue and math.abs(vendorOwnerAt - vendorPendingAt) > VENDOR_SETTLE then
+		Pulse:FireIfEnabled(cue)
+	end
+end
+
+-- true = handled (the caller must not fire now). cueID is the caller's own cue, played
+-- later by the deferred flush if no gold debit shows up.
+function Arbiter:VendorOwnsIntake(cueID)
 	local episode = Pulse.Registry.EPISODES.vendor
-	return self:IsMerchantOpen() and anyLive(episode.owners)
+	if not (self:IsMerchantOpen() and anyLive(episode.owners)) then
+		return false
+	end
+	local now = GetTime()
+	if (now - vendorOwnerAt) <= VENDOR_SETTLE then
+		return true -- the gold debit already spoke for this item
+	end
+	if cueID and self:IsLive(cueID) and not vendorPendingCue then
+		vendorPendingCue, vendorPendingAt = cueID, now
+		C_Timer.After(VENDOR_SETTLE, flushVendorIntake) -- static function: no closure
+	end
+	return true
 end
 
 -- ── Loot episode ──────────────────────────────────────────────────────────────
@@ -218,9 +252,14 @@ function Arbiter:LootOpened(autoLoot)
 	if not issecretvalue(autoLoot) then
 		loot.autoLoot = autoLoot and true or false
 	end
+	local prevBest, prevQuest = loot.best, loot.quest
 	scan()
 	if loot.items + loot.coins > 0 or not loot.speaker then
 		loot.speaker = chooseSpeaker()
+	else
+		-- Autoloot emptied the window between LOOT_READY and LOOT_OPENED: keep what the
+		-- first scan saw, or the speaker plays at the default gain.
+		loot.best, loot.quest = prevBest, prevQuest
 	end
 end
 
@@ -283,7 +322,32 @@ end
 -- ── Buses ─────────────────────────────────────────────────────────────────────
 
 local DEFAULT_BUS_WINDOW = 0.15 -- [measure, §11]; covers ControllerUI's 20 Hz panel poll
-local busTime, busPriority, busLayer = {}, {}, {}
+local busTime, busPriority, busLayer, busUntil = {}, {}, {}, {}
+
+-- Approximate audible length of a discrete mode, cached per mode id. Continuous modes
+-- report 0 so the plain window applies.
+local modeLengthCache = {}
+local function modeLength(modeID)
+	local cached = modeLengthCache[modeID]
+	if cached then
+		return cached
+	end
+	local mode = modeID and Pulse.Modes and Pulse.Modes[modeID]
+	local total = 0
+	if mode and not mode.continuous and mode.steps then
+		for _, step in ipairs(mode.steps) do
+			if step.gap then
+				total = total + step.gap
+			else
+				total = total + (mode.baseDuration or 0) * (step.relDuration or 1)
+			end
+		end
+	end
+	if modeID then
+		modeLengthCache[modeID] = total
+	end
+	return total
+end
 
 -- Pre-seeded from the Registry once, so no key is ever created at event time.
 function Arbiter:SeedBuses()
@@ -291,6 +355,7 @@ function Arbiter:SeedBuses()
 		local bus = trigger.bus
 		if bus and not busLayer[bus] then
 			busTime[bus] = -100
+			busUntil[bus] = -100
 			busPriority[bus] = -1
 			busLayer[bus] = "bus:" .. bus
 		end
@@ -299,17 +364,22 @@ end
 
 -- Returns ok, layerName. ok = false when a more important cue on the same bus spoke inside
 -- the window. An unknown bus name degrades to "no bus" rather than erroring.
-function Arbiter:ClaimBus(bus, priority, window, fallbackLayer)
+-- A lower-priority cue is refused for the bus window OR while the higher cue's own
+-- pattern is still playing, whichever is longer: sharing one layer means a later PlayMode
+-- bumps the token and cancels whatever steps remain.
+function Arbiter:ClaimBus(bus, priority, window, fallbackLayer, modeID)
 	local layer = busLayer[bus]
 	if not layer then
 		return true, fallbackLayer
 	end
 	local now = GetTime()
 	priority = priority or 0
-	if (now - busTime[bus]) < (window or DEFAULT_BUS_WINDOW) and priority < busPriority[bus] then
+	local held = (now - busTime[bus]) < (window or DEFAULT_BUS_WINDOW) or now < busUntil[bus]
+	if held and priority < busPriority[bus] then
 		return false, nil
 	end
 	busTime[bus] = now
+	busUntil[bus] = now + modeLength(modeID)
 	busPriority[bus] = priority
 	return true, layer
 end

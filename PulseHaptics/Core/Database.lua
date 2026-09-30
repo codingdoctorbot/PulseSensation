@@ -24,7 +24,7 @@ local Database = {}
 Pulse.Database = Database
 
 local DB
-local DB_VERSION = 11
+local DB_VERSION = 12
 
 local GLOBAL_DEFAULTS = {
 	masterEnabled = true,
@@ -813,6 +813,7 @@ local PROFILE_TRIGGER_OVERRIDES = {
 		recipeLearned = true,
 		resurrectRequest = true,
 		rolePoll = true,
+		selfCastInstant = true,
 		selfCastInterrupted = true,
 
 		skillUp = true,
@@ -1486,7 +1487,8 @@ function Database:Migrate()
 	if DB.version < 10 then
 		self:_MigrateSwimSettings()
 	end
-	if DB.version < 11 then
+	if DB.version < 12 then
+		-- Was `< 11`. Re-run for installs that already reached 11 without the v10 comparison.
 		self:_MigrateCuratedProfilesOptionB()
 	end
 	DB.version = DB_VERSION
@@ -1950,6 +1952,22 @@ local LEGACY_V8_OVERRIDES = {
 	},
 }
 
+-- Earlier shipped curated sets, each written as its difference from today's
+-- PROFILE_TRIGGER_OVERRIDES. A profile that still equals one of them was never edited by
+-- the player and can safely be re-seeded. Add one entry per future curation change.
+local HISTORIC_CURATED_DELTAS = {
+	-- DB_VERSION 9-10: selfCastInstant doubled with selfCastSucceeded (removed in f623a8a).
+	{
+		["Dungeon: Healer"] = { selfCastInstant = true },
+		["Dungeon: Caster"] = { selfCastInstant = true },
+		["Immersion: Caster"] = { selfCastInstant = true },
+	},
+	-- DB_VERSION 11: f623a8a also dropped Immersion: Ranged's only instant-ability cue.
+	{
+		["Immersion: Ranged"] = { selfCastInstant = false },
+	},
+}
+
 -- One-time, DB_VERSION 8 -> 9 (Option B): automatically updates untouched built-in profiles
 -- to their new curated trigger overrides while preserving any profiles modified by the user.
 function Database:_MigrateCuratedProfilesOptionB()
@@ -2053,6 +2071,31 @@ function Database:_MigrateCuratedProfilesOptionB()
 			return true
 		end
 
+		-- A2. Matches an earlier shipped curated set (today's set + a recorded delta)
+		for _, deltas in ipairs(HISTORIC_CURATED_DELTAS) do
+			local delta = deltas[name]
+			local matchesOld = delta ~= nil and currentOverrides ~= nil
+			for _, trigger in ipairs(matchesOld and Pulse.Triggers or {}) do
+				if not trigger.gate then
+					local currentVal = profile.triggers[trigger.id] and true or false
+					local expected = delta[trigger.id]
+					if expected == nil then
+						expected = currentOverrides[trigger.id]
+						if expected == nil then
+							expected = not currentOverrides.__exclusive and (trigger.default and true or false) or false
+						end
+					end
+					if currentVal ~= (expected and true or false) then
+						matchesOld = false
+						break
+					end
+				end
+			end
+			if matchesOld then
+				return true
+			end
+		end
+
 		-- B. Matches legacy v8 overrides
 		local legacyOverrides = LEGACY_V8_OVERRIDES[name]
 		local matchesLegacy = true
@@ -2085,11 +2128,14 @@ function Database:_MigrateCuratedProfilesOptionB()
 		-- C. Matches pre-curation stock defaults (all trigger.default, e.g. v1-v6)
 		local matchesStock = true
 		for _, trigger in ipairs(Pulse.Triggers or {}) do
-			local currentVal = profile.triggers[trigger.id] and true or false
-			local expected = trigger.default and true or false
-			if currentVal ~= expected then
-				matchesStock = false
-				break
+			-- Same gate skip as A and B: a pre-Phase-2 profile has no gate keys at all.
+			if not trigger.gate then
+				local currentVal = profile.triggers[trigger.id] and true or false
+				local expected = trigger.default and true or false
+				if currentVal ~= expected then
+					matchesStock = false
+					break
+				end
 			end
 		end
 		if matchesStock then

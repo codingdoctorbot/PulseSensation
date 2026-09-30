@@ -156,7 +156,7 @@ function M:_WatchLoot()
 		elseif event == "LOOT_CLOSED" then
 			Arbiter:LootClosed()
 		elseif event == "ITEM_PUSH" then
-			if not Arbiter:VendorOwnsIntake() and not Arbiter:LootIntake() then
+			if not Arbiter:VendorOwnsIntake("itemObtained") and not Arbiter:LootIntake() then
 				Pulse:FireIfEnabled("itemObtained")
 			end
 		elseif event == "CHAT_MSG_LOOT" then

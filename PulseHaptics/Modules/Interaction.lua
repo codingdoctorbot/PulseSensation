@@ -122,6 +122,7 @@ local armedCost = 0
 local debitCost = 0 -- copper a personal repair will take; -1 = unknown (cursor repair)
 local debitUntil = 0
 local repairFiredAt = -100
+local cursorPaidAt = -100 -- a cursor repair's payment seen before its durability update
 
 -- One-frame deferred close (window bus, Core/Arbiter.lua): a close is dropped when an
 -- interaction SHOW arrives before the deferred close runs.
@@ -143,6 +144,7 @@ end
 local function resetRepair()
 	armedUntil, armedGuild, armedCost = 0, false, 0
 	debitCost, debitUntil = 0, 0
+	cursorPaidAt = -100
 end
 
 local function fireRepairOnce(now)
@@ -274,7 +276,7 @@ frame:SetScript("OnEvent", function(_, event, arg1)
 				fireRepairOnce(now)
 				if armed and not armedGuild then
 					debitCost, debitUntil = armedCost, now + DEBIT_WINDOW
-				elseif cursor then
+				elseif cursor and (now - cursorPaidAt) > DEBIT_WINDOW then
 					debitCost, debitUntil = -1, now + DEBIT_WINDOW
 				end
 				armedUntil = 0
@@ -290,6 +292,10 @@ frame:SetScript("OnEvent", function(_, event, arg1)
 				local now = GetTime()
 				if delta < 0 and now < debitUntil and (debitCost < 0 or -delta == debitCost) then
 					debitCost, debitUntil = 0, 0 -- the repair's own payment, already felt
+				elseif delta < 0 and type(InRepairMode) == "function" and InRepairMode() then
+					-- Repair cursor active: a debit now is a repair, never a purchase.
+					fireRepairOnce(now)
+					cursorPaidAt = now
 				elseif delta < 0 and now < armedUntil and not armedGuild and -delta == armedCost then
 					-- Money beat the durability update: this IS the repair.
 					fireRepairOnce(now)
@@ -297,6 +303,7 @@ frame:SetScript("OnEvent", function(_, event, arg1)
 				elseif delta > 0 then
 					Pulse:FireIfEnabled("merchantSell")
 				elseif delta < 0 then
+					Pulse.Arbiter:VendorOwnerSpoke()
 					Pulse:FireIfEnabled("merchantBuy")
 				end
 			end

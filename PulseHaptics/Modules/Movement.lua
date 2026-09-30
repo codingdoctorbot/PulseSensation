@@ -49,7 +49,8 @@ end
 local OCEAN_PATTERNS = {
 	"%f[%a]seas?%f[%A]",
 	"%f[%a]oceans?%f[%A]",
-	"%f[%a]coastal?%f[%A]",
+	"%f[%a]coasts?%f[%A]",
+	"%f[%a]coastal%f[%A]",
 	"%f[%a]shores?%f[%A]",
 	"%f[%a]bays?%f[%A]",
 	"%f[%a]coves?%f[%A]",

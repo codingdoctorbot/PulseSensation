@@ -147,7 +147,7 @@ function M:OnEnable()
 				-- Owner rule (Registry.EPISODES): a purchase speaks through merchantBuy when
 				-- that cue is live, a loot window through its episode speaker. Otherwise
 				-- this tick is the only feedback for the item, so it plays.
-				if not Pulse.Arbiter:VendorOwnsIntake() and not Pulse.Arbiter:LootIntake() then
+				if not Pulse.Arbiter:VendorOwnsIntake("bagItemAdded") and not Pulse.Arbiter:LootIntake() then
 					Pulse:FireIfEnabled("bagItemAdded")
 				end
 			elseif free > lastFreeSlots then

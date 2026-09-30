@@ -98,9 +98,17 @@ function Pulse:FireIfEnabled(triggerID, intensityOverride)
 		end
 	end
 
+	-- Resolved before the bus claim: the bus needs the pattern length, and a cue dialled
+	-- to zero must not claim a shared layer it will play nothing on.
+	local scale = self.Database:GetTriggerSetting(triggerID, "intensity", 1.0)
+	if type(scale) ~= "number" or scale <= 0 then
+		return false
+	end
+	local modeID = self.Database:GetTriggerMode(triggerID) or trigger.mode
+
 	local layerName = triggerID
 	if trigger.bus then
-		local ok, layer = self.Arbiter:ClaimBus(trigger.bus, trigger.busPriority, trigger.busWindow, triggerID)
+		local ok, layer = self.Arbiter:ClaimBus(trigger.bus, trigger.busPriority, trigger.busWindow, triggerID, modeID)
 		if not ok then
 			return false
 		end
@@ -111,12 +119,6 @@ function Pulse:FireIfEnabled(triggerID, intensityOverride)
 		lastFireTime[triggerID] = now
 	end
 
-	-- Per-cue intensity (2026-09-15), replacing the old per-category scale. Seeded by
-	-- Database:ApplyDefaults, so it is an ordinary GetTriggerSetting read.
-	local scale = self.Database:GetTriggerSetting(triggerID, "intensity", 1.0)
-	-- A user-chosen mode override wins over the trigger's own Registry.lua default: same
-	-- trigger, same everything else, a different shape.
-	local modeID = self.Database:GetTriggerMode(triggerID) or trigger.mode
 	if self.debug then
 		print(("Pulse: %s fired -> %s (intensity %.2f)"):format(trigger.label or triggerID, modeID, scale))
 	end
