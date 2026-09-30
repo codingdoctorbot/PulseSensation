@@ -2,7 +2,7 @@
 ### **Feel Azeroth in your hands.**
 
 [![WoW Version](https://img.shields.io/badge/World%20of%20Warcraft-Forever%20%2F%20Classic%20Beta%20(120100)-blue.svg)](https://github.com/codingdoctorbot/PulseSensation)
-[![Status](https://img.shields.io/badge/Release-0.2.0--beta-purple.svg)](https://github.com/codingdoctorbot/PulseSensation/releases)
+[![Status](https://img.shields.io/badge/Release-0.2.1--beta-purple.svg)](https://github.com/codingdoctorbot/PulseSensation/releases)
 [![Performance](https://img.shields.io/badge/Performance-Zero--GC%20Tight%20Loops-brightgreen.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -61,10 +61,13 @@ A rich library of tactile waveforms, from organic pulses to punchy transients:
 ### ⚡ One-Click Cue Sweeps
 - **Enable All / Disable All**: Instantly turn all 190 cues on or off in a single click from the Cue Index or Profiles page, or via chat commands (`/pulse enableall` and `/pulse disableall`). Perfect for isolated debugging or starting fresh profiles from scratch.
 
+### 📊 Live Haptic Oscilloscope & Telemetry HUD
+- **Real-Time Waveform Monitor (`/pulse scope`)**: Live telemetry tracking motor power, instantaneous RMS energy, and saturation meters for low and high rumble channels. Includes an active haptic layer monitor displaying dynamic contributions from continuous and transient cues. Can be run as a floating, resizable overlay or docked directly inside the Settings panel.
+
 ### 🛡️ Zero-GC Engine & 100% Taint Immunity
 - **Zero-GC in Tight Loops**: Continuous oscillators and high-frequency frames allocate zero throwaway tables per frame, eliminating garbage collection micro-stutters during intense 40-man raids and battlegrounds.
 - **Taint-Immune Gamepad UI**: Never triggers `ADDON_ACTION_BLOCKED`. Uses passive state polling and Classic aperture framing rather than dangerous Blizzard protected UI hooks.
-- **Zero-Deadband Shutoff**: Automatically snaps decaying continuous rumble to 0 below 0.025 to eliminate mechanical motor stall whine and reduce telemetry overhead.
+- **Zero-Deadband Shutoff & Soft Breakaway Floor**: Automatically snaps decaying continuous rumble to 0 below stall thresholds to eliminate mechanical motor stall whine, while scaling continuous textures (swimming, flight, stealth) so low slider settings fade cleanly into dead silence.
 
 ---
 
@@ -115,6 +118,7 @@ Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open 
 | Command | Action |
 |:---|:---|
 | `/pulse` or `/pulsehaptics` (or `/pulseui`) | Toggle the main settings window. |
+| `/pulse scope` | Open the real-time haptic oscilloscope & telemetry HUD. |
 | `/pulse test <mode>` | Play any authored vibration mode (e.g. `thud`, `snap`, `wave`, `surge`, `heartbeat`). |
 | `/pulse enableall` | Enable all 190 cues in the active profile in one sweep. |
 | `/pulse disableall` | Disable all 190 cues in the active profile in one sweep. |

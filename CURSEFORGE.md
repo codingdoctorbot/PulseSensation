@@ -59,6 +59,10 @@ A reusable library of distinct vibration patterns, including:
 
 *   **Enable All / Disable All:** Quickly turn all 190 cues on or off in a single click from the Cue Index or Profiles page, or via chat commands (`/pulse enableall` and `/pulse disableall`). Ideal for debugging or building custom profiles.
 
+### 📊 Live Haptic Oscilloscope & Telemetry HUD
+
+*   **Real-time Waveform Monitor (`/pulse scope`):** Live telemetry tracking motor power, instantaneous RMS energy, and saturation meters for low and high rumble channels. Includes an active haptic layer monitor so you can see exactly which gameplay systems are driving vibration in real time. Can be run as a floating overlay or docked directly inside the Settings window.
+
 ### 🎮 Controller Support & Tuning
 
 PulseHaptics is engineered to take full advantage of modern gamepads:
@@ -69,7 +73,7 @@ PulseHaptics is engineered to take full advantage of modern gamepads:
 *   **Nintendo Switch Pro & 8BitDo Ultimate**
 
 *Includes 4 swappable hardware schemas:* `Standard`, `High Motor Only`, `Low Motor Only`, and `Inverted`.
-*Zero-Deadband Shutoff:* Automatically snaps decaying continuous rumble to 0 below 0.025 to eliminate mechanical motor stall whine.
+*Zero-Deadband Shutoff & Soft Breakaway Floor:* Automatically snaps decaying continuous rumble to 0 below stall thresholds to eliminate motor whine, while scaling continuous textures so low slider settings fade cleanly into dead silence.
 
 ### 🌊 Zero-GC Performance & 100% Taint Immunity
 
@@ -111,6 +115,7 @@ Extract the `PulseHaptics` folder into your World of Warcraft `Interface/AddOns/
 | Command | Action |
 |:---|:---|
 | `/pulse` or `/pulsehaptics` | Open the main settings window. |
+| `/pulse scope` | Open the real-time haptic oscilloscope & telemetry HUD. |
 | `/pulse test <mode>` | Play a vibration mode (e.g. `thud`, `snap`, `wave`, `surge`, `heartbeat`). |
 | `/pulse enableall` | Enable all 190 cues in the active profile in one sweep. |
 | `/pulse disableall` | Disable all 190 cues in the active profile in one sweep. |
@@ -130,7 +135,7 @@ Extract the `PulseHaptics` folder into your World of Warcraft `Interface/AddOns/
 
 PulseHaptics is a **free, open-source hobby project** developed independently for the World of Warcraft community.
 
-It is actively developed and currently in **Public Beta (v0.2.0-beta)**. The core engine is fully implemented, while authored cues continue to be tuned in-game against Blizzard's evolving controller APIs.
+It is actively developed and currently in **Public Beta (v0.2.1-beta)**. The core engine is fully implemented, while authored cues continue to be tuned in-game against Blizzard's evolving controller APIs.
 
 Feedback, bug reports, testing, and contributions are welcome.
 
