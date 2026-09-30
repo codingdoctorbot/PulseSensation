@@ -2,7 +2,7 @@
 ### **Feel Azeroth in your hands.**
 
 [![WoW Version](https://img.shields.io/badge/World%20of%20Warcraft-Forever%20%2F%20Classic%20Beta%20(120100)-blue.svg)](https://github.com/codingdoctorbot/PulseSensation)
-[![Status](https://img.shields.io/badge/Release-0.2.1--beta-purple.svg)](https://github.com/codingdoctorbot/PulseSensation/releases)
+[![Status](https://img.shields.io/badge/Release-0.3.0--beta-purple.svg)](https://github.com/codingdoctorbot/PulseSensation/releases)
 [![Performance](https://img.shields.io/badge/Performance-Zero--GC%20Tight%20Loops-brightgreen.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -63,6 +63,18 @@ A rich library of tactile waveforms, from organic pulses to punchy transients:
 
 ### 📊 Live Haptic Oscilloscope & Telemetry HUD
 - **Real-Time Waveform Monitor (`/pulse scope`)**: Live telemetry tracking motor power, instantaneous RMS energy, and saturation meters for low and high rumble channels. Includes an active haptic layer monitor displaying dynamic contributions from continuous and transient cues. Can be run as a floating, resizable overlay or docked directly inside the Settings panel.
+
+### 🔀 Smart Event Arbitration & Coalescence (`Core/Arbiter.lua`)
+- **Double-Fire Elimination**: Multi-event actions no longer trigger jarring machine-gun vibration bursts.
+- **Owner-Aware Vendor Intake**: Purchasing from vendors speaks cleanly through `merchantBuy`. If `merchantBuy` is disabled, or when buying with alternate currencies (honor/badges), bag intake seamlessly provides feedback.
+- **Loot Episode Burst Absorption**: Multi-item corpse/chest looting is absorbed into a single satisfying intake pulse with dynamic item quality weighting.
+- **Smart Repair Recognition**: Distinguishes merchant repairs (`RepairAllItems`) from equipment damage, eliminating false-alarm durability warnings while fixing armor.
+- **Window Priority Bus**: Resolves overlapping interaction window open/close events across Gossip, Quest, Merchant, Mail, and Bank frames.
+
+### 🎨 Streamlined Settings UI & Category Master Gates (`/pulse`)
+- **Non-Destructive Category Master Gates**: Toggle entire feature categories (Loot, Commerce, Combat Rhythm, Hazards, etc.) On or Off with a single master switch without overwriting individual fine-tuned child settings underneath.
+- **70% Less Scrolling**: Redesigned compact single-line rows reduce vertical scroll height from 787 to 239 rows.
+- **Collapsible Sections & Simple View**: Foldable category sections with account-wide persistence, plus a one-click "Simple View" toggle for quick adjustments.
 
 ### 🛡️ Zero-GC Engine & 100% Taint Immunity
 - **Zero-GC in Tight Loops**: Continuous oscillators and high-frequency frames allocate zero throwaway tables per frame, eliminating garbage collection micro-stutters during intense 40-man raids and battlegrounds.
@@ -131,6 +143,9 @@ Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open 
 | `/pcheck export` *(PulseChecklist)* | Generate a markdown QA status report you can copy to clipboard. |
 | `/pcheck import` *(PulseChecklist)* | Open the import dialog to restore cue verification statuses. |
 | `/pulsereview` *(PulseProfileReview)* | Open the profile cue review and auditing tool. |
+| `/probe` *(PulseProbe)* | Open the telemetry probe and safety auditor HUD. |
+| `/probe trace start [name]` *(PulseProbe)* | Start recording event-order trace with precise clocks. |
+| `/probe trace dump` *(PulseProbe)* | Dump recorded event traces to SavedVariables for offline report analysis. |
 | `/console GamePadEnable 1` | Ensure Blizzard gamepad engine subsystem is enabled. |
 | `/console GamePadVibration 1` | Ensure Blizzard gamepad vibration output is enabled. |
 
@@ -146,6 +161,7 @@ PulseHaptics is distributed as a **single, self-contained package** (`PulseHapti
 | **`PulseDebug`** | 🐙 *GitHub Repo* | Developer HUD for real-time channel telemetry and trigger inspection (`/pdebug`). |
 | **`PulseChecklist`** | 🐙 *GitHub Repo* | In-game QA tracking checklist for verifying all 190 cues with markdown export (`/pcheck`). |
 | **`PulseProfileReview`** | 🐙 *GitHub Repo* | Companion auditing tool for vetting profile cue sets and bulk toggling (`/pulsereview`). |
+| **`PulseProbe`** | 🐙 *GitHub Repo* | Telemetry probe, event-order tracer ring, and sensory test lab (`/probe`). |
 
 > *If you are developing, testing, or reviewing cues, simply clone the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation) to access the entire developer suite.*
 

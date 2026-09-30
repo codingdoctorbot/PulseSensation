@@ -63,6 +63,20 @@ A reusable library of distinct vibration patterns, including:
 
 *   **Real-time Waveform Monitor (`/pulse scope`):** Live telemetry tracking motor power, instantaneous RMS energy, and saturation meters for low and high rumble channels. Includes an active haptic layer monitor so you can see exactly which gameplay systems are driving vibration in real time. Can be run as a floating overlay or docked directly inside the Settings window.
 
+### 🔀 Smart Event Arbitration & Coalescence
+
+*   **No More Double-Buzzing:** Multi-event interactions (like purchasing an item and putting it into your bag) now trigger a single, clean vibration instead of machine-gun overlapping pulses.
+*   **Owner-Aware Vendor Shopping:** Vendor transactions speak cleanly through `merchantBuy`, seamlessly falling back to bag intake for alternate currency purchases (honor/badges).
+*   **Loot Episode Burst Absorption:** Multi-item corpse or chest looting is absorbed into a single satisfying intake pulse with dynamic item quality weighting (Uncommon, Rare, Epic).
+*   **Smart Armor Repairs:** Merchant repairs (`RepairAllItems`) are recognized immediately, eliminating false-alarm durability loss alerts when fixing your gear.
+*   **Window Priority Bus:** Resolves rapid window open/close overlap across Gossip, Quest, Merchant, Mail, and Bank frames.
+
+### 🎨 Streamlined Settings Menu & Category Master Switches (`/pulse`)
+
+*   **Category Master On/Off Gates:** Turn entire feature groups (Loot, Commerce, Combat Rhythm, Hazards, etc.) On or Off with a single master checkbox without wiping your customized child sliders underneath.
+*   **70% Less Scrolling:** Redesigned compact 1-line rows reduce vertical scroll bloat by ~70% (from 787 to 239 rows).
+*   **Collapsible Sections & Simple View:** Fold and unfold categories to keep your menu clean, with fold states preserved account-wide, plus a one-click "Simple View" overview.
+
 ### 🎮 Controller Support & Tuning
 
 PulseHaptics is engineered to take full advantage of modern gamepads:
@@ -108,7 +122,7 @@ Extract the `PulseHaptics` folder into your World of Warcraft `Interface/AddOns/
 *   **macOS:** `/Applications/World of Warcraft/_classic_beta_/Interface/AddOns/PulseHaptics`
 *   **Windows:** `C:\Program Files (x86)\World of Warcraft\_classic_beta_\Interface\AddOns\PulseHaptics`
 
-*(Note: Developer diagnostic tools like `PulseDebug`, `PulseChecklist`, and `PulseProfileReview` are available directly in the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation) for contributors and testers).*
+*(Note: Developer diagnostic tools like `PulseDebug`, `PulseChecklist`, `PulseProfileReview`, and `PulseProbe` are available directly in the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation) for contributors and testers).*
 
 ### 3. In-Game Commands
 
@@ -128,6 +142,7 @@ Extract the `PulseHaptics` folder into your World of Warcraft `Interface/AddOns/
 | `/pcheck export` *(PulseChecklist)* | Generate a markdown QA report to copy to clipboard. |
 | `/pcheck import` *(PulseChecklist)* | Restore statuses and notes from a previous export. |
 | `/pulsereview` *(PulseProfileReview)* | Open the profile cue review and auditing tool. |
+| `/probe` *(PulseProbe)* | Open the telemetry probe and safety auditor HUD. |
 
 ---
 
@@ -135,7 +150,7 @@ Extract the `PulseHaptics` folder into your World of Warcraft `Interface/AddOns/
 
 PulseHaptics is a **free, open-source hobby project** developed independently for the World of Warcraft community.
 
-It is actively developed and currently in **Public Beta (v0.2.1-beta)**. The core engine is fully implemented, while authored cues continue to be tuned in-game against Blizzard's evolving controller APIs.
+It is actively developed and currently in **Public Beta (v0.3.0-beta)**. The core engine is fully implemented, while authored cues continue to be tuned in-game against Blizzard's evolving controller APIs.
 
 Feedback, bug reports, testing, and contributions are welcome.
 
