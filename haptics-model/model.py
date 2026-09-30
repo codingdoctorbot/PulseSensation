@@ -619,7 +619,8 @@ def summary(kind, profiles, modes=SELECTED, hw=None, fps=60.0, scale=1.0, master
     res = {(p, m): evaluate(kind, p, m, hw, fps, scale, master)[0] for p in profiles for m in modes}
     for label, key, f in (
         ("Peak strength (dB re full scale, both channels summed)", "peak", lambda r: f"{db(r['peak']):.0f}" if r["peak"] >= E_TH else "**not felt**"),
-        ("First felt (ms after the cue fires)", "t_det", lambda r: fmt(r["t_det"], "ms")),
+        (("First felt (ms after the cue fires)", "t_det", lambda r: fmt(r["t_det"], "ms")) if kind == "erm" else
+         ("Time to 50% of peak (ms after the cue fires)", "t50", lambda r: fmt(r["t50"], "ms"))),
         ("Tail: felt past the authored end (ms)", "tail", lambda r: fmt(r["tail"], "ms")),
     ):
         print(f"\n#### {title}{label}\n")
@@ -633,7 +634,8 @@ def summary(kind, profiles, modes=SELECTED, hw=None, fps=60.0, scale=1.0, master
         print("| Profile | " + " | ".join(gm) + " |")
         print("|---|" + "---|" * len(gm))
         for p in profiles:
-            print(f"| {p} | " + " | ".join(", ".join(f"{d:.0f}" for d in res[(p, m)]["dips"]) for m in gm) + " |")
+            print(f"| {p} | " + " | ".join(", ".join(("≥40" if d >= 40 else f"{d:.0f}") for d in res[(p, m)]["dips"])
+                                           for m in gm) + " |")
     return res
 
 
@@ -707,6 +709,68 @@ def section_erm():
     print("```")
 
 
+def ladder_rows(kind, profiles, ch="High", master=0.7):
+    print("| Profile | " + " | ".join(m for m, _ in LADDER) + " | CLICK→HEAVY range |")
+    print("|---|" + "---|" * (len(LADDER) + 1))
+    for p in profiles:
+        cfg = PRESETS[p][ch]
+        E = [steady_E(kind, ch, map_value(cfg, v * master, True)) for _, v in LADDER]
+        cells = [("silent" if e <= 0 else f"{db(e) - db(E[-1]):+.1f}") for e in E]
+        print(f"| {p} | " + " | ".join(cells) + f" | {db(E[-1]) - db(E[0]):.1f} dB |")
+
+
+def lra_census(profile, hw=None):
+    weakest = []
+    for c in load_cues():
+        if c["mode"] not in MODES:
+            continue
+        sim = actuate(cue_rows(profile, c["mode"], c["intensity"]), "lra", hw)
+        weakest.append((max(l + h for _, l, h in sim), c))
+    weakest.sort(key=lambda x: x[0])
+    return weakest
+
+
+def section_lra():
+    print("\n## LRA: baseline (nominal hardware, 60 fps, master 0.7, intensity 1.0)")
+    summary("lra", LRA_PROFILES)
+    print("\n## LRA: what-if gamma on the dualsense preset (static ladder, High channel)\n")
+    g = [variant("dualsense", f"dualsense, gamma {x}", gamma=x) for x in (1.4, 1.8)]
+    ladder_rows("lra", ["dualsense"] + g)
+    print("\nFor reference, the Xbox preset on ERM hardware:\n")
+    ladder_rows("erm", ["xbox"])
+    print("\nWeakest shipped cues on LRA (peak strength):\n")
+    print("| Profile | weakest cue | 5th weakest | cues below −30 dB |")
+    print("|---|---|---|---|")
+    for p in ["dualsense"] + g:
+        w = lra_census(p)
+        n30 = sum(1 for e, _ in w if db(e) < -30)
+        print(f"| {p} | {w[0][1]['id']} {db(w[0][0]):.0f} dB | {w[4][1]['id']} {db(w[4][0]):.0f} dB | {n30} |")
+    print("\n## LRA: sensitivity to actuator speed")
+    for lab, tau in (("fast LRA (τ 5 ms)", 0.005), ("slow LRA (τ 25 ms)", 0.025)):
+        hw = {"Low": dict(tau=tau, brake=1.0), "High": dict(tau=tau, brake=1.0)}
+        summary("lra", ["default", "dualsense", "steamcontroller", "lra_classic"],
+                modes=["DOUBLE_TAP", "CHIME", "STUTTER", "CLICK"], hw=hw, title=f"{lab}: ")
+    print("\n## LRA: frame rate")
+    for fps in (30.0, 144.0):
+        summary("lra", ["default", "dualsense", "lra_classic"], modes=["STUTTER", "CLICK", "TAP"], fps=fps,
+                title=f"{fps:.0f} fps: ")
+    print("\n## LRA: continuous holds (1 s)\n")
+    print("| Profile | HUM steady | HUM 90% rise | HUM felt after state ends | DRIFT steady |")
+    print("|---|---|---|---|---|")
+    for p in LRA_PROFILES:
+        h = hold_metrics("lra", p, CONTINUOUS["HUM"]["low"], 0)
+        d = hold_metrics("lra", p, CONTINUOUS["DRIFT"]["low"], 0)
+        print(f"| {p} | {db(h['ss']):.0f} dB | {fmt(h['t90'], 'ms')} | {fmt(h['tail'], 'ms')} | {db(d['ss']):.0f} dB |")
+    print("\n## LRA: envelopes (10 ms per character, −40…0 dB)\n")
+    print("```")
+    for m in ("CLICK", "STUTTER", "CHIME"):
+        print(f"{m:11s}{'authored':12s}{authored_bar(m)}")
+        for p in ("default", "dualsense", "steamcontroller", "lra_classic"):
+            print(f"{'':11s}{p[:11]:12s}" + envelope("lra", p, m))
+        print()
+    print("```")
+
+
 if __name__ == "__main__":
     which = sys.argv[1] if len(sys.argv) > 1 else "all"
     if which in ("all", "transfer"):
@@ -718,5 +782,4 @@ if __name__ == "__main__":
     if which in ("all", "erm"):
         section_erm()
     if which in ("all", "lra"):
-        print("\n## LRA hardware\n")
-        section_dynamics("lra", LRA_PROFILES)
+        section_lra()

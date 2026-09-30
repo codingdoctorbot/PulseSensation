@@ -25,8 +25,8 @@ conclusions still hold when those assumptions change.
 | 2 | [02-actuator-models.md](02-actuator-models.md) | ERM and LRA physical models, parameters and assumptions | ✅ done |
 | 3 | [03-static-transfer.md](03-static-transfer.md) | Each profile's input→command curve: floor, gamma, gain, clipping, dead zones | ✅ done |
 | 4 | [04-erm-dynamics.md](04-erm-dynamics.md) | Selected modes simulated on ERM hardware, per profile | ✅ done |
-| 5 | [05-lra-dynamics.md](05-lra-dynamics.md) | Selected modes simulated on LRA hardware, per profile | ⏳ next |
-| 6 | [06-findings.md](06-findings.md) | Negative effects, ranked, with suggested tuning directions | ⏳ |
+| 5 | [05-lra-dynamics.md](05-lra-dynamics.md) | Selected modes simulated on LRA hardware, per profile | ✅ done |
+| 6 | [06-findings.md](06-findings.md) | Negative effects, ranked, with suggested tuning directions | ⏳ next |
 | — | [model.py](model.py) | The simulator that produces every table (plain Python 3, no dependencies) | ✅ engine + actuators |
 
 ## Modes selected
@@ -72,3 +72,8 @@ vocabulary (lightest, heaviest, fastest rhythm, continuous):
   counted twice. CHIME goes from crisp to soft (14 → 8–9 dB), and fuses completely on slow
   motors. DOUBLE_TAP loses 6–9 dB of separation, and tails grow 30–65 ms. Setting release
   to 12 ms fixes the rhythms with no loss of strength. Overdrive helps a little.
+- **Step 5:** LRA dynamics (`05-lra-dynamics.md`). The native LRA presets are good for timing:
+  every rhythm stays crisp, and they beat `default` clearly. Their problems are in level: gamma
+  1.0 leaves an LRA's intensity ladder at about half an ERM's, and textures play 11–18 dB
+  stronger than on ERM pads. A gamma of about 1.4–1.6 would restore most of the ladder without
+  losing any cue (assuming the driver's mapping is linear).
