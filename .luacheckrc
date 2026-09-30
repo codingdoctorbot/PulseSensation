@@ -262,4 +262,5 @@ globals = {
 exclude_files = {
     "PulseChecklist/tests/**",
     "_reference/**",
+    "_parked/**",
 }

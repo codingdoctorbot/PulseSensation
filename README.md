@@ -138,11 +138,6 @@ Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open 
 | `/pulse profile [name]` | Inspect or switch the active profile via chat. |
 | `/pulse minimap` | Toggle the minimap button on or off. |
 | `/pulse debug` | Toggle verbose console logging and view engine error diagnostics. |
-| `/pb` *(PulseBridge)* | Open WeakAuras, BigWigs, and DBM haptic hook dispatcher. |
-| `/studio` *(PulseStudio)* | Open the visual in-game multi-track haptic timeline sequencer. |
-| `/paudio` *(PulseAudio)* | Open acoustic earcon synthesizer & DualSense speaker settings. |
-| `/psync` *(PulseSync)* | Open profile export/import string hub and community presets. |
-| `/pcompass` *(PulseCompass)* | Open directional spatial haptics radar and navigation HUD. |
 | `/pdebug` *(PulseDebug)* | Open the real-time diagnostic and troubleshooting HUD. |
 | `/pcheck` *(PulseChecklist)* | Open the in-game cue verification checklist (all 190 cues). |
 | `/pcheck export` *(PulseChecklist)* | Generate a markdown QA status report you can copy to clipboard. |
@@ -163,16 +158,13 @@ PulseHaptics is designed as a modular ecosystem of dedicated, standalone compani
 | Companion Addon | Slash Cmd | Purpose |
 |:---|:---:|:---|
 | **`PulseHaptics`** | `/pulse` | Core tactile engine, 190 cues, 12 curated profiles, 35 vibration modes, and 11 controller presets. |
-| **`PulseBridge`** | `/pb` | Direct haptic hook for WeakAuras, BigWigs, and DBM boss mechanics without taint. |
-| **`PulseStudio`** | `/studio` | In-game DAW-style multi-track waveform composer and dynamic mode injector. |
-| **`PulseAudio`** | `/paudio` | Acoustic earcon synthesizer converting tactile motor output into audible mechanical feedback. |
-| **`PulseSync`** | `/psync` | 1-click compressed profile string generator (`!Pulse:1:...`) and community preset hub. |
-| **`PulseCompass`** | `/pcompass` | Stereo directional spatial navigation radar for waypoints, corpses, and accessibility. |
 | **`PulseDebug`** | `/pdebug` | Telemetry HUD and real-time dual-trace oscilloscope. |
 | **`PulseChecklist`** | `/pcheck` | In-game QA tracking checklist for verifying all 190 cues with markdown export. |
 | **`PulseProfileReview`** | `/pulsereview` | Auditing tool for vetting profile cue allocations. |
-| **`PulseProbe`** | `/probe` | Experimental telemetry probe, event-order tracer ring, and sensory test lab. |
+| **`PulseProbe`** | `/probe` | (Experimental) Telemetry probe, event-order tracer ring, and sensory test lab. |
 
+> *Parked in `_parked/` (not loaded, kept for future work): PulseCompass, PulseStudio, PulseAudio, PulseSync, PulseBridge.*
+>
 > *If you are developing, testing, or reviewing cues, simply clone the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation) to access the entire developer suite.*
 
 ---
