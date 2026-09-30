@@ -93,15 +93,15 @@ Below is the complete physical and kinematic breakdown across all 35 modes in `M
 | 9 | **THUD** | Impact / Attack Decay | `both` $\to$ `low` | 2 | 0.156 | 0.000 | 0.156 | 0.85 | 0.85 | 0.0973 | 65/100 | Excellent |
 | 10 | **THUMP** | Full-Body Impact | `both` | 1 | 0.140 | 0.000 | 0.140 | 0.85 | 0.85 | 0.1012 | 58/100 | Excellent |
 | 11 | **DEFLECT** | Metallic Parry | `high` | 2 | 0.070 | 0.000 | 0.070 | 0.00 | 0.95 | 0.0320 | 95/100 | Good (Jitter Risk)|
-| 12 | **TICK** | Micro-Transient | `high` | 1 | 0.040 | 0.000 | 0.040 | 0.00 | 0.28 | 0.0031 | 85/100 | Marginal (Overdrive)|
+| 12 | **TICK** | Micro-Transient | `high` | 1 | 0.040 | 0.000 | 0.040 | 0.00 | 0.35 | 0.0049 | 85/100 | Excellent (Tuned)|
 | 13 | **CHIME** | Multi-Tone Accent | `low` $\to$ `high` | 3 | 0.200 | 0.080 | 0.280 | 0.50 | 0.60 | 0.0610 | 72/100 | Excellent |
-| 14 | **KNOCK** | Mechanical Strike | `high` | 3 | 0.320 | 0.140 | 0.460 | 0.00 | 0.90 | 0.1972 | 80/100 | Misallocated Role|
+| 14 | **KNOCK** | Mechanical Strike | `both` | 3 | 0.216 | 0.120 | 0.336 | 0.95 | 0.95 | 0.1620 | 72/100 | Masterpiece Knock|
 | 15 | **SURGE** | Multi-Stage Build | `low` $\to$ `high` | 4 | 0.920 | 0.000 | 0.920 | 1.00 | 1.00 | 0.6100 | 70/100 | Very High Load |
 | 16 | **PULSE_BEAT** | Cardiac Lub-Dub | `low` $\to$ `both` | 3 | 0.184 | 0.075 | 0.259 | 0.90 | 0.90 | 0.1149 | 62/100 | Benchmark Perfect|
 | 17 | **BURST** | Tactical Flurry | `high` $\to$ `both` | 5 | 0.130 | 0.110 | 0.240 | 0.80 | 1.00 | 0.1117 | 88/100 | Excellent |
 | 18 | **IMPACT** | Hard Smash | `both` | 1 | 0.070 | 0.000 | 0.070 | 1.00 | 1.00 | 0.0700 | 75/100 | Excellent |
 | 19 | **CRACK** | Snap + Low Tail | `high` $\to$ `low` | 2 | 0.120 | 0.000 | 0.120 | 0.25 | 1.00 | 0.0544 | 90/100 | Excellent |
-| 20 | **CLICK** | UI Detent | `high` | 1 | 0.030 | 0.000 | 0.030 | 0.00 | 0.38 | 0.0043 | 90/100 | Marginal (Overdrive)|
+| 20 | **CLICK** | UI Detent | `high` | 1 | 0.030 | 0.000 | 0.030 | 0.00 | 0.20 | 0.0012 | 88/100 | Lightest Detent |
 | 21 | **BRAKE** | Deceleration Bleed | `both` $\to$ `low` | 3 | 0.616 | 0.000 | 0.616 | 0.75 | 0.75 | 0.1268 | 40/100 | Excellent |
 | 22 | **BLIP** | Light Low Blip | `low` | 1 | 0.050 | 0.000 | 0.050 | 0.48 | 0.00 | 0.0115 | 22/100 | Severe Stall Risk|
 | 23 | **WOBBLE** | Stereo Roll | `low` $\leftrightarrow$ `high`| 4 | 0.360 | 0.000 | 0.360 | 0.55 | 0.55 | 0.0837 | 55/100 | Outstanding |

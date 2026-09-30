@@ -25,7 +25,7 @@ Pulse.Modes = {
 		steps = { { role = "high", relIntensity = 0.55, relDuration = 1.0 } },
 	},
 	DOUBLE_TAP = {
-		label = "Two soft ticks.",
+		label = "Two rhythmic thuds.",
 		baseDuration = 0.12,
 		steps = {
 			{ role = "low", relIntensity = 0.6, relDuration = 1.0 },
@@ -34,7 +34,7 @@ Pulse.Modes = {
 		},
 	},
 	TRIPLE_TAP = {
-		label = "Three soft ticks.",
+		label = "Three rhythmic thuds.",
 		baseDuration = 0.10,
 		steps = {
 			{ role = "low", relIntensity = 0.6, relDuration = 1.0 },
@@ -112,7 +112,7 @@ Pulse.Modes = {
 	TICK = {
 		label = "A very light micro-pulse.",
 		baseDuration = 0.040,
-		steps = { { role = "high", relIntensity = 0.28, relDuration = 1.0 } },
+		steps = { { role = "high", relIntensity = 0.35, relDuration = 1.0 } },
 	},
 	CHIME = {
 		label = "A soft tick followed by a brighter one.",
@@ -125,11 +125,11 @@ Pulse.Modes = {
 	},
 	KNOCK = {
 		label = "Two heavier hits with a gap between them.",
-		baseDuration = 0.16,
+		baseDuration = 0.12,
 		steps = {
-			{ role = "high", relIntensity = 0.65, relDuration = 1.0 },
-			{ gap = 0.14 },
-			{ role = "high", relIntensity = 0.9, relDuration = 1.0 },
+			{ role = "both", relIntensity = 0.75, relDuration = 0.8 },
+			{ gap = 0.12 },
+			{ role = "both", relIntensity = 0.95, relDuration = 1.0 },
 		},
 	},
 	SURGE = {
@@ -190,7 +190,7 @@ Pulse.Modes = {
 	CLICK = {
 		label = "A single dry click, lighter than a tick.",
 		baseDuration = 0.030,
-		steps = { { role = "high", relIntensity = 0.38, relDuration = 1.0 } },
+		steps = { { role = "high", relIntensity = 0.20, relDuration = 1.0 } },
 	},
 	-- Starts firm and decays in two steps: deceleration, not impact.
 	BRAKE = {

@@ -197,8 +197,8 @@ local ERM_LOW = {
 	attackTau = 0.085,
 	transientAttackTau = 0.018,
 	releaseTau = 0.050,
-	overdriveBoost = 1.00,
-	overdriveDuration = 0.000,
+	overdriveBoost = 1.25,
+	overdriveDuration = 0.025,
 	gamma = 0.88,
 	useSCurve = false,
 }
@@ -206,9 +206,9 @@ local ERM_HIGH = {
 	floor = 0.095,
 	attackTau = 0.045,
 	transientAttackTau = 0.010,
-	releaseTau = 0.030,
-	overdriveBoost = 1.00,
-	overdriveDuration = 0.000,
+	releaseTau = 0.024,
+	overdriveBoost = 1.15,
+	overdriveDuration = 0.020,
 	gamma = 0.88,
 	useSCurve = false,
 }
@@ -268,7 +268,7 @@ Pulse.Devices = {
 		note = "Two asymmetrical ERM motors with balanced weight distribution. Fast 75ms spin-up and 0.115 breakaway floor.",
 		channels = {
 			Low = copy(ERM_LOW, { floor = 0.115, attackTau = 0.075, releaseTau = 0.045, gamma = 0.90 }),
-			High = copy(ERM_HIGH, { floor = 0.090, attackTau = 0.040, releaseTau = 0.028, gamma = 0.90 }),
+			High = copy(ERM_HIGH, { floor = 0.090, attackTau = 0.040, releaseTau = 0.024, gamma = 0.90 }),
 		},
 	},
 
@@ -301,7 +301,7 @@ Pulse.Devices = {
 		note = "Heavy metal-reinforced chassis (345g vs 280g) and rubberized grips. +10% Low gain compensates for chassis damping.",
 		channels = {
 			Low = copy(ERM_LOW, { floor = 0.135, gain = 1.10, attackTau = 0.090, releaseTau = 0.055, gamma = 0.85 }),
-			High = copy(ERM_HIGH, { floor = 0.105, gain = 1.05, attackTau = 0.050, releaseTau = 0.032, gamma = 0.85 }),
+			High = copy(ERM_HIGH, { floor = 0.105, gain = 1.05, attackTau = 0.050, releaseTau = 0.026, gamma = 0.85 }),
 		},
 	},
 
@@ -323,7 +323,7 @@ Pulse.Devices = {
 		note = "Asymmetrical ERMs with stiff carbon-composite brushes. 0.145 Low floor guarantees reliable breakaway without deadband stutter.",
 		channels = {
 			Low = copy(ERM_LOW, { floor = 0.145, attackTau = 0.080, releaseTau = 0.048 }),
-			High = copy(ERM_HIGH, { floor = 0.115, attackTau = 0.045, releaseTau = 0.030 }),
+			High = copy(ERM_HIGH, { floor = 0.115, attackTau = 0.045, releaseTau = 0.024 }),
 		},
 	},
 
