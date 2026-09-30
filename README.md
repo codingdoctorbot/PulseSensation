@@ -143,9 +143,6 @@ Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open 
 | `/pcheck export` *(PulseChecklist)* | Generate a markdown QA status report you can copy to clipboard. |
 | `/pcheck import` *(PulseChecklist)* | Open the import dialog to restore cue verification statuses. |
 | `/pulsereview` *(PulseProfileReview)* | Open the profile cue review and auditing tool. |
-| `/probe` *(PulseProbe)* | Open the telemetry probe and safety auditor HUD. |
-| `/probe trace start [name]` *(PulseProbe)* | Start recording event-order trace with precise clocks. |
-| `/probe trace dump` *(PulseProbe)* | Dump recorded event traces to SavedVariables for offline report analysis. |
 | `/console GamePadEnable 1` | Ensure Blizzard gamepad engine subsystem is enabled. |
 | `/console GamePadVibration 1` | Ensure Blizzard gamepad vibration output is enabled. |
 
@@ -161,9 +158,8 @@ PulseHaptics is designed as a modular ecosystem of dedicated, standalone compani
 | **`PulseDebug`** | `/pdebug` | Telemetry HUD and real-time dual-trace oscilloscope. |
 | **`PulseChecklist`** | `/pcheck` | In-game QA tracking checklist for verifying all 190 cues with markdown export. |
 | **`PulseProfileReview`** | `/pulsereview` | Auditing tool for vetting profile cue allocations. |
-| **`PulseProbe`** | `/probe` | (Experimental) Telemetry probe, event-order tracer ring, and sensory test lab. |
 
-> *Parked in `_parked/` (not loaded, kept for future work): PulseCompass, PulseStudio, PulseAudio, PulseSync, PulseBridge.*
+> *Parked in `_parked/` (not loaded, kept for future work): PulseCompass, PulseStudio, PulseAudio, PulseSync, PulseBridge, PulseProbe.*
 >
 > *If you are developing, testing, or reviewing cues, simply clone the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation) to access the entire developer suite.*
 

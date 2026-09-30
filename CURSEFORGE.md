@@ -122,7 +122,7 @@ Extract the `PulseHaptics` folder into your World of Warcraft `Interface/AddOns/
 *   **macOS:** `/Applications/World of Warcraft/_classic_beta_/Interface/AddOns/PulseHaptics`
 *   **Windows:** `C:\Program Files (x86)\World of Warcraft\_classic_beta_\Interface\AddOns\PulseHaptics`
 
-*(Note: Developer diagnostic tools like `PulseDebug`, `PulseChecklist`, `PulseProfileReview`, and `PulseProbe` are available directly in the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation) for contributors and testers).*
+*(Note: Developer diagnostic tools like `PulseDebug`, `PulseChecklist`, and `PulseProfileReview` are available directly in the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation) for contributors and testers).*
 
 ### 3. In-Game Commands
 
@@ -142,7 +142,6 @@ Extract the `PulseHaptics` folder into your World of Warcraft `Interface/AddOns/
 | `/pcheck export` *(PulseChecklist)* | Generate a markdown QA report to copy to clipboard. |
 | `/pcheck import` *(PulseChecklist)* | Restore statuses and notes from a previous export. |
 | `/pulsereview` *(PulseProfileReview)* | Open the profile cue review and auditing tool. |
-| `/probe` *(PulseProbe)* | Open the telemetry probe and safety auditor HUD. |
 
 ---
 
