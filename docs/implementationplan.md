@@ -9,7 +9,7 @@
 
 ## 1. Architectural Overview & Design Goals
 
-This plan translates the theoretical haptic models from [`brainstorm.md`](file:///Users/erik2/Developer/WoW/PulseSensation/brainstorm.md) into concrete, production-grade Lua 5.1 code changes optimized specifically for the **Microsoft Xbox Series controller** (as well as Xbox One and Xbox Elite Series 2).
+This plan translates the theoretical haptic models from [`brainstorm.md`](brainstorm.md) into concrete, production-grade Lua 5.1 code changes optimized specifically for the **Microsoft Xbox Series controller** (as well as Xbox One and Xbox Elite Series 2).
 
 ### Core Goals:
 1. **Eliminate ERM Spin-up Lag**: Inject a brief software **overdrive kick** (30ms on Low motor, 15ms on High motor) on transient onsets to accelerate the heavy counterweight 3× faster.
@@ -352,7 +352,7 @@ All additions must be strictly verified against the offline test suite before in
 ## 6. Work Package 7: Vibration Modes Precision Retuning
 
 ### Objective
-Update `PulseHaptics/Core/Modes.lua` with the refined physical timings, gap intervals, and motor roles derived from our industry benchmarking and psychophysical analysis in [`brainstorm.md`](file:///Users/erik2/Developer/WoW/PulseSensation/brainstorm.md).
+Update `PulseHaptics/Core/Modes.lua` with the refined physical timings, gap intervals, and motor roles derived from our industry benchmarking and psychophysical analysis in [`brainstorm.md`](brainstorm.md).
 
 ### Target File
 * **`PulseHaptics/Core/Modes.lua`**

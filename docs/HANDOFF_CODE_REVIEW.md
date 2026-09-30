@@ -1,7 +1,7 @@
 # Handoff: full code review of PulseSensation (xhigh)
 
 **Written:** 2026-09-28, at the end of the planning/documentation session.
-**For:** a fresh Claude Code session in `/Users/erik2/Developer/WoW/PulseSensation`.
+**For:** a fresh Claude Code session in `PulseSensation`.
 **Task:** a complete, read-only code review at **xhigh** depth. Findings are documented in the repo, not only in chat.
 
 Read this whole file before doing anything else.
@@ -103,7 +103,7 @@ Full list and statuses: `docs/DOCS_COMPILATION.md` section 4; history in 9.3–9
 - **Consistency.** Comments versus code; Registry `desc`/`caveat` versus module behaviour; cue IDs consistent across Registry, Database overrides, Checklist baseline, Guide and PulseDebug; magic numbers; duplicated logic (two `JumpOrAscendStart` hooks).
 - **Tests.** Assertions that can fail (not vacuous); fakes that match the real API; missing coverage for bugs found.
 
-**Verifying findings.** Reproduce with the offline stubs where you can. `PulseChecklist/tests/engine-test.lua` lines 1–118 (stubs plus `loadfile` of Modes, Devices, the Standard schema and Engine) are a ready template for engine probes. Otherwise label the finding [Inference]. The last session's probes may still sit in its scratchpad (`/private/tmp/claude-502/-Users-erik2-Developer-WoW-PulseSensation/56fa2587-d32b-4c32-930d-ca4308449c42/scratchpad/`: `pool-probe3.lua`, `pool-control.lua`, `profiles.lua`); they may have been cleaned up.
+**Verifying findings.** Reproduce with the offline stubs where you can. `PulseChecklist/tests/engine-test.lua` lines 1–118 (stubs plus `loadfile` of Modes, Devices, the Standard schema and Engine) are a ready template for engine probes. Otherwise label the finding [Inference]. The last session's probes may still sit in its scratchpad (`scratchpad/`: `pool-probe3.lua`, `pool-control.lua`, `profiles.lua`); they may have been cleaned up.
 
 ## 7. Output
 

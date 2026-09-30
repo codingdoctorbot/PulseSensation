@@ -1,8 +1,8 @@
 # Claude handoff: PulseSensation audit and plan review
 
 **Written:** 2026-09-29, 20:50 CEST, at the end of the session.
-**Location:** `/Users/erik2/Developer/WoW/claudehandoff.md`. This is deliberately outside the `PulseSensation` repo, so it is not versioned. It is listed in `/Users/erik2/Developer/WoW/.gitignore`, but that directory is not a git repository.
-**For:** the next Claude Code session working in `/Users/erik2/Developer/WoW/PulseSensation`.
+**Location:** `docs/claudehandoff.md`.
+**For:** the next Claude Code session working in `PulseSensation`.
 
 Read the whole file before acting.
 
