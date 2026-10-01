@@ -1,4 +1,4 @@
-## Interface: 120100, 110200, 110100
+## Interface: 16001, 120100, 110200, 110100
 ## Title: PulseCompass |cffff6600[Tactile Navigation Radar]|r
 ## Notes: Directional spatial haptics guiding players toward targets, corpses, or waypoints via stereo controller motors.
 ## Author: Pulse Team

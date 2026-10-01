@@ -1,4 +1,4 @@
-## Interface: 120100, 110200, 110100
+## Interface: 16001, 120100, 110200, 110100
 ## Title: PulseHaptics
 ## Notes: Immersive controller vibration — movement, environment, and combat texture.
 ## Author: codingdoctorbot
@@ -10,9 +10,9 @@
 # Non-commercial hobby project developed with AI pair-programming assistance (Claude Code & Antigravity).
 # Free to reuse, redistribute and share as-is; no warranty, no support.
 
-# 120100 (Patch 12.1.0) CONFIRMED as this account's live client build via
-# /dump select(4, GetBuildInfo()). Older client builds (11.1 / 11.2) are
-# unvalidated compatibility targets.
+# 16001 (Patch 1.60.1, WoW Forever / _classic_beta_) and 120100 (Patch 12.1.0)
+# confirmed target client builds. Older client builds (11.1 / 11.2) are
+# compatibility targets.
 
 # TREMOR, referenced throughout this codebase and its comments: the proof-of-concept
 # alpha that preceded this one. An earlier, narrower build whose accessibility cue set

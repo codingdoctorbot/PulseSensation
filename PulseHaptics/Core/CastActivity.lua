@@ -139,9 +139,10 @@ function CastActivity:_OnSucceeded(unit, castGUID, spellID)
 			isCrafting = (self.crafting.castSpellID == spellID)
 		elseif self.crafting.spellID == spellID then
 			isCrafting = true
-		elseif next(self.pending) == nil or self.pending[key] ~= nil then
-			-- A player can only craft one item at a time; if self.crafting is active
-			-- and any tracked cast (or test event) finishes, consume crafting state.
+		elseif self.pending[key] ~= nil then
+			-- Uncorrelated craft: accept only a cast we actually watched START. An event with
+			-- no START behind it (an instant spell, an off-GCD ability) is never the craft —
+			-- an empty pending table is absence of evidence, not a match.
 			isCrafting = true
 		end
 	end
@@ -214,10 +215,17 @@ function CastActivity:_OnInterrupted(unit, castGUID, spellID)
 	then
 		self.activeChannel.interruptedBy = "interrupt"
 	end
+	-- Read before clearing: with no cast GUID on record, only a cast we watched START may
+	-- end the craft. Otherwise any failed button press would abandon it.
+	local wasPending = self.pending[key] ~= nil
 	self.pending[key] = nil
 	if
 		self.crafting
-		and (not self.crafting.castGUID or self.crafting.castGUID == castGUID or self.crafting.castSpellID == spellID)
+		and (
+			(not self.crafting.castGUID and wasPending)
+			or (castGUID and self.crafting.castGUID == castGUID)
+			or (spellID and self.crafting.castSpellID == spellID)
+		)
 	then
 		local craft = self.crafting
 		self.crafting = nil
@@ -256,10 +264,15 @@ function CastActivity:_OnFailed(unit, castGUID, spellID)
 	then
 		self.activeChannel.interruptedBy = "failed"
 	end
+	local wasPending = self.pending[key] ~= nil -- see _OnInterrupted
 	self.pending[key] = nil
 	if
 		self.crafting
-		and (not self.crafting.castGUID or self.crafting.castGUID == castGUID or self.crafting.castSpellID == spellID)
+		and (
+			(not self.crafting.castGUID and wasPending)
+			or (castGUID and self.crafting.castGUID == castGUID)
+			or (spellID and self.crafting.castSpellID == spellID)
+		)
 	then
 		local craft = self.crafting
 		self.crafting = nil
@@ -304,7 +317,8 @@ function CastActivity:_OnStop(unit, castGUID, spellID)
 			isCrafting = (self.crafting.castSpellID == spellID)
 		elseif self.crafting.spellID == spellID then
 			isCrafting = true
-		elseif next(self.pending) == nil or pending ~= nil then
+		elseif pending ~= nil then
+			-- Same rule as _OnSucceeded: only a cast we watched START can be the craft.
 			isCrafting = true
 		end
 	end

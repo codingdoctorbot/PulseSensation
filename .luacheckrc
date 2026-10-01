@@ -156,6 +156,7 @@ read_globals = {
     "GetSubZoneText",
     "GetZoneText",
     "GetMinimapZoneText",
+    "GetLocale",
     "issecretvalue",
     "issecurevariable",
     "LE_GAME_ERR_ATTACK_DEAD",

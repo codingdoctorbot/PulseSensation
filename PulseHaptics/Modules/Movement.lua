@@ -71,6 +71,10 @@ local OCEAN_PATTERNS = {
 	"%f[%a]deep sea%f[%A]",
 }
 
+-- Zone names are localised; these English patterns only mean something on English clients.
+local GetLocale = _G.GetLocale
+local OCEAN_NAMES_READABLE = (type(GetLocale) ~= "function") or GetLocale() == "enUS" or GetLocale() == "enGB"
+
 local function updateOceanZone()
 	local subZone = safeGetText(GetSubZoneText)
 	local zone = safeGetText(GetZoneText)
@@ -247,7 +251,7 @@ local function pollLandingAndSwim(_, elapsed)
 			-- motor, with crisp surface froth and spray on the high motor at peak crest.
 			if wantOcean then
 				local oceanOnly = Pulse.Database:GetTriggerSetting("oceanTexture", "oceanOnly", 1) == 1
-				if not oceanOnly or isOceanZone or isFatigueWater then
+				if not oceanOnly or isOceanZone or isFatigueWater or not OCEAN_NAMES_READABLE then
 					local strength = Pulse.Database:GetTriggerSetting("oceanTexture", "swellStrength", 0.14)
 					local period = Pulse.Database:GetTriggerSetting("oceanTexture", "swellPeriod", 9.0)
 					local harmonic = Pulse.Database:GetTriggerSetting("oceanTexture", "harmonicCrest", 0.35)

@@ -1946,7 +1946,20 @@ do
 
 		-- Restore real DB
 		_G.PulseDB = savedPulseDB
-		Pulse.Database:Init()
+		-- F-04: Isolated database listener notification (one broken callback does not halt loop)
+		do
+			local laterListenerRan = false
+			Pulse.Database:OnGlobalChanged("masterIntensity", function()
+				error("simulated buggy listener in a module")
+			end)
+			Pulse.Database:OnGlobalChanged("masterIntensity", function()
+				laterListenerRan = true
+			end)
+
+			local okSet = pcall(Pulse.Database.Set, Pulse.Database, "masterIntensity", 0.55)
+			check("Database:Set does not throw when listener errors (F-04)", okSet, true)
+			check("Subsequent listener still notified despite earlier error (F-04)", laterListenerRan, true)
+		end
 
 		Pulse.Engine:StopAll()
 	end

@@ -1,4 +1,4 @@
-## Interface: 120100, 110200, 110100
+## Interface: 16001, 120100, 110200, 110100
 ## Title: PulseAudio |cff33ccff[Earcon & Speaker Synthesizer]|r
 ## Notes: Translates Pulse tactile waveforms into audible mechanical earcons and controller-speaker sound cues.
 ## Author: Pulse Team

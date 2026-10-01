@@ -1,4 +1,4 @@
-## Interface: 120100, 110200, 110100
+## Interface: 16001, 120100, 110200, 110100
 ## Title: PulseStudio |cffffaa00[Waveform Sequencer]|r
 ## Notes: Visual multi-track haptic timeline and waveform synthesizer for PulseHaptics.
 ## Author: Pulse Team

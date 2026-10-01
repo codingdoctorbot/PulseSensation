@@ -1228,8 +1228,15 @@ local function notify(listeners, key)
 	if not list then
 		return
 	end
+	-- One listener per call, each isolated: a bug in one module must not stop the rest from
+	-- hearing a change that has already been saved (same pattern as CastActivity's emit).
+	local errHandler = _G.geterrorhandler and _G.geterrorhandler()
 	for _, callback in ipairs(list) do
-		callback()
+		if errHandler then
+			xpcall(callback, errHandler)
+		else
+			pcall(callback)
+		end
 	end
 end
 

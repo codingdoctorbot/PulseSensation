@@ -532,4 +532,81 @@ runCraft(3.0, 60)
 check("gateCasting off: 0 strikes played", strikes, 0)
 cues.gateCasting = true
 
+-- 9. Uncorrelated craft edge cases: unrelated instant, stop, fail, interrupt (Appendix A / F-02)
+local seenActivities = {}
+Pulse.CastActivity:OnActivity(function(r)
+	seenActivities[#seenActivities + 1] = r.classification
+end)
+
+local function testScenario(label, want, fn)
+	Pulse.CastActivity:Reset()
+	wipe(seenActivities)
+	now = now + 100
+	fn()
+	local got = table.concat(seenActivities, ",")
+	check("craft scenario: " .. label, got, want)
+end
+
+testScenario("START then CRAFT_BEGIN then SUCCEEDED", "CAST_START,CRAFT_START,CRAFT_COMPLETE", function()
+	Pulse.CastActivity:_OnStart("player", "g-craft", 3333)
+	now = now + 0.1
+	Pulse.CastActivity:_OnCraftBegin(1234)
+	now = now + 3
+	Pulse.CastActivity:_OnSucceeded("player", "g-craft", 3333)
+end)
+
+testScenario("CRAFT_BEGIN then START then SUCCEEDED", "CRAFT_START,CRAFT_CAST_START,CRAFT_COMPLETE", function()
+	Pulse.CastActivity:_OnCraftBegin(1234)
+	now = now + 0.05
+	Pulse.CastActivity:_OnStart("player", "g-craft", 3333)
+	now = now + 3
+	Pulse.CastActivity:_OnSucceeded("player", "g-craft", 3333)
+end)
+
+testScenario("START 0.8s before CRAFT_BEGIN, then SUCCEEDED", "CAST_START,CRAFT_START,CRAFT_COMPLETE", function()
+	Pulse.CastActivity:_OnStart("player", "g-craft", 3333)
+	now = now + 0.8
+	Pulse.CastActivity:_OnCraftBegin(1234)
+	now = now + 3
+	Pulse.CastActivity:_OnSucceeded("player", "g-craft", 3333)
+end)
+
+testScenario("recipe-ID SUCCEEDED, no START seen", "CRAFT_START,CRAFT_COMPLETE", function()
+	Pulse.CastActivity:_OnCraftBegin(1234)
+	now = now + 3
+	Pulse.CastActivity:_OnSucceeded("player", nil, 1234)
+end)
+
+testScenario("real cast FAILED (e.g. moved)", "CAST_START,CRAFT_START,CRAFT_STOPPED,FAILED", function()
+	Pulse.CastActivity:_OnStart("player", "g-craft", 3333)
+	now = now + 0.1
+	Pulse.CastActivity:_OnCraftBegin(1234)
+	now = now + 1
+	Pulse.CastActivity:_OnFailed("player", "g-craft", 3333)
+end)
+
+testScenario("unrelated instant SUCCEEDED during craft ignored", "CRAFT_START,INSTANT", function()
+	Pulse.CastActivity:_OnCraftBegin(1234)
+	now = now + 1
+	Pulse.CastActivity:_OnSucceeded("player", "g-other", 5555)
+end)
+
+testScenario("unrelated FAILED during craft ignored", "CRAFT_START,FAILED", function()
+	Pulse.CastActivity:_OnCraftBegin(1234)
+	now = now + 1
+	Pulse.CastActivity:_OnFailed("player", "g-other", 6666)
+end)
+
+testScenario("unrelated STOP during craft ignored", "CRAFT_START,CAST_STOPPED", function()
+	Pulse.CastActivity:_OnCraftBegin(1234)
+	now = now + 1
+	Pulse.CastActivity:_OnStop("player", "g-other", 7777)
+end)
+
+testScenario("unrelated INTERRUPTED during craft ignored", "CRAFT_START,INTERRUPTED", function()
+	Pulse.CastActivity:_OnCraftBegin(1234)
+	now = now + 1
+	Pulse.CastActivity:_OnInterrupted("player", "g-other", 8888)
+end)
+
 io.write("\n" .. (failures == 0 and "NO FAILURES\n" or ("FAILURES: " .. failures .. "\n")))
