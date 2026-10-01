@@ -13,7 +13,7 @@ the repository has been changed yet.** This document only proposes the fixes.
 | ID | The review says | Verdict | What to do |
 |---|---|---|---|
 | F-01 | TOC is missing Forever Beta's interface `16001` (release blocker) | **Probably wrong.** Your own in-client check says `120100` | Run one command in game to settle it |
-| F-02 | An unrelated spell can complete a craft | **True, and there are 3 more places like it** | Fix below (tested) |
+| F-02 | An unrelated spell can complete a craft | True, with 3 more places like it, but **rare in practice** (live client log below) | Fix below (tested); low priority |
 | F-03 | Ocean detection only works in English | True, but minor: the setting is off by default | Small fix below |
 | F-04 | One broken listener stops the others from hearing a change | **True** | Fix below (tested) |
 | F-05 | Event registration isn't consistently protected | True as a design point; nothing breaks today | Optional |
@@ -23,7 +23,7 @@ the repository has been changed yet.** This document only proposes the fixes.
 | F-09 | "AlertExperimental" is still loaded | Only the filename is left over | Optional rename |
 | F-10 | No event-sequence tests | Overstated: the tests exist outside the release zip | Add the new tests below |
 
-**Recommended order:** check F-01 → fix F-04 → fix F-02 → F-03 when convenient.
+**Recommended order:** check F-01 → fix F-04 → fix F-02 and F-03 when convenient.
 
 ---
 
@@ -59,7 +59,7 @@ almost certainly right.
 
 ---
 
-## F-02 — Crafting: other spells are mistaken for the craft (real bug)
+## F-02 — Crafting: other spells are mistaken for the craft (real bug, rare in practice)
 
 **The bug.** When you start crafting, `Core/CastActivity.lua` remembers the craft, and then
 waits for "a cast succeeded", "a cast stopped" or "a cast failed" events to learn how it ended.
@@ -168,10 +168,31 @@ craft after **2 seconds**. Many crafts take longer than 2 seconds, so every one 
 lose its completion vibration. The fix above keeps every real craft working (see the table) and
 only rejects events that can't be the craft.
 
+**Evidence from the live client (2026-10-01).** A debug log of one Blacksmithing craft (Rough
+Sharpening Stone, recipe 2660), with every cue enabled, shows this order:
+
+| # | Chat line | Event |
+|---|---|---|
+| 1 | Craft started | `TRADE_SKILL_CRAFT_BEGIN`, **first** |
+| 2 | Cast sent | `UNIT_SPELLCAST_SENT` |
+| 3 | Your cast started | `UNIT_SPELLCAST_START`, **after** the craft event |
+| 4 | Crafting texture holding | the texture runs |
+| 5 | Craft finished, then Your cast succeeded | one `UNIT_SPELLCAST_SUCCEEDED` |
+| 6 | Your cast ended | `UNIT_SPELLCAST_STOP` |
+| 7 | Item obtained, Loot received, skill up | loot and skill messages |
+
+The craft event arrives first and the cast start right after it, so `_OnStart` records the
+craft's cast ID at step 3. From then on, every success, stop or failure is matched by that ID,
+and the guessing code never runs. The bug can only happen in the instant between steps 1 and 3,
+or if a cast start is never delivered. **So it is real but rare: low priority, not the P1 the
+review gave it.** The fix is still worth making because it is small and tested, and it leaves
+this normal path untouched (it is the "craft begins, then cast start, then succeeds" row
+above).
+
 **One trade-off to know about.** A craft with **no cast bar at all**, and no matching IDs, will
-no longer get a completion vibration. Crafts with no cast bar are rare. To confirm on the live
-client, run `/etrace` while crafting and check that `UNIT_SPELLCAST_START` appears before the
-craft finishes.
+no longer get a completion vibration. The log confirms a normal craft does have a cast start,
+so this only matters for unusual cases. Not yet observed: repeat crafting ("Create All"). Craft
+three items with debug on and check that "Craft started" appears three times.
 
 **Deliberately left alone.** `_OnStart` (line 90) lets any new cast take over the craft's
 tracking. That looks like a bug, but it is probably what makes **repeat crafting** ("Create
