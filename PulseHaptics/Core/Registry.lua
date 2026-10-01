@@ -1273,6 +1273,8 @@ Pulse.Triggers = {
 	-- press too, which would be far too often to read as "that landed". Off by default.
 	{
 		id = "selfCastSucceeded",
+		bus = "window",
+		busPriority = 0,
 		category = "ALERT_SELF_CAST",
 		mode = "CHIME",
 		throttle = 0.2,
@@ -2389,6 +2391,8 @@ Pulse.Triggers = {
 	-- ── Controller UI: focus ────────────────────────────────────────────────────
 	{
 		id = "uiFocusIn",
+		bus = "window",
+		busPriority = 0,
 		category = "CONTROLLER_UI",
 		mode = "TAP",
 		throttle = 0.2,
@@ -2400,6 +2404,8 @@ Pulse.Triggers = {
 	},
 	{
 		id = "uiFocusOut",
+		bus = "window",
+		busPriority = 0,
 		category = "CONTROLLER_UI",
 		mode = "TICK",
 		throttle = 0.2,
@@ -2654,6 +2660,8 @@ Pulse.Triggers = {
 	-- The half of UNIT_SPELLCAST_SUCCEEDED that was previously unreachable.
 	{
 		id = "selfCastInstant",
+		bus = "window",
+		busPriority = 0,
 		category = "ALERT_SELF_CAST",
 		mode = "CLICK",
 		throttle = 0.1,

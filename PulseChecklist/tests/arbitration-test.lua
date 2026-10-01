@@ -526,6 +526,25 @@ now = now + 0.2
 Pulse:FireIfEnabled("interactionWindowClosed") -- window bus prio 1
 check("B5 lower-prio cue does not cut off DOUBLE_TAP while playing", #plays, 1)
 
+fresh({ "tradeSkillShow", "selfCastInstant", "selfCastSucceeded", "uiFocusIn" })
+Pulse:FireIfEnabled("tradeSkillShow") -- window bus prio 3
+Pulse:FireIfEnabled("selfCastInstant") -- window bus prio 0
+Pulse:FireIfEnabled("selfCastSucceeded") -- window bus prio 0
+Pulse:FireIfEnabled("uiFocusIn") -- window bus prio 0
+check("B6 profession window: only tradeSkillShow plays", #plays, 1)
+check("B6   tradeSkillShow played on bus:window", plays[1] and plays[1].layer == "bus:window", true)
+check("B6   tradeSkillShow count is 1", count("tradeSkillShow"), 1)
+check("B6   selfCastInstant dropped", count("selfCastInstant"), 0)
+check("B6   selfCastSucceeded dropped", count("selfCastSucceeded"), 0)
+check("B6   uiFocusIn dropped", count("uiFocusIn"), 0)
+
+now = now + 0.5
+reset()
+Pulse:FireIfEnabled("selfCastInstant")
+check("B7 standalone instant spell outside window plays", #plays, 1)
+check("B7   plays on bus:window layer", plays[1] and plays[1].layer == "bus:window", true)
+check("B7   selfCastInstant count is 1", count("selfCastInstant"), 1)
+
 -- ── Intake outside any episode (mail, quest reward) ───────────────────────────
 
 fresh({ "itemObtained", "bagItemAdded" })
