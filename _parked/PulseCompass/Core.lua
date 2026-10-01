@@ -8,7 +8,7 @@ local ADDON_NAME, Compass = ...
 _G.PulseCompass = Compass
 
 Compass.Name = ADDON_NAME
-Compass.Version = "0.3.0-beta"
+Compass.Version = "0.3.1-beta"
 
 local PREFIX = "|cffff6600PulseCompass|r  "
 local SUCCESS = "|cff44ff44"

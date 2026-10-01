@@ -2,7 +2,7 @@
 ## Title: PulseSync |cff00ffaa[Profile Exporter & Hub]|r
 ## Notes: Share, export, and import custom PulseHaptics gamepad profiles and tuning curves via compact text strings.
 ## Author: Pulse Team
-## Version: 0.3.0-beta
+## Version: 0.3.1-beta
 ## Dependencies: PulseHaptics
 ## SavedVariables: PulseSyncDB
 ## IconTexture: Interface\Icons\INV_Misc_Book_09

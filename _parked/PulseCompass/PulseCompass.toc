@@ -2,7 +2,7 @@
 ## Title: PulseCompass |cffff6600[Tactile Navigation Radar]|r
 ## Notes: Directional spatial haptics guiding players toward targets, corpses, or waypoints via stereo controller motors.
 ## Author: Pulse Team
-## Version: 0.3.0-beta
+## Version: 0.3.1-beta
 ## Dependencies: PulseHaptics
 ## SavedVariables: PulseCompassDB
 ## IconTexture: Interface\Icons\INV_Misc_Compass_01

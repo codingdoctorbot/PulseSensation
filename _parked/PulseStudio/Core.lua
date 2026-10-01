@@ -8,7 +8,7 @@ local ADDON_NAME, Studio = ...
 _G.PulseStudio = Studio
 
 Studio.Name = ADDON_NAME
-Studio.Version = "0.3.0-beta"
+Studio.Version = "0.3.1-beta"
 
 local PREFIX = "|cffffaa00PulseStudio|r  "
 local SUCCESS = "|cff44ff44"

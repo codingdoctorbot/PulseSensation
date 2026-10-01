@@ -2,7 +2,7 @@
 ## Title: PulseBridge |cff00ffcc[WeakAuras & BossMod Hook]|r
 ## Notes: Direct haptic dispatcher connecting WeakAuras, BigWigs, DBM, and custom macros to PulseHaptics without taint.
 ## Author: Pulse Team
-## Version: 0.3.0-beta
+## Version: 0.3.1-beta
 ## Dependencies: PulseHaptics
 ## OptionalDeps: WeakAuras, BigWigs, DBM-Core
 ## SavedVariables: PulseBridgeDB

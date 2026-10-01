@@ -8,7 +8,7 @@ local ADDON_NAME, Audio = ...
 _G.PulseAudio = Audio
 
 Audio.Name = ADDON_NAME
-Audio.Version = "0.3.0-beta"
+Audio.Version = "0.3.1-beta"
 
 local PREFIX = "|cff33ccffPulseAudio|r  "
 local SUCCESS = "|cff44ff44"
