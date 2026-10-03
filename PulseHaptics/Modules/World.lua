@@ -5,6 +5,7 @@
 -- Pulse:WatchTrigger (Core/Init.lua) rather than dedicated event frames.
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local M = {}
 Pulse:RegisterModule("World", M)

@@ -12,6 +12,9 @@
 -- Core/Engine.lua's upvalues.
 
 local ADDON_NAME = ...
+local issecretvalue = _G.issecretvalue or function()
+	return false
+end
 
 local PREFIX = "|cffb488ff PulseDebug|r  "
 local GOOD = "|cff44ff44"

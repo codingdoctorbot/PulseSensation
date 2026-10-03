@@ -7,6 +7,7 @@
 -- least one trigger needing it is enabled, so the addon costs nothing when they are off.
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local M = {}
 Pulse:RegisterModule("Movement", M)
@@ -139,6 +140,10 @@ end
 local function pollLandingAndSwim(_, elapsed)
 	local falling, flying = IsFalling(), IsFlying()
 
+	if flying and not wasFlying then
+		fallStartTime = nil
+	end
+
 	-- A fall not started by a jump — walked off a ledge, knocked back, dismounted mid-air
 	-- — never fires JumpOrAscendStart, so without this the cue only ever fired for
 	-- jump-initiated falls. Falling turning true with nothing already marking a start
@@ -148,15 +153,8 @@ local function pollLandingAndSwim(_, elapsed)
 		fallStartTime = GetTime()
 	end
 
-	-- Stale jump timestamp expiration:
-	-- If JumpOrAscendStart set fallStartTime, but the jump was blocked (rooted, stunned,
-	-- mounted indoors, low ceiling) and the player never entered a falling/flying state,
-	-- clear fallStartTime after 1.5s to prevent false-positive landingHard triggers later.
-	if not falling and not flying and fallStartTime and (GetTime() - fallStartTime > 1.5) then
-		fallStartTime = nil
-	end
-
-	if (wasFalling and not falling) or (wasFlying and not flying and not falling) then
+	local landed = (wasFalling and not falling) or (wasFlying and not flying and not falling)
+	if landed then
 		if fallStartTime then
 			local airTime = GetTime() - fallStartTime
 			if airTime > HARD_LANDING_AIRTIME then
@@ -164,9 +162,15 @@ local function pollLandingAndSwim(_, elapsed)
 			elseif airTime > SOFT_LANDING_AIRTIME then
 				Pulse:FireIfEnabled("landingSoft")
 			end
-		elseif wasFlying and not flying and not falling then
+		elseif wasFlying then
 			Pulse:FireIfEnabled("landingSoft")
 		end
+		fallStartTime = nil
+	elseif not falling and not flying and fallStartTime and (GetTime() - fallStartTime > 1.5) then
+		-- Stale jump timestamp expiration:
+		-- If JumpOrAscendStart set fallStartTime, but the jump was blocked (rooted, stunned,
+		-- mounted indoors, low ceiling) and the player never entered a falling/flying state,
+		-- clear fallStartTime after 1.5s to prevent false-positive landingHard triggers later.
 		fallStartTime = nil
 	end
 	wasFalling, wasFlying = falling, flying

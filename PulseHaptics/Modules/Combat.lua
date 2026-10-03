@@ -9,6 +9,7 @@
 -- return secret values in combat. Handlers take no varargs where the payload is unused.
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local M = {}
 Pulse:RegisterModule("Combat", M)

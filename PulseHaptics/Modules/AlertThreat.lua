@@ -5,6 +5,7 @@
 -- though the player/target query form is exempt from the threat-state predicate.
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local M = {}
 Pulse:RegisterModule("AlertThreat", M)

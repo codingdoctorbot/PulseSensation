@@ -92,7 +92,7 @@ local mockEpsilon = nil
 local mockGain = nil
 local mockFloor = nil
 
-local Pulse = { debug = false }
+local Pulse = { issecret = issecretvalue, debug = false }
 Pulse.Database = {
 	Get = function(_, key)
 		if key == "defaultHapticSchema" then

@@ -119,7 +119,7 @@ end
 
 -- ── Load ──────────────────────────────────────────────────────────────────────
 
-local Pulse = { modules = {}, moduleOrder = {}, debug = false }
+local Pulse = { issecret = issecretvalue, modules = {}, moduleOrder = {}, debug = false }
 function Pulse:RegisterModule(name, module)
 	self.modules[name] = module
 	self.moduleOrder[#self.moduleOrder + 1] = name

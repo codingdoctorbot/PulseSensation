@@ -28,6 +28,7 @@
 -- once per tick in OnUpdate, applied continuously rather than per mode-step.
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local Engine = {}
 Pulse.Engine = Engine
@@ -424,10 +425,11 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
 
 	local MIN_STEP_DURATION = 0.020
 	local MIN_GAP_DURATION = 0.025
+	local STEP_OVERLAP = 0.035
 
 	local offset = 0
 	local lastScheduledAt = -1
-	for _, step in ipairs(mode.steps) do
+	for index, step in ipairs(mode.steps) do
 		if step.gap then
 			offset = offset + math.max(MIN_GAP_DURATION, (step.gap or 0) * durMult)
 		else
@@ -441,6 +443,12 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
 				offset = at
 			end
 			lastScheduledAt = at
+
+			local nextStep = mode.steps[index + 1]
+			local hold = duration
+			if nextStep and not nextStep.gap then
+				hold = duration + STEP_OVERLAP
+			end
 
 			if at <= 0 then
 				-- Synchronous execution on frame zero: eliminates 16-33ms C_Timer.After input lag
@@ -458,7 +466,7 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
 					else
 						stepRoles.low = clamp01(mag * lowMult)
 					end
-					self:SetRoles(name, stepRoles, duration, true)
+					self:SetRoles(name, stepRoles, hold, true)
 				end
 			else
 				-- Subsequent delayed steps: do NOT use the pool. It's shared across every layer,
@@ -487,7 +495,7 @@ function Engine:PlayMode(name, modeID, scale, intensityOverride)
 					self:SetRoles(
 						name,
 						{ low = low, high = high, ltrigger = ltrigger, rtrigger = rtrigger },
-						duration,
+						hold,
 						true
 					)
 				end)

@@ -7,12 +7,9 @@ local ADDON_NAME, Pulse = ...
 
 _G.Pulse = Pulse -- for /run poking while tuning, same reason as Tremor's Core/Init.lua:12
 
--- Safe global fallback for issecretvalue. Older client builds, test harnesses, or
--- isolated environments that lack the 11.0+ Secret Values C-API will not error.
-if type(_G.issecretvalue) ~= "function" then
-	_G.issecretvalue = function()
-		return false
-	end
+-- Safe internal fallback for issecretvalue.
+Pulse.issecret = _G.issecretvalue or function()
+	return false
 end
 
 Pulse.ADDON_NAME = ADDON_NAME
@@ -104,7 +101,10 @@ function Pulse:FireIfEnabled(triggerID, intensityOverride)
 	if type(scale) ~= "number" or scale <= 0 then
 		return false
 	end
-	local modeID = self.Database:GetTriggerMode(triggerID) or trigger.mode
+	local modeID = self.Database:GetTriggerMode(triggerID)
+	if not (modeID and Pulse.Modes[modeID]) then
+		modeID = trigger.mode
+	end
 
 	local layerName = triggerID
 	if trigger.bus then
@@ -252,7 +252,7 @@ end
 -- /pulse test both call it, so one place knows what testing a mode means: bypass
 -- masterEnabled and every trigger's enabled/throttle check, but still require a live pad.
 -- Returns true, or false plus a reason, so each caller reports failure in its own voice.
-function Pulse:TestMode(modeID)
+function Pulse:TestMode(modeID, scale)
 	if not Pulse.Modes[modeID] then
 		return false, "no such mode"
 	end
@@ -260,7 +260,8 @@ function Pulse:TestMode(modeID)
 	if not self.Engine:IsDeviceReady() then
 		return false, "no controller detected"
 	end
-	self.Engine:PlayMode("preview", modeID, 1.0)
+	self:CancelContinuousPreview()
+	self.Engine:PlayMode("preview", modeID, scale or 1.0)
 	return true
 end
 
@@ -389,8 +390,11 @@ function Pulse:TestCue(triggerID)
 	end
 
 	if trigger.mode then
-		local modeID = self.Database:GetTriggerMode(triggerID) or trigger.mode
-		if not Pulse.Modes[modeID] then
+		local modeID = self.Database:GetTriggerMode(triggerID)
+		if not (modeID and Pulse.Modes[modeID]) then
+			modeID = trigger.mode
+		end
+		if not (modeID and Pulse.Modes[modeID]) then
 			return false, "no such mode"
 		end
 		self.Engine:PlayMode(PREVIEW_LAYER, modeID, scale)

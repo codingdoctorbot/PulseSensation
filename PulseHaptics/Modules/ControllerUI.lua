@@ -27,6 +27,7 @@
 --   3. Plain Lua events on our own frame (interactFrame) — for soft targeting, cursor items, and action bar paging.
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local M = {}
 Pulse:RegisterModule("ControllerUI", M)

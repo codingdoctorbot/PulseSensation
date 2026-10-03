@@ -7,6 +7,7 @@
 -- no overlap.
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local M = {}
 Pulse:RegisterModule("AlertWorld", M)

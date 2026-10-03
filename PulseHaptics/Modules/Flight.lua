@@ -4,6 +4,7 @@
 -- ramps through a tunable exponential ease-in curve (see thrillCurve below).
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local M = {}
 Pulse:RegisterModule("Flight", M)

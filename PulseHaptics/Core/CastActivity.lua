@@ -24,6 +24,7 @@
 -- resurrect that spam.
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local CastActivity = {}
 Pulse.CastActivity = CastActivity
@@ -73,6 +74,13 @@ local function keyFor(castGUID, spellID)
 	return "unknown"
 end
 
+local function clean(v)
+	if v == nil or issecretvalue(v) then
+		return nil
+	end
+	return v
+end
+
 local function isPlayer(unit)
 	return unit == "player"
 end
@@ -83,6 +91,7 @@ function CastActivity:_OnStart(unit, castGUID, spellID)
 	if not isPlayer(unit) then
 		return
 	end
+	castGUID, spellID = clean(castGUID), clean(spellID)
 	local key = keyFor(castGUID, spellID)
 	self.pending[key] = { spellID = spellID, castGUID = castGUID, startedAt = GetTime() }
 
@@ -107,6 +116,7 @@ function CastActivity:_OnChannelStart(unit, castGUID, spellID)
 	if not isPlayer(unit) then
 		return
 	end
+	castGUID, spellID = clean(castGUID), clean(spellID)
 	self.activeChannel = {
 		key = keyFor(castGUID, spellID),
 		castGUID = castGUID,
@@ -124,6 +134,7 @@ function CastActivity:_OnSucceeded(unit, castGUID, spellID)
 	if not isPlayer(unit) then
 		return
 	end
+	castGUID, spellID = clean(castGUID), clean(spellID)
 	local key = keyFor(castGUID, spellID)
 
 	-- A crafting cast completing is a finished craft, not a finished spell.
@@ -204,6 +215,7 @@ function CastActivity:_OnInterrupted(unit, castGUID, spellID)
 	if not isPlayer(unit) then
 		return
 	end
+	castGUID, spellID = clean(castGUID), clean(spellID)
 	local key = keyFor(castGUID, spellID)
 	if
 		self.activeChannel
@@ -247,21 +259,15 @@ function CastActivity:_OnFailed(unit, castGUID, spellID)
 	if not isPlayer(unit) then
 		return
 	end
+	castGUID, spellID = clean(castGUID), clean(spellID)
 	if UnitIsDeadOrGhost and UnitIsDeadOrGhost("player") then
 		return
 	end
-	if not issecretvalue(spellID) and IGNORED_SPELL_IDS[spellID] then
+	if spellID and IGNORED_SPELL_IDS[spellID] then
 		return
 	end
 	local key = keyFor(castGUID, spellID)
-	if
-		self.activeChannel
-		and (
-			self.activeChannel.spellID == spellID
-			or (castGUID and self.activeChannel.castGUID == castGUID)
-			or self.activeChannel.key == key
-		)
-	then
+	if self.activeChannel and castGUID and self.activeChannel.castGUID == castGUID then
 		self.activeChannel.interruptedBy = "failed"
 	end
 	local wasPending = self.pending[key] ~= nil -- see _OnInterrupted
@@ -292,6 +298,7 @@ function CastActivity:_OnStop(unit, castGUID, spellID)
 	if not isPlayer(unit) then
 		return
 	end
+	castGUID, spellID = clean(castGUID), clean(spellID)
 	local key = keyFor(castGUID, spellID)
 	local pending = self.pending[key]
 	self.pending[key] = nil
@@ -348,6 +355,7 @@ function CastActivity:_OnChannelStop(unit, castGUID, spellID, interruptedBy)
 	if not isPlayer(unit) then
 		return
 	end
+	castGUID, spellID = clean(castGUID), clean(spellID)
 	local channel = self.activeChannel
 	self.activeChannel = nil
 	local isInterrupted = false
@@ -431,18 +439,38 @@ function CastActivity:_Sweep()
 			self.activeChannel = nil
 		end
 	end
+	local staleCraft
 	if self.crafting then
 		local age = now - (self.crafting.startedAt or now)
 		if age > HARD_SWEEP_CEILING or (not isPlayerCasting and age > STALE_TIMEOUT) then
+			staleCraft = self.crafting
 			self.crafting = nil
 		end
+	end
+	if staleCraft then
+		emit({
+			classification = "CRAFT_STOPPED",
+			spellID = staleCraft.spellID,
+			isCrafting = true,
+			reason = "stale",
+			duration = now - (staleCraft.startedAt or now),
+		})
 	end
 end
 
 function CastActivity:Reset()
+	local craft = self.crafting
 	self.pending = {}
 	self.activeChannel = nil
 	self.crafting = nil
+	if craft then
+		emit({
+			classification = "CRAFT_STOPPED",
+			spellID = craft.spellID,
+			isCrafting = true,
+			reason = "reset",
+		})
+	end
 end
 
 -- Event bridge

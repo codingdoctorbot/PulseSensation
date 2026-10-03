@@ -16,6 +16,7 @@
 -- is not something raiding and questing could sensibly disagree on.
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 -- The physical channel names passed to C_GamePad.SetVibration as `vibrationType`.
 -- LIVE CLIENT CONFIRMATION (2026-09-29): C_GamePad.SetVibration strictly supports only

@@ -5,6 +5,7 @@
 -- fires repeatedly for every queued battlefield on every status change).
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local M = {}
 Pulse:RegisterModule("AlertSocial", M)

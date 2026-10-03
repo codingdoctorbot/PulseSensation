@@ -107,6 +107,7 @@ local dbStore = {
 }
 
 local Pulse = {
+	issecret = issecretvalue, -- Core/Init.lua provides this in-game
 	modules = {},
 	Database = {
 		GetLocomotionProfile = function()

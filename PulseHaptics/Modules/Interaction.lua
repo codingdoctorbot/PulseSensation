@@ -23,6 +23,7 @@
 -- - bankClosed: heavy latch thud when closing a bank, guild bank, or void storage vault.
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local M = {}
 Pulse:RegisterModule("Interaction", M)
@@ -376,6 +377,16 @@ local function sync()
 	if Pulse.Database:GetCue("bankGold") then
 		pcall(frame.RegisterEvent, frame, "PLAYER_MONEY")
 		pcall(frame.RegisterEvent, frame, "GUILDBANK_UPDATE_MONEY")
+	end
+
+	-- Reseed live open state if syncing while an interaction is already open
+	if Pulse.Arbiter and Pulse.Arbiter.IsMerchantOpen and Pulse.Arbiter:IsMerchantOpen() then
+		openMerchant()
+	end
+	if type(BankFrame) == "table" and BankFrame.IsShown and BankFrame:IsShown() then
+		inBank = true
+		local money = (GetMoney and GetMoney()) or 0
+		lastBankMoney = (not issecretvalue(money) and type(money) == "number") and money or 0
 	end
 end
 

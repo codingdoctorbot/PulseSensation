@@ -917,10 +917,12 @@ function Spec.BuildProfilesPage()
 		return options
 	end
 
-	local function ruleDropdown(scope, label, tooltip)
+	local function ruleDropdown(scope, label, tooltip, labelFunc, visibleWhen)
 		return {
 			kind = "dropdown",
 			label = label,
+			labelFunc = labelFunc,
+			visibleWhen = visibleWhen,
 			tooltip = tooltip,
 			options = function()
 				return profileOptions(true)
@@ -984,18 +986,21 @@ function Spec.BuildProfilesPage()
 			.. "lets the one below it decide; with none of them set, Pulse uses Default.",
 	}
 
-	-- Only offered when the character has a specialization to key on. Without one
-	-- GetSpecInfo returns nil, a spec rule could never match, and a dropdown that can never
-	-- do anything is worse than no dropdown.
+	-- Only offered when the character has a specialization to key on.
 	local specID, specName = store:GetSpecInfo()
-	if specID then
-		rows[#rows + 1] = ruleDropdown(
-			store.SCOPE_SPEC,
-			child_label_spec(specName, specID),
-			"Applies only while this character is in this specialization. Switching "
-				.. "specialization switches profile with it, with no further action from you."
-		)
-	end
+	rows[#rows + 1] = ruleDropdown(
+		store.SCOPE_SPEC,
+		child_label_spec(specName, specID),
+		"Applies only while this character is in this specialization. Switching "
+			.. "specialization switches profile with it, with no further action from you.",
+		function()
+			local curID, curName = store:GetSpecInfo()
+			return child_label_spec(curName, curID)
+		end,
+		function()
+			return store:GetSpecInfo() ~= nil
+		end
+	)
 
 	rows[#rows + 1] = ruleDropdown(
 		store.SCOPE_CHARACTER,
@@ -1256,31 +1261,36 @@ function Spec.BuildDefaultProfilesPage()
 					end,
 				}
 
-				if specID then
-					rows[#rows + 1] = {
-						kind = "button",
-						child = true,
-						label = ("Auto-switch in %s"):format(specName or ("Spec " .. tostring(specID))),
-						buttonText = "Set for Spec",
-						tooltip = ("Automatically switch to %s whenever this character is in %s."):format(
-							pLabel,
-							specName or tostring(specID)
-						),
-						onClick = function()
-							local ok, reason = store:SetProfileForScope(store.SCOPE_SPEC, pID)
-							if ok then
-								print(
-									('Pulse: bound profile "%s" to specialization %s'):format(
-										pLabel,
-										specName or tostring(specID)
-									)
+				rows[#rows + 1] = {
+					kind = "button",
+					child = true,
+					label = ("Auto-switch in %s"):format(specName or ("Spec " .. tostring(specID or 1))),
+					labelFunc = function()
+						local curID, curName = store:GetSpecInfo()
+						return ("Auto-switch in %s"):format(curName or ("Spec " .. tostring(curID or 1)))
+					end,
+					visibleWhen = function()
+						return store:GetSpecInfo() ~= nil
+					end,
+					buttonText = "Set for Spec",
+					tooltip = ("Automatically switch to %s whenever this character is in this specialization."):format(
+						pLabel
+					),
+					onClick = function()
+						local curID, curName = store:GetSpecInfo()
+						local ok, reason = store:SetProfileForScope(store.SCOPE_SPEC, pID)
+						if ok then
+							print(
+								('Pulse: bound profile "%s" to specialization %s'):format(
+									pLabel,
+									curName or tostring(curID)
 								)
-							else
-								report(ok, reason)
-							end
-						end,
-					}
-				end
+							)
+						else
+							report(ok, reason)
+						end
+					end,
+				}
 
 				rows[#rows + 1] = {
 					kind = "button",

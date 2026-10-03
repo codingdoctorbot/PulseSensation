@@ -5,6 +5,7 @@
 -- registration is needed here. Exception: selfCastFailed, see _WatchCastFailed below.
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local M = {}
 Pulse:RegisterModule("AlertGeneric", M)
@@ -35,53 +36,69 @@ local IGNORED_SPELL_IDS = { [121125] = true, [1221044] = true }
 local CUSTOM = { selfCastFailed = true, selfChannelInterrupted = true, actionFailed = true }
 
 function M:OnEnable()
-    Pulse:WatchCategory("ALERT_SELF_CAST", CUSTOM)
-    Pulse:WatchCategory("ALERT_STATE")
-    self:_WatchCastFailed()
-    self:_WatchChannelInterrupted()
+	Pulse:WatchCategory("ALERT_SELF_CAST", CUSTOM)
+	Pulse:WatchCategory("ALERT_STATE")
+	self:_WatchCastFailed()
+	self:_WatchChannelInterrupted()
 end
 
 function M:_WatchCastFailed()
-    local frame = CreateFrame("Frame")
+	local frame = CreateFrame("Frame")
 
-    local function sync()
-        frame:UnregisterAllEvents()
-        if not Pulse.Database:Get("masterEnabled") then return end
-        if not Pulse.Database:GetCue("selfCastFailed") then return end
-        frame:RegisterUnitEvent("UNIT_SPELLCAST_FAILED", "player")
-        frame:RegisterUnitEvent("UNIT_SPELLCAST_FAILED_QUIET", "player")
-    end
+	local function sync()
+		frame:UnregisterAllEvents()
+		if not Pulse.Database:Get("masterEnabled") then
+			return
+		end
+		if not Pulse.Database:GetCue("selfCastFailed") then
+			return
+		end
+		frame:RegisterUnitEvent("UNIT_SPELLCAST_FAILED", "player")
+		frame:RegisterUnitEvent("UNIT_SPELLCAST_FAILED_QUIET", "player")
+	end
 
-    frame:SetScript("OnEvent", function(_, event, unitTarget, castGUID, spellID)
-        if UnitIsDeadOrGhost("player") then return end
-        if not issecretvalue(spellID) and IGNORED_SPELL_IDS[spellID] then return end
-        Pulse:FireIfEnabled("selfCastFailed")
-    end)
+	frame:SetScript("OnEvent", function(_, event, unitTarget, castGUID, spellID)
+		if UnitIsDeadOrGhost("player") then
+			return
+		end
+		if not issecretvalue(spellID) and IGNORED_SPELL_IDS[spellID] then
+			return
+		end
+		Pulse:FireIfEnabled("selfCastFailed")
+	end)
 
-    Pulse:BindFrame({ "selfCastFailed" }, sync)
+	Pulse:BindFrame({ "selfCastFailed" }, sync)
 end
 
 -- selfChannelInterrupted needs the event's 4th argument (interruptedBy) to tell "cut short"
 -- from "ran to completion", so it cannot use the generic zero-inspection watcher.
 function M:_WatchChannelInterrupted()
-    local frame = CreateFrame("Frame")
+	local frame = CreateFrame("Frame")
 
-    local function sync()
-        frame:UnregisterAllEvents()
-        if not Pulse.Database:Get("masterEnabled") then return end
-        if not Pulse.Database:GetCue("selfChannelInterrupted") then return end
-        frame:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_STOP", "player")
-    end
+	local function sync()
+		frame:UnregisterAllEvents()
+		if not Pulse.Database:Get("masterEnabled") then
+			return
+		end
+		if not Pulse.Database:GetCue("selfChannelInterrupted") then
+			return
+		end
+		frame:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_STOP", "player")
+	end
 
-    -- interruptedBy is nil when the channel ran to completion and a real GUID when it was
-    -- cut short — CONFIRMED against Blizzard's CastingBarFrame.lua
-    -- (`complete = interruptedBy == nil`). UNVERIFIED whether it comes back secret here;
-    -- the RULE B guard below means it silently never fires rather than erroring if so.
-    frame:SetScript("OnEvent", function(_, event, unitTarget, castGUID, spellID, interruptedBy)
-        if issecretvalue(interruptedBy) then return end
-        if interruptedBy == nil then return end
-        Pulse:FireIfEnabled("selfChannelInterrupted")
-    end)
+	-- interruptedBy is nil when the channel ran to completion and a real GUID when it was
+	-- cut short — CONFIRMED against Blizzard's CastingBarFrame.lua
+	-- (`complete = interruptedBy == nil`). UNVERIFIED whether it comes back secret here;
+	-- the RULE B guard below means it silently never fires rather than erroring if so.
+	frame:SetScript("OnEvent", function(_, event, unitTarget, castGUID, spellID, interruptedBy)
+		if issecretvalue(interruptedBy) then
+			return
+		end
+		if interruptedBy == nil then
+			return
+		end
+		Pulse:FireIfEnabled("selfChannelInterrupted")
+	end)
 
-    Pulse:BindFrame({ "selfChannelInterrupted" }, sync)
+	Pulse:BindFrame({ "selfChannelInterrupted" }, sync)
 end

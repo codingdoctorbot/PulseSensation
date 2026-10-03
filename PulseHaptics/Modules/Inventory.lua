@@ -6,6 +6,7 @@
 -- full inventory rejections. Zero-allocation design with defensive secrecy guards.
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local M = {}
 Pulse:RegisterModule("Inventory", M)

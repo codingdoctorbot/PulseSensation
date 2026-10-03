@@ -28,6 +28,7 @@
 --       cache is not warm still gets the right gait rather than a generic one all session.
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local M = {}
 Pulse:RegisterModule("Locomotion", M)
@@ -268,19 +269,19 @@ end
 -- come back secret there, and comparing a secret throws rather than reading nil.
 local function resolveSpeed()
 	if inCombat then
-		return lastGoodSpeed
+		return lastGoodSpeed, false
 	end
 	if type(GetUnitSpeed) ~= "function" then
-		return lastGoodSpeed
+		return lastGoodSpeed, false
 	end
 	local ok, speed = pcall(GetUnitSpeed, "player")
 	if not ok or issecretvalue(speed) or type(speed) ~= "number" then
-		return lastGoodSpeed
+		return lastGoodSpeed, false
 	end
 	if speed > 0.05 then
 		lastGoodSpeed = speed
 	end
-	return speed
+	return speed, true
 end
 
 local function resolveGait()
@@ -733,8 +734,9 @@ local function sync()
 	refreshRidingTier()
 	refreshArmorWeight()
 	persist()
-	local speed = resolveSpeed()
-	if speed > 0.05 then
+	inCombat = InCombatLockdown and InCombatLockdown() and true or false
+	local speed, readable = resolveSpeed()
+	if readable and speed > 0.05 then
 		isMoving = true
 		resolveGait()
 		pollFrame:SetScript("OnUpdate", tick)

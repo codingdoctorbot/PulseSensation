@@ -27,33 +27,40 @@ local CUES = { "craftStart", "craftComplete", "craftStopped", "selfCastInstant" 
 -- ignored rather than guessed at — the other classifications are already covered by the
 -- original watchers, and firing them from two places would double every pulse.
 local CUE_FOR_CLASSIFICATION = {
-    CRAFT_START    = "craftStart",
-    CRAFT_COMPLETE = "craftComplete",
-    CRAFT_STOPPED  = "craftStopped",
-    INSTANT        = "selfCastInstant",
+	CRAFT_START = "craftStart",
+	CRAFT_COMPLETE = "craftComplete",
+	CRAFT_STOPPED = "craftStopped",
+	INSTANT = "selfCastInstant",
 }
 
 local function onActivity(result)
-    local cueID = CUE_FOR_CLASSIFICATION[result.classification]
-    if not cueID then return end
-    Pulse:FireIfEnabled(cueID)
+	local cueID = CUE_FOR_CLASSIFICATION[result.classification]
+	if not cueID then
+		return
+	end
+	if result.classification == "CRAFT_STOPPED" and (result.reason == "stale" or result.reason == "reset") then
+		return
+	end
+	Pulse:FireIfEnabled(cueID)
 end
 
 local function sync()
-    local wanted = Pulse.Database:Get("masterEnabled") or false
-    if wanted then
-        local any = false
-        for _, cueID in ipairs(CUES) do
-            if Pulse.Database:GetCue(cueID) then any = true end
-        end
-        wanted = any
-    end
-    -- CastActivity registers nothing while no cue here wants it, so a player with all four
-    -- switched off pays nothing for this module existing.
-    Pulse.CastActivity:SetActive("casting", wanted)
+	local wanted = Pulse.Database:Get("masterEnabled") or false
+	if wanted then
+		local any = false
+		for _, cueID in ipairs(CUES) do
+			if Pulse.Database:GetCue(cueID) then
+				any = true
+			end
+		end
+		wanted = any
+	end
+	-- CastActivity registers nothing while no cue here wants it, so a player with all four
+	-- switched off pays nothing for this module existing.
+	Pulse.CastActivity:SetActive("casting", wanted)
 end
 
 function M:OnEnable()
-    Pulse.CastActivity:OnActivity(onActivity)
-    Pulse:BindFrame(CUES, sync)
+	Pulse.CastActivity:OnActivity(onActivity)
+	Pulse:BindFrame(CUES, sync)
 end

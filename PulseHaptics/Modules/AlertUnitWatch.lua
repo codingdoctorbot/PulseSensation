@@ -6,6 +6,7 @@
 -- per unit token, frame identity is the filter, never a branch on arg1.
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local M = {}
 Pulse:RegisterModule("AlertUnitWatch", M)

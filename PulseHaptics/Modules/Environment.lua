@@ -4,6 +4,7 @@
 -- and G14 (weather, C_Weather/WEATHER_CHANGED, continuous weather texture).
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local M = {}
 Pulse:RegisterModule("Environment", M)
@@ -44,6 +45,7 @@ local warnedLowBreath = false
 local breathMaxValue = nil
 local lastGasp = 0
 local lastRemaining = nil
+local lastCurrent = nil
 local DEPLETED = 0.05
 local isDrowning = false
 local lastDrownDamageTime = 0
@@ -57,6 +59,7 @@ local function stopBreathTicker()
 	breathMaxValue = nil
 	lastGasp = 0
 	lastRemaining = nil
+	lastCurrent = nil
 	isDrowning = false
 	lastDrownDamageTime = 0
 end
@@ -65,6 +68,7 @@ local function startBreathTicker(maxValue)
 	stopBreathTicker()
 	breathMaxValue = maxValue
 	lastRemaining = nil
+	lastCurrent = nil
 	isDrowning = false
 
 	-- 0.1s poll for breath depletion and drowning state
@@ -114,6 +118,13 @@ local function startBreathTicker(maxValue)
 			end
 			return
 		end
+
+		if lastCurrent and current > lastCurrent then
+			-- Breath bar is rising: player is breathing / refilling
+			stopBreathTicker()
+			return
+		end
+		lastCurrent = current
 
 		local remaining = current / breathMaxValue
 		lastRemaining = remaining
@@ -185,8 +196,11 @@ local function syncBreath()
 			local maxVal = nil
 			if type(GetMirrorTimerInfo) == "function" then
 				for i = 1, 3 do
-					local timer, _, mVal = GetMirrorTimerInfo(i)
+					local timer, _, mVal, rate = GetMirrorTimerInfo(i)
 					if timer == "BREATH" and mVal and mVal > 0 then
+						if rate and not issecretvalue(rate) and rate >= 0 then
+							return -- refilling on surface, do not seed dive ticker
+						end
 						maxVal = mVal
 						break
 					end
@@ -199,7 +213,7 @@ local function syncBreath()
 	end
 end
 
-breathFrame:SetScript("OnEvent", function(_, event, timerName, value, maxValue)
+breathFrame:SetScript("OnEvent", function(_, event, timerName, value, maxValue, scale)
 	if event == "PLAYER_DEAD" then
 		stopBreathTicker()
 		return
@@ -208,6 +222,15 @@ breathFrame:SetScript("OnEvent", function(_, event, timerName, value, maxValue)
 		return
 	end
 	if event == "MIRROR_TIMER_START" then
+		local refilling = (not issecretvalue(scale)) and type(scale) == "number" and scale >= 0
+		if refilling then
+			if isDrowning then
+				isDrowning = false
+				Pulse:HoldIfEnabled("breathTexture", 0.4, 0.4, 0.15, true)
+			end
+			stopBreathTicker()
+			return
+		end
 		local m = maxValue or 30000
 		startBreathTicker(m)
 		if value and m and m > 0 then

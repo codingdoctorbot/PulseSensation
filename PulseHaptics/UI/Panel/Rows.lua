@@ -609,6 +609,9 @@ function Rows.CreateDropdown(parent, spec)
 	row.Dropdown = dropdown
 
 	row.RefreshValue = function()
+		if spec.labelFunc then
+			row.Text:SetText(spec.labelFunc())
+		end
 		setText(labelFor(spec.get()))
 		updateSteppers()
 	end

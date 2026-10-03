@@ -23,11 +23,9 @@
 
 local ADDON_NAME = ...
 
--- Safe global fallback for issecretvalue
-if type(_G.issecretvalue) ~= "function" then
-	_G.issecretvalue = function()
-		return false
-	end
+-- File-local fallback for issecretvalue (native on WoW Forever / retail; never write the global).
+local issecretvalue = _G.issecretvalue or function()
+	return false
 end
 
 local function core()

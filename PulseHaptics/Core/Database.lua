@@ -19,6 +19,7 @@
 -- dialog.
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local Database = {}
 Pulse.Database = Database
@@ -3158,7 +3159,11 @@ function Database:ApplyDevicePreset(id)
 		local overrides = device.channels and device.channels[channel]
 		local target = {}
 		for key, default in pairs(Pulse.CHANNEL_DEFAULTS) do
-			target[key] = (overrides and overrides[key]) or default
+			local value = overrides and overrides[key]
+			if value == nil then
+				value = default
+			end
+			target[key] = value
 		end
 		DB.channelTuning[channel] = target
 	end

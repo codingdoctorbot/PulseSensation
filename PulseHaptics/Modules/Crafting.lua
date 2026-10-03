@@ -26,6 +26,7 @@
 -- castTexture in Modules/Combat.lua takes over as fallback.
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local M = {}
 Pulse:RegisterModule("Crafting", M)
@@ -306,34 +307,12 @@ end
 -- Combat.lua need not know how this module stores state and a missing module reads as "not
 -- crafting" rather than erroring.
 local lastCraftSeen = 0
+local isGathering = false
+local trackedCraftSpellID = nil
 
 function M:IsCrafting()
 	if not (Pulse.Database and Pulse.Database:Get("masterEnabled") and Pulse:IsCueActive(CUE)) then
 		return false
-	end
-	if active then
-		-- Failsafe: if no cast or channel is active, craft suppression auto-clears after 0.5s
-		local hasCast = false
-		if type(UnitCastingInfo) == "function" then
-			local _, _, _, startTimeMs = UnitCastingInfo("player")
-			if startTimeMs then
-				hasCast = true
-			end
-		end
-		if not hasCast and type(UnitChannelInfo) == "function" then
-			local _, _, _, startTimeMs = UnitChannelInfo("player")
-			if startTimeMs then
-				hasCast = true
-			end
-		end
-
-		if not hasCast then
-			if GetTime() - lastCraftSeen > 0.5 then
-				active = false
-			end
-		else
-			lastCraftSeen = GetTime()
-		end
 	end
 	return active
 end
@@ -440,6 +419,7 @@ local bedRoles = { low = 0 }
 
 function tick()
 	if not active then
+		pollFrame:SetScript("OnUpdate", nil)
 		return
 	end
 
@@ -458,8 +438,13 @@ function tick()
 		return
 	end
 	if not startTimeMs or not endTimeMs or endTimeMs <= startTimeMs then
+		if GetTime() - lastCraftSeen > 1.0 then
+			endCraft(false)
+			isGathering, trackedCraftSpellID = false, nil
+		end
 		return
 	end
+	lastCraftSeen = GetTime()
 
 	local duration = (endTimeMs - startTimeMs) / 1000
 	local progress = clamp01((GetTime() * 1000 - startTimeMs) / (endTimeMs - startTimeMs))
@@ -492,9 +477,6 @@ function tick()
 end
 
 -- Wiring
-
-local isGathering = false
-local trackedCraftSpellID = nil
 
 local function onActivity(result)
 	local classification = result.classification

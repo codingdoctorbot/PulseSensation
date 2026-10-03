@@ -18,6 +18,7 @@
 -- Reads game state only. Calls no protected API, hooks nothing, writes no SavedVariables.
 
 local ADDON_NAME, Pulse = ...
+local issecretvalue = Pulse.issecret
 
 local Arbiter = {}
 Pulse.Arbiter = Arbiter
@@ -248,6 +249,9 @@ function Arbiter:LootOpened(autoLoot)
 		loot.openedAt = GetTime()
 		loot.spoke = false
 		loot.sawSlotCleared = false
+		loot.speaker = false
+		loot.best = -1
+		loot.quest = false
 	end
 	if not issecretvalue(autoLoot) then
 		loot.autoLoot = autoLoot and true or false
