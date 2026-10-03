@@ -149,7 +149,7 @@ Extract the `PulseHaptics` folder into your World of Warcraft `Interface/AddOns/
 
 PulseHaptics is a **free, open-source hobby project** developed independently for the World of Warcraft community.
 
-It is actively developed and currently in **Public Beta (v0.3.1-beta)**. The core engine is fully implemented, while authored cues continue to be tuned in-game against Blizzard's evolving controller APIs.
+It is actively developed and currently in **Public Beta (v0.3.2-beta)**. The core engine is fully implemented, while authored cues continue to be tuned in-game against Blizzard's evolving controller APIs.
 
 Feedback, bug reports, testing, and contributions are welcome.
 

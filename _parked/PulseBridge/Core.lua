@@ -8,7 +8,7 @@ local ADDON_NAME, Bridge = ...
 _G.PulseBridge = Bridge
 
 Bridge.Name = ADDON_NAME
-Bridge.Version = "0.3.1-beta"
+Bridge.Version = "0.3.2-beta"
 
 local PREFIX = "|cff00ffccPulseBridge|r  "
 local SUCCESS = "|cff44ff44"

@@ -8,7 +8,7 @@ local ADDON_NAME, Sync = ...
 _G.PulseSync = Sync
 
 Sync.Name = ADDON_NAME
-Sync.Version = "0.3.1-beta"
+Sync.Version = "0.3.2-beta"
 
 local PREFIX = "|cff00ffaaPulseSync|r  "
 local SUCCESS = "|cff44ff44"
