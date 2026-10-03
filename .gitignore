@@ -20,7 +20,7 @@ PulseChecklist/tests/locomotion-sim/
 # Docs & internal development archives
 docs/
 PARKED_ADDONS_HARVEST.md
-CURSEFORGE_UPDATE.txt
+CURSEFORGE_UPDATE*.txt
 /IMPLEMENTATION_PLAN.md
 /VERIFIED_BUGS_AND_FIX_PLAN.md
 /PulseHaptics-v0.3.1-beta-code-review.md
