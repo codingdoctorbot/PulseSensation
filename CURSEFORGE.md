@@ -1,10 +1,10 @@
 # Feel Azeroth.
 
-**PulseHaptics brings World of Warcraft to your controller with rich, customizable haptic feedback.**
+**PulseHaptics adds rich, customizable gamepad vibration to World of Warcraft — controller haptics and rumble that you can tune for every cue.**
 
 Feel combat impacts. Feel your spells. Feel movement, flight, swimming, UI interactions, and the world around you.
 
-PulseHaptics turns game events into tactile feedback designed to complement what you see and hear — from quick impact pulses to continuous sensations that evolve with what you're doing.
+PulseHaptics turns game events into tactile controller feedback designed to complement what you see and hear — from quick impact pulses to continuous gamepad rumble that evolves with what you're doing. Made for WoW Forever's native gamepad support, with presets for Xbox, DualSense, DualShock 4, Steam Deck, Switch Pro and 8BitDo controllers.
 
 ---
 
@@ -77,9 +77,9 @@ A reusable library of distinct vibration patterns, including:
 *   **70% Less Scrolling:** Redesigned compact 1-line rows reduce vertical scroll bloat by ~70% (from 787 to 239 rows).
 *   **Collapsible Sections & Simple View:** Fold and unfold categories to keep your menu clean, with fold states preserved account-wide, plus a one-click "Simple View" overview.
 
-### 🎮 Controller Support & Tuning
+### 🎮 Controller & Gamepad Support
 
-PulseHaptics is engineered to take full advantage of modern gamepads:
+PulseHaptics is engineered to take full advantage of the vibration motors in modern gamepads, with a tuned controller preset for each:
 
 *   **PlayStation 5 DualSense / DualShock 4** (Linear resonance & haptic role routing)
 *   **Xbox Wireless & Elite Series Controllers** (Tuned asymmetrical ERM rumble motors)
@@ -98,7 +98,7 @@ PulseHaptics is engineered to take full advantage of modern gamepads:
 
 ## ♿ Accessibility & Immersion
 
-Haptics provide another channel for perceiving important game events.
+Controller vibration provides another channel for perceiving important game events.
 
 PulseHaptics can be used purely for immersion, as an additional feedback layer alongside sound and visuals, or as a tactical sensory radar to make selected combat and boss mechanics physically noticeable without staring at UI frames.
 
@@ -108,7 +108,7 @@ PulseHaptics can be used purely for immersion, as an additional feedback layer a
 
 ### 1. Enable Gamepad & Vibration in WoW
 
-Run these two commands once in-game:
+WoW's own gamepad and vibration settings must be on before any controller rumble can play. Run these two commands once in-game:
 
 ```text
 /console GamePadEnable 1

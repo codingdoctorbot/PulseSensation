@@ -58,6 +58,7 @@ Core/Guide.lua
 Modules/Movement.lua
 Modules/Flight.lua
 Modules/Combat.lua
+Modules/Windfury.lua
 Modules/Environment.lua
 Modules/World.lua
 Modules/Inventory.lua
@@ -127,4 +128,5 @@ UI/Panel/Gamepad.lua
 UI/Panel/Content.lua
 UI/Panel/Spec.lua
 UI/Panel/Panel.lua
+UI/QuickSetup.lua
 UI/Minimap.lua

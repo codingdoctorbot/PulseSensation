@@ -45,6 +45,7 @@ local GLOBAL_DEFAULTS = {
 	-- a spec-driven profile switch must never re-fold the window or change its view.
 	simpleView = false,
 	collapsedSections = {}, -- "PAGEID/Section label" -> true while that section is folded
+	quickSetupCompleted = false,
 }
 
 -- The shape of one profile slot. These fields used to live flat on DB; DB_VERSION 2's
@@ -2939,6 +2940,14 @@ function Database:SetSectionCollapsed(key, collapsed)
 	DB.collapsedSections = DB.collapsedSections or {}
 	DB.collapsedSections[key] = collapsed or nil
 	notify(globalListeners, "collapsedSections")
+end
+
+function Database:IsQuickSetupCompleted()
+	return DB and DB.quickSetupCompleted or false
+end
+
+function Database:SetQuickSetupCompleted(completed)
+	self:Set("quickSetupCompleted", completed and true or false)
 end
 
 function Database:GetCue(triggerID)

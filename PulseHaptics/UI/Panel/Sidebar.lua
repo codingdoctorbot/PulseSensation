@@ -44,6 +44,7 @@ local CATEGORY_ICONS = {
 	CONTROLLER = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\CONTROLLER",
 	CONTROLLER_UI = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\CONTROLLER_UI",
 	GAMEPAD_INTERACT = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\GAMEPAD_INTERACT",
+	EXPERIMENTAL = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\COMBAT",
 	modeTuning = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\modeTuning",
 	calibration = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\calibration",
 	continuous = "Interface\\AddOns\\PulseHaptics\\Media\\Icons\\continuous",

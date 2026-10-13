@@ -250,16 +250,29 @@ function UISettings:Build()
 	body:SetText(BODY_TEXT)
 
 	local open = buildButton(canvas)
-	open:SetPoint("TOP", body, "BOTTOM", 0, -30)
+	open:SetPoint("TOP", body, "BOTTOM", 0, -22)
+
+	local quickSetupBtn = CreateFrame("Button", nil, canvas, "UIPanelButtonTemplate")
+	quickSetupBtn:SetSize(220, 26)
+	quickSetupBtn:SetPoint("TOP", open, "BOTTOM", 0, -8)
+	quickSetupBtn:SetText("Quick Setup Wizard")
+	if Pulse.UI and Pulse.UI.Panel and Pulse.UI.Panel.Theme and Pulse.UI.Panel.Theme.StyleActionButton then
+		Pulse.UI.Panel.Theme.StyleActionButton(quickSetupBtn, true)
+	end
+	quickSetupBtn:SetScript("OnClick", function()
+		if Pulse.UI and Pulse.UI.QuickSetup and Pulse.UI.QuickSetup.Open then
+			Pulse.UI.QuickSetup.Open()
+		end
+	end)
 
 	local hint = canvas:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
 	hint:SetJustifyH("CENTER")
 	hint:SetSpacing(2)
-	hint:SetPoint("TOP", open, "BOTTOM", 0, -16)
+	hint:SetPoint("TOP", quickSetupBtn, "BOTTOM", 0, -12)
 	hint:SetText(
 		"|cffffd100/pulseui|r opens it too. "
-			.. "|cffffd100/pulse debug|r toggles logging, "
-			.. "|cffffd100/pulse test <mode>|r plays a single shape."
+			.. "|cffffd100/pulse setup|r re-opens Quick Setup, "
+			.. "|cffffd100/pulse test <mode>|r plays a shape."
 	)
 
 	local version = addonVersion()

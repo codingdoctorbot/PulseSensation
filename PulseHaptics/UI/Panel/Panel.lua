@@ -234,6 +234,18 @@ local function buildWindow()
 	end)
 	f.CloseButton = closeButton
 
+	local setupButton = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
+	setupButton:SetSize(110, 22)
+	setupButton:SetPoint("RIGHT", closeButton, "LEFT", -10, 0)
+	setupButton:SetText("Quick Setup")
+	Theme.StyleActionButton(setupButton, true)
+	setupButton:SetScript("OnClick", function()
+		if Pulse.UI and Pulse.UI.QuickSetup and Pulse.UI.QuickSetup.Open then
+			Pulse.UI.QuickSetup.Open()
+		end
+	end)
+	f.SetupButton = setupButton
+
 	-- Status badge at bottom-left: connection dot, cue count, version
 	local statusBadge = f:CreateFontString(nil, "ARTWORK", "GameFontDisableSmall")
 	statusBadge:SetPoint("BOTTOMLEFT", f, "BOTTOMLEFT", 18, 18)
@@ -505,6 +517,13 @@ local function slashHandler(message)
 	local command, rest = strsplit(" ", strtrim(message or ""), 2)
 	command = string.lower(command or "")
 
+	if command == "setup" or command == "quicksetup" or command == "wizard" then
+		if Pulse.UI and Pulse.UI.QuickSetup and Pulse.UI.QuickSetup.Open then
+			Pulse.UI.QuickSetup.Open()
+		end
+		return
+	end
+
 	if command == "debug" then
 		Pulse.debug = not Pulse.debug
 		print("Pulse: debug " .. (Pulse.debug and "ON — option changes and cue firings will print here." or "OFF"))
@@ -659,4 +678,12 @@ SLASH_PULSEUI1 = "/pulseui"
 SLASH_PULSEUI2 = "/pulsepanel"
 SlashCmdList["PULSEUI"] = function()
 	Panel.Toggle()
+end
+
+SLASH_PULSESETUP1 = "/pulsesetup"
+SLASH_PULSESETUP2 = "/pulsewizard"
+SlashCmdList["PULSESETUP"] = function()
+	if Pulse.UI and Pulse.UI.QuickSetup and Pulse.UI.QuickSetup.Open then
+		Pulse.UI.QuickSetup.Open()
+	end
 end

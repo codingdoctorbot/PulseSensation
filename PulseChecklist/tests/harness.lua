@@ -1401,6 +1401,7 @@ do
 			"Modules/PlayerState.lua",
 			"Modules/Flight.lua",
 			"Modules/Combat.lua",
+			"Modules/Windfury.lua",
 			"Modules/Locomotion.lua",
 		}
 		for _, modPath in ipairs(testModules) do
@@ -1960,6 +1961,18 @@ do
 			check("Database:Set does not throw when listener errors (F-04)", okSet, true)
 			check("Subsequent listener still notified despite earlier error (F-04)", laterListenerRan, true)
 		end
+
+		-- QuickSetup Database & Persistence Audit
+		check(
+			"quickSetupCompleted default exists in GLOBAL_DEFAULTS",
+			Pulse.Database.GLOBAL_DEFAULTS.quickSetupCompleted,
+			false
+		)
+		check("Database:IsQuickSetupCompleted reports boolean", type(Pulse.Database:IsQuickSetupCompleted()), "boolean")
+		Pulse.Database:SetQuickSetupCompleted(true)
+		check("Database:SetQuickSetupCompleted(true) persists", Pulse.Database:IsQuickSetupCompleted(), true)
+		Pulse.Database:SetQuickSetupCompleted(false)
+		check("Database:SetQuickSetupCompleted(false) persists", Pulse.Database:IsQuickSetupCompleted(), false)
 
 		Pulse.Engine:StopAll()
 	end

@@ -510,5 +510,26 @@ bootstrap:SetScript("OnEvent", function(self, event, loadedAddonName)
 		Pulse.UI.Minimap:Init()
 	end
 
+	-- Auto-open Quick Setup wizard on first run
+	local welcomeFrame = CreateFrame("Frame")
+	welcomeFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+	welcomeFrame:SetScript("OnEvent", function(wf)
+		wf:UnregisterEvent("PLAYER_ENTERING_WORLD")
+		if not (Pulse.Database and Pulse.Database:Get("quickSetupCompleted")) then
+			if C_Timer and C_Timer.After then
+				C_Timer.After(1.5, function()
+					if
+						(not InCombatLockdown or not InCombatLockdown())
+						and Pulse.UI
+						and Pulse.UI.QuickSetup
+						and not Pulse.Database:Get("quickSetupCompleted")
+					then
+						Pulse.UI.QuickSetup.Open()
+					end
+				end)
+			end
+		end
+	end)
+
 	self:UnregisterEvent("ADDON_LOADED")
 end)

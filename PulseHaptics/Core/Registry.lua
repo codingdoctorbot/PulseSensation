@@ -43,6 +43,7 @@ local CATEGORY_ORDER = {
 	"ALERT_SELF_CAST",
 	"CONTROLLER_UI",
 	"GAMEPAD_INTERACT",
+	"EXPERIMENTAL",
 	"PAGE_GATE",
 }
 local CATEGORY_LABELS = {
@@ -80,6 +81,7 @@ local CATEGORY_LABELS = {
 	-- reticle, on the cursor, which bar is live, which input device drives. Separate
 	-- category so PulseDebug and PulseChecklist list the two apart.
 	GAMEPAD_INTERACT = "Controller Interactions",
+	EXPERIMENTAL = "Experimental",
 
 	-- Phase 2 page switches: pure gates, no mode, one per settings page (Registry.PAGE_GATES).
 	PAGE_GATE = "Page switches",
@@ -2871,6 +2873,29 @@ Pulse.Triggers = {
 		desc = "A soft tick when releasing the group targeting modifier back to normal navigation.",
 		caveat = "Passively polled via GroupTargeting.isTargetingActive. Fires when the group targeting modifier is released.",
 	},
+	-- ── Experimental: Windfury Extra Attacks ─────────────────────────────────────
+	{
+		id = "windfurySwing",
+		category = "EXPERIMENTAL",
+		mode = "BURST",
+		throttle = 0.4,
+		default = false,
+		defaultIntensity = 0.85,
+		label = "Windfury (swing burst)",
+		desc = "A dense three-pulse tactical flurry on Windfury extra attacks, detected via sub-50% weapon speed PLAYER_SWING timing.",
+		caveat = "Experimental. Measures the interval between consecutive main-hand swings. Extra attacks arrive well under 50% of weapon speed without needing combat log access. Confirmed working on WoW Forever.",
+	},
+	{
+		id = "windfurySpell",
+		category = "EXPERIMENTAL",
+		mode = "BURST",
+		throttle = 0.4,
+		default = false,
+		defaultIntensity = 0.85,
+		label = "Windfury (spellcast hook)",
+		desc = "A dense three-pulse tactical flurry when the client receives UNIT_SPELLCAST_SUCCEEDED for Windfury Attack (Spell ID 25504).",
+		caveat = "Experimental. Listens for the client spellcast event of Windfury Attack (Spell ID 25504). Dependent on the server emitting UNIT_SPELLCAST_SUCCEEDED for item proc extra attacks.",
+	},
 	-- ── Page switches (Phase 2) ─────────────────────────────────────────────────
 	-- Pure gates: no mode, play nothing, never overwrite the cues they gate. Seeded ON in every
 	-- profile regardless of __exclusive (Database:_SeedProfileTriggerDefaults).
@@ -3374,6 +3399,19 @@ local PAGE_LAYOUT = {
 			{ label = "Item cursor", cues = { "cursorPickup", "cursorDrop" } },
 			{ label = "Action bars", cues = { "actionBarPage" } },
 			{ label = "Input mode", cues = { "inputModeChanged" } },
+		},
+	},
+	{
+		id = "EXPERIMENTAL",
+		label = "Experimental",
+		sections = {
+			{
+				label = "Windfury extra attacks",
+				cues = {
+					"windfurySwing",
+					"windfurySpell",
+				},
+			},
 		},
 	},
 }

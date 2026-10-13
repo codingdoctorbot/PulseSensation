@@ -96,6 +96,7 @@ local MODULE_FILES = {
 	"Modules/Movement.lua",
 	"Modules/Flight.lua",
 	"Modules/Combat.lua",
+	"Modules/Windfury.lua",
 	"Modules/Environment.lua",
 	"Modules/World.lua",
 	"Modules/Inventory.lua",
