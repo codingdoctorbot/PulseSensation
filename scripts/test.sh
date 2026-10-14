@@ -24,6 +24,7 @@ SUITES=(
   "engine-test PulseHaptics"
   "arbitration-test PulseHaptics"
   "windfury-test PulseHaptics"
+  "quicksetup-test PulseHaptics"
   "phase2-test PulseHaptics"
   "cue-audit PulseHaptics"
   "pulsedebug-test PulseDebug"
