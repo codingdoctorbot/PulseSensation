@@ -401,6 +401,21 @@ function Spec.BuildRootPage()
 	}
 
 	rows[#rows + 1] = {
+		kind = "button",
+		label = "Quick Setup",
+		buttonText = "Run Wizard",
+		tooltip = "Launch the interactive onboarding wizard to configure controller hardware, combat haptics, world feedback, and immersion textures.",
+		onClick = function()
+			if Panel and Panel.Close then
+				Panel.Close()
+			end
+			if Pulse.UI and Pulse.UI.QuickSetup and Pulse.UI.QuickSetup.Open then
+				Pulse.UI.QuickSetup.Open()
+			end
+		end,
+	}
+
+	rows[#rows + 1] = {
 		kind = "dropdown",
 		label = "Profile",
 		tooltip = "Which saved cue configuration is active on this character. Every cue's "

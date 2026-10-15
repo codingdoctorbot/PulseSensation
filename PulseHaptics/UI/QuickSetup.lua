@@ -208,6 +208,7 @@ local TOTAL_STEPS = 6
 local stepFrames = {}
 local stepIndicators = {}
 local btnBack, btnNext, btnFinish, btnAdvanced
+local tabIndicatorL1, tabIndicatorR1, navLegend
 
 local quickNavFocus = nil
 local quickFocusBox = nil
@@ -287,6 +288,9 @@ local function getQuickFocusBox(parent)
 end
 
 local function setQuickFocus(target)
+	if quickNavFocus and quickNavFocus.isSlider and quickNavFocus.SetAdjusting and target ~= quickNavFocus then
+		quickNavFocus.SetAdjusting(false)
+	end
 	quickNavFocus = target
 	if not target or not target.widget or not target.widget:IsShown() then
 		if quickFocusBox then
@@ -301,6 +305,13 @@ local function setQuickFocus(target)
 	fb:ClearAllPoints()
 	fb:SetPoint("TOPLEFT", target.widget, "TOPLEFT", -2, 2)
 	fb:SetPoint("BOTTOMRIGHT", target.widget, "BOTTOMRIGHT", 2, -2)
+	if fb.bTop then
+		fb.bTop:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
+		fb.bBottom:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
+		fb.bLeft:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
+		fb.bRight:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
+		fb.accent:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
+	end
 	fb:Show()
 	if SOUNDKIT and SOUNDKIT.IG_MAINMENU_OPTION then
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
@@ -393,8 +404,12 @@ local function onQuickGamepadInput(key)
 		return
 	end
 
-	-- B button: Step back or close
+	-- B button: if adjusting slider, cancel adjustment mode; otherwise step back or close
 	if key == "PAD2" then
+		if quickNavFocus and quickNavFocus.isSlider and quickNavFocus.IsAdjusting and quickNavFocus.IsAdjusting() then
+			quickNavFocus.SetAdjusting(false)
+			return
+		end
 		if currentStep > 1 then
 			currentStep = currentStep - 1
 			if stepFrames[currentStep] and stepFrames[currentStep].OnShowStep then
@@ -427,13 +442,17 @@ local function onQuickGamepadInput(key)
 	elseif key == "PADDDOWN" then
 		navigateQuickStep("DOWN")
 	elseif key == "PADDLEFT" then
-		if quickNavFocus and quickNavFocus.OnStep then
+		if quickNavFocus and quickNavFocus.isSlider and quickNavFocus.IsAdjusting and quickNavFocus.IsAdjusting() then
+			quickNavFocus.OnStep(-1)
+		elseif quickNavFocus and not quickNavFocus.isSlider and quickNavFocus.OnStep then
 			quickNavFocus.OnStep(-1)
 		else
 			navigateQuickStep("LEFT")
 		end
 	elseif key == "PADDRIGHT" then
-		if quickNavFocus and quickNavFocus.OnStep then
+		if quickNavFocus and quickNavFocus.isSlider and quickNavFocus.IsAdjusting and quickNavFocus.IsAdjusting() then
+			quickNavFocus.OnStep(1)
+		elseif quickNavFocus and not quickNavFocus.isSlider and quickNavFocus.OnStep then
 			quickNavFocus.OnStep(1)
 		else
 			navigateQuickStep("RIGHT")
@@ -495,6 +514,21 @@ function updateStepView()
 		end
 	end
 
+	if tabIndicatorL1 then
+		if currentStep > 1 then
+			tabIndicatorL1:SetText("|cff38BDF8[L1 / LB]|r")
+		else
+			tabIndicatorL1:SetText("|cff444444[L1 / LB]|r")
+		end
+	end
+	if tabIndicatorR1 then
+		if currentStep < TOTAL_STEPS then
+			tabIndicatorR1:SetText("|cff38BDF8[R1 / RB]|r")
+		else
+			tabIndicatorR1:SetText("|cff444444[R1 / RB]|r")
+		end
+	end
+
 	if btnBack then
 		btnBack:SetShown(currentStep > 1)
 	end
@@ -506,6 +540,16 @@ function updateStepView()
 	end
 	if btnAdvanced then
 		btnAdvanced:SetShown(currentStep == TOTAL_STEPS)
+	end
+
+	if navLegend then
+		if currentStep == TOTAL_STEPS then
+			navLegend:SetText("|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[A]|r Toggle Slider / Select")
+		else
+			navLegend:SetText(
+				"|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[D-Pad]|r Navigate  •  |cff38BDF8[A]|r Select"
+			)
+		end
 	end
 
 	local targets = stepFrames[currentStep] and stepFrames[currentStep].navTargets or {}
@@ -1510,7 +1554,7 @@ local function buildStep6(container)
 	desc:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
 	-- Master Intensity Slider Card
-	local sliderCard = createCard(sf, 634, 86)
+	local sliderCard = createCard(sf, 634, 100)
 	sliderCard:SetPoint("TOPLEFT", sf, "TOPLEFT", 6, -56)
 
 	local sliderLabel = sliderCard:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
@@ -1522,9 +1566,9 @@ local function buildStep6(container)
 	valLabel:SetTextColor(THEME.accent.r, THEME.accent.g, THEME.accent.b)
 
 	local slider = CreateFrame("Slider", nil, sliderCard, "OptionsSliderTemplate")
-	slider:SetWidth(460)
+	slider:SetWidth(450)
 	slider:SetHeight(18)
-	slider:SetPoint("TOPLEFT", sliderLabel, "BOTTOMLEFT", 0, -16)
+	slider:SetPoint("TOPLEFT", sliderLabel, "BOTTOMLEFT", 0, -14)
 	slider:SetMinMaxValues(10, 100)
 	slider:SetValueStep(5)
 	slider:SetObeyStepOnDrag(true)
@@ -1539,17 +1583,51 @@ local function buildStep6(container)
 		slider.Text:SetText("")
 	end
 
-	local btnFeel = createButton(sliderCard, "Feel Strength", 120, 26, false)
-	btnFeel:SetPoint("LEFT", slider, "RIGHT", 20, 0)
+	local btnFeel = createButton(sliderCard, "Feel Strength", 130, 26, false)
+	btnFeel:SetPoint("LEFT", slider, "RIGHT", 16, 0)
 	btnFeel:SetScript("OnClick", function()
 		if Pulse.TestMode then
 			Pulse:TestMode("HEAVY_STRIKE", slider:GetValue() / 100)
 		end
 	end)
 
+	local sliderHint = sliderCard:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	sliderHint:SetPoint("TOPLEFT", slider, "BOTTOMLEFT", 0, -12)
+	sliderHint:SetText("|cff38BDF8[A] Adjust Value|r  •  |cffffffff[→] Jump to Feel Button|r")
+
+	local isSliderAdjusting = false
+	local function updateSliderHint()
+		if isSliderAdjusting then
+			sliderHint:SetText(
+				("|cff00ff00[Adjusting %d%%]|r Use |cffffffff[← / →]|r to Change, |cff38BDF8[A]|r Confirm & Feel"):format(
+					slider:GetValue() or 70
+				)
+			)
+			if quickFocusBox and quickFocusBox.bTop then
+				quickFocusBox.bTop:SetColorTexture(1.0, 0.85, 0.2, 1.0)
+				quickFocusBox.bBottom:SetColorTexture(1.0, 0.85, 0.2, 1.0)
+				quickFocusBox.bLeft:SetColorTexture(1.0, 0.85, 0.2, 1.0)
+				quickFocusBox.bRight:SetColorTexture(1.0, 0.85, 0.2, 1.0)
+				quickFocusBox.accent:SetColorTexture(1.0, 0.85, 0.2, 1.0)
+			end
+		else
+			sliderHint:SetText("|cff38BDF8[A] Adjust Value|r  •  |cffffffff[→] Jump to Feel Button|r")
+			if quickFocusBox and quickFocusBox.bTop then
+				quickFocusBox.bTop:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
+				quickFocusBox.bBottom:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
+				quickFocusBox.bLeft:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
+				quickFocusBox.bRight:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
+				quickFocusBox.accent:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
+			end
+		end
+	end
+
 	local function updateSliderVal(val)
 		valLabel:SetText(("%d%%"):format(math.floor(val + 0.5)))
 		Pulse.Database:Set("masterIntensity", val / 100)
+		if isSliderAdjusting then
+			updateSliderHint()
+		end
 	end
 
 	slider:SetScript("OnValueChanged", function(self, value)
@@ -1557,7 +1635,7 @@ local function buildStep6(container)
 	end)
 
 	-- Info Summary Card
-	local summaryCard = createCard(sf, 634, 200)
+	local summaryCard = createCard(sf, 634, 190)
 	summaryCard:SetPoint("TOPLEFT", sliderCard, "BOTTOMLEFT", 0, -12)
 
 	local summaryTitle = summaryCard:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
@@ -1622,19 +1700,34 @@ local function buildStep6(container)
 		local curInt = math.floor((Pulse.Database:Get("masterIntensity") or 0.70) * 100 + 0.5)
 		slider:SetValue(curInt)
 		updateSliderVal(curInt)
+		isSliderAdjusting = false
+		updateSliderHint()
 		refreshSummary()
 	end
 
 	local navTargets = {
 		{
 			widget = slider,
+			isSlider = true,
+			IsAdjusting = function()
+				return isSliderAdjusting
+			end,
+			SetAdjusting = function(adj)
+				isSliderAdjusting = adj
+				updateSliderHint()
+			end,
 			OnStep = function(delta)
 				local cur = slider:GetValue() or 70
 				local nextVal = math.max(10, math.min(100, cur + delta * 5))
 				slider:SetValue(nextVal)
+				if Pulse.TestMode then
+					Pulse:TestMode("TAP", nextVal / 100)
+				end
 			end,
 			OnActivate = function()
-				if Pulse.TestMode then
+				isSliderAdjusting = not isSliderAdjusting
+				updateSliderHint()
+				if not isSliderAdjusting and Pulse.TestMode then
 					Pulse:TestMode("HEAVY_STRIKE", slider:GetValue() / 100)
 				end
 			end,
@@ -1709,6 +1802,40 @@ local function buildWindow()
 	stepBar:SetPoint("TOPLEFT", headerBar, "BOTTOMLEFT", 16, -6)
 	stepBar:SetPoint("TOPRIGHT", headerBar, "BOTTOMRIGHT", -16, -6)
 
+	local l1Btn = CreateFrame("Button", nil, stepBar)
+	l1Btn:SetSize(62, 22)
+	l1Btn:SetPoint("LEFT", stepBar, "LEFT", 0, 0)
+	tabIndicatorL1 = l1Btn:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	tabIndicatorL1:SetAllPoints(l1Btn)
+	tabIndicatorL1:SetJustifyH("LEFT")
+	tabIndicatorL1:SetText("|cff38BDF8[L1 / LB]|r")
+	l1Btn:SetScript("OnClick", function()
+		if currentStep > 1 then
+			currentStep = currentStep - 1
+			if stepFrames[currentStep] and stepFrames[currentStep].OnShowStep then
+				stepFrames[currentStep].OnShowStep()
+			end
+			updateStepView()
+		end
+	end)
+
+	local r1Btn = CreateFrame("Button", nil, stepBar)
+	r1Btn:SetSize(62, 22)
+	r1Btn:SetPoint("RIGHT", stepBar, "RIGHT", 0, 0)
+	tabIndicatorR1 = r1Btn:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	tabIndicatorR1:SetAllPoints(r1Btn)
+	tabIndicatorR1:SetJustifyH("RIGHT")
+	tabIndicatorR1:SetText("|cff38BDF8[R1 / RB]|r")
+	r1Btn:SetScript("OnClick", function()
+		if currentStep < TOTAL_STEPS then
+			currentStep = currentStep + 1
+			if stepFrames[currentStep] and stepFrames[currentStep].OnShowStep then
+				stepFrames[currentStep].OnShowStep()
+			end
+			updateStepView()
+		end
+	end)
+
 	local stepLabels = {
 		"1. Controller",
 		"2. Combat",
@@ -1717,11 +1844,23 @@ local function buildWindow()
 		"5. Immersion",
 		"6. Finish",
 	}
-	local tabW = 98
+	local tabW = 80
+	local startX = 66
 	for i = 1, TOTAL_STEPS do
-		local tab = stepBar:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-		tab:SetPoint("LEFT", stepBar, "LEFT", (i - 1) * (tabW + 6), 0)
+		local tabBtn = CreateFrame("Button", nil, stepBar)
+		tabBtn:SetSize(tabW, 22)
+		tabBtn:SetPoint("LEFT", stepBar, "LEFT", startX + (i - 1) * (tabW + 4), 0)
+		local tab = tabBtn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+		tab:SetAllPoints(tabBtn)
+		tab:SetJustifyH("CENTER")
 		tab:SetText(stepLabels[i])
+		tabBtn:SetScript("OnClick", function()
+			currentStep = i
+			if stepFrames[currentStep] and stepFrames[currentStep].OnShowStep then
+				stepFrames[currentStep].OnShowStep()
+			end
+			updateStepView()
+		end)
 		stepIndicators[i] = tab
 	end
 
@@ -1760,6 +1899,11 @@ local function buildWindow()
 			updateStepView()
 		end
 	end)
+
+	navLegend = bottomBar:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	navLegend:SetPoint("LEFT", bottomBar, "LEFT", 112, 0)
+	navLegend:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
+	navLegend:SetText("|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[D-Pad]|r Navigate  •  |cff38BDF8[A]|r Select")
 
 	btnNext = createButton(bottomBar, "Next >", 110, 28, true)
 	btnNext:SetPoint("RIGHT", bottomBar, "RIGHT", 0, 0)

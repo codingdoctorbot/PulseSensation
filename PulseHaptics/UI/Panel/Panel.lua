@@ -234,19 +234,6 @@ local function buildWindow()
 	end)
 	f.CloseButton = closeButton
 
-	local setupButton = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
-	setupButton:SetSize(110, 22)
-	setupButton:SetPoint("RIGHT", closeButton, "LEFT", -10, 0)
-	setupButton:SetText("Quick Setup")
-	Theme.StyleActionButton(setupButton, true)
-	setupButton:SetScript("OnClick", function()
-		Panel.Close()
-		if Pulse.UI and Pulse.UI.QuickSetup and Pulse.UI.QuickSetup.Open then
-			Pulse.UI.QuickSetup.Open()
-		end
-	end)
-	f.SetupButton = setupButton
-
 	-- Status badge at bottom-left: connection dot, cue count, version
 	local statusBadge = f:CreateFontString(nil, "ARTWORK", "GameFontDisableSmall")
 	statusBadge:SetPoint("BOTTOMLEFT", f, "BOTTOMLEFT", 18, 18)
