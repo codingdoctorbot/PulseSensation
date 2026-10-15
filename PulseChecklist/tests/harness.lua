@@ -112,13 +112,35 @@ local function newFrame(frameType, name, parent, template)
 		return f.__shown
 	end)
 	rawset(f, "Show", function()
+		local wasShown = f.__shown
 		f.__shown = true
+		if not wasShown then
+			if f.__script_OnShow then
+				f.__script_OnShow(f)
+			end
+			if f.__hook_OnShow then
+				f.__hook_OnShow(f)
+			end
+		end
 	end)
 	rawset(f, "Hide", function()
+		local wasShown = f.__shown
 		f.__shown = false
+		if wasShown then
+			if f.__script_OnHide then
+				f.__script_OnHide(f)
+			end
+			if f.__hook_OnHide then
+				f.__hook_OnHide(f)
+			end
+		end
 	end)
 	rawset(f, "SetShown", function(_, v)
-		f.__shown = v and true or false
+		if v then
+			f:Show()
+		else
+			f:Hide()
+		end
 	end)
 	rawset(f, "GetWidth", function()
 		return 620
@@ -226,6 +248,30 @@ function GenerateClosure(fn, ...)
 	local args = { ... }
 	return function(...)
 		return fn(unpack(args), ...)
+	end
+end
+
+function hooksecurefunc(tableOrFunc, funcNameOrHook, hook)
+	if hook then
+		local orig = tableOrFunc[funcNameOrHook]
+		tableOrFunc[funcNameOrHook] = function(...)
+			local r1, r2, r3, r4, r5 = nil
+			if orig then
+				r1, r2, r3, r4, r5 = orig(...)
+			end
+			hook(...)
+			return r1, r2, r3, r4, r5
+		end
+	else
+		local orig = _G[tableOrFunc]
+		_G[tableOrFunc] = function(...)
+			local r1, r2, r3, r4, r5 = nil
+			if orig then
+				r1, r2, r3, r4, r5 = orig(...)
+			end
+			funcNameOrHook(...)
+			return r1, r2, r3, r4, r5
+		end
 	end
 end
 

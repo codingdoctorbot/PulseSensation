@@ -28,15 +28,19 @@ check("Pulse.UI.GameMenu:Init function exists", type(UI.GameMenu.Init), "functio
 -- Mock GameMenuFrame in harness environment if not present
 if not _G.GameMenuFrame then
 	_G.GameMenuFrame = _G.CreateFrame("Frame", "GameMenuFrame", _G.UIParent)
-	_G.GameMenuButtonQuit = _G.CreateFrame("Button", "GameMenuButtonQuit", _G.GameMenuFrame)
-	_G.GameMenuButtonContinue = _G.CreateFrame("Button", "GameMenuButtonContinue", _G.GameMenuFrame)
 	_G.GameMenuFrame:SetSize(190, 260)
 end
 
 UI.GameMenu:Init()
-local menuBtn = _G.GameMenuButtonPulse
-check("GameMenuButtonPulse created inside GameMenuFrame", menuBtn ~= nil, true)
-check("GameMenuButtonPulse parent is GameMenuFrame", menuBtn and menuBtn:GetParent(), _G.GameMenuFrame)
+local menuBtn = _G.GameMenuButtonPulse or _G.PulseGameMenuButton
+check("GameMenuButtonPulse created", menuBtn ~= nil, true)
+check("GameMenuButtonPulse parent is UIParent (taint-free)", menuBtn and menuBtn:GetParent(), _G.UIParent)
+
+-- Verify visibility synchronization with GameMenuFrame
+_G.GameMenuFrame:Show()
+check("GameMenuButtonPulse shows when GameMenuFrame shown", menuBtn:IsShown(), true)
+_G.GameMenuFrame:Hide()
+check("GameMenuButtonPulse hides when GameMenuFrame hidden", menuBtn:IsShown(), false)
 
 -- 2. Quick Setup closes Main Panel
 if UI.Panel and UI.Panel.EnsureBuilt then
