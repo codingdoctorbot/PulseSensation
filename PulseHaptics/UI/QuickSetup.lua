@@ -202,14 +202,251 @@ local function createCheckbox(parent, size)
 	return cb
 end
 
--- ── Window Construction ───────────────────────────────────────────────────────
+-- ── Window Construction & Controller Navigation ─────────────────────────────
 
 local TOTAL_STEPS = 6
 local stepFrames = {}
 local stepIndicators = {}
 local btnBack, btnNext, btnFinish, btnAdvanced
 
-local function updateStepView()
+local quickNavFocus = nil
+local quickFocusBox = nil
+local quickCaptureBtn = nil
+
+local QUICK_GAMEPAD_KEYS = {
+	"PAD1",
+	"PAD2",
+	"PAD3",
+	"PAD4",
+	"PADLSHOULDER",
+	"PADRSHOULDER",
+	"PADDUP",
+	"PADDDOWN",
+	"PADDLEFT",
+	"PADDRIGHT",
+	"PADFORWARD",
+	"PADBACK",
+}
+
+local function getQuickFocusBox(parent)
+	if quickFocusBox then
+		return quickFocusBox
+	end
+
+	local fb = CreateFrame("Frame", nil, parent)
+	fb:SetFrameStrata("DIALOG")
+	fb:SetFrameLevel((parent:GetFrameLevel() or 10) + 30)
+
+	local border = fb:CreateTexture(nil, "BORDER")
+	border:SetAllPoints(fb)
+	border:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 0.95)
+	fb.border = border
+
+	local inner = fb:CreateTexture(nil, "ARTWORK")
+	inner:SetPoint("TOPLEFT", fb, "TOPLEFT", 1.5, -1.5)
+	inner:SetPoint("BOTTOMRIGHT", fb, "BOTTOMRIGHT", -1.5, 1.5)
+	inner:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 0.12)
+	fb.inner = inner
+
+	fb:Hide()
+	quickFocusBox = fb
+	return fb
+end
+
+local function setQuickFocus(target)
+	quickNavFocus = target
+	if not target or not target.widget or not target.widget:IsShown() then
+		if quickFocusBox then
+			quickFocusBox:Hide()
+		end
+		return
+	end
+	if not frame then
+		return
+	end
+	local fb = getQuickFocusBox(frame)
+	fb:ClearAllPoints()
+	fb:SetPoint("TOPLEFT", target.widget, "TOPLEFT", -2, 2)
+	fb:SetPoint("BOTTOMRIGHT", target.widget, "BOTTOMRIGHT", 2, -2)
+	fb:Show()
+	if SOUNDKIT and SOUNDKIT.IG_MAINMENU_OPTION then
+		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
+	end
+end
+
+local function navigateQuickStep(direction)
+	local targets = stepFrames[currentStep] and stepFrames[currentStep].navTargets or {}
+	if #targets == 0 then
+		return
+	end
+
+	if not quickNavFocus or not quickNavFocus.widget or not quickNavFocus.widget:IsShown() then
+		setQuickFocus(targets[1])
+		return
+	end
+
+	local cx, cy = quickNavFocus.widget:GetCenter()
+	if not cx or not cy then
+		setQuickFocus(targets[1])
+		return
+	end
+
+	local bestTarget = nil
+	local lowestScore = math.huge
+
+	for _, target in ipairs(targets) do
+		local cand = target.widget
+		if cand ~= quickNavFocus.widget and cand:IsShown() then
+			local tx, ty = cand:GetCenter()
+			if tx and ty then
+				local dx = tx - cx
+				local dy = ty - cy
+				local valid = false
+
+				if direction == "UP" and dy > 6 then
+					valid = true
+				elseif direction == "DOWN" and dy < -6 then
+					valid = true
+				elseif direction == "RIGHT" and dx > 6 then
+					valid = true
+				elseif direction == "LEFT" and dx < -6 then
+					valid = true
+				end
+
+				if valid then
+					local euclidean = math.sqrt(dx * dx + dy * dy)
+					local perp = (direction == "UP" or direction == "DOWN") and math.abs(dx) or math.abs(dy)
+					local parallel = (direction == "UP" or direction == "DOWN") and math.abs(dy) or math.abs(dx)
+					local score = euclidean * (1.0 + (perp / (parallel + 1.0)) * 2.5)
+
+					if score < lowestScore then
+						lowestScore = score
+						bestTarget = target
+					end
+				end
+			end
+		end
+	end
+
+	if bestTarget then
+		setQuickFocus(bestTarget)
+	end
+end
+
+local function onQuickGamepadInput(key)
+	if InCombatLockdown and InCombatLockdown() then
+		QuickSetup.Close()
+		return
+	end
+
+	-- Bumper navigation
+	if key == "PADLSHOULDER" then
+		if currentStep > 1 then
+			currentStep = currentStep - 1
+			if stepFrames[currentStep] and stepFrames[currentStep].OnShowStep then
+				stepFrames[currentStep].OnShowStep()
+			end
+			updateStepView()
+		end
+		return
+	elseif key == "PADRSHOULDER" then
+		if currentStep < TOTAL_STEPS then
+			currentStep = currentStep + 1
+			if stepFrames[currentStep] and stepFrames[currentStep].OnShowStep then
+				stepFrames[currentStep].OnShowStep()
+			end
+			updateStepView()
+		end
+		return
+	end
+
+	-- B button: Step back or close
+	if key == "PAD2" then
+		if currentStep > 1 then
+			currentStep = currentStep - 1
+			if stepFrames[currentStep] and stepFrames[currentStep].OnShowStep then
+				stepFrames[currentStep].OnShowStep()
+			end
+			updateStepView()
+		else
+			QuickSetup.Close()
+		end
+		return
+	end
+
+	-- Start button: finish if on step 6, otherwise advance
+	if key == "PADFORWARD" then
+		if currentStep == TOTAL_STEPS then
+			if btnFinish then
+				btnFinish:Click()
+			end
+		else
+			if btnNext then
+				btnNext:Click()
+			end
+		end
+		return
+	end
+
+	-- D-Pad directional navigation
+	if key == "PADDUP" then
+		navigateQuickStep("UP")
+	elseif key == "PADDDOWN" then
+		navigateQuickStep("DOWN")
+	elseif key == "PADDLEFT" then
+		if quickNavFocus and quickNavFocus.OnStep then
+			quickNavFocus.OnStep(-1)
+		else
+			navigateQuickStep("LEFT")
+		end
+	elseif key == "PADDRIGHT" then
+		if quickNavFocus and quickNavFocus.OnStep then
+			quickNavFocus.OnStep(1)
+		else
+			navigateQuickStep("RIGHT")
+		end
+	elseif key == "PAD1" then
+		-- A button: activate focused target
+		if quickNavFocus and quickNavFocus.OnActivate then
+			quickNavFocus.OnActivate()
+		end
+	end
+end
+
+local function bindQuickCaptureKeys(owner)
+	if InCombatLockdown and InCombatLockdown() then
+		return
+	end
+	if not quickCaptureBtn then
+		quickCaptureBtn = CreateFrame("Button", "PulseQuickSetupCaptureButton", UIParent)
+		quickCaptureBtn:SetSize(1, 1)
+		quickCaptureBtn:SetPoint("TOPLEFT", UIParent, "TOPLEFT", -20, 20)
+		quickCaptureBtn:RegisterForClicks("AnyDown")
+		quickCaptureBtn:SetScript("OnClick", function(_, _, down)
+			if down and quickCaptureBtn.currentKey then
+				onQuickGamepadInput(quickCaptureBtn.currentKey)
+			end
+		end)
+	end
+
+	if ClearOverrideBindings then
+		ClearOverrideBindings(owner)
+	end
+
+	for _, key in ipairs(QUICK_GAMEPAD_KEYS) do
+		if SetOverrideBindingClick then
+			SetOverrideBindingClick(owner, true, key, quickCaptureBtn:GetName(), "LeftButton")
+		end
+	end
+end
+
+local function releaseQuickCaptureKeys(owner)
+	if ClearOverrideBindings then
+		pcall(ClearOverrideBindings, owner)
+	end
+end
+
+function updateStepView()
 	for i = 1, TOTAL_STEPS do
 		if stepFrames[i] then
 			stepFrames[i]:SetShown(i == currentStep)
@@ -236,6 +473,15 @@ local function updateStepView()
 	end
 	if btnAdvanced then
 		btnAdvanced:SetShown(currentStep == TOTAL_STEPS)
+	end
+
+	local targets = stepFrames[currentStep] and stepFrames[currentStep].navTargets or {}
+	if #targets > 0 then
+		setQuickFocus(targets[1])
+	else
+		if quickFocusBox then
+			quickFocusBox:Hide()
+		end
 	end
 end
 
@@ -356,6 +602,23 @@ local function buildStep1(container)
 			end
 		end
 	end)
+
+	local navTargets = {}
+	for _, c in ipairs(devCards) do
+		navTargets[#navTargets + 1] = {
+			widget = c,
+			OnActivate = function()
+				c:Click()
+			end,
+		}
+	end
+	navTargets[#navTargets + 1] = {
+		widget = btnTest,
+		OnActivate = function()
+			btnTest:Click()
+		end,
+	}
+	sf.navTargets = navTargets
 
 	sf.OnShowStep = function()
 		selectedDevice = Pulse.Database:GetAppliedDevicePreset() or "default"
@@ -649,7 +912,11 @@ local function buildStep2(container)
 
 	sf.OnShowStep = function()
 		if not selectedClass then
-			local _, pClass = UnitClass("player")
+			local pClass
+			if type(UnitClass) == "function" then
+				local _, cls = UnitClass("player")
+				pClass = cls
+			end
 			selectedClass = pClass or "WARRIOR"
 		end
 		for _, b in ipairs(classButtons) do
@@ -661,6 +928,49 @@ local function buildStep2(container)
 		cbOff:SetChecked(isOffActive())
 		cbDef:SetChecked(isDefActive())
 	end
+
+	local navTargets = {}
+	for _, b in ipairs(classButtons) do
+		navTargets[#navTargets + 1] = {
+			widget = b,
+			OnActivate = function()
+				b:Click()
+			end,
+		}
+	end
+	for _, b in ipairs(roleButtons) do
+		navTargets[#navTargets + 1] = {
+			widget = b,
+			OnActivate = function()
+				b:Click()
+			end,
+		}
+	end
+	navTargets[#navTargets + 1] = {
+		widget = cbOff,
+		OnActivate = function()
+			cbOff:Click()
+		end,
+	}
+	navTargets[#navTargets + 1] = {
+		widget = btnTestOff,
+		OnActivate = function()
+			btnTestOff:Click()
+		end,
+	}
+	navTargets[#navTargets + 1] = {
+		widget = cbDef,
+		OnActivate = function()
+			cbDef:Click()
+		end,
+	}
+	navTargets[#navTargets + 1] = {
+		widget = btnTestDef,
+		OnActivate = function()
+			btnTestDef:Click()
+		end,
+	}
+	sf.navTargets = navTargets
 
 	return sf
 end
@@ -797,6 +1107,34 @@ local function buildStep3(container)
 			Pulse.UI.Panel.Theme.PlayCheckSound(val)
 		end
 	end)
+
+	local navTargets = {
+		{
+			widget = cbWorld,
+			OnActivate = function()
+				cbWorld:Click()
+			end,
+		},
+		{
+			widget = btnTestWorld,
+			OnActivate = function()
+				btnTestWorld:Click()
+			end,
+		},
+		{
+			widget = cbTarget,
+			OnActivate = function()
+				cbTarget:Click()
+			end,
+		},
+		{
+			widget = btnTestTarget,
+			OnActivate = function()
+				btnTestTarget:Click()
+			end,
+		},
+	}
+	sf.navTargets = navTargets
 
 	sf.OnShowStep = function()
 		cbWorld:SetChecked(isWorldActive())
@@ -939,6 +1277,34 @@ local function buildStep4(container)
 		end
 	end)
 
+	local navTargets = {
+		{
+			widget = cbUI,
+			OnActivate = function()
+				cbUI:Click()
+			end,
+		},
+		{
+			widget = btnTestUI,
+			OnActivate = function()
+				btnTestUI:Click()
+			end,
+		},
+		{
+			widget = cbSocial,
+			OnActivate = function()
+				cbSocial:Click()
+			end,
+		},
+		{
+			widget = btnTestSocial,
+			OnActivate = function()
+				btnTestSocial:Click()
+			end,
+		},
+	}
+	sf.navTargets = navTargets
+
 	sf.OnShowStep = function()
 		cbUI:SetChecked(isUIActive())
 		cbSocial:SetChecked(isSocialActive())
@@ -1033,6 +1399,8 @@ local function buildStep5(container)
 			cb:SetChecked(Pulse.Database:GetCue(opt.id))
 		end
 
+		card.cb = cb
+		card.btnPreview = btnPreview
 		itemCards[#itemCards + 1] = card
 		card.refresh()
 	end
@@ -1049,6 +1417,29 @@ local function buildStep5(container)
 			card.refresh()
 		end
 	end)
+
+	local navTargets = {}
+	navTargets[#navTargets + 1] = {
+		widget = cbMaster,
+		OnActivate = function()
+			cbMaster:Click()
+		end,
+	}
+	for _, card in ipairs(itemCards) do
+		navTargets[#navTargets + 1] = {
+			widget = card.cb,
+			OnActivate = function()
+				card.cb:Click()
+			end,
+		}
+		navTargets[#navTargets + 1] = {
+			widget = card.btnPreview,
+			OnActivate = function()
+				card.btnPreview:Click()
+			end,
+		}
+	end
+	sf.navTargets = navTargets
 
 	sf.OnShowStep = function()
 		local anyOn = false
@@ -1201,6 +1592,29 @@ local function buildStep6(container)
 		refreshSummary()
 	end
 
+	local navTargets = {
+		{
+			widget = slider,
+			OnStep = function(delta)
+				local cur = slider:GetValue() or 70
+				local nextVal = math.max(10, math.min(100, cur + delta * 5))
+				slider:SetValue(nextVal)
+			end,
+			OnActivate = function()
+				if Pulse.TestMode then
+					Pulse:TestMode("HEAVY_STRIKE", slider:GetValue() / 100)
+				end
+			end,
+		},
+		{
+			widget = btnFeel,
+			OnActivate = function()
+				btnFeel:Click()
+			end,
+		},
+	}
+	sf.navTargets = navTargets
+
 	return sf
 end
 
@@ -1347,6 +1761,43 @@ local function buildWindow()
 		end
 	end)
 
+	if stepFrames[6] and stepFrames[6].navTargets then
+		table.insert(stepFrames[6].navTargets, {
+			widget = btnAdvanced,
+			OnActivate = function()
+				btnAdvanced:Click()
+			end,
+		})
+		table.insert(stepFrames[6].navTargets, {
+			widget = btnFinish,
+			OnActivate = function()
+				btnFinish:Click()
+			end,
+		})
+	end
+
+	if f.EnableGamePadButton then
+		pcall(f.EnableGamePadButton, f, true)
+	end
+	f:SetScript("OnGamePadButtonDown", function(_, key)
+		onQuickGamepadInput(key)
+	end)
+
+	f:HookScript("OnShow", function()
+		bindQuickCaptureKeys(f)
+		local targets = stepFrames[currentStep] and stepFrames[currentStep].navTargets or {}
+		if #targets > 0 then
+			setQuickFocus(targets[1])
+		end
+	end)
+
+	f:HookScript("OnHide", function()
+		releaseQuickCaptureKeys(f)
+		if quickFocusBox then
+			quickFocusBox:Hide()
+		end
+	end)
+
 	f:RegisterEvent("PLAYER_REGEN_DISABLED")
 	f:SetScript("OnEvent", function(self, event)
 		if event == "PLAYER_REGEN_DISABLED" then
@@ -1366,6 +1817,10 @@ function QuickSetup.Open(initialStep)
 		return
 	end
 
+	if Pulse.UI and Pulse.UI.Panel and Pulse.UI.Panel.Close then
+		Pulse.UI.Panel.Close()
+	end
+
 	buildWindow()
 	currentStep = initialStep or 1
 	if stepFrames[currentStep] and stepFrames[currentStep].OnShowStep then
@@ -1379,7 +1834,11 @@ function QuickSetup.Close()
 	if Pulse.CancelContinuousPreview then
 		Pulse:CancelContinuousPreview()
 	end
+	if quickFocusBox then
+		quickFocusBox:Hide()
+	end
 	if frame then
+		releaseQuickCaptureKeys(frame)
 		frame:Hide()
 	end
 end

@@ -509,6 +509,9 @@ bootstrap:SetScript("OnEvent", function(self, event, loadedAddonName)
 	if Pulse.UI.Minimap and Pulse.UI.Minimap.Init then
 		Pulse.UI.Minimap:Init()
 	end
+	if Pulse.UI.GameMenu and Pulse.UI.GameMenu.Init then
+		Pulse.UI.GameMenu:Init()
+	end
 
 	-- Auto-open Quick Setup wizard on first run
 	local welcomeFrame = CreateFrame("Frame")

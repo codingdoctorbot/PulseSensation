@@ -571,6 +571,9 @@ local FILES = {
 	"UI/Panel/Content.lua",
 	"UI/Panel/Spec.lua",
 	"UI/Panel/Panel.lua",
+	"UI/QuickSetup.lua",
+	"UI/Minimap.lua",
+	"UI/GameMenu.lua",
 }
 
 for _, relative in ipairs(FILES) do

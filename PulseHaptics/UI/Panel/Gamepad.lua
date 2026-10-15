@@ -1,546 +1,444 @@
 -- Pulse — UI/Panel/Gamepad.lua
 --
--- Controller navigation for Pulse's own settings window.
+-- Safe, native controller navigation for Pulse's main settings panel.
 --
--- READ THE BLOCK BELOW FIRST. As of 2026-09-22 this file is mostly inert: the approach it
--- was built on — hand the window to Forever's frame-controls manager and let
--- SmartNavigation drive it, as Blizzard_SettingsPanel.lua:1162-1213 does — is unavailable
--- to an addon, because every route into it ends at a protected binding call.
--- DRIVE_BLIZZARD_NAVIGATION is off and the window is mouse-only until Pulse owns the input.
---
--- The shape it was built to, kept because the replacement wants the same one: the sidebar
--- is the main navigation group and the content container a named SUB-SECTION, so the two
--- are separate focus contexts. Right on a category enters the settings, B or the left edge
--- returns to the list; inside the content the D-pad moves between rows, the right stick
--- scrolls, and a selected slider or dropdown claims left and right.
---
--- Everything is guarded. Blizzard_GamepadSmartNavigation and Blizzard_GamepadSharedUtility
--- exist only on a client with gamepad UI; without them every function here is a no-op and
--- the panel is simply a mouse panel. Nothing here may be the reason a page fails to open.
+-- Architecture:
+--   - Two focus contexts: "SIDEBAR" (category list) and "CONTENT" (settings rows).
+--   - D-Pad UP/DOWN moves focus; D-Pad RIGHT or A enters content; D-Pad LEFT or B returns to sidebar.
+--   - Bumpers (LB/RB) switch categories smoothly from anywhere.
+--   - Triggers (LT/RT) scroll the content frame.
+--   - Sliders claim D-Pad LEFT/RIGHT to step values by their own precision.
+--   - Auto-scrolling: Ensures the focused row is always cleanly visible in the ScrollFrame.
+--   - Taint-free execution: Uses EnableGamePadButton and window-owned override bindings out of combat.
+--     Clears cleanly on OnHide and closes instantly on combat start (PLAYER_REGEN_DISABLED).
 
 local ADDON_NAME, Pulse = ...
 
 local Panel = Pulse.UI.Panel
+local Theme = Panel.Theme
 
 local Gamepad = {}
 Panel.Gamepad = Gamepad
 
-local FOCUS_KEY = "PulsePanelContent"
+local panel -- reference to PulsePanel
+local captureButton -- invisible button owned by panel for override binding capture
+local focusBox -- visual focus reticle
+local mode = "SIDEBAR" -- "SIDEBAR" or "CONTENT"
+local currentSidebarIndex = 1
+local currentContentIndex = 1
+local focusedRow = nil
 
--- Driving Blizzard's navigation — OFF, 2026-09-22
---
--- CONFIRMED LIVE: "Pulse has been blocked from an action only available to the Blizzard
--- UI." The panel opened, settings changed, nothing crashed — the call was refused, not
--- fatal — but it fires on every open and means Blizzard's navigation never actually took
--- the window anyway.
---
--- THE PATH, traced in the Forever source rather than guessed:
---
---     Gamepad.OnShow
---       -> GamepadMode.FrameControlsManager:FrameShown(panel)
---            FrameControlsManager.lua:449  CheckForInputBinding(self)
---            FrameControlsManager.lua:111  GamepadMode.ActivateBindingGroup(...)
---            InputButtonBinding.lua:28     SetOverrideBindingClick(UIParent, ...)
---
--- SetOverrideBindingClick is protected. Everything on a call stack that started in Pulse is
--- tainted, so the client refuses it at the bottom. FocusFrame reaches the same place a
--- second way through EnableNavigation -> SmartNavigation:ActivateBinding, and the prompted
--- binding footers below end identically: CreatePromptedBindingFooter ->
--- Finalize/ShowAndActivateBindings -> the same protected call.
---
--- Modules/ControllerUI.lua records the same message from hooking ActivateRadial on
--- 2026-09-21, and the rule it bought applies here: where a choice exists, take the one that
--- does not call into Blizzard's machinery. Taint follows the stack and an addon cannot hand
--- the binding system a clean one, so Pulse does not call into it.
---
--- WHAT IS STILL ON, none of it able to taint anything: every SmartNavigation_Mark* call,
--- the jump-navigation overrides and the custom cursor anchors. Each writes one field on a
--- frame and returns, costs nothing while the flag is off, and is exactly what a Pulse-owned
--- navigation pass will want.
---
--- WHAT IS LOST until Pulse owns the input: the controller cannot move through this window
--- at all. A headline feature, off, stated plainly rather than left to be discovered. The
--- replacement is a frame's own OnGamePadButtonDown with EnableGamePadButton — both
--- CONFIRMED present in this client's generated API documentation
--- (SimpleFrameAPIDocumentation.lua:225 and :1424), both ordinary frame methods, neither
--- protected. That is a separate piece of work, not a flag flip.
---
--- Setting this back to true restores the old behaviour and the error with it.
-local DRIVE_BLIZZARD_NAVIGATION = false
-
-local panel -- the window, set by Gamepad.Init
-local refreshPending = false
-
-local function smartNav()
-	return (type(SmartNavigation) == "table") and SmartNavigation or nil
-end
+local GAMEPAD_KEYS = {
+	"PAD1",
+	"PAD2",
+	"PAD3",
+	"PAD4",
+	"PADLSHOULDER",
+	"PADRSHOULDER",
+	"PADLTRIGGER",
+	"PADRTRIGGER",
+	"PADDUP",
+	"PADDDOWN",
+	"PADDLEFT",
+	"PADDRIGHT",
+	"PADFORWARD",
+	"PADBACK",
+}
 
 function Gamepad.IsEnabled()
-	return type(InputUtil) == "table"
-		and type(InputUtil.IsGamepadUIEnabled) == "function"
-		and InputUtil.IsGamepadUIEnabled()
-end
-
--- ── Navigation targets inside the current page ────────────────────────────────
-
--- A checkbox or button row is a plain Frame whose inner widget is the target; a slider or
--- dropdown row is itself the target. Rows.lua explains the split.
-local function navTargetOf(row)
-	if not row or not row:IsShown() then
-		return nil
-	end
-	if row.isHeader or row.isText then
-		return nil
-	end
-	if row:IsObjectType("Button") then
-		return row
-	end
-	return row.Control
-end
-
-local function firstNavTarget()
-	local content = panel and panel.Content
-	local page = content and content.page
-	if not page or not page.rows then
-		return nil
-	end
-	for _, row in ipairs(page.rows) do
-		local target = navTargetOf(row)
-		if target then
-			return target
+	if type(InputUtil) == "table" and type(InputUtil.IsGamepadUIEnabled) == "function" then
+		if InputUtil.IsGamepadUIEnabled() then
+			return true
 		end
 	end
-	return nil
-end
-
-local function lastNavTarget()
-	local content = panel and panel.Content
-	local page = content and content.page
-	if not page or not page.rows then
-		return nil
-	end
-	for index = #page.rows, 1, -1 do
-		local target = navTargetOf(page.rows[index])
-		if target then
-			return target
+	if type(GetCVarBool) == "function" then
+		local ok, val = pcall(GetCVarBool, "GamePadEnable")
+		if ok and val then
+			return true
 		end
 	end
-	return nil
-end
-
--- ── Focus group: sidebar ⇄ content ────────────────────────────────────────────
-
-function Gamepad.FocusContent(button)
-	if not DRIVE_BLIZZARD_NAVIGATION then
-		return
-	end
-	local nav = smartNav()
-	if not nav or not nav.IsInFocusGroup then
-		return
-	end
-	if nav:IsInFocusGroup() then
-		return
-	end
-
-	nav:EnterFocusGroup(FOCUS_KEY)
-	if nav.activeInfo then
-		button = button or panel.lastContentButton or firstNavTarget()
-		panel.lastContentButton = nil
-		if button then
-			nav:SelectButton(button)
-		end
-	end
-end
-
-function Gamepad.UnfocusContent(button)
-	if not DRIVE_BLIZZARD_NAVIGATION then
-		return
-	end
-	local nav = smartNav()
-	if not nav or not nav.IsInFocusGroup then
-		return
-	end
-	if not nav:IsInFocusGroup() then
-		return
-	end
-
-	if not button then
-		button = panel.Sidebar and panel.Sidebar:GetSelectedButton()
-	end
-	panel.lastContentButton = nav:GetCurrentButton()
-	nav:LeaveFocusGroup(button)
 	return true
 end
 
--- ── Prompted binding footers ──────────────────────────────────────────────────
---
--- Blizzard builds these once at file scope (Blizzard_SettingControls.lua:669-685). Lazy
--- here instead, because this addon loads before the gamepad addons are certain to be
--- present, and a player on mouse and keyboard should never pay for them.
+-- ── Visual Focus Reticle ─────────────────────────────────────────────────────
 
-local function createFooter(debugName, bindings)
-	-- The reason this whole section is inert: Finalize and ShowAndActivateBindings both
-	-- end at SetOverrideBindingClick. See the header.
-	if not DRIVE_BLIZZARD_NAVIGATION then
-		return false
-	end
-	if
-		type(GamepadSharedUtility) ~= "table"
-		or type(GamepadSharedUtility.CreatePromptedBindingFooter) ~= "function"
-	then
-		return false
-	end
-	local parent = UIParent or GlueParent
-	if not parent then
-		return false
+local function getFocusBox(parent)
+	if focusBox then
+		return focusBox
 	end
 
-	local ok, footer = pcall(GamepadSharedUtility.CreatePromptedBindingFooter, parent, debugName)
-	if not ok or not footer then
-		return false
+	local fb = CreateFrame("Frame", nil, parent)
+	fb:SetFrameStrata("DIALOG")
+	fb:SetFrameLevel((parent:GetFrameLevel() or 10) + 15)
+
+	-- 2px Radiant Cyan Border
+	local border = fb:CreateTexture(nil, "BORDER")
+	border:SetAllPoints(fb)
+	border:SetColorTexture(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b, 0.85)
+	fb.border = border
+
+	-- Inner cut-out
+	local inner = fb:CreateTexture(nil, "ARTWORK")
+	inner:SetPoint("TOPLEFT", fb, "TOPLEFT", 1.5, -1.5)
+	inner:SetPoint("BOTTOMRIGHT", fb, "BOTTOMRIGHT", -1.5, 1.5)
+	inner:SetColorTexture(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b, 0.08)
+	fb.inner = inner
+
+	fb:Hide()
+	focusBox = fb
+	return fb
+end
+
+local function highlightWidget(widget, insetX, insetY)
+	if not widget or not widget:IsShown() then
+		if focusBox then
+			focusBox:Hide()
+		end
+		return
 	end
 
-	for _, binding in ipairs(bindings) do
-		if binding.key then
-			pcall(footer.AddFunctionBinding, footer, binding.key, binding.func)
+	local fb = getFocusBox(panel)
+	fb:ClearAllPoints()
+	fb:SetPoint("TOPLEFT", widget, "TOPLEFT", -(insetX or 2), insetY or 2)
+	fb:SetPoint("BOTTOMRIGHT", widget, "BOTTOMRIGHT", insetX or 2, -(insetY or 2))
+	fb:Show()
+end
+
+-- ── Content Row Navigation ───────────────────────────────────────────────────
+
+local function getVisibleRows()
+	local rows = {}
+	if not panel or not panel.Content or not panel.Content.page then
+		return rows
+	end
+	local pageRows = panel.Content.page.rows
+	if not pageRows then
+		return rows
+	end
+
+	for _, row in ipairs(pageRows) do
+		if row:IsShown() and not row.isHeader and not row.isText then
+			rows[#rows + 1] = row
 		end
 	end
-	pcall(footer.Finalize, footer)
-	return footer
+	return rows
 end
 
-local function currentRow()
-	local nav = smartNav()
-	return nav and nav.GetCurrentButton and nav:GetCurrentButton() or nil
-end
-
--- Sliders: left and right step by the slider's own step size, through the same
--- OnStepperClicked the visible arrows use, so keyboard, mouse and stick all move by the
--- same amount.
-local sliderFooter
-
-local function stepSlider(forward)
-	local row = currentRow()
-	local slider = row and row.Control
-	if slider and slider.OnStepperClicked then
-		slider:OnStepperClicked(forward)
-	end
-end
-
-local function getSliderFooter()
-	if sliderFooter ~= nil then
-		return sliderFooter
-	end
-	sliderFooter = createFooter("PulsePanelSlider", {
-		{
-			key = GAMEPAD_DPAD_LEFT,
-			func = function()
-				stepSlider(false)
-			end,
-		},
-		{
-			key = GAMEPAD_DPAD_RIGHT,
-			func = function()
-				stepSlider(true)
-			end,
-		},
-	})
-	return sliderFooter
-end
-
-function Gamepad.OnSliderSelected()
-	local footer = getSliderFooter()
-	if footer then
-		pcall(footer.ShowAndActivateBindings, footer)
-	end
-end
-
-function Gamepad.OnSliderDeselected()
-	local footer = getSliderFooter()
-	if footer then
-		pcall(footer.HideAndDeactivateBindings, footer)
-	end
-end
-
--- Dropdowns: left and right step through the options without opening the list, and the
--- face buttons open it. Same mapping as Blizzard_SettingControls.lua:772-795.
-local dropdownFooter
-
-local function stepDropdown(increment)
-	local row = currentRow()
-	local control = row and row.Control
-	if not control then
+local function ensureRowVisible(row)
+	if not row or not panel or not panel.Content or not panel.Content.Scroll then
 		return
 	end
-	if increment then
-		if control.IncrementButton then
-			control.IncrementButton:Click()
-		elseif control.Increment then
-			control:Increment()
+
+	local scroll = panel.Content.Scroll
+	local scrollChild = panel.Content.Child
+	if not scrollChild then
+		return
+	end
+
+	local rowTop = row:GetTop()
+	local rowBottom = row:GetBottom()
+	local scrollTop = scroll:GetTop()
+	local scrollBottom = scroll:GetBottom()
+
+	if not rowTop or not rowBottom or not scrollTop or not scrollBottom then
+		return
+	end
+
+	local curScroll = scroll:GetVerticalScroll() or 0
+	local maxScroll = scroll:GetVerticalScrollRange() or 0
+
+	if rowTop > scrollTop then
+		-- Row is above visible view: scroll up
+		local diff = rowTop - scrollTop + 10
+		local target = math.max(0, curScroll - diff)
+		scroll:SetVerticalScroll(target)
+	elseif rowBottom < scrollBottom then
+		-- Row is below visible view: scroll down
+		local diff = scrollBottom - rowBottom + 10
+		local target = math.min(maxScroll, curScroll + diff)
+		scroll:SetVerticalScroll(target)
+	end
+end
+
+local function setContentFocus(index)
+	local rows = getVisibleRows()
+	if #rows == 0 then
+		focusedRow = nil
+		if focusBox then
+			focusBox:Hide()
 		end
-	else
-		if control.DecrementButton then
-			control.DecrementButton:Click()
-		elseif control.Decrement then
-			control:Decrement()
+		return
+	end
+
+	if index < 1 then
+		index = 1
+	elseif index > #rows then
+		index = #rows
+	end
+
+	currentContentIndex = index
+
+	if focusedRow and focusedRow.HideRowTooltip then
+		focusedRow:HideRowTooltip()
+	end
+
+	local row = rows[index]
+	focusedRow = row
+
+	if row then
+		if row.ShowRowTooltip then
+			row:ShowRowTooltip()
+		end
+		highlightWidget(row, 2, 2)
+		ensureRowVisible(row)
+		if SOUNDKIT and SOUNDKIT.IG_MAINMENU_OPTION then
+			PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
 		end
 	end
 end
 
-local function openDropdown()
-	local row = currentRow()
-	local dropdown = row and row.Dropdown
-	if not dropdown then
-		return
-	end
-	if dropdown.MouseDown then
-		dropdown:MouseDown()
-	end
-	if dropdown.MouseUp then
-		dropdown:MouseUp()
-	end
-end
+-- ── Sidebar Navigation ───────────────────────────────────────────────────────
 
-local function getDropdownFooter()
-	if dropdownFooter ~= nil then
-		return dropdownFooter
+local function getSidebarButtons()
+	if not panel or not panel.Sidebar or not panel.Sidebar.buttons then
+		return {}
 	end
-	dropdownFooter = createFooter("PulsePanelDropdown", {
-		{
-			key = GAMEPAD_DPAD_LEFT,
-			func = function()
-				stepDropdown(false)
-			end,
-		},
-		{
-			key = GAMEPAD_DPAD_RIGHT,
-			func = function()
-				stepDropdown(true)
-			end,
-		},
-		{ key = GAMEPAD_FACE_TOP, func = openDropdown },
-		{ key = GAMEPAD_FACE_BOTTOM, func = openDropdown },
-	})
-	return dropdownFooter
-end
-
-function Gamepad.OnDropdownSelected()
-	local footer = getDropdownFooter()
-	if footer then
-		pcall(footer.ShowAndActivateBindings, footer)
-	end
-end
-
-function Gamepad.OnDropdownDeselected()
-	local footer = getDropdownFooter()
-	if footer then
-		pcall(footer.HideAndDeactivateBindings, footer)
-	end
-end
-
--- ── Refreshing the navigable set ──────────────────────────────────────────────
-
--- SmartNavigation caches the buttons it found when the panel opened
--- (SmartNavigation.lua:1523). Switching pages, filtering and greying a row all change that
--- set. Coalesced to one rebuild per frame, because a page switch fires this once for the
--- switch and again for the refresh pass that follows, and walking the frame tree twice for
--- one visible change is waste.
-local function doRefresh()
-	refreshPending = false
-	if not DRIVE_BLIZZARD_NAVIGATION then
-		return
-	end
-	if not panel or not panel:IsShown() then
-		return
-	end
-	if not Gamepad.IsEnabled() then
-		return
-	end
-
-	local nav = smartNav()
-	if not nav then
-		return
-	end
-
-	if nav.RefreshButtonGroups then
-		pcall(nav.RefreshButtonGroups, nav, panel)
-	end
-	-- Which frame to scroll when the selection moves off screen, and right-stick
-	-- scrolling. A plain ScrollFrame takes HandleScroll's simple SetVerticalScroll path —
-	-- see Content.lua's header.
-	if nav.SetScrollFrameForFrame and panel.Content then
-		pcall(nav.SetScrollFrameForFrame, nav, panel, panel.Content.Scroll)
-	end
-end
-
-function Gamepad.RefreshNavigation()
-	if not DRIVE_BLIZZARD_NAVIGATION then
-		return
-	end
-	if refreshPending then
-		return
-	end
-	if not panel or not panel:IsShown() then
-		return
-	end
-	if not Gamepad.IsEnabled() then
-		return
-	end
-	refreshPending = true
-	C_Timer.After(0, doRefresh)
-end
-
--- ── Setup and lifecycle ───────────────────────────────────────────────────────
-
--- Static wiring, done once. Mirrors SettingsPanelMixin:SetupGamepad.
-function Gamepad.Setup()
-	if not panel then
-		return
-	end
-	if panel.gamepadSetupDone then
-		return
-	end
-	panel.gamepadSetupDone = true
-
-	local Theme = Panel.Theme
-	Theme.MarkIgnored(panel.CloseButton)
-	Theme.MarkIgnored(panel.ClosePanelButton)
-	-- The search box is deliberately out of the gamepad's reach. Blizzard's panel lets a
-	-- stick land on it, but typing into an EditBox with a controller means the on-screen
-	-- keyboard and a focus state handed back cleanly, and a filter box is not worth that
-	-- surface. Mouse users keep it.
-	if panel.SearchBox then
-		Theme.MarkIgnored(panel.SearchBox)
-	end
-
-	if type(SmartNavigation_MarkFrameSubSection) == "function" then
-		pcall(SmartNavigation_MarkFrameSubSection, panel.Container, FOCUS_KEY)
-	end
-
-	-- Right from a category enters its settings, and it is the only way in: a sub-section
-	-- is not reachable by ordinary directional navigation.
-	-- Blizzard_SettingsPanel.lua:1090-1095.
-	if
-		type(SmartNavigation_AddJumpNavigationOverride) == "function"
-		and SMART_NAV_INPUT_DIRECTION
-		and panel.Sidebar
-	then
-		for _, button in ipairs(panel.Sidebar.buttons) do
-			pcall(SmartNavigation_AddJumpNavigationOverride, button, SMART_NAV_INPUT_DIRECTION.RIGHT, function()
-				Gamepad.FocusContent()
-				return true
-			end)
+	local btns = {}
+	for _, b in ipairs(panel.Sidebar.buttons) do
+		if b:IsShown() then
+			btns[#btns + 1] = b
 		end
 	end
+	return btns
+end
 
-	-- Down from the bottom of the list reaches the Close button; up from it comes back.
-	if
-		type(SmartNavigation_AddJumpNavigationOverride) == "function"
-		and SMART_NAV_INPUT_DIRECTION
-		and panel.CloseButton
-	then
-		pcall(SmartNavigation_AddJumpNavigationOverride, panel.CloseButton, SMART_NAV_INPUT_DIRECTION.UP, function()
-			Gamepad.FocusContent(lastNavTarget())
-			return true
+local function selectSidebarIndex(index, enterContent)
+	local buttons = getSidebarButtons()
+	if #buttons == 0 then
+		return
+	end
+
+	if index < 1 then
+		index = #buttons
+	elseif index > #buttons then
+		index = 1
+	end
+
+	currentSidebarIndex = index
+	local btn = buttons[index]
+
+	if btn and btn.page then
+		panel.Sidebar:Select(btn.page)
+		if enterContent then
+			mode = "CONTENT"
+			setContentFocus(1)
+		else
+			mode = "SIDEBAR"
+			if focusedRow and focusedRow.HideRowTooltip then
+				focusedRow:HideRowTooltip()
+				focusedRow = nil
+			end
+			highlightWidget(btn, 0, 0)
+		end
+		if SOUNDKIT and SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON then
+			PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+		end
+	end
+end
+
+-- ── Input Dispatcher ─────────────────────────────────────────────────────────
+
+local function scrollContent(delta)
+	if not panel or not panel.Content or not panel.Content.Scroll then
+		return
+	end
+	local scroll = panel.Content.Scroll
+	local cur = scroll:GetVerticalScroll() or 0
+	local maxRange = scroll:GetVerticalScrollRange() or 0
+	local target = math.max(0, math.min(maxRange, cur + delta))
+	scroll:SetVerticalScroll(target)
+end
+
+local function handleInput(key)
+	if InCombatLockdown and InCombatLockdown() then
+		Panel.Close()
+		return
+	end
+
+	-- Global Bumpers: Tab categories forward/backward
+	if key == "PADLSHOULDER" then
+		selectSidebarIndex(currentSidebarIndex - 1, mode == "CONTENT")
+		return
+	elseif key == "PADRSHOULDER" then
+		selectSidebarIndex(currentSidebarIndex + 1, mode == "CONTENT")
+		return
+	end
+
+	-- Global Triggers: Scroll content
+	if key == "PADLTRIGGER" then
+		scrollContent(-120)
+		return
+	elseif key == "PADRTRIGGER" then
+		scrollContent(120)
+		return
+	end
+
+	-- Quick Setup Shortcut: PADBACK (Select / View)
+	if key == "PADBACK" then
+		Panel.Close()
+		if Pulse.UI and Pulse.UI.QuickSetup and Pulse.UI.QuickSetup.Open then
+			Pulse.UI.QuickSetup.Open()
+		end
+		return
+	end
+
+	if mode == "SIDEBAR" then
+		if key == "PADDUP" then
+			selectSidebarIndex(currentSidebarIndex - 1, false)
+		elseif key == "PADDDOWN" then
+			selectSidebarIndex(currentSidebarIndex + 1, false)
+		elseif key == "PADDRIGHT" or key == "PAD1" then
+			-- Enter content area
+			mode = "CONTENT"
+			setContentFocus(1)
+		elseif key == "PAD2" or key == "PADFORWARD" then
+			Panel.Close()
+		end
+	elseif mode == "CONTENT" then
+		local rows = getVisibleRows()
+		local row = rows[currentContentIndex]
+
+		if key == "PADDUP" then
+			setContentFocus(currentContentIndex - 1)
+		elseif key == "PADDDOWN" then
+			setContentFocus(currentContentIndex + 1)
+		elseif key == "PADDLEFT" then
+			-- If on a slider, step the slider down; otherwise return to sidebar
+			if row and row.Control and row.Control.OnStepperClicked then
+				row.Control:OnStepperClicked(false)
+			elseif row and row.Control and (row.Control.DecrementButton or row.Control.Decrement) then
+				if row.Control.DecrementButton then
+					row.Control.DecrementButton:Click()
+				else
+					row.Control:Decrement()
+				end
+			else
+				mode = "SIDEBAR"
+				selectSidebarIndex(currentSidebarIndex, false)
+			end
+		elseif key == "PADDRIGHT" then
+			-- If on a slider or dropdown, step up
+			if row and row.Control and row.Control.OnStepperClicked then
+				row.Control:OnStepperClicked(true)
+			elseif row and row.Control and (row.Control.IncrementButton or row.Control.Increment) then
+				if row.Control.IncrementButton then
+					row.Control.IncrementButton:Click()
+				else
+					row.Control:Increment()
+				end
+			end
+		elseif key == "PAD1" then
+			-- A button: Activate the control
+			if row then
+				if row.Control and row.Control:IsObjectType("CheckButton") then
+					row.Control:Click()
+				elseif row.Button and row.Button:IsObjectType("Button") then
+					row.Button:Click()
+				elseif row.Control and row.Control:IsObjectType("Button") then
+					row.Control:Click()
+				elseif row.spec and row.spec.testMode and Pulse.TestMode then
+					Pulse:TestMode(row.spec.testMode, 0.75)
+				end
+			end
+		elseif key == "PAD2" then
+			-- B button: Return to sidebar
+			mode = "SIDEBAR"
+			selectSidebarIndex(currentSidebarIndex, false)
+		elseif key == "PADFORWARD" then
+			Panel.Close()
+		end
+	end
+end
+
+-- ── Bindings & Lifecycle ─────────────────────────────────────────────────────
+
+local function bindCaptureKeys(owner)
+	if InCombatLockdown and InCombatLockdown() then
+		return
+	end
+	if not captureButton then
+		captureButton = CreateFrame("Button", "PulsePanelCaptureButton", UIParent)
+		captureButton:SetSize(1, 1)
+		captureButton:SetPoint("TOPLEFT", UIParent, "TOPLEFT", -10, 10)
+		captureButton:RegisterForClicks("AnyDown")
+		captureButton:SetScript("OnClick", function(_, _, down)
+			if down and captureButton.currentKey then
+				handleInput(captureButton.currentKey)
+			end
 		end)
 	end
 
-	-- B, or walking off the left edge of the settings, returns to the category list
-	-- rather than closing the window.
-	panel.SmartNavigationCloseHandler = function()
-		return Gamepad.UnfocusContent()
+	if ClearOverrideBindings then
+		ClearOverrideBindings(owner)
+	end
+
+	for _, key in ipairs(GAMEPAD_KEYS) do
+		if SetOverrideBindingClick then
+			SetOverrideBindingClick(owner, true, key, captureButton:GetName(), "LeftButton")
+		end
+	end
+end
+
+local function releaseCaptureKeys(owner)
+	if ClearOverrideBindings then
+		pcall(ClearOverrideBindings, owner)
 	end
 end
 
 function Gamepad.OnShow()
-	if not panel then
-		return
-	end
-	if not Gamepad.IsEnabled() then
+	if not panel or not panel:IsShown() then
 		return
 	end
 
-	-- Marking only. Cheap, taint-free, and what a Pulse-owned navigation pass will read.
-	Gamepad.Setup()
+	mode = "SIDEBAR"
+	currentSidebarIndex = 1
+	currentContentIndex = 1
+	focusedRow = nil
 
-	if not DRIVE_BLIZZARD_NAVIGATION then
-		return
+	-- Hook native gamepad button events on the frame
+	if panel.EnableGamePadButton then
+		pcall(panel.EnableGamePadButton, panel, true)
 	end
 
-	if type(GamepadMode) == "table" and GamepadMode.FrameControlsManager then
-		pcall(function()
-			GamepadMode.FrameControlsManager:FrameShown(panel)
-		end)
-	end
+	panel:SetScript("OnGamePadButtonDown", function(_, key)
+		handleInput(key)
+	end)
 
-	local nav = smartNav()
-	if nav and nav.RegisterCallback then
-		-- Wrapped, not passed directly: a CallbackRegistry hands the owner to the callback
-		-- as its first argument, and UnfocusContent's first argument is the button to select
-		-- afterwards — passing it raw would ask it to select the window.
-		pcall(nav.RegisterCallback, nav, "HitLeftEdge", function()
-			Gamepad.UnfocusContent()
-		end, panel)
-		-- Point SmartNavigation at the selected category rather than whatever is top-left.
-		if nav.SetSmartNavPanelInfoAddedCallback then
-			pcall(nav.SetSmartNavPanelInfoAddedCallback, nav, panel, function()
-				local button = panel.Sidebar and panel.Sidebar:GetSelectedButton()
-				if button and nav.SetTargetButtonForFrame then
-					pcall(nav.SetTargetButtonForFrame, nav, panel, button)
-				end
-			end)
-		end
-	end
-
-	Gamepad.RefreshNavigation()
+	bindCaptureKeys(panel)
+	selectSidebarIndex(1, false)
 end
 
 function Gamepad.OnHide()
-	if not panel then
-		return
+	if focusBox then
+		focusBox:Hide()
 	end
-	if not DRIVE_BLIZZARD_NAVIGATION then
-		return
+	if focusedRow and focusedRow.HideRowTooltip then
+		focusedRow:HideRowTooltip()
+		focusedRow = nil
 	end
-
-	local nav = smartNav()
-	if nav and nav.UnregisterCallback then
-		pcall(nav.UnregisterCallback, nav, "HitLeftEdge", panel)
-	end
-
-	-- Any legend still on screen belongs to a row that is no longer selectable.
-	Gamepad.OnSliderDeselected()
-	Gamepad.OnDropdownDeselected()
-
-	if type(GamepadMode) == "table" and GamepadMode.FrameControlsManager then
-		pcall(function()
-			GamepadMode.FrameControlsManager:FrameHidden(panel)
-		end)
+	if panel then
+		releaseCaptureKeys(panel)
 	end
 end
 
+function Gamepad.RefreshNavigation()
+	if mode == "CONTENT" then
+		setContentFocus(currentContentIndex)
+	end
+end
+
+function Gamepad.Setup() end
+
 function Gamepad.Init(owner)
 	panel = owner
-
-	if not DRIVE_BLIZZARD_NAVIGATION then
-		return
-	end
-
-	-- The client can switch between mouse and gamepad at runtime and InputUtil is how a
-	-- frame asks to be told. Optional: without it, Setup still runs from OnShow.
-	if type(InputUtil) == "table" then
-		if type(InputUtil.RegisterForInterfaceTransitions) == "function" then
-			pcall(InputUtil.RegisterForInterfaceTransitions, panel)
-		end
-		if type(InputUtil.RegisterGamepadSetup) == "function" then
-			pcall(InputUtil.RegisterGamepadSetup, panel, Gamepad.Setup)
-		end
-		if type(InputUtil.RegisterGamepadInit) == "function" then
-			pcall(InputUtil.RegisterGamepadInit, panel, function()
-				if panel:IsShown() then
-					Gamepad.OnShow()
-				end
-			end)
-		end
-	end
 end

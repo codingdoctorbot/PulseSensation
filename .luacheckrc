@@ -213,6 +213,11 @@ read_globals = {
     "GAMEPAD_DPAD_RIGHT",
     "GAMEPAD_FACE_TOP",
     "GAMEPAD_FACE_BOTTOM",
+    "GameMenuFrame",
+    "HideUIPanel",
+    "GetCVarBool",
+    "ClearOverrideBindings",
+    "SetOverrideBindingClick",
 }
 
 globals = {

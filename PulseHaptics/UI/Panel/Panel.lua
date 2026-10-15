@@ -240,6 +240,7 @@ local function buildWindow()
 	setupButton:SetText("Quick Setup")
 	Theme.StyleActionButton(setupButton, true)
 	setupButton:SetScript("OnClick", function()
+		Panel.Close()
 		if Pulse.UI and Pulse.UI.QuickSetup and Pulse.UI.QuickSetup.Open then
 			Pulse.UI.QuickSetup.Open()
 		end
@@ -499,6 +500,7 @@ end
 function Panel.IsShown()
 	return frame ~= nil and frame:IsShown()
 end
+Panel.IsOpen = Panel.IsShown
 
 -- Kept for symmetry with Pulse.UI.Settings:Build(), in case Core/Init.lua ever wants to
 -- build this eagerly. Building is idempotent.

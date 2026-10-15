@@ -260,6 +260,9 @@ function UISettings:Build()
 		Pulse.UI.Panel.Theme.StyleActionButton(quickSetupBtn, true)
 	end
 	quickSetupBtn:SetScript("OnClick", function()
+		if Pulse.UI and Pulse.UI.Panel and Pulse.UI.Panel.Close then
+			Pulse.UI.Panel.Close()
+		end
 		if Pulse.UI and Pulse.UI.QuickSetup and Pulse.UI.QuickSetup.Open then
 			Pulse.UI.QuickSetup.Open()
 		end

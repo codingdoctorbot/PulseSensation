@@ -130,3 +130,4 @@ UI/Panel/Spec.lua
 UI/Panel/Panel.lua
 UI/QuickSetup.lua
 UI/Minimap.lua
+UI/GameMenu.lua
