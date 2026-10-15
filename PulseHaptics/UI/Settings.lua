@@ -205,6 +205,12 @@ local function buildButton(canvas)
 	end
 	button:SetText("Open Pulse settings")
 	button:SetScript("OnClick", function()
+		local sp = _G.SettingsPanel
+		if sp and sp.Close then
+			sp:Close()
+		elseif sp and HideUIPanel then
+			HideUIPanel(sp)
+		end
 		if Pulse.UI.Panel and Pulse.UI.Panel.Open then
 			Pulse.UI.Panel.Open()
 		end
@@ -260,6 +266,12 @@ function UISettings:Build()
 		Pulse.UI.Panel.Theme.StyleActionButton(quickSetupBtn, true)
 	end
 	quickSetupBtn:SetScript("OnClick", function()
+		local sp = _G.SettingsPanel
+		if sp and sp.Close then
+			sp:Close()
+		elseif sp and HideUIPanel then
+			HideUIPanel(sp)
+		end
 		if Pulse.UI and Pulse.UI.Panel and Pulse.UI.Panel.Close then
 			Pulse.UI.Panel.Close()
 		end

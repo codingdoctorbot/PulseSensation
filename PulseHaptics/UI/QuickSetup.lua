@@ -237,15 +237,48 @@ local function getQuickFocusBox(parent)
 	fb:SetFrameStrata("DIALOG")
 	fb:SetFrameLevel((parent:GetFrameLevel() or 10) + 30)
 
-	local border = fb:CreateTexture(nil, "BORDER")
-	border:SetAllPoints(fb)
-	border:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 0.95)
-	fb.border = border
+	-- Hollow 2px Electric Cyan Border (never washes out the card surface)
+	local bTop = fb:CreateTexture(nil, "OVERLAY")
+	bTop:SetPoint("TOPLEFT", fb, "TOPLEFT", 0, 0)
+	bTop:SetPoint("TOPRIGHT", fb, "TOPRIGHT", 0, 0)
+	bTop:SetHeight(2)
+	bTop:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
+	fb.bTop = bTop
 
-	local inner = fb:CreateTexture(nil, "ARTWORK")
-	inner:SetPoint("TOPLEFT", fb, "TOPLEFT", 1.5, -1.5)
-	inner:SetPoint("BOTTOMRIGHT", fb, "BOTTOMRIGHT", -1.5, 1.5)
-	inner:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 0.12)
+	local bBottom = fb:CreateTexture(nil, "OVERLAY")
+	bBottom:SetPoint("BOTTOMLEFT", fb, "BOTTOMLEFT", 0, 0)
+	bBottom:SetPoint("BOTTOMRIGHT", fb, "BOTTOMRIGHT", 0, 0)
+	bBottom:SetHeight(2)
+	bBottom:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
+	fb.bBottom = bBottom
+
+	local bLeft = fb:CreateTexture(nil, "OVERLAY")
+	bLeft:SetPoint("TOPLEFT", fb, "TOPLEFT", 0, 0)
+	bLeft:SetPoint("BOTTOMLEFT", fb, "BOTTOMLEFT", 0, 0)
+	bLeft:SetWidth(2)
+	bLeft:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
+	fb.bLeft = bLeft
+
+	local bRight = fb:CreateTexture(nil, "OVERLAY")
+	bRight:SetPoint("TOPRIGHT", fb, "TOPRIGHT", 0, 0)
+	bRight:SetPoint("BOTTOMRIGHT", fb, "BOTTOMRIGHT", 0, 0)
+	bRight:SetWidth(2)
+	bRight:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
+	fb.bRight = bRight
+
+	-- Glowing Left Accent Docking Socket (4px wide, vibrant neon cyan)
+	local accent = fb:CreateTexture(nil, "OVERLAY")
+	accent:SetPoint("TOPLEFT", fb, "TOPLEFT", 0, 0)
+	accent:SetPoint("BOTTOMLEFT", fb, "BOTTOMLEFT", 0, 0)
+	accent:SetWidth(4)
+	accent:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
+	fb.accent = accent
+
+	-- Subtle translucent interior tint (only 0.05 alpha for crystal-clear readability)
+	local inner = fb:CreateTexture(nil, "BACKGROUND")
+	inner:SetPoint("TOPLEFT", fb, "TOPLEFT", 2, -2)
+	inner:SetPoint("BOTTOMRIGHT", fb, "BOTTOMRIGHT", -2, 2)
+	inner:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 0.05)
 	fb.inner = inner
 
 	fb:Hide()

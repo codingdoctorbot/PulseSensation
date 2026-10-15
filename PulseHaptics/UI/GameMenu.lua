@@ -49,8 +49,13 @@ local function updateBannerLayout()
 		banner:SetWidth(DEFAULT_BANNER_W)
 	end
 	banner:ClearAllPoints()
-	-- Anchored directly to the lowermost edge of GameMenuFrame
-	banner:SetPoint("TOP", GameMenuFrame, "BOTTOM", 0, -8)
+	-- Anchored directly to the lowermost edge of GameMenuFrame (or below gamepad footer if active)
+	local footer = GameMenuFrame.gamepadFooter
+	if footer and footer.IsShown and footer:IsShown() then
+		banner:SetPoint("TOP", footer, "BOTTOM", 0, -6)
+	else
+		banner:SetPoint("TOP", GameMenuFrame, "BOTTOM", 0, -8)
+	end
 end
 
 local function createBanner()
