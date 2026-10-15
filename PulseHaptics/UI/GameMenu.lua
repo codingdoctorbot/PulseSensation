@@ -2,15 +2,15 @@
 --
 -- Integration into Blizzard's Game Menu (Escape Menu).
 -- Anchors a sleek Pulse Haptics button above GameMenuFrame (or stacked above ControllerApex crest).
--- Provides native controller SmartNavigation support in the Game Menu.
 --
--- Architecture & Taint Shielding (ControllerApex pattern):
--- 1. Parented to UIParent (strata DIALOG), NEVER to GameMenuFrame. This guarantees 100% zero
---    execution taint on GameMenuFrame and avoids ADDON_ACTION_BLOCKED errors when pressing Escape.
--- 2. Native SmartNavigation integration: Injects jump navigation overrides chaining between
---    the top button (Options) and the bottom button (Exit Game), enabling seamless controller
---    D-pad/stick navigation and (A) button selection.
--- 3. Resilient initialization: Hooks immediately if GameMenuFrame exists, or awaits ADDON_LOADED/PLAYER_LOGIN.
+-- Crash-Proof & Zero-Taint Architecture (ControllerForever / EasyController pattern):
+-- 1. Parented to UIParent (strata DIALOG), NEVER to GameMenuFrame.
+-- 2. ZERO SmartNavigation table injection: Never calls SmartNavigation_AddJumpNavigationOverride
+--    on Blizzard's GameMenuFrame.buttons, which taints SmartNavigation and causes client freezes.
+-- 3. Uses a standalone GamePad D-Pad / Button listener + OverrideBindingOwner while focused,
+--    allowing seamless D-Pad UP/DOWN wrapping between Options, Pulse Banner, and Exit Game
+--    without ever tainting Blizzard's SmartNavigation stack.
+-- 4. Closes GameMenuFrame safely via deferred execution without tainting UIParent panels.
 
 local ADDON_NAME, Pulse = ...
 
@@ -23,27 +23,40 @@ local DEFAULT_BANNER_W = 200
 local ICON_PATH = "Interface\\AddOns\\PulseHaptics\\Media\\icon"
 
 local banner = nil
+local bindOwner = nil
+local navWatcher = nil
 local isHooked = false
+local isBannerFocused = false
 
+-- Safely close GameMenuFrame and toggle Pulse Panel on the next frame tick
+-- so we never taint the active Gamepad/SmartNavigation call stack.
 local function onClick()
 	if InCombatLockdown and InCombatLockdown() then
 		print("|cff4cb8ffPulse:|r Cannot open settings during combat.")
 		return
 	end
-	if HideUIPanel and GameMenuFrame then
-		HideUIPanel(GameMenuFrame)
-	elseif GameMenuFrame then
-		GameMenuFrame:Hide()
-	end
-	if Pulse.UI and Pulse.UI.Panel and Pulse.UI.Panel.Toggle then
-		Pulse.UI.Panel.Toggle()
-	end
+
+	C_Timer.After(0, function()
+		if InCombatLockdown and InCombatLockdown() then
+			return
+		end
+		-- Use GameMenuFrame:Hide() directly instead of HideUIPanel(GameMenuFrame)
+		-- because HideUIPanel taints UIParent attributes when called from addon code.
+		if GameMenuFrame and GameMenuFrame:IsShown() then
+			GameMenuFrame:Hide()
+		end
+		if Pulse.UI and Pulse.UI.Panel and Pulse.UI.Panel.Toggle then
+			Pulse.UI.Panel.Toggle()
+		end
+	end)
 end
 
 local function setFocused(btn, focused)
 	if not btn then
 		return
 	end
+	isBannerFocused = focused and true or false
+
 	if focused then
 		btn.bg:SetColorTexture(0.118, 0.145, 0.212, 0.98) -- Elevated Slate (#1E2536)
 		btn.accent:SetColorTexture(0.40, 0.85, 1.00, 1.0) -- Bright Neon Cyan (#66D9FF)
@@ -53,12 +66,22 @@ local function setFocused(btn, focused)
 		if SOUNDKIT and SOUNDKIT.IG_MAINMENU_OPTION then
 			PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
 		end
+
+		-- Bind PAD1 (A / Cross) to click the Pulse banner while it holds virtual focus
+		if bindOwner and not (InCombatLockdown and InCombatLockdown()) then
+			ClearOverrideBindings(bindOwner)
+			SetOverrideBindingClick(bindOwner, true, "PAD1", "PulseGameMenuButton", "LeftButton")
+		end
 	else
 		btn.bg:SetColorTexture(0.043, 0.055, 0.078, 0.98) -- Deep Obsidian (#0B0E14)
 		btn.accent:SetColorTexture(0.298, 0.722, 1.000, 1.0) -- #4CB8FF
 		btn.sheen:SetColorTexture(0.298, 0.722, 1.000, 0.85)
 		btn.title:SetTextColor(0.298, 0.722, 1.000)
 		btn.badge:SetTextColor(0.220, 0.741, 0.973)
+
+		if bindOwner and not (InCombatLockdown and InCombatLockdown()) then
+			ClearOverrideBindings(bindOwner)
+		end
 	end
 end
 
@@ -89,48 +112,80 @@ local function updateBannerLayout()
 	end
 end
 
-local function setupSmartNavOverrides()
-	if not banner or not GameMenuFrame or not GameMenuFrame.buttons then
-		return
+-- Read-only check to see if a GameMenuFrame button currently has SmartNavigation / Mouse focus
+local function isGameMenuButtonHighlighted(btn)
+	if not btn then
+		return false
 	end
-
-	if not SmartNavigation_AddJumpNavigationOverride or not SMART_NAV_INPUT_DIRECTION then
-		return
+	if btn.IsMouseOver and btn:IsMouseOver() then
+		return true
 	end
-
-	local topBtn = GameMenuFrame.buttons[1]
-	local exitBtn = GameMenuFrame.buttons[#GameMenuFrame.buttons]
-
-	if not topBtn or not exitBtn then
-		return
+	-- Check SmartNavigation's current target in a strictly read-only manner
+	if _G.SmartNavigation and _G.SmartNavigation.currentTarget == btn then
+		return true
 	end
-
-	-- When focused on top button (Options), pressing UP navigates to Pulse banner
-	SmartNavigation_AddJumpNavigationOverride(topBtn, SMART_NAV_INPUT_DIRECTION.UP, banner)
-
-	-- When focused on Pulse banner:
-	-- DOWN navigates down to top button (Options)
-	SmartNavigation_AddJumpNavigationOverride(banner, SMART_NAV_INPUT_DIRECTION.DOWN, topBtn)
-	-- UP wraps around to bottom button (Exit Game)
-	SmartNavigation_AddJumpNavigationOverride(banner, SMART_NAV_INPUT_DIRECTION.UP, exitBtn)
-
-	-- When focused on lowermost button (Exit Game), pressing DOWN wraps around to Pulse banner
-	SmartNavigation_AddJumpNavigationOverride(exitBtn, SMART_NAV_INPUT_DIRECTION.DOWN, banner)
+	if _G.SmartNavigation_GetFocusedFrame and _G.SmartNavigation_GetFocusedFrame() == btn then
+		return true
+	end
+	return false
 end
 
-local function clearSmartNavOverrides()
-	if not banner then
-		return
+local function createNavWatcher()
+	if navWatcher then
+		return navWatcher
 	end
-	if SmartNavigation_ClearJumpNavigationOverrides then
-		SmartNavigation_ClearJumpNavigationOverrides(banner)
+
+	bindOwner = CreateFrame("Frame", "PulseGameMenuBindOwner", UIParent)
+
+	-- Passive listener frame that watches GamePad D-Pad UP/DOWN while GameMenuFrame is shown
+	local w = CreateFrame("Frame", "PulseGameMenuNavWatcher", UIParent)
+	w:Hide()
+
+	-- Always propagate input so we NEVER block Blizzard's secure GamePad stack
+	if w.SetPropagateKeyboardInput then
+		pcall(w.SetPropagateKeyboardInput, w, true)
 	end
+
+	w:SetScript("OnGamePadButtonDown", function(self, button)
+		if not banner or not banner:IsShown() or not GameMenuFrame or not GameMenuFrame:IsShown() then
+			return
+		end
+
+		if button == "PADDUP" or button == "PADDOWN" then
+			local buttons = GameMenuFrame.buttons
+			local topBtn = buttons and buttons[1]
+			local exitBtn = buttons and buttons[#buttons]
+
+			if isBannerFocused then
+				-- Moving off the Pulse banner back onto GameMenuFrame buttons
+				setFocused(banner, false)
+			elseif (button == "PADDUP" and isGameMenuButtonHighlighted(topBtn))
+				or (button == "PADDOWN" and isGameMenuButtonHighlighted(exitBtn)) then
+				-- Stepped past the top or bottom button: highlight Pulse banner
+				C_Timer.After(0, function()
+					if banner and banner:IsShown() then
+						setFocused(banner, true)
+					end
+				end)
+			end
+		elseif button == "PAD2" then
+			-- B / Circle clears focus before closing
+			if isBannerFocused then
+				setFocused(banner, false)
+			end
+		end
+	end)
+
+	navWatcher = w
+	return w
 end
 
 local function createBanner()
 	if banner then
 		return banner
 	end
+
+	createNavWatcher()
 
 	-- Parent to UIParent to ensure GameMenuFrame remains 100% untainted
 	local b = CreateFrame("Button", "PulseGameMenuButton", UIParent)
@@ -140,11 +195,11 @@ local function createBanner()
 		b:SetFrameLevel(GameMenuFrame:GetFrameLevel() + 5)
 	end
 	b:EnableMouse(true)
+	b:RegisterForClicks("AnyUp")
 	b:Hide()
 
-	-- SmartNavigation custom cursor offset (positions yellow pointer cleanly at left accent)
-	b.customSmartNavOffsetX = -4
-	b.customSmartNavOffsetY = 0
+	-- Crucial: Tell Blizzard's native SmartNavigation NOT to walk or mutate this addon frame
+	b.ignoreSmartNavigation = true
 
 	-- Deep Slate Obsidian Base Plate (#0B0E14)
 	b.bg = b:CreateTexture(nil, "BACKGROUND")
@@ -216,7 +271,7 @@ local function createBanner()
 	b.badge:SetPoint("RIGHT", b, "RIGHT", -10, 0)
 	b.badge:SetText("|cff38BDF8/pulse|r")
 
-	-- Interactive Feedback Scripts (Mouse + Controller SmartNavigation)
+	-- Interactive Feedback Scripts (Mouse + Virtual Controller Focus)
 	b:SetScript("OnEnter", function(btn)
 		setFocused(btn, true)
 	end)
@@ -227,20 +282,33 @@ local function createBanner()
 
 	b:SetScript("OnClick", onClick)
 
-	-- SmartNavigation hooks for GamePad controller focus & activation
-	b.OnSmartNavSelect = function(btn)
-		setFocused(btn, true)
-	end
-
-	b.OnSmartNavDeselect = function(btn)
-		setFocused(btn, false)
-	end
-
-	b.OnSmartNavClick = onClick
-
 	banner = b
 	_G.GameMenuButtonPulse = b
 	return b
+end
+
+local function onGameMenuShow()
+	C_Timer.After(0, function()
+		if not GameMenuFrame or not GameMenuFrame:IsShown() then
+			return
+		end
+		updateBannerLayout()
+		setFocused(banner, false)
+		banner:Show()
+		if navWatcher then
+			navWatcher:Show()
+		end
+	end)
+end
+
+local function onGameMenuHide()
+	if banner then
+		setFocused(banner, false)
+		banner:Hide()
+	end
+	if navWatcher then
+		navWatcher:Hide()
+	end
 end
 
 local function hookGameMenu()
@@ -251,48 +319,26 @@ local function hookGameMenu()
 	createBanner()
 	updateBannerLayout()
 
-	-- Visibility synchronization and SmartNavigation setup
+	-- Use HookScript ONLY (not both HookScript and hooksecurefunc) to prevent double-firing
 	if GameMenuFrame.HookScript then
-		GameMenuFrame:HookScript("OnShow", function()
-			updateBannerLayout()
-			banner:Show()
-			setupSmartNavOverrides()
-		end)
-		GameMenuFrame:HookScript("OnHide", function()
-			banner:Hide()
-			clearSmartNavOverrides()
-		end)
+		GameMenuFrame:HookScript("OnShow", onGameMenuShow)
+		GameMenuFrame:HookScript("OnHide", onGameMenuHide)
 	end
 
-	if hooksecurefunc then
-		hooksecurefunc(GameMenuFrame, "Show", function()
-			updateBannerLayout()
-			banner:Show()
-			setupSmartNavOverrides()
-		end)
-		hooksecurefunc(GameMenuFrame, "Hide", function()
-			banner:Hide()
-			clearSmartNavOverrides()
-		end)
-
-		-- Re-register jump navigation overrides after GameMenuFrame rebuilds gamepad buttons
-		if GameMenuFrameMixin and GameMenuFrameMixin.SetupGamepadButtons then
-			hooksecurefunc(GameMenuFrameMixin, "SetupGamepadButtons", function(menuFrame)
-				if menuFrame == GameMenuFrame then
-					setupSmartNavOverrides()
-				end
-			end)
-		elseif GameMenuFrame.SetupGamepadButtons then
-			hooksecurefunc(GameMenuFrame, "SetupGamepadButtons", function()
-				setupSmartNavOverrides()
-			end)
+	-- Ensure we clean up overrides if combat starts while the menu is open
+	local combatGuard = CreateFrame("Frame")
+	combatGuard:RegisterEvent("PLAYER_REGEN_DISABLED")
+	combatGuard:SetScript("OnEvent", function()
+		if bindOwner then
+			ClearOverrideBindings(bindOwner)
 		end
-	end
+		if banner then
+			setFocused(banner, false)
+		end
+	end)
 
 	if GameMenuFrame:IsShown() then
-		updateBannerLayout()
-		banner:Show()
-		setupSmartNavOverrides()
+		onGameMenuShow()
 	end
 
 	isHooked = true
@@ -302,7 +348,6 @@ function GameMenu:Init()
 	if GameMenuFrame then
 		hookGameMenu()
 	else
-		-- If GameMenuFrame is not yet loaded, wait for it
 		local loader = CreateFrame("Frame")
 		loader:RegisterEvent("ADDON_LOADED")
 		loader:RegisterEvent("PLAYER_LOGIN")
