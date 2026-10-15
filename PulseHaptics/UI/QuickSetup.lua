@@ -22,13 +22,14 @@ local frame
 local currentStep = 1
 
 local THEME = {
-	bg = { r = 0.035, g = 0.040, b = 0.055, a = 0.96 },
-	surface = { r = 0.060, g = 0.068, b = 0.085, a = 0.90 },
-	border = { r = 0.18, g = 0.22, b = 0.28, a = 0.85 },
+	bg = { r = 0.035, g = 0.040, b = 0.055, a = 1.0 },
+	surface = { r = 0.060, g = 0.068, b = 0.085, a = 0.95 },
+	border = { r = 0.18, g = 0.22, b = 0.28, a = 0.75 },
 	accent = { r = 0.30, g = 0.72, b = 1.00, a = 1.0 },
 	accentDim = { r = 0.15, g = 0.40, b = 0.60, a = 0.8 },
 	textPrimary = { r = 0.90, g = 0.93, b = 0.96 },
 	textMuted = { r = 0.53, g = 0.58, b = 0.68 },
+	live = { r = 0.18, g = 0.83, b = 0.75 },
 }
 
 -- ── Data Definitions ─────────────────────────────────────────────────────────
@@ -585,15 +586,15 @@ local function buildStep1(container)
 	local selectedDevice = Pulse.Database:GetAppliedDevicePreset() or "default"
 	local devCards = {}
 
-	local startY = -68
-	local cardW = 310
-	local cardH = 62
+	local startY = -60
+	local cardW = 308
+	local cardH = 60
 
 	for idx, opt in ipairs(CONTROLLER_OPTIONS) do
 		local col = (idx - 1) % 2
 		local row = math.floor((idx - 1) / 2)
-		local x = col * (cardW + 14) + 6
-		local y = startY - row * (cardH + 8)
+		local x = col * (cardW + 12) + 6
+		local y = startY - row * (cardH + 6)
 
 		local card = CreateFrame("Button", nil, sf)
 		card:SetSize(cardW, cardH)
@@ -601,12 +602,12 @@ local function buildStep1(container)
 
 		local bg = card:CreateTexture(nil, "BACKGROUND")
 		bg:SetAllPoints(card)
-		bg:SetColorTexture(THEME.surface.r, THEME.surface.g, THEME.surface.b, 0.85)
+		bg:SetColorTexture(THEME.surface.r, THEME.surface.g, THEME.surface.b, 0.90)
 		card.bg = bg
 
 		local border = card:CreateTexture(nil, "BORDER")
 		border:SetAllPoints(card)
-		border:SetColorTexture(THEME.border.r, THEME.border.g, THEME.border.b, 0.8)
+		border:SetColorTexture(THEME.border.r, THEME.border.g, THEME.border.b, 0.7)
 		card.border = border
 
 		local inner = card:CreateTexture(nil, "ARTWORK")
@@ -619,8 +620,14 @@ local function buildStep1(container)
 		label:SetPoint("TOPLEFT", card, "TOPLEFT", 12, -8)
 		label:SetText(opt.label)
 
+		local activeBadge = card:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+		activeBadge:SetPoint("TOPRIGHT", card, "TOPRIGHT", -8, -8)
+		activeBadge:SetText("|cff2dd4bf[ACTIVE]|r")
+		activeBadge:Hide()
+		card.activeBadge = activeBadge
+
 		local sub = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-		sub:SetPoint("TOPLEFT", label, "BOTTOMLEFT", 0, -4)
+		sub:SetPoint("TOPLEFT", label, "BOTTOMLEFT", 0, -3)
 		sub:SetPoint("RIGHT", card, "RIGHT", -10, 0)
 		sub:SetJustifyH("LEFT")
 		sub:SetText(opt.desc)
@@ -635,15 +642,30 @@ local function buildStep1(container)
 
 		local function refreshCard()
 			if selectedDevice == opt.id then
-				border:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 0.9)
+				inner:SetColorTexture(0.06, 0.10, 0.16, 0.96)
+				border:SetColorTexture(THEME.accentDim.r, THEME.accentDim.g, THEME.accentDim.b, 0.8)
 				label:SetTextColor(THEME.accent.r, THEME.accent.g, THEME.accent.b)
 				pip:Show()
+				activeBadge:Show()
 			else
-				border:SetColorTexture(THEME.border.r, THEME.border.g, THEME.border.b, 0.7)
+				inner:SetColorTexture(THEME.surface.r, THEME.surface.g, THEME.surface.b, 0.95)
+				border:SetColorTexture(THEME.border.r, THEME.border.g, THEME.border.b, 0.6)
 				label:SetTextColor(THEME.textPrimary.r, THEME.textPrimary.g, THEME.textPrimary.b)
 				pip:Hide()
+				activeBadge:Hide()
 			end
 		end
+
+		card:SetScript("OnEnter", function()
+			if selectedDevice ~= opt.id then
+				inner:SetColorTexture(THEME.surface.r + 0.02, THEME.surface.g + 0.02, THEME.surface.b + 0.03, 0.95)
+			end
+		end)
+		card:SetScript("OnLeave", function()
+			if selectedDevice ~= opt.id then
+				inner:SetColorTexture(THEME.surface.r, THEME.surface.g, THEME.surface.b, 0.95)
+			end
+		end)
 
 		card:SetScript("OnClick", function()
 			selectedDevice = opt.id
@@ -1746,15 +1768,31 @@ end
 
 -- ── Window Frame & Navigation ────────────────────────────────────────────────
 
+local function createWindow()
+	local created
+	for _, template in ipairs({ "SettingsFrameTemplate", "ButtonFrameTemplate" }) do
+		local ok, result = pcall(CreateFrame, "Frame", FRAME_NAME, UIParent, template)
+		if ok and result then
+			created = result
+			break
+		end
+	end
+	if not created then
+		created = CreateFrame("Frame", FRAME_NAME, UIParent, "BackdropTemplate")
+	end
+	return created
+end
+
 local function buildWindow()
 	if frame then
 		return frame
 	end
 
-	local f = CreateFrame("Frame", FRAME_NAME, UIParent, "BackdropTemplate")
-	f:SetSize(660, 530)
+	local f = createWindow()
+	f:SetSize(676, 550)
 	f:SetPoint("CENTER", UIParent, "CENTER", 0, 20)
 	f:SetFrameStrata("DIALOG")
+	f:SetToplevel(true)
 	f:SetMovable(true)
 	f:EnableMouse(true)
 	f:RegisterForDrag("LeftButton")
@@ -1764,43 +1802,67 @@ local function buildWindow()
 
 	tinsert(UISpecialFrames, FRAME_NAME)
 
-	local bg = f:CreateTexture(nil, "BACKGROUND")
-	bg:SetAllPoints(f)
-	bg:SetColorTexture(THEME.bg.r, THEME.bg.g, THEME.bg.b, THEME.bg.a)
-	f.bg = bg
+	-- Title on Blizzard nine-slice frame
+	local titleText = f.NineSlice and f.NineSlice.Text
+	if not titleText then
+		titleText = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+		titleText:SetPoint("TOP", f, "TOP", 0, -5)
+	end
+	titleText:SetText("PULSE QUICK SETUP")
+	if titleText.SetTextColor then
+		titleText:SetTextColor(THEME.accent.r, THEME.accent.g, THEME.accent.b)
+	end
 
-	local border = f:CreateTexture(nil, "BORDER")
-	border:SetAllPoints(f)
-	border:SetColorTexture(THEME.border.r, THEME.border.g, THEME.border.b, THEME.border.a)
-	f.border = border
+	local titleIcon = f:CreateTexture(nil, "OVERLAY")
+	titleIcon:SetSize(18, 18)
+	titleIcon:SetTexture("Interface\\AddOns\\PulseHaptics\\Media\\icon")
+	titleIcon:SetPoint("RIGHT", titleText, "LEFT", -6, 0)
+	f.TitleIcon = titleIcon
 
-	-- Header Bar
-	local headerBar = CreateFrame("Frame", nil, f)
-	headerBar:SetHeight(46)
-	headerBar:SetPoint("TOPLEFT", f, "TOPLEFT", 0, 0)
-	headerBar:SetPoint("TOPRIGHT", f, "TOPRIGHT", 0, 0)
+	-- Fix frame level of template background
+	if f.Bg and f.Bg.SetFrameLevel then
+		f.Bg:SetFrameLevel(f:GetFrameLevel())
+	end
 
-	local title = headerBar:CreateFontString(nil, "OVERLAY", "GameFontHighlightHuge")
-	title:SetPoint("LEFT", headerBar, "LEFT", 18, 2)
-	title:SetText("PULSE |cff4cb8ffQUICK SETUP|r")
+	-- Opaque dark fill behind content
+	local fill = f:CreateTexture(nil, "BACKGROUND")
+	fill:SetPoint("TOPLEFT", f, "TOPLEFT", 8, -20)
+	fill:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -5, 4)
+	fill:SetColorTexture(THEME.bg.r, THEME.bg.g, THEME.bg.b, 1)
 
-	local accentLine = headerBar:CreateTexture(nil, "OVERLAY")
-	accentLine:SetHeight(2)
-	accentLine:SetPoint("BOTTOMLEFT", headerBar, "BOTTOMLEFT", 16, 0)
-	accentLine:SetPoint("BOTTOMRIGHT", headerBar, "BOTTOMRIGHT", -16, 0)
-	accentLine:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 0.8)
+	-- Atmospheric watermark of the ripple artwork
+	local watermark = f:CreateTexture(nil, "BACKGROUND", nil, 1)
+	watermark:SetTexture("Interface\\AddOns\\PulseHaptics\\Media\\SettingsBG")
+	watermark:SetPoint("TOPLEFT", f, "TOPLEFT", 50, -40)
+	watermark:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -10, 10)
+	watermark:SetAlpha(0.06)
 
-	local closeBtn = CreateFrame("Button", nil, f, "UIPanelCloseButtonDefaultAnchors")
-	closeBtn:SetPoint("TOPRIGHT", f, "TOPRIGHT", -4, -4)
-	closeBtn:SetScript("OnClick", function()
-		QuickSetup.Close()
-	end)
+	-- Inner recessed frame behind content
+	local inner = f:CreateTexture(nil, "BACKGROUND", nil, 2)
+	local okAtlas = pcall(inner.SetAtlas, inner, "Options_InnerFrame", true)
+	if okAtlas then
+		inner:SetPoint("TOPLEFT", f, "TOPLEFT", 14, -54)
+		inner:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -14, 46)
+	end
 
-	-- Step breadcrumb tabs (6 tabs across 628px)
+	-- Close button from SettingsFrameTemplate, or create if absent
+	if not f.ClosePanelButton then
+		local ok, close = pcall(CreateFrame, "Button", nil, f, "UIPanelCloseButtonDefaultAnchors")
+		if ok and close then
+			f.ClosePanelButton = close
+		end
+	end
+	if f.ClosePanelButton then
+		f.ClosePanelButton:SetScript("OnClick", function()
+			QuickSetup.Close()
+		end)
+	end
+
+	-- Step breadcrumb tabs (6 tabs across 640px)
 	local stepBar = CreateFrame("Frame", nil, f)
 	stepBar:SetHeight(24)
-	stepBar:SetPoint("TOPLEFT", headerBar, "BOTTOMLEFT", 16, -6)
-	stepBar:SetPoint("TOPRIGHT", headerBar, "BOTTOMRIGHT", -16, -6)
+	stepBar:SetPoint("TOPLEFT", f, "TOPLEFT", 18, -28)
+	stepBar:SetPoint("TOPRIGHT", f, "TOPRIGHT", -18, -28)
 
 	local l1Btn = CreateFrame("Button", nil, stepBar)
 	l1Btn:SetSize(62, 22)
@@ -1845,7 +1907,7 @@ local function buildWindow()
 		"6. Finish",
 	}
 	local tabW = 80
-	local startX = 66
+	local startX = 70
 	for i = 1, TOTAL_STEPS do
 		local tabBtn = CreateFrame("Button", nil, stepBar)
 		tabBtn:SetSize(tabW, 22)
@@ -1866,8 +1928,8 @@ local function buildWindow()
 
 	-- Content Container
 	local container = CreateFrame("Frame", nil, f)
-	container:SetPoint("TOPLEFT", stepBar, "BOTTOMLEFT", 0, -6)
-	container:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -16, 54)
+	container:SetPoint("TOPLEFT", f, "TOPLEFT", 18, -58)
+	container:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -18, 48)
 
 	stepFrames[1] = buildStep1(container)
 	stepFrames[2] = buildStep2(container)
@@ -1878,17 +1940,17 @@ local function buildWindow()
 
 	-- Bottom Action Bar
 	local bottomBar = CreateFrame("Frame", nil, f)
-	bottomBar:SetHeight(48)
-	bottomBar:SetPoint("BOTTOMLEFT", f, "BOTTOMLEFT", 16, 0)
-	bottomBar:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -16, 0)
+	bottomBar:SetHeight(40)
+	bottomBar:SetPoint("BOTTOMLEFT", f, "BOTTOMLEFT", 18, 8)
+	bottomBar:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -18, 8)
 
 	local bottomRule = bottomBar:CreateTexture(nil, "ARTWORK")
 	bottomRule:SetHeight(1)
 	bottomRule:SetPoint("TOPLEFT", bottomBar, "TOPLEFT", 0, 0)
 	bottomRule:SetPoint("TOPRIGHT", bottomBar, "TOPRIGHT", 0, 0)
-	bottomRule:SetColorTexture(THEME.border.r, THEME.border.g, THEME.border.b, 0.6)
+	bottomRule:SetColorTexture(THEME.border.r, THEME.border.g, THEME.border.b, 0.4)
 
-	btnBack = createButton(bottomBar, "< Back", 100, 28, false)
+	btnBack = createButton(bottomBar, "< Back", 100, 26, false)
 	btnBack:SetPoint("LEFT", bottomBar, "LEFT", 0, 0)
 	btnBack:SetScript("OnClick", function()
 		if currentStep > 1 then
@@ -1905,7 +1967,7 @@ local function buildWindow()
 	navLegend:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 	navLegend:SetText("|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[D-Pad]|r Navigate  •  |cff38BDF8[A]|r Select")
 
-	btnNext = createButton(bottomBar, "Next >", 110, 28, true)
+	btnNext = createButton(bottomBar, "Next >", 110, 26, true)
 	btnNext:SetPoint("RIGHT", bottomBar, "RIGHT", 0, 0)
 	btnNext:SetScript("OnClick", function()
 		if currentStep < TOTAL_STEPS then
@@ -1917,7 +1979,7 @@ local function buildWindow()
 		end
 	end)
 
-	btnFinish = createButton(bottomBar, "Save & Start Playing", 160, 28, true)
+	btnFinish = createButton(bottomBar, "Save & Start Playing", 160, 26, true)
 	btnFinish:SetPoint("RIGHT", bottomBar, "RIGHT", 0, 0)
 	btnFinish:SetScript("OnClick", function()
 		Pulse.Database:SetQuickSetupCompleted(true)
@@ -1928,7 +1990,7 @@ local function buildWindow()
 		print("|cff4cb8ffPulse:|r Quick setup complete! Type |cffffffff/pulse|r anytime to fine-tune settings.")
 	end)
 
-	btnAdvanced = createButton(bottomBar, "Advanced Settings", 140, 28, false)
+	btnAdvanced = createButton(bottomBar, "Advanced Settings", 140, 26, false)
 	btnAdvanced:SetPoint("RIGHT", btnFinish, "LEFT", -10, 0)
 	btnAdvanced:SetScript("OnClick", function()
 		Pulse.Database:SetQuickSetupCompleted(true)
