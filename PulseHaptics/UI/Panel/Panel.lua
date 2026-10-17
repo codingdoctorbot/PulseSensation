@@ -298,6 +298,21 @@ local function buildWindow()
 	end
 	f.UpdateStatusBadge = updateStatusBadge
 
+	-- Lowermost bar: Gamepad navigation legend with controller glyphs
+	local gamepadLegend = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	gamepadLegend:SetPoint("LEFT", f.StatusBadge, "RIGHT", 16, 0)
+	gamepadLegend:SetPoint("RIGHT", f.CloseButton, "LEFT", -16, 0)
+	gamepadLegend:SetJustifyH("CENTER")
+	f.GamepadLegend = gamepadLegend
+
+	f.UpdateGamepadLegend = function(text)
+		if f.GamepadLegend then
+			f.GamepadLegend:SetText(text or "")
+			f.GamepadLegend.text = text or ""
+		end
+		f.GamepadLegendText = text or ""
+	end
+
 	-- Sidebar.
 	local sidebar = Sidebar.Create(f, function(page)
 		-- Clearing the box on a category change matches Blizzard's panel

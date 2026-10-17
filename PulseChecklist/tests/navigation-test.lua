@@ -123,18 +123,34 @@ if UI.Panel and UI.Panel.Open then
 		"function"
 	)
 
+	check("PulseSettingsFrame has GamepadLegend", panelFrame.GamepadLegend ~= nil, true)
+
 	local panelPadHandler = panelFrame and panelFrame:GetScript("OnGamePadButtonDown")
 	if panelPadHandler then
 		-- RB switches category
 		panelPadHandler(panelFrame, "PADRSHOULDER")
 		-- D-Pad Right enters content
 		panelPadHandler(panelFrame, "PADDRIGHT")
+		check("GamepadLegend populated in content", (panelFrame.GamepadLegendText or "") ~= "", true)
+
+		-- D-Pad Right moves to next sub-target (dropdown or slider)
+		panelPadHandler(panelFrame, "PADDRIGHT")
+		-- PAD3 triggers Try Texture
+		panelPadHandler(panelFrame, "PAD3")
+
+		-- D-Pad Left moves back towards checkbox
+		panelPadHandler(panelFrame, "PADDLEFT")
 		-- D-Pad Left returns to sidebar
 		panelPadHandler(panelFrame, "PADDLEFT")
 		-- B closes panel
 		panelPadHandler(panelFrame, "PAD2")
 	end
 	check("PulseSettingsFrame closed cleanly via controller PAD2", UI.Panel.IsOpen(), false)
+
+	-- 5. Dropdown Popup Gamepad Navigation
+	local Popup = UI.Panel and UI.Panel.Popup
+	check("Popup.NavigateList function exists", type(Popup and Popup.NavigateList), "function")
+	check("Popup.ConfirmList function exists", type(Popup and Popup.ConfirmList), "function")
 end
 
 io.write("\n")

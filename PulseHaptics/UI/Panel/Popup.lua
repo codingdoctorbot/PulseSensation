@@ -97,6 +97,33 @@ local list -- the popup itself
 local listCatcher -- full-screen click-away catcher behind it
 local entries = {} -- reused entry buttons, index-keyed
 local listState = {}
+local listFocusedIndex = 1
+local listTotalEntries = 0
+
+local function updateEntryFocus()
+	for idx, entry in ipairs(entries) do
+		if entry:IsShown() then
+			if idx == listFocusedIndex then
+				entry.Highlight:Show()
+				if entry.tooltip then
+					Theme.ShowTooltip(entry, entry.label, entry.tooltip)
+				end
+				if list and list.Scroll then
+					local top = (idx - 1) * ENTRY_HEIGHT
+					local curScroll = list.Scroll:GetVerticalScroll() or 0
+					local viewH = list:GetHeight() or 200
+					if top < curScroll then
+						list.Scroll:SetVerticalScroll(math.max(0, top - 10))
+					elseif top + ENTRY_HEIGHT > curScroll + viewH then
+						list.Scroll:SetVerticalScroll(top + ENTRY_HEIGHT - viewH + 10)
+					end
+				end
+			else
+				entry.Highlight:Hide()
+			end
+		end
+	end
+end
 
 local function closeList()
 	if listCatcher then
@@ -105,6 +132,9 @@ local function closeList()
 	listState.onSelect = nil
 	listState.owner = nil
 	listState.previewScale = nil
+	listFocusedIndex = 1
+	listTotalEntries = 0
+	Theme.HideTooltip()
 end
 
 function Popup.CloseList()
@@ -113,6 +143,30 @@ end
 
 function Popup.IsListOpen()
 	return listCatcher ~= nil and listCatcher:IsShown()
+end
+
+function Popup.NavigateList(delta)
+	if not Popup.IsListOpen() or listTotalEntries <= 0 then
+		return
+	end
+	listFocusedIndex = math.max(1, math.min(listTotalEntries, listFocusedIndex + delta))
+	updateEntryFocus()
+	local ent = entries[listFocusedIndex]
+	if ent and ent.value and Pulse.TestMode then
+		pcall(Pulse.TestMode, Pulse, ent.value)
+	end
+end
+
+function Popup.ConfirmList()
+	if not Popup.IsListOpen() then
+		return
+	end
+	local ent = entries[listFocusedIndex]
+	if ent and ent:IsShown() and ent:GetScript("OnClick") then
+		ent:GetScript("OnClick")(ent)
+	else
+		closeList()
+	end
 end
 
 local function ensureList()
@@ -544,6 +598,16 @@ function Popup.OpenList(owner, options, selectedValue, onSelect, previewScale)
 			list.ScrollBar:Hide()
 		end
 	end
+
+	listTotalEntries = #options
+	listFocusedIndex = 1
+	for i = 1, listTotalEntries do
+		if entries[i] and entries[i].Selected and entries[i].Selected:IsShown() then
+			listFocusedIndex = i
+			break
+		end
+	end
+	updateEntryFocus()
 
 	listCatcher:Show()
 	list:Show()
