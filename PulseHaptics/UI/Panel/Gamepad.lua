@@ -284,15 +284,20 @@ local function getRowSubTargets(row)
 		or (type(row.Play) == "table" and type(row.Play.IsShown) == "function")
 
 	if hasSub then
-		-- Cue row with multiple interactive elements on the same horizontal line
+		-- Cue row with multiple interactive elements on the same horizontal line.
+		-- Ordered strictly by visual left-to-right coordinate on screen:
+		-- 1. Checkbox / Toggle   (Theme.CUE_CHECK_LEFT = 4)
+		-- 2. Intensity Slider     (Theme.CUE_SLIDER_LEFT = 232)
+		-- 3. Vibration Mode       (Theme.CUE_DROPDOWN_LEFT = 392)
+		-- 4. Try Texture (Play >) (Theme.CUE_PLAY_LEFT = 550)
 		if type(row.Control) == "table" and row.Control.IsShown and row.Control:IsShown() then
 			targets[#targets + 1] = { kind = "CHECK", widget = row.Control, label = "Enable Cue" }
 		end
-		if type(row.Dropdown) == "table" and row.Dropdown.IsShown and row.Dropdown:IsShown() then
-			targets[#targets + 1] = { kind = "DROPDOWN", widget = row.Dropdown, label = "Vibration Mode" }
-		end
 		if type(row.Slider) == "table" and row.Slider.IsShown and row.Slider:IsShown() then
 			targets[#targets + 1] = { kind = "SLIDER", widget = row.Slider, label = "Intensity Slider" }
+		end
+		if type(row.Dropdown) == "table" and row.Dropdown.IsShown and row.Dropdown:IsShown() then
+			targets[#targets + 1] = { kind = "DROPDOWN", widget = row.Dropdown, label = "Vibration Mode" }
 		end
 		if type(row.Play) == "table" and row.Play.IsShown and row.Play:IsShown() then
 			targets[#targets + 1] = { kind = "PLAY", widget = row.Play, label = "Try Texture" }

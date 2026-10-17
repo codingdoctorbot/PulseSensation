@@ -127,18 +127,52 @@ if UI.Panel and UI.Panel.Open then
 
 	local panelPadHandler = panelFrame and panelFrame:GetScript("OnGamePadButtonDown")
 	if panelPadHandler then
-		-- RB switches category
-		panelPadHandler(panelFrame, "PADRSHOULDER")
-		-- D-Pad Right enters content
-		panelPadHandler(panelFrame, "PADDRIGHT")
-		check("GamepadLegend populated in content", (panelFrame.GamepadLegendText or "") ~= "", true)
+		local sb = panelFrame.Sidebar
+		for idx, btn in ipairs(sb and sb.buttons or {}) do
+			if btn.page and (btn.page.id == "COMBAT" or btn.page.name == "COMBAT" or btn.page.label == "Combat") then
+				btn:Click()
+				break
+			end
+		end
 
-		-- D-Pad Right moves to next sub-target (dropdown or slider)
+		-- D-Pad Right enters content (lands on sub-target 1: Checkbox)
 		panelPadHandler(panelFrame, "PADDRIGHT")
-		-- PAD3 triggers Try Texture
+		check(
+			"Sub-target 1 is Checkbox (Toggle)",
+			string.find(panelFrame.GamepadLegendText or "", "Toggle") ~= nil,
+			true
+		)
+
+		-- D-Pad Right moves to sub-target 2: Intensity Slider
+		panelPadHandler(panelFrame, "PADDRIGHT")
+		check(
+			"Sub-target 2 is Slider (Adjust Intensity)",
+			string.find(panelFrame.GamepadLegendText or "", "Adjust Intensity") ~= nil,
+			true
+		)
+
+		-- D-Pad Right moves to sub-target 3: Dropdown (Select Mode)
+		panelPadHandler(panelFrame, "PADDRIGHT")
+		check(
+			"Sub-target 3 is Dropdown (Select Mode)",
+			string.find(panelFrame.GamepadLegendText or "", "Select Mode") ~= nil,
+			true
+		)
+
+		-- D-Pad Right moves to sub-target 4: Play button (Try Texture)
+		panelPadHandler(panelFrame, "PADDRIGHT")
+		check(
+			"Sub-target 4 is Play Button (Try Texture)",
+			string.find(panelFrame.GamepadLegendText or "", "Try Texture") ~= nil,
+			true
+		)
+
+		-- PAD3 triggers Try Texture anywhere
 		panelPadHandler(panelFrame, "PAD3")
 
-		-- D-Pad Left moves back towards checkbox
+		-- D-Pad Left moves backwards towards checkbox
+		panelPadHandler(panelFrame, "PADDLEFT")
+		panelPadHandler(panelFrame, "PADDLEFT")
 		panelPadHandler(panelFrame, "PADDLEFT")
 		-- D-Pad Left returns to sidebar
 		panelPadHandler(panelFrame, "PADDLEFT")

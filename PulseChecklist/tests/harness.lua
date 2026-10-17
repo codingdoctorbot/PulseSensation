@@ -195,6 +195,14 @@ local function newFrame(frameType, name, parent, template)
 	end)
 	rawset(f, "RegisterCallback", function() end)
 	rawset(f, "Init", function() end)
+	rawset(f, "Click", function(self)
+		if f.__script_OnClick then
+			f.__script_OnClick(self)
+		end
+		if f.__hook_OnClick then
+			f.__hook_OnClick(self)
+		end
+	end)
 	if parent and parent.__children then
 		table.insert(parent.__children, f)
 	end
