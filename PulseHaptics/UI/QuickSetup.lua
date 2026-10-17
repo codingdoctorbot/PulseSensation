@@ -73,12 +73,94 @@ local CLASS_LIST = {
 local ROLE_LIST = {
 	{ id = "tank", label = "🛡️ Tank", desc = "Threat, mitigations, and CC" },
 	{ id = "healer", label = "💚 Healer", desc = "Heal casts and low-health triage" },
-	{ id = "melee", label = "⚔️ Melee DPS", desc = "Weapon swings, combo points, and strikes" },
-	{ id = "ranged", label = "🏹 Ranged DPS", desc = "Spell flow, cast finish, and auto-shot" },
+	{ id = "melee", label = "⚔️ Melee DPS", desc = "Weapon swings, ability cadence, and auto-attack stops" },
+	{ id = "ranged", label = "🏹 Ranged DPS", desc = "Spell flow, instant casts, and interrupts" },
+}
+
+-- Cues each role / class switches on. Mind the direction: critLanded, healCrit and
+-- healReceived fire when YOU are crit or healed (see their Registry caveats), so they are
+-- survival cues for a tank, not output cues for a DPS or healer.
+local ROLE_CUES = {
+	tank = { "threatLost", "deflect", "damageTaken", "critLanded", "debuffReceived" },
+	healer = { "selfCastSucceeded", "selfCastInterrupted", "threatAggro" },
+	melee = { "weaponSwingMain", "weaponSwingOff", "abilityPulse", "meleeAttackStop" },
+	ranged = { "selfCastSucceeded", "selfCastInstant", "selfCastInterrupted" },
+}
+
+-- Only classes with a cue that is theirs alone. autoShotFired is Hunter-specific (spell 75).
+local CLASS_CUES = {
+	HUNTER = { "autoShotFired", "autoRepeatStop" },
+	ROGUE = { "comboPoint" },
+	DRUID = { "comboPoint", "formChanged" },
 }
 
 local selectedClass = nil
-local selectedRole = "melee"
+-- nil until the player picks one: a highlighted role must mean its cues were applied.
+local selectedRole = nil
+
+-- Switch a cue on or off, and when switching it on also open the page gate and category
+-- master in front of it — otherwise a cue enabled here stays silent if that page was
+-- switched off in the settings window.
+local function setCue(id, enabled)
+	Pulse.Database:SetCue(id, enabled)
+	if not enabled then
+		return
+	end
+	local registry = Pulse.Registry
+	local trigger = registry:GetTrigger(id)
+	local master = trigger and registry.ALERT_CATEGORY_MASTER[trigger.category]
+	if master and master ~= id then
+		Pulse.Database:SetCue(master, true)
+	end
+	local gate = registry.CUE_GATE[id]
+	if gate and gate ~= id then
+		Pulse.Database:SetCue(gate, true)
+	end
+end
+
+-- Apply the selected class and role. Cues owned by a role or class that is NOT selected go
+-- back to their registry default rather than off, so clicking through all four roles does
+-- not leave all four applied, and default-on cues (deflect, critLanded, threat warnings)
+-- are not silenced just because another role listed them.
+local function applyClassAndRole()
+	local wanted, managed = {}, {}
+	for _, sets in ipairs({ ROLE_CUES, CLASS_CUES }) do
+		for _, ids in pairs(sets) do
+			for _, id in ipairs(ids) do
+				managed[id] = true
+			end
+		end
+	end
+	for _, id in ipairs(ROLE_CUES[selectedRole] or {}) do
+		wanted[id] = true
+	end
+	for _, id in ipairs(CLASS_CUES[selectedClass] or {}) do
+		wanted[id] = true
+	end
+	for id in pairs(managed) do
+		local trigger = Pulse.Registry:GetTrigger(id)
+		if wanted[id] then
+			setCue(id, true)
+		elseif trigger then
+			setCue(id, trigger.default and true or false)
+		end
+	end
+end
+
+-- Every test button goes through here so a failure ("no controller detected") is reported
+-- instead of swallowed. `quiet` is for the incidental feedback taps on selection clicks.
+local function reportTest(ok, reason, quiet)
+	if not ok and reason and not quiet then
+		print("|cffff5555Pulse:|r " .. tostring(reason))
+	end
+end
+
+local function testMode(modeID, scale, quiet)
+	if Pulse.TestMode then
+		local ok, reason = Pulse:TestMode(modeID, scale)
+		reportTest(ok, reason, quiet)
+	end
+end
 
 local CONTINUOUS_OPTIONS = {
 	{
@@ -673,9 +755,7 @@ local function buildStep1(container)
 			for _, c in ipairs(devCards) do
 				c.refresh()
 			end
-			if Pulse.TestMode then
-				Pulse:TestMode("TAP", 0.6)
-			end
+			testMode("TAP", 0.6, true)
 		end)
 
 		card.refresh = refreshCard
@@ -694,12 +774,7 @@ local function buildStep1(container)
 	local btnTest = createButton(testCard, "Test Rumble", 140, 26, true)
 	btnTest:SetPoint("RIGHT", testCard, "RIGHT", -12, 0)
 	btnTest:SetScript("OnClick", function()
-		if Pulse.TestMode then
-			local ok, err = Pulse:TestMode("HEAVY_STRIKE", 0.85)
-			if not ok and err then
-				print("|cffff5555Pulse:|r " .. tostring(err))
-			end
-		end
+		testMode("HEAVY", 0.85)
 	end)
 
 	local navTargets = {}
@@ -756,6 +831,10 @@ local function buildStep2(container)
 	roleTitle:SetText("1. Planned Class & Combat Role")
 	roleTitle:SetTextColor(THEME.accent.r, THEME.accent.g, THEME.accent.b)
 
+	-- Assigned once the Offensive/Defensive cards below exist; class and role clicks change
+	-- cues those two checkboxes summarise.
+	local refreshCombatChecks = function() end
+
 	-- Class selection buttons (2 rows of 5)
 	local classButtons = {}
 	local classW = 118
@@ -801,9 +880,9 @@ local function buildStep2(container)
 			for _, b in ipairs(classButtons) do
 				b.refresh()
 			end
-			if Pulse.TestMode then
-				Pulse:TestMode("TICK", 0.6)
-			end
+			applyClassAndRole()
+			refreshCombatChecks()
+			testMode("TICK", 0.6, true)
 		end)
 
 		btn.refresh = refreshClassBtn
@@ -816,29 +895,6 @@ local function buildStep2(container)
 	local roleW = 149
 	local roleH = 24
 	local roleY = -78
-
-	local function applyRoleTuning(rID)
-		if rID == "tank" then
-			Pulse.Database:SetCue("threatRising", true)
-			Pulse.Database:SetCue("threatAggro", true)
-			Pulse.Database:SetCue("threatLost", true)
-			Pulse.Database:SetCue("damageTaken", true)
-			Pulse.Database:SetCue("deflect", true)
-		elseif rID == "healer" then
-			Pulse.Database:SetCue("healCrit", true)
-			Pulse.Database:SetCue("healReceived", true)
-			Pulse.Database:SetCue("selfCastSucceeded", true)
-		elseif rID == "melee" then
-			Pulse.Database:SetCue("weaponSwingMain", true)
-			Pulse.Database:SetCue("weaponSwingOff", true)
-			Pulse.Database:SetCue("abilityPulse", true)
-			Pulse.Database:SetCue("critLanded", true)
-		elseif rID == "ranged" then
-			Pulse.Database:SetCue("selfCastSucceeded", true)
-			Pulse.Database:SetCue("selfCastInstant", true)
-			Pulse.Database:SetCue("autoShotFired", true)
-		end
-	end
 
 	for idx, rInfo in ipairs(ROLE_LIST) do
 		local x = 12 + (idx - 1) * (roleW + 8)
@@ -873,13 +929,12 @@ local function buildStep2(container)
 
 		btn:SetScript("OnClick", function()
 			selectedRole = rInfo.id
-			applyRoleTuning(rInfo.id)
+			applyClassAndRole()
+			refreshCombatChecks()
 			for _, b in ipairs(roleButtons) do
 				b.refresh()
 			end
-			if Pulse.TestMode then
-				Pulse:TestMode("TAP", 0.7)
-			end
+			testMode("TAP", 0.7, true)
 		end)
 
 		btn.refresh = refreshRoleBtn
@@ -903,16 +958,14 @@ local function buildStep2(container)
 	descOff:SetPoint("RIGHT", offCard, "RIGHT", -110, 0)
 	descOff:SetJustifyH("LEFT")
 	descOff:SetText(
-		"Physical strikes for weapon swings (main & off hand), auto-shot arrows, ability execution cadence, critical hits landed, and instant spellcasts."
+		"Physical strikes for weapon swings (main & off hand), auto-shot arrows, ability execution cadence, and completed and instant spellcasts."
 	)
 	descOff:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
 	local btnTestOff = createButton(offCard, "Test Strike", 90, 24, false)
 	btnTestOff:SetPoint("TOPRIGHT", offCard, "TOPRIGHT", -12, -12)
 	btnTestOff:SetScript("OnClick", function()
-		if Pulse.TestMode then
-			Pulse:TestMode("HEAVY_STRIKE", 0.75)
-		end
+		testMode("IMPACT", 0.75)
 	end)
 
 	local OFF_CUES = {
@@ -942,7 +995,7 @@ local function buildStep2(container)
 	cbOff:SetScript("OnClick", function(self)
 		local val = self:GetChecked() and true or false
 		for _, id in ipairs(OFF_CUES) do
-			Pulse.Database:SetCue(id, val)
+			setCue(id, val)
 		end
 		if Pulse.UI.Panel and Pulse.UI.Panel.Theme and Pulse.UI.Panel.Theme.PlayCheckSound then
 			Pulse.UI.Panel.Theme.PlayCheckSound(val)
@@ -965,16 +1018,15 @@ local function buildStep2(container)
 	descDef:SetPoint("RIGHT", defCard, "RIGHT", -110, 0)
 	descDef:SetJustifyH("LEFT")
 	descDef:SetText(
-		"Sensory radar for survival: immediate physical warnings when taking damage, getting critically hit, deflecting attacks, receiving debuffs, losing threat, or losing control."
+		"Sensory radar for survival: immediate physical warnings when taking damage, getting critically hit, deflecting attacks, being healed, receiving debuffs, threat changes, or losing control."
 	)
 	descDef:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
 	local btnTestDef = createButton(defCard, "Test Impact", 90, 24, false)
 	btnTestDef:SetPoint("TOPRIGHT", defCard, "TOPRIGHT", -12, -12)
 	btnTestDef:SetScript("OnClick", function()
-		if Pulse.TestMode then
-			Pulse:TestMode("DOUBLE_THUD", 0.75)
-		end
+		-- THUD is critLanded's own mode: the hit this card is about.
+		testMode("THUD", 0.75)
 	end)
 
 	local DEF_CUES = {
@@ -1002,12 +1054,17 @@ local function buildStep2(container)
 	cbDef:SetScript("OnClick", function(self)
 		local val = self:GetChecked() and true or false
 		for _, id in ipairs(DEF_CUES) do
-			Pulse.Database:SetCue(id, val)
+			setCue(id, val)
 		end
 		if Pulse.UI.Panel and Pulse.UI.Panel.Theme and Pulse.UI.Panel.Theme.PlayCheckSound then
 			Pulse.UI.Panel.Theme.PlayCheckSound(val)
 		end
 	end)
+
+	refreshCombatChecks = function()
+		cbOff:SetChecked(isOffActive())
+		cbDef:SetChecked(isDefActive())
+	end
 
 	sf.OnShowStep = function()
 		if not selectedClass then
@@ -1024,8 +1081,7 @@ local function buildStep2(container)
 		for _, b in ipairs(roleButtons) do
 			b.refresh()
 		end
-		cbOff:SetChecked(isOffActive())
-		cbDef:SetChecked(isDefActive())
+		refreshCombatChecks()
 	end
 
 	local navTargets = {}
@@ -1119,9 +1175,7 @@ local function buildStep3(container)
 	local btnTestWorld = createButton(worldCard, "Test Reward", 90, 24, false)
 	btnTestWorld:SetPoint("TOPRIGHT", worldCard, "TOPRIGHT", -12, -12)
 	btnTestWorld:SetScript("OnClick", function()
-		if Pulse.TestMode then
-			Pulse:TestMode("CHIME", 0.75)
-		end
+		testMode("CHIME", 0.75)
 	end)
 
 	local WORLD_CUES = { "lootReceived", "questComplete", "questAccepted", "levelUp", "achievement", "xpGained" }
@@ -1176,9 +1230,7 @@ local function buildStep3(container)
 	local btnTestTarget = createButton(targetCard, "Test Lock", 90, 24, false)
 	btnTestTarget:SetPoint("TOPRIGHT", targetCard, "TOPRIGHT", -12, -12)
 	btnTestTarget:SetScript("OnClick", function()
-		if Pulse.TestMode then
-			Pulse:TestMode("DEFLECT", 0.75)
-		end
+		testMode("DEFLECT", 0.75)
 	end)
 
 	local TARGET_CUES = { "targetChanged", "focusChanged", "softTargetInteraction" }
@@ -1288,9 +1340,7 @@ local function buildStep4(container)
 	local btnTestUI = createButton(uiCard, "Test UI", 90, 24, false)
 	btnTestUI:SetPoint("TOPRIGHT", uiCard, "TOPRIGHT", -12, -12)
 	btnTestUI:SetScript("OnClick", function()
-		if Pulse.TestMode then
-			Pulse:TestMode("TAP", 0.75)
-		end
+		testMode("TAP", 0.75)
 	end)
 
 	local UI_CUES = { "uiInfoMessage", "merchantShow", "bankOpened" }
@@ -1346,9 +1396,8 @@ local function buildStep4(container)
 	local btnTestSocial = createButton(socialCard, "Test Alert", 90, 24, false)
 	btnTestSocial:SetPoint("TOPRIGHT", socialCard, "TOPRIGHT", -12, -12)
 	btnTestSocial:SetScript("OnClick", function()
-		if Pulse.TestMode then
-			Pulse:TestMode("PULSE_BURST", 0.75)
-		end
+		-- DOUBLE_TAP is readyCheck's own mode.
+		testMode("DOUBLE_TAP", 0.75)
 	end)
 
 	local SOCIAL_CUES = { "whisper", "partyInvite", "readyCheck", "queuePop" }
@@ -1482,7 +1531,7 @@ local function buildStep5(container)
 		btnPreview:SetPoint("RIGHT", card, "RIGHT", -6, 0)
 		btnPreview:SetScript("OnClick", function()
 			if Pulse.TestCue then
-				Pulse:TestCue(opt.id)
+				reportTest(Pulse:TestCue(opt.id))
 			end
 		end)
 
@@ -1608,9 +1657,8 @@ local function buildStep6(container)
 	local btnFeel = createButton(sliderCard, "Feel Strength", 130, 26, false)
 	btnFeel:SetPoint("LEFT", slider, "RIGHT", 16, 0)
 	btnFeel:SetScript("OnClick", function()
-		if Pulse.TestMode then
-			Pulse:TestMode("HEAVY_STRIKE", slider:GetValue() / 100)
-		end
+		-- Scale 1.0: the slider already wrote masterIntensity, which the engine applies.
+		testMode("HEAVY", 1.0)
 	end)
 
 	local sliderHint = sliderCard:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
@@ -1690,7 +1738,7 @@ local function buildStep6(container)
 			end
 		end
 
-		local roleName = selectedRole or "Melee"
+		local roleName = "no role chosen"
 		for _, r in ipairs(ROLE_LIST) do
 			if r.id == selectedRole then
 				roleName = r.label
@@ -1742,15 +1790,13 @@ local function buildStep6(container)
 				local cur = slider:GetValue() or 70
 				local nextVal = math.max(10, math.min(100, cur + delta * 5))
 				slider:SetValue(nextVal)
-				if Pulse.TestMode then
-					Pulse:TestMode("TAP", nextVal / 100)
-				end
+				testMode("TAP", 1.0, true)
 			end,
 			OnActivate = function()
 				isSliderAdjusting = not isSliderAdjusting
 				updateSliderHint()
-				if not isSliderAdjusting and Pulse.TestMode then
-					Pulse:TestMode("HEAVY_STRIKE", slider:GetValue() / 100)
+				if not isSliderAdjusting then
+					testMode("HEAVY", 1.0)
 				end
 			end,
 		},
@@ -1983,9 +2029,8 @@ local function buildWindow()
 	btnFinish:SetPoint("RIGHT", bottomBar, "RIGHT", 0, 0)
 	btnFinish:SetScript("OnClick", function()
 		Pulse.Database:SetQuickSetupCompleted(true)
-		if Pulse.TestMode then
-			Pulse:TestMode("LEVEL_UP", 0.75)
-		end
+		-- SURGE is levelUp's own mode.
+		testMode("SURGE", 0.75, true)
 		QuickSetup.Close()
 		print("|cff4cb8ffPulse:|r Quick setup complete! Type |cffffffff/pulse|r anytime to fine-tune settings.")
 	end)

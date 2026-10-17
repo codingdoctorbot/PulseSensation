@@ -220,6 +220,7 @@ read_globals = {
     "GetCVarBool",
     "ClearOverrideBindings",
     "SetOverrideBindingClick",
+    "GetBindingAction",
 }
 
 globals = {

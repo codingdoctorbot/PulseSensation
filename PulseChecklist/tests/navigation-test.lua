@@ -25,24 +25,26 @@ local UI = P.UI
 check("Pulse.UI.GameMenu module exists", type(UI.GameMenu), "table")
 check("Pulse.UI.GameMenu:Init function exists", type(UI.GameMenu.Init), "function")
 
--- Mock GameMenuFrame in harness environment if not present
+-- Mock C_Timer.After to execute synchronously in offline test harness
+_G.C_Timer = _G.C_Timer or {}
+_G.C_Timer.After = function(_, fn)
+	if fn then
+		fn()
+	end
+end
+
 if not _G.GameMenuFrame then
 	_G.GameMenuFrame = _G.CreateFrame("Frame", "GameMenuFrame", _G.UIParent)
 	_G.GameMenuFrame:SetSize(190, 260)
 end
 
--- Set up SmartNavigation mocks
-_G.SMART_NAV_INPUT_DIRECTION = {
-	UP = { dirKey = "UP" },
-	DOWN = { dirKey = "DOWN" },
-}
-local overridesRecorded = {}
-_G.SmartNavigation_AddJumpNavigationOverride = function(btn, dir, target)
-	overridesRecorded[btn] = overridesRecorded[btn] or {}
-	overridesRecorded[btn][dir.dirKey] = target
+local bindingsRecorded = {}
+_G.SetOverrideBindingClick = function(owner, priority, key, buttonName, mouseButton)
+	bindingsRecorded[owner] = bindingsRecorded[owner] or {}
+	bindingsRecorded[owner][key] = { button = buttonName, mouse = mouseButton }
 end
-_G.SmartNavigation_ClearJumpNavigationOverrides = function(btn)
-	overridesRecorded[btn] = nil
+_G.ClearOverrideBindings = function(owner)
+	bindingsRecorded[owner] = nil
 end
 
 local btn1 = _G.CreateFrame("Button", "GameMenuButton1", _G.GameMenuFrame)
@@ -53,21 +55,19 @@ UI.GameMenu:Init()
 local menuBtn = _G.GameMenuButtonPulse or _G.PulseGameMenuButton
 check("GameMenuButtonPulse created", menuBtn ~= nil, true)
 check("GameMenuButtonPulse parent is UIParent (taint-free)", menuBtn and menuBtn:GetParent(), _G.UIParent)
-check("GameMenuButtonPulse has OnSmartNavSelect", type(menuBtn and menuBtn.OnSmartNavSelect), "function")
-check("GameMenuButtonPulse has OnSmartNavDeselect", type(menuBtn and menuBtn.OnSmartNavDeselect), "function")
-check("GameMenuButtonPulse has OnSmartNavClick", type(menuBtn and menuBtn.OnSmartNavClick), "function")
 
--- Verify visibility synchronization and SmartNavigation overrides on Show
+-- Verify visibility synchronization and override binding on Show
 _G.GameMenuFrame:Show()
 check("GameMenuButtonPulse shows when GameMenuFrame shown", menuBtn:IsShown(), true)
-check("Top button UP navigates to menuBtn", overridesRecorded[btn1] and overridesRecorded[btn1]["UP"], menuBtn)
-check("menuBtn DOWN navigates to top button", overridesRecorded[menuBtn] and overridesRecorded[menuBtn]["DOWN"], btn1)
-check("menuBtn UP wraps to bottom button", overridesRecorded[menuBtn] and overridesRecorded[menuBtn]["UP"], btn2)
-check("Bottom button DOWN wraps to menuBtn", overridesRecorded[btn2] and overridesRecorded[menuBtn] ~= nil, true)
+check(
+	"PAD3 override bound to PulseGameMenuButton",
+	bindingsRecorded[menuBtn] and bindingsRecorded[menuBtn]["PAD3"] ~= nil,
+	true
+)
 
 _G.GameMenuFrame:Hide()
 check("GameMenuButtonPulse hides when GameMenuFrame hidden", menuBtn:IsShown(), false)
-check("SmartNav overrides cleared on hide", overridesRecorded[menuBtn], nil)
+check("Override bindings cleared on hide", bindingsRecorded[menuBtn], nil)
 
 -- 2. Quick Setup closes Main Panel
 if UI.Panel and UI.Panel.EnsureBuilt then
