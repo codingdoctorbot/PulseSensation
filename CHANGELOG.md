@@ -1,4 +1,4 @@
-# PulseHaptics v0.3.3-beta
+# PulseHaptics v0.3.3
 
 ## Guided setup
 
@@ -20,4 +20,4 @@
 - Added standalone Windfury proc tracking and an Experimental settings page.
 - Updated the setup documentation, source links, release packaging, and offline regression coverage.
 
-This is a beta release targeting WoW Forever 1.60.1 (Interface 16001). Existing compatibility TOC entries are retained; they do not establish testing on those other clients. Controller response varies by hardware and connection method.
+This release targets WoW Forever 1.60.1 (Interface 16001). Existing compatibility TOC entries are retained; they do not establish testing on those other clients. Controller response varies by hardware and connection method.

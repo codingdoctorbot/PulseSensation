@@ -6,7 +6,7 @@ Feel combat impacts, spellcasting, footsteps, mount movement, gathering, loot, a
 
 Choose the feedback you want, adjust its strength and timing, and keep the rest quiet. Presets are available for Xbox, PlayStation DualSense and DualShock 4, Steam Deck, Steam Controller, Nintendo Switch Pro, and 8BitDo controllers. Motor behavior varies by hardware and connection method.
 
-## New in v0.3.3-beta
+## New in v0.3.3
 
 - **Six-step guided setup:** choose controller hardware, combat feedback, world and interface cues, continuous effects, and overall strength.
 - **Conservative continuous-effect defaults:** new setups enable casting, crafting, low-health heartbeat, and breath depletion. Other continuous effects start off. Existing profiles keep their saved choices.
@@ -62,7 +62,7 @@ Four motor schemas are available: Standard, High Motor Only, Low Motor Only, and
 
 ## Compatibility and project status
 
-**Public beta: v0.3.3-beta.** Current development targets **WoW Forever 1.60.1, Interface 16001**, with native gamepad support. The TOC retains compatibility entries for other clients; those entries do not mean every effect has been verified on each client. Individual cues continue to be tuned as Blizzard's APIs evolve.
+**Current release: v0.3.3.** Current development targets **WoW Forever 1.60.1, Interface 16001**, with native gamepad support. The TOC retains compatibility entries for other clients; those entries do not mean every effect has been verified on each client. Individual cues continue to be tuned as Blizzard's APIs evolve.
 
 Haptics supplement the game's visual and audio cues. Actual feedback depends on the controller, connection, client support, and enabled effects.
 

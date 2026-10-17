@@ -2,7 +2,7 @@
 ### **Feel Azeroth in your hands.**
 
 [![WoW Version](https://img.shields.io/badge/World%20of%20Warcraft-Forever%20(16001)-blue.svg)](https://github.com/codingdoctorbot/PulseSensation2)
-[![Status](https://img.shields.io/badge/Release-0.3.3--beta-purple.svg)](https://github.com/codingdoctorbot/PulseSensation2/releases)
+[![Status](https://img.shields.io/badge/Release-0.3.3-purple.svg)](https://github.com/codingdoctorbot/PulseSensation2/releases)
 [![Performance](https://img.shields.io/badge/Performance-Zero--GC%20Tight%20Loops-brightgreen.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
