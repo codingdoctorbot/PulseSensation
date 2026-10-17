@@ -1,8 +1,8 @@
 # ⚡ PulseHaptics
 ### **Feel Azeroth in your hands.**
 
-[![WoW Version](https://img.shields.io/badge/World%20of%20Warcraft-Forever%20(16001)-blue.svg)](https://github.com/codingdoctorbot/PulseSensation2)
-[![Status](https://img.shields.io/badge/Release-0.3.3-purple.svg)](https://github.com/codingdoctorbot/PulseSensation2/releases)
+[![WoW Version](https://img.shields.io/badge/World%20of%20Warcraft-Forever%20(16001)-blue.svg)](https://github.com/codingdoctorbot/PulseSensation)
+[![Status](https://img.shields.io/badge/Release-0.3.3-purple.svg)](https://github.com/codingdoctorbot/PulseSensation/releases)
 [![Performance](https://img.shields.io/badge/Performance-Zero--GC%20Tight%20Loops-brightgreen.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -110,7 +110,7 @@ Install **PulseHaptics** into your World of Warcraft `Interface/AddOns/` directo
 - **macOS Path**: `/Applications/World of Warcraft/_classic_beta_/Interface/AddOns/`
 - **Windows Path**: `C:\Program Files (x86)\World of Warcraft\_classic_beta_\Interface\AddOns\`
 
-*(Developer tools like `PulseDebug`, `PulseChecklist`, and `PulseProfileReview` are available directly in the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation2) for contributors and testers).*
+*(Developer tools like `PulseDebug`, `PulseChecklist`, and `PulseProfileReview` are available directly in the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation) for contributors and testers).*
 
 ### 3. Guided Setup
 
@@ -168,7 +168,7 @@ PulseHaptics is designed as a modular ecosystem of dedicated, standalone compani
 
 > *Parked in `_parked/` (not loaded, kept for future work): PulseCompass, PulseStudio, PulseAudio, PulseSync, PulseBridge, PulseProbe.*
 >
-> *If you are developing, testing, or reviewing cues, simply clone the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation2) to access the entire developer suite.*
+> *If you are developing, testing, or reviewing cues, simply clone the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation) to access the entire developer suite.*
 
 ---
 

@@ -66,7 +66,7 @@ Four motor schemas are available: Standard, High Motor Only, Low Motor Only, and
 
 Haptics supplement the game's visual and audio cues. Actual feedback depends on the controller, connection, client support, and enabled effects.
 
-PulseHaptics is a free, open-source hobby project. Feedback, bug reports, and contributions are welcome. The source and developer tools (`PulseDebug`, `PulseChecklist`, and `PulseProfileReview`) are available in the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation2).
+PulseHaptics is a free, open-source hobby project. Feedback, bug reports, and contributions are welcome. The source and developer tools (`PulseDebug`, `PulseChecklist`, and `PulseProfileReview`) are available in the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation).
 
 ## Credits
 
