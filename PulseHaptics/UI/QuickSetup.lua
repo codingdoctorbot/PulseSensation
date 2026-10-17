@@ -8,7 +8,7 @@
 --   2. Combat Haptics (Offensive & Defensive + Class & Planned Role)
 --   3. World & Target Interactions (World & Discovery + Target & Crosshair)
 --   4. Interface & Social (Controller UI & Windows + Social & Group Readiness)
---   5. Immersion & Continuous Textures (12 ambient textures, all default off, rich info)
+--   5. Immersion & Continuous Textures (12 effects; casting, crafting, low-health and breath enabled for new setups)
 --   6. Master Strength & Finish (Master intensity slider, live summary, save & play)
 
 local ADDON_NAME, Pulse = ...
@@ -197,13 +197,13 @@ local CONTINUOUS_OPTIONS = {
 		id = "castTexture",
 		label = "Spellcasting Channel Hum",
 		desc = "Continuous magical hum that builds during casts and channels steadily through your hands.",
-		default = false,
+		default = true,
 	},
 	{
 		id = "craftTexture",
 		label = "Crafting Rhythms",
 		desc = "Physical tool strikes: anvil hammer strokes, mining pickaxe impacts, tailoring stitches.",
-		default = false,
+		default = true,
 	},
 	{
 		id = "weatherTexture",
@@ -215,13 +215,13 @@ local CONTINUOUS_OPTIONS = {
 		id = "breathTexture",
 		label = "Breath Depletion",
 		desc = "Rising heartbeat pulse that quickens and intensifies as your breath meter runs low underwater.",
-		default = false,
+		default = true,
 	},
 	{
 		id = "lowHealthWarning",
 		label = "Low Health Heartbeat",
 		desc = "Urgent repeating cardiac 'lub-dub' rhythm in sync with screen warnings below 20% health.",
-		default = false,
+		default = true,
 	},
 	{
 		id = "taxiRide",
@@ -236,6 +236,19 @@ local CONTINUOUS_OPTIONS = {
 		default = false,
 	},
 }
+
+-- Seed only genuinely new installs. Existing profiles and a partially completed wizard
+-- keep the player's saved choices when this window is opened again.
+local function applyInitialContinuousDefaults()
+	local database = Pulse.Database
+	if not database:Get("quickSetupDefaultsPending") then
+		return
+	end
+	for _, option in ipairs(CONTINUOUS_OPTIONS) do
+		setCue(option.id, option.default)
+	end
+	database:Set("quickSetupDefaultsPending", false)
+end
 
 -- ── UI Helper Builders ───────────────────────────────────────────────────────
 
@@ -295,22 +308,7 @@ local tabIndicatorL1, tabIndicatorR1, navLegend
 
 local quickNavFocus = nil
 local quickFocusBox = nil
-local quickCaptureBtn = nil
-
-local QUICK_GAMEPAD_KEYS = {
-	"PAD1",
-	"PAD2",
-	"PAD3",
-	"PAD4",
-	"PADLSHOULDER",
-	"PADRSHOULDER",
-	"PADDUP",
-	"PADDDOWN",
-	"PADDLEFT",
-	"PADDRIGHT",
-	"PADFORWARD",
-	"PADBACK",
-}
+local pendingCaptureCleanup
 
 local function getQuickFocusBox(parent)
 	if quickFocusBox then
@@ -548,36 +546,19 @@ local function onQuickGamepadInput(key)
 	end
 end
 
-local function bindQuickCaptureKeys(owner)
-	if InCombatLockdown and InCombatLockdown() then
+-- Native OnGamePadButtonDown handles navigation; never redirect gameplay keys to
+-- an invisible click target. Clean up only our own stale overrides, after combat if needed.
+local function releaseQuickCaptureKeys(owner)
+	if not owner or not ClearOverrideBindings then
 		return
 	end
-	if not quickCaptureBtn then
-		quickCaptureBtn = CreateFrame("Button", "PulseQuickSetupCaptureButton", UIParent)
-		quickCaptureBtn:SetSize(1, 1)
-		quickCaptureBtn:SetPoint("TOPLEFT", UIParent, "TOPLEFT", -20, 20)
-		quickCaptureBtn:RegisterForClicks("AnyDown")
-		quickCaptureBtn:SetScript("OnClick", function(_, _, down)
-			if down and quickCaptureBtn.currentKey then
-				onQuickGamepadInput(quickCaptureBtn.currentKey)
-			end
-		end)
+	if InCombatLockdown and InCombatLockdown() then
+		pendingCaptureCleanup = owner
+		return
 	end
-
-	if ClearOverrideBindings then
-		ClearOverrideBindings(owner)
-	end
-
-	for _, key in ipairs(QUICK_GAMEPAD_KEYS) do
-		if SetOverrideBindingClick then
-			SetOverrideBindingClick(owner, true, key, quickCaptureBtn:GetName(), "LeftButton")
-		end
-	end
-end
-
-local function releaseQuickCaptureKeys(owner)
-	if ClearOverrideBindings then
-		pcall(ClearOverrideBindings, owner)
+	ClearOverrideBindings(owner)
+	if pendingCaptureCleanup == owner then
+		pendingCaptureCleanup = nil
 	end
 end
 
@@ -1194,9 +1175,9 @@ local function buildStep3(container)
 
 	cbWorld:SetScript("OnClick", function(self)
 		local val = self:GetChecked() and true or false
-		Pulse.Database:SetCue("gateWorld", val)
+		setCue("gateWorld", val)
 		for _, id in ipairs(WORLD_CUES) do
-			Pulse.Database:SetCue(id, val)
+			setCue(id, val)
 		end
 		if Pulse.UI.Panel and Pulse.UI.Panel.Theme and Pulse.UI.Panel.Theme.PlayCheckSound then
 			Pulse.UI.Panel.Theme.PlayCheckSound(val)
@@ -1249,10 +1230,10 @@ local function buildStep3(container)
 
 	cbTarget:SetScript("OnClick", function(self)
 		local val = self:GetChecked() and true or false
-		Pulse.Database:SetCue("gateTarget", val)
-		Pulse.Database:SetCue("gateInteract", val)
+		setCue("gateTarget", val)
+		setCue("gateInteract", val)
 		for _, id in ipairs(TARGET_CUES) do
-			Pulse.Database:SetCue(id, val)
+			setCue(id, val)
 		end
 		if Pulse.UI.Panel and Pulse.UI.Panel.Theme and Pulse.UI.Panel.Theme.PlayCheckSound then
 			Pulse.UI.Panel.Theme.PlayCheckSound(val)
@@ -1359,10 +1340,10 @@ local function buildStep4(container)
 
 	cbUI:SetScript("OnClick", function(self)
 		local val = self:GetChecked() and true or false
-		Pulse.Database:SetCue("controllerUIMaster", val)
-		Pulse.Database:SetCue("gateInterface", val)
+		setCue("controllerUIMaster", val)
+		setCue("gateInterface", val)
 		for _, id in ipairs(UI_CUES) do
-			Pulse.Database:SetCue(id, val)
+			setCue(id, val)
 		end
 		if Pulse.UI.Panel and Pulse.UI.Panel.Theme and Pulse.UI.Panel.Theme.PlayCheckSound then
 			Pulse.UI.Panel.Theme.PlayCheckSound(val)
@@ -1416,9 +1397,9 @@ local function buildStep4(container)
 
 	cbSocial:SetScript("OnClick", function(self)
 		local val = self:GetChecked() and true or false
-		Pulse.Database:SetCue("gateSocial", val)
+		setCue("gateSocial", val)
 		for _, id in ipairs(SOCIAL_CUES) do
-			Pulse.Database:SetCue(id, val)
+			setCue(id, val)
 		end
 		if Pulse.UI.Panel and Pulse.UI.Panel.Theme and Pulse.UI.Panel.Theme.PlayCheckSound then
 			Pulse.UI.Panel.Theme.PlayCheckSound(val)
@@ -1461,7 +1442,7 @@ local function buildStep4(container)
 	return sf
 end
 
--- ── Step 5: Immersion & Continuous Textures (Default OFF, Rich Info) ────────
+-- ── Step 5: Immersion & Continuous Textures ────────
 
 local function buildStep5(container)
 	local sf = CreateFrame("Frame", nil, container)
@@ -1477,7 +1458,7 @@ local function buildStep5(container)
 	desc:SetPoint("RIGHT", sf, "RIGHT", -10, 0)
 	desc:SetJustifyH("LEFT")
 	desc:SetText(
-		"Continuous textures provide constant ambient vibration (held sensations). All are off by default so you can enable only the ones you enjoy."
+		"New setups enable casting, crafting, low-health and breath effects. Other effects start off; your saved choices are kept."
 	)
 	desc:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
@@ -1540,7 +1521,7 @@ local function buildStep5(container)
 			if Pulse.UI.Panel and Pulse.UI.Panel.Theme and Pulse.UI.Panel.Theme.PlayCheckSound then
 				Pulse.UI.Panel.Theme.PlayCheckSound(val)
 			end
-			Pulse.Database:SetCue(opt.id, val)
+			setCue(opt.id, val)
 		end)
 
 		card.refresh = function()
@@ -1559,7 +1540,7 @@ local function buildStep5(container)
 			Pulse.UI.Panel.Theme.PlayCheckSound(val)
 		end
 		for _, opt in ipairs(CONTINUOUS_OPTIONS) do
-			Pulse.Database:SetCue(opt.id, val)
+			setCue(opt.id, val)
 		end
 		for _, card in ipairs(itemCards) do
 			card.refresh()
@@ -1759,7 +1740,7 @@ local function buildStep6(container)
 			(
 				"• Selected Controller Hardware: |cffffffff%s|r\n"
 				.. "• Character Class & Planned Role: |cffffffff%s (%s)|r\n"
-				.. "• Active Continuous Textures: |cffffffff%d active|r (default off)\n"
+				.. "• Active Continuous Textures: |cffffffff%d active|r\n"
 				.. "• Master Haptic Strength: |cffffffff%d%%|r\n\n"
 				.. "All preferences are saved directly to your active profile.\nYou can re-run this setup anytime by typing |cff4cb8ff/pulse setup|r."
 			):format(devName, className, roleName, contCount, curInt)
@@ -1835,6 +1816,7 @@ local function buildWindow()
 	end
 
 	local f = createWindow()
+	f:Hide() -- install lifecycle hooks before its first Show
 	f:SetSize(676, 550)
 	f:SetPoint("CENTER", UIParent, "CENTER", 0, 20)
 	f:SetFrameStrata("DIALOG")
@@ -2068,7 +2050,10 @@ local function buildWindow()
 	end)
 
 	f:HookScript("OnShow", function()
-		bindQuickCaptureKeys(f)
+		releaseQuickCaptureKeys(f)
+		if f.EnableGamePadButton then
+			f:EnableGamePadButton(true)
+		end
 		local targets = stepFrames[currentStep] and stepFrames[currentStep].navTargets or {}
 		if #targets > 0 then
 			setQuickFocus(targets[1])
@@ -2077,15 +2062,24 @@ local function buildWindow()
 
 	f:HookScript("OnHide", function()
 		releaseQuickCaptureKeys(f)
+		if f.EnableGamePadButton then
+			f:EnableGamePadButton(false)
+		end
+		if Pulse.CancelContinuousPreview then
+			Pulse:CancelContinuousPreview()
+		end
 		if quickFocusBox then
 			quickFocusBox:Hide()
 		end
 	end)
 
 	f:RegisterEvent("PLAYER_REGEN_DISABLED")
-	f:SetScript("OnEvent", function(self, event)
+	f:RegisterEvent("PLAYER_REGEN_ENABLED")
+	f:SetScript("OnEvent", function(_, event)
 		if event == "PLAYER_REGEN_DISABLED" then
 			QuickSetup.Close()
+		elseif event == "PLAYER_REGEN_ENABLED" and pendingCaptureCleanup then
+			releaseQuickCaptureKeys(pendingCaptureCleanup)
 		end
 	end)
 
@@ -2105,6 +2099,7 @@ function QuickSetup.Open(initialStep)
 		Pulse.UI.Panel.Close()
 	end
 
+	applyInitialContinuousDefaults()
 	buildWindow()
 	currentStep = initialStep or 1
 	if stepFrames[currentStep] and stepFrames[currentStep].OnShowStep then
@@ -2115,15 +2110,8 @@ function QuickSetup.Open(initialStep)
 end
 
 function QuickSetup.Close()
-	if Pulse.CancelContinuousPreview then
-		Pulse:CancelContinuousPreview()
-	end
-	if quickFocusBox then
-		quickFocusBox:Hide()
-	end
 	if frame then
-		releaseQuickCaptureKeys(frame)
-		frame:Hide()
+		frame:Hide() -- OnHide owns all exit-path cleanup, including Escape.
 	end
 end
 

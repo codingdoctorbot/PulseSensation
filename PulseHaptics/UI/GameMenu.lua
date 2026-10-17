@@ -14,8 +14,9 @@
 --    Detects active controller hardware (PlayStation: Square, Xbox: X, Nintendo: Y) and dynamically
 --    displays the corresponding Blizzard button glyph (|A:Gamepad_...|a) and clear prompt:
 --    "Press [Square / X glyph] to open settings".
--- 4. Safe Dismissal: Uses deferred GameMenuFrame:Hide() on the next frame tick rather than
---    HideUIPanel(), completely avoiding SetPreferredGamepadInteractTarget execution taint.
+-- 4. Dismissal: Uses the public HideUIPanel path out of combat on the next frame tick.
+--    Direct Frame:Hide() skips FrameControlsManager cleanup and leaves its UI binding
+--    groups active after the settings window closes.
 
 local ADDON_NAME, Pulse = ...
 
@@ -26,6 +27,7 @@ Pulse.UI.GameMenu = GameMenu
 local PAD_KEY = "PAD3"
 local BUTTON_NAME = "PulseGameMenuButton"
 local BANNER_H = 40
+local BANNER_GAP = 52
 local DEFAULT_BANNER_W = 260
 local ICON_PATH = "Interface\\AddOns\\PulseHaptics\\Media\\icon"
 
@@ -109,41 +111,24 @@ local function detectPadStyle()
 	return "Auto"
 end
 
--- Generate glyph-rich prompt text based on detected controller hardware
+-- Keep a single, compact prompt within the button's second line.
 local function getGamepadPrompt()
 	local style = detectPadStyle()
 	if style == "Shapes" then
-		-- PlayStation: Square
-		return "Press |A:Gamepad_Shp_Square_32:15:15:0:-1|a Square to open settings", "Square"
+		return "|A:gamepad-ps-buttonsquare-normal:12:12|a Square: open settings"
 	elseif style == "Letters" then
-		-- Xbox: X
-		return "Press |A:Gamepad_Ltr_X_32:15:15:0:-1|a X to open settings", "X"
+		return "|A:gamepad-xbox1-buttonx-normal:12:12|a X: open settings"
 	elseif style == "Reverse" then
-		-- Nintendo Switch: Y
-		return "Press |A:Gamepad_Rev_Y_32:15:15:0:-1|a Y to open settings", "Y"
-	else
-		-- Mixed / Generic: Show both Square / X
-		return "Press |A:Gamepad_Shp_Square_32:14:14:0:-1|a Square / |A:Gamepad_Ltr_X_32:14:14:0:-1|a X to open settings",
-			"Square/X"
+		return "|A:gamepad-switch-128x-face-y-normal:12:12|a Y: open settings"
 	end
+	return "Square / X: open settings"
 end
 
 local function refreshPrompt()
 	if not banner or not banner.subtitle then
 		return
 	end
-	if bound then
-		local prompt, btnLabel = getGamepadPrompt()
-		banner.subtitle:SetText(prompt)
-		if banner.badge then
-			banner.badge:SetText(("|cff38BDF8[%s]|r"):format(btnLabel))
-		end
-	else
-		banner.subtitle:SetText("Click to open settings")
-		if banner.badge then
-			banner.badge:SetText("|cff38BDF8/pulse|r")
-		end
-	end
+	banner.subtitle:SetText(bound and getGamepadPrompt() or "Click to open settings")
 end
 
 local function unbind()
@@ -176,13 +161,17 @@ local function onClick()
 
 	unbind()
 
-	-- Defer dismissal to next frame tick: avoids SetPreferredGamepadInteractTarget taint
+	-- Finish the current press before closing the managed native panel.
 	C_Timer.After(0, function()
 		if inCombat() then
 			return
 		end
 		if GameMenuFrame and GameMenuFrame:IsShown() then
-			GameMenuFrame:Hide()
+			-- Also releases native controller focus and its fallthrough key catcher.
+			HideUIPanel(GameMenuFrame)
+			if GameMenuFrame:IsShown() then
+				return
+			end
 		end
 		openPanel()
 	end)
@@ -226,6 +215,8 @@ local function updateBannerLayout()
 	end
 	banner:SetWidth(width)
 	banner:SetHeight(BANNER_H)
+	banner.title:SetWidth(width - 56)
+	banner.subtitle:SetWidth(width - 56)
 	if GameMenuFrame.GetFrameLevel then
 		banner:SetFrameLevel(GameMenuFrame:GetFrameLevel() + 5)
 	end
@@ -235,8 +226,8 @@ local function updateBannerLayout()
 	if apexCrest and apexCrest.IsShown and apexCrest:IsShown() then
 		banner:SetPoint("BOTTOM", apexCrest, "TOP", 0, 8)
 	else
-		-- Sit 22px above GameMenuFrame to sit cleanly above Blizzard's DialogHeader "Game Menu" ribbon
-		banner:SetPoint("BOTTOM", GameMenuFrame, "TOP", 0, 22)
+		-- Leave room above Blizzard's Game Menu title ribbon.
+		banner:SetPoint("BOTTOM", GameMenuFrame, "TOP", 0, BANNER_GAP)
 	end
 end
 
@@ -280,20 +271,21 @@ local function createBanner()
 	-- Title (Top Line)
 	local fontName = _G.GameFontNormalMed1 and "GameFontNormalMed1" or "GameFontNormal"
 	b.title = b:CreateFontString(nil, "OVERLAY", fontName)
-	b.title:SetPoint("TOPLEFT", b.icon, "TOPRIGHT", 10, -3)
+	b.title:SetPoint("TOPLEFT", b, "TOPLEFT", 44, -5)
+	b.title:SetHeight(14)
+	b.title:SetJustifyH("LEFT")
+	b.title:SetWordWrap(false)
 	b.title:SetText("Pulse Haptics")
 	b.title:SetTextColor(0.298, 0.722, 1.000)
 
-	-- Subtitle (Bottom Line): "Press [Square/X] to open settings"
+	-- Subtitle: controller shortcut, or a mouse prompt when unbound.
 	local subFont = "GameFontHighlightSmall"
 	b.subtitle = b:CreateFontString(nil, "OVERLAY", subFont)
-	b.subtitle:SetPoint("BOTTOMLEFT", b.icon, "BOTTOMRIGHT", 10, 4)
+	b.subtitle:SetPoint("BOTTOMLEFT", b, "BOTTOMLEFT", 44, 5)
+	b.subtitle:SetHeight(14)
+	b.subtitle:SetJustifyH("LEFT")
+	b.subtitle:SetWordWrap(false)
 	b.subtitle:SetTextColor(0.88, 0.92, 0.96)
-
-	-- Badge: Controller key prompt or /pulse command
-	local legendFont = "GameFontHighlightSmall"
-	b.badge = b:CreateFontString(nil, "OVERLAY", legendFont)
-	b.badge:SetPoint("RIGHT", b, "RIGHT", -12, 0)
 
 	b:SetScript("OnEnter", function(btn)
 		setHover(btn, true)

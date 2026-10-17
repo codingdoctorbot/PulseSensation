@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # PulseSensation unified QA test and lint runner
-# Executes static analysis (luacheck) and all 7 offline test harnesses.
+# Executes static analysis (luacheck) and the registered offline test harnesses.
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "${REPO_DIR}"
@@ -25,6 +25,7 @@ SUITES=(
   "arbitration-test PulseHaptics"
   "windfury-test PulseHaptics"
   "navigation-test PulseHaptics"
+  "quicksetup-test PulseHaptics"
   "phase2-test PulseHaptics"
   "cue-audit PulseHaptics"
   "pulsedebug-test PulseDebug"

@@ -4,8 +4,9 @@ set -euo pipefail
 # PulseHaptics release packaging script
 # Generates a clean distribution zip archive for CurseForge, Wago, and GitHub Releases.
 
-VERSION="0.3.2-beta"
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+VERSION="$(awk '/^## Version:/ { print $3; exit }' "${REPO_DIR}/PulseHaptics/PulseHaptics.toc")"
+[[ "${VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+[-A-Za-z0-9.]*$ ]] || { echo "Invalid TOC version" >&2; exit 1; }
 DIST_DIR="${REPO_DIR}/dist"
 STAGE_DIR="${DIST_DIR}/stage"
 
@@ -23,6 +24,7 @@ rsync -av --exclude '.DS_Store' --exclude '.*' \
 # Copy LICENSE and README into PulseHaptics
 cp "${REPO_DIR}/LICENSE" "${STAGE_DIR}/PulseHaptics/"
 cp "${REPO_DIR}/README.md" "${STAGE_DIR}/PulseHaptics/"
+cp "${REPO_DIR}/CHANGELOG.md" "${STAGE_DIR}/PulseHaptics/"
 
 # Disable macOS AppleDouble resource forks (._* files)
 export COPYFILE_DISABLE=1

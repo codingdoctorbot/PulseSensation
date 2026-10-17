@@ -15,8 +15,8 @@
 --     Triggers (LT/RT) also step sliders directly.
 --   - Integrated Dropdown Navigation: D-Pad and A/B directly browse and pick from Popup menus.
 --   - Dynamic Lowermost Bar: Displays contextual button prompts with native Blizzard controller glyphs.
---   - Taint-free execution: Uses EnableGamePadButton and window-owned override bindings out of combat.
---     Clears cleanly on OnHide and closes instantly on combat start (PLAYER_REGEN_DISABLED).
+--   - Native button events handle navigation. No hidden click target captures gameplay keys.
+--     Any stale window-owned overrides are cleared out of combat.
 
 local ADDON_NAME, Pulse = ...
 
@@ -27,7 +27,7 @@ local Gamepad = {}
 Panel.Gamepad = Gamepad
 
 local panel -- reference to PulsePanel
-local captureButton -- invisible button owned by panel for override binding capture
+local pendingCaptureCleanup
 local focusBox -- visual focus reticle
 local mode = "SIDEBAR" -- "SIDEBAR" or "CONTENT"
 local currentSidebarIndex = 1
@@ -35,23 +35,6 @@ local currentContentIndex = 1
 local currentSubTargetIndex = 1
 local isAdjustingSlider = false
 local focusedRow = nil
-
-local GAMEPAD_KEYS = {
-	"PAD1",
-	"PAD2",
-	"PAD3",
-	"PAD4",
-	"PADLSHOULDER",
-	"PADRSHOULDER",
-	"PADLTRIGGER",
-	"PADRTRIGGER",
-	"PADDUP",
-	"PADDDOWN",
-	"PADDLEFT",
-	"PADDRIGHT",
-	"PADFORWARD",
-	"PADBACK",
-}
 
 function Gamepad.IsEnabled()
 	if type(InputUtil) == "table" and type(InputUtil.IsGamepadUIEnabled) == "function" then
@@ -830,36 +813,17 @@ end
 
 -- ── Bindings & Lifecycle ─────────────────────────────────────────────────────
 
-local function bindCaptureKeys(owner)
-	if InCombatLockdown and InCombatLockdown() then
+local function releaseCaptureKeys(owner)
+	if not owner or not ClearOverrideBindings then
 		return
 	end
-	if not captureButton then
-		captureButton = CreateFrame("Button", "PulsePanelCaptureButton", UIParent)
-		captureButton:SetSize(1, 1)
-		captureButton:SetPoint("TOPLEFT", UIParent, "TOPLEFT", -10, 10)
-		captureButton:RegisterForClicks("AnyDown")
-		captureButton:SetScript("OnClick", function(_, _, down)
-			if down and captureButton.currentKey then
-				handleInput(captureButton.currentKey)
-			end
-		end)
+	if InCombatLockdown and InCombatLockdown() then
+		pendingCaptureCleanup = owner
+		return
 	end
-
-	if ClearOverrideBindings then
-		ClearOverrideBindings(owner)
-	end
-
-	for _, key in ipairs(GAMEPAD_KEYS) do
-		if SetOverrideBindingClick then
-			SetOverrideBindingClick(owner, true, key, captureButton:GetName(), "LeftButton")
-		end
-	end
-end
-
-local function releaseCaptureKeys(owner)
-	if ClearOverrideBindings then
-		pcall(ClearOverrideBindings, owner)
+	ClearOverrideBindings(owner)
+	if pendingCaptureCleanup == owner then
+		pendingCaptureCleanup = nil
 	end
 end
 
@@ -883,7 +847,7 @@ function Gamepad.OnShow()
 		handleInput(key)
 	end)
 
-	bindCaptureKeys(panel)
+	releaseCaptureKeys(panel)
 	selectSidebarIndex(1, false)
 end
 
@@ -898,6 +862,9 @@ function Gamepad.OnHide()
 	end
 	if panel then
 		releaseCaptureKeys(panel)
+		if panel.EnableGamePadButton then
+			panel:EnableGamePadButton(false)
+		end
 		if panel.UpdateGamepadLegend then
 			panel.UpdateGamepadLegend("")
 		end
@@ -917,4 +884,10 @@ function Gamepad.Setup() end
 
 function Gamepad.Init(owner)
 	panel = owner
+	owner:RegisterEvent("PLAYER_REGEN_ENABLED")
+	owner:HookScript("OnEvent", function(_, event)
+		if event == "PLAYER_REGEN_ENABLED" and pendingCaptureCleanup then
+			releaseCaptureKeys(pendingCaptureCleanup)
+		end
+	end)
 end

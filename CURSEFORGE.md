@@ -1,181 +1,78 @@
-# Feel Azeroth.
+# Pulse Haptics: Feel Azeroth
 
-**PulseHaptics adds rich, customizable gamepad vibration to World of Warcraft — controller haptics and rumble that you can tune for every cue.**
+**Customizable controller vibration for World of Warcraft.**
 
-Feel combat impacts. Feel your spells. Feel movement, flight, swimming, UI interactions, and the world around you.
+Feel combat impacts, spellcasting, footsteps, mount movement, gathering, loot, and interface interactions through your gamepad. PulseHaptics uses WoW's native gamepad support, with 190 configurable cues, 35 vibration modes, and 12 built-in profiles.
 
-PulseHaptics turns game events into tactile controller feedback designed to complement what you see and hear — from quick impact pulses to continuous gamepad rumble that evolves with what you're doing. Made for WoW Forever's native gamepad support, with presets for Xbox, DualSense, DualShock 4, Steam Deck, Switch Pro and 8BitDo controllers.
+Choose the feedback you want, adjust its strength and timing, and keep the rest quiet. Presets are available for Xbox, PlayStation DualSense and DualShock 4, Steam Deck, Steam Controller, Nintendo Switch Pro, and 8BitDo controllers. Motor behavior varies by hardware and connection method.
 
----
+## New in v0.3.3-beta
 
-## 🎮 Features
+- **Six-step guided setup:** choose controller hardware, combat feedback, world and interface cues, continuous effects, and overall strength.
+- **Conservative continuous-effect defaults:** new setups enable casting, crafting, low-health heartbeat, and breath depletion. Other continuous effects start off. Existing profiles keep their saved choices.
+- **Controller navigation:** move between controls, adjust sliders, select dropdown choices, and read contextual button prompts.
+- **Settings handoff fixes:** improved cleanup when settings close after being opened from the Game Menu. The wizard and Advanced Settings no longer capture gameplay keys through hidden click targets.
+- **Windfury tracking:** a standalone proc-tracking module and Experimental settings page.
 
-### 🎯 190 Granular Haptic Cues
+## Feedback you can tune
 
-A rich collection of customizable cues across 16 distinct categories:
+- **Combat and defense:** swings, critical hits, parries, blocks, incoming damage, combo points, and execute alerts.
+- **Casting and channels:** cast build-up, channel feedback, completion, interrupts, and failure alerts.
+- **Movement and mounts:** distinct footstep and gait styles, galloping, takeoff, landing, and flight feedback.
+- **Environment:** weather, swimming, underwater breath, and exploration cues.
+- **Professions and loot:** crafting rhythms, gathering, fishing, item collection, and inventory interactions.
+- **Interface and targeting:** radial menus, panel transitions, soft targeting, and selected combat alerts.
 
-*   **Combat & Defense:** Weapon swings, crits, parries, blocks, damage taken, combo points, and execute alerts.
-*   **Spellcasting & Channels:** Cast build-up crescendo, channel hum, instant casts, interrupt and failure alerts.
-*   **Shaped Locomotion:** Footfalls with 6 physical surface timbres (Boot, Hoof, Paw, Heavy, Claw, Metal) and stereo left/right motor split.
-*   **Mounts & Flight:** Gallop rhythm, takeoff thrust, landing impact, taxi flights, and dragonriding speed turbulence.
-*   **Environment & Weather:** Rain patter, blizzard biting chatter, storm rumbles, breath loss, and swimming drag.
-*   **Tradeskills & Economy:** Anvil hammer beats, mining pick taps, skinning, herbalism, fishing bobber rumble, and loot pulses.
-*   **Controller UI & Menus:** Radial menu ticks, panel transitions, popup dialogs, and soft-targeting reticle locks.
-*   **Tactile Radar & Accessibility:** Loss of control stuns, interrupt windows, boss ability telegraphs, and threat transitions.
+Enable or disable individual cues or whole categories without clearing the settings underneath. Collapsible sections and Simple View keep Advanced Settings manageable. The engine coalesces overlapping events and keeps high-frequency haptic loops allocation-conscious.
 
-### 🎭 12 Curated Built-in Profiles
+## Profiles and vibration modes
 
-Tailor your haptic feedback to your exact activity without manual configuration:
+Start with **Default**, **Questing**, **Raiding**, **PvP – Tactical Radar**, dungeon-role profiles for Tank, Healer, Melee, Caster, and Hunter, or the three Immersion profiles for Melee, Caster, and Ranged. Customize any profile to suit your playstyle.
 
-*   **Default:** Balanced baseline across combat, environment, movement, and alerts (42 active cues, zero motor fatigue).
-*   **Dungeon: Tank:** Threat lost/aggro alarms, active mitigation, CC suite, and boss cast telegraphs; zero footstep or ambient clutter.
-*   **Dungeon: Healer:** Triage low-health alarms, heal completion confirmations, dispels, and interrupt warnings.
-*   **Dungeon: Melee:** Strike cadence, combo points, execute warnings, boss telegraphs, and kick windows.
-*   **Dungeon: Caster:** Continuous channel beds, completion snaps, lockout alarms, and proc notifications.
-*   **Dungeon: Hunter:** Auto-shot timing, melee weave cadence, and feign-death threat alarms.
-*   **Immersion: Melee:** Armor-weighted gait, terrain landings, parry/block impacts, weather, and world looting.
-*   **Immersion: Caster:** Flowing spell textures, elemental channeling, environmental weather, and magical interactions.
-*   **Immersion: Ranged:** Ranged shot cadence, weapon swings, bag handling, and world exploration.
-*   **PvP (Tactical Radar):** Pure competitive reaction radar — CC suite, enemy casts, defensives, and life-threatening danger; zero ambient noise.
-*   **Raiding:** Boss telegraph alarms, phase transitions, tank swaps, defensive cooldowns, and raid coordination.
-*   **Questing:** Open-world adventure — footfalls, mount gallop, weather, dialogue, level up, bag/item management, and crisp mob kills.
+The vibration library includes short transients, physical impacts, rhythmic pulses, continuous textures, and ramps. Examples include `SNAP`, `MICRO_TAP`, `THUD`, `DOUBLE_PULSE`, `HEARTBEAT`, `RUMBLE`, `HUM`, `WAVE`, and `CRESCENDO`.
 
-### 👣 Shaped Locomotion & Authentic Gait
+Four motor schemas are available: Standard, High Motor Only, Low Motor Only, and Inverted. Supported dual-motor devices can use alternating left/right footstep emphasis.
 
-*   **Zero-Smoothing Bypass:** Discrete footstep taps bypass the continuous low-pass filter entirely using an exponential decay envelope, ensuring footsteps feel crisp and punchy rather than turning into a muddy drone.
-*   **Stereo Pan / Split-Feet:** Alternates left and right footstep weights across low and high rumble motors on dual-motor gamepads (automatically disengages on single-motor schemas to maintain perfect balance).
-*   **Mount Gallop Cadence:** Quadruped gaits merge footfall pairs under 80ms into authentic "ba-dump... ba-dump" stride rhythms.
+## Quick start
 
-### 🎛️ 35 Haptic Modes & Dual-Motor Transients
-
-A reusable library of distinct vibration patterns, including:
-
-*   **Punchy Transients:** `SNAP`, `DRAW`, `MICRO_TAP`, `STACCATO`, `RECOIL`, `SHUTTLE`, `TENSION` (reprogrammed for dual-motor coordination).
-*   **Physical Impacts & Pulses:** `THUD`, `CLICK`, `TAP`, `HEARTBEAT`, `WARNINGBEAT`, `PULSE`, `DOUBLE_PULSE`, `TRIPLE_PULSE`, `CRACK`, `BURST`, `CRESCENDO`, `FLUTTER`, `RUMBLE`, `STUTTER`, `HEAVY_IMPACT`, `SURGE`, `PING`.
-*   **Continuous Textures:** `HUM`, `THRUM`, `WAVE`, `PATTER`, `DRIFT`.
-*   **Dynamic Ramps & Fades:** Customizable attack, decay, and peak strength.
-
-### ⚡ One-Click Cue Sweeps
-
-*   **Enable All / Disable All:** Quickly turn all 190 cues on or off in a single click from the Cue Index or Profiles page, or via chat commands (`/pulse enableall` and `/pulse disableall`). Ideal for debugging or building custom profiles.
-
-### 📊 Live Haptic Oscilloscope & Telemetry HUD
-
-*   **Real-time Waveform Monitor (`/pulse scope`):** Live telemetry tracking motor power, instantaneous RMS energy, and saturation meters for low and high rumble channels. Includes an active haptic layer monitor so you can see exactly which gameplay systems are driving vibration in real time. Can be run as a floating overlay or docked directly inside the Settings window.
-
-### 🔀 Smart Event Arbitration & Coalescence
-
-*   **No More Double-Buzzing:** Multi-event interactions (like purchasing an item and putting it into your bag) now trigger a single, clean vibration instead of machine-gun overlapping pulses.
-*   **Owner-Aware Vendor Shopping:** Vendor transactions speak cleanly through `merchantBuy`, seamlessly falling back to bag intake for alternate currency purchases (honor/badges).
-*   **Loot Episode Burst Absorption:** Multi-item corpse or chest looting is absorbed into a single satisfying intake pulse with dynamic item quality weighting (Uncommon, Rare, Epic).
-*   **Smart Armor Repairs:** Merchant repairs (`RepairAllItems`) are recognized immediately, eliminating false-alarm durability loss alerts when fixing your gear.
-*   **Window Priority Bus:** Resolves rapid window open/close overlap across Gossip, Quest, Merchant, Mail, and Bank frames.
-
-### 🎨 Streamlined Settings Menu & Category Master Switches (`/pulse`)
-
-*   **Category Master On/Off Gates:** Turn entire feature groups (Loot, Commerce, Combat Rhythm, Hazards, etc.) On or Off with a single master checkbox without wiping your customized child sliders underneath.
-*   **70% Less Scrolling:** Redesigned compact 1-line rows reduce vertical scroll bloat by ~70% (from 787 to 239 rows).
-*   **Collapsible Sections & Simple View:** Fold and unfold categories to keep your menu clean, with fold states preserved account-wide, plus a one-click "Simple View" overview.
-
-### 🎮 Controller & Gamepad Support
-
-PulseHaptics is engineered to take full advantage of the vibration motors in modern gamepads, with a tuned controller preset for each:
-
-*   **PlayStation 5 DualSense / DualShock 4** (Linear resonance & haptic role routing)
-*   **Xbox Wireless & Elite Series Controllers** (Tuned asymmetrical ERM rumble motors)
-*   **Steam Deck & Steam Controller**
-*   **Nintendo Switch Pro & 8BitDo Ultimate**
-
-*Includes 4 swappable hardware schemas:* `Standard`, `High Motor Only`, `Low Motor Only`, and `Inverted`.
-*Zero-Deadband Shutoff & Soft Breakaway Floor:* Automatically snaps decaying continuous rumble to 0 below stall thresholds to eliminate motor whine, while scaling continuous textures so low slider settings fade cleanly into dead silence.
-
-### 🌊 Zero-GC Performance & 100% Taint Immunity
-
-*   **Zero Garbage in Tight Loops:** Continuous oscillators allocate zero throwaway tables per frame, eliminating Lua garbage collection stutters in 40-man raids and intense battlegrounds.
-*   **Taint-Immune UI:** Never triggers `ADDON_ACTION_BLOCKED`. Uses passive state polling and Classic aperture framing rather than dangerous Blizzard protected UI hooks.
-
----
-
-## ♿ Accessibility & Immersion
-
-Controller vibration provides another channel for perceiving important game events.
-
-PulseHaptics can be used purely for immersion, as an additional feedback layer alongside sound and visuals, or as a tactical sensory radar to make selected combat and boss mechanics physically noticeable without staring at UI frames.
-
----
-
-## 🚀 Quick Start
-
-### 1. Enable Gamepad & Vibration in WoW
-
-WoW's own gamepad and vibration settings must be on before any controller rumble can play. Run these two commands once in-game:
+1. Install the `PulseHaptics` folder in your WoW `Interface/AddOns/` directory, or install through CurseForge.
+2. Enable WoW's gamepad and vibration options. If needed, run:
 
 ```text
 /console GamePadEnable 1
 /console GamePadVibration 1
 ```
 
-### 2. Installation
+3. Complete the setup wizard on first login. Run `/pulse setup` to revisit it. Saved choices are preserved.
+4. Open `/pulse` for Advanced Settings. Try `/pulse test thud` to check controller output.
 
-Extract the `PulseHaptics` folder into your World of Warcraft `Interface/AddOns/` directory:
-
-*   **macOS:** `/Applications/World of Warcraft/_classic_beta_/Interface/AddOns/PulseHaptics`
-*   **Windows:** `C:\Program Files (x86)\World of Warcraft\_classic_beta_\Interface\AddOns\PulseHaptics`
-
-*(Note: Developer diagnostic tools like `PulseDebug`, `PulseChecklist`, and `PulseProfileReview` are available directly in the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation) for contributors and testers).*
-
-### 3. In-Game Commands
+## Useful commands
 
 | Command | Action |
-|:---|:---|
-| `/pulse` or `/pulsehaptics` | Open the main settings window. |
-| `/pulse scope` | Open the real-time haptic oscilloscope & telemetry HUD. |
-| `/pulse test <mode>` | Play a vibration mode (e.g. `thud`, `snap`, `wave`, `surge`, `heartbeat`). |
-| `/pulse enableall` | Enable all 190 cues in the active profile in one sweep. |
-| `/pulse disableall` | Disable all 190 cues in the active profile in one sweep. |
-| `/pulse stop` (or `/pulse off`, `/pulse mute`) | Immediately stop all active vibrations. |
-| `/pulse profile [name]` | Inspect or switch the active profile. |
-| `/pulse minimap` | Toggle the minimap icon on or off. |
-| `/pulse debug` | Toggle verbose logging and view engine error diagnostics. |
-| `/pdebug` *(PulseDebug)* | Open the real-time diagnostic and troubleshooting HUD. |
-| `/pcheck` *(PulseChecklist)* | Open the in-game cue verification checklist (all 190 cues). |
-| `/pcheck export` *(PulseChecklist)* | Generate a markdown QA report to copy to clipboard. |
-| `/pcheck import` *(PulseChecklist)* | Restore statuses and notes from a previous export. |
-| `/pulsereview` *(PulseProfileReview)* | Open the profile cue review and auditing tool. |
+| --- | --- |
+| `/pulse` or `/pulsehaptics` | Open Advanced Settings |
+| `/pulse setup` or `/pulsewizard` | Open guided setup |
+| `/pulse test <mode>` | Test a vibration mode |
+| `/pulse scope` | Open the live waveform and motor telemetry display |
+| `/pulse stop` | Stop active vibration |
+| `/pulse profile [name]` | Inspect or switch the active profile |
+| `/pulse enableall` / `/pulse disableall` | Enable or disable cues in the active profile |
+| `/pulse minimap` | Toggle the minimap icon |
+| `/pulse debug` | Toggle diagnostic logging |
 
----
+## Compatibility and project status
 
-## 🛠️ Open Source Hobby Project
+**Public beta: v0.3.3-beta.** Current development targets **WoW Forever 1.60.1, Interface 16001**, with native gamepad support. The TOC retains compatibility entries for other clients; those entries do not mean every effect has been verified on each client. Individual cues continue to be tuned as Blizzard's APIs evolve.
 
-PulseHaptics is a **free, open-source hobby project** developed independently for the World of Warcraft community.
+Haptics supplement the game's visual and audio cues. Actual feedback depends on the controller, connection, client support, and enabled effects.
 
-It is actively developed and currently in **Public Beta (v0.3.2-beta)**. The core engine is fully implemented, while authored cues continue to be tuned in-game against Blizzard's evolving controller APIs.
+PulseHaptics is a free, open-source hobby project. Feedback, bug reports, and contributions are welcome. The source and developer tools (`PulseDebug`, `PulseChecklist`, and `PulseProfileReview`) are available in the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation2).
 
-Feedback, bug reports, testing, and contributions are welcome.
+## Credits
 
----
+- **Author:** codingdoctorbot
+- **AI-assisted development:** Claude Code (Anthropic), Google Antigravity (Google DeepMind), and Codex (OpenAI)
+- **Tremor:** precursor project that supplied initial inspiration, structural ideas, and foundational accessibility cues
+- **Libraries:** LibStub, CallbackHandler-1.0, and LibDataBroker-1.1; see the source and included license notices for their authors
 
-## 📜 Credits & Attributions
-
-**Author:** codingdoctorbot
-
-**AI-assisted development:** Claude Code (Anthropic) and Google Antigravity (Google DeepMind)
-
-**Tremor:** Precursor project that provided initial inspiration, core structural ideas, and the foundational accessibility cue set used by PulseHaptics.
-
-**Third-party libraries:**
-*   `LibStub` — Kaelten, Cladhaire, ckknight, Mikk, Ammo, Nevcairiel
-*   `CallbackHandler-1.0` — Cladhaire, Ammo
-*   `LibDataBroker-1.1` — tekkub
-
----
-
-## ⚠️ Disclaimer
-
-PulseHaptics is a community-made World of Warcraft addon and is not affiliated with or endorsed by Blizzard Entertainment.
-
-World of Warcraft and Blizzard Entertainment are trademarks of Blizzard Entertainment.
-
----
-
-**Feel Azeroth.**
+PulseHaptics is a community addon and is not affiliated with or endorsed by Blizzard Entertainment. World of Warcraft and Blizzard Entertainment are trademarks of Blizzard Entertainment.

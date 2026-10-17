@@ -46,6 +46,7 @@ local GLOBAL_DEFAULTS = {
 	simpleView = false,
 	collapsedSections = {}, -- "PAGEID/Section label" -> true while that section is folded
 	quickSetupCompleted = false,
+	quickSetupDefaultsPending = false, -- only new installs seed the wizard once
 }
 
 -- The shape of one profile slot. These fields used to live flat on DB; DB_VERSION 2's
@@ -1278,6 +1279,7 @@ function Database:OnModeTuningChanged(modeID, key, callback)
 end
 
 function Database:Init()
+	local isNewInstall = PulseDB == nil or (type(PulseDB) == "table" and next(PulseDB) == nil)
 	if type(PulseDB) ~= "table" then
 		local bad = PulseDB
 		PulseDB = { __corrupt = bad }
@@ -1351,6 +1353,9 @@ function Database:Init()
 	-- every slot verbatim, holes and all, then ApplyDefaults fills the holes.
 	self:Migrate()
 	self:ApplyDefaults()
+	if isNewInstall then
+		DB.quickSetupDefaultsPending = true
+	end
 	invalidateResolution()
 	lastResolved = nil
 end

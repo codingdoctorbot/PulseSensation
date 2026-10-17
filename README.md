@@ -1,8 +1,8 @@
 # ⚡ PulseHaptics
 ### **Feel Azeroth in your hands.**
 
-[![WoW Version](https://img.shields.io/badge/World%20of%20Warcraft-Forever%20%2F%20Classic%20Beta%20(120100)-blue.svg)](https://github.com/codingdoctorbot/PulseSensation)
-[![Status](https://img.shields.io/badge/Release-0.3.1--beta-purple.svg)](https://github.com/codingdoctorbot/PulseSensation/releases)
+[![WoW Version](https://img.shields.io/badge/World%20of%20Warcraft-Forever%20(16001)-blue.svg)](https://github.com/codingdoctorbot/PulseSensation2)
+[![Status](https://img.shields.io/badge/Release-0.3.3--beta-purple.svg)](https://github.com/codingdoctorbot/PulseSensation2/releases)
 [![Performance](https://img.shields.io/badge/Performance-Zero--GC%20Tight%20Loops-brightgreen.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -76,9 +76,9 @@ A rich library of tactile waveforms, from organic pulses to punchy transients:
 - **70% Less Scrolling**: Redesigned compact single-line rows reduce vertical scroll height from 787 to 239 rows.
 - **Collapsible Sections & Simple View**: Foldable category sections with account-wide persistence, plus a one-click "Simple View" toggle for quick adjustments.
 
-### 🛡️ Zero-GC Engine & 100% Taint Immunity
+### 🛡️ Performance & Controller Navigation
 - **Zero-GC in Tight Loops**: Continuous oscillators and high-frequency frames allocate zero throwaway tables per frame, eliminating garbage collection micro-stutters during intense 40-man raids and battlegrounds.
-- **Taint-Immune Gamepad UI**: Never triggers `ADDON_ACTION_BLOCKED`. Uses passive state polling and Classic aperture framing rather than dangerous Blizzard protected UI hooks.
+- **Controller Navigation**: Both the wizard and Advanced Settings use native controller button events. The wizard closes when combat begins, and any pending binding cleanup waits until combat ends.
 - **Zero-Deadband Shutoff & Soft Breakaway Floor**: Automatically snaps decaying continuous rumble to 0 below stall thresholds to eliminate mechanical motor stall whine, while scaling continuous textures (swimming, flight, stealth) so low slider settings fade cleanly into dead silence.
 
 ---
@@ -110,9 +110,15 @@ Install **PulseHaptics** into your World of Warcraft `Interface/AddOns/` directo
 - **macOS Path**: `/Applications/World of Warcraft/_classic_beta_/Interface/AddOns/`
 - **Windows Path**: `C:\Program Files (x86)\World of Warcraft\_classic_beta_\Interface\AddOns\`
 
-*(Developer tools like `PulseDebug`, `PulseChecklist`, and `PulseProfileReview` are available directly in the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation) for contributors and testers).*
+*(Developer tools like `PulseDebug`, `PulseChecklist`, and `PulseProfileReview` are available directly in the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation2) for contributors and testers).*
 
-### 3. Immediate Taste Test
+### 3. Guided Setup
+
+The six-step wizard opens automatically on first login. Run `/pulse setup` to revisit it: choose a controller, combat feedback, world and interface cues, continuous effects, and overall strength.
+
+New setups enable casting, crafting, low-health heartbeat, and breath depletion. Other continuous effects start off. Reopening the wizard preserves saved preferences; `/pulse` opens Advanced Settings for individual adjustments.
+
+### 4. Immediate Taste Test
 Make sure your gamepad is turned on and try these chat commands to feel your controller come alive:
 - `/pulse test thud` — Heavy physical impact (boots, hammer, mace)
 - `/pulse test snap` — Crisp, sharp tactile transient snap
@@ -120,7 +126,7 @@ Make sure your gamepad is turned on and try these chat commands to feel your con
 - `/pulse test wave` — Smooth environmental ocean swell
 - `/pulse test surge` — Powerful magical energy surge
 
-### 4. Customization
+### 5. Customization
 Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open the settings window with **over 1,000 interactive controls across 190 distinct triggers and 16 active categories**.
 
 ---
@@ -130,6 +136,7 @@ Type **`/pulse`** (or click the concentric ripple icon on your minimap) to open 
 | Command | Action |
 |:---|:---|
 | `/pulse` or `/pulsehaptics` (or `/pulseui`) | Toggle the main settings window. |
+| `/pulse setup` (or `/pulsewizard`) | Open the six-step setup wizard. |
 | `/pulse scope` | Open the real-time haptic oscilloscope & telemetry HUD. |
 | `/pulse test <mode>` | Play any authored vibration mode (e.g. `thud`, `snap`, `wave`, `surge`, `heartbeat`). |
 | `/pulse enableall` | Enable all 190 cues in the active profile in one sweep. |
@@ -161,7 +168,7 @@ PulseHaptics is designed as a modular ecosystem of dedicated, standalone compani
 
 > *Parked in `_parked/` (not loaded, kept for future work): PulseCompass, PulseStudio, PulseAudio, PulseSync, PulseBridge, PulseProbe.*
 >
-> *If you are developing, testing, or reviewing cues, simply clone the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation) to access the entire developer suite.*
+> *If you are developing, testing, or reviewing cues, simply clone the [GitHub repository](https://github.com/codingdoctorbot/PulseSensation2) to access the entire developer suite.*
 
 ---
 
