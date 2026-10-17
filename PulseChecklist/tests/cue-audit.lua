@@ -50,6 +50,7 @@ print("\n--- 2. AUDITING TRIGGERS IN REGISTRY.LUA ---")
 local totalTriggers = #Pulse.Triggers
 local discreteCount = 0
 local continuousCount = 0
+local gateCount, silentCount = 0, 0
 local triggerModeErrors = 0
 local triggerIDMap = {}
 
@@ -60,10 +61,12 @@ for _, trig in ipairs(Pulse.Triggers) do
 	end
 	triggerIDMap[trig.id] = trig
 
-	if trig.continuous then
-		continuousCount = continuousCount + 1
+	if trig.gate then
+		gateCount = gateCount + 1 -- category switches intentionally have no mode or event
 	elseif trig.silent then
-		-- Intentional silent / housekeeping cue (e.g. padDisconnected clearing active vibrations)
+		silentCount = silentCount + 1 -- housekeeping is not an audible/tactile effect
+	elseif trig.continuous then
+		continuousCount = continuousCount + 1
 	else
 		discreteCount = discreteCount + 1
 		if not trig.mode then
@@ -77,10 +80,13 @@ for _, trig in ipairs(Pulse.Triggers) do
 end
 print(
 	string.format(
-		"Total Cues in Registry: %d (Discrete: %d, Continuous: %d)",
+		"Registry entries: %d (Haptic: %d, Discrete: %d, Continuous: %d, Gates: %d, Silent: %d)",
 		totalTriggers,
+		discreteCount + continuousCount,
 		discreteCount,
-		continuousCount
+		continuousCount,
+		gateCount,
+		silentCount
 	)
 )
 print(string.format("Trigger definition / mode reference errors: %d", triggerModeErrors))
@@ -142,12 +148,13 @@ for _, trig in ipairs(Pulse.Triggers) do
 	-- Note: Registry itself has "trig.id", so count should be >= 2 (Registry + owning module)
 	-- Unless it's an ALERT category trigger watched via WatchCategory
 	local count = triggersHandled[trig.id] or 0
-	if count < 2 then
+	if count < 2 and not trig.gate and not trig.silent then
 		table.insert(unreferenced, { id = trig.id, category = trig.category, count = count })
 	end
 end
 
-print(string.format("Triggers with direct module reference: %d / %d", totalTriggers - #unreferenced, totalTriggers))
+local hapticCount = discreteCount + continuousCount
+print(string.format("Haptic cues with direct module reference: %d / %d", hapticCount - #unreferenced, hapticCount))
 
 print("\n--- 4. AUDITING ALERT / WATCH_CATEGORY CUES ---")
 local alertEventErrors = 0
@@ -168,3 +175,10 @@ end
 print(string.format("Checked %d WatchCategory cues: %d errors.", #unreferenced, alertEventErrors))
 
 print("\n================== AUDIT FINISHED ==================")
+
+local errors = modeErrors + triggerModeErrors + alertEventErrors
+if errors > 0 then
+	io.stderr:write(string.format("FAIL: cue audit found %d errors\n", errors))
+	os.exit(1)
+end
+print("PASS: cue definitions, modes and event coverage")

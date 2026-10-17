@@ -4,7 +4,7 @@
 
 Feel combat impacts, spellcasting, footsteps, mount movement, gathering, loot, and interface interactions through your gamepad. PulseHaptics uses WoW's native gamepad support, with 190 configurable cues, 35 vibration modes, and 12 built-in profiles.
 
-Choose the feedback you want, adjust its strength and timing, and keep the rest quiet. Presets are available for Xbox, PlayStation DualSense and DualShock 4, Steam Deck, Steam Controller, Nintendo Switch Pro, and 8BitDo controllers. Motor behavior varies by hardware and connection method.
+Choose the feedback you want, adjust its strength and timing, and keep the rest quiet. Presets are available for Xbox, PlayStation DualSense and DualShock 4, Steam Deck, Steam Controller, Nintendo Switch Pro, and 8BitDo controllers. These presets are calibration starting points; use the in-game test controls to tune your controller. Motor behavior varies by hardware and connection method.
 
 ## New in v0.3.3
 
@@ -12,7 +12,7 @@ Choose the feedback you want, adjust its strength and timing, and keep the rest 
 - **Conservative continuous-effect defaults:** new setups enable casting, crafting, low-health heartbeat, and breath depletion. Other continuous effects start off. Existing profiles keep their saved choices.
 - **Controller navigation:** move between controls, adjust sliders, select dropdown choices, and read contextual button prompts.
 - **Settings handoff fixes:** improved cleanup when settings close after being opened from the Game Menu. The wizard and Advanced Settings no longer capture gameplay keys through hidden click targets.
-- **Windfury tracking:** a standalone proc-tracking module and Experimental settings page.
+- **Experimental extra-attack cues:** Windfury-related feedback on the Experimental page, disabled by default. One cue detects unusually close swings; the other depends on the client receiving the relevant spellcast event.
 
 ## Feedback you can tune
 
@@ -38,10 +38,10 @@ Four motor schemas are available: Standard, High Motor Only, Low Motor Only, and
 1. Install the `PulseHaptics` folder in your WoW `Interface/AddOns/` directory, or install through CurseForge.
 2. Enable WoW's gamepad and vibration options. If needed, run:
 
-```text
-/console GamePadEnable 1
-/console GamePadVibration 1
-```
+    ```text
+    /console GamePadEnable 1
+    /console GamePadVibration 1
+    ```
 
 3. Complete the setup wizard on first login. Run `/pulse setup` to revisit it. Saved choices are preserved.
 4. Open `/pulse` for Advanced Settings. Try `/pulse test thud` to check controller output.
