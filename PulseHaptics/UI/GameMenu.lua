@@ -278,21 +278,20 @@ local function createBanner()
 	b.icon:SetTexture(ICON_PATH)
 
 	-- Title (Top Line)
-	local fontName = _G.ApexFontCardTitle
-		or (_G.GameFontNormalMed1 and "GameFontNormalMed1" or "GameFontHighlightMedium")
+	local fontName = _G.GameFontNormalMed1 and "GameFontNormalMed1" or "GameFontNormal"
 	b.title = b:CreateFontString(nil, "OVERLAY", fontName)
 	b.title:SetPoint("TOPLEFT", b.icon, "TOPRIGHT", 10, -3)
 	b.title:SetText("Pulse Haptics")
 	b.title:SetTextColor(0.298, 0.722, 1.000)
 
 	-- Subtitle (Bottom Line): "Press [Square/X] to open settings"
-	local subFont = _G.GameFontHighlightSmall or "GameFontNormalSmall"
+	local subFont = "GameFontHighlightSmall"
 	b.subtitle = b:CreateFontString(nil, "OVERLAY", subFont)
 	b.subtitle:SetPoint("BOTTOMLEFT", b.icon, "BOTTOMRIGHT", 10, 4)
 	b.subtitle:SetTextColor(0.88, 0.92, 0.96)
 
 	-- Badge: Controller key prompt or /pulse command
-	local legendFont = _G.ApexFontLegend or "GameFontHighlightSmall"
+	local legendFont = "GameFontHighlightSmall"
 	b.badge = b:CreateFontString(nil, "OVERLAY", legendFont)
 	b.badge:SetPoint("RIGHT", b, "RIGHT", -12, 0)
 
@@ -333,8 +332,8 @@ local function hookGameMenu()
 	if isHooked or not GameMenuFrame then
 		return
 	end
-	isHooked = true
 	createBanner()
+	isHooked = true
 
 	-- Combat safety: clear bindings the instant combat begins
 	local combatWatcher = CreateFrame("Frame")
