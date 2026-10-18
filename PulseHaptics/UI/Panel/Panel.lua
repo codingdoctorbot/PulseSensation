@@ -385,6 +385,13 @@ local function buildWindow()
 		Gamepad.OnShow()
 	end)
 	f:SetScript("OnHide", function()
+		-- Stop window-owned probes and previews without clearing gameplay haptics.
+		if Pulse.CancelContinuousPreview then
+			Pulse:CancelContinuousPreview()
+		end
+		if Pulse.Engine and Pulse.Engine.StopRamp then
+			Pulse.Engine:StopRamp()
+		end
 		Theme.HideTooltip()
 		-- The list and the dialogs are parented to UIParent, not to the window, so that
 		-- they can sit above it. That means closing the window has to take them with it.

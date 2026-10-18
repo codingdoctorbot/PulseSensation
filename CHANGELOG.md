@@ -1,3 +1,21 @@
+# PulseHaptics v0.3.4
+
+## Fixed
+
+- Closing Advanced Settings now stops motor-calibration ramps and one-shot motor tests.
+  Previously a ramp could continue vibrating and printing calibration steps for up to
+  20 seconds after the window closed.
+- Temporary continuous and multi-step cue previews are also cancelled when settings close.
+- Cleanup covers the Close button, corner X, Escape, and switching to Quick Setup.
+- Normal gameplay haptics keep running; saved profiles and calibration values are unchanged.
+
+## Compatibility
+
+The existing client interface entries are unchanged: `16001`, `120100`, `110200`, and
+`110100`. This patch does not narrow the addon to WoW Forever.
+
+---
+
 # PulseHaptics v0.3.3
 
 ## Guided setup

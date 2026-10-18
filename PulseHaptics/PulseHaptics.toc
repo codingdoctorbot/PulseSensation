@@ -2,7 +2,7 @@
 ## Title: PulseHaptics
 ## Notes: Immersive controller vibration — movement, environment, and combat texture.
 ## Author: codingdoctorbot
-## Version: 0.3.3
+## Version: 0.3.4
 ## SavedVariables: PulseDB
 ## IconTexture: Interface\AddOns\PulseHaptics\Media\icon
 ## X-Credits: Anthropic (Claude Code), Google DeepMind (Antigravity)
