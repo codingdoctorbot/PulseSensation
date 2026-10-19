@@ -1,4 +1,4 @@
--- PulseComic — Announcer.lua
+-- KAPOW — Announcer.lua
 --
 -- Arena-shooter moments (old-school arena and tactical shooters) and a kill feed. Each moment is an event in
 -- Events.lua whose look (art, animation, text, color, size, place, sound) the player picks:
@@ -126,14 +126,14 @@ end
 local stage
 local queue = {}
 local showing = false
-A.history = {} -- event ids shown, newest last (bounded); read by tests and /comic announce
+A.history = {} -- event ids shown, newest last (bounded); read by tests and /kapow announce
 A.shownTotal = 0 -- banners shown this session
 
 local function EnsureStage()
 	if stage then
 		return
 	end
-	local root = CreateFrame("Frame", "PulseComicBanner", UIParent)
+	local root = CreateFrame("Frame", "KapowBanner", UIParent)
 	root:SetSize(256, 256)
 	root:SetFrameStrata("HIGH")
 	root:EnableMouse(false)
@@ -194,7 +194,7 @@ local feed
 local feedEntries = {} -- { at, format, args, n }, newest first
 
 local function BuildFeed()
-	feed = CreateFrame("Frame", "PulseComicKillFeed", UIParent)
+	feed = CreateFrame("Frame", "KapowKillFeed", UIParent)
 	feed:SetSize(360, FEED_LINES * 22)
 	feed:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -230, -210)
 	feed:EnableMouse(false)
@@ -722,6 +722,6 @@ function A:Command(arg)
 	elseif sub == "last" then
 		ns.Say("recent banners: " .. (#A.history > 0 and table.concat(A.history, ", ") or "none"))
 	else
-		ns.Say("/comic announce test (demo banners and a feed line)  ·  announce last (recent banners)")
+		ns.Say("/kapow announce test (demo banners and a feed line)  ·  announce last (recent banners)")
 	end
 end

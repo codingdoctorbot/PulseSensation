@@ -1,16 +1,16 @@
--- PulseComic — Profiles.lua
+-- KAPOW — Profiles.lua
 --
 -- Saved settings live in profiles, shared across the account; each character picks one or
 -- follows the account default.
 --
---   PulseComicDB (account)        { version = 2, profiles = { [name] = profile },
+--   KapowDB (account)        { version = 2, profiles = { [name] = profile },
 --                                   defaultProfile = name, minimap = { hide, pos } }
---   PulseComicCharDB (character)  { profile = name }   -- nil: follow the account default
+--   KapowCharDB (character)  { profile = name }   -- nil: follow the account default
 --
 -- A profile is the flat settings (ns.DEFAULTS) plus profile.events (Events.lua).
 -- ns.db is always the active profile.
 --
--- EXPORT / IMPORT. A profile (or all of them) becomes one line of text, "PCOMIC1:" plus a
+-- EXPORT / IMPORT. A profile (or all of them) becomes one line of text, "KAPOW1:" plus a
 -- small typed encoding with strings in hex, safe to paste into chat or a forum. Import
 -- parses it with the reader below, never with loadstring, and keeps only known keys of the
 -- expected types, so a pasted string can set settings and nothing else.
@@ -20,7 +20,8 @@ local _, ns = ...
 local P = {}
 ns.profiles = P
 
-local PREFIX = "PCOMIC1:"
+local PREFIX = "KAPOW1:"
+local OLD_PREFIX = "PCOMIC1:" -- exports made before the addon was renamed
 local MAX_IMPORT = 200000 -- characters
 local MAX_DEPTH = 6
 local MAX_STRING = 300 -- longest text a setting may hold
@@ -94,7 +95,7 @@ P.Fill = Fill
 
 -- Called at ADDON_LOADED. Returns the active profile.
 function P:Load()
-	local saved = _G.PulseComicDB
+	local saved = _G.KapowDB
 	if type(saved) ~= "table" then
 		saved = {}
 	end
@@ -109,7 +110,7 @@ function P:Load()
 		saved = { version = 2, profiles = { Default = migrated }, defaultProfile = "Default", minimap = saved.minimap }
 	end
 	account = saved
-	_G.PulseComicDB = account
+	_G.KapowDB = account
 	if type(account.minimap) ~= "table" then
 		account.minimap = { hide = false, pos = 225 }
 	end
@@ -123,10 +124,10 @@ function P:Load()
 		account.defaultProfile = "Default"
 	end
 
-	char = _G.PulseComicCharDB
+	char = _G.KapowCharDB
 	if type(char) ~= "table" then
 		char = {}
-		_G.PulseComicCharDB = char
+		_G.KapowCharDB = char
 	end
 	ns.account, ns.char = account, char
 	return self:Active()
@@ -419,10 +420,15 @@ local function Deserialize(text)
 	if #text > MAX_IMPORT then
 		return nil, "too long"
 	end
-	if string.sub(text, 1, #PREFIX) ~= PREFIX then
-		return nil, "not a PulseComic export (it starts with " .. PREFIX .. ")"
+	local start
+	if string.sub(text, 1, #PREFIX) == PREFIX then
+		start = #PREFIX + 1
+	elseif string.sub(text, 1, #OLD_PREFIX) == OLD_PREFIX then
+		start = #OLD_PREFIX + 1
+	else
+		return nil, "not a KAPOW export (it starts with " .. PREFIX .. ")"
 	end
-	local decoded, pos = Decode(text, #PREFIX + 1, 0)
+	local decoded, pos = Decode(text, start, 0)
 	if decoded == nil then
 		return nil, pos
 	end
@@ -525,7 +531,7 @@ function P:Import(text, name)
 			return a[1] < b[1]
 		end)
 	else
-		return nil, "not a PulseComic profile"
+		return nil, "not a KAPOW profile"
 	end
 	local added = {}
 	for _, item in ipairs(incoming) do

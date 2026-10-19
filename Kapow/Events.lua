@@ -1,6 +1,6 @@
--- PulseComic — Events.lua
+-- KAPOW — Events.lua
 --
--- Every moment PulseComic can show, and what it shows by default. A profile stores one
+-- Every moment KAPOW can show, and what it shows by default. A profile stores one
 -- config per event (profile.events[id]); anything missing falls back to the defaults here.
 --
 -- Per event:
@@ -23,7 +23,7 @@
 
 local _, ns = ...
 
--- Hit events are the three secret-gated comic frames in PulseComic.lua; every other event
+-- Hit events are the three secret-gated comic frames in Kapow.lua; every other event
 -- is a banner from Announcer.lua.
 ns.EVENTS = {
 	-- Hits

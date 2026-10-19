@@ -1,14 +1,19 @@
-# PulseComic (alpha)
+# KAPOW! (alpha)
 
-Comic-book frames for your hits: **POW!** on a crit, **K.O.!** on a killing blow, **OVERKILL!** when a crit kills.
-A standalone companion to PulseHaptics. It does not call into PulseHaptics and works without it.
+Big, loud, animated popups for the moments that matter: **POW!** on a crit, **K.O.!** on a killing blow, FIRST BLOOD,
+DOUBLE KILL to LUDICROUS, KILLING SPREE, HEADSHOT, GOAL!, YOU DIED, GRAVITY WINS! and dozens more, in comic, anime,
+arcade fighter, ninja, arena shooter, tactical shooter and football styles. Every moment's art, animation, text, font,
+color, size, position and sound is yours to pick, saved in profiles you can share.
 
-Install: copy the `PulseComic` folder into `Interface/AddOns/`. Not included in the PulseHaptics release zip.
+A standalone companion to PulseHaptics: it does not call into PulseHaptics and works without it. KAPOW! was called
+PulseComic during its first builds; `/comic` still opens it and old `PCOMIC1:` exports still import.
+
+Install: copy the `Kapow` folder into `Interface/AddOns/`. Not included in the PulseHaptics release zip.
 
 ## Settings window
 
-`/comic` (or left-click the minimap button) opens PulseComic's own window, separate from Blizzard's settings panel.
-Right-click the minimap button to turn PulseComic on or off; drag it to move it. No gamepad support yet.
+`/kapow` (or left-click the minimap button) opens KAPOW's own window, separate from Blizzard's settings panel.
+Right-click the minimap button to turn KAPOW on or off; drag it to move it. No gamepad support yet.
 
 - **General**: on/off, overall size, which hits count, kill detection, critical hits, kill feed, extras.
 - **Events**: what each moment shows. Pick a group (Hits, Kills, Multi-kills, Sprees, Deaths, Interrupts,
@@ -22,11 +27,11 @@ Right-click the minimap button to turn PulseComic on or off; drag it to move it.
   - **Title color**, **Size**, **Position** (comic spot, top banner, low centre, left, right), **Sound**.
   - **Preview** and **Reset event**.
 - **Profiles**: profiles are shared across the account. Each character uses one or follows the account default.
-  New, Copy, Rename, Delete (click twice), Reset. **Export this** / **Export all** put a `PCOMIC1:` string in the box
+  New, Copy, Rename, Delete (click twice), Reset. **Export this** / **Export all** put a `KAPOW1:` string in the box
   to copy; **Import** adds pasted profiles beside yours, never over them. Import parses the string itself (no code
   is run) and keeps only known settings of the right type.
 
-The master art lives in the repository's `Art/` folder, with sources, previews and metadata. `PulseComic/Art` is a
+The master art lives in the repository's `Art/` folder, with sources, previews and metadata. `Kapow/Art` is a
 copy of just what the addon loads (the TGA frames, and the fonts with their licenses), so the addon folder works on
 its own. `scripts/make-art-catalog.py` keeps the copy in step.
 
@@ -34,25 +39,25 @@ its own. `scripts/make-art-catalog.py` keeps the copy in step.
 
 | Command | Action |
 |:---|:---|
-| `/comic` | Open or close the settings window |
-| `/comic test pow\|ko\|overkill\|hit` | Show a frame with plain booleans, no fight needed |
-| `/comic on` / `off` | Enable or disable |
-| `/comic kill event` | Toggle the killing-blow event (`PARTY_KILL`) as a kill source |
-| `/comic kill death` | Toggle the target death check (`UnitIsDead`) as a kill source |
-| `/comic kill pet` | Toggle whether your pet's killing blows count |
-| `/comic kill log` | Toggle a chat line for every killing blow the client reports, and whether it counted |
-| `/comic minimap` | Show or hide the minimap button |
-| `/comic profile [name]` | Show profiles, or switch this character to one |
-| `/comic credits` | Font attributions |
-| `/comic scale <0.3-3>` | Frame size |
-| `/comic pos <x> <y>` | Offset from screen centre |
-| `/comic attribution recent\|any` | Only your hits (default), or every hit on your target |
-| `/comic numbers` | Toggle the damage number inside the burst |
-| `/comic meter` | Toggle the hit-meter prototype panel (drag to move) |
-| `/comic meter test <dmg> <hp> [max]` | Drive the meter with plain numbers, e.g. `5000 4000` is a kill |
-| `/comic meter source hit\|prev` | Which health reading drives the OVERKILL slide |
-| `/comic jitter` | Toggle random offset and tilt per pop |
-| `/comic debug` | Print the raw feed values for every hit on your target (secret ones as `<secret ...>`) |
+| `/kapow` | Open or close the settings window |
+| `/kapow test pow\|ko\|overkill\|hit` | Show a frame with plain booleans, no fight needed |
+| `/kapow on` / `off` | Enable or disable |
+| `/kapow kill event` | Toggle the killing-blow event (`PARTY_KILL`) as a kill source |
+| `/kapow kill death` | Toggle the target death check (`UnitIsDead`) as a kill source |
+| `/kapow kill pet` | Toggle whether your pet's killing blows count |
+| `/kapow kill log` | Toggle a chat line for every killing blow the client reports, and whether it counted |
+| `/kapow minimap` | Show or hide the minimap button |
+| `/kapow profile [name]` | Show profiles, or switch this character to one |
+| `/kapow credits` | Font attributions |
+| `/kapow scale <0.3-3>` | Frame size |
+| `/kapow pos <x> <y>` | Offset from screen centre |
+| `/kapow attribution recent\|any` | Only your hits (default), or every hit on your target |
+| `/kapow numbers` | Toggle the damage number inside the burst |
+| `/kapow meter` | Toggle the hit-meter prototype panel (drag to move) |
+| `/kapow meter test <dmg> <hp> [max]` | Drive the meter with plain numbers, e.g. `5000 4000` is a kill |
+| `/kapow meter source hit\|prev` | Which health reading drives the OVERKILL slide |
+| `/kapow jitter` | Toggle random offset and tilt per pop |
+| `/kapow debug` | Print the raw feed values for every hit on your target (secret ones as `<secret ...>`) |
 
 ## How it works
 
@@ -95,10 +100,10 @@ Rows: *of max health*, *of health at hit* (`UnitHealth` read when the hit arrive
 unknown, so one of the two is the true "health before the hit"; watch which lamp lights on kills only.
 
 Check in this order:
-1. Out of combat: `/comic meter test 3000 4000` (no lamp) and `/comic meter test 5000 4000` (lamps lit, art slid in).
+1. Out of combat: `/kapow meter test 3000 4000` (no lamp) and `/kapow meter test 5000 4000` (lamps lit, art slid in).
    This proves the geometry: a 128,000 px bar, clipping, and anchoring to a fill texture.
 2. On a dummy or mobs: do the bars move and the numbers draw? If yes, secret min/max/value work.
-3. On kills only: which row's lamp lights? Set `/comic meter source` to match.
+3. On kills only: which row's lamp lights? Set `/kapow meter source` to match.
 
 If all three hold, OVERKILL can switch from "critical killing blow" to real overkill.
 
@@ -108,7 +113,7 @@ A theme is a ready-made look for every event (titles, detail lines, art, animati
 Profiles tab pick one and press **New from theme** (a fresh profile) or **Apply here** (click twice: replaces every
 event look in the profile in use; which events are on is kept, apart from those the theme turns on).
 
-The themes are homages to genres under PulseComic's own names, not borrowed game titles:
+The themes are homages to genres under KAPOW's own names, not borrowed game titles:
 
 | Theme | Flavour | Font |
 |:---|:---|:---|
@@ -144,18 +149,18 @@ file the client cannot load leaves the text on the game font.
 
 ## Credits
 
-Artwork was generated for PulseComic with OpenAI's Codex image generation (prompts in `Art/_metadata/manifest.json`).
+Artwork was generated for KAPOW with OpenAI's Codex image generation (prompts in `Art/_metadata/manifest.json`).
 The nine display fonts are by their designers and used unmodified under the SIL Open Font License 1.1; see
 [`FONT-CREDITS.md`](FONT-CREDITS.md) for each copyright notice and source, and `Art/_fonts/<font>/OFL.txt` for the full
-licenses, which must stay with the font files. In game: `/comic credits` or **Font credits** on the General tab.
+licenses, which must stay with the font files. In game: `/kapow credits` or **Font credits** on the General tab.
 
 ## Adding art
 
 1. Add the sequence to `Art/<category>/<message>_1..3.tga` (256x256, 32-bit with alpha) and to
    `Art/_metadata/manifest.json` (`assets` and `categories`).
-2. Run `python3 scripts/make-art-catalog.py`. It checks every frame and font and regenerates `PulseComic/ArtCatalog.lua`
-   and `PulseComic/FONT-CREDITS.md`; a message with a missing or unusable frame is left out and reported.
-3. The script also copies the new frames into `PulseComic/Art`. `/reload`, and the new art shows up in every event's
+2. Run `python3 scripts/make-art-catalog.py`. It checks every frame and font and regenerates `Kapow/ArtCatalog.lua`
+   and `Kapow/FONT-CREDITS.md`; a message with a missing or unusable frame is left out and reported.
+3. The script also copies the new frames into `Kapow/Art`. `/reload`, and the new art shows up in every event's
    Art menu.
 
 ## Falls and fight flow
@@ -179,14 +184,14 @@ Two sources, each its own option; with both off, only POW! shows.
 - **Target death check (`UnitIsDead`).** The previous method: your target's death state about 0.15 s after your
   hit. It cannot tell whose blow it was, so a groupmate's kill shows K.O. too.
 
-To check group and pet behaviour, turn on **Kill log in chat** (`/comic kill log`). Every reported killing blow
+To check group and pet behaviour, turn on **Kill log in chat** (`/kapow kill log`). Every reported killing blow
 prints who landed it (you, your pet, a groupmate by name, a groupmate's pet, someone outside your group, or a
-secret attacker), whether the victim was your target, and whether PulseComic counted it.
+secret attacker), whether the victim was your target, and whether KAPOW counted it.
 
 ## Announcer
 
 Arena-shooter banners across the top of the screen, plus a kill feed top right. Each
-modality is its own option in the window's Announcer column; `/comic announce test` plays a demo.
+modality is its own option in the window's Announcer column; `/kapow announce test` plays a demo.
 
 | Banner | When |
 |:---|:---|
@@ -208,12 +213,12 @@ interrupted your target" is matched by timing: your interrupt spell, then your t
 
 ## Unconfirmed in the live client
 
-Use `/comic debug` to settle these:
+Use `/kapow debug` to settle these:
 
 1. Setting the combat-text active unit to `"target"` delivers hits on your target, with a crit flag either in the
    message type or as the third value of the event info.
-2. `UnitIsDead("target")` is correct about 0.15 s after the killing hit (`killDelay` in `PulseComicDB`).
-   `PARTY_KILL` fires for your own and your pet's kills when solo, with a plain attacker GUID (`/comic kill log`).
+2. `UnitIsDead("target")` is correct about 0.15 s after the killing hit (`killDelay` in `KapowDB`).
+   `PARTY_KILL` fires for your own and your pet's kills when solo, with a plain attacker GUID (`/kapow kill log`).
 6. `UNIT_DIED` fires for groupmates and your pet with a plain GUID; `UNIT_SPELLCAST_INTERRUPTED` on you carries
    `interruptedBy` only when someone interrupted you; `UnitTokenFromGUID` + `UnitName` give the victim's name while
    it still has a token (target, nameplate).
@@ -225,9 +230,9 @@ Use `/comic debug` to settle these:
 
 ## Known conflict with PulseHaptics
 
-The combat-text active unit is global. PulseHaptics sets it to `"player"` for its damage-taken cues, and PulseComic
+The combat-text active unit is global. PulseHaptics sets it to `"player"` for its damage-taken cues, and KAPOW
 sets it to `"target"`. Whichever syncs last wins, so with both loaded one of them may see the wrong feed.
-Check with `/comic debug` before trusting either.
+Check with `/kapow debug` before trusting either.
 
 ## Attribution
 
@@ -237,4 +242,4 @@ own cast, or while auto-attack is on. DoT ticks outside that window are not coun
 ## Art
 
 `Media/*.tga` are 256x256 32-bit textures generated by `scripts/make-comic-art.py` (Pillow):
-`python3 scripts/make-comic-art.py PulseComic/Media`.
+`python3 scripts/make-comic-art.py Kapow/Media`.

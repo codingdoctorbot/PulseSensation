@@ -1,4 +1,4 @@
--- PulseComic — Meter.lua (prototype)
+-- KAPOW — Meter.lua (prototype)
 --
 -- An on-screen panel that answers questions chat cannot. A secret number prints as nothing
 -- useful, but the client will still DRAW it, and a StatusBar given secret min/max/value
@@ -16,7 +16,7 @@
 --
 -- Which health reading is "health before the hit" is unknown: UNIT_HEALTH may arrive before
 -- or after the combat-text event. So two candidates get a row each, and you read off which
--- one behaves. `/comic meter test <dmg> <hp>` drives it with plain numbers, to check the
+-- one behaves. `/kapow meter test <dmg> <hp>` drives it with plain numbers, to check the
 -- geometry (huge bar widths, clipping, anchoring to a fill texture) out of combat first.
 
 local _, ns = ...
@@ -26,7 +26,7 @@ ns.meter = M
 
 local FONT = "Fonts\\FRIZQT__.TTF"
 local WHITE = "Interface\\Buttons\\WHITE8X8"
-local ART = "Interface\\AddOns\\PulseComic\\Media\\overkill"
+local ART = "Interface\\AddOns\\Kapow\\Media\\overkill"
 local ZOOM = 1000 -- lamp / slide threshold starts at 1 - 1/ZOOM of health (99.9%)
 
 local BAR_W, BAR_H = 200, 14
@@ -102,7 +102,7 @@ local function NewRow(index, label, withLamp)
 end
 
 local function Build()
-	panel = CreateFrame("Frame", "PulseComicMeter", UIParent)
+	panel = CreateFrame("Frame", "KAPOWMeter", UIParent)
 	panel:SetSize(120 + BAR_W + LAMP_W + 18, 26 + 3 * 22 + SLIDE + 12)
 	panel:SetPoint("CENTER", UIParent, "CENTER", -360, 0)
 	panel:SetFrameStrata("MEDIUM")
@@ -118,7 +118,7 @@ local function Build()
 
 	local title = NewText(panel, 12)
 	title:SetPoint("TOPLEFT", panel, "TOPLEFT", 8, -8)
-	title:SetText("|cffffd60aPulseComic meter|r  damage / health, drawn by the client")
+	title:SetText("|cffffd60aKAPOW meter|r  damage / health, drawn by the client")
 
 	rows = {
 		max = NewRow(1, "of max health", false),
@@ -248,7 +248,7 @@ function M:Command(arg)
 		-- Plain numbers typed by the player, never secrets: safe to do arithmetic on.
 		local dmgText, hpText, maxText = string.match(rest, "^(%d+)%s+(%d+)%s*(%d*)$")
 		if not dmgText then
-			ns.Say("usage: /comic meter test <damage> <health> [maxHealth]   e.g. 5000 4000 = overkill")
+			ns.Say("usage: /kapow meter test <damage> <health> [maxHealth]   e.g. 5000 4000 = overkill")
 			return
 		end
 		if not ns.db.meter then
@@ -262,9 +262,9 @@ function M:Command(arg)
 			ns.db.meterSource = rest
 			ns.Say("slide uses health " .. (rest == "hit" and "read at the hit" or "from the prior update"))
 		else
-			ns.Say("usage: /comic meter source hit | prev")
+			ns.Say("usage: /kapow meter source hit | prev")
 		end
 	else
-		ns.Say("/comic meter  ·  meter test <damage> <health> [max]  ·  meter source hit|prev")
+		ns.Say("/kapow meter  ·  meter test <damage> <health> [max]  ·  meter source hit|prev")
 	end
 end

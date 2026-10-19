@@ -1,6 +1,6 @@
--- PulseComic — UI/Theme.lua
+-- KAPOW — UI/Theme.lua
 --
--- Palette and shared helpers for PulseComic's settings window. A trimmed port of
+-- Palette and shared helpers for KAPOW's settings window. A trimmed port of
 -- PulseHaptics' UI/Panel/Theme.lua: same surfaces and button styling, a comic-yellow accent,
 -- and no SmartNavigation hooks (no gamepad support in this window yet).
 
@@ -50,7 +50,7 @@ local function getTooltip()
 	if tooltip then
 		return tooltip
 	end
-	local ok, frame = pcall(CreateFrame, "GameTooltip", "PulseComicTooltip", UIParent, "SharedTooltipTemplate")
+	local ok, frame = pcall(CreateFrame, "GameTooltip", "KapowTooltip", UIParent, "SharedTooltipTemplate")
 	if ok and frame then
 		tooltip = frame
 	else

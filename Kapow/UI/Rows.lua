@@ -1,4 +1,4 @@
--- PulseComic — UI/Rows.lua
+-- KAPOW — UI/Rows.lua
 --
 -- One constructor per kind of settings row, ported from PulseHaptics' UI/Panel/Rows.lua and
 -- cut down to what this window needs: header, checkbox, choice (a button that cycles its

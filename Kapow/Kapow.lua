@@ -1,4 +1,4 @@
--- PulseComic
+-- KAPOW
 --
 -- Comic-book frames for critical hits and killing blows: POW! (crit), K.O.! (kill),
 -- OVERKILL! (crit that kills).
@@ -37,7 +37,7 @@
 -- SetAlphaFromBoolean is 12.0+. Clients without it have no secret values either, so the gate
 -- falls back to a plain SetAlpha. Same for C_CombatText vs. the legacy combat-text globals.
 --
--- WHAT IS GUESSED (see /comic debug, which exists to settle each of these in the live client)
+-- WHAT IS GUESSED (see /kapow debug, which exists to settle each of these in the live client)
 --   * The combat-text feed with its active unit set to "target" delivers hits on the target
 --     and exposes a crit flag, either in the message type or in the event info.
 --   * UnitIsDead("target") is readable (plain or secret) shortly after the killing hit.
@@ -142,7 +142,7 @@ local function EnsureFrames()
 	end
 	frames = {}
 	for _, style in ipairs(STYLES) do
-		local root = CreateFrame("Frame", "PulseComicFrame_" .. style.key, UIParent)
+		local root = CreateFrame("Frame", "KapowFrame_" .. style.key, UIParent)
 		root:SetSize(FRAME_SIZE, FRAME_SIZE)
 		root:SetFrameStrata("HIGH")
 		root:EnableMouse(false)
@@ -161,7 +161,7 @@ end
 
 -- ── Showing a pop ─────────────────────────────────────────────────────────────────────
 -- isCrit / isDead may be secret booleans, amount a secret number, or plain values from
--- /comic test. Never read them.
+-- /kapow test. Never read them.
 local popValues = {}
 local popOpts = {}
 
@@ -210,7 +210,7 @@ end
 
 -- ── Debug ─────────────────────────────────────────────────────────────────────────────
 local function Say(msg)
-	DEFAULT_CHAT_FRAME:AddMessage("|cffffd60aPulseComic|r " .. msg)
+	DEFAULT_CHAT_FRAME:AddMessage("|cffffd60aKAPOW|r " .. msg)
 end
 ns.Say = Say
 
@@ -445,7 +445,7 @@ local function OnCombatText(messageType)
 	elseif ok then
 		-- Secret message type: cannot be filtered. Use the feed's crit flag (PulseHaptics reads
 		-- it as the third value after pcall on RESIST/ABSORB entries) and let the engine
-		-- decide visibility. Unconfirmed; compare with `/comic debug`.
+		-- decide visibility. Unconfirmed; compare with `/kapow debug`.
 		-- type() reports the real type even for a secret, so this test is safe.
 		if type(ret3) == "boolean" then
 			OnHit(ret3, ret1)
@@ -597,7 +597,7 @@ ns.TESTS = {
 	hit = { false, false, 100 },
 }
 
--- Plain booleans, no secrets: what /comic test and the window's test buttons show.
+-- Plain booleans, no secrets: what /kapow test and the window's test buttons show.
 function ns.Test(key)
 	local t = ns.TESTS[key]
 	if t then
@@ -608,11 +608,11 @@ end
 
 -- Font attributions (ArtCatalog.lua, generated from Art/_fonts). Full licenses: Art/_fonts/*/OFL.txt.
 function ns.PrintCredits()
-	Say("art: generated for PulseComic (Art/). Display fonts, unmodified, under their own licenses:")
+	Say("art: generated for KAPOW (Art/). Display fonts, unmodified, under their own licenses:")
 	for _, credit in ipairs(ns.FONT_CREDITS or {}) do
 		Say("|cffffd60a" .. credit[1] .. "|r  " .. credit[2] .. "  (" .. credit[3] .. ")")
 	end
-	Say("full licenses beside each font in Art/_fonts; list in PulseComic/FONT-CREDITS.md")
+	Say("full licenses beside each font in Art/_fonts; list in Kapow/FONT-CREDITS.md")
 end
 
 -- ── Slash commands ────────────────────────────────────────────────────────────────────
@@ -623,11 +623,11 @@ local KILL_KEYS = {
 	log = { "killLog", "kill log in chat" },
 }
 
-local HELP = "/comic opens settings  ·  test pow|ko|overkill|hit  ·  on|off  ·  kill event|death|pet|log  ·  announce test  ·  profile [name]  ·  credits  ·  scale <n>  ·  pos <x> <y>  ·  attribution recent|any  ·  numbers  ·  meter  ·  jitter  ·  minimap  ·  debug"
+local HELP = "/kapow opens settings  ·  test pow|ko|overkill|hit  ·  on|off  ·  kill event|death|pet|log  ·  announce test  ·  profile [name]  ·  credits  ·  scale <n>  ·  pos <x> <y>  ·  attribution recent|any  ·  numbers  ·  meter  ·  jitter  ·  minimap  ·  debug"
 
-SLASH_PULSECOMIC1 = "/comic"
-SLASH_PULSECOMIC2 = "/pulsecomic"
-SlashCmdList["PULSECOMIC"] = function(input)
+SLASH_KAPOW1 = "/kapow"
+SLASH_KAPOW2 = "/comic" -- the name before KAPOW
+SlashCmdList["KAPOW"] = function(input)
 	local cmd, arg = string.match(input or "", "^%s*(%S*)%s*(.-)%s*$")
 	cmd = string.lower(cmd or "")
 	if cmd == "" or cmd == "config" or cmd == "options" then
@@ -638,7 +638,7 @@ SlashCmdList["PULSECOMIC"] = function(input)
 		end
 	elseif cmd == "test" then
 		if not ns.Test(string.lower(arg)) then
-			Say("usage: /comic test pow | ko | overkill | hit  (plain booleans, no secrets)")
+			Say("usage: /kapow test pow | ko | overkill | hit  (plain booleans, no secrets)")
 		end
 	elseif cmd == "on" or cmd == "off" then
 		ns.Set("enabled", cmd == "on")
@@ -648,7 +648,7 @@ SlashCmdList["PULSECOMIC"] = function(input)
 		if entry then
 			Say(entry[2] .. " " .. (ns.Toggle(entry[1]) and "on" or "off"))
 		else
-			Say("usage: /comic kill event | death | pet | log")
+			Say("usage: /kapow kill event | death | pet | log")
 		end
 	elseif cmd == "scale" then
 		local n = tonumber(arg)
@@ -656,7 +656,7 @@ SlashCmdList["PULSECOMIC"] = function(input)
 			ns.Set("scale", n)
 			Say("scale " .. n)
 		else
-			Say("usage: /comic scale 0.3 - 3")
+			Say("usage: /kapow scale 0.3 - 3")
 		end
 	elseif cmd == "pos" then
 		local x, y = string.match(arg, "^(-?%d+)%s+(-?%d+)$")
@@ -664,14 +664,14 @@ SlashCmdList["PULSECOMIC"] = function(input)
 			db.x, db.y = tonumber(x), tonumber(y)
 			Say("offset " .. x .. ", " .. y)
 		else
-			Say("usage: /comic pos <x> <y>  (pixels from screen centre)")
+			Say("usage: /kapow pos <x> <y>  (pixels from screen centre)")
 		end
 	elseif cmd == "attribution" then
 		if arg == "any" or arg == "recent" then
 			ns.Set("attribution", arg)
 			Say("attribution " .. arg)
 		else
-			Say("usage: /comic attribution recent | any")
+			Say("usage: /kapow attribution recent | any")
 		end
 	elseif cmd == "meter" then
 		if ns.meter then

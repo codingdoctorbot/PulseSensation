@@ -1,21 +1,21 @@
--- Offline test for PulseComic.
+-- Offline test for KAPOW.
 --
--- PulseComic decides which comic frame is visible without ever reading the crit flag or the
+-- KAPOW decides which comic frame is visible without ever reading the crit flag or the
 -- death state, because in 12.x either may be a secret boolean. This test loads the real
--- PulseComic.lua against a stub WoW API in which secret booleans are tables that throw on
+-- Kapow.lua against a stub WoW API in which secret booleans are tables that throw on
 -- comparison, and only SetAlphaFromBoolean may unwrap them. Effective alpha is computed as
 -- the product down the parent chain, the same as the client.
 --
 -- It cannot tell you that the client really delivers target hits on the combat-text feed,
--- or that UnitIsDead settles inside killDelay; those are what `/comic debug` is for. It can
+-- or that UnitIsDead settles inside killDelay; those are what `/kapow debug` is for. It can
 -- tell you that every (crit, dead) pair shows exactly the right frame through the secret
 -- path, the plain path and the pre-12.0 fallback, and that nothing ever compares a secret.
 --
--- Run from the repo root:  lua PulseChecklist/tests/pulsecomic-test.lua PulseComic
+-- Run from the repo root:  lua PulseChecklist/tests/kapow-test.lua KAPOW
 
-local ROOT = arg[1] or "PulseComic"
+local ROOT = arg[1] or "Kapow"
 -- TOC order, minus the window and minimap button (UI/), which the smoke test covers.
-local FILES = { "PulseComic.lua", "Meter.lua", "ArtCatalog.lua", "Art.lua", "Events.lua", "Display.lua", "Themes.lua", "Profiles.lua", "Announcer.lua" }
+local FILES = { "Kapow.lua", "Meter.lua", "ArtCatalog.lua", "Art.lua", "Events.lua", "Display.lua", "Themes.lua", "Profiles.lua", "Announcer.lua" }
 local unpack = table.unpack or unpack
 
 local failures = 0
@@ -165,7 +165,7 @@ local function NewRegion(parent, modern)
 	return r
 end
 
--- saved / savedChar: what PulseComicDB / PulseComicCharDB hold before ADDON_LOADED.
+-- saved / savedChar: what KapowDB / KapowCharDB hold before ADDON_LOADED.
 local function Load(modern, saved, savedChar)
 	env = { regions = {}, labels = {}, frames = {}, timers = {}, now = 1000, dead = false, info = {}, modern = modern }
 
@@ -319,20 +319,20 @@ local function Load(modern, saved, savedChar)
 	env.chat = {}
 	_G.DEFAULT_CHAT_FRAME = { AddMessage = function(_, m) env.chat[#env.chat + 1] = m end }
 	_G.SlashCmdList = {}
-	_G.PulseComicDB = saved
-	_G.PulseComicCharDB = savedChar
+	_G.KapowDB = saved
+	_G.KapowCharDB = savedChar
 
 	-- TOC order, one shared addon namespace, as the client does it.
 	env.ns = {}
 	for _, file in ipairs(FILES) do
-		assert(loadfile(ROOT .. "/" .. file))("PulseComic", env.ns)
+		assert(loadfile(ROOT .. "/" .. file))("Kapow", env.ns)
 	end
 	for _, f in ipairs(env.frames) do
 		if f.events.ADDON_LOADED then
 			env.driver = f
 		end
 	end
-	env.driver:Fire("ADDON_LOADED", "PulseComic")
+	env.driver:Fire("ADDON_LOADED", "Kapow")
 	env.driver:Fire("PLAYER_ENTERING_WORLD")
 end
 
@@ -349,7 +349,7 @@ local KEYS = { "pow", "ko", "overkill" }
 local function Visible()
 	local out = {}
 	for _, key in ipairs(KEYS) do
-		local root = _G["PulseComicFrame_" .. key]
+		local root = _G["KapowFrame_" .. key]
 		for _, tex in ipairs(env.regions) do
 			local p = tex.parent
 			while p and p ~= root do
@@ -365,7 +365,7 @@ end
 
 -- Text of the damage label on a given frame.
 local function LabelOf(key)
-	local root = _G["PulseComicFrame_" .. key]
+	local root = _G["KapowFrame_" .. key]
 	for _, fs in ipairs(env.labels) do
 		local p = fs.parent
 		while p and p ~= root do
@@ -379,7 +379,7 @@ end
 
 local function Fade()
 	for _, key in ipairs(KEYS) do
-		_G["PulseComicFrame_" .. key].shown = false
+		_G["KapowFrame_" .. key].shown = false
 	end
 end
 
@@ -417,8 +417,8 @@ check("12.x: active unit set to target", env.activeUnit, "target")
 for _, c in ipairs(CASES) do
 	local name, crit, dead, want = unpack(c)
 	Fade()
-	_G.SlashCmdList.PULSECOMIC("test " .. ({ pow = "pow", ko = "ko", overkill = "overkill", none = "hit" })[want])
-	check("/comic test, " .. name, Visible(), want)
+	_G.SlashCmdList.KAPOW("test " .. ({ pow = "pow", ko = "ko", overkill = "overkill", none = "hit" })[want])
+	check("/kapow test, " .. name, Visible(), want)
 	local msg = crit and "DAMAGE_CRIT" or "DAMAGE"
 	check("secret type + secret crit + secret dead, " .. name, Hit(Secret(msg), Secret(crit), Secret(dead)), want)
 	check("plain type + plain dead, " .. name, Hit(msg, nil, dead), want)
@@ -426,8 +426,8 @@ end
 
 -- Damage numbers
 Fade()
-_G.SlashCmdList.PULSECOMIC("test pow")
-check("/comic test pow labels the burst through the abbreviator", LabelOf("pow"), "12.3K")
+_G.SlashCmdList.KAPOW("test pow")
+check("/kapow test pow labels the burst through the abbreviator", LabelOf("pow"), "12.3K")
 Hit("DAMAGE_CRIT", nil, false)
 check("plain amount is abbreviated", LabelOf("pow"), "1.2K")
 Hit(Secret("DAMAGE_CRIT"), Secret(true), Secret(false), nil, Secret(98765))
@@ -445,12 +445,12 @@ Hit(Secret("DAMAGE_CRIT"), Secret(true), Secret(false), nil, Secret("98765"))
 check("secret string amount reaches SetText", tostring(LabelOf("pow")), "<S:98765>")
 Hit("DAMAGE_CRIT", nil, false, nil, "missing")
 check("missing amount gives an empty label", LabelOf("pow"), "")
-_G.SlashCmdList.PULSECOMIC("numbers")
+_G.SlashCmdList.KAPOW("numbers")
 Hit("DAMAGE_CRIT", nil, false)
-check("/comic numbers off clears the label", LabelOf("pow"), "")
-_G.SlashCmdList.PULSECOMIC("numbers")
+check("/kapow numbers off clears the label", LabelOf("pow"), "")
+_G.SlashCmdList.KAPOW("numbers")
 Hit("DAMAGE_CRIT", nil, false)
-check("/comic numbers on restores it", LabelOf("pow"), "1.2K")
+check("/kapow numbers on restores it", LabelOf("pow"), "1.2K")
 
 check("plain HEAL is ignored", Hit("HEAL", false, false), "none")
 
@@ -504,22 +504,22 @@ check("groupmate's kill shows via UnitIsDead when that is on", KillHit("DAMAGE_C
 check("pet's killing blow with no hit of yours shows K.O.!", KillHit(nil, "Pet-1"), "ko")
 check("secret attacker is not counted", KillHit("DAMAGE_CRIT", Secret("Player-1")), "pow")
 
-_G.SlashCmdList.PULSECOMIC("kill death")
-check("/comic kill death turns UnitIsDead off", env.ns.db.killUnitDead, false)
+_G.SlashCmdList.KAPOW("kill death")
+check("/kapow kill death turns UnitIsDead off", env.ns.db.killUnitDead, false)
 check("with UnitIsDead off a groupmate's kill shows only POW!", KillHit("DAMAGE_CRIT", "Player-2", { dead = true }), "pow")
 check("with UnitIsDead off your kill still shows OVERKILL!", KillHit("DAMAGE_CRIT", "Player-1", { dead = false }), "overkill")
-_G.SlashCmdList.PULSECOMIC("kill pet")
-check("/comic kill pet turns pet kills off", KillHit(nil, "Pet-1"), "none")
-_G.SlashCmdList.PULSECOMIC("kill pet")
-_G.SlashCmdList.PULSECOMIC("kill event")
-check("/comic kill event unregisters PARTY_KILL", env.driver.events.PARTY_KILL, nil)
+_G.SlashCmdList.KAPOW("kill pet")
+check("/kapow kill pet turns pet kills off", KillHit(nil, "Pet-1"), "none")
+_G.SlashCmdList.KAPOW("kill pet")
+_G.SlashCmdList.KAPOW("kill event")
+check("/kapow kill event unregisters PARTY_KILL", env.driver.events.PARTY_KILL, nil)
 check("with both sources off a crit kill shows only POW!", KillHit("DAMAGE_CRIT", nil, { dead = true }), "pow")
-_G.SlashCmdList.PULSECOMIC("kill log")
+_G.SlashCmdList.KAPOW("kill log")
 check("kill log keeps PARTY_KILL registered", env.driver.events.PARTY_KILL, true)
 check("kill log alone counts nothing", KillHit("DAMAGE", "Player-1"), "none")
 check("kill log says the event is off", (env.chat[#env.chat] or ""):find("killing-blow event is off", 1, true) ~= nil, true)
-_G.SlashCmdList.PULSECOMIC("kill event")
-_G.SlashCmdList.PULSECOMIC("kill death")
+_G.SlashCmdList.KAPOW("kill event")
+_G.SlashCmdList.KAPOW("kill death")
 
 KillHit("DAMAGE", "Player-1")
 check("kill log: you, your target, counted", (env.chat[#env.chat] or ""):find("kill: you, your target", 1, true) ~= nil, true)
@@ -531,11 +531,11 @@ KillHit("DAMAGE", Secret("Player-1"), { victim = Secret("Creature-1") })
 check("kill log handles secret attacker and victim", (env.chat[#env.chat] or ""):find("a secret attacker, victim secret", 1, true) ~= nil, true)
 KillHit("DAMAGE", "Creature-7")
 check("kill log: someone outside your group", (env.chat[#env.chat] or ""):find("outside your group", 1, true) ~= nil, true)
-_G.SlashCmdList.PULSECOMIC("kill log")
+_G.SlashCmdList.KAPOW("kill log")
 check("groupmate crit ignored under attribution=recent", Hit("DAMAGE_CRIT", true, false, false), "none")
-_G.SlashCmdList.PULSECOMIC("attribution any")
+_G.SlashCmdList.KAPOW("attribution any")
 check("groupmate crit shown under attribution=any", Hit("DAMAGE_CRIT", true, false, false), "pow")
-_G.SlashCmdList.PULSECOMIC("attribution recent")
+_G.SlashCmdList.KAPOW("attribution recent")
 
 env.now = env.now + 5
 env.timers = {}
@@ -545,15 +545,15 @@ Advance(0.01)
 env.driver:Fire("COMBAT_TEXT_UPDATE", "DAMAGE_CRIT")
 check("two hits 10 ms apart schedule one pop", #env.timers, 1)
 
-_G.SlashCmdList.PULSECOMIC("off")
-check("/comic off stops listening", env.driver.events.COMBAT_TEXT_UPDATE, nil)
-_G.SlashCmdList.PULSECOMIC("on")
-check("/comic on listens again", env.driver.events.COMBAT_TEXT_UPDATE, true)
+_G.SlashCmdList.KAPOW("off")
+check("/kapow off stops listening", env.driver.events.COMBAT_TEXT_UPDATE, nil)
+_G.SlashCmdList.KAPOW("on")
+check("/kapow on listens again", env.driver.events.COMBAT_TEXT_UPDATE, true)
 
 -- ── Hit meter (Meter.lua) ─────────────────────────────────────────────────────────────
-check("meter is off and unbuilt by default", _G.PulseComicMeter, nil)
-_G.SlashCmdList.PULSECOMIC("meter test 5000 4000")
-local meterPanel = _G.PulseComicMeter
+check("meter is off and unbuilt by default", _G.KAPOWMeter, nil)
+_G.SlashCmdList.KAPOW("meter test 5000 4000")
+local meterPanel = _G.KAPOWMeter
 check("meter test builds and shows the panel", meterPanel ~= nil and meterPanel.shown, true)
 
 -- Find bars by role: rows sit in the panel, lamps and the slide sit in clipping windows.
@@ -616,19 +616,19 @@ check("row 'prior' max is the update before the latest", tostring(bars.rows[3].h
 check("row 'of max' max is the secret max health", tostring(bars.rows[1].hi), "<S:10000>")
 check("bar value is the secret damage", tostring(bars.rows[2].value), "<S:3000>")
 check("slide defaults to the 'at hit' reading", tostring(bars.zoomed[3].hi), "<S:2500>")
-_G.SlashCmdList.PULSECOMIC("meter source prev")
+_G.SlashCmdList.KAPOW("meter source prev")
 Hit(Secret("DAMAGE"), Secret(false), Secret(false), nil, Secret(3000))
 check("meter source prev moves the slide to the prior reading", tostring(Bars().zoomed[3].hi), "<S:9000>")
-_G.SlashCmdList.PULSECOMIC("meter source hit")
+_G.SlashCmdList.KAPOW("meter source hit")
 env.health = nil
 Hit("DAMAGE", nil, false)
 check("no health reading: row says so", Bars().rows[2].hi, 1)
-_G.SlashCmdList.PULSECOMIC("meter")
-check("/comic meter toggles the panel off", meterPanel.shown, false)
+_G.SlashCmdList.KAPOW("meter")
+check("/kapow meter toggles the panel off", meterPanel.shown, false)
 check("and stops watching health", watcherFrame.events.UNIT_HEALTH, nil)
 env.health, env.healthMax = nil, nil
 
-_G.SlashCmdList.PULSECOMIC("debug")
+_G.SlashCmdList.KAPOW("debug")
 env.info = { Secret("a"), Secret(1), Secret(true) }
 env.dead = Secret(false)
 env.driver:Fire("UNIT_SPELLCAST_SUCCEEDED", "player")
@@ -766,14 +766,14 @@ check("tied fight: no MVP", Since(m):find("mvp", 1, true) == nil, true)
 -- Kill feed
 env.now = env.now + 10
 Kill("Player-2", Secret("Creature-5"))
-local feedText = tostring(_G.PulseComicKillFeed.lines[1].text)
+local feedText = tostring(_G.KapowKillFeed.lines[1].text)
 check("feed line names the groupmate", feedText:find("Bob", 1, true) ~= nil, true)
 check("feed line draws the secret victim name", feedText:find("<S:Defias Thug>", 1, true) ~= nil, true)
 Kill("Player-1", Secret("Creature-404"))
-check("unknown victim reads 'an enemy'", tostring(_G.PulseComicKillFeed.lines[1].text):find("an enemy", 1, true) ~= nil, true)
-check("newest feed line on top, older below", tostring(_G.PulseComicKillFeed.lines[2].text):find("Bob", 1, true) ~= nil, true)
+check("unknown victim reads 'an enemy'", tostring(_G.KapowKillFeed.lines[1].text):find("an enemy", 1, true) ~= nil, true)
+check("newest feed line on top, older below", tostring(_G.KapowKillFeed.lines[2].text):find("Bob", 1, true) ~= nil, true)
 Advance(7)
-check("feed lines expire", _G.PulseComicKillFeed.lines[1].shown, false)
+check("feed lines expire", _G.KapowKillFeed.lines[1].shown, false)
 local before = #ann.feedEntries
 Kill("Creature-7")
 check("kills outside the group stay out of the feed", #ann.feedEntries, before)
@@ -872,7 +872,7 @@ end
 Flush()
 check("one banner on screen, at most 4 waiting", select(2, Since(m):gsub("triple", "")), 5)
 env.ns.Set("enabled", false)
-check("PulseComic off: announcer unregisters", next(annFrame.events), nil)
+check("KAPOW off: announcer unregisters", next(annFrame.events), nil)
 env.ns.Set("enabled", true)
 check("back on: registers again", annFrame.events.PARTY_KILL, true)
 m = Mark()
@@ -884,8 +884,8 @@ check("demo plays four banners", Since(m), "firstblood,double,spree5,mvp")
 Load(true)
 local ART = env.ns.art
 check("art: a sequence resolves to three frames", #ART.Resolve("comic/pow").frames, 3)
-check("art: frame paths follow Art/<theme>/<message>_<n>", ART.Resolve("anime/critical").frames[2], "Interface\\AddOns\\PulseComic\\Art\\anime\\critical_2")
-check("art: originals play one file three times", ART.Resolve("original/pow").frames[3], "Interface\\AddOns\\PulseComic\\Media\\pow")
+check("art: frame paths follow Art/<theme>/<message>_<n>", ART.Resolve("anime/critical").frames[2], "Interface\\AddOns\\Kapow\\Art\\anime\\critical_2")
+check("art: originals play one file three times", ART.Resolve("original/pow").frames[3], "Interface\\AddOns\\Kapow\\Media\\pow")
 check("art: none is text only", ART.Resolve("none"), nil)
 check("art: random from a category stays in it", ART.Resolve("random:failure").category, "failure")
 check("art: random from everything resolves", ART.Resolve("random:all") ~= nil, true)
@@ -913,7 +913,7 @@ check("text: empty template clears", fs.text, "")
 
 -- Hit events take their look from the profile
 local function TexOf(key)
-	local root = _G["PulseComicFrame_" .. key]
+	local root = _G["KapowFrame_" .. key]
 	for _, tex in ipairs(env.regions) do
 		local p = tex.parent
 		while p and p ~= root do
@@ -926,17 +926,17 @@ local function TexOf(key)
 end
 env.ns.SetEvent("crit", "art", "anime/critical")
 Hit("DAMAGE_CRIT", nil, false)
-check("crit plays the chosen art, first frame", TexOf("pow"), "Interface\\AddOns\\PulseComic\\Art\\anime\\critical_1")
+check("crit plays the chosen art, first frame", TexOf("pow"), "Interface\\AddOns\\Kapow\\Art\\anime\\critical_1")
 env.timers = {}
 env.ns.Test("pow")
 Advance(0.09)
-check("flipbook: peak frame after 80 ms", TexOf("pow"), "Interface\\AddOns\\PulseComic\\Art\\anime\\critical_2")
+check("flipbook: peak frame after 80 ms", TexOf("pow"), "Interface\\AddOns\\Kapow\\Art\\anime\\critical_2")
 Advance(0.13)
-check("flipbook: aftershock frame after 200 ms", TexOf("pow"), "Interface\\AddOns\\PulseComic\\Art\\anime\\critical_3")
+check("flipbook: aftershock frame after 200 ms", TexOf("pow"), "Interface\\AddOns\\Kapow\\Art\\anime\\critical_3")
 env.ns.SetEvent("crit", "anim", "slam")
 env.timers = {}
 env.ns.Test("pow")
-check("slam shows the peak frame from the start", TexOf("pow"), "Interface\\AddOns\\PulseComic\\Art\\anime\\critical_2")
+check("slam shows the peak frame from the start", TexOf("pow"), "Interface\\AddOns\\Kapow\\Art\\anime\\critical_2")
 env.ns.SetEvent("crit", "enabled", false)
 check("crit event off: a crit shows nothing", Hit("DAMAGE_CRIT", nil, false), "none")
 check("crit event off: a crit kill still shows OVERKILL!", Hit("DAMAGE_CRIT", nil, true), "overkill")
@@ -949,18 +949,18 @@ check("hit detail line is a template", LabelOf("pow"), "1.2K CRIT")
 Load(true)
 local P = env.ns.profiles
 check("fresh install: one Default profile", table.concat(P:Names(), ","), "Default")
-check("ns.db is the active profile", env.ns.db == _G.PulseComicDB.profiles.Default, true)
-check("character table created", type(_G.PulseComicCharDB), "table")
+check("ns.db is the active profile", env.ns.db == _G.KapowDB.profiles.Default, true)
+check("character table created", type(_G.KapowCharDB), "table")
 check("every event filled", env.ns.db.events.spree30.title, "WICKED SICK")
-check("minimap lives account-wide", _G.PulseComicDB.minimap.pos, 225)
+check("minimap lives account-wide", _G.KapowDB.minimap.pos, 225)
 
 check("create from defaults", P:Create("PvP"), "PvP")
 check("create refuses a duplicate", select(2, P:Create("PvP")), "a profile with that name exists")
 check("create refuses an empty name", P:Create("   "), nil)
-_G.PulseComicDB.profiles.PvP.events.firstblood.enabled = false
+_G.KapowDB.profiles.PvP.events.firstblood.enabled = false
 check("use a profile on this character", P:Use("PvP"), true)
-check("switch moves ns.db", env.ns.db == _G.PulseComicDB.profiles.PvP, true)
-check("character choice saved", _G.PulseComicCharDB.profile, "PvP")
+check("switch moves ns.db", env.ns.db == _G.KapowDB.profiles.PvP, true)
+check("character choice saved", _G.KapowCharDB.profile, "PvP")
 check("announcer follows the switch", select(2, pcall(function()
 	env.inGroup = true
 	local annFrame2
@@ -975,7 +975,7 @@ check("announcer follows the switch", select(2, pcall(function()
 	return env.ns.announcer.shownTotal - before2
 end)), 0)
 check("copy a profile", P:Create("PvP copy", "PvP"), "PvP copy")
-check("copy is a deep copy", _G.PulseComicDB.profiles["PvP copy"].events ~= _G.PulseComicDB.profiles.PvP.events, true)
+check("copy is a deep copy", _G.KapowDB.profiles["PvP copy"].events ~= _G.KapowDB.profiles.PvP.events, true)
 check("rename", P:Rename("PvP copy", "Raid"), "Raid")
 check("Default keeps its name", P:Rename("Default", "X"), nil)
 check("set account default", P:SetDefault("Raid"), true)
@@ -985,34 +985,35 @@ check("following the default", P:ActiveName(), "Raid")
 check("delete", P:Delete("Raid"), true)
 check("deleting the default falls back to Default", P:ActiveName(), "Default")
 check("Default cannot be deleted", P:Delete("Default"), false)
-_G.PulseComicDB.profiles.PvP.scale = 2
+_G.KapowDB.profiles.PvP.scale = 2
 P:Reset("PvP")
-check("reset restores defaults", _G.PulseComicDB.profiles.PvP.scale, 1)
+check("reset restores defaults", _G.KapowDB.profiles.PvP.scale, 1)
 
 -- Export / import round trip
-local pvp = _G.PulseComicDB.profiles.PvP
+local pvp = _G.KapowDB.profiles.PvP
 pvp.events.crit.art = "anime/critical"
 pvp.events.crit.title = "BAM | {amount} 100%"
 pvp.events.youdied.anim = "shake"
 pvp.killPet = false
 local text = P:Export("PvP")
-check("export starts with the prefix", text:sub(1, 8), "PCOMIC1:")
+check("export starts with the prefix", text:sub(1, 7), "KAPOW1:")
 check("export is one line without | (chat-safe)", text:find("[|\n]") == nil, true)
 local added = P:Import(text)
 check("import adds a copy beside the original", added and added[1], "PvP (2)")
-local copy = _G.PulseComicDB.profiles["PvP (2)"]
+local copy = _G.KapowDB.profiles["PvP (2)"]
 check("round trip: art", copy.events.crit.art, "anime/critical")
 check("round trip: text with | and %", copy.events.crit.title, "BAM | {amount} 100%")
 check("round trip: animation", copy.events.youdied.anim, "shake")
 check("round trip: flat setting", copy.killPet, false)
 added = P:Import(text, "Mine")
 check("import under a chosen name", added and added[1], "Mine")
+check("an export from before the rename still imports", (P:Import("PCOMIC1:" .. text:sub(8))) ~= nil, true)
 added = P:Import(P:ExportAll())
 check("import all: every profile added", added and #added, #P:Names() / 2)
 
-check("import rejects other text", select(2, P:Import("hello")), "not a PulseComic export (it starts with PCOMIC1:)")
+check("import rejects other text", select(2, P:Import("hello")), "not a KAPOW export (it starts with KAPOW1:)")
 check("import rejects a cut-off string", P:Import(text:sub(1, 40)), nil)
-check("import rejects deep nesting", P:Import("PCOMIC1:" .. string.rep("{S61;", 10) .. string.rep("}", 10)), nil)
+check("import rejects deep nesting", P:Import("KAPOW1:" .. string.rep("{S61;", 10) .. string.rep("}", 10)), nil)
 check("import rejects trailing data", P:Import(text .. "T"), nil)
 local hostile
 local function Enc(v)
@@ -1034,14 +1035,14 @@ local function Enc(v)
 		end
 	end
 	e(v)
-	return "PCOMIC1:" .. table.concat(out)
+	return "KAPOW1:" .. table.concat(out)
 end
 hostile = Enc({ kind = "profile", name = "Evil", profile = {
 	scale = "big", foo = "bar", killPet = 1,
 	events = { crit = { anim = "evil", size = 99, color = "rainbow", title = string.rep("x", 500) }, unknown = { a = 1 } },
 } })
 added = P:Import(hostile)
-local evil = added and _G.PulseComicDB.profiles[added[1]]
+local evil = added and _G.KapowDB.profiles[added[1]]
 check("hostile import still creates a profile", evil ~= nil, true)
 check("hostile: wrong type falls back to default", evil.scale, 1)
 check("hostile: unknown keys dropped", evil.foo, nil)
@@ -1053,17 +1054,17 @@ check("hostile: unknown event dropped", evil.events.unknown, nil)
 
 -- Migration: art saved under the old category id
 Load(true, { version = 2, defaultProfile = "Default", profiles = { Default = { events = { critkill = { art = "counterstrike/headshot" } } } } })
-check("migration: saved counterstrike art becomes tactical", _G.PulseComicDB.profiles.Default.events.critkill.art, "tactical/headshot")
+check("migration: saved counterstrike art becomes tactical", _G.KapowDB.profiles.Default.events.critkill.art, "tactical/headshot")
 
 -- Migration from flat settings of the previous build
 Load(true, { scale = 1.5, annMultiKill = false, numbers = false, critPop = false, minimap = { hide = true, pos = 10 } }, { profile = "Gone" })
-local d = _G.PulseComicDB.profiles.Default
+local d = _G.KapowDB.profiles.Default
 check("migration: flat settings become Default", d.scale, 1.5)
 check("migration: old toggles become event switches", d.events.double.enabled, false)
 check("migration: old crit toggle", d.events.crit.enabled, false)
 check("migration: numbers off becomes hit details off", d.events.kill.details, false)
 check("migration: old keys removed", d.annMultiKill == nil and d.numbers == nil and d.critPop == nil, true)
-check("migration: minimap moves account-wide", _G.PulseComicDB.minimap.hide, true)
+check("migration: minimap moves account-wide", _G.KapowDB.minimap.hide, true)
 check("a character pointing at a missing profile follows the default", env.ns.profiles:ActiveName(), "Default")
 
 -- ── Falls, fight flow, themes, fonts ─────────────────────────────────────────────────
@@ -1184,12 +1185,12 @@ check("a fight with no kills has no end banner", Ids(m), "kickoff")
 
 -- Fonts
 P = env.ns.profiles
-local FONT_DIR = "Interface\\AddOns\\PulseComic\\Art\\_fonts\\"
+local FONT_DIR = "Interface\\AddOns\\Kapow\\Art\\_fonts\\"
 env.ns.Test("pow")
-check("auto font: a comic pop gets the comic font", ann.stage and _G.PulseComicFrame_pow and (function()
+check("auto font: a comic pop gets the comic font", ann.stage and _G.KapowFrame_pow and (function()
 	for _, fs in ipairs(env.labels) do
 		local q = fs.parent
-		while q and q ~= _G.PulseComicFrame_pow do
+		while q and q ~= _G.KapowFrame_pow do
 			q = q.parent
 		end
 		if q then
@@ -1219,8 +1220,8 @@ Flush()
 
 -- Catalog and themes
 check("categories carry the addon's own names", env.ns.art.CategoryLabel("tactical") .. "|" .. env.ns.art.CategoryLabel("arcade") .. "|" .. env.ns.art.CategoryLabel("football"), "Strike Squad|Roadfighter|Soccer League")
-check("Strike Squad art resolves", env.ns.art.Resolve("tactical/headshot").frames[1], "Interface\\AddOns\\PulseComic\\Art\\tactical\\headshot_1")
-check("an art key saved before the rename still resolves", env.ns.art.Resolve("counterstrike/headshot").frames[1], "Interface\\AddOns\\PulseComic\\Art\\tactical\\headshot_1")
+check("Strike Squad art resolves", env.ns.art.Resolve("tactical/headshot").frames[1], "Interface\\AddOns\\Kapow\\Art\\tactical\\headshot_1")
+check("an art key saved before the rename still resolves", env.ns.art.Resolve("counterstrike/headshot").frames[1], "Interface\\AddOns\\Kapow\\Art\\tactical\\headshot_1")
 check("old random category still resolves", env.ns.art.Resolve("random:counterstrike").category, "tactical")
 check("football and falling art in the catalog", env.ns.art.Resolve("football/top-bins") ~= nil and env.ns.art.Resolve("falling/wheee") ~= nil, true)
 check("nine display fonts listed", #env.ns.ART_FONTS, 9)
@@ -1253,14 +1254,14 @@ check("Football: hat-trick art", P:ApplyTheme("Default", "football") and ev.trip
 check("Football: own goal on fall death", ev.falldeath.art, "football/own-goal")
 check("apply Classic restores defaults", P:ApplyTheme("Default", "classic") and ev.kill.art, "comic/ko")
 check("new profile from a theme", P:CreateFromTheme("", "tactical"), "Strike Squad")
-check("named after the theme, dressed in it", _G.PulseComicDB.profiles["Strike Squad"].events.critkill.art, "tactical/headshot")
+check("named after the theme, dressed in it", _G.KapowDB.profiles["Strike Squad"].events.critkill.art, "tactical/headshot")
 local cs = P:Export("Strike Squad")
 local back = P:Import(cs)
-check("theme survives export / import", _G.PulseComicDB.profiles[back[1]].events.kill.font, "black-ops-one")
+check("theme survives export / import", _G.KapowDB.profiles[back[1]].events.kill.font, "black-ops-one")
 check("unknown theme refused", P:ApplyTheme("Default", "chess"), false)
 local chatBefore = #env.chat
-_G.SlashCmdList.PULSECOMIC("credits")
-check("/comic credits lists every font", #env.chat - chatBefore, 9 + 2)
+_G.SlashCmdList.KAPOW("credits")
+check("/kapow credits lists every font", #env.chat - chatBefore, 9 + 2)
 check("credits name the designer and license", (table.concat(env.chat, "\n", chatBefore + 1)):find("Tyler Finck", 1, true) ~= nil
 	and (table.concat(env.chat, "\n", chatBefore + 1)):find("SIL Open Font License 1.1", 1, true) ~= nil, true)
 

@@ -1,4 +1,4 @@
--- PulseComic — UI/ProfilesPage.lua
+-- KAPOW — UI/ProfilesPage.lua
 --
 -- The Profiles tab. Profiles are account-wide; this character uses one of them or follows
 -- the account default. New, copy, rename, delete and reset act on the profile in use;
@@ -249,7 +249,7 @@ local function Specs()
 		{
 			type = "edit",
 			label = "String",
-			tooltip = "Exports appear here. To import, paste a PCOMIC1: string here.",
+			tooltip = "Exports appear here. To import, paste a KAPOW1: string here.",
 			get = function()
 				return boxText
 			end,

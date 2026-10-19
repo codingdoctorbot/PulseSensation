@@ -1,4 +1,4 @@
--- PulseComic — Art.lua
+-- KAPOW — Art.lua
 --
 -- The art catalog. Every entry is a message with its word baked into the artwork and three
 -- animation frames (Art/<theme>/<message>_1..3.tga: onset, peak, aftershock; 256x256 RGBA).

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Generate PulseComic's comic-burst textures (pow / ko / overkill) as 256x256 32-bit TGA.
+"""Generate KAPOW's comic-burst textures (pow / ko / overkill) as 256x256 32-bit TGA.
 
-Usage:  python3 scripts/make-comic-art.py PulseComic/Media [path/to/BoldItalic.ttf]
+Usage:  python3 scripts/make-comic-art.py Kapow/Media [path/to/BoldItalic.ttf]
 
 Needs Pillow. The lettering was rendered with Poppins Bold Italic (SIL Open Font License);
 pass any heavy italic TTF as the second argument, or set COMIC_FONT. Only the rendered

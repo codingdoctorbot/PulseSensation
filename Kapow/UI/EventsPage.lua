@@ -1,4 +1,4 @@
--- PulseComic — UI/EventsPage.lua
+-- KAPOW — UI/EventsPage.lua
 --
 -- The Events tab: what each moment shows. Left, the event groups; middle, the events of the
 -- selected group (a dot shows which are on); right, the editor for the selected event: art
@@ -129,7 +129,7 @@ local function EditorSpecs()
 			get = EventGet("size"),
 			set = EventSet("size"),
 		},
-		OptionsDropdown("Position", "Comic spot follows /comic pos; the others are fixed places on screen.", "pos", D.POSITION_ORDER, D.POSITIONS),
+		OptionsDropdown("Position", "Comic spot follows /kapow pos; the others are fixed places on screen.", "pos", D.POSITION_ORDER, D.POSITIONS),
 		OptionsDropdown("Sound", "Needs Event sounds on (General tab).", "sound", D.SOUND_ORDER, D.SOUNDS),
 		{
 			type = "note",

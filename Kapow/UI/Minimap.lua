@@ -1,9 +1,9 @@
--- PulseComic — UI/Minimap.lua
+-- KAPOW — UI/Minimap.lua
 --
 -- Minimap button, ported from PulseHaptics' UI/Minimap.lua (without its LibDataBroker feed
 -- and SmartNavigation hooks). Left-click toggles the settings window, right-click turns
--- PulseComic on or off, drag moves the button around the minimap. Position and visibility
--- live in PulseComicDB.minimap.
+-- KAPOW on or off, drag moves the button around the minimap. Position and visibility
+-- live in KapowDB.minimap.
 
 local ADDON_NAME, ns = ...
 
@@ -47,7 +47,7 @@ local function showTooltip(owner)
 	local db = ns.db
 	GameTooltip:SetOwner(owner, "ANCHOR_LEFT")
 	GameTooltip:ClearLines()
-	GameTooltip:AddLine("PulseComic", 1.00, 0.84, 0.04)
+	GameTooltip:AddLine("Kapow", 1.00, 0.84, 0.04)
 	GameTooltip:AddLine("Status: " .. (db.enabled and "|cff00ff00Enabled|r" or "|cffff0000Disabled|r"), 1, 1, 1)
 	GameTooltip:AddLine("Killing-blow event: " .. onOff(db.killEvent), 1, 1, 1)
 	GameTooltip:AddLine("Target death check: " .. onOff(db.killUnitDead), 1, 1, 1)
@@ -75,7 +75,7 @@ local function toggleEnabled(owner)
 end
 
 local function create()
-	local btn = CreateFrame("Button", "PulseComicMinimapButton", Minimap)
+	local btn = CreateFrame("Button", "KapowMinimapButton", Minimap)
 	btn:SetSize(32, 32)
 	btn:SetFrameStrata("MEDIUM")
 	btn:SetFrameLevel((Minimap:GetFrameLevel() or 8) + 5)

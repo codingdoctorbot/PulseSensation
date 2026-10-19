@@ -1,8 +1,8 @@
--- PulseComic — Display.lua
+-- KAPOW — Display.lua
 --
 -- Draws one event: its art (a three-frame flipbook), title and detail line, with one of the
 -- animation presets, at the chosen position, color, size and sound. Used by the comic hit
--- frames (PulseComic.lua, inside their secret alpha gates) and by the banners
+-- frames (Kapow.lua, inside their secret alpha gates) and by the banners
 -- (Announcer.lua).
 --
 -- A "stage" is one drawable: an outer root that moves and fades, and a container holding the
@@ -56,7 +56,7 @@ D.SOUNDS = {
 D.SOUND_ORDER = { "none", "raidwarning", "readycheck", "quest", "alarm" }
 
 D.POSITIONS = {
-	comic = { "Comic spot (/comic pos)" },
+	comic = { "Comic spot (/kapow pos)" },
 	banner = { "Top banner", 0, 260 },
 	low = { "Low centre", 0, -160 },
 	left = { "Left", -380, 120 },

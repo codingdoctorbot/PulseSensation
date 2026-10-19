@@ -1,4 +1,4 @@
--- PulseComic — Themes.lua
+-- KAPOW — Themes.lua
 --
 -- A theme is a ready-made look for every event: titles, detail lines, art, animation,
 -- color, font and sound. Applying one to a profile rewrites its event looks (a player's
@@ -34,7 +34,7 @@ T.LIST = {
 	{
 		id = "classic",
 		label = "Classic",
-		description = "PulseComic's own defaults: comic hits, arena announcer, art fonts.",
+		description = "KAPOW's own defaults: comic hits, arena announcer, art fonts.",
 		events = {},
 	},
 	{

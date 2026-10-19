@@ -1,6 +1,6 @@
--- PulseComic — UI/Panel.lua
+-- KAPOW — UI/Panel.lua
 --
--- PulseComic's own settings window, kept apart from Blizzard's settings panel. Based on
+-- KAPOW's own settings window, kept apart from Blizzard's settings panel. Based on
 -- PulseHaptics' UI/Panel/Panel.lua: the same SettingsFrameTemplate shell, opaque fill and
 -- close buttons, shown with a plain Show plus UISpecialFrames for Escape, never ShowUIPanel
 -- (that route reaches the gamepad frame-controls manager and its protected calls).
@@ -15,7 +15,7 @@ local ADDON_NAME, ns = ...
 local Theme = ns.ui.Theme
 local Rows = ns.ui.Rows
 
-local FRAME_NAME = "PulseComicSettingsFrame"
+local FRAME_NAME = "KapowSettingsFrame"
 local PAGE_TOP = -62 -- below the tabs
 local HIT_EVENTS = { "crit", "kill", "critkill" }
 
@@ -77,12 +77,12 @@ end
 local function GeneralSpecs()
 	return {
 		{ type = "header", label = "General" },
-		Checkbox("enabled", "Enable PulseComic", "Shows comic, arena and announcer moments for your hits, kills and more. What each one looks like is on the Events tab.", { master = true }),
+		Checkbox("enabled", "Enable KAPOW", "Shows comic, arena and announcer moments for your hits, kills and more. What each one looks like is on the Events tab.", { master = true }),
 		Checkbox("jitter", "Random tilt and offset", "Give every hit pop a small random offset and tilt."),
 		{
 			type = "choice",
 			label = "Overall size",
-			tooltip = "Scale of everything PulseComic shows; each event has its own size on top.",
+			tooltip = "Scale of everything KAPOW shows; each event has its own size on top.",
 			choices = { { 0.75, "75%" }, { 1.0, "100%" }, { 1.25, "125%" }, { 1.5, "150%" } },
 			get = Get("scale"),
 			set = Set("scale"),
@@ -111,7 +111,7 @@ local function GeneralSpecs()
 		Checkbox(
 			"killLog",
 			"Kill log in chat",
-			"Prints who landed every killing blow the client reports (you, your pet, a groupmate or someone else) and whether PulseComic counted it. Use it to check group and pet behaviour."
+			"Prints who landed every killing blow the client reports (you, your pet, a groupmate or someone else) and whether KAPOW counted it. Use it to check group and pet behaviour."
 		),
 
 		{ type = "header", label = "Critical hits" },
@@ -170,7 +170,7 @@ local function GeneralSpecs()
 		{
 			type = "checkbox",
 			label = "Minimap button",
-			tooltip = "Left-click opens this window, right-click turns PulseComic on or off, drag to move. Account-wide.",
+			tooltip = "Left-click opens this window, right-click turns KAPOW on or off, drag to move. Account-wide.",
 			get = function()
 				return not ns.account.minimap.hide
 			end,
@@ -230,7 +230,7 @@ ns.ui.pages.general = {
 				local enabled = ns.db.enabled
 				for _, row in ipairs(rows) do
 					row:RefreshValue()
-					-- Everything but the master switches greys out while PulseComic is off.
+					-- Everything but the master switches greys out while KAPOW is off.
 					local spec = row.spec
 					if not spec.master then
 						local on = enabled and (not spec.needs or ns.db[spec.needs])
@@ -294,7 +294,7 @@ local function buildWindow()
 		titleText = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 		titleText:SetPoint("TOP", f, "TOP", 0, -5)
 	end
-	titleText:SetText("PULSECOMIC")
+	titleText:SetText("KAPOW!")
 	titleText:SetTextColor(Theme.COLOR_ACCENT.r, Theme.COLOR_ACCENT.g, Theme.COLOR_ACCENT.b)
 
 	local titleIcon = f:CreateTexture(nil, "OVERLAY")
@@ -393,7 +393,7 @@ function ns.ui.Refresh()
 	if not frame or not frame:IsShown() then
 		return
 	end
-	frame.Stamp:SetText(addonVersion() .. "   ·   profile: " .. ns.profiles:ActiveName() .. "   ·   /comic opens this window")
+	frame.Stamp:SetText(addonVersion() .. "   ·   profile: " .. ns.profiles:ActiveName() .. "   ·   /kapow opens this window")
 	local page = frame.pages[frame.current]
 	if page then
 		page.Refresh()
