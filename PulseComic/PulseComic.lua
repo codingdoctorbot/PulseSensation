@@ -32,8 +32,6 @@
 -- The hit's amount is secret in combat too. It cannot be compared, so it cannot decide
 -- anything, but FontString:SetText() accepts secrets: the client draws the number and the
 -- addon never sees it. The label sits inside deadGate, so it is gated with its frame.
--- `/comic debug` also probes whether GetStringWidth() of that text stays readable, which
--- would be a crude size signal (wider number, bigger hit). Expected to be secret too.
 --
 -- OLDER CLIENTS (16001 / 110x)
 -- SetAlphaFromBoolean is 12.0+. Clients without it have no secret values either, so the gate
@@ -53,6 +51,8 @@ local issecretvalue = _G.issecretvalue or function()
 	return false
 end
 
+-- Flat settings of a profile (Profiles.lua). Per-event looks live in profile.events
+-- (Events.lua); the minimap button's place is account-wide.
 local DEFAULTS = {
 	enabled = true,
 	scale = 1.0,
@@ -62,13 +62,24 @@ local DEFAULTS = {
 	minInterval = 0.12, -- seconds between pops
 	killDelay = 0.15, -- seconds to wait for the target's death state to settle after a hit
 	jitter = true, -- small random offset and tilt per pop
-	numbers = true, -- print the hit's damage inside the burst
 	meter = false, -- the hit-meter prototype panel (Meter.lua)
 	meterSource = "hit", -- which health reading drives the OVERKILL slide: "hit" or "prev"
+	-- Kill detection. Either source, both, or neither (then only crits pop).
+	killEvent = true, -- PARTY_KILL: the client names the killing blow's attacker
+	killUnitDead = true, -- UnitIsDead("target") read killDelay after your hit
+	killPet = true, -- your pet's killing blows count as yours (PARTY_KILL only)
+	killLog = false, -- print who landed every PARTY_KILL, to check group and pet behaviour
+	-- Announcer (Announcer.lua). Which banners show is per event.
+	annFirstBloodSolo = false, -- FIRST BLOOD also when you are not in a group
+	annFeed = true, -- kill feed: who killed what
+	annSound = true, -- master switch for event sounds
 	debug = false,
 }
+ns.DEFAULTS = DEFAULTS
 
 local db
+
+ns.IsSecret = issecretvalue
 
 -- ── Client compatibility ──────────────────────────────────────────────────────────────
 local CombatText = _G.C_CombatText
@@ -76,24 +87,24 @@ local SetActiveUnit = (CombatText and CombatText.SetActiveUnit) or _G.CombatText
 local GetEventInfo = (CombatText and CombatText.GetCurrentEventInfo) or _G.GetCurrentCombatTextEventInfo
 local IsCurrentSpellFn = (_G.C_Spell and _G.C_Spell.IsCurrentSpell) or _G.IsCurrentSpell
 
-local FONT = "Fonts\\FRIZQT__.TTF"
-
 -- Damage amount -> label text. `amount` may be a secret number or string: no comparisons,
--- no arithmetic, only type() and calls documented to pass secrets through. The client's
--- abbreviator is tried first ("12.3K"); if it refuses a secret, plain formatting is used.
+-- no arithmetic, no conversion, only type() and calls documented to take secrets. The
+-- client's formatters accept secrets from addon code (SecretArguments = "AllowedWhenTainted"):
+-- AbbreviateNumbers ("12.3K") first, then BreakUpLargeNumbers ("12,345"). Without either,
+-- the value goes to SetText as it is.
 local function AmountText(amount)
 	local kind = type(amount)
 	if kind ~= "number" and kind ~= "string" then
 		return ""
 	end
-	local abbreviate = _G.AbbreviateNumbers
-	if abbreviate and kind == "number" then
-		local ok, text = pcall(abbreviate, amount)
+	local format = _G.AbbreviateNumbers or _G.BreakUpLargeNumbers
+	if format and kind == "number" then
+		local ok, text = pcall(format, amount)
 		if ok and type(text) == "string" then
 			return text
 		end
 	end
-	return string.format("%s", amount)
+	return amount
 end
 ns.AmountText = AmountText
 
@@ -111,94 +122,67 @@ local function Gate(region, value, ifTrue, ifFalse)
 	end
 end
 
--- ── Styles ────────────────────────────────────────────────────────────────────────────
--- wantCrit / wantDead: the (crit, dead) pair for which this frame is visible.
+-- ── Hit frames ────────────────────────────────────────────────────────────────────────
+-- wantCrit / wantDead: the (crit, dead) pair for which this frame is visible; event: whose
+-- look (art, animation, text, ...) it shows.
 local STYLES = {
-	{ key = "pow", wantCrit = true, wantDead = false },
-	{ key = "ko", wantCrit = false, wantDead = true },
-	{ key = "overkill", wantCrit = true, wantDead = true },
+	{ key = "pow", event = "crit", wantCrit = true, wantDead = false },
+	{ key = "ko", event = "kill", wantCrit = false, wantDead = true },
+	{ key = "overkill", event = "critkill", wantCrit = true, wantDead = true },
 }
 
 local FRAME_SIZE = 256
-local TEXTURE_PATH = "Interface\\AddOns\\" .. ADDON_NAME .. "\\Media\\"
+local HIT_LIFE = 1.0 -- seconds a hit frame stays
 
-local frames = {} -- key -> { root, critGate, deadGate, tex, anim }
+local frames -- key -> { root, critGate, deadGate, stage }, built once Display.lua has loaded
 
-local function BuildFrame(style)
-	local root = CreateFrame("Frame", "PulseComicFrame_" .. style.key, UIParent)
-	root:SetSize(FRAME_SIZE, FRAME_SIZE)
-	root:SetFrameStrata("HIGH")
-	root:EnableMouse(false)
-	root:Hide()
-
-	local critGate = CreateFrame("Frame", nil, root)
-	critGate:SetAllPoints(root)
-	local deadGate = CreateFrame("Frame", nil, critGate)
-	deadGate:SetAllPoints(critGate)
-
-	local tex = deadGate:CreateTexture(nil, "ARTWORK")
-	tex:SetAllPoints(deadGate)
-	tex:SetTexture(TEXTURE_PATH .. style.key)
-
-	-- Damage number, inside deadGate so it shares the frame's visibility.
-	local label = deadGate:CreateFontString(nil, "OVERLAY")
-	label:SetFont(FONT, 30, "THICKOUTLINE")
-	label:SetPoint("CENTER", deadGate, "CENTER", 0, -62)
-	label:SetTextColor(1, 1, 1)
-	label:SetShadowOffset(2, -2)
-
-	-- Pop in, hold, fade. All on root, with plain (non-secret) values.
-	local anim = root:CreateAnimationGroup()
-	local pop = anim:CreateAnimation("Scale")
-	pop:SetOrder(1)
-	pop:SetDuration(0.12)
-	if pop.SetScaleFrom then
-		pop:SetScaleFrom(0.35, 0.35)
-		pop:SetScaleTo(1.0, 1.0)
-	else
-		pop:SetFromScale(0.35, 0.35)
-		pop:SetToScale(1.0, 1.0)
+local function EnsureFrames()
+	if frames then
+		return
 	end
-	pop:SetSmoothing("OUT")
-	local fade = anim:CreateAnimation("Alpha")
-	fade:SetOrder(2)
-	fade:SetStartDelay(0.5)
-	fade:SetDuration(0.3)
-	fade:SetFromAlpha(1)
-	fade:SetToAlpha(0)
-	anim:SetScript("OnFinished", function()
+	frames = {}
+	for _, style in ipairs(STYLES) do
+		local root = CreateFrame("Frame", "PulseComicFrame_" .. style.key, UIParent)
+		root:SetSize(FRAME_SIZE, FRAME_SIZE)
+		root:SetFrameStrata("HIGH")
+		root:EnableMouse(false)
 		root:Hide()
-	end)
 
-	frames[style.key] = { root = root, critGate = critGate, deadGate = deadGate, tex = tex, label = label, anim = anim }
-end
+		local critGate = CreateFrame("Frame", nil, root)
+		critGate:SetAllPoints(root)
+		local deadGate = CreateFrame("Frame", nil, critGate)
+		deadGate:SetAllPoints(critGate)
 
-for _, style in ipairs(STYLES) do
-	BuildFrame(style)
+		-- Art, title and damage number all inside deadGate; animation on root only.
+		local stage = ns.display.NewStage(root, deadGate, HIT_LIFE)
+		frames[style.key] = { root = root, critGate = critGate, deadGate = deadGate, stage = stage }
+	end
 end
 
 -- ── Showing a pop ─────────────────────────────────────────────────────────────────────
 -- isCrit / isDead may be secret booleans, amount a secret number, or plain values from
 -- /comic test. Never read them.
+local popValues = {}
+local popOpts = {}
+
 local function Pop(isCrit, isDead, amount)
-	local text = db.numbers and AmountText(amount) or ""
+	EnsureFrames()
+	popValues.amount = AmountText(amount)
 	local dx, dy, tilt = 0, 0, 0
 	if db.jitter then
 		dx, dy, tilt = math.random(-40, 40), math.random(-20, 20), math.rad(math.random(-8, 8))
 	end
+	popOpts.dx, popOpts.dy, popOpts.tilt = dx, dy, tilt
 	for _, style in ipairs(STYLES) do
 		local f = frames[style.key]
-		Gate(f.critGate, isCrit, style.wantCrit and 1 or 0, style.wantCrit and 0 or 1)
-		Gate(f.deadGate, isDead, style.wantDead and 1 or 0, style.wantDead and 0 or 1)
-		f.tex:SetRotation(tilt)
-		f.label:SetText(text)
-		f.root:SetScale(db.scale)
-		f.root:ClearAllPoints()
-		f.root:SetPoint("CENTER", UIParent, "CENTER", db.x + dx, db.y + dy)
-		f.root:SetAlpha(1)
-		f.anim:Stop()
-		f.root:Show()
-		f.anim:Play()
+		local cfg = ns.EventConfig(style.event)
+		if cfg.enabled then
+			Gate(f.critGate, isCrit, style.wantCrit and 1 or 0, style.wantCrit and 0 or 1)
+			Gate(f.deadGate, isDead, style.wantDead and 1 or 0, style.wantDead and 0 or 1)
+			ns.display.Play(f.stage, cfg, popValues, popOpts)
+		else
+			ns.display.Stop(f.stage)
+		end
 	end
 end
 
@@ -224,33 +208,6 @@ local function IsMine()
 	return false
 end
 
--- ── Resolving a hit ───────────────────────────────────────────────────────────────────
-local lastPopAt = 0
-
--- Called with the crit flag of one hit. The target's death state is sampled a moment later,
--- because it is not updated at the instant the hit is reported.
-local function OnHit(isCrit, amount)
-	if not db.enabled then
-		return
-	end
-	local now = GetTime()
-	if not IsMine() then
-		return
-	end
-	-- The meter sees every attributed hit, before the pop throttle.
-	if ns.meter then
-		ns.meter:OnHit(amount)
-	end
-	if now - lastPopAt < db.minInterval then
-		return
-	end
-	lastPopAt = now
-	C_Timer.After(db.killDelay, function()
-		-- UnitIsDead is not wrapped in `and`/`or`: its result may be a secret boolean.
-		Pop(isCrit, UnitIsDead("target"), amount)
-	end)
-end
-
 -- ── Debug ─────────────────────────────────────────────────────────────────────────────
 local function Say(msg)
 	DEFAULT_CHAT_FRAME:AddMessage("|cffffd60aPulseComic|r " .. msg)
@@ -264,27 +221,192 @@ local function Describe(v)
 	return type(v) .. ":" .. tostring(v)
 end
 
--- Width probe for /comic debug: does GetStringWidth() of a secret number stay readable?
--- Its own hidden FontString, because SetText with a secret marks the string's text secret
--- until it is reset, and that must not leak into the visible labels.
-local probe
-local function ProbeWidth(amount)
-	if not probe then
-		local holder = CreateFrame("Frame", nil, UIParent)
-		holder:SetSize(1, 1)
-		holder:SetPoint("TOPLEFT", UIParent, "BOTTOMRIGHT", 100, -100) -- off-screen
-		probe = holder:CreateFontString(nil, "OVERLAY")
-		probe:SetFont(FONT, 30, "THICKOUTLINE")
+-- ── Killing blows ─────────────────────────────────────────────────────────────────────
+-- Two sources, each a separate option:
+--
+--   PARTY_KILL (killEvent). The client names the attacker of every killing blow in your
+--   group. Its payload is SecretWhenUnitIdentityRestricted, which makes values secret for
+--   units that are not player-controlled or in your party/raid. You and your pet are
+--   neither, so attackerGUID should be plain for your own kills; the victim's GUID is
+--   probably secret and is not needed. A secret attacker is simply not counted.
+--
+--   UnitIsDead (killUnitDead). The target's death state, read killDelay after your hit.
+--   May be secret; it goes to the death gate unread. It cannot tell whose blow it was.
+--
+-- PARTY_KILL can arrive just before or just after the hit that caused it, so a kill counts
+-- for any hit within KILL_WINDOW of it.
+local KILL_WINDOW = 0.3
+
+local lastKillAt = -100 -- GetTime() of the latest killing blow by you (or your pet)
+local killConsumed = true -- whether a pop has already shown that kill
+
+-- The latest hit on the target, attributed or not. A pet's killing blow pops with it.
+local lastHitAt, lastHitCrit, lastHitAmount = -100, false, nil
+
+-- Secret first: a secret may not even be compared with nil.
+local function Plain(v)
+	return not issecretvalue(v) and v ~= nil
+end
+
+-- Who landed a killing blow: "you", "pet", "group", "grouppet", "other" or "secret", plus
+-- the group unit token when there is one.
+local function WhoKilled(attackerGUID)
+	if issecretvalue(attackerGUID) then
+		return "secret"
 	end
-	local ok = pcall(probe.SetText, probe, AmountText(amount))
-	if not ok then
-		return "SetText refused"
+	if type(attackerGUID) ~= "string" then
+		return "other"
 	end
-	local okWidth, width = pcall(probe.GetStringWidth, probe)
-	if not okWidth then
-		return "GetStringWidth errored"
+	local attacker = attackerGUID -- checked plain above
+	local me = UnitGUID("player")
+	if Plain(me) and attacker == me then
+		return "you"
 	end
-	return Describe(width)
+	local pet = UnitGUID("pet")
+	if Plain(pet) and attacker == pet then
+		return "pet"
+	end
+	local prefix, count = "party", GetNumSubgroupMembers and GetNumSubgroupMembers() or 0
+	if IsInRaid and IsInRaid() then
+		prefix, count = "raid", GetNumGroupMembers()
+	end
+	for i = 1, count do
+		local unit = prefix .. i
+		local guid = UnitGUID(unit)
+		if Plain(guid) and attacker == guid then
+			return "group", unit
+		end
+		local petUnit = prefix .. "pet" .. i
+		local petGUID = UnitGUID(petUnit)
+		if Plain(petGUID) and attacker == petGUID then
+			return "grouppet", petUnit
+		end
+	end
+	return "other"
+end
+
+local function UnitLabel(unit)
+	local name = UnitName(unit)
+	if Plain(name) and type(name) == "string" then
+		return name
+	end
+	return unit
+end
+
+ns.Plain, ns.WhoKilled, ns.UnitLabel = Plain, WhoKilled, UnitLabel
+
+local WHO_TEXT = {
+	you = "you",
+	pet = "your pet",
+	other = "someone outside your group",
+	secret = "a secret attacker",
+}
+
+local function LogKill(who, unit, victimGUID, counted)
+	local whoText = WHO_TEXT[who]
+	if who == "group" then
+		whoText = UnitLabel(unit) .. " (group)"
+	elseif who == "grouppet" then
+		whoText = UnitLabel(unit) .. " (group pet)"
+	end
+	local victim
+	if not Plain(victimGUID) then
+		victim = "victim secret"
+	else
+		local victimPlain = victimGUID -- checked plain above
+		local target = UnitGUID("target")
+		if Plain(target) and victimPlain == target then
+			victim = "your target"
+		else
+			victim = "not your target"
+		end
+	end
+	local verdict
+	if counted then
+		verdict = "|cff40ff40counted|r"
+	elseif who == "pet" then
+		verdict = "ignored: pet kills are off"
+	elseif not db.killEvent then
+		verdict = "ignored: killing-blow event is off"
+	else
+		verdict = "not yours"
+	end
+	Say("kill: " .. whoText .. ", " .. victim .. " — " .. verdict)
+end
+
+-- Whether a hit at `hitAt` killed. Plain true for a counted killing blow; otherwise the
+-- UnitIsDead reading (possibly secret), or plain false.
+local function ResolveDead(hitAt)
+	if db.killEvent and lastKillAt >= hitAt - KILL_WINDOW then
+		killConsumed = true
+		return true
+	end
+	if db.killUnitDead then
+		local dead = UnitIsDead("target")
+		if type(dead) == "boolean" then
+			return dead
+		end
+	end
+	return false
+end
+
+local function OnPartyKill(attackerGUID, victimGUID)
+	if not db.enabled then
+		return
+	end
+	local who, unit = WhoKilled(attackerGUID)
+	local counted = db.killEvent and (who == "you" or (who == "pet" and db.killPet))
+	if db.killLog then
+		LogKill(who, unit, victimGUID, counted)
+	end
+	if not counted then
+		return
+	end
+	local killAt = GetTime()
+	lastKillAt, killConsumed = killAt, false
+	-- A pending hit claims the kill when its timer fires. If none does (a pet's blow, a hit
+	-- the attribution filter dropped), show the kill with the latest hit's crit and amount.
+	C_Timer.After(db.killDelay + 0.05, function()
+		if killConsumed or lastKillAt ~= killAt or not db.enabled then
+			return
+		end
+		killConsumed = true
+		local isCrit, amount = false, nil
+		if killAt - lastHitAt <= KILL_WINDOW then
+			isCrit, amount = lastHitCrit, lastHitAmount
+		end
+		Pop(isCrit, true, amount)
+	end)
+end
+
+-- ── Resolving a hit ───────────────────────────────────────────────────────────────────
+local lastPopAt = 0
+
+-- Called with the crit flag of one hit. Whether it killed is decided a moment later,
+-- because neither the death state nor PARTY_KILL is in place at the instant of the hit.
+local function OnHit(isCrit, amount)
+	if not db.enabled then
+		return
+	end
+	local now = GetTime()
+	lastHitAt, lastHitCrit, lastHitAmount = now, isCrit, amount
+	if not IsMine() then
+		return
+	end
+	-- The meter sees every attributed hit, before the pop throttle.
+	if ns.meter then
+		ns.meter:OnHit(amount)
+	end
+	if now - lastPopAt < db.minInterval then
+		return
+	end
+	lastPopAt = now
+	C_Timer.After(db.killDelay, function()
+		if not db.enabled then
+			return
+		end
+		Pop(isCrit, ResolveDead(now), amount)
+	end)
 end
 
 -- ── Event sources ─────────────────────────────────────────────────────────────────────
@@ -292,6 +414,8 @@ local CRIT_TYPES = { DAMAGE_CRIT = true, SPELL_DAMAGE_CRIT = true }
 local HIT_TYPES = { DAMAGE = true, SPELL_DAMAGE = true, DAMAGE_CRIT = true, SPELL_DAMAGE_CRIT = true }
 
 local function OnCombatText(messageType)
+	-- Same layout as Blizzard_CombatText: `data, arg3, arg4 = GetCurrentEventInfo()`. For
+	-- damage types the amount is the first value; the third is the crit flag on partials.
 	local ok, ret1, ret2, ret3
 	if GetEventInfo then
 		ok, ret1, ret2, ret3 = pcall(GetEventInfo)
@@ -301,16 +425,14 @@ local function OnCombatText(messageType)
 		Say(
 			"CTU type="
 				.. Describe(messageType)
-				.. " info1="
+				.. " info1(amount)="
 				.. Describe(ret1)
-				.. " info2(amount?)="
+				.. " info2="
 				.. Describe(ret2)
 				.. " info3(crit?)="
 				.. Describe(ret3)
 				.. " dead="
 				.. Describe(UnitIsDead("target"))
-				.. " width="
-				.. ProbeWidth(ret2)
 		)
 	end
 
@@ -319,27 +441,39 @@ local function OnCombatText(messageType)
 		if not HIT_TYPES[messageType] then
 			return
 		end
-		OnHit(CRIT_TYPES[messageType] == true, ret2)
+		OnHit(CRIT_TYPES[messageType] == true, ret1)
 	elseif ok then
 		-- Secret message type: cannot be filtered. Use the feed's crit flag (PulseHaptics reads
 		-- it as the third value after pcall on RESIST/ABSORB entries) and let the engine
 		-- decide visibility. Unconfirmed; compare with `/comic debug`.
 		-- type() reports the real type even for a secret, so this test is safe.
 		if type(ret3) == "boolean" then
-			OnHit(ret3, ret2)
+			OnHit(ret3, ret1)
 		end
 	end
 end
 
-local function OnUnitCombat(unit, _, flagText, amount)
+local function OnUnitCombat(unit, action, flagText, amount)
 	if unit ~= "target" then
 		return
 	end
 	if db.debug then
-		Say("UNIT_COMBAT flag=" .. Describe(flagText) .. " dead=" .. Describe(UnitIsDead("target")))
+		Say(
+			"UNIT_COMBAT action="
+				.. Describe(action)
+				.. " flag="
+				.. Describe(flagText)
+				.. " amount="
+				.. Describe(amount)
+				.. " dead="
+				.. Describe(UnitIsDead("target"))
+		)
 	end
-	if issecretvalue(flagText) then
+	if issecretvalue(action) or issecretvalue(flagText) then
 		return -- a secret string cannot be turned into a boolean; COMBAT_TEXT_UPDATE is the path for that
+	end
+	if action ~= "WOUND" then
+		return -- heals, energizes, misses, dodges and the like
 	end
 	OnHit(flagText == "CRITICAL", amount)
 end
@@ -349,12 +483,17 @@ local function SyncSources()
 	driver:UnregisterEvent("COMBAT_TEXT_UPDATE")
 	driver:UnregisterEvent("UNIT_COMBAT")
 	driver:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+	pcall(driver.UnregisterEvent, driver, "PARTY_KILL")
 	if not db.enabled then
 		return
 	end
 	driver:RegisterEvent("COMBAT_TEXT_UPDATE")
 	driver:RegisterUnitEvent("UNIT_COMBAT", "target")
 	driver:RegisterUnitEvent("UNIT_SPELLCAST_SUCCEEDED", "player")
+	if db.killEvent or db.killLog then
+		-- pcall: a client without the event refuses to register it.
+		pcall(driver.RegisterEvent, driver, "PARTY_KILL")
+	end
 	-- NOTE: the active unit is global. PulseHaptics sets it to "player" for its own damage-taken
 	-- cues; whichever addon sets it last wins. See the README.
 	if SetActiveUnit then
@@ -370,16 +509,17 @@ driver:SetScript("OnEvent", function(_, event, ...)
 		if (...) ~= ADDON_NAME then
 			return
 		end
-		PulseComicDB = PulseComicDB or {}
-		db = PulseComicDB
-		for k, v in pairs(DEFAULTS) do
-			if db[k] == nil then
-				db[k] = v
-			end
-		end
+		db = ns.profiles:Load()
 		ns.db = db
+		EnsureFrames()
 		if ns.meter then
 			ns.meter:Init()
+		end
+		if ns.announcer then
+			ns.announcer:Init()
+		end
+		if ns.minimap then
+			ns.minimap:Init()
 		end
 		return
 	end
@@ -394,37 +534,126 @@ driver:SetScript("OnEvent", function(_, event, ...)
 		OnCombatText(...)
 	elseif event == "UNIT_COMBAT" then
 		OnUnitCombat(...)
+	elseif event == "PARTY_KILL" then
+		OnPartyKill(...)
 	end
 end)
 
--- ── Slash commands ────────────────────────────────────────────────────────────────────
-local TESTS = {
+-- ── Settings API (slash commands and the settings window) ─────────────────────────────
+-- Every change goes through here, so a toggle has the same effect wherever it is made.
+function ns.Set(key, value)
+	db[key] = value
+	if key == "enabled" or key == "killEvent" or key == "killLog" then
+		SyncSources()
+	elseif key == "meter" and ns.meter then
+		ns.meter:Refresh()
+	end
+	if ns.announcer and (key == "enabled" or string.sub(key, 1, 3) == "ann") then
+		ns.announcer:Sync()
+	end
+	if ns.ui and ns.ui.Refresh then
+		ns.ui.Refresh()
+	end
+end
+
+function ns.Toggle(key)
+	ns.Set(key, not db[key])
+	return db[key]
+end
+
+-- One field of one event's look.
+function ns.SetEvent(id, field, value)
+	db.events[id][field] = value
+	if field == "enabled" and ns.announcer then
+		ns.announcer:Sync()
+	end
+	if ns.ui and ns.ui.Refresh then
+		ns.ui.Refresh()
+	end
+end
+
+-- Switches every module to `profile` (Profiles.lua calls this after a change).
+function ns.ApplyProfile(profile)
+	db = profile
+	ns.db = profile
+	SyncSources()
+	if ns.meter then
+		ns.meter:Refresh()
+	end
+	if ns.announcer then
+		ns.announcer:Init()
+	end
+	if ns.ui and ns.ui.Refresh then
+		ns.ui.Refresh()
+	end
+end
+
+local HIT_EVENTS = { "crit", "kill", "critkill" }
+
+ns.TESTS = {
 	pow = { true, false, 12345 },
 	ko = { false, true, 4321 },
 	overkill = { true, true, 987654 },
 	hit = { false, false, 100 },
 }
 
+-- Plain booleans, no secrets: what /comic test and the window's test buttons show.
+function ns.Test(key)
+	local t = ns.TESTS[key]
+	if t then
+		Pop(t[1], t[2], t[3])
+	end
+	return t ~= nil
+end
+
+-- Font attributions (ArtCatalog.lua, generated from Art/_fonts). Full licenses: Art/_fonts/*/OFL.txt.
+function ns.PrintCredits()
+	Say("art: generated for PulseComic (Art/). Display fonts, unmodified, under their own licenses:")
+	for _, credit in ipairs(ns.FONT_CREDITS or {}) do
+		Say("|cffffd60a" .. credit[1] .. "|r  " .. credit[2] .. "  (" .. credit[3] .. ")")
+	end
+	Say("full licenses beside each font in Art/_fonts; list in PulseComic/FONT-CREDITS.md")
+end
+
+-- ── Slash commands ────────────────────────────────────────────────────────────────────
+local KILL_KEYS = {
+	event = { "killEvent", "killing-blow event (PARTY_KILL)" },
+	death = { "killUnitDead", "target death check (UnitIsDead)" },
+	pet = { "killPet", "pet killing blows" },
+	log = { "killLog", "kill log in chat" },
+}
+
+local HELP = "/comic opens settings  ·  test pow|ko|overkill|hit  ·  on|off  ·  kill event|death|pet|log  ·  announce test  ·  profile [name]  ·  credits  ·  scale <n>  ·  pos <x> <y>  ·  attribution recent|any  ·  numbers  ·  meter  ·  jitter  ·  minimap  ·  debug"
+
 SLASH_PULSECOMIC1 = "/comic"
 SLASH_PULSECOMIC2 = "/pulsecomic"
 SlashCmdList["PULSECOMIC"] = function(input)
 	local cmd, arg = string.match(input or "", "^%s*(%S*)%s*(.-)%s*$")
 	cmd = string.lower(cmd or "")
-	if cmd == "test" then
-		local t = TESTS[string.lower(arg)]
-		if not t then
-			Say("usage: /comic test pow | ko | overkill | hit  (plain booleans, no secrets)")
-			return
+	if cmd == "" or cmd == "config" or cmd == "options" then
+		if ns.ui then
+			ns.ui.Toggle()
+		else
+			Say(HELP)
 		end
-		Pop(t[1], t[2], t[3])
+	elseif cmd == "test" then
+		if not ns.Test(string.lower(arg)) then
+			Say("usage: /comic test pow | ko | overkill | hit  (plain booleans, no secrets)")
+		end
 	elseif cmd == "on" or cmd == "off" then
-		db.enabled = (cmd == "on")
-		SyncSources()
+		ns.Set("enabled", cmd == "on")
 		Say(db.enabled and "enabled" or "disabled")
+	elseif cmd == "kill" then
+		local entry = KILL_KEYS[string.lower(arg)]
+		if entry then
+			Say(entry[2] .. " " .. (ns.Toggle(entry[1]) and "on" or "off"))
+		else
+			Say("usage: /comic kill event | death | pet | log")
+		end
 	elseif cmd == "scale" then
 		local n = tonumber(arg)
 		if n and n >= 0.3 and n <= 3 then
-			db.scale = n
+			ns.Set("scale", n)
 			Say("scale " .. n)
 		else
 			Say("usage: /comic scale 0.3 - 3")
@@ -439,7 +668,7 @@ SlashCmdList["PULSECOMIC"] = function(input)
 		end
 	elseif cmd == "attribution" then
 		if arg == "any" or arg == "recent" then
-			db.attribution = arg
+			ns.Set("attribution", arg)
 			Say("attribution " .. arg)
 		else
 			Say("usage: /comic attribution recent | any")
@@ -449,18 +678,41 @@ SlashCmdList["PULSECOMIC"] = function(input)
 			ns.meter:Command(arg)
 		end
 	elseif cmd == "numbers" then
-		db.numbers = not db.numbers
-		Say("damage numbers " .. (db.numbers and "on" or "off"))
+		local on = not db.events.crit.details
+		for _, id in ipairs(HIT_EVENTS) do
+			ns.SetEvent(id, "details", on)
+		end
+		Say("damage numbers " .. (on and "on" or "off"))
+	elseif cmd == "profile" then
+		local P = ns.profiles
+		if arg == "" then
+			Say("profile: " .. P:ActiveName() .. (P:HasCharacterChoice() and " (this character)" or " (account default)") .. "  ·  all: " .. table.concat(P:Names(), ", "))
+		elseif P:Exists(arg) then
+			P:Use(arg)
+			Say("this character now uses profile " .. arg)
+		else
+			Say("no profile named " .. arg .. "  ·  all: " .. table.concat(P:Names(), ", "))
+		end
 	elseif cmd == "jitter" then
-		db.jitter = not db.jitter
-		Say("jitter " .. (db.jitter and "on" or "off"))
+		Say("jitter " .. (ns.Toggle("jitter") and "on" or "off"))
+	elseif cmd == "announce" or cmd == "ann" then
+		if ns.announcer then
+			ns.announcer:Command(arg)
+		end
+	elseif cmd == "credits" then
+		ns.PrintCredits()
+	elseif cmd == "minimap" then
+		if ns.minimap then
+			ns.minimap:Toggle()
+			Say("minimap button " .. (ns.account.minimap.hide and "hidden" or "shown"))
+		end
 	elseif cmd == "debug" then
-		db.debug = not db.debug
+		ns.Toggle("debug")
 		Say(
 			"debug "
-				.. (db.debug and "on: every hit on your target prints its raw feed values (secret ones as <secret>) and whether its text width is readable" or "off")
+				.. (db.debug and "on: every hit on your target prints its raw feed values (secret ones as <secret>)" or "off")
 		)
 	else
-		Say("/comic test pow|ko|overkill|hit  ·  on|off  ·  scale <n>  ·  pos <x> <y>  ·  attribution recent|any  ·  numbers  ·  meter  ·  jitter  ·  debug")
+		Say(HELP)
 	end
 end

@@ -1,0 +1,323 @@
+-- PulseComic — Display.lua
+--
+-- Draws one event: its art (a three-frame flipbook), title and detail line, with one of the
+-- animation presets, at the chosen position, color, size and sound. Used by the comic hit
+-- frames (PulseComic.lua, inside their secret alpha gates) and by the banners
+-- (Announcer.lua).
+--
+-- A "stage" is one drawable: an outer root that moves and fades, and a container holding the
+-- art texture and two font strings. For the hit frames the container is the inner death
+-- gate, so everything drawn stays under the gates; animation only ever runs on the root.
+-- All animation values are plain.
+
+local _, ns = ...
+
+local D = {}
+ns.display = D
+
+local ART_SIZE = 256
+
+D.COLORS = {
+	gold = { 1.00, 0.84, 0.04 },
+	red = { 1.00, 0.22, 0.18 },
+	green = { 0.35, 1.00, 0.40 },
+	blue = { 0.35, 0.75, 1.00 },
+	white = { 1.00, 1.00, 1.00 },
+	purple = { 0.78, 0.45, 1.00 },
+	orange = { 1.00, 0.55, 0.10 },
+}
+D.COLOR_ORDER = { "gold", "orange", "red", "green", "blue", "purple", "white" }
+
+-- key -> { label, path }. "auto" takes the font of the art's category (ART_FONTS), or
+-- TEXT_FONT when there is no art. Then the game's own fonts, then the display fonts that
+-- ship in Art/_fonts (ArtCatalog.lua).
+D.FONTS = {
+	auto = { "Match the art" },
+	friz = { "Friz Quadrata (game)", "Fonts\\FRIZQT__.TTF" },
+	arial = { "Arial Narrow (game)", "Fonts\\ARIALN.TTF" },
+	skurri = { "Skurri (game)", "Fonts\\skurri.ttf" },
+	morpheus = { "Morpheus (game)", "Fonts\\MORPHEUS.ttf" },
+}
+D.FONT_ORDER = { "auto", "friz", "arial", "skurri", "morpheus" }
+for _, font in ipairs(ns.ART_FONTS or {}) do
+	D.FONTS[font[1]] = { font[2], font[3] }
+	D.FONT_ORDER[#D.FONT_ORDER + 1] = font[1]
+end
+D.TEXT_FONT = D.FONTS["black-ops-one"] and "black-ops-one" or "friz"
+
+-- key -> { label, SOUNDKIT name }. A kit this client lacks is skipped at play time.
+D.SOUNDS = {
+	none = { "None" },
+	raidwarning = { "Raid warning", "RAID_WARNING" },
+	readycheck = { "Ready check", "READY_CHECK" },
+	quest = { "Quest complete", "IG_QUEST_LIST_COMPLETE" },
+	alarm = { "Alarm", "ALARM_CLOCK_WARNING_3" },
+}
+D.SOUND_ORDER = { "none", "raidwarning", "readycheck", "quest", "alarm" }
+
+D.POSITIONS = {
+	comic = { "Comic spot (/comic pos)" },
+	banner = { "Top banner", 0, 260 },
+	low = { "Low centre", 0, -160 },
+	left = { "Left", -380, 120 },
+	right = { "Right", 380, 120 },
+}
+D.POSITION_ORDER = { "comic", "banner", "low", "left", "right" }
+
+-- Presets: whether the art flips through its three frames, and how the root moves.
+D.ANIMS = {
+	flipbook = { label = "Flipbook pop", flip = true },
+	slam = { label = "Slam in", flip = false },
+	bounce = { label = "Bounce", flip = true },
+	rise = { label = "Rise and fade", flip = true },
+	shake = { label = "Shake", flip = true },
+	static = { label = "Still", flip = false },
+}
+D.ANIM_ORDER = { "flipbook", "slam", "bounce", "rise", "shake", "static" }
+
+-- ── Building ──────────────────────────────────────────────────────────────────────────
+
+-- Adds art, title and detail line to `container`, animated through `root`.
+-- life: seconds on screen before the fade completes.
+function D.NewStage(root, container, life)
+	local stage = { root = root, container = container, life = life, groups = {}, showId = 0 }
+
+	stage.tex = container:CreateTexture(nil, "ARTWORK")
+	stage.tex:SetSize(ART_SIZE, ART_SIZE)
+	stage.tex:SetPoint("CENTER", container, "CENTER", 0, 0)
+
+	stage.sub = container:CreateFontString(nil, "OVERLAY")
+	stage.sub:SetFont(D.FONTS.friz[2], 26, "THICKOUTLINE")
+	stage.sub:SetTextColor(1, 1, 1)
+	stage.sub:SetShadowOffset(2, -2)
+
+	stage.title = container:CreateFontString(nil, "OVERLAY")
+	stage.title:SetFont(D.FONTS.friz[2], 54, "THICKOUTLINE")
+	stage.font = "friz"
+	stage.title:SetShadowOffset(3, -3)
+
+	return stage
+end
+
+local function ScaleFromTo(anim, from, to)
+	if anim.SetScaleFrom then
+		anim:SetScaleFrom(from, from)
+		anim:SetScaleTo(to, to)
+	else
+		anim:SetFromScale(from, from)
+		anim:SetToScale(to, to)
+	end
+end
+
+local function Fade(group, life, order)
+	local fade = group:CreateAnimation("Alpha")
+	fade:SetOrder(order)
+	fade:SetStartDelay(math.max(0, life - 0.35))
+	fade:SetDuration(0.35)
+	fade:SetFromAlpha(1)
+	fade:SetToAlpha(0)
+end
+
+local BUILDERS = {}
+
+function BUILDERS.flipbook(group, life)
+	local pop = group:CreateAnimation("Scale")
+	pop:SetOrder(1)
+	pop:SetDuration(0.12)
+	ScaleFromTo(pop, 0.6, 1.0)
+	pop:SetSmoothing("OUT")
+	Fade(group, life - 0.12, 2)
+end
+
+function BUILDERS.slam(group, life)
+	local slam = group:CreateAnimation("Scale")
+	slam:SetOrder(1)
+	slam:SetDuration(0.14)
+	ScaleFromTo(slam, 1.8, 1.0)
+	slam:SetSmoothing("OUT")
+	Fade(group, life - 0.14, 2)
+end
+
+function BUILDERS.bounce(group, life)
+	local up = group:CreateAnimation("Scale")
+	up:SetOrder(1)
+	up:SetDuration(0.12)
+	ScaleFromTo(up, 0.3, 1.15)
+	up:SetSmoothing("OUT")
+	local settle = group:CreateAnimation("Scale")
+	settle:SetOrder(2)
+	settle:SetDuration(0.08)
+	ScaleFromTo(settle, 1.0, 1 / 1.15)
+	Fade(group, life - 0.2, 3)
+end
+
+function BUILDERS.rise(group, life)
+	local rise = group:CreateAnimation("Translation")
+	rise:SetOrder(1)
+	rise:SetDuration(life)
+	rise:SetOffset(0, 70)
+	rise:SetSmoothing("OUT")
+	local fade = group:CreateAnimation("Alpha")
+	fade:SetOrder(1)
+	fade:SetStartDelay(life * 0.5)
+	fade:SetDuration(life * 0.5)
+	fade:SetFromAlpha(1)
+	fade:SetToAlpha(0)
+end
+
+function BUILDERS.shake(group, life)
+	local offsets = { 10, -16, 12, -8, 2 }
+	for i, dx in ipairs(offsets) do
+		local move = group:CreateAnimation("Translation")
+		move:SetOrder(i)
+		move:SetDuration(0.04)
+		move:SetOffset(dx, 0)
+	end
+	Fade(group, life - 0.2, #offsets + 1)
+end
+
+function BUILDERS.static(group, life)
+	Fade(group, life, 1)
+end
+
+local function Group(stage, preset)
+	local group = stage.groups[preset]
+	if not group then
+		group = stage.root:CreateAnimationGroup()
+		BUILDERS[preset](group, stage.life)
+		stage.groups[preset] = group
+	end
+	return group
+end
+
+-- ── Playing ───────────────────────────────────────────────────────────────────────────
+
+local function Layout(stage, hasArt)
+	local title, sub, container = stage.title, stage.sub, stage.container
+	title:ClearAllPoints()
+	sub:ClearAllPoints()
+	if hasArt then
+		-- The word is in the art. The detail line sits in its calm lower area, the title
+		-- under the art.
+		sub:SetPoint("CENTER", container, "CENTER", 0, -62)
+		title:SetPoint("TOP", container, "CENTER", 0, -ART_SIZE / 2 + 6)
+	else
+		title:SetPoint("CENTER", container, "CENTER", 0, 14)
+		sub:SetPoint("TOP", title, "BOTTOM", 0, -6)
+	end
+end
+
+local function PlayEventSound(key)
+	if not ns.db.annSound then
+		return
+	end
+	local sound = D.SOUNDS[key]
+	local kit = sound and sound[2] and SOUNDKIT and SOUNDKIT[sound[2]]
+	if kit then
+		_G.PlaySound(kit)
+	end
+end
+
+-- A font file the client cannot load leaves the text on the game font.
+local function SetFonts(stage, path)
+	if not stage.title:SetFont(path, 54, "THICKOUTLINE") then
+		stage.title:SetFont(D.FONTS.friz[2], 54, "THICKOUTLINE")
+	end
+	if not stage.sub:SetFont(path, 26, "THICKOUTLINE") then
+		stage.sub:SetFont(D.FONTS.friz[2], 26, "THICKOUTLINE")
+	end
+end
+
+-- Where a position key puts the stage, before jitter.
+function D.Offset(pos)
+	local p = D.POSITIONS[pos] or D.POSITIONS.banner
+	if pos == "comic" then
+		return ns.db.x, ns.db.y
+	end
+	return p[2], p[3]
+end
+
+-- Shows `cfg` on `stage`. `values` fills the text templates (may hold secrets).
+-- opts: dx, dy, tilt (jitter); onDone: called when it has faded out.
+function D.Play(stage, cfg, values, opts, onDone)
+	local entry = ns.art.Resolve(cfg.art)
+	local preset = D.ANIMS[cfg.anim] and cfg.anim or "slam"
+	local flip = entry and D.ANIMS[preset].flip
+
+	stage.showId = stage.showId + 1
+	local showId = stage.showId
+
+	if entry then
+		stage.tex:SetTexture(entry.frames[flip and 1 or 2])
+		stage.tex:SetRotation(opts and opts.tilt or 0)
+		stage.tex:Show()
+	else
+		stage.tex:Hide()
+	end
+	Layout(stage, entry ~= nil)
+
+	local font = cfg.font
+	if font == "auto" or not D.FONTS[font] then
+		font = (entry and ns.art.FontFor(entry.category)) or D.TEXT_FONT
+	end
+	if stage.font ~= font then
+		stage.font = font
+		SetFonts(stage, D.FONTS[font] and D.FONTS[font][2] or D.FONTS.friz[2])
+	end
+
+	local c = D.COLORS[cfg.color] or D.COLORS.gold
+	stage.title:SetTextColor(c[1], c[2], c[3])
+	ns.ComposeText(stage.title, cfg.title, values)
+	if cfg.details then
+		ns.ComposeText(stage.sub, cfg.sub, values)
+	else
+		stage.sub:SetText("")
+	end
+
+	local root = stage.root
+	local x, y = D.Offset(cfg.pos)
+	root:ClearAllPoints()
+	root:SetPoint("CENTER", UIParent, "CENTER", x + (opts and opts.dx or 0), y + (opts and opts.dy or 0))
+	root:SetScale((ns.db.scale or 1) * (cfg.size or 1))
+	root:SetAlpha(1)
+	for _, group in pairs(stage.groups) do
+		group:Stop()
+	end
+	root:Show()
+	Group(stage, preset):Play()
+
+	if flip then
+		local times = ns.art.FRAME_TIMES
+		C_Timer.After(times[1], function()
+			if stage.showId == showId then
+				stage.tex:SetTexture(entry.frames[2])
+			end
+		end)
+		C_Timer.After(times[1] + times[2], function()
+			if stage.showId == showId then
+				stage.tex:SetTexture(entry.frames[3])
+			end
+		end)
+	end
+
+	C_Timer.After(stage.life, function()
+		if stage.showId ~= showId then
+			return -- a newer show took over this stage
+		end
+		root:Hide()
+		if onDone then
+			onDone()
+		end
+	end)
+
+	PlayEventSound(cfg.sound)
+end
+
+-- Stops a stage at once.
+function D.Stop(stage)
+	stage.showId = stage.showId + 1
+	for _, group in pairs(stage.groups) do
+		group:Stop()
+	end
+	stage.root:Hide()
+end

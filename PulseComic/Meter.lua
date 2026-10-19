@@ -231,6 +231,11 @@ function M:Init()
 	Sync()
 end
 
+-- Re-applies ns.db.meter after it changed elsewhere (the settings window).
+function M:Refresh()
+	Sync()
+end
+
 -- ── Commands ──────────────────────────────────────────────────────────────────────────
 function M:Command(arg)
 	local sub, rest = string.match(arg or "", "^%s*(%S*)%s*(.-)%s*$")

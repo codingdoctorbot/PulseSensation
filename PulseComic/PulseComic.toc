@@ -1,12 +1,13 @@
-## Interface: 16001, 120100, 110200, 110100
+## Interface: 16001, 120105, 120100, 110200, 110100
 ## Title: PulseComic
 ## Notes: Comic-book POW! / K.O.! / OVERKILL! frames for critical hits and killing blows. Companion to PulseHaptics.
 ## Author: codingdoctorbot
 ## Version: 0.1.0-alpha
 ## OptionalDeps: PulseHaptics
 ## SavedVariables: PulseComicDB
+## SavedVariablesPerCharacter: PulseComicCharDB
 ## IconTexture: Interface\AddOns\PulseComic\Media\pow
-## X-Credits: Anthropic (Claude Code), Google DeepMind (Antigravity)
+## X-Credits: Anthropic (Claude Code), Google DeepMind (Antigravity), OpenAI (Codex: artwork); fonts: Bangers, Knewave, Russo One, Shojumaru, Metal Mania, Black Ops One, Lilita One, Graduate, Bubblegum Sans (SIL OFL 1.1, see FONT-CREDITS.md)
 
 # Standalone: does not call into PulseHaptics and works without it. OptionalDeps only orders
 # the load so both addons settle the shared combat-text active unit predictably (see README).
@@ -14,3 +15,21 @@
 PulseComic.lua
 # Prototype: on-screen hit meter (/comic meter). Engine-computed damage/health bars.
 Meter.lua
+# Art catalog (Art/ holds the three-frame sequences), events and their looks, drawing.
+ArtCatalog.lua
+Art.lua
+Events.lua
+Display.lua
+# Themes: Classic, Comic chaos, Roadfighter, Shadow Clan, Boomer Shooter, Strike Squad, Soccer League.
+Themes.lua
+# Profiles: account-wide list, per-character choice, export / import.
+Profiles.lua
+# Arena-shooter banners (FIRST BLOOD, DOUBLE KILL, MVP ...) and a kill feed.
+Announcer.lua
+# Settings window and minimap button, ported from PulseHaptics' UI (no gamepad support yet).
+UI\Theme.lua
+UI\Rows.lua
+UI\Panel.lua
+UI\EventsPage.lua
+UI\ProfilesPage.lua
+UI\Minimap.lua
