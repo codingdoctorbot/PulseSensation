@@ -170,6 +170,7 @@ PulseHaptics is designed as a modular ecosystem of dedicated, standalone compani
 | **`PulseDebug`** | `/pdebug` | Telemetry HUD and real-time dual-trace oscilloscope. |
 | **`PulseChecklist`** | `/pcheck` | In-game QA tracking checklist for verifying all 190 cues with markdown export. |
 | **`PulseProfileReview`** | `/pulsereview` | Auditing tool for vetting profile cue allocations. |
+| **`PulseComic`** *(alpha)* | `/comic` | Comic-book POW! / K.O.! / OVERKILL! frames for your crits and killing blows. Standalone; see [`PulseComic/README.md`](PulseComic/README.md). |
 
 > *Parked in `_parked/` (not loaded, kept for future work): PulseCompass, PulseStudio, PulseAudio, PulseSync, PulseBridge, PulseProbe.*
 >
