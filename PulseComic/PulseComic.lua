@@ -47,7 +47,7 @@
 --   * "OVERKILL" means a critical killing blow. Real overkill damage (damage minus remaining
 --     health) is arithmetic on secrets, which is not allowed.
 
-local ADDON_NAME = ...
+local ADDON_NAME, ns = ...
 
 local issecretvalue = _G.issecretvalue or function()
 	return false
@@ -63,6 +63,8 @@ local DEFAULTS = {
 	killDelay = 0.15, -- seconds to wait for the target's death state to settle after a hit
 	jitter = true, -- small random offset and tilt per pop
 	numbers = true, -- print the hit's damage inside the burst
+	meter = false, -- the hit-meter prototype panel (Meter.lua)
+	meterSource = "hit", -- which health reading drives the OVERKILL slide: "hit" or "prev"
 	debug = false,
 }
 
@@ -93,6 +95,7 @@ local function AmountText(amount)
 	end
 	return string.format("%s", amount)
 end
+ns.AmountText = AmountText
 
 -- Sets a gate's alpha from a boolean that may be secret. Never reads `value` itself when
 -- the engine can do it.
@@ -231,10 +234,14 @@ local function OnHit(isCrit, amount)
 		return
 	end
 	local now = GetTime()
-	if now - lastPopAt < db.minInterval then
+	if not IsMine() then
 		return
 	end
-	if not IsMine() then
+	-- The meter sees every attributed hit, before the pop throttle.
+	if ns.meter then
+		ns.meter:OnHit(amount)
+	end
+	if now - lastPopAt < db.minInterval then
 		return
 	end
 	lastPopAt = now
@@ -248,6 +255,7 @@ end
 local function Say(msg)
 	DEFAULT_CHAT_FRAME:AddMessage("|cffffd60aPulseComic|r " .. msg)
 end
+ns.Say = Say
 
 local function Describe(v)
 	if issecretvalue(v) then
@@ -369,6 +377,10 @@ driver:SetScript("OnEvent", function(_, event, ...)
 				db[k] = v
 			end
 		end
+		ns.db = db
+		if ns.meter then
+			ns.meter:Init()
+		end
 		return
 	end
 	if not db then
@@ -432,6 +444,10 @@ SlashCmdList["PULSECOMIC"] = function(input)
 		else
 			Say("usage: /comic attribution recent | any")
 		end
+	elseif cmd == "meter" then
+		if ns.meter then
+			ns.meter:Command(arg)
+		end
 	elseif cmd == "numbers" then
 		db.numbers = not db.numbers
 		Say("damage numbers " .. (db.numbers and "on" or "off"))
@@ -445,6 +461,6 @@ SlashCmdList["PULSECOMIC"] = function(input)
 				.. (db.debug and "on: every hit on your target prints its raw feed values (secret ones as <secret>) and whether its text width is readable" or "off")
 		)
 	else
-		Say("/comic test pow|ko|overkill|hit  ·  on|off  ·  scale <n>  ·  pos <x> <y>  ·  attribution recent|any  ·  numbers  ·  jitter  ·  debug")
+		Say("/comic test pow|ko|overkill|hit  ·  on|off  ·  scale <n>  ·  pos <x> <y>  ·  attribution recent|any  ·  numbers  ·  meter  ·  jitter  ·  debug")
 	end
 end

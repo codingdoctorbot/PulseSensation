@@ -15,6 +15,9 @@ Install: copy the `PulseComic` folder into `Interface/AddOns/`. Not included in 
 | `/comic pos <x> <y>` | Offset from screen centre |
 | `/comic attribution recent\|any` | Only your hits (default), or every hit on your target |
 | `/comic numbers` | Toggle the damage number inside the burst |
+| `/comic meter` | Toggle the hit-meter prototype panel (drag to move) |
+| `/comic meter test <dmg> <hp> [max]` | Drive the meter with plain numbers, e.g. `5000 4000` is a kill |
+| `/comic meter source hit\|prev` | Which health reading drives the OVERKILL slide |
 | `/comic jitter` | Toggle random offset and tilt per pop |
 | `/comic debug` | Print the raw feed values for every hit on your target (secret ones as `<secret ...>`), plus whether the damage text's width is readable |
 
@@ -42,6 +45,31 @@ accepts secrets, though, so the client draws the number and the addon never read
 
 `/comic debug` also sets each amount on a hidden font string and reports `GetStringWidth()`. If that ever comes back
 readable for a secret amount, text width would be a crude hit-size signal. It is expected to be secret as well.
+
+## Hit meter (prototype)
+
+Chat output is a dead end for secrets: the value prints as `<secret>`. The client will still *draw* a secret number
+and *fill* a StatusBar from secret min/max/value, so the meter lets the engine do the maths and shows the result:
+
+- **Bars.** `SetMinMaxValues(0, health)` + `SetValue(damage)`: the fill is damage ÷ health, computed by the client.
+  The numbers are drawn on top. Each hit snaps to 0 and eases in (`ExponentialEaseOut`, 12.0+).
+- **Lamps.** A 28 px clipping window over the right end of the same bar made 1000× wider. Only the last 0.1% is
+  visible, so the lamp stays dark until damage ≥ ~99.9% of health and is fully lit at ≥ 100%. A threshold
+  decided by geometry, not by Lua.
+- **OVERKILL slide.** The OVERKILL art anchored to the right edge of a zoomed bar's fill, in a clipping window: it
+  slides in only on a killing-size hit.
+
+Rows: *of max health*, *of health at hit* (`UnitHealth` read when the hit arrives) and *of health, prior* (the
+`UNIT_HEALTH` value before the latest one). Whether `UNIT_HEALTH` lands before or after the combat-text event is
+unknown, so one of the two is the true "health before the hit"; watch which lamp lights on kills only.
+
+Check in this order:
+1. Out of combat: `/comic meter test 3000 4000` (no lamp) and `/comic meter test 5000 4000` (lamps lit, art slid in).
+   This proves the geometry: a 128,000 px bar, clipping, and anchoring to a fill texture.
+2. On a dummy or mobs: do the bars move and the numbers draw? If yes, secret min/max/value work.
+3. On kills only: which row's lamp lights? Set `/comic meter source` to match.
+
+If all three hold, OVERKILL can switch from "critical killing blow" to real overkill.
 
 ## Unconfirmed in the live client
 

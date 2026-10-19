@@ -34,6 +34,7 @@ local function refuse()
 end
 SecretMT.__eq, SecretMT.__lt, SecretMT.__le = refuse, refuse, refuse
 SecretMT.__add, SecretMT.__sub, SecretMT.__concat, SecretMT.__len = refuse, refuse, refuse, refuse
+SecretMT.__mul, SecretMT.__div, SecretMT.__mod, SecretMT.__pow, SecretMT.__unm = refuse, refuse, refuse, refuse, refuse
 SecretMT.__index, SecretMT.__call = refuse, refuse
 -- In the client string.format("%s", secret) yields a secret string. Here it yields a marker
 -- the assertions can recognise, proving the secret travelled to SetText untouched.
@@ -57,10 +58,29 @@ local function NewRegion(parent, modern)
 	local r = { alpha = 1, parent = parent, shown = true }
 	local noop = function() end
 	for _, m in ipairs({
-		"SetAllPoints", "SetSize", "SetFrameStrata", "EnableMouse", "ClearAllPoints", "SetPoint",
-		"SetScale", "SetTexture", "SetRotation",
+		"SetAllPoints", "SetFrameStrata", "EnableMouse", "ClearAllPoints",
+		"SetScale", "SetTexture", "SetRotation", "SetStatusBarTexture", "SetStatusBarColor",
+		"SetClipsChildren", "SetMovable", "RegisterForDrag", "StartMoving", "StopMovingOrSizing",
+		"SetColorTexture",
 	}) do
 		r[m] = noop
+	end
+	function r:SetSize(w, h)
+		self.w, self.h = w, h
+	end
+	function r:SetPoint(point, rel)
+		self.point, self.anchorTo = point, rel
+	end
+	-- StatusBar: record what the client would be asked to draw. Secrets pass straight through.
+	function r:SetMinMaxValues(lo, hi)
+		self.lo, self.hi = lo, hi
+	end
+	function r:SetValue(v, interp)
+		self.value, self.interp = v, interp
+	end
+	function r:GetStatusBarTexture()
+		self.fill = self.fill or NewRegion(self, modern)
+		return self.fill
 	end
 	function r:Hide()
 		self.shown = false
@@ -98,6 +118,9 @@ local function NewRegion(parent, modern)
 		fs.SetFont, fs.SetTextColor, fs.SetShadowOffset = noop, noop, noop
 		function fs:SetText(t)
 			self.text = t
+		end
+		function fs:SetFormattedText(fmt, ...)
+			self.text = string.format(fmt, ...)
 		end
 		function fs:GetStringWidth()
 			return #tostring(self.text or "") * 10
@@ -170,6 +193,13 @@ local function Load(modern)
 	_G.UnitIsDead = function()
 		return env.dead
 	end
+	_G.UnitHealth = function()
+		return env.health
+	end
+	_G.UnitHealthMax = function()
+		return env.healthMax
+	end
+	_G.Enum = modern and { StatusBarInterpolation = { Immediate = 0, ExponentialEaseOut = 1 } } or nil
 	_G.C_Spell = { IsCurrentSpell = function() return false end }
 	-- The client's abbreviator; this one refuses secrets, so the addon must fall back.
 	_G.AbbreviateNumbers = modern
@@ -196,8 +226,11 @@ local function Load(modern)
 	_G.SlashCmdList = {}
 	_G.PulseComicDB = nil
 
-	local chunk = assert(loadfile(ROOT .. "/PulseComic.lua"))
-	chunk("PulseComic")
+	-- TOC order, one shared addon namespace, as the client does it.
+	env.ns = {}
+	for _, file in ipairs({ "PulseComic.lua", "Meter.lua" }) do
+		assert(loadfile(ROOT .. "/" .. file))("PulseComic", env.ns)
+	end
 	for _, f in ipairs(env.frames) do
 		if f.events.ADDON_LOADED then
 			env.driver = f
@@ -333,6 +366,84 @@ check("/comic off stops listening", env.driver.events.COMBAT_TEXT_UPDATE, nil)
 _G.SlashCmdList.PULSECOMIC("on")
 check("/comic on listens again", env.driver.events.COMBAT_TEXT_UPDATE, true)
 
+-- ── Hit meter (Meter.lua) ─────────────────────────────────────────────────────────────
+check("meter is off and unbuilt by default", _G.PulseComicMeter, nil)
+_G.SlashCmdList.PULSECOMIC("meter test 5000 4000")
+local meterPanel = _G.PulseComicMeter
+check("meter test builds and shows the panel", meterPanel ~= nil and meterPanel.shown, true)
+
+-- Find bars by role: rows sit in the panel, lamps and the slide sit in clipping windows.
+local function Bars()
+	local out = { rows = {}, zoomed = {} }
+	for _, f in ipairs(env.frames) do
+		if f.lo ~= nil then
+			if f.w and f.w >= 1000 then
+				out.zoomed[#out.zoomed + 1] = f
+			else
+				out.rows[#out.rows + 1] = f
+			end
+		end
+	end
+	return out
+end
+local bars = Bars()
+check("three proportional rows", #bars.rows, 3)
+check("two lamps + one slide, each 1000x its window", #bars.zoomed, 3)
+check("lamp width is 28 x 1000", bars.zoomed[1].w, 28000)
+check("slide width is 128 x 1000", bars.zoomed[3].w, 128000)
+check("zoomed bars are pinned to their window's right edge", bars.zoomed[1].point, "RIGHT")
+check("row 'at hit': max is the health given", bars.rows[2].hi, 4000)
+check("row 'at hit': value is the damage", bars.rows[2].value, 5000)
+check("row 'of max': max health used", bars.rows[1].hi, 8000)
+check("fill eases in (ExponentialEaseOut)", bars.rows[2].interp, 1)
+check("slide: damage vs health", bars.zoomed[3].hi .. ":" .. bars.zoomed[3].value, "4000:5000")
+local slideArt
+for _, t in ipairs(env.regions) do
+	if t.anchorTo == bars.zoomed[3]:GetStatusBarTexture() then
+		slideArt = t
+	end
+end
+check("OVERKILL art rides the slide bar's fill edge", slideArt ~= nil and slideArt.point, "RIGHT")
+local rowTexts = {}
+for _, fs in ipairs(env.labels) do
+	if fs.text and tostring(fs.text):match("^%S+ / %S+$") then
+		rowTexts[#rowTexts + 1] = fs.text
+	end
+end
+check("row text draws damage / health", rowTexts[2], "5.0K / 4.0K")
+
+-- Live path: secret damage and secret health go to the bars untouched.
+env.health, env.healthMax = Secret(2000), Secret(10000)
+local watcherFrame
+for _, f in ipairs(env.frames) do
+	if f.events.UNIT_HEALTH then
+		watcherFrame = f
+	end
+end
+check("meter watches target health", watcherFrame ~= nil, true)
+env.health = Secret(9000); watcherFrame:Fire("UNIT_HEALTH", "target")
+env.health = Secret(6000); watcherFrame:Fire("UNIT_HEALTH", "target")
+env.health = Secret(2500)
+local okMeter, errMeter = pcall(Hit, Secret("DAMAGE"), Secret(false), Secret(false), nil, Secret(3000))
+check("secret hit through the meter does not error", okMeter and "ok" or tostring(errMeter), "ok")
+bars = Bars()
+check("row 'at hit' max is the secret read at the hit", tostring(bars.rows[2].hi), "<S:2500>")
+check("row 'prior' max is the update before the latest", tostring(bars.rows[3].hi), "<S:9000>")
+check("row 'of max' max is the secret max health", tostring(bars.rows[1].hi), "<S:10000>")
+check("bar value is the secret damage", tostring(bars.rows[2].value), "<S:3000>")
+check("slide defaults to the 'at hit' reading", tostring(bars.zoomed[3].hi), "<S:2500>")
+_G.SlashCmdList.PULSECOMIC("meter source prev")
+Hit(Secret("DAMAGE"), Secret(false), Secret(false), nil, Secret(3000))
+check("meter source prev moves the slide to the prior reading", tostring(Bars().zoomed[3].hi), "<S:9000>")
+_G.SlashCmdList.PULSECOMIC("meter source hit")
+env.health = nil
+Hit("DAMAGE", nil, false)
+check("no health reading: row says so", Bars().rows[2].hi, 1)
+_G.SlashCmdList.PULSECOMIC("meter")
+check("/comic meter toggles the panel off", meterPanel.shown, false)
+check("and stops watching health", watcherFrame.events.UNIT_HEALTH, nil)
+env.health, env.healthMax = nil, nil
+
 _G.SlashCmdList.PULSECOMIC("debug")
 env.info = { Secret("a"), Secret(1), Secret(true) }
 env.dead = Secret(false)
@@ -357,13 +468,18 @@ end
 -- be truthy and only runs __eq when both sides are tables. In the client both raise. So the
 -- names that may carry a secret are checked in the source instead.
 _G.type = realtype
-local SECRET_NAMES = { "isCrit", "isDead", "ret2", "ret3", "value", "amount", "width" }
-local source = assert(io.open(ROOT .. "/PulseComic.lua")):read("*a")
+local SECRET_NAMES = {
+	"isCrit", "isDead", "ret2", "ret3", "value", "amount", "width",
+	"health", "healthNow", "healthPrior", "healthMax", "healthLast", "healthBefore", "source", "max",
+}
 local offenders = {}
+for _, file in ipairs({ "PulseComic.lua", "Meter.lua" }) do
+local source = assert(io.open(ROOT .. "/" .. file)):read("*a")
 local lineNo = 0
 for line in (source .. "\n"):gmatch("([^\n]*)\n") do
 	lineNo = lineNo + 1
-	local code = line:gsub("%-%-.*$", "")
+	-- Comments and string literals cannot branch on anything; drop them before matching.
+	local code = line:gsub("%-%-.*$", ""):gsub('"[^"]*"', '""'):gsub("'[^']*'", "''")
 	for _, name in ipairs(SECRET_NAMES) do
 		local n = "%f[%w_]" .. name .. "%f[^%w_]"
 		local keyword = code:match("%f[%w_]if%s+%(?" .. n)
@@ -380,9 +496,10 @@ for line in (source .. "\n"):gmatch("([^\n]*)\n") do
 		-- The one sanctioned read: Gate() inspects `value` only after issecretvalue() said no.
 		local sanctioned = name == "value" and code:match("^%s*if value then%s*$")
 		if keyword and not sanctioned then
-			offenders[#offenders + 1] = ("%d: %s"):format(lineNo, line:gsub("^%s+", ""))
+			offenders[#offenders + 1] = ("%s:%d: %s"):format(file, lineNo, (line:gsub("^%s+", "")))
 		end
 	end
+end
 end
 check("source never branches on or compares a possibly-secret value", table.concat(offenders, " | "), "")
 
