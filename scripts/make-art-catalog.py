@@ -6,6 +6,11 @@ in Lua. Run this after adding art (a new category or message) to the manifest:
 
     python3 scripts/make-art-catalog.py
 
+It also copies what the addon loads (the listed TGA frames, and each display font with its
+OFL.txt license) from Art/ into PulseComic/Art, so the addon folder is self-contained. Art/
+stays the master copy with the sources, previews and metadata. Files already identical are
+skipped; files in PulseComic/Art that the catalog no longer lists are reported, not deleted.
+
 Every listed frame is checked on disk: an uncompressed or RLE true-colour TGA, 32 bits per
 pixel, power-of-two sides. A message with a missing or unusable frame is left out of the
 catalog and reported. The display fonts in Art/_fonts (font-index.json, category-fonts.json)
@@ -13,7 +18,9 @@ are checked to be TrueType files and listed with the category each one belongs t
 status is 1 when anything was left out.
 """
 
+import filecmp
 import json
+import shutil
 import struct
 import sys
 from pathlib import Path
@@ -25,6 +32,7 @@ FONT_INDEX = ART / "_fonts" / "font-index.json"
 CATEGORY_FONTS = ART / "_fonts" / "category-fonts.json"
 OUT = ROOT / "PulseComic" / "ArtCatalog.lua"
 CREDITS = ROOT / "PulseComic" / "FONT-CREDITS.md"
+ADDON_ART = ROOT / "PulseComic" / "Art"
 
 # Labels the window shows. The folders keep plain ids; the names players see are the
 # addon's own, not borrowed game titles.
@@ -80,6 +88,27 @@ def lua_string(text):
     return '"' + text.replace("\\", "\\\\").replace('"', '\\"') + '"'
 
 
+def sync_addon_art(relative_paths):
+    """Copy Art/<path> to PulseComic/Art/<path> for every path; returns (copied, stale)."""
+    if ADDON_ART.is_symlink():
+        raise SystemExit(f"{ADDON_ART} is a symlink; replace it with a folder first")
+    copied = 0
+    wanted = set()
+    for rel in sorted(relative_paths):
+        src, dst = ART / rel, ADDON_ART / rel
+        wanted.add(dst.resolve())
+        if dst.is_file() and filecmp.cmp(src, dst, shallow=False):
+            continue
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src, dst)
+        copied += 1
+    stale = sorted(
+        str(f.relative_to(ADDON_ART)) for f in ADDON_ART.rglob("*") if f.is_file() and f.resolve() not in wanted
+        and f.name != ".DS_Store"
+    )
+    return copied, stale
+
+
 def write_credits(credits):
     out = [
         "# Font credits",
@@ -121,6 +150,7 @@ def main():
             usable[key] = True
 
     fonts, category_font, credits = [], {}, []
+    font_files = []
     if FONT_INDEX.is_file() and CATEGORY_FONTS.is_file():
         index = json.loads(FONT_INDEX.read_text())["fonts"]
         assigned = json.loads(CATEGORY_FONTS.read_text())
@@ -135,6 +165,7 @@ def main():
             notice = " ".join(info["copyright_notice"].split())
             credits.append((info["family"], notice, info["license"], info["license_file"], info["upstream_directory"], used_by))
             by_file[info["file"]] = key
+            font_files += [info["file"], info["license_file"]]
         for cat, a in assigned.items():
             if a["file"] in by_file:
                 category_font[cat] = by_file[a["file"]]
@@ -173,6 +204,12 @@ def main():
     lines.append("}")
     OUT.write_text("\n".join(lines) + "\n")
     write_credits(credits)
+
+    files = [name for key in usable for name in frames[key]] + font_files
+    copied, stale = sync_addon_art(files)
+    print(f"PulseComic/Art: {len(files)} files needed, {copied} copied")
+    for name in stale:
+        print("not in the catalog (left in place):", name, file=sys.stderr)
 
     total = sum(1 for keys in manifest["categories"].values() for key in keys if key in usable)
     print(f"wrote {OUT.relative_to(ROOT)}: {len(usable)} sequences, {total} category entries, {len(fonts)} fonts")

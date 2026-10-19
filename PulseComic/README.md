@@ -26,7 +26,9 @@ Right-click the minimap button to turn PulseComic on or off; drag it to move it.
   to copy; **Import** adds pasted profiles beside yours, never over them. Import parses the string itself (no code
   is run) and keeps only known settings of the right type.
 
-Art lives in the repository's `Art/` folder; `PulseComic/Art` is a symlink to it so the addon can load it.
+The master art lives in the repository's `Art/` folder, with sources, previews and metadata. `PulseComic/Art` is a
+copy of just what the addon loads (the TGA frames, and the fonts with their licenses), so the addon folder works on
+its own. `scripts/make-art-catalog.py` keeps the copy in step.
 
 ## Commands
 
@@ -153,7 +155,8 @@ licenses, which must stay with the font files. In game: `/comic credits` or **Fo
    `Art/_metadata/manifest.json` (`assets` and `categories`).
 2. Run `python3 scripts/make-art-catalog.py`. It checks every frame and font and regenerates `PulseComic/ArtCatalog.lua`
    and `PulseComic/FONT-CREDITS.md`; a message with a missing or unusable frame is left out and reported.
-3. `/reload`. The new art shows up in every event's Art menu.
+3. The script also copies the new frames into `PulseComic/Art`. `/reload`, and the new art shows up in every event's
+   Art menu.
 
 ## Falls and fight flow
 
