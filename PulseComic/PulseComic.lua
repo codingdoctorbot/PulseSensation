@@ -28,6 +28,13 @@
 -- Exactly one of the three is visible for any (crit, dead) pair, or none for a plain hit.
 -- The animation runs on `root`, never on a gate, so it cannot fight the secret alpha aspect.
 --
+-- DAMAGE NUMBERS
+-- The hit's amount is secret in combat too. It cannot be compared, so it cannot decide
+-- anything, but FontString:SetText() accepts secrets: the client draws the number and the
+-- addon never sees it. The label sits inside deadGate, so it is gated with its frame.
+-- `/comic debug` also probes whether GetStringWidth() of that text stays readable, which
+-- would be a crude size signal (wider number, bigger hit). Expected to be secret too.
+--
 -- OLDER CLIENTS (16001 / 110x)
 -- SetAlphaFromBoolean is 12.0+. Clients without it have no secret values either, so the gate
 -- falls back to a plain SetAlpha. Same for C_CombatText vs. the legacy combat-text globals.
@@ -55,6 +62,7 @@ local DEFAULTS = {
 	minInterval = 0.12, -- seconds between pops
 	killDelay = 0.15, -- seconds to wait for the target's death state to settle after a hit
 	jitter = true, -- small random offset and tilt per pop
+	numbers = true, -- print the hit's damage inside the burst
 	debug = false,
 }
 
@@ -65,6 +73,26 @@ local CombatText = _G.C_CombatText
 local SetActiveUnit = (CombatText and CombatText.SetActiveUnit) or _G.CombatTextSetActiveUnit
 local GetEventInfo = (CombatText and CombatText.GetCurrentEventInfo) or _G.GetCurrentCombatTextEventInfo
 local IsCurrentSpellFn = (_G.C_Spell and _G.C_Spell.IsCurrentSpell) or _G.IsCurrentSpell
+
+local FONT = "Fonts\\FRIZQT__.TTF"
+
+-- Damage amount -> label text. `amount` may be a secret number or string: no comparisons,
+-- no arithmetic, only type() and calls documented to pass secrets through. The client's
+-- abbreviator is tried first ("12.3K"); if it refuses a secret, plain formatting is used.
+local function AmountText(amount)
+	local kind = type(amount)
+	if kind ~= "number" and kind ~= "string" then
+		return ""
+	end
+	local abbreviate = _G.AbbreviateNumbers
+	if abbreviate and kind == "number" then
+		local ok, text = pcall(abbreviate, amount)
+		if ok and type(text) == "string" then
+			return text
+		end
+	end
+	return string.format("%s", amount)
+end
 
 -- Sets a gate's alpha from a boolean that may be secret. Never reads `value` itself when
 -- the engine can do it.
@@ -109,6 +137,13 @@ local function BuildFrame(style)
 	tex:SetAllPoints(deadGate)
 	tex:SetTexture(TEXTURE_PATH .. style.key)
 
+	-- Damage number, inside deadGate so it shares the frame's visibility.
+	local label = deadGate:CreateFontString(nil, "OVERLAY")
+	label:SetFont(FONT, 30, "THICKOUTLINE")
+	label:SetPoint("CENTER", deadGate, "CENTER", 0, -62)
+	label:SetTextColor(1, 1, 1)
+	label:SetShadowOffset(2, -2)
+
 	-- Pop in, hold, fade. All on root, with plain (non-secret) values.
 	local anim = root:CreateAnimationGroup()
 	local pop = anim:CreateAnimation("Scale")
@@ -132,7 +167,7 @@ local function BuildFrame(style)
 		root:Hide()
 	end)
 
-	frames[style.key] = { root = root, critGate = critGate, deadGate = deadGate, tex = tex, anim = anim }
+	frames[style.key] = { root = root, critGate = critGate, deadGate = deadGate, tex = tex, label = label, anim = anim }
 end
 
 for _, style in ipairs(STYLES) do
@@ -140,8 +175,10 @@ for _, style in ipairs(STYLES) do
 end
 
 -- ── Showing a pop ─────────────────────────────────────────────────────────────────────
--- isCrit / isDead may be secret booleans, or plain ones from /comic test. Never read them.
-local function Pop(isCrit, isDead)
+-- isCrit / isDead may be secret booleans, amount a secret number, or plain values from
+-- /comic test. Never read them.
+local function Pop(isCrit, isDead, amount)
+	local text = db.numbers and AmountText(amount) or ""
 	local dx, dy, tilt = 0, 0, 0
 	if db.jitter then
 		dx, dy, tilt = math.random(-40, 40), math.random(-20, 20), math.rad(math.random(-8, 8))
@@ -151,6 +188,7 @@ local function Pop(isCrit, isDead)
 		Gate(f.critGate, isCrit, style.wantCrit and 1 or 0, style.wantCrit and 0 or 1)
 		Gate(f.deadGate, isDead, style.wantDead and 1 or 0, style.wantDead and 0 or 1)
 		f.tex:SetRotation(tilt)
+		f.label:SetText(text)
 		f.root:SetScale(db.scale)
 		f.root:ClearAllPoints()
 		f.root:SetPoint("CENTER", UIParent, "CENTER", db.x + dx, db.y + dy)
@@ -188,7 +226,7 @@ local lastPopAt = 0
 
 -- Called with the crit flag of one hit. The target's death state is sampled a moment later,
 -- because it is not updated at the instant the hit is reported.
-local function OnHit(isCrit)
+local function OnHit(isCrit, amount)
 	if not db.enabled then
 		return
 	end
@@ -202,7 +240,7 @@ local function OnHit(isCrit)
 	lastPopAt = now
 	C_Timer.After(db.killDelay, function()
 		-- UnitIsDead is not wrapped in `and`/`or`: its result may be a secret boolean.
-		Pop(isCrit, UnitIsDead("target"))
+		Pop(isCrit, UnitIsDead("target"), amount)
 	end)
 end
 
@@ -216,6 +254,29 @@ local function Describe(v)
 		return "<secret " .. type(v) .. ">"
 	end
 	return type(v) .. ":" .. tostring(v)
+end
+
+-- Width probe for /comic debug: does GetStringWidth() of a secret number stay readable?
+-- Its own hidden FontString, because SetText with a secret marks the string's text secret
+-- until it is reset, and that must not leak into the visible labels.
+local probe
+local function ProbeWidth(amount)
+	if not probe then
+		local holder = CreateFrame("Frame", nil, UIParent)
+		holder:SetSize(1, 1)
+		holder:SetPoint("TOPLEFT", UIParent, "BOTTOMRIGHT", 100, -100) -- off-screen
+		probe = holder:CreateFontString(nil, "OVERLAY")
+		probe:SetFont(FONT, 30, "THICKOUTLINE")
+	end
+	local ok = pcall(probe.SetText, probe, AmountText(amount))
+	if not ok then
+		return "SetText refused"
+	end
+	local okWidth, width = pcall(probe.GetStringWidth, probe)
+	if not okWidth then
+		return "GetStringWidth errored"
+	end
+	return Describe(width)
 end
 
 -- ── Event sources ─────────────────────────────────────────────────────────────────────
@@ -234,12 +295,14 @@ local function OnCombatText(messageType)
 				.. Describe(messageType)
 				.. " info1="
 				.. Describe(ret1)
-				.. " info2="
+				.. " info2(amount?)="
 				.. Describe(ret2)
 				.. " info3(crit?)="
 				.. Describe(ret3)
 				.. " dead="
 				.. Describe(UnitIsDead("target"))
+				.. " width="
+				.. ProbeWidth(ret2)
 		)
 	end
 
@@ -248,19 +311,19 @@ local function OnCombatText(messageType)
 		if not HIT_TYPES[messageType] then
 			return
 		end
-		OnHit(CRIT_TYPES[messageType] == true)
+		OnHit(CRIT_TYPES[messageType] == true, ret2)
 	elseif ok then
 		-- Secret message type: cannot be filtered. Use the feed's crit flag (PulseHaptics reads
 		-- it as the third value after pcall on RESIST/ABSORB entries) and let the engine
 		-- decide visibility. Unconfirmed; compare with `/comic debug`.
 		-- type() reports the real type even for a secret, so this test is safe.
 		if type(ret3) == "boolean" then
-			OnHit(ret3)
+			OnHit(ret3, ret2)
 		end
 	end
 end
 
-local function OnUnitCombat(unit, _, flagText)
+local function OnUnitCombat(unit, _, flagText, amount)
 	if unit ~= "target" then
 		return
 	end
@@ -270,7 +333,7 @@ local function OnUnitCombat(unit, _, flagText)
 	if issecretvalue(flagText) then
 		return -- a secret string cannot be turned into a boolean; COMBAT_TEXT_UPDATE is the path for that
 	end
-	OnHit(flagText == "CRITICAL")
+	OnHit(flagText == "CRITICAL", amount)
 end
 
 local driver = CreateFrame("Frame")
@@ -324,10 +387,10 @@ end)
 
 -- ── Slash commands ────────────────────────────────────────────────────────────────────
 local TESTS = {
-	pow = { true, false },
-	ko = { false, true },
-	overkill = { true, true },
-	hit = { false, false },
+	pow = { true, false, 12345 },
+	ko = { false, true, 4321 },
+	overkill = { true, true, 987654 },
+	hit = { false, false, 100 },
 }
 
 SLASH_PULSECOMIC1 = "/comic"
@@ -341,7 +404,7 @@ SlashCmdList["PULSECOMIC"] = function(input)
 			Say("usage: /comic test pow | ko | overkill | hit  (plain booleans, no secrets)")
 			return
 		end
-		Pop(t[1], t[2])
+		Pop(t[1], t[2], t[3])
 	elseif cmd == "on" or cmd == "off" then
 		db.enabled = (cmd == "on")
 		SyncSources()
@@ -369,6 +432,9 @@ SlashCmdList["PULSECOMIC"] = function(input)
 		else
 			Say("usage: /comic attribution recent | any")
 		end
+	elseif cmd == "numbers" then
+		db.numbers = not db.numbers
+		Say("damage numbers " .. (db.numbers and "on" or "off"))
 	elseif cmd == "jitter" then
 		db.jitter = not db.jitter
 		Say("jitter " .. (db.jitter and "on" or "off"))
@@ -376,9 +442,9 @@ SlashCmdList["PULSECOMIC"] = function(input)
 		db.debug = not db.debug
 		Say(
 			"debug "
-				.. (db.debug and "on: every hit on your target prints its raw feed values (secret ones as <secret>)" or "off")
+				.. (db.debug and "on: every hit on your target prints its raw feed values (secret ones as <secret>) and whether its text width is readable" or "off")
 		)
 	else
-		Say("/comic test pow|ko|overkill|hit  ·  on|off  ·  scale <n>  ·  pos <x> <y>  ·  attribution recent|any  ·  jitter  ·  debug")
+		Say("/comic test pow|ko|overkill|hit  ·  on|off  ·  scale <n>  ·  pos <x> <y>  ·  attribution recent|any  ·  numbers  ·  jitter  ·  debug")
 	end
 end

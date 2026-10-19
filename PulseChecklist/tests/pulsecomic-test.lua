@@ -35,6 +35,11 @@ end
 SecretMT.__eq, SecretMT.__lt, SecretMT.__le = refuse, refuse, refuse
 SecretMT.__add, SecretMT.__sub, SecretMT.__concat, SecretMT.__len = refuse, refuse, refuse, refuse
 SecretMT.__index, SecretMT.__call = refuse, refuse
+-- In the client string.format("%s", secret) yields a secret string. Here it yields a marker
+-- the assertions can recognise, proving the secret travelled to SetText untouched.
+SecretMT.__tostring = function(t)
+	return "<S:" .. tostring(rawget(t, "__v")[1]) .. ">"
+end
 local function Secret(v)
 	return setmetatable({ __v = { v } }, SecretMT)
 end
@@ -87,6 +92,19 @@ local function NewRegion(parent, modern)
 		env.regions[#env.regions + 1] = t
 		return t
 	end
+	function r:CreateFontString()
+		local fs = NewRegion(self, modern)
+		fs.text = nil
+		fs.SetFont, fs.SetTextColor, fs.SetShadowOffset = noop, noop, noop
+		function fs:SetText(t)
+			self.text = t
+		end
+		function fs:GetStringWidth()
+			return #tostring(self.text or "") * 10
+		end
+		env.labels[#env.labels + 1] = fs
+		return fs
+	end
 	function r:CreateAnimationGroup()
 		local g = { SetScript = noop, Play = noop, Stop = noop }
 		function g:CreateAnimation()
@@ -106,7 +124,7 @@ local function NewRegion(parent, modern)
 end
 
 local function Load(modern)
-	env = { regions = {}, frames = {}, timers = {}, now = 1000, dead = false, info = {}, modern = modern }
+	env = { regions = {}, labels = {}, frames = {}, timers = {}, now = 1000, dead = false, info = {}, modern = modern }
 
 	_G.type = function(x)
 		if isSecret(x) then
@@ -153,6 +171,15 @@ local function Load(modern)
 		return env.dead
 	end
 	_G.C_Spell = { IsCurrentSpell = function() return false end }
+	-- The client's abbreviator; this one refuses secrets, so the addon must fall back.
+	_G.AbbreviateNumbers = modern
+			and function(n)
+				if isSecret(n) then
+					refuse()
+				end
+				return ("%.1fK"):format(n / 1000)
+			end
+		or nil
 	local getInfo = function()
 		return unpack(env.info, 1, 3)
 	end
@@ -207,6 +234,20 @@ local function Visible()
 	return #out == 0 and "none" or table.concat(out, "+")
 end
 
+-- Text of the damage label on a given frame.
+local function LabelOf(key)
+	local root = _G["PulseComicFrame_" .. key]
+	for _, fs in ipairs(env.labels) do
+		local p = fs.parent
+		while p and p ~= root do
+			p = p.parent
+		end
+		if p == root then
+			return fs.text
+		end
+	end
+end
+
 local function Fade()
 	for _, key in ipairs(KEYS) do
 		_G["PulseComicFrame_" .. key].shown = false
@@ -214,11 +255,16 @@ local function Fade()
 end
 
 -- One hit on the target. mine=false means no cast of ours preceded it.
-local function Hit(msgType, crit, dead, mine)
+local function Hit(msgType, crit, dead, mine, amount)
 	env.now = env.now + 5
 	env.timers = {}
 	env.dead = dead
-	env.info = { "x", 1234, crit }
+	if amount == nil then
+		amount = 1234
+	elseif amount == "missing" then
+		amount = nil
+	end
+	env.info = { "x", amount, crit }
 	Fade()
 	if mine ~= false then
 		env.driver:Fire("UNIT_SPELLCAST_SUCCEEDED", "player")
@@ -249,6 +295,25 @@ for _, c in ipairs(CASES) do
 	check("plain type + plain dead, " .. name, Hit(msg, nil, dead), want)
 end
 
+-- Damage numbers
+Fade()
+_G.SlashCmdList.PULSECOMIC("test pow")
+check("/comic test pow labels the burst through the abbreviator", LabelOf("pow"), "12.3K")
+Hit("DAMAGE_CRIT", nil, false)
+check("plain amount is abbreviated", LabelOf("pow"), "1.2K")
+Hit(Secret("DAMAGE_CRIT"), Secret(true), Secret(false), nil, Secret(98765))
+check("secret amount reaches SetText after abbreviator refuses it", LabelOf("pow"), "<S:98765>")
+Hit(Secret("DAMAGE_CRIT"), Secret(true), Secret(false), nil, Secret("98765"))
+check("secret string amount reaches SetText", LabelOf("pow"), "<S:98765>")
+Hit("DAMAGE_CRIT", nil, false, nil, "missing")
+check("missing amount gives an empty label", LabelOf("pow"), "")
+_G.SlashCmdList.PULSECOMIC("numbers")
+Hit("DAMAGE_CRIT", nil, false)
+check("/comic numbers off clears the label", LabelOf("pow"), "")
+_G.SlashCmdList.PULSECOMIC("numbers")
+Hit("DAMAGE_CRIT", nil, false)
+check("/comic numbers on restores it", LabelOf("pow"), "1.2K")
+
 check("plain HEAL is ignored", Hit("HEAL", false, false), "none")
 check("groupmate crit ignored under attribution=recent", Hit("DAMAGE_CRIT", true, false, false), "none")
 _G.SlashCmdList.PULSECOMIC("attribution any")
@@ -275,6 +340,9 @@ env.driver:Fire("UNIT_SPELLCAST_SUCCEEDED", "player")
 local ok, err = pcall(env.driver.Fire, env.driver, "COMBAT_TEXT_UPDATE", Secret("DAMAGE_CRIT"))
 check("debug output with every value secret does not error", ok and "ok" or tostring(err), "ok")
 check("debug output marks secrets", (env.chat[#env.chat] or ""):find("<secret string>", 1, true) ~= nil, true)
+check("debug output reports the width probe", (env.chat[#env.chat] or ""):match("width=(%S+)") ~= nil, true)
+local hiddenProbe = env.labels[#env.labels]
+check("width probe is not one of the visible labels", LabelOf("pow") ~= hiddenProbe.text or hiddenProbe.text == nil, true)
 
 -- ── Pre-12.0 client: no SetAlphaFromBoolean, no secrets, legacy combat-text globals ────
 Load(false)
@@ -289,7 +357,7 @@ end
 -- be truthy and only runs __eq when both sides are tables. In the client both raise. So the
 -- names that may carry a secret are checked in the source instead.
 _G.type = realtype
-local SECRET_NAMES = { "isCrit", "isDead", "ret3", "value" }
+local SECRET_NAMES = { "isCrit", "isDead", "ret2", "ret3", "value", "amount", "width" }
 local source = assert(io.open(ROOT .. "/PulseComic.lua")):read("*a")
 local offenders = {}
 local lineNo = 0

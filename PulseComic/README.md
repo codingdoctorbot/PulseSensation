@@ -14,8 +14,9 @@ Install: copy the `PulseComic` folder into `Interface/AddOns/`. Not included in 
 | `/comic scale <0.3-3>` | Frame size |
 | `/comic pos <x> <y>` | Offset from screen centre |
 | `/comic attribution recent\|any` | Only your hits (default), or every hit on your target |
+| `/comic numbers` | Toggle the damage number inside the burst |
 | `/comic jitter` | Toggle random offset and tilt per pop |
-| `/comic debug` | Print the raw feed values for every hit on your target (secret ones as `<secret ...>`) |
+| `/comic debug` | Print the raw feed values for every hit on your target (secret ones as `<secret ...>`), plus whether the damage text's width is readable |
 
 ## How it works
 
@@ -32,6 +33,16 @@ parent chain, so visibility becomes an AND of the two booleans without the code 
 The pop and fade animation runs on the outer frame, never on a gate. On clients without
 `SetAlphaFromBoolean` (16001, 110x) there are no secrets, and the gates fall back to plain `SetAlpha`.
 
+## Damage numbers
+
+Each burst prints the hit's damage, e.g. "12.3K". In combat the amount is a secret number: it cannot be compared or
+used in arithmetic, so it cannot decide which frame shows or whether a hit counts as overkill. `FontString:SetText()`
+accepts secrets, though, so the client draws the number and the addon never reads it. The client's
+`AbbreviateNumbers` is tried first; if it refuses a secret, the number is passed through `string.format` unshortened.
+
+`/comic debug` also sets each amount on a hidden font string and reports `GetStringWidth()`. If that ever comes back
+readable for a secret amount, text width would be a crude hit-size signal. It is expected to be secret as well.
+
 ## Unconfirmed in the live client
 
 Use `/comic debug` to settle these:
@@ -40,7 +51,9 @@ Use `/comic debug` to settle these:
    message type or as the third value of the event info.
 2. `UnitIsDead("target")` is correct about 0.15 s after the killing hit (`killDelay` in `PulseComicDB`).
 3. `SetAlphaFromBoolean(v, 1, 0)` takes alpha on a 0-1 scale. If frames look nearly invisible, the scale is 0-255.
-4. OVERKILL means "critical killing blow". Real overkill damage needs arithmetic on secrets, which is not allowed.
+4. The second event-info value is the hit's amount, and `AbbreviateNumbers` either handles a secret or refuses it
+   cleanly (refusal falls back to the full number).
+5. OVERKILL means "critical killing blow". Real overkill damage needs arithmetic on secrets, which is not allowed.
    `C_DamageMeter` has an `overkillAmount` field (12.0.1), but whether it is readable in combat is unconfirmed.
 
 ## Known conflict with PulseHaptics
