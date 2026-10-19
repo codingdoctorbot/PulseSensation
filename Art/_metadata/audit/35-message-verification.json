@@ -1,0 +1,63 @@
+{
+  "result": "complete",
+  "unique_messages": 35,
+  "transparent_tga_frames": 105,
+  "source_strips": 35,
+  "gif_previews": 35,
+  "category_review_sheets": 8,
+  "target_set_match": true,
+  "case_punctuation_whitespace_deduplicated": true,
+  "all_frames_distinct": true,
+  "format": "Uncompressed true-color TGA, 256x256 RGBA32, 8-bit alpha",
+  "alpha_padding": "At least 4 transparent pixels on all export edges",
+  "source_cell_boundary_check": "All cell-boundary alpha <=32/255; no meaningful cutoffs",
+  "visual_review": "Seven new tactical HUD strips accepted as generated for exact full text and absence of obvious blocking failures; minor polish deferred. Existing artwork preserved.",
+  "existing_preservation": {
+    "tga_frames": 33,
+    "source_strips": 11,
+    "byte_identical": true,
+    "original_prompt_metadata_unchanged": true
+  },
+  "generation": {
+    "missing_messages_added": 14,
+    "replacement": "One new WHAM strip corrected for clipped wedges; original and prompt archived; no original 11 assets regenerated",
+    "original_remakes_added": 3,
+    "counterstrike_messages_added": 7
+  },
+  "shared_assets": {
+    "RAMPAGE!": [
+      "arena",
+      "escalation"
+    ]
+  },
+  "scope": "Artwork pack only; no addon Lua, TOC, triggers or unrelated work modified by this task",
+  "in_game_validation": "Not performed",
+  "review_sheet": "_previews/all-messages.png",
+  "reference_notes": "README.md",
+  "per_file_validation": "_metadata/validation.json",
+  "existing_75_frames_and_original_media_textures_preserved": true,
+  "original_remakes": {
+    "messages": [
+      "POW!",
+      "OVERKILL!",
+      "K.O.!"
+    ],
+    "new_frames": 9,
+    "folder": "comic/",
+    "review": "_previews/comic/sequence-sheet.png",
+    "prior_25_asset_metadata_unchanged": true,
+    "qa_scope": "Obvious failures only; small alignment and other polish deferred"
+  },
+  "delivery_root": "/Users/erik2/Developer/WoW/PulseSensation/Art",
+  "organization": "Moved the single delivery collection to Art; three original remakes are comic; all frames use suffixes _1, _2, _3; no texture re-export or extra QA",
+  "existing_84_frames_preserved": true,
+  "latest_addition": {
+    "category": "counterstrike",
+    "messages": 7,
+    "frames": 21,
+    "sources": "_sources/counterstrike/",
+    "previews": "_previews/counterstrike/",
+    "generator": "Built-in image_gen",
+    "actual_prompts": "_metadata/manifest.json"
+  }
+}

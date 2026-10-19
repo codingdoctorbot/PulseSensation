@@ -1,0 +1,21 @@
+{
+  "family": "Graduate",
+  "internal_postscript_name": "Graduate-Regular",
+  "file": "_fonts/graduate/Graduate-Regular.ttf",
+  "license": "SIL Open Font License 1.1",
+  "license_file": "_fonts/graduate/OFL.txt",
+  "source_url": "https://raw.githubusercontent.com/google/fonts/47d54ca1ebb14fd864695f1d39dc734f39017c33/ofl/graduate/Graduate-Regular.ttf",
+  "license_url": "https://raw.githubusercontent.com/google/fonts/47d54ca1ebb14fd864695f1d39dc734f39017c33/ofl/graduate/OFL.txt",
+  "upstream_directory": "https://github.com/google/fonts/tree/47d54ca1ebb14fd864695f1d39dc734f39017c33/ofl/graduate",
+  "upstream_commit": "47d54ca1ebb14fd864695f1d39dc734f39017c33",
+  "sha256": "971222b309851d86f2513f89b510dc52d52ef7798b5f43af2c6f58d43df568e5",
+  "license_sha256": "2643f19f015fe49e170727d070b7ee501d3f38e0810208a0567aff7b656a1875",
+  "unmodified_binary": true,
+  "static_true_type": true,
+  "glyph_check": {
+    "required_characters": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?'-+:;/\"%()[]#&=",
+    "missing": [],
+    "swedish_letters_present": true
+  },
+  "copyright_notice": "Copyright 2012 The Graduate Project Authors (https://github.com/etunni/graduate) with Reserved Font Name \"Graduate\""
+}

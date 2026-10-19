@@ -1,0 +1,18 @@
+{
+  "key": "originals/ko",
+  "word": "K.O.!",
+  "style": "Preserve WHITE huge bold slanted sans-serif lettering with very thick BLACK outline and short black offset shadow. Preserve a flat LIGHT SKY BLUE angular starburst with a thick DARK ROYAL BLUE outer border, sparse tiny darker blue halftone dots inside. Blue pieces in aftershock. Exact punctuation is essential: K then PERIOD then O then PERIOD then EXCLAMATION: K.O.! Both periods must be present in each of the three frames. Closely recognizable as the supplied knockout original.",
+  "reference_file": "references/original-ko.png",
+  "original_texture": "../ko.tga",
+  "prompt": "Use case: stylized-concept.\nAsset type: three-frame animated remake of an existing WoW comic popup.\nInput image: original single-frame popup, a style and palette reference. Turn it into a NEW three-frame horizontal sprite strip; do not overwrite the original.\nCanvas: exactly THREE equal SQUARE cells in ONE horizontal row, 3:1 wide image, preferably 1536x512. GENUINE transparent background. No grid, separators, labels, numbers or extra words.\nComposition: use the reference's simple bold comic identity, thick outlines, clear angular burst and sparse halftone. FLAT printed ink color shapes, no realistic flame, rocks, metal, glow or complex scenery.\nDraw the specified wordmark once and duplicate it unchanged across the three cells: SAME spelling, glyphs, letter spacing, scale, tilt, center anchor and baseline. Full word visible in every frame. Animate the BURST and halftone flecks only.\nFrames left to right: 01 onset = compact tight burst behind the full-size word; 02 peak = larger emphatic version of the original burst; 03 aftershock = the burst breaks into a few outward-moving colored angular pieces and sparse dots, while the word stays unchanged.\nIMPORTANT SPACING: each complete word-plus-effects sticker fits inside the middle 60% width and 60% height of its square cell. Leave broad completely transparent gutters, at least 20% on all four sides of each cell. No line, fragment or shadow reaches a cell boundary. All three stickers isolated and centered.\nOpaque lettering with crisp anti-aliased edges, legible at 256x256. No checkerboard painted into the art, no logos, no watermarks.\nSpecific appearance: Preserve WHITE huge bold slanted sans-serif lettering with very thick BLACK outline and short black offset shadow. Preserve a flat LIGHT SKY BLUE angular starburst with a thick DARK ROYAL BLUE outer border, sparse tiny darker blue halftone dots inside. Blue pieces in aftershock. Exact punctuation is essential: K then PERIOD then O then PERIOD then EXCLAMATION: K.O.! Both periods must be present in each of the three frames. Closely recognizable as the supplied knockout original.\nText (verbatim, exactly ONCE per cell): \"K.O.!\". No substitutions.",
+  "generation_source": "/Users/erik2/.codex/generated_images/01a154f2-a4f8-7fd0-b497-05b5c59eb74f/exec-5ff47f31-cd5b-4224-a646-b4d6b251311f.png",
+  "source_file": "sources/originals--ko.png",
+  "frames": [
+    "originals/ko_01.tga",
+    "originals/ko_02.tga",
+    "originals/ko_03.tga"
+  ],
+  "categories": [
+    "originals"
+  ]
+}

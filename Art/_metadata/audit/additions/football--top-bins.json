@@ -1,0 +1,16 @@
+{
+  "key": "football/top-bins",
+  "word": "TOP BINS!",
+  "style": "Football broadcast top-corner strike graphic. Bold WHITE athletic lettering with thick deep BLUE outline and a few LIME edge highlights, over a sharply angled WHITE goal-net CORNER in the upper-right of the sticker. A bright TURQUOISE diagonal shot trail sweeps upward toward that corner. TWO lines TOP above BINS!. Onset: short diagonal streak; peak: strong swoosh into the stretched corner net; aftershock: net springs back and trail separates into short cyan ticks. No ball or character required, keep text dominant.",
+  "prompt": "Use case: stylized-concept.\nAsset type: original transparent WoW popup animation bases, ONE horizontal three-frame sprite strip.\nCanvas: exactly THREE equal SQUARE cells in ONE horizontal row, 3:1 wide canvas, preferably 1536x512. Actual alpha transparency outside the artwork. No grid, labels, frame numbers or dividers.\nThe specified FULL text must be visible and readable in ALL THREE cells. Draw the bold outlined wordmark ONCE, duplicate it across the three cells with the SAME lettering, line breaks, scale, tilt, position and center anchor. Animate the effects around it. Small hand-drawn differences acceptable.\nFrame progression: left = onset with contained movement; middle = peak with the strongest effect; right = aftershock with effects dispersing or recoiling. Coherent variants of ONE design, not three unrelated illustrations.\nReadability at 256x256: oversized chunky lettering, thick contrasting outline, strong simple silhouette, mostly opaque colors, broad effect shapes and minimal fine details. No tiny supporting text or numbers.\nSpacing: each entire sticker including lettering, shadows, swooshes, netting, dust and every particle fits inside the middle 60% width and height of its OWN square cell. Leave 20% empty transparent margin on EVERY side of EACH cell. Three isolated stickers with wide clear gutters. Never crop artwork to fit.\nNo characters, no real team crests or sponsor marks, no game logos, no watermark, no actual stadium scene, no painted checkerboard, no solid image background, no generic fiery explosions.\nSpecific visual and motion direction: Football broadcast top-corner strike graphic. Bold WHITE athletic lettering with thick deep BLUE outline and a few LIME edge highlights, over a sharply angled WHITE goal-net CORNER in the upper-right of the sticker. A bright TURQUOISE diagonal shot trail sweeps upward toward that corner. TWO lines TOP above BINS!. Onset: short diagonal streak; peak: strong swoosh into the stretched corner net; aftershock: net springs back and trail separates into short cyan ticks. No ball or character required, keep text dominant.\nText (verbatim, once per cell): \"TOP BINS!\". Keep the exact wording and punctuation in all three cells.",
+  "source_file": "_sources/football/top-bins.png",
+  "frames": [
+    "football/top-bins_1.tga",
+    "football/top-bins_2.tga",
+    "football/top-bins_3.tga"
+  ],
+  "categories": [
+    "football"
+  ],
+  "generation_source": "/Users/erik2/.codex/generated_images/01a154f2-a4f8-7fd0-b497-05b5c59eb74f/exec-3a8f51f1-910f-4e81-b034-7554f5bea81a.png"
+}

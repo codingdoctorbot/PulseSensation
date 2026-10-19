@@ -1,0 +1,4091 @@
+[
+  {
+    "file": "anime/critical_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      12,
+      15,
+      246,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "anime/critical_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      11,
+      24,
+      246,
+      230
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "anime/critical_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      18,
+      7,
+      233,
+      213
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "anime/limit-break_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      11,
+      252,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 6,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "anime/limit-break_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      4,
+      252,
+      226
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 16,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "anime/limit-break_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      10,
+      252,
+      239
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 11,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "anime/annihilated_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      12,
+      247,
+      248
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "anime/annihilated_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      15,
+      251,
+      238
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "anime/annihilated_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      7,
+      30,
+      242,
+      248
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/krakoom_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      16,
+      7,
+      234,
+      247
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/krakoom_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      14,
+      22,
+      245,
+      238
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/krakoom_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      20,
+      21,
+      245,
+      245
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/wham_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      21,
+      18,
+      251,
+      185
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/wham_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      7,
+      4,
+      224,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/wham_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      37,
+      6,
+      241,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/splat_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      4,
+      252,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/splat_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      4,
+      252,
+      247
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/splat_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      5,
+      11,
+      248,
+      247
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/boom_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      41,
+      7,
+      248,
+      241
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/boom_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      35,
+      238,
+      244
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/boom_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      34,
+      49,
+      223,
+      247
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/zap_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      4,
+      244,
+      238
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      722,
+      726
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/zap_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      7,
+      18,
+      244,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      722,
+      0,
+      1445,
+      726
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/zap_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      7,
+      25,
+      239,
+      240
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1445,
+      0,
+      2167,
+      726
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/smash_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      31,
+      18,
+      233,
+      235
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/smash_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      5,
+      48,
+      245,
+      236
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/smash_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      5,
+      29,
+      241,
+      228
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/crash_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      7,
+      251,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/crash_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      8,
+      21,
+      252,
+      252
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/crash_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      13,
+      232,
+      235
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "arcade/counter_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      25,
+      7,
+      249,
+      247
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "arcade/counter_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      14,
+      27,
+      241,
+      225
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "arcade/counter_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      9,
+      32,
+      233,
+      240
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "arcade/perfect_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      21,
+      6,
+      245,
+      235
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "arcade/perfect_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      24,
+      11,
+      252,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "arcade/perfect_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      4,
+      248,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "arcade/super-combo_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      20,
+      35,
+      232,
+      252
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "arcade/super-combo_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      19,
+      251,
+      247
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "arcade/super-combo_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      14,
+      6,
+      239,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "ninja/obliterated_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      27,
+      49,
+      245,
+      235
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "ninja/obliterated_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      9,
+      39,
+      251,
+      243
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "ninja/obliterated_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      19,
+      13,
+      236,
+      248
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "ninja/shadow-strike_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      10,
+      252,
+      242
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "ninja/shadow-strike_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      25,
+      252,
+      245
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 2,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "ninja/shadow-strike_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      12,
+      217,
+      244
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "ninja/executed_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      10,
+      56,
+      246,
+      239
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "ninja/executed_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      30,
+      43,
+      230,
+      208
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "ninja/executed_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      16,
+      53,
+      230,
+      201
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "arena/fragged_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      4,
+      252,
+      248
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "arena/fragged_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      7,
+      11,
+      252,
+      247
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "arena/fragged_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      16,
+      7,
+      245,
+      245
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "arena/gibbed_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      32,
+      7,
+      246,
+      238
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "arena/gibbed_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      24,
+      13,
+      252,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "arena/gibbed_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      7,
+      7,
+      228,
+      245
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "escalation/rampage_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      10,
+      11,
+      235,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "escalation/rampage_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      8,
+      21,
+      252,
+      242
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "escalation/rampage_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      16,
+      18,
+      242,
+      219
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "escalation/double-kill_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      12,
+      10,
+      252,
+      252
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "escalation/double-kill_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      15,
+      36,
+      241,
+      237
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "escalation/double-kill_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      7,
+      30,
+      235,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "escalation/multikill_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      17,
+      18,
+      247,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "escalation/multikill_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      6,
+      14,
+      248,
+      233
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "escalation/multikill_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      7,
+      7,
+      242,
+      223
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "failure/whiff_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      24,
+      11,
+      252,
+      224
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "failure/whiff_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      31,
+      249,
+      229
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "failure/whiff_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      18,
+      13,
+      235,
+      209
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "failure/nope_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      28,
+      46,
+      241,
+      230
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "failure/nope_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      12,
+      16,
+      241,
+      227
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "failure/nope_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      20,
+      39,
+      239,
+      244
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "failure/bonk_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      12,
+      13,
+      245,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "failure/bonk_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      17,
+      28,
+      252,
+      241
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "failure/bonk_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      10,
+      50,
+      246,
+      240
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "failure/boing_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      18,
+      32,
+      248,
+      244
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "failure/boing_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      14,
+      28,
+      244,
+      245
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "failure/boing_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      29,
+      10,
+      238,
+      229
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/pow_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      16,
+      28,
+      235,
+      244
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/pow_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      6,
+      10,
+      251,
+      235
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/pow_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      7,
+      16,
+      239,
+      231
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/overkill_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      29,
+      26,
+      252,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/overkill_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      5,
+      10,
+      252,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/overkill_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      5,
+      14,
+      232,
+      237
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/ko_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      51,
+      57,
+      223,
+      204
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/ko_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      14,
+      18,
+      238,
+      237
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "comic/ko_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      17,
+      32,
+      234,
+      220
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/counter-terrorists-win_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      10,
+      46,
+      252,
+      245
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/counter-terrorists-win_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      20,
+      251,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/counter-terrorists-win_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      15,
+      246,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/terrorists-win_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      15,
+      6,
+      252,
+      252
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/terrorists-win_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      11,
+      252,
+      252
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/terrorists-win_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      5,
+      7,
+      247,
+      252
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/bomb-planted_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      12,
+      7,
+      252,
+      250
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/bomb-planted_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      7,
+      252,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/bomb-planted_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      7,
+      245,
+      247
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/bomb-defused_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      21,
+      231,
+      244
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/bomb-defused_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      17,
+      27,
+      251,
+      245
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/bomb-defused_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      6,
+      19,
+      237,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/headshot_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      32,
+      242,
+      252
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/headshot_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      14,
+      31,
+      242,
+      239
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/headshot_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      14,
+      48,
+      243,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/clutch_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      8,
+      13,
+      246,
+      232
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/clutch_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      10,
+      33,
+      244,
+      224
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/clutch_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      17,
+      16,
+      250,
+      224
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/ace_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      16,
+      6,
+      250,
+      245
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/ace_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      8,
+      10,
+      252,
+      244
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "tactical/ace_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      11,
+      252,
+      247
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/goal_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      4,
+      252,
+      247
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/goal_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      5,
+      4,
+      251,
+      245
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/goal_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      7,
+      8,
+      252,
+      252
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/hat-trick_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      27,
+      243,
+      240
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/hat-trick_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      9,
+      15,
+      252,
+      236
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/hat-trick_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      32,
+      242,
+      245
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/top-bins_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      4,
+      252,
+      241
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/top-bins_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      10,
+      252,
+      241
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/top-bins_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      11,
+      7,
+      248,
+      244
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/what-a-save_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      20,
+      39,
+      242,
+      236
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/what-a-save_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      7,
+      25,
+      248,
+      240
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/what-a-save_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      32,
+      21,
+      237,
+      235
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/offside_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      26,
+      13,
+      235,
+      210
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/offside_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      8,
+      27,
+      252,
+      231
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 2,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/offside_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      29,
+      237,
+      228
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/red-card_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      28,
+      30,
+      240,
+      229
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/red-card_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      16,
+      9,
+      252,
+      245
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/red-card_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      7,
+      26,
+      236,
+      240
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/own-goal_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      10,
+      17,
+      242,
+      222
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/own-goal_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      14,
+      251,
+      228
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 0,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/own-goal_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      18,
+      7,
+      252,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 2,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/var-check_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      19,
+      4,
+      252,
+      245
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/var-check_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      12,
+      252,
+      244
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 15,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "football/var-check_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      7,
+      242,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 11,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "falling/wheee_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      31,
+      252,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "falling/wheee_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      4,
+      32,
+      246,
+      242
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "falling/wheee_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      5,
+      12,
+      243,
+      244
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "falling/faceplant_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      20,
+      12,
+      251,
+      244
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      721,
+      727
+    ],
+    "source_edge_alpha_max": 250,
+    "source_visible_clipping": true,
+    "source_edge_effects_accepted": true
+  },
+  {
+    "file": "falling/faceplant_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      5,
+      29,
+      251,
+      239
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      721,
+      0,
+      1443,
+      727
+    ],
+    "source_edge_alpha_max": 251,
+    "source_visible_clipping": true,
+    "source_edge_effects_accepted": true
+  },
+  {
+    "file": "falling/faceplant_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      5,
+      19,
+      245,
+      243
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1443,
+      0,
+      2164,
+      727
+    ],
+    "source_edge_alpha_max": 251,
+    "source_visible_clipping": true,
+    "source_edge_effects_accepted": true
+  },
+  {
+    "file": "falling/timber_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      26,
+      20,
+      239,
+      222
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "falling/timber_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      12,
+      9,
+      252,
+      252
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "falling/timber_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      7,
+      30,
+      242,
+      246
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "falling/gravity-wins_1.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      39,
+      34,
+      240,
+      209
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "falling/gravity-wins_2.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      5,
+      18,
+      249,
+      223
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      724,
+      0,
+      1448,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  },
+  {
+    "file": "falling/gravity-wins_3.tga",
+    "dimensions": [
+      256,
+      256
+    ],
+    "bits_per_pixel": 32,
+    "alpha_bits": 8,
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nontransparent_bounds": [
+      15,
+      36,
+      245,
+      214
+    ],
+    "roundtrip": "exact",
+    "source_cell_box": [
+      1448,
+      0,
+      2172,
+      724
+    ],
+    "source_edge_alpha_max": 1,
+    "source_visible_clipping": false,
+    "source_edge_effects_accepted": false
+  }
+]

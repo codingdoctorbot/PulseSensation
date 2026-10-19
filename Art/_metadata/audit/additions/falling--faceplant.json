@@ -1,0 +1,16 @@
+{
+  "key": "falling/faceplant",
+  "word": "FACEPLANT!",
+  "style": "Playful slapstick landing graphic. Huge IVORY and coral-orange chunky rounded lettering with thick BLACK outline, over a wide SQUASHED GROUND-IMPACT PANCAKE silhouette in warm ochre and orange. Several tiny but clear YELLOW dizzy stars hover just above, no face or body. One readable line FACEPLANT!. Onset: compact flattened landing puff; peak: very wide shallow pancake dust splosh and three yellow stars; aftershock: dust puffs separate sideways and stars drift. Shape is low and wide, no flames or generic explosive starburst.",
+  "prompt": "Use case: stylized-concept.\nAsset type: original transparent WoW popup animation bases, ONE horizontal three-frame sprite strip.\nCanvas: exactly THREE equal SQUARE cells in ONE horizontal row, 3:1 wide canvas, preferably 1536x512. Actual alpha transparency outside the artwork. No grid, labels, frame numbers or dividers.\nThe specified FULL text must be visible and readable in ALL THREE cells. Draw the bold outlined wordmark ONCE, duplicate it across the three cells with the SAME lettering, line breaks, scale, tilt, position and center anchor. Animate the effects around it. Small hand-drawn differences acceptable.\nFrame progression: left = onset with contained movement; middle = peak with the strongest effect; right = aftershock with effects dispersing or recoiling. Coherent variants of ONE design, not three unrelated illustrations.\nReadability at 256x256: oversized chunky lettering, thick contrasting outline, strong simple silhouette, mostly opaque colors, broad effect shapes and minimal fine details. No tiny supporting text or numbers.\nSpacing: each entire sticker including lettering, shadows, swooshes, netting, dust and every particle fits inside the middle 60% width and height of its OWN square cell. Leave 20% empty transparent margin on EVERY side of EACH cell. Three isolated stickers with wide clear gutters. Never crop artwork to fit.\nNo characters, no real team crests or sponsor marks, no game logos, no watermark, no actual stadium scene, no painted checkerboard, no solid image background, no generic fiery explosions.\nSpecific visual and motion direction: Playful slapstick landing graphic. Huge IVORY and coral-orange chunky rounded lettering with thick BLACK outline, over a wide SQUASHED GROUND-IMPACT PANCAKE silhouette in warm ochre and orange. Several tiny but clear YELLOW dizzy stars hover just above, no face or body. One readable line FACEPLANT!. Onset: compact flattened landing puff; peak: very wide shallow pancake dust splosh and three yellow stars; aftershock: dust puffs separate sideways and stars drift. Shape is low and wide, no flames or generic explosive starburst.\nText (verbatim, once per cell): \"FACEPLANT!\". Keep the exact wording and punctuation in all three cells.",
+  "source_file": "_sources/falling/faceplant.png",
+  "frames": [
+    "falling/faceplant_1.tga",
+    "falling/faceplant_2.tga",
+    "falling/faceplant_3.tga"
+  ],
+  "categories": [
+    "falling"
+  ],
+  "generation_source": "/Users/erik2/.codex/generated_images/01a154f2-a4f8-7fd0-b497-05b5c59eb74f/exec-4d43251f-a02d-4ab9-a944-5c67282b0880.png"
+}

@@ -1,0 +1,21 @@
+{
+  "family": "Lilita One",
+  "internal_postscript_name": "LilitaOne",
+  "file": "_fonts/lilita-one/LilitaOne-Regular.ttf",
+  "license": "SIL Open Font License 1.1",
+  "license_file": "_fonts/lilita-one/OFL.txt",
+  "source_url": "https://raw.githubusercontent.com/google/fonts/47d54ca1ebb14fd864695f1d39dc734f39017c33/ofl/lilitaone/LilitaOne-Regular.ttf",
+  "license_url": "https://raw.githubusercontent.com/google/fonts/47d54ca1ebb14fd864695f1d39dc734f39017c33/ofl/lilitaone/OFL.txt",
+  "upstream_directory": "https://github.com/google/fonts/tree/47d54ca1ebb14fd864695f1d39dc734f39017c33/ofl/lilitaone",
+  "upstream_commit": "47d54ca1ebb14fd864695f1d39dc734f39017c33",
+  "sha256": "f5b641c45c69d772ee4eda687bc9fda411d5cad6b0b45371491da4580cbc8d59",
+  "license_sha256": "255d5debbb80eb2ea762644311f266a279e8778f00156655a516e2b7781a63e1",
+  "unmodified_binary": true,
+  "static_true_type": true,
+  "glyph_check": {
+    "required_characters": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?'-+:;/\"%()[]#&=",
+    "missing": [],
+    "swedish_letters_present": true
+  },
+  "copyright_notice": "Copyright (c) 2011 Juan Montoreano (juan@remolacha.biz), \nwith Reserved Font Name Lilita"
+}

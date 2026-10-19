@@ -1,0 +1,21 @@
+{
+  "family": "Metal Mania",
+  "internal_postscript_name": "MetalMania-Regular",
+  "file": "_fonts/metal-mania/MetalMania-Regular.ttf",
+  "license": "SIL Open Font License 1.1",
+  "license_file": "_fonts/metal-mania/OFL.txt",
+  "source_url": "https://raw.githubusercontent.com/google/fonts/47d54ca1ebb14fd864695f1d39dc734f39017c33/ofl/metalmania/MetalMania-Regular.ttf",
+  "license_url": "https://raw.githubusercontent.com/google/fonts/47d54ca1ebb14fd864695f1d39dc734f39017c33/ofl/metalmania/OFL.txt",
+  "upstream_directory": "https://github.com/google/fonts/tree/47d54ca1ebb14fd864695f1d39dc734f39017c33/ofl/metalmania",
+  "upstream_commit": "47d54ca1ebb14fd864695f1d39dc734f39017c33",
+  "sha256": "4b95f0e55b291990c26a7b68818b20c1b728a8be05a34982b7bb4736c46c19ea",
+  "license_sha256": "4e66943af352059c059dd658774f25fbc831f1ad478f9f0890c06ecc2dd324c7",
+  "unmodified_binary": true,
+  "static_true_type": true,
+  "glyph_check": {
+    "required_characters": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?'-+:;/\"%()[]#&=",
+    "missing": [],
+    "swedish_letters_present": true
+  },
+  "copyright_notice": "Copyright (c) 2012 by Open Window (dathanboardman@gmail.com) with Reseved Font Name \"Metal Mania\""
+}

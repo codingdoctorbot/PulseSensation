@@ -1,0 +1,21 @@
+{
+  "family": "Russo One",
+  "internal_postscript_name": "RussoOne-Regular",
+  "file": "_fonts/russo-one/RussoOne-Regular.ttf",
+  "license": "SIL Open Font License 1.1",
+  "license_file": "_fonts/russo-one/OFL.txt",
+  "source_url": "https://raw.githubusercontent.com/google/fonts/47d54ca1ebb14fd864695f1d39dc734f39017c33/ofl/russoone/RussoOne-Regular.ttf",
+  "license_url": "https://raw.githubusercontent.com/google/fonts/47d54ca1ebb14fd864695f1d39dc734f39017c33/ofl/russoone/OFL.txt",
+  "upstream_directory": "https://github.com/google/fonts/tree/47d54ca1ebb14fd864695f1d39dc734f39017c33/ofl/russoone",
+  "upstream_commit": "47d54ca1ebb14fd864695f1d39dc734f39017c33",
+  "sha256": "bc0abcc660bd8b7ad3000ecb2898a27c58a29a50f7ec81652fa12e75148d09df",
+  "license_sha256": "3ac1301549523d9861fedca12871f24e575fbd26d520632fc00ba849b471d275",
+  "unmodified_binary": true,
+  "static_true_type": true,
+  "glyph_check": {
+    "required_characters": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?'-+:;/\"%()[]#&=",
+    "missing": [],
+    "swedish_letters_present": true
+  },
+  "copyright_notice": "Copyright (c) 2011-2012, Jovanny Lemonad (jovanny.ru), with Reserved Font Name \"Russo\""
+}
