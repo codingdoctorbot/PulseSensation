@@ -15,7 +15,7 @@
 
 local ROOT = arg[1] or "Kapow"
 -- TOC order, minus the window and minimap button (UI/), which the smoke test covers.
-local FILES = { "Kapow.lua", "Meter.lua", "ArtCatalog.lua", "Art.lua", "Events.lua", "Display.lua", "Themes.lua", "Profiles.lua", "Announcer.lua" }
+local FILES = { "Kapow.lua", "Meter.lua", "ArtCatalog.lua", "SoundCatalog.lua", "Art.lua", "Events.lua", "Display.lua", "Themes.lua", "Profiles.lua", "Announcer.lua", "Detect.lua", "Attribution.lua", "Extras.lua", "Moments.lua" }
 local unpack = table.unpack or unpack
 
 local failures = 0
@@ -63,6 +63,7 @@ local function NewRegion(parent, modern)
 		"SetScale", "SetRotation", "SetStatusBarTexture", "SetStatusBarColor",
 		"SetClipsChildren", "SetMovable", "RegisterForDrag", "StartMoving", "StopMovingOrSizing",
 		"SetColorTexture", "SetJustifyH", "SetWidth", "SetHeight",
+		"SetVertexColor", "SetBlendMode", "SetParent",
 	}) do
 		r[m] = noop
 	end
@@ -89,11 +90,17 @@ local function NewRegion(parent, modern)
 	function r:Hide()
 		self.shown = false
 	end
+	function r:IsShown()
+		return self.shown
+	end
+	function r:GetCenter()
+		return self.cx or 0, self.cy or 0
+	end
 	function r:Show()
 		self.shown = true
 	end
 	function r:SetAlpha(a)
-		if isSecret(a) then
+		if isSecret(a) and not env.secretAlphaOK then
 			refuse()
 		end
 		self.alpha = a
@@ -226,6 +233,12 @@ local function Load(modern, saved, savedChar)
 	_G.UnitGUID = function(unit)
 		return env.guids[unit]
 	end
+	_G.UnitExists = function(unit)
+		return env.guids[unit] ~= nil
+	end
+	_G.UnitAffectingCombat = function(unit)
+		return unit == "pet" and env.petCombat or false
+	end
 	_G.UnitName = function(unit)
 		if isSecret(unit) then
 			return env.names[unwrap(unit)]
@@ -263,6 +276,9 @@ local function Load(modern, saved, savedChar)
 		return false
 	end
 	_G.UnitIsUnit = function(a, b)
+		if a == "pettarget" and b == "target" then
+			return env.petTarget or false
+		end
 		return a == b
 	end
 	_G.UnitIsDeadOrGhost = function(unit)
@@ -995,6 +1011,7 @@ pvp.events.crit.art = "anime/critical"
 pvp.events.crit.title = "BAM | {amount} 100%"
 pvp.events.youdied.anim = "shake"
 pvp.killPet = false
+pvp.killPetBackup = true
 local text = P:Export("PvP")
 check("export starts with the prefix", text:sub(1, 7), "KAPOW1:")
 check("export is one line without | (chat-safe)", text:find("[|\n]") == nil, true)
@@ -1005,6 +1022,7 @@ check("round trip: art", copy.events.crit.art, "anime/critical")
 check("round trip: text with | and %", copy.events.crit.title, "BAM | {amount} 100%")
 check("round trip: animation", copy.events.youdied.anim, "shake")
 check("round trip: flat setting", copy.killPet, false)
+check("round trip: separate pet backup setting", copy.killPetBackup, true)
 added = P:Import(text, "Mine")
 check("import under a chosen name", added and added[1], "Mine")
 check("an export from before the rename still imports", (P:Import("PCOMIC1:" .. text:sub(8))) ~= nil, true)
@@ -1264,6 +1282,1020 @@ _G.SlashCmdList.KAPOW("credits")
 check("/kapow credits lists every font", #env.chat - chatBefore, 9 + 2)
 check("credits name the designer and license", (table.concat(env.chat, "\n", chatBefore + 1)):find("Tyler Finck", 1, true) ~= nil
 	and (table.concat(env.chat, "\n", chatBefore + 1)):find("SIL Open Font License 1.1", 1, true) ~= nil, true)
+
+-- ── Optional pet target-death backup (no PARTY_KILL or player hit required) ──────────
+local function PetTick()
+	local watch = _G.KapowPetKillWatcher
+	if watch.scripts.OnUpdate then
+		watch.scripts.OnUpdate(watch, 0.05)
+	end
+end
+
+local function PetSetup(modern)
+	Load(modern ~= false)
+	env.ns.Set("killUnitDead", false)
+	env.ns.Set("annFirstBloodSolo", true)
+	env.ns.Set("killPetBackup", true)
+	env.petTarget, env.petCombat = true, true
+	PetTick() -- observe the pet fighting a living target
+end
+
+local function PetDeath()
+	env.dead = true
+	PetTick()
+	Advance(0.2)
+end
+
+local function PartyKillBoth(attacker)
+	for _, frame in ipairs(env.frames) do
+		frame:Fire("PARTY_KILL", attacker, "Creature-1")
+	end
+end
+
+Load(true)
+check("pet backup defaults off", env.ns.db.killPetBackup, false)
+check("pet backup off does not poll", _G.KapowPetKillWatcher.scripts.OnUpdate, nil)
+env.ns.Set("killPetBackup", true)
+local petSaved = _G.KapowDB
+Load(true, petSaved)
+check("pet backup persists across reload", env.ns.db.killPetBackup, true)
+check("pet backup resumes polling after reload", _G.KapowPetKillWatcher.scripts.OnUpdate ~= nil, true)
+
+PetSetup()
+PetDeath()
+check("pet backup: pet-only target death shows K.O. without PARTY_KILL", Visible(), "ko")
+check("pet backup leaves existing death-check setting alone", env.ns.db.killUnitDead, false)
+check("pet backup: solo First Blood uses shared kill processing", env.ns.announcer.history[1], "firstblood")
+check("pet backup: kill feed names your pet", env.ns.announcer.feedEntries[1].args[1]:find("Your pet", 1, true) ~= nil, true)
+local feedCount = #env.ns.announcer.feedEntries
+local popRoot = _G.KapowFrame_ko -- a duplicate pop would extend this frame's life
+Advance(0.3)
+PetTick()
+check("pet backup: dead target is counted only once", #env.ns.announcer.feedEntries, feedCount)
+PartyKillBoth("Pet-1")
+Advance(0.2)
+check("pet backup: late PARTY_KILL does not double count feed", #env.ns.announcer.feedEntries, feedCount)
+check("pet backup: late PARTY_KILL does not award Double Kill", env.ns.announcer.history[2], nil)
+Advance(0.6)
+check("pet backup: late PARTY_KILL does not restart the pop", popRoot.shown, false)
+
+-- Five independent pet deaths count toward multi-kills and a spree.
+PetSetup()
+for i = 1, 5 do
+	if i > 1 then
+		env.guids.target = "Creature-" .. i
+		env.driver:Fire("PLAYER_TARGET_CHANGED")
+		env.dead = false
+		PetTick()
+	end
+	PetDeath()
+	Advance(0.3)
+end
+for _ = 1, 12 do Advance(1) end
+local history = table.concat(env.ns.announcer.history, ",")
+check("pet backup contributes to multi-kills", history:find("double", 1, true) ~= nil, true)
+check("pet backup contributes to killing sprees", history:find("spree5", 1, true) ~= nil, true)
+
+PetSetup()
+env.dead = true
+PetTick() -- backup is pending; the real kill arrives before the confirmation timer
+PartyKillBoth("Pet-1")
+Advance(0.3)
+check("pet backup: real pet PARTY_KILL wins", #env.ns.announcer.feedEntries, 1)
+check("pet backup: real pet PARTY_KILL still pops", Visible(), "ko")
+
+PetSetup()
+env.dead = true
+PetTick()
+PartyKillBoth("Player-2")
+Advance(0.3)
+check("pet backup: reported groupmate kill suppresses pet estimate", Visible(), "none")
+check("pet backup: groupmate remains the feed killer", env.ns.announcer.feedEntries[1].args[1], "Bob")
+
+PetSetup()
+env.ns.Set("killEvent", false)
+PetTick()
+PetDeath()
+check("pet backup works with both original detection switches off", Visible(), "ko")
+
+PetSetup()
+env.dead = true
+PetTick()
+env.ns.Set("killPetBackup", false)
+Advance(0.3)
+check("pet backup: toggle off cancels pending death", Visible(), "none")
+check("pet backup: toggle off stops polling", _G.KapowPetKillWatcher.scripts.OnUpdate, nil)
+
+PetSetup()
+env.ns.Set("killPet", false)
+PetDeath()
+check("pet backup respects pet kills disabled", Visible(), "none")
+
+PetSetup()
+env.ns.Set("enabled", false)
+PetDeath()
+check("pet backup respects addon disabled", Visible(), "none")
+check("pet backup: addon disabled stops polling", _G.KapowPetKillWatcher.scripts.OnUpdate, nil)
+
+PetSetup()
+env.dead = true
+PetTick()
+env.guids.target = "Creature-9"
+env.driver:Fire("PLAYER_TARGET_CHANGED")
+Advance(0.3)
+check("pet backup: changing target cancels pending kill", Visible(), "none")
+
+PetSetup()
+env.guids.target = "Creature-9"
+env.dead = true
+PetTick()
+Advance(0.3)
+check("pet backup: selecting an already dead target does not count", Visible(), "none")
+
+PetSetup()
+env.petTarget = false
+Advance(0.8)
+PetDeath()
+check("pet backup: stale pet activity does not count", Visible(), "none")
+
+PetSetup()
+env.petTarget = false -- pettarget often clears at the instant of death
+PetDeath()
+check("pet backup: recently lost pettarget still counts", Visible(), "ko")
+
+PetSetup()
+env.ns.Set("killPetBackup", true) -- reset the observation
+env.petCombat = false
+PetTick()
+PetDeath()
+check("pet backup: idle pet target does not count", Visible(), "none")
+
+PetSetup()
+env.ns.Set("killPetBackup", true)
+env.guids.pet = nil
+PetTick()
+PetDeath()
+check("pet backup: no pet does not count", Visible(), "none")
+
+PetSetup()
+env.ns.Set("killPetBackup", true)
+env.petTarget = Secret(true)
+PetTick()
+PetDeath()
+check("pet backup: secret pettarget comparison is not read", Visible(), "none")
+
+PetSetup()
+env.ns.Set("killPetBackup", true)
+_G.UnitIsUnit = function() error("unit comparison restricted") end
+PetTick()
+PetDeath()
+check("pet backup: restricted unit comparison does not error or count", Visible(), "none")
+
+PetSetup()
+env.ns.Set("killPetBackup", true)
+env.petCombat = Secret(true)
+PetTick()
+PetDeath()
+check("pet backup: secret pet combat state does not count", Visible(), "none")
+
+PetSetup()
+env.dead = Secret(true)
+PetTick()
+Advance(0.3)
+check("pet backup: secret death state does not award a kill", Visible(), "none")
+
+-- Hidden target identity: the selection itself identifies the target, timing deduplicates.
+PetSetup()
+env.guids.target = Secret("Creature-1")
+PetTick()
+PetDeath()
+check("pet backup: works when the target's GUID is hidden", Visible(), "ko")
+check("pet backup: hidden-GUID kill reaches the feed", #env.ns.announcer.feedEntries, 1)
+for _, frame in ipairs(env.frames) do
+	frame:Fire("PARTY_KILL", "Pet-1", Secret("Creature-1"))
+end
+Advance(0.6)
+check("pet backup: late pet report with a hidden victim does not double the feed", #env.ns.announcer.feedEntries, 1)
+
+PetSetup()
+env.dead = true
+for _, frame in ipairs(env.frames) do
+	frame:Fire("PARTY_KILL", "Pet-1", Secret("Creature-1"))
+end
+local popsBefore = #env.ns.announcer.feedEntries
+PetTick()
+Advance(0.3)
+check("pet backup: a hidden-victim pet report just before the death wins (one feed line)", #env.ns.announcer.feedEntries, popsBefore)
+
+PetSetup()
+env.dead = true
+for _, frame in ipairs(env.frames) do
+	frame:Fire("PARTY_KILL", "Player-2", Secret("Creature-1"))
+end
+PetTick()
+Advance(0.3)
+check("pet backup: a hidden-victim groupmate report near the death suppresses the estimate", Visible(), "none")
+
+-- Changing target right after a crit keeps the crit pop (the backup used to drop it).
+PetSetup()
+Fade()
+env.info = { 1234, 0, true }
+env.driver:Fire("UNIT_SPELLCAST_SUCCEEDED", "player")
+env.driver:Fire("COMBAT_TEXT_UPDATE", "DAMAGE_CRIT")
+env.guids.target = "Creature-9"
+env.driver:Fire("PLAYER_TARGET_CHANGED")
+Advance(0.2)
+check("pet backup: a crit still pops when you change target right after it", Visible(), "pow")
+
+-- A player-attributed hit can already have a pending death-check pop. Only one source wins.
+PetSetup()
+env.ns.Set("killUnitDead", true)
+env.info = { 1234, 0, false }
+env.driver:Fire("UNIT_SPELLCAST_SUCCEEDED", "player")
+env.driver:Fire("COMBAT_TEXT_UPDATE", "DAMAGE")
+PetDeath()
+Advance(0.1)
+check("pet backup: pending hit still yields one kill feed entry", #env.ns.announcer.feedEntries, 1)
+check("pet backup: pending hit yields a kill frame", Visible(), "ko")
+
+PetSetup(false)
+PetDeath()
+check("pet backup: legacy client API path also shows K.O.", Visible(), "ko")
+
+-- ── Hit sounds (Experimental tab) ──────────────────────────────────────────────────────
+-- Sound cannot follow the secret alpha gates, so it plays only when the hit type is plain.
+Load(true)
+env.ns.SetEvent("crit", "sound", "raidwarning")
+local soundsBefore = env.sounds
+env.ns.Test("pow")
+check("hit sounds: off by default, a crit stays silent", env.sounds - soundsBefore, 0)
+env.ns.Set("hitSounds", true)
+soundsBefore = env.sounds
+env.ns.Test("hit")
+check("hit sounds: a plain non-crit hit does not play the crit sound", env.sounds - soundsBefore, 0)
+soundsBefore = env.sounds
+env.ns.Test("pow")
+check("hit sounds: a plain crit plays its sound once", env.sounds - soundsBefore, 1)
+env.ns.SetEvent("kill", "sound", "raidwarning")
+env.ns.SetEvent("critkill", "sound", "raidwarning")
+soundsBefore = env.sounds
+env.ns.Test("overkill")
+check("hit sounds: a plain crit kill plays only its own sound", env.sounds - soundsBefore, 1)
+soundsBefore = env.sounds
+Hit(Secret("DAMAGE_CRIT"), Secret(true), Secret(false))
+check("hit sounds: a hidden hit type stays silent", env.sounds - soundsBefore, 0)
+env.ns.Set("hitSoundsSecret", true)
+soundsBefore = env.sounds
+Hit(Secret("DAMAGE_CRIT"), Secret(true), Secret(false))
+check("hit sounds: 'also when hidden' plays every hit event's sound", env.sounds - soundsBefore, 3)
+
+-- ── Import keeps flat settings in range ────────────────────────────────────────────────
+Load(true)
+local function HexOf(text)
+	return (text:gsub(".", function(c) return ("%02x"):format(c:byte()) end))
+end
+local function WithNumber(text, key, n)
+	return (text:gsub("(S" .. HexOf(key) .. ";)N[^;]*;", "%1N" .. n .. ";"))
+end
+local function WithText(text, key, v)
+	return (text:gsub("(S" .. HexOf(key) .. ";)S[^;]*;", "%1S" .. HexOf(v) .. ";"))
+end
+local badExport = WithText(WithNumber(WithNumber(env.ns.profiles:Export("Default"), "scale", "0"), "killDelay", "1e999"), "attribution", "bogus")
+local badNames = env.ns.profiles:Import(badExport, "Bad")
+local badProfile = _G.KapowDB.profiles[badNames[1]]
+check("import clamps a zero scale", badProfile.scale, 0.3)
+check("import clamps an endless kill delay", badProfile.killDelay, 1)
+check("import rejects an unknown attribution", badProfile.attribution, "recent")
+
+-- ── More kill sources and Accurate attribution (Detect.lua, Attribution.lua) ──────────
+local function FireAll(event, ...)
+	for _, frame in ipairs(env.frames) do
+		frame:Fire(event, ...)
+	end
+end
+
+local function MyActionsLog()
+	_G.QUICKBUTTON_NAME_MY_ACTIONS = "My actions"
+	_G.Blizzard_CombatLog_Filters = { currentFilter = 1, filters = { { name = "My actions" } } }
+	env.logOn = false
+	_G.C_CombatLog = {
+		AreFilteredEventsEnabled = function() return env.logOn end,
+		SetFilteredEventsEnabled = function(on) env.logOn = on end,
+	}
+end
+
+-- Combat log colour: your white kill line.
+Load(true)
+MyActionsLog()
+env.ns.Set("killUnitDead", false)
+env.ns.Set("killLogLine", true)
+check("log line: turns the combat log's event feed on", env.logOn, true)
+Fade()
+FireAll("COMBAT_LOG_MESSAGE", "x", 1, 1, 1, 0)
+Advance(0.3)
+check("log line: a white line before any grey one is not trusted", Visible(), "none")
+FireAll("COMBAT_LOG_MESSAGE", "x", 0.7, 0.7, 0.7, 0)
+FireAll("COMBAT_LOG_MESSAGE", "x", 1, 1, 1, 0)
+Advance(0.3)
+check("log line: your white kill line shows K.O.", Visible(), "ko")
+local feedAfterLine = #env.ns.announcer.feedEntries
+check("log line: the kill reaches the feed as yours", env.ns.announcer.feedEntries[1].args[1]:find("You", 1, true) ~= nil, true)
+FireAll("PARTY_KILL", "Player-1", Secret("Creature-1"))
+Advance(0.3)
+check("log line: the same kill's PARTY_KILL is not counted again", #env.ns.announcer.feedEntries, feedAfterLine)
+env.now = env.now + 5
+_G.Blizzard_CombatLog_Filters.filters[1].name = "Everything"
+Fade()
+FireAll("COMBAT_LOG_MESSAGE", "x", 1, 1, 1, 0)
+Advance(0.3)
+check("log line: ignored when the filter is not My actions", Visible(), "none")
+env.ns.Set("killLogLine", false)
+check("log line: turning it off hands the event feed back", env.logOn, false)
+
+-- Target death event.
+Load(true)
+env.ns.Set("killUnitDead", false)
+env.ns.Set("killTargetDied", true)
+Fade()
+env.info = { 1234, 0, false }
+env.driver:Fire("UNIT_SPELLCAST_SUCCEEDED", "player")
+env.driver:Fire("COMBAT_TEXT_UPDATE", "DAMAGE")
+FireAll("PLAYER_TARGET_DIED")
+Advance(0.2)
+check("target died: the hit that killed shows K.O.", Visible(), "ko")
+env.now = env.now + 5
+Fade()
+env.driver:Fire("UNIT_SPELLCAST_SUCCEEDED", "player")
+env.driver:Fire("COMBAT_TEXT_UPDATE", "DAMAGE_CRIT")
+FireAll("PLAYER_TARGET_DIED")
+env.driver:Fire("PLAYER_TARGET_CHANGED")
+Advance(0.2)
+check("target died: still right after you switch target", Visible(), "overkill")
+env.now = env.now + 5
+Fade()
+env.driver:Fire("UNIT_SPELLCAST_SUCCEEDED", "player")
+env.driver:Fire("COMBAT_TEXT_UPDATE", "DAMAGE")
+Advance(0.2)
+check("target died: no event, no kill", Visible(), "none")
+
+-- Accurate attribution.
+local function Wound(flag, school, cast)
+	Fade()
+	if cast then
+		env.driver:Fire("UNIT_SPELLCAST_SUCCEEDED", "player", "cast", cast)
+	end
+	env.driver:Fire("UNIT_COMBAT", "target", "WOUND", flag or "", 1234, school)
+	Advance(0.2)
+	return Visible()
+end
+Load(true)
+env.ns.Set("killUnitDead", false)
+env.ns.Set("attribution", "accurate")
+check("accurate: listens for your weapon swings", env.driver.events.PLAYER_SWING, true)
+env.now = env.now + 5
+check("accurate: a hit nothing of yours explains is someone else's", Wound("CRITICAL", 4), "none")
+env.now = env.now + 5
+check("accurate: a crit right after your cast is yours", Wound("CRITICAL", 4, 133), "pow")
+env.now = env.now + 0.5
+check("accurate: that cast is spent; the next fire hit is not yours", Wound("CRITICAL", 4), "none")
+env.now = env.now + 5
+check("accurate: a cast of a spell known as Fire does not take a Frost hit", Wound("CRITICAL", 16, 133), "none")
+env.now = env.now + 5
+env.driver:Fire("PLAYER_SWING", 2.0, 0)
+env.now = env.now + 0.45
+check("accurate: a physical crit 0.45 s after your swing is yours", Wound("CRITICAL", 1), "pow")
+env.now = env.now + 5
+env.petTarget, env.petCombat = true, true
+check("accurate: a physical hit while your pet attacks counts (pet kills on)", Wound("CRITICAL", 1), "pow")
+env.now = env.now + 0.3
+check("accurate: the pet takes at most one hit a second", Wound("CRITICAL", 1), "none")
+env.petTarget = false
+env.now = env.now + 5
+Fade()
+env.info = { 1234, 0, true }
+-- Two casts, then one hit reported by both feeds: only one cast may be spent, so a second
+-- hit 0.5 s later still finds the other cast.
+env.driver:Fire("UNIT_SPELLCAST_SUCCEEDED", "player", "cast", 133)
+env.driver:Fire("UNIT_SPELLCAST_SUCCEEDED", "player", "cast", 133)
+env.driver:Fire("COMBAT_TEXT_UPDATE", "DAMAGE_CRIT")
+env.driver:Fire("UNIT_COMBAT", "target", "WOUND", "CRITICAL", 1234, 4)
+Advance(0.2)
+check("accurate: one hit from both feeds pops once", Visible(), "pow")
+env.now = env.now + 0.5
+check("accurate: one hit from both feeds spends one cast", Wound("CRITICAL", 4), "pow")
+
+-- Combat text unit: leave it alone.
+Load(true)
+env.activeUnit = nil
+env.ns.Set("feedUnit", "leave")
+env.activeUnit = nil
+env.driver:Fire("PLAYER_TARGET_CHANGED")
+check("feed leave: KAPOW never sets the combat text unit", env.activeUnit, nil)
+check("feed leave: the shared combat text feed is not read", env.driver.events.COMBAT_TEXT_UPDATE, nil)
+check("feed leave: your target's own combat events still are", env.driver.events.UNIT_COMBAT, true)
+check("feed leave: hits still pop", UnitCombat("WOUND", "CRITICAL", 4321), "pow")
+
+-- Damage meter: overkill on OVERKILL! and confirmed interrupts.
+Load(true)
+env.resets = 0
+_G.C_DamageMeter = {
+	IsDamageMeterAvailable = function() return true end,
+	GetCombatSessionSourceFromType = function() return { combatSpells = { { overkillAmount = Secret(4321) } } } end,
+	ResetAllCombatSessions = function() env.resets = env.resets + 1 end,
+}
+env.ns.Set("meterOverkill", true)
+FireAll("DAMAGE_METER_COMBAT_SESSION_UPDATED", 0, 1)
+check("meter: the overkill read clears the meter", env.resets, 1)
+Fade()
+env.ns.Test("overkill")
+check("meter: OVERKILL! shows the overkill (drawn, never read)", tostring(LabelOf("overkill")):find("+<S:4.3K> overkill", 1, true) ~= nil, true)
+env.now = env.now + 5
+Fade()
+env.ns.Test("overkill")
+check("meter: a stale overkill is not shown", LabelOf("overkill"), "987.7K")
+
+Load(true)
+_G.C_DamageMeter = { IsDamageMeterAvailable = function() return true end }
+env.ns.Set("meterInterrupts", true)
+local banners = #env.ns.announcer.history
+FireAll("UNIT_SPELLCAST_SUCCEEDED", "player", "cast", 1766)
+FireAll("DAMAGE_METER_COMBAT_SESSION_UPDATED", 5, 1)
+check("meter: an interrupt count change after your Kick shows You interrupted", env.ns.announcer.history[banners + 1], "interrupt")
+FireAll("DAMAGE_METER_COMBAT_SESSION_UPDATED", 5, 1)
+check("meter: one Kick, one banner", env.ns.announcer.history[banners + 2], nil)
+
+-- Interrupt streaks grow.
+Advance(2)
+local streakScale
+env.ns.announcer.stage.root.SetScale = function(_, s) streakScale = s end
+env.now = env.now + 1
+FireAll("UNIT_SPELLCAST_SUCCEEDED", "player", "cast", 1766)
+FireAll("DAMAGE_METER_COMBAT_SESSION_UPDATED", 5, 1)
+check("streak: the second interrupt in a row pops bigger", streakScale ~= nil and streakScale > 1.15 and streakScale < 1.25, true)
+env.driver:Fire("PLAYER_REGEN_ENABLED")
+FireAll("PLAYER_REGEN_ENABLED")
+Advance(2)
+env.now = env.now + 1
+FireAll("UNIT_SPELLCAST_SUCCEEDED", "player", "cast", 1766)
+FireAll("DAMAGE_METER_COMBAT_SESSION_UPDATED", 5, 1)
+check("streak: a new fight starts small again", streakScale, 1)
+
+-- Kill statistic.
+Load(true)
+env.statValue = 10
+_G.GetStatisticsCategoryList = function() return { 100 } end
+_G.GetCategoryNumAchievements = function() return 1 end
+_G.GetStatistic = function() return tostring(env.statValue), false, 555 end
+_G.GetAchievementInfo = function() return 555, "Total kills" end
+local chatBeforeStats = #env.chat
+_G.SlashCmdList.KAPOW("stats")
+check("/kapow stats lists kill statistics with their number", (env.chat[chatBeforeStats + 1] or ""):find("555", 1, true) ~= nil, true)
+env.ns.Set("killUnitDead", false)
+env.ns.Set("killStatId", 555)
+env.ns.Set("killStatistic", true)
+Fade()
+env.statValue = 11
+FireAll("CRITERIA_UPDATE")
+Advance(0.3)
+check("statistic: the counter going up shows your kill", Visible(), "ko")
+env.now = env.now + 5
+Fade()
+FireAll("CRITERIA_UPDATE")
+Advance(0.3)
+check("statistic: no change, no kill", Visible(), "none")
+
+-- ── Animation settings: duration, jitter amounts, stacked banners ─────────────────────
+Load(true)
+env.ns.SetEvent("crit", "duration", 2)
+Fade()
+env.ns.Test("pow")
+Advance(1.2)
+check("duration 2x: a crit pop is still up after its normal second", _G.KapowFrame_pow.shown, true)
+Advance(1.0)
+check("duration 2x: and gone after two seconds", _G.KapowFrame_pow.shown, false)
+
+env.ns.Set("jitterX", 0)
+env.ns.Set("jitterY", 0)
+env.ns.Set("jitterTilt", 0)
+local jx, jy, jt = env.ns.Jitter()
+check("jitter set to zero gives no offset or tilt", jx == 0 and jy == 0 and jt == 0, true)
+env.ns.Set("jitterX", 50)
+local inRange = true
+for _ = 1, 200 do
+	local x = env.ns.Jitter()
+	if x < -50 or x > 50 then inRange = false end
+end
+check("jitter stays within the chosen sideways offset", inRange, true)
+env.ns.Set("jitter", false)
+env.ns.Set("jitterX", 140)
+jx = env.ns.Jitter()
+check("jitter off gives no offset whatever the amount", jx, 0)
+
+Load(true)
+env.ns.Set("annFirstBloodSolo", true)
+env.ns.announcer:Fire("firstblood", { killer = "You", victim = "Hogger" })
+env.ns.announcer:Fire("double", { count = 2 })
+check("one banner at a time by default (no second banner frame)", _G.KapowBanner2, nil)
+Load(true)
+env.ns.Set("annStack", true)
+env.ns.announcer:Fire("firstblood", { killer = "You", victim = "Hogger" })
+env.ns.announcer:Fire("double", { count = 2 })
+check("several at once: two banners show together", _G.KapowBanner.shown and _G.KapowBanner2 ~= nil and _G.KapowBanner2.shown, true)
+Advance(2)
+check("several at once: both clear after their time", _G.KapowBanner.shown or _G.KapowBanner2.shown, false)
+
+Load(true)
+local longExport = env.ns.profiles:Export("Default"):gsub("(S" .. ("duration"):gsub(".", function(c) return ("%02x"):format(c:byte()) end) .. ";)N[^;]*;", "%1N99;")
+local longNames = env.ns.profiles:Import(longExport, "Long")
+check("import clamps an event duration", _G.KapowDB.profiles[longNames[1]].events.crit.duration, 4)
+
+-- ── Sound pools (game sounds now, generated files later) ───────────────────────────────
+Load(true)
+env.ns.SetEvent("kickoff", "enabled", true)
+check("fight start defaults to the random fight-start pool", env.ns.db.events.kickoff.sound, "random:fightstart")
+local poolBefore = env.sounds
+env.driver:Fire("PLAYER_REGEN_DISABLED")
+FireAll("PLAYER_REGEN_DISABLED")
+check("random pool: a fight start plays exactly one sound", env.sounds - poolBefore, 1)
+env.playedFiles = {}
+_G.PlaySoundFile = function(path) env.playedFiles[#env.playedFiles + 1] = path return true end
+env.ns.display.SOUNDS["random:test"] = { "Test", pool = { "Interface\\AddOns\\Kapow\\Sounds\\test\\a.ogg" } }
+env.ns.SetEvent("kickoff", "sound", "random:test")
+Advance(2)
+FireAll("PLAYER_REGEN_DISABLED")
+check("random pool: a generated file plays through PlaySoundFile", env.playedFiles[1], "Interface\\AddOns\\Kapow\\Sounds\\test\\a.ogg")
+env.ns.display.SOUNDS["random:missing"] = { "Missing", pool = { "NO_SUCH_KIT", "ALSO_MISSING" } }
+env.ns.SetEvent("kickoff", "sound", "random:missing")
+Advance(2)
+poolBefore = env.sounds
+FireAll("PLAYER_REGEN_DISABLED")
+check("random pool: kits this client lacks are skipped quietly", env.sounds - poolBefore, 0)
+_G.PlaySoundFile = nil
+
+-- ── UwU mode and the multi-kill timer bar ─────────────────────────────────────────────
+Load(true)
+env.ns.Test("pow")
+check("uwu off: no UwU frame is made", _G.KapowUwU, nil)
+env.ns.Set("uwu", true)
+env.ns.Test("pow")
+check("uwu on: a crit shows the UwU frame", _G.KapowUwU ~= nil and _G.KapowUwU.shown, true)
+local function UwuAlpha()
+	for _, f in ipairs(env.frames) do
+		if f.parent == _G.KapowUwU then
+			return f.alpha
+		end
+	end
+end
+check("uwu on: a crit opens its gate", UwuAlpha(), 1)
+env.ns.Test("hit")
+check("uwu on: a plain non-crit keeps its gate shut", UwuAlpha(), 0)
+Hit(Secret("DAMAGE_CRIT"), Secret(true), Secret(false))
+check("uwu on: a secret crit still opens the gate (the client decides)", UwuAlpha(), 1)
+env.ns.Set("uwuSound", "raidwarning")
+local uwuSounds = env.sounds
+env.ns.Test("pow")
+check("uwu sound: plays on a plain crit", env.sounds - uwuSounds, 1)
+uwuSounds = env.sounds
+Hit(Secret("DAMAGE_CRIT"), Secret(true), Secret(false))
+check("uwu sound: not on a hidden crit (cannot be gated)", env.sounds - uwuSounds, 0)
+
+Load(true)
+env.ns.Set("annFirstBloodSolo", true)
+FireAll("PARTY_KILL", "Player-1", "Creature-1")
+check("timer bar off: none after a kill", _G.KapowStreakBar, nil)
+env.ns.Set("annStreakBar", true)
+env.now = env.now + 10
+FireAll("PARTY_KILL", "Player-1", "Creature-2")
+check("timer bar on: shows after your kill", _G.KapowStreakBar ~= nil and _G.KapowStreakBar.shown, true)
+env.now = env.now + 1
+FireAll("PARTY_KILL", "Player-1", "Creature-3")
+check("timer bar: counts the chain", _G.KapowStreakBar.label.text, "x2")
+env.now = env.now + 5
+_G.KapowStreakBar.scripts.OnUpdate(_G.KapowStreakBar, 0.1)
+check("timer bar: hides when the window runs out", _G.KapowStreakBar.shown, false)
+
+-- ── Extras.lua and Moments.lua ────────────────────────────────────────────────────────
+local NEW_EVENTS = { "combo", "countdown", "countgo", "duelstart", "duelwin", "duellose", "bosspull",
+	"assist", "record", "achievement", "epicloot", "quest", "honorkill" }
+local function Has(list, id)
+	for _, v in ipairs(list) do
+		if v == id then
+			return true
+		end
+	end
+	return false
+end
+local function Shown(id, from)
+	for i = (from or 1), #env.ns.announcer.history do
+		if env.ns.announcer.history[i] == id then
+			return true
+		end
+	end
+	return false
+end
+
+Load(true)
+local allOff = true
+for _, id in ipairs(NEW_EVENTS) do
+	if env.ns.db.events[id].enabled then
+		allOff = false
+	end
+end
+check("extras: every new event starts off", allOff, true)
+check("extras: combo counter, flash, overlays and sync start off",
+	tostring(env.ns.db.comboCounter) .. env.ns.db.flash .. tostring(env.ns.db.dangerLow) .. tostring(env.ns.db.finishIt)
+		.. tostring(env.ns.db.partySync) .. tostring(env.ns.db.gamepadNav),
+	"falseofffalsefalsefalsefalse")
+env.ns.Set("annFirstBloodSolo", true)
+for _ = 1, 6 do
+	Hit("DAMAGE_CRIT", nil, false)
+end
+FireAll("PARTY_KILL", "Player-1", "Creature-1")
+Advance(10)
+local leaked = false
+for _, id in ipairs(env.ns.announcer.history) do
+	if Has(NEW_EVENTS, id) then
+		leaked = true
+	end
+end
+check("extras: defaults add no banner to an ordinary fight", leaked, false)
+check("extras: defaults make no combo, flash or warning frames",
+	tostring(_G.KapowCombo) .. tostring(_G.KapowFlash) .. tostring(_G.KapowDanger) .. tostring(_G.KapowFinish), "nilnilnilnil")
+check("extras: the banner spot stays where it was", select(2, env.ns.display.Offset("banner")), 260)
+
+-- Combo counter
+local function QuickHit()
+	env.now = env.now + 0.5
+	env.dead = false
+	env.info = { 1234, 0, false }
+	env.driver:Fire("UNIT_SPELLCAST_SUCCEEDED", "player")
+	env.driver:Fire("COMBAT_TEXT_UPDATE", "DAMAGE")
+	Advance(0.2)
+end
+Load(true)
+env.ns.Set("comboCounter", true)
+env.ns.SetEvent("combo", "enabled", true)
+for _ = 1, 6 do
+	QuickHit()
+end
+check("combo: the counter shows while hits keep coming", _G.KapowCombo and _G.KapowCombo.shown, true)
+check("combo: it counts the hits", _G.KapowCombo.count.text, 6)
+env.now = env.now + 3
+_G.KapowCombo.scripts.OnUpdate(_G.KapowCombo, 0.1)
+Advance(5)
+check("combo: a 2 s gap ends the chain and hides the counter", _G.KapowCombo.shown, false)
+check("combo: a chain of 6 shows the Combo banner", Shown("combo"), true)
+check("combo: the best combo is saved for the character", env.ns.char.records.combo, 6)
+local before = #env.ns.announcer.history
+for _ = 1, 3 do
+	QuickHit()
+end
+env.now = env.now + 3
+_G.KapowCombo.scripts.OnUpdate(_G.KapowCombo, 0.1)
+Advance(5)
+check("combo: 3 hits stay under the minimum, no banner", Shown("combo", before + 1), false)
+QuickHit()
+QuickHit()
+check("combo: a fresh chain counts from the start", _G.KapowCombo.count.text, 2)
+env.guids.target = "Creature-9"
+QuickHit()
+check("combo: a new target ends the chain", _G.KapowCombo.shown, false)
+env.guids.target = "Creature-1"
+
+-- Impact flash
+Load(true)
+env.ns.Set("flash", "critkill")
+local function FlashGates()
+	local f = _G.KapowFlash
+	local crit, dead
+	for _, fr in ipairs(env.frames) do
+		if fr.parent == f then
+			crit = fr
+		end
+	end
+	for _, fr in ipairs(env.frames) do
+		if fr.parent == crit then
+			dead = fr
+		end
+	end
+	return crit.alpha * dead.alpha
+end
+Hit(Secret("DAMAGE_CRIT"), Secret(true), Secret(true))
+check("flash: a hidden crit kill lights the flash (the client decides)", _G.KapowFlash.shown and FlashGates(), 1)
+Hit(Secret("DAMAGE_CRIT"), Secret(true), Secret(false))
+check("flash crit kills: a crit that does not kill stays dark", FlashGates(), 0)
+env.ns.Set("flash", "crit")
+Hit(Secret("DAMAGE_CRIT"), Secret(true), Secret(false))
+check("flash every crit: any crit lights it", FlashGates(), 1)
+env.ns.Set("reduceMotion", true)
+_G.KapowFlash.shown = false
+Hit("DAMAGE_CRIT", nil, false)
+check("reduce motion: no flash", _G.KapowFlash.shown, false)
+env.ns.Set("jitter", true)
+local jx, jy, jt = env.ns.Jitter()
+check("reduce motion: no random offset or tilt", jx + jy + jt, 0)
+
+-- Hidden health: low health and FINISH IT!
+local function CurveMocks()
+	_G.Enum.LuaCurveType = { Linear = 0, Step = 1 }
+	_G.C_CurveUtil = {
+		CreateCurve = function()
+			local c = { points = {} }
+			function c:SetType(t)
+				self.type = t
+			end
+			function c:AddPoint(x, y)
+				self.points[#self.points + 1] = { x, y }
+			end
+			return c
+		end,
+	}
+	-- The client evaluates the curve on the hidden health and hands back a secret.
+	_G.UnitHealthPercent = function(unit, _, curve)
+		local share = env.share[unit]
+		local y = 0
+		for _, p in ipairs(curve.points) do
+			if share >= p[1] then
+				y = p[2]
+			end
+		end
+		return Secret(y)
+	end
+end
+local function GateOf(root)
+	for _, fr in ipairs(env.frames) do
+		if fr.parent == root then
+			return fr
+		end
+	end
+end
+Load(true)
+env.secretAlphaOK = true
+CurveMocks()
+env.share = { player = 0.2, target = 0.5 }
+env.ns.Set("dangerLow", true)
+check("low health: the overlay registers for player health", env.frames[#env.frames] ~= nil and _G.KapowDanger ~= nil, true)
+check("low health: 20% at a 25% threshold opens the gate (secret, client-side)", tostring(GateOf(_G.KapowDanger).alpha), "<S:1>")
+env.share.player = 0.8
+FireAll("UNIT_HEALTH", "player")
+check("low health: 80% shuts it", tostring(GateOf(_G.KapowDanger).alpha), "<S:0>")
+env.share.player = 0.25
+FireAll("UNIT_HEALTH", "player")
+check("low health: exactly at the threshold counts", tostring(GateOf(_G.KapowDanger).alpha), "<S:1>")
+env.deadUnits.player = true
+FireAll("PLAYER_DEAD")
+check("low health: hidden while you are dead", _G.KapowDanger.shown, false)
+env.deadUnits.player = nil
+
+_G.UnitCanAttack = function()
+	return true
+end
+env.ns.Set("finishIt", true)
+FireAll("PLAYER_TARGET_CHANGED")
+check("finish it: 50% target stays dark", tostring(GateOf(_G.KapowFinish).alpha), "<S:0>")
+env.share.target = 0.15
+FireAll("UNIT_HEALTH", "target")
+check("finish it: 15% target at 20% shows FINISH IT!", tostring(GateOf(_G.KapowFinish).alpha), "<S:1>")
+env.dead = Secret(true)
+FireAll("UNIT_HEALTH", "target")
+check("finish it: a hidden death flag hides it (no corpse prompt)", _G.KapowFinish.shown, false)
+env.dead = false
+_G.UnitCanAttack = function()
+	return false
+end
+FireAll("PLAYER_TARGET_CHANGED")
+check("finish it: a friendly target never shows it", _G.KapowFinish.shown, false)
+_G.UnitCanAttack = nil
+env.ns.Set("finishIt", false)
+env.ns.Set("dangerLow", false)
+check("overlays off: both hide", tostring(_G.KapowDanger.shown) .. tostring(_G.KapowFinish.shown), "falsefalse")
+
+-- Without curves: a plain health reading, nothing when it is secret.
+Load(true)
+_G.C_CurveUtil, _G.UnitHealthPercent = nil, nil
+env.health, env.healthMax = 20, 100
+env.ns.Set("dangerLow", true)
+check("no curves: plain 20% opens the gate", GateOf(_G.KapowDanger).alpha, 1)
+env.health = 60
+FireAll("UNIT_HEALTH", "player")
+check("no curves: plain 60% shuts it", GateOf(_G.KapowDanger).alpha, 0)
+env.health = Secret(10)
+FireAll("UNIT_HEALTH", "player")
+check("no curves: secret health is never compared, the gate stays shut", GateOf(_G.KapowDanger).alpha, 0)
+env.health, env.healthMax = nil, nil
+
+-- Placing
+Load(true)
+env.ns.Set("bannerX", 120)
+env.ns.Set("bannerY", 300)
+local bx, by = env.ns.display.Offset("banner")
+check("placing: banners follow the saved spot", bx .. "," .. by, "120,300")
+env.ns.extras.SetUnlocked(true)
+local handle = _G.KapowPlace_combo
+check("placing: unlock shows a handle per movable thing", handle ~= nil and handle.shown and _G.KapowPlace_finish.shown, true)
+handle.cx, handle.cy = -50, 75
+_G.UIParent.cx, _G.UIParent.cy = 0, 0
+handle.scripts.OnDragStop(handle)
+check("placing: dropping a handle saves its offset", env.ns.db.comboX .. "," .. env.ns.db.comboY, "-50,75")
+_G.SlashCmdList.KAPOW("lock")
+check("placing: /kapow lock hides the handles", handle.shown, false)
+env.ns.extras.ResetPlaces()
+check("placing: reset puts everything back", env.ns.db.bannerX .. "," .. env.ns.db.bannerY .. "," .. env.ns.db.comboX, "0,260,-300")
+
+-- Moments: format patterns
+local M = env.ns.moments
+local pat, order = M.Pattern("%2$s has fled from %1$s in a duel")
+local args = M.Match("Bob has fled from Alice in a duel", { pat, order })
+check("pattern: positional arguments land in format order", args[1] .. "/" .. args[2], "Alice/Bob")
+args = M.Match("You receive loot: [Thing]x3", { M.Pattern("You receive loot: %sx%d") })
+check("pattern: %s and %d", args[1] .. "/" .. args[2], "[Thing]/3")
+check("pattern: magic characters are literal", M.Match("Gold (5)", { M.Pattern("Gold (%d)") })[1], "5")
+check("pattern: no match gives nil", M.Match("something else", { M.Pattern("Duel starting: %d") }), nil)
+
+-- Duels
+Load(true)
+_G.DUEL_COUNTDOWN = "Duel starting: %d"
+_G.DUEL_WINNER_KNOCKOUT = "%1$s has defeated %2$s in a duel"
+_G.DUEL_WINNER_RETREAT = "%2$s has fled from %1$s in a duel"
+env.names.player = "Me"
+for _, id in ipairs({ "countdown", "duelstart", "duelwin", "duellose" }) do
+	env.ns.SetEvent(id, "enabled", true)
+end
+env.ns.Set("annStack", true)
+FireAll("DUEL_REQUESTED", "Bob-Realm")
+for n = 3, 1, -1 do
+	FireAll("CHAT_MSG_SYSTEM", "Duel starting: " .. n)
+	Advance(1)
+end
+Advance(5)
+check("duel: the countdown lines show 3, 2, 1", #env.ns.announcer.history >= 3 and env.ns.announcer.history[1], "countdown")
+check("duel: then ROUND 1 ... FIGHT!", Shown("duelstart"), true)
+FireAll("CHAT_MSG_SYSTEM", "Me has defeated Bob in a duel")
+Advance(5)
+check("duel: a knockout by you shows YOU WIN", Shown("duelwin"), true)
+check("duel: the win is tallied", env.ns.char.records.total_duelwins, 1)
+FireAll("CHAT_MSG_SYSTEM", "Me has fled from Bob in a duel")
+Advance(5)
+check("duel: fleeing shows YOU LOSE", Shown("duellose"), true)
+before = #env.ns.announcer.history
+FireAll("CHAT_MSG_SYSTEM", Secret("Me has defeated Bob in a duel"))
+FireAll("CHAT_MSG_SYSTEM", "Alice has defeated Bob in a duel")
+Advance(5)
+check("duel: secret lines and other people's duels are ignored", #env.ns.announcer.history, before)
+
+-- Countdowns
+Load(true)
+env.ns.SetEvent("countdown", "enabled", true)
+env.ns.SetEvent("countgo", "enabled", true)
+env.ns.Set("annStack", true)
+FireAll("START_TIMER", 0, 5, 10)
+Advance(1.5)
+check("countdown: nothing before the last three seconds", #env.ns.announcer.history, 0)
+Advance(4)
+Advance(2)
+local seq = table.concat(env.ns.announcer.history, ",")
+check("countdown: 3, 2, 1, FIGHT! in step with the timer", seq, "countdown,countdown,countdown,countgo")
+Load(true)
+env.ns.SetEvent("countgo", "enabled", true)
+FireAll("START_TIMER", 0, 5, 10)
+Advance(1)
+FireAll("STOP_TIMER_OF_TYPE", 0)
+Advance(10)
+check("countdown: a stopped timer says nothing", #env.ns.announcer.history, 0)
+
+-- Loot, achievements, quests, honorable kills, boss pull
+Load(true)
+_G.LOOT_ITEM_SELF = "You receive loot: %s"
+_G.LOOT_ITEM_SELF_MULTIPLE = "You receive loot: %sx%d"
+_G.LOOT_ITEM_PUSHED_SELF = "You receive item: %s"
+_G.LOOT_ITEM_PUSHED_SELF_MULTIPLE = "You receive item: %sx%d"
+for _, id in ipairs({ "epicloot", "achievement", "quest", "honorkill", "bosspull" }) do
+	env.ns.SetEvent(id, "enabled", true)
+end
+env.ns.Set("annStack", true)
+FireAll("CHAT_MSG_LOOT", "You receive loot: |cffa335ee|Hitem:1::|h[Big Axe]|h|r")
+Advance(5)
+check("loot: an epic of yours shows EPIC LOOT", Shown("epicloot"), true)
+before = #env.ns.announcer.history
+FireAll("CHAT_MSG_LOOT", "You receive loot: |cff1eff00|Hitem:2::|h[Green Thing]|h|r")
+FireAll("CHAT_MSG_LOOT", "Bob receives loot: |cffa335ee|Hitem:1::|h[Big Axe]|h|r")
+FireAll("CHAT_MSG_LOOT", Secret("You receive loot: |cffa335ee|Hitem:1::|h[Big Axe]|h|r"))
+Advance(5)
+check("loot: greens, other people's loot and secret lines are ignored", #env.ns.announcer.history, before)
+_G.GetAchievementInfo = function(id)
+	return id, "Explorer"
+end
+FireAll("ACHIEVEMENT_EARNED", 42, true)
+Advance(5)
+check("achievement: one already earned elsewhere is ignored", Shown("achievement"), false)
+FireAll("ACHIEVEMENT_EARNED", 42, false)
+Advance(5)
+check("achievement: a new one shows", Shown("achievement"), true)
+_G.C_QuestLog = { GetTitleForQuestID = function() return "Wolves" end }
+FireAll("QUEST_TURNED_IN", 7, 0, 0)
+Advance(5)
+check("quest: turning one in shows QUEST COMPLETE", Shown("quest"), true)
+local hk = 10
+_G.GetPVPLifetimeStats = function()
+	return hk
+end
+env.ns.SetEvent("honorkill", "enabled", false)
+env.ns.SetEvent("honorkill", "enabled", true)
+FireAll("PLAYER_PVP_KILLS_CHANGED", "player")
+Advance(5)
+check("honorable kill: no change, no banner", Shown("honorkill"), false)
+hk = 11
+FireAll("PLAYER_PVP_KILLS_CHANGED", "player")
+Advance(5)
+check("honorable kill: the lifetime count going up shows it", Shown("honorkill"), true)
+FireAll("ENCOUNTER_START", 1, "Hogger", 1, 5)
+Advance(5)
+check("boss pull: ENCOUNTER_START shows ROUND 1 ... FIGHT!", Shown("bosspull"), true)
+
+-- Records
+Load(true)
+env.ns.SetEvent("record", "enabled", true)
+env.ns.Set("annStack", true)
+M = env.ns.moments
+M.CheckRecord("spree", 3)
+M.CheckRecord("spree", 4)
+Advance(5)
+check("records: bests under the minimum are kept quietly", Shown("record"), false)
+check("records: ...but saved", env.ns.char.records.spree, 4)
+M.CheckRecord("spree", 5)
+M.CheckRecord("spree", 6)
+M.EndRun("spree")
+M.CheckRecord("spree", 7)
+Advance(5)
+check("records: 5 over a best of 4 is quiet (4 is under the minimum)", env.ns.char.records.spree, 7)
+local records = 0
+for _, id in ipairs(env.ns.announcer.history) do
+	if id == "record" then
+		records = records + 1
+	end
+end
+check("records: one banner per run, again after the run ends", records, 2)
+_G.SlashCmdList.KAPOW("records reset")
+check("records: /kapow records reset clears them", env.ns.char.records.spree, nil)
+
+-- Assist
+Load(true)
+env.ns.SetEvent("assist", "enabled", true)
+env.inGroup = true
+Hit("DAMAGE", nil, false)
+FireAll("PARTY_KILL", "Player-2", "Creature-1")
+Advance(10)
+check("assist: a groupmate's kill of what you hit shows ASSIST", Shown("assist"), true)
+before = #env.ns.announcer.history
+env.now = env.now + 20
+FireAll("PARTY_KILL", "Player-2", "Creature-7")
+Advance(10)
+check("assist: not for something you never hit", Shown("assist", before + 1), false)
+
+-- Party sync
+Load(true)
+env.inGroup = true
+local sent = {}
+_G.C_ChatInfo = {
+	RegisterAddonMessagePrefix = function(p)
+		env.prefix = p
+		return true
+	end,
+	SendAddonMessage = function(prefix, text, channel)
+		sent[#sent + 1] = prefix .. " " .. text .. " " .. channel
+	end,
+}
+M = env.ns.moments
+check("sync off: nothing is sent", M.Share("mega", 5), false)
+env.ns.Set("partySync", true)
+check("sync on: the prefix is registered", env.prefix, "KAPOW")
+M.Share("mega", 5)
+check("sync: a moment goes to the party as id and count", sent[1], "KAPOW 1|mega|5 PARTY")
+M.Share("triple", 3)
+check("sync: at most two a second", #sent, 1)
+env.now = env.now + 1
+M.Share("kill", 1)
+check("sync: only shareable moments travel", #sent, 1)
+env.names.player = "Me"
+FireAll("CHAT_MSG_ADDON", "KAPOW", "1|mega|5", "PARTY", "Bob-Realm")
+check("sync: a groupmate's moment lands in the kill feed", env.ns.announcer.feedEntries[1] ~= nil and env.ns.announcer.feedEntries[1].args[1], "Bob")
+local feedCount = #env.ns.announcer.feedEntries
+FireAll("CHAT_MSG_ADDON", "KAPOW", "1|mega|5", "PARTY", "Me-Realm")
+FireAll("CHAT_MSG_ADDON", "KAPOW", "1|os.exit|5", "PARTY", "Bob")
+FireAll("CHAT_MSG_ADDON", "KAPOW", Secret("1|mega|5"), "PARTY", "Bob")
+FireAll("CHAT_MSG_ADDON", "OTHER", "1|mega|5", "PARTY", "Bob")
+check("sync: own echoes, unknown ids, secret text and other prefixes are ignored", #env.ns.announcer.feedEntries, feedCount)
+_G.C_ChatInfo = nil
+
+-- Import clamps the new settings
+Load(true)
+local extrasExport = env.ns.profiles:Export("Default")
+extrasExport = WithNumber(WithNumber(extrasExport, "comboMin", "0"), "bannerY", "1e999")
+extrasExport = WithText(extrasExport, "flash", "strobe")
+local extrasProfile = _G.KapowDB.profiles[env.ns.profiles:Import(extrasExport, "Extras")[1]]
+check("import clamps the combo minimum", extrasProfile.comboMin, 2)
+check("import clamps a place", extrasProfile.bannerY, 3000)
+check("import rejects an unknown flash mode", extrasProfile.flash, "off")
 
 -- ── Pre-12.0 client: no SetAlphaFromBoolean, no secrets, legacy combat-text globals ────
 Load(false)

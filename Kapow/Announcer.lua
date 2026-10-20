@@ -123,70 +123,98 @@ local function IsInterruptSpell(spellID)
 end
 
 -- ── Banner ────────────────────────────────────────────────────────────────────────────
-local stage
+-- One banner at a time by default, in queue order. With annStack, up to STACK_MAX show at
+-- once, each a slot lower on screen; the rest still queue.
+local STACK_MAX = 3
+local STACK_GAP = 120 -- pixels between stacked banners
+local stages, busy, slotOpts, slotDone = {}, {}, {}, {}
 local queue = {}
-local showing = false
 A.history = {} -- event ids shown, newest last (bounded); read by tests and /kapow announce
 A.shownTotal = 0 -- banners shown this session
 
-local function EnsureStage()
-	if stage then
-		return
+local ShowNext
+
+local function EnsureStage(slot)
+	if stages[slot] then
+		return stages[slot]
 	end
-	local root = CreateFrame("Frame", "KapowBanner", UIParent)
+	local root = CreateFrame("Frame", slot == 1 and "KapowBanner" or ("KapowBanner" .. slot), UIParent)
 	root:SetSize(256, 256)
 	root:SetFrameStrata("HIGH")
 	root:EnableMouse(false)
 	root:Hide()
-	stage = ns.display.NewStage(root, root, BANNER_LIFE)
-	A.stage = stage
+	stages[slot] = ns.display.NewStage(root, root, BANNER_LIFE)
+	slotOpts[slot] = {}
+	slotDone[slot] = function()
+		busy[slot] = false
+		ShowNext()
+	end
+	if slot == 1 then
+		A.stage = stages[1]
+	end
+	return stages[slot]
 end
 
-local ShowNext
+local function FreeSlot()
+	local slots = db.annStack and STACK_MAX or 1
+	for slot = 1, slots do
+		if not busy[slot] then
+			return slot
+		end
+	end
+end
 
-local function Done()
-	showing = false
-	ShowNext()
+-- Slot offset, streak size and (with jitterBanners) the same random spread as the hit pops.
+local function OptsFor(slot, entry)
+	local opts = slotOpts[slot]
+	local dx, dy, tilt = 0, 0, 0
+	if db.jitterBanners then
+		dx, dy, tilt = ns.Jitter()
+	end
+	opts.dx, opts.dy, opts.tilt = dx, dy - (slot - 1) * STACK_GAP, tilt
+	opts.sizeMul = entry.opts and entry.opts.sizeMul or nil
+	return opts
 end
 
 ShowNext = function()
-	local entry = table.remove(queue, 1)
-	if not entry then
-		return
+	while queue[1] do
+		local slot = FreeSlot()
+		if not slot then
+			return
+		end
+		local entry = table.remove(queue, 1)
+		local stage = EnsureStage(slot)
+		busy[slot] = true
+		A.shownTotal = A.shownTotal + 1
+		local history = A.history
+		history[#history + 1] = entry.id
+		if #history > 30 then
+			table.remove(history, 1)
+		end
+		ns.display.Play(stage, db.events[entry.id], entry.values, OptsFor(slot, entry), slotDone[slot])
 	end
-	EnsureStage()
-	showing = true
-	A.shownTotal = A.shownTotal + 1
-	local history = A.history
-	history[#history + 1] = entry.id
-	if #history > 30 then
-		table.remove(history, 1)
-	end
-	ns.display.Play(stage, db.events[entry.id], entry.values, nil, Done)
 end
 
--- Queues event `id` with its text values (which may hold secrets).
-function A:Fire(id, values)
+-- Queues event `id` with its text values (which may hold secrets). opts: sizeMul (streaks).
+function A:Fire(id, values, opts)
 	if not db or not On(id) or #queue >= QUEUE_MAX then
 		return
 	end
-	queue[#queue + 1] = { id = id, values = values or {} }
-	if not showing then
-		ShowNext()
-	end
+	queue[#queue + 1] = { id = id, values = values or {}, opts = opts }
+	ShowNext()
 end
 
 -- Shows one event at once with sample values, for the window's Preview button.
-local SAMPLE = { killer = "You", victim = "Hogger", count = 3, total = 5, name = "Bob", level = 42, amount = "12.3K" }
+local SAMPLE = { killer = "You", victim = "Hogger", count = 3, total = 5, name = "Bob", level = 42, amount = "12.3K", overkill = "1.2K" }
 function A:Preview(id)
 	local def = ns.EVENT_BY_ID[id]
 	if def and def.hit then
 		ns.Test(id == "crit" and "pow" or (id == "kill" and "ko" or "overkill"))
 		return
 	end
-	EnsureStage()
-	showing = true
-	ns.display.Play(stage, db.events[id], SAMPLE, nil, Done)
+	local stage = EnsureStage(1)
+	busy[1] = true
+	ns.display.Play(stage, db.events[id], SAMPLE, OptsFor(1, {}), slotDone[1])
 end
 
 -- ── Kill feed ─────────────────────────────────────────────────────────────────────────
@@ -329,6 +357,8 @@ local lastMyKillAt = -100
 local spree = 0
 local lastAvoidAt = -100
 local lastMyInterruptAt = -100
+local interruptStreak, interruptedStreak = 0, 0 -- in a row this fight (interruptGrow)
+local STREAK_STEP, STREAK_MAX = 0.2, 2.0
 local petGUID -- cached on UNIT_PET: the pet's GUID may be gone by the time UNIT_DIED fires
 
 local function CachePet()
@@ -345,6 +375,16 @@ local function ResetFight()
 	fightTotal = 0
 	fightDeaths = false
 	firstBloodDone = false
+	interruptStreak, interruptedStreak = 0, 0
+end
+
+-- An interrupt event with its streak: {count} and, with interruptGrow, a bigger pop each time.
+local function FireInterrupt(id, name, streak)
+	local opts
+	if db.interruptGrow and streak > 1 then
+		opts = { sizeMul = math.min(STREAK_MAX, 1 + STREAK_STEP * (streak - 1)) }
+	end
+	A:Fire(id, { name = name, count = streak }, opts)
 end
 
 local function SpreeEvent(n)
@@ -357,10 +397,67 @@ local function SpreeEvent(n)
 	return nil
 end
 
+-- ── Multi-kill timer bar ──────────────────────────────────────────────────────────────
+-- An idea from MegaKill Announcer: after each kill of yours a thin bar drains over the
+-- MULTI_WINDOW you have to chain the next kill into a multi-kill.
+local STREAK_COLORS = { { 1.00, 0.84, 0.04 }, { 1.00, 0.55, 0.10 }, { 1.00, 0.22, 0.18 }, { 0.78, 0.45, 1.00 } }
+local streakBar
+
+local function EnsureStreakBar()
+	if streakBar then
+		return streakBar
+	end
+	local bar = CreateFrame("StatusBar", "KapowStreakBar", UIParent)
+	bar:SetSize(220, 8)
+	bar:SetPoint("CENTER", UIParent, "CENTER", db.barX or 0, db.barY or 190)
+	if ns.extras then
+		ns.extras.Register("bar", bar)
+	end
+	bar:SetStatusBarTexture("Interface\\Buttons\\WHITE8X8")
+	bar:SetMinMaxValues(0, MULTI_WINDOW)
+	bar:EnableMouse(false)
+	local bg = bar:CreateTexture(nil, "BACKGROUND")
+	bg:SetAllPoints(bar)
+	bg:SetColorTexture(0, 0, 0, 0.6)
+	bar.label = bar:CreateFontString(nil, "OVERLAY")
+	bar.label:SetFont(FONT, 14, "OUTLINE")
+	bar.label:SetPoint("RIGHT", bar, "LEFT", -6, 0)
+	bar:SetScript("OnUpdate", function(self)
+		local left = MULTI_WINDOW - (GetTime() - self.since)
+		if left <= 0 then
+			self:Hide()
+		else
+			self:SetValue(left)
+		end
+	end)
+	bar:Hide()
+	streakBar = bar
+	return bar
+end
+
+-- A kill of yours just landed: (re)start the bar with the chain so far.
+local function StartStreakBar(chain)
+	if not db.annStreakBar then
+		return
+	end
+	local bar = EnsureStreakBar()
+	local c = STREAK_COLORS[math.min(chain, #STREAK_COLORS)]
+	bar:SetStatusBarColor(c[1], c[2], c[3])
+	bar.label:SetText(chain > 1 and ("x" .. chain) or "")
+	bar.since = GetTime()
+	bar:SetValue(MULTI_WINDOW)
+	bar:Show()
+end
+
+local function StopStreakBar()
+	if streakBar then
+		streakBar:Hide()
+	end
+end
+
 -- ── Events ────────────────────────────────────────────────────────────────────────────
 
-local function OnPartyKill(attackerGUID, victimGUID)
-	local who, unit = ns.WhoKilled(attackerGUID)
+local function RecordKill(who, unit, victimGUID)
 	local inGroup = who == "you" or who == "pet" or who == "group" or who == "grouppet"
 	local mine = who == "you" or (who == "pet" and db.killPet)
 	local victim = NameFromGUID(victimGUID, "an enemy")
@@ -385,11 +482,23 @@ local function OnPartyKill(attackerGUID, victimGUID)
 
 	if not firstBloodDone and (InGroup() or db.annFirstBloodSolo) then
 		A:Fire("firstblood", { killer = entry.label, victim = victim })
+		if key == "you" and ns.moments then
+			ns.moments.Share("firstblood", 1)
+		end
 	end
 	firstBloodDone = true
 
+	-- ASSIST: a groupmate (or their pet) finished something you were hitting.
+	if (who == "group" or who == "grouppet") and On("assist") and ns.MyHitOn and ns.MyHitOn(victimGUID) then
+		A:Fire("assist", { name = entry.label, victim = victim })
+	end
+
 	if not mine then
 		return
+	end
+	local moments = ns.moments
+	if moments then
+		moments.Count("kills")
 	end
 
 	local now = GetTime()
@@ -397,16 +506,59 @@ local function OnPartyKill(attackerGUID, victimGUID)
 		myKillTimes = myKillTimes + 1
 	else
 		myKillTimes = 1
+		if moments then
+			moments.EndRun("multi")
+		end
 	end
 	lastMyKillAt = now
+	StartStreakBar(myKillTimes)
 	if myKillTimes >= 2 then
-		A:Fire(MULTI[myKillTimes] or MULTI_MAX, { count = myKillTimes, victim = victim })
+		local id = MULTI[myKillTimes] or MULTI_MAX
+		A:Fire(id, { count = myKillTimes, victim = victim })
+		if moments then
+			if myKillTimes == 2 then
+				moments.Count("multis")
+			end
+			moments.CheckRecord("multi", myKillTimes)
+			moments.Share(id, myKillTimes)
+		end
 	end
 
 	spree = spree + 1
+	if spree == 1 and moments then
+		moments.EndRun("spree")
+	end
 	local spreeEvent = SpreeEvent(spree)
 	if spreeEvent then
 		A:Fire(spreeEvent, { count = spree, victim = victim })
+		if moments then
+			moments.Share(spreeEvent, spree)
+		end
+	end
+	if moments then
+		moments.CheckRecord("spree", spree)
+	end
+end
+
+local function OnPartyKill(attackerGUID, victimGUID)
+	local who, unit = ns.WhoKilled(attackerGUID)
+	if ns.TrackKill(victimGUID, false, who) then
+		RecordKill(who, unit, victimGUID)
+	end
+end
+
+-- A kill of yours from the white combat-log line or the kill statistic (Kapow.lua has
+-- deduplicated it against PARTY_KILL). guid: the victim's, maybe secret or nil, for its name.
+function A:OwnKill(guid)
+	if db and db.enabled then
+		RecordKill("you", nil, guid)
+	end
+end
+
+-- The target-death watcher has already claimed/deduplicated this estimated pet kill.
+function A:PetKill(guid)
+	if db and db.enabled and db.killPet and db.killPetBackup then
+		RecordKill("pet", nil, guid)
 	end
 end
 
@@ -543,6 +695,7 @@ end
 
 local function OnPlayerDead()
 	spree, myKillTimes = 0, 0
+	StopStreakBar()
 	fightDeaths = true
 	local air = FallThatKilled()
 	fallStart, lastLandAt = nil, -100 -- the fall is spent; no hard landing on top
@@ -565,7 +718,20 @@ end
 local function OnTargetInterrupted()
 	if GetTime() - lastMyInterruptAt <= INTERRUPT_WINDOW then
 		lastMyInterruptAt = -100
-		A:Fire("interrupt", { name = UnitName("target") or "them" })
+		interruptStreak = interruptStreak + 1
+		FireInterrupt("interrupt", UnitName("target") or "them", interruptStreak)
+	end
+end
+
+-- The damage meter's Interrupts count changed (Detect.lua, meterInterrupts): an interrupt of
+-- yours on any enemy, when one of your interrupt spells went off just before. The target path
+-- above clears lastMyInterruptAt, so one interrupt shows once.
+local METER_INTERRUPT_WINDOW = 1.0
+function A:OnMeterInterrupt()
+	if db and db.enabled and GetTime() - lastMyInterruptAt <= METER_INTERRUPT_WINDOW then
+		lastMyInterruptAt = -100
+		interruptStreak = interruptStreak + 1
+		FireInterrupt("interrupt", "them", interruptStreak)
 	end
 end
 
@@ -578,7 +744,8 @@ end
 -- carries interruptedBy, a cast you cancelled or moved out of does not.
 local function OnPlayerInterrupted(interruptedBy)
 	if Present(interruptedBy) then
-		A:Fire("interrupted", { name = NameFromGUID(interruptedBy, "an enemy") })
+		interruptedStreak = interruptedStreak + 1
+		FireInterrupt("interrupted", NameFromGUID(interruptedBy, "an enemy"), interruptedStreak)
 	end
 end
 
@@ -618,9 +785,13 @@ function A:Sync()
 	end
 	driver:UnregisterAllEvents()
 	targetCasts:UnregisterAllEvents()
+	if not db.annStreakBar then
+		StopStreakBar()
+	end
 	if not db.enabled then
 		fallFrame:SetScript("OnUpdate", nil)
 		fallStart = nil
+		StopStreakBar()
 		return
 	end
 	Register(driver, "PLAYER_REGEN_DISABLED")

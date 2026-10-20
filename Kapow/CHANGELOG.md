@@ -1,5 +1,72 @@
 # KAPOW! changelog
 
+## Unreleased
+
+Not yet tested in the live client.
+
+### Added
+- **Pet kill backup** (off by default, General tab): estimates a pet kill from your target's death when the
+  killing-blow event is missing. Also feeds the Announcer and kill feed.
+- **Experimental tab** with **hit sounds**: Critical hit, Killing blow and Critical killing blow sounds moved here. They
+  play only when the game says plainly what kind of hit it was, and then only the matching one. "Also when the game
+  hides the hit type" restores the old behaviour (every hit event's sound on every hit).
+
+- **More kill sources** (General tab, each optional): the game's **target death event** (PLAYER_TARGET_DIED: exact
+  timing, still right after a target switch) and the **combat log colour** (Blizzard paints your own killing blow
+  white; KAPOW reads only the colour, never the text, so it knows the kill was yours even when the game hides who
+  died). From MikScrollingBattleText's Forever build and Blizzard's own combat audio alerts.
+- **Accurate** hit attribution (General tab, "Hits that count"): each hit on your target is matched to your weapon
+  swings, casts (by damage type), damage-over-time ticks, pet and combat-log lines. Condensed from
+  MikScrollingBattleText's Forever engine.
+- Experimental tab:
+  - **Overkill numbers on OVERKILL!** from Blizzard's damage meter (`{overkill}` token too). Clears the damage meter
+    window while on, as MidnightBattleText does.
+  - **Interrupts confirmed by the damage meter**, on any enemy, and **interrupt streaks grow**: each interrupt in a row
+    pops bigger, up to double size (`{count}` token).
+  - **Combat text unit**: "Leave it alone" never switches the shared combat-text unit (the PulseHaptics / MidnightFCT
+    conflict); hits then come from your target's own combat events. Default unchanged.
+  - **Kill statistic**: a server kill counter going up confirms your kill (WarCult's method). `/kapow stats` lists them.
+
+- **Animation settings:** a per-event **Duration** (0.5x–3x, the art's flipbook stretches with it); adjustable random
+  **offset** (sideways, up/down) and **tilt** for the hit pops, optionally **also on banners**; **several banners at
+  once** (up to three, stacked) instead of one after another.
+- **Sound pools:** six more of the game's own sounds and three **random pools** (fight start, victory, alert); Fight
+  start and Fight end default to them, and the Roadfighter, Strike Squad and Soccer League themes use them.
+  Generated sounds drop into `Kapow/Sounds/<pool>/` and `scripts/make-sound-catalog.py` adds them.
+- `Kapow/Generation/generationpromptdatabase.md`: prompts for the missing banners (P1 events with text only, P2 a
+  Street Fighter-style Roadfighter set, P3 category gaps) and for high-fidelity announcer and effect sounds.
+
+- **Multi-kill timer bar** (General tab, Announcer; idea from MegaKill Announcer): after each kill of yours a thin bar
+  drains over the 4 s you have to chain the next one, with the chain so far.
+- **UwU mode** (Experimental tab; idea from Forever UwU): a cute word floats up over your character on crits, gated by
+  the crit flag like the comic frames (secret crits included); its optional sound plays only on plain crits.
+
+- **Extras tab** (all off by default; nothing changes until switched on):
+  - **Combo counter**: a fighting-game "12 HITS" counter while your hits on one target keep coming; a **Combo**
+    banner when the chain ends at the minimum or more. Counts hits, never amounts.
+  - **Impact flash** on crit kills, every kill or every crit, behind the same hidden crit/death gates as the comic
+    frames.
+  - **Low health warning** and **FINISH IT!** (execute range on your target): health stays hidden; the client's
+    curve helper (`UnitHealthPercent` with a step curve) turns it into the overlay's opacity, so both work in combat.
+  - **Reduce motion**: no slam, bounce, shake, offset, tilt, flash or pulsing; shorter shows.
+  - **Controller navigation** for this window.
+  - **Placing**: `/kapow unlock` shows drag handles for the hit pops, banners, timer bar, UwU, combo counter and
+    FINISH IT!; banner and other spots are saved per profile.
+  - **Personal records** per character (best multi-kill, spree, combo; kills, multi-kills, duels) and a **New
+    personal record** banner, once per run. `/kapow records`.
+  - **Party sync**: groupmates running KAPOW see your multi-kills, sprees, first blood, combos, records and duel wins
+    in their kill feed. Only an event id and a count are sent.
+- New event groups (all off): **Arcade** (Combo, Countdown 3-2-1 and FIGHT! for arena/battleground gates and pull
+  timers, duel ROUND 1 ... FIGHT!, YOU WIN, YOU LOSE, boss pull) and **Moments** (Assist, New personal record,
+  Achievement, Epic loot, Quest complete, Honorable kill).
+
+### Fixed
+- A sound picked for a hit event played on every hit, up to three at once (sound cannot follow the secret alpha gates).
+- Import kept out-of-range settings from a pasted string (a zero scale errors on every pop; an endless kill delay stops
+  kills resolving). Scale, position, timing and the text choices are now clamped to the window's ranges.
+- Pet kill backup: a crit no longer disappears when you change target right after it; it also works when the
+  target's GUID is hidden, and a killing-blow report with a hidden victim is no longer counted twice.
+
 ## 0.2.0-alpha — 2026-10-19
 
 The addon formerly called PulseComic, renamed and grown from three comic frames into a configurable popup engine.

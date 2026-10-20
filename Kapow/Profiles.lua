@@ -448,6 +448,55 @@ local ENUMS = {
 	font = ns.display.FONTS,
 }
 
+-- Flat settings a pasted profile may set, kept to what the window and slash commands allow.
+-- (A zero scale makes SetScale error on every pop; an endless delay stops kills resolving.)
+local NUMBER_RANGES = {
+	scale = { 0.3, 3 },
+	x = { -3000, 3000 },
+	y = { -3000, 3000 },
+	minInterval = { 0, 2 },
+	killDelay = { 0, 1 },
+	killStatId = { 0, 10000000 },
+	jitterX = { 0, 300 },
+	jitterY = { 0, 300 },
+	jitterTilt = { 0, 45 },
+	comboMin = { 2, 50 },
+	dangerAt = { 0.05, 0.6 },
+	finishAt = { 0.05, 0.5 },
+	bannerX = { -3000, 3000 },
+	bannerY = { -3000, 3000 },
+	barX = { -3000, 3000 },
+	barY = { -3000, 3000 },
+	uwuX = { -3000, 3000 },
+	uwuY = { -3000, 3000 },
+	comboX = { -3000, 3000 },
+	comboY = { -3000, 3000 },
+	finishX = { -3000, 3000 },
+	finishY = { -3000, 3000 },
+}
+local STRING_CHOICES = {
+	uwuSound = ns.display.SOUNDS,
+	attribution = { recent = true, any = true, accurate = true },
+	feedUnit = { target = true, leave = true },
+	meterSource = { hit = true, prev = true },
+	flash = { off = true, critkill = true, kill = true, crit = true },
+}
+
+local function CleanFlat(key, setting, default)
+	local range = NUMBER_RANGES[key]
+	if range and type(setting) == "number" then
+		if setting ~= setting then -- NaN
+			return default
+		end
+		return math.min(range[2], math.max(range[1], setting))
+	end
+	local choices = STRING_CHOICES[key]
+	if choices and not choices[setting] then
+		return default
+	end
+	return setting
+end
+
 local function CleanValue(incoming, default)
 	if type(incoming) ~= type(default) then
 		return CopyValue(default)
@@ -473,7 +522,7 @@ local function CleanProfile(data)
 	end
 	for k, default in pairs(ns.DEFAULTS) do
 		if data[k] ~= nil then
-			profile[k] = CleanValue(data[k], default)
+			profile[k] = CleanFlat(k, CleanValue(data[k], default), default)
 		end
 	end
 	if type(data.events) == "table" then
@@ -488,6 +537,8 @@ local function CleanProfile(data)
 					end
 					if field == "size" then
 						clean = math.min(3, math.max(0.3, clean))
+					elseif field == "duration" then
+						clean = math.min(4, math.max(0.25, clean))
 					end
 					cfg[field] = clean
 				end

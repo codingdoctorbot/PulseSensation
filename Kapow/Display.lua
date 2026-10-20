@@ -45,19 +45,54 @@ for _, font in ipairs(ns.ART_FONTS or {}) do
 end
 D.TEXT_FONT = D.FONTS["black-ops-one"] and "black-ops-one" or "friz"
 
--- key -> { label, SOUNDKIT name }. A kit this client lacks is skipped at play time.
+-- key -> { label, SOUNDKIT name } or { label, pool = { entries } }. A pool plays one entry at
+-- random each time: a SOUNDKIT name, or a file path (generated sounds, SoundCatalog.lua). A
+-- kit this client lacks is skipped at play time. All standard sounds are the game's own.
 D.SOUNDS = {
 	none = { "None" },
 	raidwarning = { "Raid warning", "RAID_WARNING" },
 	readycheck = { "Ready check", "READY_CHECK" },
 	quest = { "Quest complete", "IG_QUEST_LIST_COMPLETE" },
 	alarm = { "Alarm", "ALARM_CLOCK_WARNING_3" },
+	countdown = { "Countdown: go!", "UI_BATTLEGROUND_COUNTDOWN_FINISHED" },
+	queuepop = { "Queue pop", "PVP_THROUGH_QUEUE" },
+	record = { "New record", "UI_CHALLENGES_NEW_RECORD" },
+	legendary = { "Legendary loot", "UI_LEGENDARY_LOOT_TOAST" },
+	bossemote = { "Boss emote", "RAID_BOSS_EMOTE_WARNING" },
+	stunned = { "Stunned", "UI_LOSS_OF_CONTROL_START" },
+	["random:fightstart"] = { "Random: fight start", pool = {
+		"UI_BATTLEGROUND_COUNTDOWN_FINISHED", "PVP_THROUGH_QUEUE", "RAID_WARNING", "UI_LOSS_OF_CONTROL_START",
+	} },
+	["random:victory"] = { "Random: victory", pool = {
+		"UI_CHALLENGES_NEW_RECORD", "UI_LEGENDARY_LOOT_TOAST", "UI_EPICLOOT_TOAST", "IG_QUEST_LIST_COMPLETE",
+		"UI_PERSONAL_LOOT_BANNER",
+	} },
+	["random:alert"] = { "Random: alert", pool = {
+		"RAID_WARNING", "RAID_BOSS_EMOTE_WARNING", "ALARM_CLOCK_WARNING_2", "READY_CHECK",
+	} },
 }
-D.SOUND_ORDER = { "none", "raidwarning", "readycheck", "quest", "alarm" }
+D.SOUND_ORDER = {
+	"none", "raidwarning", "readycheck", "quest", "alarm", "countdown", "queuepop", "record", "legendary",
+	"bossemote", "stunned", "random:fightstart", "random:victory", "random:alert",
+}
+
+-- Generated sound files (SoundCatalog.lua): join a built-in pool of the same id, or add one.
+for poolId, pool in pairs(ns.SOUND_FILES or {}) do
+	local key = "random:" .. poolId
+	local entry = D.SOUNDS[key]
+	if not entry then
+		entry = { "Random: " .. (pool.label or poolId), pool = {} }
+		D.SOUNDS[key] = entry
+		D.SOUND_ORDER[#D.SOUND_ORDER + 1] = key
+	end
+	for _, file in ipairs(pool.files or {}) do
+		entry.pool[#entry.pool + 1] = file
+	end
+end
 
 D.POSITIONS = {
 	comic = { "Comic spot (/kapow pos)" },
-	banner = { "Top banner", 0, 260 },
+	banner = { "Top banner (drag with /kapow unlock)", 0, 260 },
 	low = { "Low centre", 0, -160 },
 	left = { "Left", -380, 120 },
 	right = { "Right", 380, 120 },
@@ -180,14 +215,28 @@ function BUILDERS.static(group, life)
 	Fade(group, life, 1)
 end
 
-local function Group(stage, preset)
-	local group = stage.groups[preset]
+-- One animation group per preset and duration, built on first use (preset -> life -> group).
+local function Group(stage, preset, life)
+	local byLife = stage.groups[preset]
+	if not byLife then
+		byLife = {}
+		stage.groups[preset] = byLife
+	end
+	local group = byLife[life]
 	if not group then
 		group = stage.root:CreateAnimationGroup()
-		BUILDERS[preset](group, stage.life)
-		stage.groups[preset] = group
+		BUILDERS[preset](group, life)
+		byLife[life] = group
 	end
 	return group
+end
+
+local function StopAll(stage)
+	for _, byLife in pairs(stage.groups) do
+		for _, group in pairs(byLife) do
+			group:Stop()
+		end
+	end
 end
 
 -- ── Playing ───────────────────────────────────────────────────────────────────────────
@@ -207,15 +256,48 @@ local function Layout(stage, hasArt)
 	end
 end
 
+-- One sound entry: a file path (it has a backslash) or a SOUNDKIT name. True if it played.
+local function PlayEntry(entry)
+	if string.find(entry, "\\", 1, true) then
+		return _G.PlaySoundFile and _G.PlaySoundFile(entry, "Master") and true or false
+	end
+	local kit = SOUNDKIT and SOUNDKIT[entry]
+	if kit then
+		_G.PlaySound(kit)
+		return true
+	end
+	return false
+end
+
 local function PlayEventSound(key)
 	if not ns.db.annSound then
 		return
 	end
 	local sound = D.SOUNDS[key]
-	local kit = sound and sound[2] and SOUNDKIT and SOUNDKIT[sound[2]]
-	if kit then
-		_G.PlaySound(kit)
+	if not sound then
+		return
 	end
+	local pool = sound.pool
+	if pool then
+		-- A random start, then onwards, so a kit or file this client lacks is skipped.
+		local count = #pool
+		if count == 0 then
+			return
+		end
+		local start = math.random(1, count)
+		for i = 0, count - 1 do
+			if PlayEntry(pool[(start + i - 1) % count + 1]) then
+				return
+			end
+		end
+	elseif sound[2] then
+		PlayEntry(sound[2])
+	end
+end
+
+-- One of D.SOUNDS by key (Event sounds switch respected), for callers outside an event.
+function D.PlaySound(key)
+	PlayEventSound(key)
 end
 
 -- A font file the client cannot load leaves the text on the game font.
@@ -234,15 +316,27 @@ function D.Offset(pos)
 	if pos == "comic" then
 		return ns.db.x, ns.db.y
 	end
+	if pos == "banner" and ns.db.bannerX then
+		return ns.db.bannerX, ns.db.bannerY
+	end
 	return p[2], p[3]
 end
 
 -- Shows `cfg` on `stage`. `values` fills the text templates (may hold secrets).
--- opts: dx, dy, tilt (jitter); onDone: called when it has faded out.
+-- opts: dx, dy, tilt (jitter), silent (skip the sound), sizeMul; onDone: called when it has faded out.
+-- cfg.duration stretches the whole show, flipbook included (1 = the stage's own length).
 function D.Play(stage, cfg, values, opts, onDone)
 	local entry = ns.art.Resolve(cfg.art)
 	local preset = D.ANIMS[cfg.anim] and cfg.anim or "slam"
+	if ns.db.reduceMotion and preset ~= "static" then
+		preset = D.ANIMS[preset].flip and "rise" or "static" -- no slam, bounce or shake
+	end
 	local flip = entry and D.ANIMS[preset].flip
+	local stretch = math.min(4, math.max(0.25, tonumber(cfg.duration) or 1))
+	if ns.db.reduceMotion then
+		stretch = math.min(stretch, 0.75) -- Extras: calmer, shorter shows
+	end
+	local life = stage.life * stretch
 
 	stage.showId = stage.showId + 1
 	local showId = stage.showId
@@ -278,29 +372,28 @@ function D.Play(stage, cfg, values, opts, onDone)
 	local x, y = D.Offset(cfg.pos)
 	root:ClearAllPoints()
 	root:SetPoint("CENTER", UIParent, "CENTER", x + (opts and opts.dx or 0), y + (opts and opts.dy or 0))
-	root:SetScale((ns.db.scale or 1) * (cfg.size or 1))
+	-- A zero scale errors. sizeMul: Announcer streaks grow their banner.
+	root:SetScale(math.max(0.05, (ns.db.scale or 1) * (cfg.size or 1) * (opts and opts.sizeMul or 1)))
 	root:SetAlpha(1)
-	for _, group in pairs(stage.groups) do
-		group:Stop()
-	end
+	StopAll(stage)
 	root:Show()
-	Group(stage, preset):Play()
+	Group(stage, preset, life):Play()
 
 	if flip then
 		local times = ns.art.FRAME_TIMES
-		C_Timer.After(times[1], function()
+		C_Timer.After(times[1] * stretch, function()
 			if stage.showId == showId then
 				stage.tex:SetTexture(entry.frames[2])
 			end
 		end)
-		C_Timer.After(times[1] + times[2], function()
+		C_Timer.After((times[1] + times[2]) * stretch, function()
 			if stage.showId == showId then
 				stage.tex:SetTexture(entry.frames[3])
 			end
 		end)
 	end
 
-	C_Timer.After(stage.life, function()
+	C_Timer.After(life, function()
 		if stage.showId ~= showId then
 			return -- a newer show took over this stage
 		end
@@ -310,14 +403,14 @@ function D.Play(stage, cfg, values, opts, onDone)
 		end
 	end)
 
-	PlayEventSound(cfg.sound)
+	if not (opts and opts.silent) then
+		PlayEventSound(cfg.sound)
+	end
 end
 
 -- Stops a stage at once.
 function D.Stop(stage)
 	stage.showId = stage.showId + 1
-	for _, group in pairs(stage.groups) do
-		group:Stop()
-	end
+	StopAll(stage)
 	stage.root:Hide()
 end

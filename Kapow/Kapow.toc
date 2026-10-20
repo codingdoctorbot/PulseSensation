@@ -17,6 +17,8 @@ Kapow.lua
 Meter.lua
 # Art catalog (Art/ holds the three-frame sequences), events and their looks, drawing.
 ArtCatalog.lua
+# Generated sound pools (Kapow/Sounds/<pool>/, scripts/make-sound-catalog.py).
+SoundCatalog.lua
 Art.lua
 Events.lua
 Display.lua
@@ -26,10 +28,19 @@ Themes.lua
 Profiles.lua
 # Arena-shooter banners (FIRST BLOOD, DOUBLE KILL, MVP ...) and a kill feed.
 Announcer.lua
+# Optional detection sources: combat-log colours, target death event, damage meter, kill statistic.
+Detect.lua
+# "Accurate" hit attribution (swings, casts, school, ticks, pet), condensed from MikScrollingBattleText.
+Attribution.lua
+Extras.lua
+Moments.lua
 # Settings window and minimap button, ported from PulseHaptics' UI (no gamepad support yet).
 UI\Theme.lua
 UI\Rows.lua
 UI\Panel.lua
 UI\EventsPage.lua
 UI\ProfilesPage.lua
+UI\ExperimentalPage.lua
+UI\ExtrasPage.lua
+UI\Gamepad.lua
 UI\Minimap.lua

@@ -5,8 +5,8 @@
 -- close buttons, shown with a plain Show plus UISpecialFrames for Escape, never ShowUIPanel
 -- (that route reaches the gamepad frame-controls manager and its protected calls).
 --
--- Three pages behind tabs: General (this file), Events (EventsPage.lua: what each moment
--- shows) and Profiles (ProfilesPage.lua). Built lazily on first open; no scrolling, no
+-- Four pages behind tabs: General (this file), Events (EventsPage.lua: what each moment
+-- shows), Profiles (ProfilesPage.lua) and Experimental (ExperimentalPage.lua). Built lazily on first open; no scrolling, no
 -- gamepad support yet. Every write goes through ns.Set / ns.SetEvent / ns.profiles, so
 -- slash commands and this window stay in step.
 
@@ -53,7 +53,8 @@ function ns.ui.BuildColumns(parent, specs)
 		column:SetWidth(Theme.COLUMN_WIDTH)
 		return column
 	end
-	local rows = {}
+	local rows = parent.kapowRows or {} -- Gamepad.lua walks these
+	parent.kapowRows = rows
 	local columns, column, y, tallest = 1, NewColumn(1), 0, 0
 	for _, spec in ipairs(specs) do
 		if spec.type == "column" then
@@ -78,7 +79,35 @@ local function GeneralSpecs()
 	return {
 		{ type = "header", label = "General" },
 		Checkbox("enabled", "Enable KAPOW", "Shows comic, arena and announcer moments for your hits, kills and more. What each one looks like is on the Events tab.", { master = true }),
-		Checkbox("jitter", "Random tilt and offset", "Give every hit pop a small random offset and tilt."),
+		Checkbox("jitter", "Random tilt and offset", "Give every hit pop a small random offset and tilt. How much is set below."),
+		{
+			type = "choice",
+			label = "Offset sideways",
+			tooltip = "How far a pop may land left or right of its spot, in pixels each way.",
+			needs = "jitter",
+			choices = { { 0, "0" }, { 20, "20" }, { 40, "40" }, { 80, "80" }, { 140, "140" } },
+			get = Get("jitterX"),
+			set = Set("jitterX"),
+		},
+		{
+			type = "choice",
+			label = "Offset up / down",
+			tooltip = "How far a pop may land above or below its spot, in pixels each way.",
+			needs = "jitter",
+			choices = { { 0, "0" }, { 10, "10" }, { 20, "20" }, { 40, "40" }, { 80, "80" } },
+			get = Get("jitterY"),
+			set = Set("jitterY"),
+		},
+		{
+			type = "choice",
+			label = "Tilt",
+			tooltip = "How far the art may slant either way, in degrees.",
+			needs = "jitter",
+			choices = { { 0, "0°" }, { 4, "4°" }, { 8, "8°" }, { 15, "15°" }, { 25, "25°" } },
+			get = Get("jitterTilt"),
+			set = Set("jitterTilt"),
+		},
+		Checkbox("jitterBanners", "Also on banners", "Announcer banners (FIRST BLOOD, DOUBLE KILL...) get the same random offset and tilt.", { needs = "jitter" }),
 		{
 			type = "choice",
 			label = "Overall size",
@@ -90,8 +119,8 @@ local function GeneralSpecs()
 		{
 			type = "choice",
 			label = "Hits that count",
-			tooltip = "Mine only: hits shortly after your own cast, or while your auto-attack runs.\n\nEvery hit: anyone's hits on your target.",
-			choices = { { "recent", "Mine only" }, { "any", "Every hit" } },
+			tooltip = "Mine only: hits shortly after your own cast, or while your auto-attack runs.\n\nEvery hit: anyone's hits on your target.\n\nAccurate: each hit is matched to your own swings, casts (by damage type), damage-over-time ticks, pet and combat-log lines; anything that fits none is someone else's (from MikScrollingBattleText's Forever engine).",
+			choices = { { "recent", "Mine only" }, { "any", "Every hit" }, { "accurate", "Accurate" } },
 			get = Get("attribution"),
 			set = Set("attribution"),
 		},
@@ -107,7 +136,23 @@ local function GeneralSpecs()
 			"Target death check (UnitIsDead)",
 			"The previous method: checks whether your target is dead a moment after your hit. Cannot tell whose blow it was, so a groupmate's kill also shows."
 		),
-		Checkbox("killPet", "Count pet killing blows", "Your pet's killing blows count as yours. Needs the killing-blow event.", { needs = "killEvent" }),
+		Checkbox(
+			"killTargetDied",
+			"Target death event",
+			"The game's own \"your target died\" event (PLAYER_TARGET_DIED): exact timing, and still right after you switch target. Like the death check, it cannot tell whose blow it was."
+		),
+		Checkbox(
+			"killLogLine",
+			"Combat log colour (your white kill line)",
+			"Blizzard's combat log paints your own killing blows white. KAPOW watches that colour, never the text, so it knows the kill was yours even when the game hides who died. Needs the combat log filter on My actions (Blizzard's default) with default colours. Keeps the combat log's event feed on while active."
+		),
+		Checkbox("killPet", "Count pet killing blows", "Your pet's killing blows count as yours, through the killing-blow event or the optional pet kill backup."),
+		Checkbox(
+			"killPetBackup",
+			"Pet kill backup (target death)",
+			"Estimates a pet kill when your selected target dies just after your pet fought it, without PARTY_KILL. Also updates the Announcer and kill feed. Keep the target selected. Another attacker can land the final blow, so this can overcount in groups. Requires readable target identity and death state. Off by default.",
+			{ needs = "killPet" }
+		),
 		Checkbox(
 			"killLog",
 			"Kill log in chat",
@@ -202,6 +247,8 @@ local function GeneralSpecs()
 		{ type = "note", label = "Which moments show, and how, is on the Events tab." },
 		Checkbox("annSound", "Event sounds", "Master switch for the sound each event can play."),
 		Checkbox("annFirstBloodSolo", "First blood when solo", "Also show First blood when you are not in a group."),
+		Checkbox("annStreakBar", "Multi-kill timer bar", "After each kill of yours a thin bar drains over the 4 seconds you have to chain the next kill into a multi-kill, with the chain so far (x2, x3...)."),
+		Checkbox("annStack", "Several banners at once", "Up to three banners show together, stacked down the screen, instead of one after another. More than three still wait their turn."),
 		Checkbox("annFeed", "Kill feed", "Top right: who in your group killed what. Enemy names are drawn by the client; when it has no name, \"an enemy\"."),
 		{
 			type = "buttons",
@@ -346,7 +393,7 @@ local function buildWindow()
 		return a.def.order < b.def.order
 	end)
 
-	f.pages, f.tabs = {}, {}
+	f.pages, f.tabs, f.tabOrder = {}, {}, {}
 	local tallest, previousTab = 0, nil
 	for _, item in ipairs(order) do
 		local pageFrame = CreateFrame("Frame", nil, f)
@@ -371,6 +418,7 @@ local function buildWindow()
 			SelectPage(f, item.id)
 		end)
 		f.tabs[item.id] = tab
+		f.tabOrder[#f.tabOrder + 1] = item.id
 		previousTab = tab
 	end
 
@@ -378,9 +426,15 @@ local function buildWindow()
 
 	f:SetScript("OnShow", function()
 		ns.ui.Refresh()
+		if ns.ui.gamepad then
+			ns.ui.gamepad.OnShow(f)
+		end
 	end)
 	f:SetScript("OnHide", function()
 		Theme.HideTooltip()
+		if ns.ui.gamepad then
+			ns.ui.gamepad.OnHide()
+		end
 	end)
 
 	tinsert(UISpecialFrames, FRAME_NAME)
@@ -397,6 +451,9 @@ function ns.ui.Refresh()
 	local page = frame.pages[frame.current]
 	if page then
 		page.Refresh()
+	end
+	if ns.ui.gamepad then
+		ns.ui.gamepad.Refresh()
 	end
 end
 

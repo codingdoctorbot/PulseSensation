@@ -62,17 +62,61 @@ local DEFAULTS = {
 	minInterval = 0.12, -- seconds between pops
 	killDelay = 0.15, -- seconds to wait for the target's death state to settle after a hit
 	jitter = true, -- small random offset and tilt per pop
+	jitterX = 40, -- pixels each way, left and right
+	jitterY = 20, -- pixels each way, up and down
+	jitterTilt = 8, -- degrees each way
+	jitterBanners = false, -- the same random offset and tilt on Announcer banners
 	meter = false, -- the hit-meter prototype panel (Meter.lua)
 	meterSource = "hit", -- which health reading drives the OVERKILL slide: "hit" or "prev"
 	-- Kill detection. Either source, both, or neither (then only crits pop).
 	killEvent = true, -- PARTY_KILL: the client names the killing blow's attacker
 	killUnitDead = true, -- UnitIsDead("target") read killDelay after your hit
-	killPet = true, -- your pet's killing blows count as yours (PARTY_KILL only)
+	killPet = true, -- count your pet's kills from PARTY_KILL or the optional backup
+	killPetBackup = false, -- estimate pet kills from a watched target's death when PARTY_KILL is missing
 	killLog = false, -- print who landed every PARTY_KILL, to check group and pet behaviour
+	-- Experimental tab: sounds of the three hit events. Off: hit events stay silent.
+	hitSounds = false, -- play the matching hit event's sound when the game tells the hit type plainly
+	hitSoundsSecret = false, -- also when it hides crit/kill: then every hit event with a sound plays it
+	-- More kill sources (Detect.lua), each optional.
+	killTargetDied = false, -- PLAYER_TARGET_DIED: the exact moment your target died (not whose blow)
+	killLogLine = false, -- your killing blow's white line in Blizzard's combat log (colour only)
+	killStatistic = false, -- a kill statistic (killStatId) going up confirms your kill
+	killStatId = 0,
+	-- Damage meter (Experimental tab). Overkill reading clears Blizzard's damage meter window.
+	meterOverkill = false, -- overkill of your killing hit on OVERKILL! and in {overkill}
+	meterInterrupts = false, -- the meter's Interrupts count confirms your interrupts on any enemy
+	interruptGrow = true, -- each interrupt in a row shows bigger (and fills {count})
+	feedUnit = "target", -- combat-text unit: "target" (switch it, as before) or "leave" (never touch it)
 	-- Announcer (Announcer.lua). Which banners show is per event.
 	annFirstBloodSolo = false, -- FIRST BLOOD also when you are not in a group
 	annFeed = true, -- kill feed: who killed what
 	annSound = true, -- master switch for event sounds
+	annStack = false, -- several banners at once (stacked) instead of one after another
+	annStreakBar = false, -- a draining bar: time left to chain your next kill into a multi-kill
+	uwu = false, -- UwU mode: a cute word floats up over your character on crits
+	uwuSound = "none", -- its sound, played only when the game tells the crit plainly
+	-- Extras.lua, all off by default.
+	comboCounter = false, -- "12 HITS" while you keep hitting your target; Combo banner when it ends
+	comboMin = 5, -- hits for the Combo banner
+	flash = "off", -- impact flash: "off", "critkill", "kill" or "crit"
+	dangerLow = false, -- red screen edges while your health is low (works on hidden health)
+	dangerAt = 0.25,
+	finishIt = false, -- "FINISH IT!" while your target is in execute range (works on hidden health)
+	finishAt = 0.20,
+	reduceMotion = false, -- calmer: no movement, tilt or flash, shorter shows
+	partySync = false, -- tell groupmates who run KAPOW about your big moments (their kill feed)
+	gamepadNav = false, -- drive the settings window with a controller
+	-- Places (Extras.lua's unlock mode drags these; offsets from screen centre).
+	bannerX = 0,
+	bannerY = 260,
+	barX = 0,
+	barY = 190,
+	uwuX = 0,
+	uwuY = 40,
+	comboX = -300,
+	comboY = 80,
+	finishX = 0,
+	finishY = 230,
 	debug = false,
 }
 ns.DEFAULTS = DEFAULTS
@@ -122,6 +166,8 @@ local function Gate(region, value, ifTrue, ifFalse)
 	end
 end
 
+ns.Gate = Gate
+
 -- ── Hit frames ────────────────────────────────────────────────────────────────────────
 -- wantCrit / wantDead: the (crit, dead) pair for which this frame is visible; event: whose
 -- look (art, animation, text, ...) it shows.
@@ -159,27 +205,137 @@ local function EnsureFrames()
 	end
 end
 
+-- ── UwU mode ──────────────────────────────────────────────────────────────────────────
+-- An idea from the Forever UwU addon, built KAPOW's way: a cute word rises over your character
+-- on crits. The crit flag may be secret, so the word sits under its own crit gate (the same
+-- trick as the comic frames) and the client decides whether it shows. Its sound cannot be
+-- gated, so it plays only when the crit flag is plain.
+local UWU_WORDS = { "uwu~", "owo~", "ara ara~", "nya~", "kawaii~", "rawr x3", "senpai~", "baka~" }
+local uwu -- { root, gate, text, anim }, built on first use
+
+local function EnsureUwu()
+	if uwu then
+		return uwu
+	end
+	local root = CreateFrame("Frame", "KapowUwU", UIParent)
+	root:SetSize(240, 60)
+	root:SetPoint("CENTER", UIParent, "CENTER", db.uwuX or 0, db.uwuY or 40)
+	root:SetFrameStrata("HIGH")
+	root:EnableMouse(false)
+	root:Hide()
+	local gate = CreateFrame("Frame", nil, root)
+	gate:SetAllPoints(root)
+	local text = gate:CreateFontString(nil, "OVERLAY")
+	local font = ns.display.FONTS["bubblegum-sans"] or ns.display.FONTS.friz
+	if not text:SetFont(font[2], 30, "THICKOUTLINE") then
+		text:SetFont(ns.display.FONTS.friz[2], 30, "THICKOUTLINE")
+	end
+	text:SetTextColor(1, 0.55, 0.85)
+	text:SetPoint("CENTER", gate, "CENTER", 0, 0)
+	local anim = root:CreateAnimationGroup()
+	local rise = anim:CreateAnimation("Translation")
+	rise:SetOffset(0, 50)
+	rise:SetDuration(1.2)
+	rise:SetSmoothing("OUT")
+	local fade = anim:CreateAnimation("Alpha")
+	fade:SetFromAlpha(1)
+	fade:SetToAlpha(0)
+	fade:SetStartDelay(0.6)
+	fade:SetDuration(0.6)
+	anim:SetScript("OnFinished", function()
+		root:Hide()
+	end)
+	uwu = { root = root, gate = gate, text = text, anim = anim }
+	if ns.extras then
+		ns.extras.Register("uwu", root)
+	end
+	return uwu
+end
+
+-- isCrit may be secret: it only ever reaches the gate (and PlainBool for the sound).
+local function UwuPop(isCrit)
+	local u = EnsureUwu()
+	Gate(u.gate, isCrit, 1, 0)
+	u.text:SetText(UWU_WORDS[math.random(1, #UWU_WORDS)])
+	u.anim:Stop()
+	u.root:SetAlpha(1)
+	u.root:Show()
+	u.anim:Play()
+	return u
+end
+ns.UwuPop = UwuPop
+
 -- ── Showing a pop ─────────────────────────────────────────────────────────────────────
 -- isCrit / isDead may be secret booleans, amount a secret number, or plain values from
 -- /kapow test. Never read them.
 local popValues = {}
 local popOpts = {}
 
+-- A random offset and tilt within the jitter settings (0, 0, 0 with jitter off).
+local function Spread(limit)
+	local n = math.floor(math.max(0, tonumber(limit) or 0))
+	return n > 0 and math.random(-n, n) or 0
+end
+
+function ns.Jitter()
+	if not db.jitter or db.reduceMotion then
+		return 0, 0, 0
+	end
+	return Spread(db.jitterX), Spread(db.jitterY), math.rad(Spread(db.jitterTilt))
+end
+-- The Crit kill look with its detail line swapped for one that adds the overkill (meterOverkill).
+local overkillMeta = {}
+local overkillCfg = setmetatable({ sub = "{amount}  +{overkill} overkill" }, overkillMeta)
+
+-- A plain copy of a possibly-secret boolean, or nil when the game hid it.
+local function PlainBool(v)
+	if issecretvalue(v) then
+		return nil
+	end
+	return v == true
+end
+
 local function Pop(isCrit, isDead, amount)
 	EnsureFrames()
-	popValues.amount = AmountText(amount)
-	local dx, dy, tilt = 0, 0, 0
-	if db.jitter then
-		dx, dy, tilt = math.random(-40, 40), math.random(-20, 20), math.rad(math.random(-8, 8))
+	if db.flash ~= "off" and ns.extras then
+		ns.extras.Flash(isCrit, isDead)
 	end
-	popOpts.dx, popOpts.dy, popOpts.tilt = dx, dy, tilt
+	if db.uwu then
+		UwuPop(isCrit)
+		if PlainBool(isCrit) == true and db.uwuSound ~= "none" then
+			ns.display.PlaySound(db.uwuSound)
+		end
+	end
+	-- Sound cannot be gated by the secret alpha, so it plays only where the hit type is known:
+	-- with plain flags exactly the visible frame's sound, with hidden ones none (or, with the
+	-- experimental hitSoundsSecret, every hit event's sound as before).
+	local knownCrit, knownDead = PlainBool(isCrit), PlainBool(isDead)
+	local known = knownCrit ~= nil and knownDead ~= nil
+	-- The damage meter's overkill of this kill (maybe secret, only ever drawn), or nil.
+	local overkill = ns.detect and ns.detect.FreshOverkill()
+	local hasOverkill = issecretvalue(overkill) or overkill ~= nil
+	popValues.overkill = hasOverkill and AmountText(overkill) or nil
+	popValues.amount = AmountText(amount)
+	popOpts.dx, popOpts.dy, popOpts.tilt = ns.Jitter()
 	for _, style in ipairs(STYLES) do
 		local f = frames[style.key]
 		local cfg = ns.EventConfig(style.event)
 		if cfg.enabled then
 			Gate(f.critGate, isCrit, style.wantCrit and 1 or 0, style.wantCrit and 0 or 1)
 			Gate(f.deadGate, isDead, style.wantDead and 1 or 0, style.wantDead and 0 or 1)
-			ns.display.Play(f.stage, cfg, popValues, popOpts)
+			local audible
+			if known then
+				audible = knownCrit == style.wantCrit and knownDead == style.wantDead
+			else
+				audible = db.hitSoundsSecret
+			end
+			popOpts.silent = not (db.hitSounds and audible)
+			local look = cfg
+			if hasOverkill and style.event == "critkill" and cfg.details then
+				overkillMeta.__index = cfg
+				look = overkillCfg
+			end
+			ns.display.Play(f.stage, look, popValues, popOpts)
 		else
 			ns.display.Stop(f.stage)
 		end
@@ -242,6 +398,8 @@ local killConsumed = true -- whether a pop has already shown that kill
 
 -- The latest hit on the target, attributed or not. A pet's killing blow pops with it.
 local lastHitAt, lastHitCrit, lastHitAmount = -100, false, nil
+local lastHitKey -- TargetKey() of the target that hit landed on
+local targetSerial = 0
 
 -- Secret first: a secret may not even be compared with nil.
 local function Plain(v)
@@ -295,6 +453,216 @@ end
 
 ns.Plain, ns.WhoKilled, ns.UnitLabel = Plain, WhoKilled, UnitLabel
 
+-- ── Pet kill backup (optional, off by default) ────────────────────────────────────────
+-- Only deduplicates collisions with the optional backup; ordinary PARTY_KILL handling stays
+-- unchanged. A kill is matched by its victim GUID when that is plain. When the client hides
+-- it (unit-identity restrictions make GUIDs secret), timing decides instead: a killing-blow
+-- report and an estimate less than DUP_WINDOW apart are taken to be the same kill.
+local DUP_WINDOW = 1.0
+local OWN_DUP = 0.5 -- a log line, a statistic and a PARTY_KILL of yours this close are one kill
+local recentKills = {}
+local lastOwnKillAt, lastOwnSource = -100, nil -- the latest kill of yours shown, and from where
+local lastReportAt, lastReportGUID, lastReportPet = -100, nil, false
+local lastBackupAt, lastBackupGUID, lastBackupKey = -100, nil, nil
+
+local function PlainGUID(guid)
+	if Plain(guid) and type(guid) == "string" then
+		return guid
+	end
+end
+
+local function FindKill(guid)
+	local plain = PlainGUID(guid)
+	if not plain then
+		return nil
+	end
+	for _, entry in ipairs(recentKills) do
+		if entry.guid == plain and GetTime() - entry.at < 10 then
+			return entry
+		end
+	end
+end
+
+local function RememberKill(guid, backup)
+	if #recentKills >= 32 then
+		table.remove(recentKills, 1)
+	end
+	recentKills[#recentKills + 1] = { guid = guid, at = GetTime(), backup = backup }
+end
+
+-- Whether a kill is new. backup = true: the estimate asks. Otherwise a PARTY_KILL asks, with
+-- `who` from WhoKilled. Kapow.lua and Announcer.lua both ask about the same PARTY_KILL and
+-- get the same answer.
+function ns.TrackKill(guid, backup, who)
+	local now = GetTime()
+	local plain = PlainGUID(guid)
+	if backup then
+		if plain and FindKill(plain) then
+			return false
+		end
+		if now - lastOwnKillAt <= DUP_WINDOW then
+			return false -- a log line, statistic or report of yours already showed this kill
+		end
+		-- A report around this death that cannot be told apart from it wins: one with a hidden
+		-- victim, or the pet's own report when either GUID is hidden.
+		if now - lastReportAt <= DUP_WINDOW
+			and (lastReportGUID == nil or (lastReportPet and (plain == nil or lastReportGUID == plain))) then
+			return false
+		end
+		lastBackupAt, lastBackupGUID = now, plain
+		if plain then
+			RememberKill(plain, true)
+		end
+		return true
+	end
+	local entry = FindKill(plain)
+	local fresh
+	local own = who == "you" or who == "pet"
+	if own and lastOwnSource ~= "report" and now - lastOwnKillAt <= OWN_DUP then
+		fresh = false -- the combat-log line or the statistic already showed this kill
+	elseif entry then
+		fresh = not entry.backup
+	elseif who == "pet" and now - lastBackupAt <= DUP_WINDOW and (lastBackupGUID == nil or plain == nil) then
+		fresh = false -- the pet kill the estimate already showed, reported with a hidden GUID
+	else
+		fresh = true
+		if plain then
+			RememberKill(plain, false)
+		end
+	end
+	lastReportAt, lastReportGUID, lastReportPet = now, plain, who == "pet"
+	if own and fresh then
+		lastOwnKillAt, lastOwnSource = now, "report"
+	end
+	return fresh
+end
+
+-- The selected target as something comparable: its GUID when plain, otherwise the selection
+-- itself (PLAYER_TARGET_CHANGED bumps targetSerial), so a hidden identity still works.
+local serialKey, serialKeyFor
+local function TargetKey()
+	local guid = PlainGUID(UnitGUID("target"))
+	if guid then
+		return guid, guid
+	end
+	local exists = UnitExists("target")
+	if issecretvalue(exists) or not exists then
+		return nil
+	end
+	if serialKeyFor ~= targetSerial then
+		serialKey, serialKeyFor = "target#" .. targetSerial, targetSerial
+	end
+	return serialKey, nil
+end
+
+-- Watch an alive target while the pet is actually fighting it. The short grace window
+-- covers pettarget disappearing on death; it does not credit an idle pet's selected target.
+-- This confirms death, not the killer: the UI labels the attribution as an estimate.
+local petWatch = CreateFrame("Frame", "KapowPetKillWatcher")
+local petKey, petAlive, petPending
+local petSeenAt, petElapsed, petGeneration = -100, 0, 0
+
+local function ResetPetWatch()
+	petGeneration = petGeneration + 1
+	petKey, petAlive, petPending = nil, false, false
+	petSeenAt, petElapsed = -100, 0
+end
+
+local function PetBackupOn()
+	return db and db.enabled and db.killPet and db.killPetBackup
+end
+
+local function ReadPetDead()
+	local state = UnitIsDead("target")
+	if not issecretvalue(state) and type(state) == "boolean" then
+		return state
+	end
+end
+
+local function PollPetKill()
+	if not PetBackupOn() then
+		return
+	end
+	local key, guid = TargetKey()
+	if not key then
+		ResetPetWatch()
+		return
+	end
+	if key ~= petKey then
+		ResetPetWatch()
+		petKey = key
+	end
+	local state = ReadPetDead()
+	if state == nil then
+		ResetPetWatch()
+		return
+	end
+	if not state then
+		petAlive = true
+		local exists = UnitExists("pet")
+		if not issecretvalue(exists) and exists then
+			local ok, same = pcall(UnitIsUnit, "pettarget", "target")
+			local fighting = UnitAffectingCombat("pet")
+			if ok and not issecretvalue(same) and not issecretvalue(fighting) and same and fighting then
+				petSeenAt = GetTime()
+			end
+		end
+		return
+	end
+	if not petAlive or petPending or GetTime() - petSeenAt > 0.7 or FindKill(guid) then
+		return
+	end
+	petPending = true
+	local serial, generation = targetSerial, petGeneration
+	-- The victim's GUID as the client gives it (maybe secret): only for drawing its name.
+	local rawGUID = UnitGUID("target")
+	-- Give a real killing-blow event priority over the estimate.
+	C_Timer.After(db.killDelay, function()
+		if not PetBackupOn() or serial ~= targetSerial or generation ~= petGeneration or key ~= petKey then
+			return
+		end
+		petPending = false
+		if ReadPetDead() ~= true or not ns.TrackKill(guid, true) then
+			return
+		end
+		lastBackupKey = key
+		local crit, damage = false, nil
+		if lastHitKey == key and GetTime() - lastHitAt <= KILL_WINDOW + db.killDelay then
+			crit, damage = lastHitCrit, lastHitAmount
+		end
+		Pop(crit, true, damage)
+		if ns.announcer then
+			ns.announcer:PetKill(rawGUID)
+		end
+		if db.killLog then
+			Say("kill: your pet, your target — backup estimate (no PARTY_KILL)")
+		end
+	end)
+end
+
+-- Whether the backup has taken (or is taking) the kill on the target a hit landed on.
+local function PetBackupHandles(key)
+	if not PetBackupOn() or not key then
+		return false
+	end
+	if petPending and key == petKey then
+		return true
+	end
+	if lastBackupKey == key and GetTime() - lastBackupAt <= DUP_WINDOW then
+		return true
+	end
+	local entry = FindKill(key) -- the key is the GUID when that is plain
+	return entry ~= nil and entry.backup
+end
+
+local function PollPetUpdate(_, elapsed)
+	petElapsed = petElapsed + elapsed
+	if petElapsed >= 0.05 then
+		petElapsed = 0
+		PollPetKill()
+	end
+end
+
 local WHO_TEXT = {
 	you = "you",
 	pet = "your pet",
@@ -336,12 +704,17 @@ end
 
 -- Whether a hit at `hitAt` killed. Plain true for a counted killing blow; otherwise the
 -- UnitIsDead reading (possibly secret), or plain false.
-local function ResolveDead(hitAt)
-	if db.killEvent and lastKillAt >= hitAt - KILL_WINDOW then
+-- skipTargetRead: the target changed since the hit, so UnitIsDead would describe another unit.
+-- serial: targetSerial when the hit landed (PLAYER_TARGET_DIED is tied to that selection).
+local function ResolveDead(hitAt, skipTargetRead, serial)
+	if (db.killEvent or db.killLogLine or db.killStatistic) and lastKillAt >= hitAt - KILL_WINDOW then
 		killConsumed = true
 		return true
 	end
-	if db.killUnitDead then
+	if ns.detect and ns.detect.TargetDiedSince(hitAt - KILL_WINDOW, serial) then
+		return true
+	end
+	if db.killUnitDead and not skipTargetRead then
 		local dead = UnitIsDead("target")
 		if type(dead) == "boolean" then
 			return dead
@@ -355,11 +728,12 @@ local function OnPartyKill(attackerGUID, victimGUID)
 		return
 	end
 	local who, unit = WhoKilled(attackerGUID)
+	local fresh = ns.TrackKill(victimGUID, false, who)
 	local counted = db.killEvent and (who == "you" or (who == "pet" and db.killPet))
 	if db.killLog then
 		LogKill(who, unit, victimGUID, counted)
 	end
-	if not counted then
+	if not counted or not fresh then
 		return
 	end
 	local killAt = GetTime()
@@ -379,20 +753,151 @@ local function OnPartyKill(attackerGUID, victimGUID)
 	end)
 end
 
+-- A kill of yours from a source that names no victim: the white combat-log line or the kill
+-- statistic. Shown like a counted PARTY_KILL, once (TrackKill deduplicates the report).
+local OWN_SOURCES = { log = "the combat log's white line", statistic = "the kill statistic" }
+local function OwnKill(source)
+	if not db.enabled then
+		return
+	end
+	local killAt = GetTime()
+	if killAt - lastOwnKillAt <= OWN_DUP then
+		return
+	end
+	lastOwnKillAt, lastOwnSource = killAt, source
+	lastKillAt, killConsumed = killAt, false
+	C_Timer.After(db.killDelay + 0.05, function()
+		if killConsumed or lastKillAt ~= killAt or not db.enabled then
+			return
+		end
+		killConsumed = true
+		local isCrit, amount = false, nil
+		if killAt - lastHitAt <= KILL_WINDOW then
+			isCrit, amount = lastHitCrit, lastHitAmount
+		end
+		Pop(isCrit, true, amount)
+	end)
+	if ns.announcer then
+		-- The victim is most likely your dead target; its GUID (maybe secret) only names it.
+		local targetDead = PlainBool(UnitIsDead("target"))
+		ns.announcer:OwnKill(targetDead and UnitGUID("target") or nil)
+	end
+	if db.killLog then
+		Say("kill: you — from " .. OWN_SOURCES[source])
+	end
+end
+
+function ns.OnLogKill()
+	OwnKill("log")
+end
+
+function ns.OnStatKill()
+	OwnKill("statistic")
+end
+
+function ns.TargetSerial()
+	return targetSerial
+end
+
+-- PLAYER_TARGET_DIED (Detect.lua): lets the pet backup see the death at once.
+function ns.OnTargetDied()
+	if PetBackupOn() then
+		PollPetKill()
+	end
+end
+
 -- ── Resolving a hit ───────────────────────────────────────────────────────────────────
 local lastPopAt = 0
 
 -- Called with the crit flag of one hit. Whether it killed is decided a moment later,
 -- because neither the death state nor PARTY_KILL is in place at the instant of the hit.
-local function OnHit(isCrit, amount)
+local accurateHit -- the hit Accurate attribution is about to decide (both feeds may report it)
+local lastMyHitAt, lastMyHitKey = -100, nil -- the latest hit judged yours, and on what
+
+-- A hit was judged yours (any attribution mode): feeds the combo counter and assists.
+local function MyHit(now, key)
+	lastMyHitAt, lastMyHitKey = now, key
+	if ns.extras then
+		ns.extras.OnMyHit(key, now)
+	end
+end
+
+-- Whether you hit the victim of a kill in the last few seconds (Announcer's Assist). The victim's
+-- GUID may be hidden: then your current target counts if it is the one you hit and is dead.
+function ns.MyHitOn(victimGUID)
+	if GetTime() - lastMyHitAt > 6 or not lastMyHitKey then
+		return false
+	end
+	local plain = PlainGUID(victimGUID)
+	if plain then
+		return plain == lastMyHitKey
+	end
+	return TargetKey() == lastMyHitKey and PlainBool(UnitIsDead("target")) == true
+end
+
+-- The pop of a hit already judged yours, killDelay after it landed.
+local function Resolve(isCrit, amount, now, hitKey, serial)
+	-- With the pet backup on, a target change during the delay still shows the hit; only a
+	-- reported killing blow can then make it a kill, not the new target's death state.
+	local stale = PetBackupOn() and serial ~= targetSerial
+	if not stale then
+		PollPetKill()
+		if PetBackupHandles(hitKey) then
+			return
+		end
+	end
+	Pop(isCrit, ResolveDead(now, stale, serial), amount)
+end
+
+-- Accurate attribution (Attribution.lua) decides after the delay, when a swing or a combat-log
+-- line reported just after the hit is known too; the throttle applies to hits judged yours.
+local function OnAccurateHit(isCrit, amount, school, now, hitKey, serial)
+	if accurateHit and now - accurateHit.at < 0.05 then
+		-- The same hit from the other feed: keep the school if this one has it.
+		if accurateHit.school == nil then
+			accurateHit.school = school
+		end
+		return
+	end
+	local hit = { at = now, school = school }
+	accurateHit = hit
+	C_Timer.After(db.killDelay, function()
+		if not db.enabled or not ns.attribution then
+			return
+		end
+		local who = ns.attribution.Match(hit.school, hit.at)
+		if not who or (who == "pet" and not db.killPet) then
+			return
+		end
+		MyHit(now, hitKey)
+		if ns.meter then
+			ns.meter:OnHit(amount)
+		end
+		local t = GetTime()
+		if t - lastPopAt < db.minInterval then
+			return
+		end
+		lastPopAt = t
+		Resolve(isCrit, amount, now, hitKey, serial)
+	end)
+end
+
+local function OnHit(isCrit, amount, school)
 	if not db.enabled then
 		return
 	end
 	local now = GetTime()
 	lastHitAt, lastHitCrit, lastHitAmount = now, isCrit, amount
+	lastHitKey = TargetKey()
+	local hitKey, serial = lastHitKey, targetSerial
+	if db.attribution == "accurate" then
+		OnAccurateHit(isCrit, amount, school, now, hitKey, serial)
+		return
+	end
 	if not IsMine() then
 		return
 	end
+	MyHit(now, hitKey)
 	-- The meter sees every attributed hit, before the pop throttle.
 	if ns.meter then
 		ns.meter:OnHit(amount)
@@ -405,7 +910,7 @@ local function OnHit(isCrit, amount)
 		if not db.enabled then
 			return
 		end
-		Pop(isCrit, ResolveDead(now), amount)
+		Resolve(isCrit, amount, now, hitKey, serial)
 	end)
 end
 
@@ -453,7 +958,7 @@ local function OnCombatText(messageType)
 	end
 end
 
-local function OnUnitCombat(unit, action, flagText, amount)
+local function OnUnitCombat(unit, action, flagText, amount, schoolMask)
 	if unit ~= "target" then
 		return
 	end
@@ -475,28 +980,49 @@ local function OnUnitCombat(unit, action, flagText, amount)
 	if action ~= "WOUND" then
 		return -- heals, energizes, misses, dodges and the like
 	end
-	OnHit(flagText == "CRITICAL", amount)
+	OnHit(flagText == "CRITICAL", amount, schoolMask)
 end
 
 local driver = CreateFrame("Frame")
 local function SyncSources()
+	ResetPetWatch()
+	petWatch:SetScript("OnUpdate", PetBackupOn() and PollPetUpdate or nil)
 	driver:UnregisterEvent("COMBAT_TEXT_UPDATE")
 	driver:UnregisterEvent("UNIT_COMBAT")
 	driver:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED")
 	pcall(driver.UnregisterEvent, driver, "PARTY_KILL")
+	pcall(driver.UnregisterEvent, driver, "PLAYER_SWING")
+	if ns.detect then
+		ns.detect.Sync()
+	end
+	if ns.extras then
+		ns.extras.Sync()
+	end
+	if ns.moments then
+		ns.moments.Sync()
+	end
 	if not db.enabled then
 		return
 	end
-	driver:RegisterEvent("COMBAT_TEXT_UPDATE")
+	local switchFeed = db.feedUnit ~= "leave"
+	if switchFeed then
+		driver:RegisterEvent("COMBAT_TEXT_UPDATE")
+	end
 	driver:RegisterUnitEvent("UNIT_COMBAT", "target")
 	driver:RegisterUnitEvent("UNIT_SPELLCAST_SUCCEEDED", "player")
-	if db.killEvent or db.killLog then
-		-- pcall: a client without the event refuses to register it.
+	if db.attribution == "accurate" then
+		pcall(driver.RegisterEvent, driver, "PLAYER_SWING") -- Forever only
+	end
+	if db.killEvent or db.killLog or PetBackupOn() or db.killLogLine or db.killStatistic then
+		-- pcall: a client without the event refuses to register it. The log line and statistic
+		-- sources listen too, so a report of the same kill is recognised as one.
 		pcall(driver.RegisterEvent, driver, "PARTY_KILL")
 	end
 	-- NOTE: the active unit is global. PulseHaptics sets it to "player" for its own damage-taken
-	-- cues; whichever addon sets it last wins. See the README.
-	if SetActiveUnit then
+	-- cues and MidnightFCT sets it back to "player" whenever it changes; whichever addon sets it
+	-- last wins. feedUnit = "leave" never touches it (hits then come from UNIT_COMBAT only, as
+	-- MikScrollingBattleText and MidnightFCT do). See the README.
+	if switchFeed and SetActiveUnit then
 		pcall(SetActiveUnit, "target")
 	end
 end
@@ -527,9 +1053,19 @@ driver:SetScript("OnEvent", function(_, event, ...)
 		return
 	end
 	if event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_TARGET_CHANGED" then
+		targetSerial = targetSerial + 1
 		SyncSources()
 	elseif event == "UNIT_SPELLCAST_SUCCEEDED" then
 		lastCastAt = GetTime()
+		if ns.attribution then
+			local unit, _, spellID = ...
+			ns.attribution.OnCast(unit, spellID)
+		end
+	elseif event == "PLAYER_SWING" then
+		if ns.attribution then
+			local _, swingType = ...
+			ns.attribution.OnSwing(swingType)
+		end
 	elseif event == "COMBAT_TEXT_UPDATE" then
 		OnCombatText(...)
 	elseif event == "UNIT_COMBAT" then
@@ -541,15 +1077,25 @@ end)
 
 -- ── Settings API (slash commands and the settings window) ─────────────────────────────
 -- Every change goes through here, so a toggle has the same effect wherever it is made.
+local SYNC_KEYS = {
+	enabled = true, killEvent = true, killLog = true, killPet = true, killPetBackup = true,
+	killTargetDied = true, killLogLine = true, killStatistic = true, killStatId = true,
+	meterOverkill = true, meterInterrupts = true, feedUnit = true, attribution = true,
+	comboCounter = true, flash = true, dangerLow = true, dangerAt = true, finishIt = true, finishAt = true,
+	reduceMotion = true, partySync = true, gamepadNav = true,
+}
 function ns.Set(key, value)
 	db[key] = value
-	if key == "enabled" or key == "killEvent" or key == "killLog" then
+	if SYNC_KEYS[key] then
 		SyncSources()
 	elseif key == "meter" and ns.meter then
 		ns.meter:Refresh()
 	end
 	if ns.announcer and (key == "enabled" or string.sub(key, 1, 3) == "ann") then
 		ns.announcer:Sync()
+	end
+	if ns.extras and ns.extras.IsPlaceKey(key) then
+		ns.extras.PlaceAll()
 	end
 	if ns.ui and ns.ui.Refresh then
 		ns.ui.Refresh()
@@ -566,6 +1112,9 @@ function ns.SetEvent(id, field, value)
 	db.events[id][field] = value
 	if field == "enabled" and ns.announcer then
 		ns.announcer:Sync()
+	end
+	if field == "enabled" and ns.moments then
+		ns.moments.Sync()
 	end
 	if ns.ui and ns.ui.Refresh then
 		ns.ui.Refresh()
@@ -621,9 +1170,12 @@ local KILL_KEYS = {
 	death = { "killUnitDead", "target death check (UnitIsDead)" },
 	pet = { "killPet", "pet killing blows" },
 	log = { "killLog", "kill log in chat" },
+	died = { "killTargetDied", "target death event (PLAYER_TARGET_DIED)" },
+	line = { "killLogLine", "combat log colour (your white kill line)" },
+	stat = { "killStatistic", "kill statistic" },
 }
 
-local HELP = "/kapow opens settings  ·  test pow|ko|overkill|hit  ·  on|off  ·  kill event|death|pet|log  ·  announce test  ·  profile [name]  ·  credits  ·  scale <n>  ·  pos <x> <y>  ·  attribution recent|any  ·  numbers  ·  meter  ·  jitter  ·  minimap  ·  debug"
+local HELP = "/kapow opens settings  ·  test pow|ko|overkill|hit  ·  on|off  ·  kill event|death|died|line|stat|pet|log  ·  stats  ·  announce test  ·  profile [name]  ·  credits  ·  scale <n>  ·  pos <x> <y>  ·  unlock|lock  ·  records [reset]  ·  attribution recent|any|accurate  ·  numbers  ·  meter  ·  jitter  ·  minimap  ·  debug"
 
 SLASH_KAPOW1 = "/kapow"
 SLASH_KAPOW2 = "/comic" -- the name before KAPOW
@@ -648,7 +1200,7 @@ SlashCmdList["KAPOW"] = function(input)
 		if entry then
 			Say(entry[2] .. " " .. (ns.Toggle(entry[1]) and "on" or "off"))
 		else
-			Say("usage: /kapow kill event | death | pet | log")
+			Say("usage: /kapow kill event | death | died | line | stat | pet | log")
 		end
 	elseif cmd == "scale" then
 		local n = tonumber(arg)
@@ -667,11 +1219,11 @@ SlashCmdList["KAPOW"] = function(input)
 			Say("usage: /kapow pos <x> <y>  (pixels from screen centre)")
 		end
 	elseif cmd == "attribution" then
-		if arg == "any" or arg == "recent" then
+		if arg == "any" or arg == "recent" or arg == "accurate" then
 			ns.Set("attribution", arg)
 			Say("attribution " .. arg)
 		else
-			Say("usage: /kapow attribution recent | any")
+			Say("usage: /kapow attribution recent | any | accurate")
 		end
 	elseif cmd == "meter" then
 		if ns.meter then
@@ -698,6 +1250,23 @@ SlashCmdList["KAPOW"] = function(input)
 	elseif cmd == "announce" or cmd == "ann" then
 		if ns.announcer then
 			ns.announcer:Command(arg)
+		end
+	elseif cmd == "unlock" or cmd == "lock" then
+		if ns.extras then
+			ns.extras.SetUnlocked(cmd == "unlock")
+		end
+	elseif cmd == "records" then
+		if ns.moments then
+			if string.lower(arg) == "reset" then
+				ns.moments.ResetRecords()
+				Say("records reset for this character")
+			else
+				ns.moments.PrintRecords()
+			end
+		end
+	elseif cmd == "stats" then
+		if ns.detect then
+			ns.detect.ListKillStatistics()
 		end
 	elseif cmd == "credits" then
 		ns.PrintCredits()

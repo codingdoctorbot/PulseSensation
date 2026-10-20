@@ -12,12 +12,13 @@
 --   details   whether the detail line shows (for hit events: the damage number)
 --   color     title color key (Display.COLORS)
 --   size      scale multiplier
+--   duration  how long it stays, as a multiple of its normal length (flipbook included)
 --   pos       where it shows: comic, banner, low, left, right
 --   sound     sound key (Display.SOUNDS)
 --   font      font key for the title and detail line (Display.FONTS); "auto" matches the art
 --
 -- TEXT TEMPLATES. {token} fills from the event's values: {killer} {victim} {count} {amount}
--- {name} {level} {total} {time}. Values may be secret (an enemy's name, a damage amount), so a
+-- {name} {level} {total} {time} {overkill}. Values may be secret (an enemy's name, a damage amount), so a
 -- template is turned into a plain format string plus an argument list and handed to
 -- FontString:SetFormattedText, which draws secrets. Nothing here reads a value.
 
@@ -29,9 +30,9 @@ ns.EVENTS = {
 	-- Hits
 	{ id = "crit", group = "hits", label = "Critical hit", hit = true, tokens = "{amount}",
 		art = "comic/pow", anim = "flipbook", title = "", sub = "{amount}", pos = "comic", sound = "none" },
-	{ id = "kill", group = "hits", label = "Killing blow", hit = true, tokens = "{amount}",
+	{ id = "kill", group = "hits", label = "Killing blow", hit = true, tokens = "{amount} {overkill}",
 		art = "comic/ko", anim = "flipbook", title = "", sub = "{amount}", pos = "comic", sound = "none" },
-	{ id = "critkill", group = "hits", label = "Critical killing blow", hit = true, tokens = "{amount}",
+	{ id = "critkill", group = "hits", label = "Critical killing blow", hit = true, tokens = "{amount} {overkill}",
 		art = "comic/overkill", anim = "flipbook", title = "", sub = "{amount}", pos = "comic", sound = "none" },
 
 	-- Kills
@@ -70,9 +71,9 @@ ns.EVENTS = {
 
 	-- Fight flow: from entering combat to leaving it
 	{ id = "kickoff", group = "fight", label = "Fight start", tokens = "",
-		art = "none", title = "FIGHT!", sub = "", sound = "none", off = true },
+		art = "none", title = "FIGHT!", sub = "", sound = "random:fightstart", off = true },
 	{ id = "fulltime", group = "fight", label = "Fight end", tokens = "{count}",
-		art = "none", title = "FIGHT OVER", sub = "{count} kills", sound = "none", off = true },
+		art = "none", title = "FIGHT OVER", sub = "{count} kills", sound = "random:victory", off = true },
 	{ id = "mvp", group = "fight", label = "MVP (group fight end)", tokens = "{name} {count} {total}",
 		art = "none", title = "MVP", sub = "{name}  ·  {count} of {total} kills" },
 	{ id = "flawless", group = "fight", label = "Flawless (group, nobody died)", tokens = "{count}",
@@ -91,9 +92,9 @@ ns.EVENTS = {
 		art = "none", title = "PET DOWN", sub = "", color = "red", sound = "none" },
 
 	-- Interrupts
-	{ id = "interrupt", group = "interrupts", label = "You interrupted", tokens = "{name}",
+	{ id = "interrupt", group = "interrupts", label = "You interrupted", tokens = "{name} {count}",
 		art = "arcade/counter", title = "", sub = "You shut {name} up", color = "blue" },
-	{ id = "interrupted", group = "interrupts", label = "You were interrupted", tokens = "{name}",
+	{ id = "interrupted", group = "interrupts", label = "You were interrupted", tokens = "{name} {count}",
 		art = "failure/nope", title = "", sub = "by {name}", color = "red", sound = "none" },
 
 	-- Encounters and progress
@@ -112,6 +113,36 @@ ns.EVENTS = {
 	{ id = "falldeath", group = "falls", label = "Fell to death", tokens = "{time}",
 		art = "falling/gravity-wins", title = "", sub = "Fell for {time} s", color = "red" },
 
+	-- Arcade: fighting-game moments (all off until switched on)
+	{ id = "combo", group = "arcade", label = "Combo (5+ hits in a row)", tokens = "{count}",
+		art = "arcade/super-combo", title = "", sub = "{count} HITS", color = "orange", off = true },
+	{ id = "countdown", group = "arcade", label = "Countdown 3, 2, 1 (arena, battleground, pull timer)", tokens = "{count}",
+		art = "none", title = "{count}", sub = "", sound = "none", duration = 0.5, off = true },
+	{ id = "countgo", group = "arcade", label = "Countdown: FIGHT!", tokens = "",
+		art = "none", title = "FIGHT!", sub = "", sound = "random:fightstart", duration = 0.6, off = true },
+	{ id = "duelstart", group = "arcade", label = "Duel starts", tokens = "{name}",
+		art = "none", title = "ROUND 1 ... FIGHT!", sub = "vs {name}", sound = "countdown", off = true },
+	{ id = "duelwin", group = "arcade", label = "Duel won", tokens = "{name}",
+		art = "none", title = "YOU WIN!", sub = "{name} is down", color = "green", sound = "random:victory", off = true },
+	{ id = "duellose", group = "arcade", label = "Duel lost", tokens = "{name}",
+		art = "none", title = "YOU LOSE", sub = "{name} wins", color = "red", sound = "none", off = true },
+	{ id = "bosspull", group = "arcade", label = "Boss pull", tokens = "{name}",
+		art = "none", title = "ROUND 1 ... FIGHT!", sub = "{name}", sound = "random:fightstart", off = true },
+
+	-- Moments outside the kill count (all off until switched on)
+	{ id = "assist", group = "moments", label = "Assist (a groupmate killed what you hit)", tokens = "{name} {victim}",
+		art = "none", title = "ASSIST!", sub = "{name} finished {victim}", color = "blue", sound = "none", off = true },
+	{ id = "record", group = "moments", label = "New personal record", tokens = "{name} {count}",
+		art = "arcade/perfect", title = "", sub = "New best {name}: {count}", color = "gold", off = true },
+	{ id = "achievement", group = "moments", label = "Achievement earned", tokens = "{name}",
+		art = "none", title = "ACHIEVEMENT!", sub = "{name}", color = "gold", sound = "none", off = true },
+	{ id = "epicloot", group = "moments", label = "Epic or better loot", tokens = "{name}",
+		art = "none", title = "EPIC LOOT!", sub = "{name}", color = "purple", sound = "legendary", off = true },
+	{ id = "quest", group = "moments", label = "Quest turned in", tokens = "{name}",
+		art = "none", title = "QUEST COMPLETE!", sub = "{name}", color = "gold", sound = "none", off = true },
+	{ id = "honorkill", group = "moments", label = "Honorable kill (PvP)", tokens = "{count}",
+		art = "none", title = "HONORABLE KILL", sub = "{count} in total", color = "red", sound = "none", off = true },
+
 	-- Testing
 	{ id = "avoid", group = "testing", label = "Dodge / parry / block / miss", tokens = "{name}",
 		art = "failure/whiff", title = "", sub = "{name}", color = "white", sound = "none", off = true },
@@ -127,6 +158,8 @@ ns.EVENT_GROUPS = {
 	{ id = "interrupts", label = "Interrupts" },
 	{ id = "encounters", label = "Encounters" },
 	{ id = "falls", label = "Falls" },
+	{ id = "arcade", label = "Arcade" },
+	{ id = "moments", label = "Moments" },
 	{ id = "testing", label = "Testing" },
 }
 
@@ -148,6 +181,7 @@ function ns.EventDefaults(id)
 		details = true,
 		color = def.color or "gold",
 		size = 1,
+		duration = def.duration or 1,
 		pos = def.pos or "banner",
 		sound = def.sound or "raidwarning",
 		font = def.font or "auto",

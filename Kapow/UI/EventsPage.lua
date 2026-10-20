@@ -129,8 +129,24 @@ local function EditorSpecs()
 			get = EventGet("size"),
 			set = EventSet("size"),
 		},
+		{
+			type = "choice",
+			label = "Duration",
+			tooltip = "How long it stays, as a multiple of its normal length. The art's three frames slow down or speed up with it.",
+			choices = { { 0.5, "0.5x" }, { 0.75, "0.75x" }, { 1, "1x" }, { 1.5, "1.5x" }, { 2, "2x" }, { 3, "3x" } },
+			get = EventGet("duration"),
+			set = EventSet("duration"),
+		},
 		OptionsDropdown("Position", "Comic spot follows /kapow pos; the others are fixed places on screen.", "pos", D.POSITION_ORDER, D.POSITIONS),
-		OptionsDropdown("Sound", "Needs Event sounds on (General tab).", "sound", D.SOUND_ORDER, D.SOUNDS),
+		(function()
+			-- Hit events' sounds live on the Experimental tab (they cannot follow the secret gates).
+			local spec = OptionsDropdown("Sound", "Needs Event sounds on (General tab).", "sound", D.SOUND_ORDER, D.SOUNDS)
+			spec.hitLocked = true
+			spec.labelFunc = function()
+				return Def().hit and "Sound: see Experimental" or "Sound"
+			end
+			return spec
+		end)(),
 		{
 			type = "note",
 			textFunc = function()
@@ -260,6 +276,9 @@ ns.ui.pages.events = {
 			end
 			for _, row in ipairs(rows) do
 				row:RefreshValue()
+				if row.spec.hitLocked then
+					row:SetRowEnabled(not Def().hit)
+				end
 			end
 			local entry = ns.art.Resolve(Cfg().art)
 			if entry then

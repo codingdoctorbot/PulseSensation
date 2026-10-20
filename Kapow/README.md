@@ -13,7 +13,8 @@ Install: copy the `Kapow` folder into `Interface/AddOns/`. Not included in the P
 ## Settings window
 
 `/kapow` (or left-click the minimap button) opens KAPOW's own window, separate from Blizzard's settings panel.
-Right-click the minimap button to turn KAPOW on or off; drag it to move it. No gamepad support yet.
+Right-click the minimap button to turn KAPOW on or off; drag it to move it. With Extras › Controller navigation on,
+the window also works with a controller (D-pad, A, B, shoulder buttons for tabs).
 
 - **General**: on/off, overall size, which hits count, kill detection, critical hits, kill feed, extras.
 - **Events**: what each moment shows. Pick a group (Hits, Kills, Multi-kills, Sprees, Deaths, Interrupts,
@@ -26,6 +27,10 @@ Right-click the minimap button to turn KAPOW on or off; drag it to move it. No g
     `{name}`, `{level}`. Secret values (enemy names, damage) are drawn by the client, never read.
   - **Title color**, **Size**, **Position** (comic spot, top banner, low centre, left, right), **Sound**.
   - **Preview** and **Reset event**.
+- **Extras** (everything off by default): combo counter, impact flash, low health warning and FINISH IT! (drawn
+  from hidden health by the client's curve helpers), reduce motion, controller navigation, placing things by drag,
+  personal records and party sync. The matching banners are in the Events tab's **Arcade** (combo, countdown,
+  duels, boss pull) and **Moments** (assist, new record, achievement, epic loot, quest, honorable kill) groups.
 - **Profiles**: profiles are shared across the account. Each character uses one or follows the account default.
   New, Copy, Rename, Delete (click twice), Reset. **Export this** / **Export all** put a `KAPOW1:` string in the box
   to copy; **Import** adds pasted profiles beside yours, never over them. Import parses the string itself (no code
@@ -57,6 +62,8 @@ its own. `scripts/make-art-catalog.py` keeps the copy in step.
 | `/kapow meter test <dmg> <hp> [max]` | Drive the meter with plain numbers, e.g. `5000 4000` is a kill |
 | `/kapow meter source hit\|prev` | Which health reading drives the OVERKILL slide |
 | `/kapow jitter` | Toggle random offset and tilt per pop |
+| `/kapow unlock` / `lock` | Show / hide drag handles for the hit pops, banners, timer bar, UwU, combo counter, FINISH IT! |
+| `/kapow records [reset]` | Print (or clear) this character's bests and tallies |
 | `/kapow debug` | Print the raw feed values for every hit on your target (secret ones as `<secret ...>`) |
 
 ## How it works
@@ -174,7 +181,7 @@ licenses, which must stay with the font files. In game: `/kapow credits` or **Fo
 
 ## Kill detection
 
-Two sources, each its own option; with both off, only POW! shows.
+The original two sources each keep their own option; with both off, only POW! shows unless the separate pet backup is enabled.
 
 - **Killing-blow event (`PARTY_KILL`).** The client reports the attacker of each killing blow in your group. Only
   yours count, and your pet's if that option is on. Its payload is secret for units that are not player-controlled
@@ -183,10 +190,18 @@ Two sources, each its own option; with both off, only POW! shows.
   K.O.!, using the latest hit on your target for the crit flag and number.
 - **Target death check (`UnitIsDead`).** The previous method: your target's death state about 0.15 s after your
   hit. It cannot tell whose blow it was, so a groupmate's kill shows K.O. too.
+- **Pet kill backup (target death).** An additional checkbox under **General → Kill detection**, off by default.
+  With **Count pet killing blows** on, it watches your selected living target while your pet is in combat and
+  targeting it. A readable death shortly afterward can trigger K.O. without a player hit or `PARTY_KILL`, and
+  also counts for the kill feed, multi-kills, sprees and First Blood (solo First Blood still needs its own option).
+  Keep the target selected until the kill registers. This is an estimate: another attacker may land the final
+  blow. Restricted target GUIDs or pet-target comparisons cannot be used. A matching readable `PARTY_KILL`
+  takes priority during the confirmation delay; late matching events do not count the backup kill again.
 
 To check group and pet behaviour, turn on **Kill log in chat** (`/kapow kill log`). Every reported killing blow
 prints who landed it (you, your pet, a groupmate by name, a groupmate's pet, someone outside your group, or a
 secret attacker), whether the victim was your target, and whether KAPOW counted it.
+The pet backup also prints a separate line labelled `backup estimate (no PARTY_KILL)` when this log is on.
 
 ## Announcer
 
@@ -225,6 +240,10 @@ Use `/kapow debug` to settle these:
 3. `SetAlphaFromBoolean(v, 1, 0)` takes alpha on a 0-1 scale. If frames look nearly invisible, the scale is 0-255.
 4. The first event-info value is the hit's amount (as in Blizzard_CombatText), and `AbbreviateNumbers` formats a
    secret as documented (`SecretArguments = "AllowedWhenTainted"`).
+7. Extras: `UnitHealthPercent(unit, true, curve)` with a Step curve returns a (secret) 1/0 that `SetAlpha` takes;
+   the step curve takes the last point at or below x; `START_TIMER` carries plain seconds; the "Duel starting: %d"
+   and "has defeated" lines arrive as plain `CHAT_MSG_SYSTEM` outside chat lockdown; `EnableGamePadButton` on the
+   window receives D-pad and face buttons while it is open.
 5. OVERKILL means "critical killing blow". Real overkill damage needs arithmetic on secrets, which is not allowed.
    `C_DamageMeter` has an `overkillAmount` field (12.0.1), but whether it is readable in combat is unconfirmed.
 
@@ -232,7 +251,10 @@ Use `/kapow debug` to settle these:
 
 The combat-text active unit is global. PulseHaptics sets it to `"player"` for its damage-taken cues, and KAPOW
 sets it to `"target"`. Whichever syncs last wins, so with both loaded one of them may see the wrong feed.
-Check with `/kapow debug` before trusting either.
+Check with `/kapow debug` before trusting either. MidnightFCT also switches it back to `"player"` whenever it changes.
+
+Experimental tab › Combat text unit › **Leave it alone** never touches it: KAPOW then reads your target's hits from the
+target's own combat events (`UNIT_COMBAT`), as MikScrollingBattleText and MidnightFCT do. The default is unchanged.
 
 ## Attribution
 
