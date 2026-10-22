@@ -2,7 +2,7 @@
 --
 -- One constructor per kind of settings row, ported from PulseHaptics' UI/Panel/Rows.lua and
 -- cut down to what this window needs: header, checkbox, choice (a button that cycles its
--- values) and a row of buttons. Rows are built once and live for the session; no pooling.
+-- values), slider and a row of buttons. Rows are built once and live for the session; no pooling.
 --
 -- Every row exposes:
 --   row.rowHeight        vertical space it wants
@@ -356,6 +356,55 @@ function Rows.CreateNote(parent, spec)
 	return row
 end
 
+-- ── Slider ────────────────────────────────────────────────────────────────────────────
+-- spec: label, tooltip, min, max, step, get() -> number, set(number), format(number) -> text
+-- Blizzard's MinimalSliderTemplate with the value written beside it. Each move is saved.
+
+function Rows.CreateSlider(parent, spec)
+	local row = createBaseRow(parent, spec)
+
+	local slider = CreateFrame("Slider", nil, row, "MinimalSliderTemplate")
+	slider:SetWidth(Theme.BUTTON_WIDTH)
+	slider:SetPoint("LEFT", row, "LEFT", Theme.CONTROL_LEFT, 0)
+	slider:SetMinMaxValues(spec.min, spec.max)
+	slider:SetValueStep(spec.step)
+	slider:SetObeyStepOnDrag(true)
+
+	local value = row:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+	value:SetPoint("LEFT", slider, "RIGHT", 10, 0)
+
+	local function show(v)
+		value:SetText(spec.format and spec.format(v) or tostring(v))
+	end
+
+	local refreshing = false
+	slider:SetScript("OnValueChanged", function(_, v)
+		if refreshing then
+			return
+		end
+		v = math.floor(v / spec.step + 0.5) * spec.step
+		show(v)
+		spec.set(v)
+	end)
+	attachControlTooltip(row, slider)
+
+	row.Control = slider
+	row.RefreshValue = function()
+		local v = tonumber(spec.get()) or spec.min
+		refreshing = true
+		slider:SetValue(v)
+		refreshing = false
+		show(v)
+	end
+	row.SetRowEnabled = function(_, enabled)
+		slider:SetEnabled(enabled)
+		Theme.DisplayEnabled(row, enabled)
+	end
+
+	row:RefreshValue()
+	return row
+end
+
 -- ── Dispatcher ────────────────────────────────────────────────────────────────────────
 
 local BUILDERS = {
@@ -366,6 +415,7 @@ local BUILDERS = {
 	dropdown = Rows.CreateDropdown,
 	edit = Rows.CreateEdit,
 	note = Rows.CreateNote,
+	slider = Rows.CreateSlider,
 }
 
 function Rows.Create(parent, spec)

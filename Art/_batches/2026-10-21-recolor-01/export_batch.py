@@ -1,0 +1,78 @@
+"""Isolated mechanical export; no generation, installation or source edits."""
+import json
+from pathlib import Path
+from PIL import Image, ImageDraw, ImageFont
+
+BASE = Path(__file__).resolve().parent
+entries = json.loads((BASE / 'prompts.json').read_text())
+progress_path = BASE / 'progress.json'
+progress = json.loads(progress_path.read_text())
+out = BASE / 'escalation'
+preview = BASE / '_previews'
+out.mkdir(exist_ok=True)
+preview.mkdir(exist_ok=True)
+sheet = Image.new('RGB', (1290, 1500), '#272c34')
+draw = ImageDraw.Draw(sheet)
+font_path = '/System/Library/Fonts/Supplemental/Arial Bold.ttf'
+font = ImageFont.truetype(font_path, 21)
+small = ImageFont.truetype(font_path, 17)
+for index, label in enumerate(['NEW ONSET', 'NEW PEAK', 'NEW AFTERSHOCK']):
+    draw.text((476 + index * 266 + 128, 30), label, fill='#eeeeee', font=font, anchor='mm')
+checks = []
+for row, entry in enumerate(entries):
+    name = entry['name']
+    source_rel = '_sources/escalation/' + name + '.png'
+    source = Image.open(BASE / source_rel)
+    source.load()
+    w, h = source.size
+    frames = []
+    draw.text((18, 88 + row * 280), entry['word'].replace(' ', '\n'), fill='#eeeeee', font=font, spacing=5)
+    original = Image.open(entry['original_source']).convert('RGBA')
+    ow, oh = original.size
+    old_peak = original.crop((round(ow/3), 0, round(2*ow/3), oh))
+    factor = min(248/old_peak.width, 248/old_peak.height)
+    old_peak = old_peak.convert('RGBa').resize((round(old_peak.width*factor), round(old_peak.height*factor)), Image.Resampling.LANCZOS).convert('RGBA')
+    old_canvas = Image.new('RGBA', (256,256), '#353c47')
+    old_canvas.alpha_composite(old_peak, ((256-old_peak.width)//2,(256-old_peak.height)//2))
+    sheet.paste(old_canvas.convert('RGB'),(210,64+row*280))
+    draw.rectangle((210,64+row*280,465,319+row*280),outline='#4c5562')
+    draw.text((338,30),'OLD PEAK',fill='#eeeeee',font=font,anchor='mm')
+    for frame_index in range(3):
+        # Fixed proportional thirds preserve the original anchors and scale.
+        cell = source.convert('RGBA').crop((round(frame_index*w/3), 0, round((frame_index+1)*w/3), h))
+        scale = min(248 / cell.width, 248 / cell.height)
+        size = (round(cell.width * scale), round(cell.height * scale))
+        cell = cell.convert('RGBa').resize(size, Image.Resampling.LANCZOS).convert('RGBA')
+        frame = Image.new('RGBA', (256, 256))
+        frame.alpha_composite(cell, ((256-cell.width)//2, (256-cell.height)//2))
+        rel = 'escalation/' + name + '_' + str(frame_index+1) + '.tga'
+        if name == 'dominating':
+            frame.save(BASE / rel, compression=None)
+        frames.append(rel)
+        if name == 'dominating':
+            frame.save(preview / (name + '_' + str(frame_index+1) + '.png'))
+        x, y = 476 + frame_index*266, 64 + row*280
+        bg = Image.new('RGBA', (256,256), '#353c47')
+        bg.alpha_composite(frame)
+        sheet.paste(bg.convert('RGB'), (x,y))
+        draw.rectangle((x,y,x+255,y+255), outline='#4c5562')
+        actual = Image.open(BASE / rel)
+        header = (BASE / rel).read_bytes()[:18]
+        alpha = actual.getchannel('A')
+        checks.append({'file':rel, 'size':list(actual.size), 'mode':actual.mode,
+                       'tga_image_type':header[2], 'bits_per_pixel':header[16],
+                       'alpha_extrema':list(alpha.getextrema()),
+                       'transparent_pixel_count':alpha.histogram()[0],
+                       'nontransparent_bbox':actual.getbbox(),
+                       'pass':actual.size==(256,256) and actual.mode=='RGBA' and header[2]==2 and header[16]==32 and alpha.getextrema()==(0,255)})
+    entry.update(status="exported", source=source_rel, source_size=[w,h], frames=frames,
+                 frame_order=['onset','peak','aftershock'], approval_status='pending')
+    progress['entries'][row].update(status='exported', source=source_rel, frames=frames)
+    progress['status'] = 'exporting'
+    progress_path.write_text(json.dumps(progress, indent=2))
+sheet.save(preview / 'review-sheet.png')
+(BASE / 'manifest.json').write_text(json.dumps({'batch':'2026-10-21-recolor-01', 'approval_status':'pending', 'installed':False, 'entries':entries}, indent=2))
+(BASE / 'validation.json').write_text(json.dumps({'check':'one basic isolated export validation', 'expected_frames':15, 'actual_frames':len(checks), 'all_passed':len(checks)==15 and all(x['pass'] for x in checks), 'files':checks, 'observations':'Visual inspection pending; offline format validation only, no in-game verification.'}, indent=2))
+progress['status']='awaiting_visual_read'
+progress_path.write_text(json.dumps(progress, indent=2))
+print(json.dumps({'sources':len(entries), 'frames':len(checks), 'all_passed':all(x['pass'] for x in checks), 'review_sheet':str(preview/'review-sheet.png')}))

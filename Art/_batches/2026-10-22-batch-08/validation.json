@@ -1,0 +1,345 @@
+{
+  "check": "one basic isolated export validation",
+  "expected_frames": 15,
+  "actual_frames": 15,
+  "all_passed": true,
+  "files": [
+    {
+      "file": "arena/honorable-kill_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 44522,
+      "nontransparent_bbox": [
+        37,
+        34,
+        228,
+        249
+      ],
+      "pass": true
+    },
+    {
+      "file": "arena/honorable-kill_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 33382,
+      "nontransparent_bbox": [
+        13,
+        27,
+        251,
+        244
+      ],
+      "pass": true
+    },
+    {
+      "file": "arena/honorable-kill_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 40800,
+      "nontransparent_bbox": [
+        7,
+        22,
+        235,
+        241
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/kapow_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 48886,
+      "nontransparent_bbox": [
+        18,
+        16,
+        228,
+        243
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/kapow_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 36148,
+      "nontransparent_bbox": [
+        19,
+        26,
+        241,
+        244
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/kapow_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 43083,
+      "nontransparent_bbox": [
+        31,
+        29,
+        224,
+        231
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/bam_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 48468,
+      "nontransparent_bbox": [
+        4,
+        13,
+        252,
+        248
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/bam_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 38291,
+      "nontransparent_bbox": [
+        25,
+        23,
+        248,
+        240
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/bam_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 45316,
+      "nontransparent_bbox": [
+        4,
+        8,
+        220,
+        240
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/thwack_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 50430,
+      "nontransparent_bbox": [
+        33,
+        59,
+        219,
+        244
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/thwack_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 34905,
+      "nontransparent_bbox": [
+        9,
+        27,
+        247,
+        223
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/thwack_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 45279,
+      "nontransparent_bbox": [
+        16,
+        37,
+        239,
+        225
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/blam_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 52003,
+      "nontransparent_bbox": [
+        33,
+        32,
+        218,
+        217
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/blam_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 39875,
+      "nontransparent_bbox": [
+        10,
+        28,
+        238,
+        223
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/blam_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 47805,
+      "nontransparent_bbox": [
+        26,
+        48,
+        223,
+        207
+      ],
+      "pass": true
+    }
+  ],
+  "observations": [
+    "All wording readable, distinct industrial HONORABLE KILL with crossed swords and flat comic words/palettes present.",
+    "No apparent clipping or cross-cell debris. Peak effects sometimes exceed70percent target; THWACK includes an extra angular starburst behind requested swoosh."
+  ],
+  "expected_sources": 5,
+  "actual_sources": 5,
+  "verification_scope": "One normal offline export/visual check; no in-game verification, no installation, no retries."
+}

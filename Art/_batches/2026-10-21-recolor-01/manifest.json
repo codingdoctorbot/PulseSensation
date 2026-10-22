@@ -1,0 +1,187 @@
+{
+  "batch": "2026-10-21-recolor-01",
+  "approval_status": "approved",
+  "installed": false,
+  "entries": [
+    {
+      "name": "first-blood",
+      "word": "FIRST BLOOD!",
+      "palette": "CRIMSON RED effects with restrained WHITE highlights; preserve existing red droplet(s).",
+      "category": "escalation",
+      "original_source": "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-01/_sources/escalation/first-blood.png",
+      "references": [
+        "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-01/_sources/escalation/first-blood.png"
+      ],
+      "reference_roles": [
+        "EXACT EDIT TARGET; preserve existing artwork and all three frames"
+      ],
+      "generator_mode": "built-in image_gen EDIT; effects-color-only request",
+      "approval_status": "approved",
+      "status": "exported",
+      "planned_output": "_sources/escalation/first-blood.png",
+      "prompt": "Use case: precise-object-edit.\nThe supplied image is the EXACT EDIT TARGET, not a style reference. Edit this existing three-frame sprite strip by CHANGING ONLY the effects colors and physically plausible reflected colored highlights.\nNEW PALETTE: CRIMSON RED effects with restrained WHITE highlights; preserve existing red droplet(s).\nReplace the old orange/yellow fire hues wherever they conflict with this palette; no leftover orange flame palette. Apply consistent new colors to all THREE existing frames.\nSTRICT INVARIANTS: preserve the exact original horizontal 3:1 canvas and three equal square cells, onset/peak/aftershock order, complete wording \"FIRST BLOOD!\" and punctuation, the original ivory/steel opaque lettering and heavy black outlines. Preserve every existing glyph geometry, lettering scale, center anchor, framing, margins, effect silhouettes, slash shapes, flame and smoke shapes, all fragment counts/positions, material textures, antialiased edges and original transparent alpha silhouette. Keep the three effects states exactly as they are. DO NOT redesign, recompose, move, resize or reshape any feature; do not add or remove effects. This is a palette edit of completed art, not a new banner design.\nGenuine transparent alpha background, preserve transparency. No scene, grid, frame numbers, labels, extra text, logos, watermark or painted checkerboard.",
+      "source": "_sources/escalation/first-blood.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "frames": [
+        "escalation/first-blood_1.tga",
+        "escalation/first-blood_2.tga",
+        "escalation/first-blood_3.tga"
+      ],
+      "frame_order": [
+        "onset",
+        "peak",
+        "aftershock"
+      ]
+    },
+    {
+      "name": "ultra-kill",
+      "word": "ULTRA KILL!",
+      "palette": "ELECTRIC VIOLET effects, luminous violet core and deeper violet shadows.",
+      "category": "escalation",
+      "original_source": "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-01/_sources/escalation/ultra-kill.png",
+      "references": [
+        "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-01/_sources/escalation/ultra-kill.png"
+      ],
+      "reference_roles": [
+        "EXACT EDIT TARGET; preserve existing artwork and all three frames"
+      ],
+      "generator_mode": "built-in image_gen EDIT; effects-color-only request",
+      "approval_status": "approved",
+      "status": "exported",
+      "planned_output": "_sources/escalation/ultra-kill.png",
+      "prompt": "Use case: precise-object-edit.\nThe supplied image is the EXACT EDIT TARGET, not a style reference. Edit this existing three-frame sprite strip by CHANGING ONLY the effects colors and physically plausible reflected colored highlights.\nNEW PALETTE: ELECTRIC VIOLET effects, luminous violet core and deeper violet shadows.\nReplace the old orange/yellow fire hues wherever they conflict with this palette; no leftover orange flame palette. Apply consistent new colors to all THREE existing frames.\nSTRICT INVARIANTS: preserve the exact original horizontal 3:1 canvas and three equal square cells, onset/peak/aftershock order, complete wording \"ULTRA KILL!\" and punctuation, the original ivory/steel opaque lettering and heavy black outlines. Preserve every existing glyph geometry, lettering scale, center anchor, framing, margins, effect silhouettes, slash shapes, flame and smoke shapes, all fragment counts/positions, material textures, antialiased edges and original transparent alpha silhouette. Keep the three effects states exactly as they are. DO NOT redesign, recompose, move, resize or reshape any feature; do not add or remove effects. This is a palette edit of completed art, not a new banner design.\nGenuine transparent alpha background, preserve transparency. No scene, grid, frame numbers, labels, extra text, logos, watermark or painted checkerboard.",
+      "source": "_sources/escalation/ultra-kill.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "frames": [
+        "escalation/ultra-kill_1.tga",
+        "escalation/ultra-kill_2.tga",
+        "escalation/ultra-kill_3.tga"
+      ],
+      "frame_order": [
+        "onset",
+        "peak",
+        "aftershock"
+      ]
+    },
+    {
+      "name": "monster-kill",
+      "word": "MONSTER KILL!",
+      "palette": "ACID GREEN effects with dark EMERALD shadows.",
+      "category": "escalation",
+      "original_source": "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-01/_sources/escalation/monster-kill.png",
+      "references": [
+        "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-01/_sources/escalation/monster-kill.png"
+      ],
+      "reference_roles": [
+        "EXACT EDIT TARGET; preserve existing artwork and all three frames"
+      ],
+      "generator_mode": "built-in image_gen EDIT; effects-color-only request",
+      "approval_status": "approved",
+      "status": "exported",
+      "planned_output": "_sources/escalation/monster-kill.png",
+      "prompt": "Use case: precise-object-edit.\nThe supplied image is the EXACT EDIT TARGET, not a style reference. Edit this existing three-frame sprite strip by CHANGING ONLY the effects colors and physically plausible reflected colored highlights.\nNEW PALETTE: ACID GREEN effects with dark EMERALD shadows.\nReplace the old orange/yellow fire hues wherever they conflict with this palette; no leftover orange flame palette. Apply consistent new colors to all THREE existing frames.\nSTRICT INVARIANTS: preserve the exact original horizontal 3:1 canvas and three equal square cells, onset/peak/aftershock order, complete wording \"MONSTER KILL!\" and punctuation, the original ivory/steel opaque lettering and heavy black outlines. Preserve every existing glyph geometry, lettering scale, center anchor, framing, margins, effect silhouettes, slash shapes, flame and smoke shapes, all fragment counts/positions, material textures, antialiased edges and original transparent alpha silhouette. Keep the three effects states exactly as they are. DO NOT redesign, recompose, move, resize or reshape any feature; do not add or remove effects. This is a palette edit of completed art, not a new banner design.\nGenuine transparent alpha background, preserve transparency. No scene, grid, frame numbers, labels, extra text, logos, watermark or painted checkerboard.",
+      "source": "_sources/escalation/monster-kill.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "frames": [
+        "escalation/monster-kill_1.tga",
+        "escalation/monster-kill_2.tga",
+        "escalation/monster-kill_3.tga"
+      ],
+      "frame_order": [
+        "onset",
+        "peak",
+        "aftershock"
+      ]
+    },
+    {
+      "name": "ludicrous-kill",
+      "word": "LUDICROUS KILL!",
+      "palette": "WHITE-HOT luminous core with MAGENTA edges, magenta instead of orange.",
+      "category": "escalation",
+      "original_source": "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-02/_sources/escalation/ludicrous-kill.png",
+      "references": [
+        "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-02/_sources/escalation/ludicrous-kill.png"
+      ],
+      "reference_roles": [
+        "EXACT EDIT TARGET; preserve existing artwork and all three frames"
+      ],
+      "generator_mode": "built-in image_gen EDIT; effects-color-only request",
+      "approval_status": "approved",
+      "status": "exported",
+      "planned_output": "_sources/escalation/ludicrous-kill.png",
+      "prompt": "Use case: precise-object-edit.\nThe supplied image is the EXACT EDIT TARGET, not a style reference. Edit this existing three-frame sprite strip by CHANGING ONLY the effects colors and physically plausible reflected colored highlights.\nNEW PALETTE: WHITE-HOT luminous core with MAGENTA edges, magenta instead of orange.\nReplace the old orange/yellow fire hues wherever they conflict with this palette; no leftover orange flame palette. Apply consistent new colors to all THREE existing frames.\nSTRICT INVARIANTS: preserve the exact original horizontal 3:1 canvas and three equal square cells, onset/peak/aftershock order, complete wording \"LUDICROUS KILL!\" and punctuation, the original ivory/steel opaque lettering and heavy black outlines. Preserve every existing glyph geometry, lettering scale, center anchor, framing, margins, effect silhouettes, slash shapes, flame and smoke shapes, all fragment counts/positions, material textures, antialiased edges and original transparent alpha silhouette. Keep the three effects states exactly as they are. DO NOT redesign, recompose, move, resize or reshape any feature; do not add or remove effects. This is a palette edit of completed art, not a new banner design.\nGenuine transparent alpha background, preserve transparency. No scene, grid, frame numbers, labels, extra text, logos, watermark or painted checkerboard.",
+      "source": "_sources/escalation/ludicrous-kill.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "frames": [
+        "escalation/ludicrous-kill_1.tga",
+        "escalation/ludicrous-kill_2.tga",
+        "escalation/ludicrous-kill_3.tga"
+      ],
+      "frame_order": [
+        "onset",
+        "peak",
+        "aftershock"
+      ]
+    },
+    {
+      "name": "dominating",
+      "word": "DOMINATING!",
+      "palette": "TEAL effects with SILVER reflected highlights.",
+      "category": "escalation",
+      "original_source": "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-02/_sources/escalation/dominating.png",
+      "references": [
+        "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-02/_sources/escalation/dominating.png"
+      ],
+      "reference_roles": [
+        "EXACT EDIT TARGET; preserve existing artwork and all three frames"
+      ],
+      "generator_mode": "built-in image_gen EDIT; effects-color-only request",
+      "approval_status": "approved",
+      "status": "exported",
+      "planned_output": "_sources/escalation/dominating.png",
+      "prompt": "Use case: precise-object-edit.\nThe supplied image is the EXACT EDIT TARGET, not a style reference. Edit this existing three-frame sprite strip by CHANGING ONLY the effects colors and physically plausible reflected colored highlights.\nNEW PALETTE: TEAL effects with SILVER reflected highlights.\nReplace the old orange/yellow fire hues wherever they conflict with this palette; no leftover orange flame palette. Apply consistent new colors to all THREE existing frames.\nSTRICT INVARIANTS: preserve the exact original horizontal 3:1 canvas and three equal square cells, onset/peak/aftershock order, complete wording \"DOMINATING!\" and punctuation, the original ivory/steel opaque lettering and heavy black outlines. Preserve every existing glyph geometry, lettering scale, center anchor, framing, margins, effect silhouettes, slash shapes, flame and smoke shapes, all fragment counts/positions, material textures, antialiased edges and original transparent alpha silhouette. Keep the three effects states exactly as they are. DO NOT redesign, recompose, move, resize or reshape any feature; do not add or remove effects. This is a palette edit of completed art, not a new banner design.\nGenuine transparent alpha background, preserve transparency. No scene, grid, frame numbers, labels, extra text, logos, watermark or painted checkerboard.",
+      "source": "_sources/escalation/dominating.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "frames": [
+        "escalation/dominating_1.tga",
+        "escalation/dominating_2.tga",
+        "escalation/dominating_3.tga"
+      ],
+      "frame_order": [
+        "onset",
+        "peak",
+        "aftershock"
+      ],
+      "edit_history": [
+        {
+          "source": "_sources/escalation/dominating-recolor-v1.png",
+          "provenance": "dominating-recolor-v1-provenance.json"
+        },
+        {
+          "source": "_sources/escalation/dominating.png",
+          "target": "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-recolor-01/_sources/escalation/dominating-recolor-v1.png",
+          "prompt": "Use case: precise-object-edit.\nThe supplied transparent PNG is the EXACT EDIT TARGET: an existing horizontal 3:1, three equal square cells DOMINATING! teal/silver animation strip.\nPerform ONE narrowly targeted cleanup: remove detached partial teal fragments and stray little artifacts in the extreme side borders and gutters between cells, replacing only those stray bits with genuine transparency. Ensure transparent gutters at the exact one-third and two-third cell boundaries so splitting into equal thirds leaves no unrelated edge flecks.\nPreserve all THREE main teal stickers, each full exact \"DOMINATING!\" wordmark, ivory/steel glyphs, black outlines, palette, all main effect shapes, materials, positions and sizes. Preserve onset/peak/aftershock order. Do not redesign, recompose, redraw full art, add effects, alter text or change colors. Modest consistent equal-cell transparent gutter is allowed only if needed to isolate the existing stickers; avoid any other geometry change. Retain genuine transparent alpha background and antialiased edges. No grid, labels, numbers or painted checkerboard.",
+          "result": "partial cleanup; edge artifacts remain"
+        }
+      ]
+    }
+  ],
+  "copied_to_addon_unimplemented": true,
+  "implemented": false,
+  "packaged_destination": "Kapow/UnimplementedArt"
+}

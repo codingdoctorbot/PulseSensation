@@ -42,7 +42,11 @@ LABELS = {
     "arena": "Boomer Shooter",
     "tactical": "Strike Squad",
     "football": "Soccer League",
+    "escalation-orange": "Escalation (orange)",
 }
+
+# Categories that hold variants of another category's art and share its display font.
+FONT_FROM = {"escalation-orange": "escalation"}
 
 
 def label(category):
@@ -135,7 +139,11 @@ def write_credits(credits):
 
 def main():
     manifest = json.loads(MANIFEST.read_text())
-    words = {asset["key"]: asset["word"] for asset in manifest["assets"]}
+    # Variants share their word with the selected art; the menu names the variant.
+    words = {
+        asset["key"]: asset["word"] + (" (orange)" if asset.get("variant") == "original-orange" else "")
+        for asset in manifest["assets"]
+    }
     frames = {asset["key"]: asset["frames"] for asset in manifest["assets"]}
 
     problems = []
@@ -169,6 +177,9 @@ def main():
         for cat, a in assigned.items():
             if a["file"] in by_file:
                 category_font[cat] = by_file[a["file"]]
+        for cat, parent in FONT_FROM.items():
+            if parent in category_font:
+                category_font.setdefault(cat, category_font[parent])
 
     lines = [
         "-- KAPOW — ArtCatalog.lua",

@@ -1,0 +1,66 @@
+{
+  "status": "packaged_unimplemented",
+  "approval_status": "approved",
+  "entries": [
+    {
+      "name": "great",
+      "category": "arcade",
+      "status": "exported",
+      "source": "_sources/arcade/great.png",
+      "frames": [
+        "arcade/great_1.tga",
+        "arcade/great_2.tga",
+        "arcade/great_3.tga"
+      ]
+    },
+    {
+      "name": "excellent",
+      "category": "arcade",
+      "status": "exported",
+      "source": "_sources/arcade/excellent.png",
+      "frames": [
+        "arcade/excellent_1.tga",
+        "arcade/excellent_2.tga",
+        "arcade/excellent_3.tga"
+      ]
+    },
+    {
+      "name": "new-record",
+      "category": "arcade",
+      "status": "exported",
+      "source": "_sources/arcade/new-record.png",
+      "frames": [
+        "arcade/new-record_1.tga",
+        "arcade/new-record_2.tga",
+        "arcade/new-record_3.tga"
+      ]
+    },
+    {
+      "name": "finish-it",
+      "category": "arcade",
+      "status": "exported",
+      "source": "_sources/arcade/finish-it.png",
+      "frames": [
+        "arcade/finish-it_1.tga",
+        "arcade/finish-it_2.tga",
+        "arcade/finish-it_3.tga"
+      ]
+    },
+    {
+      "name": "last-one-standing",
+      "category": "tactical",
+      "status": "exported",
+      "source": "_sources/tactical/last-one-standing.png",
+      "frames": [
+        "tactical/last-one-standing_1.tga",
+        "tactical/last-one-standing_2.tga",
+        "tactical/last-one-standing_3.tga"
+      ]
+    }
+  ],
+  "generated_strips": 5,
+  "exported_frames": 15,
+  "review_sheet": "_previews/review-sheet.png",
+  "validation": "validation.json",
+  "packaged_destination": "Kapow/UnimplementedArt"
+}

@@ -1,0 +1,345 @@
+{
+  "check": "one basic isolated export validation",
+  "expected_frames": 15,
+  "actual_frames": 15,
+  "all_passed": true,
+  "files": [
+    {
+      "file": "failure/denied_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 45938,
+      "nontransparent_bbox": [
+        28,
+        7,
+        239,
+        245
+      ],
+      "pass": true
+    },
+    {
+      "file": "failure/denied_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 36771,
+      "nontransparent_bbox": [
+        10,
+        16,
+        250,
+        247
+      ],
+      "pass": true
+    },
+    {
+      "file": "failure/denied_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 41691,
+      "nontransparent_bbox": [
+        23,
+        13,
+        238,
+        211
+      ],
+      "pass": true
+    },
+    {
+      "file": "failure/miss_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 53137,
+      "nontransparent_bbox": [
+        18,
+        24,
+        245,
+        220
+      ],
+      "pass": true
+    },
+    {
+      "file": "failure/miss_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 42211,
+      "nontransparent_bbox": [
+        25,
+        50,
+        238,
+        240
+      ],
+      "pass": true
+    },
+    {
+      "file": "failure/miss_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 50210,
+      "nontransparent_bbox": [
+        34,
+        7,
+        230,
+        243
+      ],
+      "pass": true
+    },
+    {
+      "file": "tactical/enemy-down_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 39757,
+      "nontransparent_bbox": [
+        11,
+        34,
+        240,
+        240
+      ],
+      "pass": true
+    },
+    {
+      "file": "tactical/enemy-down_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 26347,
+      "nontransparent_bbox": [
+        8,
+        19,
+        252,
+        228
+      ],
+      "pass": true
+    },
+    {
+      "file": "tactical/enemy-down_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 33706,
+      "nontransparent_bbox": [
+        4,
+        40,
+        245,
+        240
+      ],
+      "pass": true
+    },
+    {
+      "file": "tactical/round-won_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 41384,
+      "nontransparent_bbox": [
+        18,
+        13,
+        250,
+        248
+      ],
+      "pass": true
+    },
+    {
+      "file": "tactical/round-won_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 29025,
+      "nontransparent_bbox": [
+        4,
+        9,
+        247,
+        244
+      ],
+      "pass": true
+    },
+    {
+      "file": "tactical/round-won_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 36724,
+      "nontransparent_bbox": [
+        13,
+        12,
+        241,
+        246
+      ],
+      "pass": true
+    },
+    {
+      "file": "tactical/round-lost_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 45414,
+      "nontransparent_bbox": [
+        32,
+        4,
+        245,
+        244
+      ],
+      "pass": true
+    },
+    {
+      "file": "tactical/round-lost_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 34773,
+      "nontransparent_bbox": [
+        25,
+        33,
+        239,
+        232
+      ],
+      "pass": true
+    },
+    {
+      "file": "tactical/round-lost_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 38888,
+      "nontransparent_bbox": [
+        5,
+        27,
+        233,
+        241
+      ],
+      "pass": true
+    }
+  ],
+  "observations": [
+    "All exact phrases readable, three tactical plates maintain distinct cyan/gold/red state palettes and failure words remain cartoon style.",
+    "No apparent clipping/cross-cell debris. DENIED is a comic starburst rather than clear rubber-stamp silhouette; MISS peak more energetic than anticlimactic direction."
+  ],
+  "expected_sources": 5,
+  "actual_sources": 5,
+  "verification_scope": "One normal offline export/visual check; no in-game verification, no installation, no retries."
+}

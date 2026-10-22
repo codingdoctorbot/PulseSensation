@@ -1,0 +1,67 @@
+{
+  "status": "packaged_unimplemented",
+  "approval_status": "approved",
+  "entries": [
+    {
+      "name": "continue",
+      "key": "arcade/continue",
+      "status": "exported",
+      "source": "_sources/arcade/continue.png",
+      "frames": [
+        "arcade/continue_1.tga",
+        "arcade/continue_2.tga",
+        "arcade/continue_3.tga"
+      ]
+    },
+    {
+      "name": "game-over",
+      "key": "arcade/game-over",
+      "status": "exported",
+      "source": "_sources/arcade/game-over.png",
+      "frames": [
+        "arcade/game-over_1.tga",
+        "arcade/game-over_2.tga",
+        "arcade/game-over_3.tga"
+      ]
+    },
+    {
+      "name": "guard-break",
+      "key": "arcade/guard-break",
+      "status": "exported",
+      "source": "_sources/arcade/guard-break.png",
+      "frames": [
+        "arcade/guard-break_1.tga",
+        "arcade/guard-break_2.tga",
+        "arcade/guard-break_3.tga"
+      ]
+    },
+    {
+      "name": "blocked",
+      "key": "arcade/blocked",
+      "status": "exported",
+      "source": "_sources/arcade/blocked.png",
+      "frames": [
+        "arcade/blocked_1.tga",
+        "arcade/blocked_2.tga",
+        "arcade/blocked_3.tga"
+      ]
+    },
+    {
+      "name": "level-up",
+      "key": "arcade/level-up",
+      "status": "exported",
+      "source": "_sources/arcade/level-up.png",
+      "frames": [
+        "arcade/level-up_1.tga",
+        "arcade/level-up_2.tga",
+        "arcade/level-up_3.tga"
+      ]
+    }
+  ],
+  "generated_strips": 5,
+  "exported_frames": 15,
+  "review_sheet": "_previews/review-sheet.png",
+  "validation": "validation.json",
+  "generation_complete": true,
+  "packaged_destination": "Kapow/UnimplementedArt"
+}

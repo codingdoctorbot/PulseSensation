@@ -1,0 +1,78 @@
+{
+  "status": "packaged_unimplemented",
+  "approval_status": "approved",
+  "entries": [
+    {
+      "key": "failure/pet-down",
+      "category": "failure",
+      "name": "pet-down",
+      "status": "exported",
+      "planned_source": "_sources/failure/pet-down.png",
+      "source": "_sources/failure/pet-down.png",
+      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-b501d31a-4d02-4e4c-bc2a-84a64e9bc0b1.png",
+      "frames": [
+        "failure/pet-down_1.tga",
+        "failure/pet-down_2.tga",
+        "failure/pet-down_3.tga"
+      ]
+    },
+    {
+      "key": "tactical/assist",
+      "category": "tactical",
+      "name": "assist",
+      "status": "exported",
+      "planned_source": "_sources/tactical/assist.png",
+      "source": "_sources/tactical/assist.png",
+      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-f93fda3b-8f06-4b04-b744-d69650b1255b.png",
+      "frames": [
+        "tactical/assist_1.tga",
+        "tactical/assist_2.tga",
+        "tactical/assist_3.tga"
+      ]
+    },
+    {
+      "key": "comic/achievement",
+      "category": "comic",
+      "name": "achievement",
+      "status": "exported",
+      "planned_source": "_sources/comic/achievement.png",
+      "source": "_sources/comic/achievement.png",
+      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-af8b4dc8-1c8c-4888-b03f-14ecd77e0db1.png",
+      "frames": [
+        "comic/achievement_1.tga",
+        "comic/achievement_2.tga",
+        "comic/achievement_3.tga"
+      ]
+    },
+    {
+      "key": "comic/epic-loot",
+      "category": "comic",
+      "name": "epic-loot",
+      "status": "exported",
+      "planned_source": "_sources/comic/epic-loot.png",
+      "source": "_sources/comic/epic-loot.png",
+      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-2b929a61-8ff0-46df-9101-17399935ef28.png",
+      "frames": [
+        "comic/epic-loot_1.tga",
+        "comic/epic-loot_2.tga",
+        "comic/epic-loot_3.tga"
+      ]
+    },
+    {
+      "key": "comic/quest-complete",
+      "category": "comic",
+      "name": "quest-complete",
+      "status": "exported",
+      "planned_source": "_sources/comic/quest-complete.png",
+      "source": "_sources/comic/quest-complete.png",
+      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-ec0757c2-1951-42c4-89a5-5aebc25f80da.png",
+      "frames": [
+        "comic/quest-complete_1.tga",
+        "comic/quest-complete_2.tga",
+        "comic/quest-complete_3.tga"
+      ]
+    }
+  ],
+  "review_sheet": "_previews/review-sheet.png",
+  "packaged_destination": "Kapow/UnimplementedArt"
+}

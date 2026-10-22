@@ -5,6 +5,24 @@
 Not yet tested in the live client.
 
 ### Added
+- **74 new art sequences** (69 messages), promoted from the reviewed `UnimplementedArt` delivery: FIRST BLOOD and the
+  full kill/spree ladder (TRIPLE KILL to WICKED SICK, DOMINATING, GODLIKE), MVP, FLAWLESS, FIGHT!, ROUND 1 ... FIGHT!,
+  YOU WIN / YOU LOSE, GAME OVER, CONTINUE?, LEVEL UP!, BLOCKED!, KAPOW!, BAM!, football and falling extras and more,
+  plus VS (512x512) and an **Escalation (orange)** category with the five original orange versions. 121 sequences in
+  all. Existing events, themes and saved profiles keep their art; the new ones are choices.
+- **Three-frame Slam and Still**: new animations *Slam in (three frames)* and *Still (three frames)* beside the
+  peak-only originals (unchanged; Still (three frames) stays still under Reduce motion). Experimental › **Three-frame
+  timing**: *Art's timing* (default, as before) or *Hold the peak* (aftershock arrives with the fade).
+- **VS intro tab** (off by default): you (left) and your opponent (right) as large translucent 3D models with the
+  VS art between, 2–4 s (default 3 s). Triggers: duel start, boss pull, countdown FIGHT!, optionally every fight.
+  Sliders for duration, size, VS size, model and VS opacity, height; behind the interface by default; fallback when
+  the opponent's model cannot be drawn; Test button and `/kapow vs`. The model is always tried (inside `pcall`), as
+  oUF's portrait does; *Cautious opponent check* (off) keeps the first version, which skipped it whenever
+  `C_Secrets.ShouldUnitIdentityBeSecret` said the identity was secret. Settings
+  rows gained a slider type, and controller navigation steps sliders with left / right.
+- **Gallery tab**: thumbnails of every sequence by category, a looping onset/peak/aftershock preview with slow
+  motion, *Use for this event*, *Random from category* and *Play on screen* (tries the art with the event's look
+  without keeping it). The Events tab's **Art gallery** button opens it for the event being edited.
 - **Pet kill backup** (off by default, General tab): estimates a pet kill from your target's death when the
   killing-blow event is missing. Also feeds the Announcer and kill feed.
 - **Experimental tab** with **hit sounds**: Critical hit, Killing blow and Critical killing blow sounds moved here. They

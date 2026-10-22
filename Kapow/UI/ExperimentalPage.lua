@@ -55,6 +55,16 @@ local function Specs()
 		{ type = "header", label = "Experimental" },
 		{ type = "note", label = "Working, but with quirks. Each one says what to expect." },
 
+		{ type = "header", label = "Art frames" },
+		{
+			type = "choice",
+			label = "Three-frame timing",
+			tooltip = "For animations that play the art's three frames.\n\nArt's timing: onset and peak flash by (80 ms, 120 ms) and the aftershock stays until it fades, as the art was drawn.\n\nHold the peak: the peak stays on screen and the aftershock arrives as it fades.",
+			choices = { { "aftershock", "Art's timing" }, { "peak", "Hold the peak" } },
+			get = Get("frameHold"),
+			set = Set("frameHold"),
+		},
+
 		{ type = "header", label = "Hit sounds" },
 		{
 			type = "checkbox",

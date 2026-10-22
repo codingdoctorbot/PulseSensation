@@ -1,0 +1,66 @@
+{
+  "expected_messages": 33,
+  "actual_messages": 33,
+  "expected_frames": 99,
+  "actual_frames": 99,
+  "batch_sheet_count": 7,
+  "all_basic_checks_passed": true,
+  "method": "Aggregate existing one-pass batch checks, no repeated asset validation or live-game claims.",
+  "known_issues": [
+    {
+      "batch": "2026-10-22-batch-07",
+      "observations": [
+        "All exact words and requested motifs readable; distinct palettes and three effects states visible.",
+        "No apparent word clipping or cross-cell debris. Several peak effects extend beyond70percent target; small lettering/anchor variation remains possible."
+      ]
+    },
+    {
+      "batch": "2026-10-22-batch-08",
+      "observations": [
+        "All wording readable, distinct industrial HONORABLE KILL with crossed swords and flat comic words/palettes present.",
+        "No apparent clipping or cross-cell debris. Peak effects sometimes exceed70percent target; THWACK includes an extra angular starburst behind requested swoosh."
+      ]
+    },
+    {
+      "batch": "2026-10-22-batch-09",
+      "observations": [
+        "All exact words readable, full opaque lettering retained even VANISH, violet/cyan/gold/crimson/lavender palettes distinct.",
+        "No apparent clipped wordmarks. ONE HIT and OVERDRIVE include more burst fragments than requested narrow speed/oval treatment; SLICE adds a crimson ring around its cut. Some peak effects exceed70percent target."
+      ]
+    },
+    {
+      "batch": "2026-10-22-batch-10",
+      "observations": [
+        "All wording readable; arena EXCELLENT is heavy gold industrial metal, clearly distinct from existing arcade brush variant. OOPS peach/blue cartoon style preserved.",
+        "ASSASSINATED long word is small at256; cut/ring arrangement follows reference more than requested crossing cuts. HUMILIATION peak is hotter/more orange than subdued rust-red direction. No apparent clipped wordmarks."
+      ]
+    },
+    {
+      "batch": "2026-10-22-batch-11",
+      "observations": [
+        "All exact phrases readable, three tactical plates maintain distinct cyan/gold/red state palettes and failure words remain cartoon style.",
+        "No apparent clipping/cross-cell debris. DENIED is a comic starburst rather than clear rubber-stamp silhouette; MISS peak more energetic than anticlimactic direction."
+      ]
+    },
+    {
+      "batch": "2026-10-22-batch-12",
+      "observations": [
+        "All sports wordmarks readable, requested yellow card/net-corner/stadium motifs visible with distinct green/blue/orange/yellow palettes.",
+        "No apparent clipped lettering or cross-cell debris. PENALTY uses a generic orange flash rather than clear spot/goal-line cue; card/net effects stronger than restrained target at peak."
+      ]
+    },
+    {
+      "batch": "2026-10-22-batch-13",
+      "observations": [
+        "All three exact wordmarks and requested water/dust/crater motifs readable, distinct aqua/peach/lavender/ochre palettes visible.",
+        "No apparent clipping or cross-cell debris. Some peak effects exceed70percent target; minor lettering/anchor variation remains possible."
+      ]
+    }
+  ],
+  "installed": false,
+  "approval_status": "approved",
+  "approval_evidence": "User: looks good \u2014 approval of the complete 33-banner bulk set.",
+  "copied_to_addon_unimplemented": true,
+  "implemented": false,
+  "packaged_destination": "Kapow/UnimplementedArt"
+}

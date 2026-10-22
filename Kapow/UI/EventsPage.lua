@@ -17,6 +17,18 @@ local EVENT_SLOTS = 8 -- the largest group has 7
 
 local selectedGroup, selectedEvent = "hits", "crit"
 
+-- The Gallery tab picks art for the same event, so the selection is shared.
+function ns.ui.SelectedEvent()
+	return selectedEvent
+end
+
+function ns.ui.SelectEvent(id)
+	local def = ns.EVENT_BY_ID[id]
+	if def then
+		selectedGroup, selectedEvent = def.group, id
+	end
+end
+
 local function Def()
 	return ns.EVENT_BY_ID[selectedEvent]
 end
@@ -97,7 +109,7 @@ local function EditorSpecs()
 				end
 			end,
 		},
-		OptionsDropdown("Animation", "How it enters, moves and leaves. Flipbook, Bounce, Rise and Shake play the art's three frames.", "anim", D.ANIM_ORDER, D.ANIMS),
+		OptionsDropdown("Animation", "How it enters, moves and leaves. Flipbook, Bounce, Rise, Shake and the two \"three frames\" presets play the art's onset, peak and aftershock; Slam in and Still show the peak only.", "anim", D.ANIM_ORDER, D.ANIMS),
 		{
 			type = "edit",
 			label = "Title text",
@@ -162,6 +174,12 @@ local function EditorSpecs()
 					"Preview",
 					function()
 						ns.announcer:Preview(selectedEvent)
+					end,
+				},
+				{
+					"Art gallery",
+					function()
+						ns.ui.Open("gallery")
 					end,
 				},
 				{

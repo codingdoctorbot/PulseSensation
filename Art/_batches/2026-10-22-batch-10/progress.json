@@ -1,0 +1,78 @@
+{
+  "status": "packaged_unimplemented",
+  "approval_status": "approved",
+  "entries": [
+    {
+      "key": "ninja/assassinated",
+      "category": "ninja",
+      "name": "assassinated",
+      "status": "exported",
+      "planned_source": "_sources/ninja/assassinated.png",
+      "source": "_sources/ninja/assassinated.png",
+      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-a22567e0-11d6-44f5-9117-e70801b9fb70.png",
+      "frames": [
+        "ninja/assassinated_1.tga",
+        "ninja/assassinated_2.tga",
+        "ninja/assassinated_3.tga"
+      ]
+    },
+    {
+      "key": "arena/humiliation",
+      "category": "arena",
+      "name": "humiliation",
+      "status": "exported",
+      "planned_source": "_sources/arena/humiliation.png",
+      "source": "_sources/arena/humiliation.png",
+      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-2ec2f06d-c51a-47be-a53f-ab9b07c506d7.png",
+      "frames": [
+        "arena/humiliation_1.tga",
+        "arena/humiliation_2.tga",
+        "arena/humiliation_3.tga"
+      ]
+    },
+    {
+      "key": "arena/impressive",
+      "category": "arena",
+      "name": "impressive",
+      "status": "exported",
+      "planned_source": "_sources/arena/impressive.png",
+      "source": "_sources/arena/impressive.png",
+      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-52b4b30e-9757-40eb-93f2-fed2a9ec80fb.png",
+      "frames": [
+        "arena/impressive_1.tga",
+        "arena/impressive_2.tga",
+        "arena/impressive_3.tga"
+      ]
+    },
+    {
+      "key": "arena/excellent",
+      "category": "arena",
+      "name": "excellent",
+      "status": "exported",
+      "planned_source": "_sources/arena/excellent.png",
+      "source": "_sources/arena/excellent.png",
+      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-49fc0751-7606-4af7-91cd-b38c606a83cf.png",
+      "frames": [
+        "arena/excellent_1.tga",
+        "arena/excellent_2.tga",
+        "arena/excellent_3.tga"
+      ]
+    },
+    {
+      "key": "failure/oops",
+      "category": "failure",
+      "name": "oops",
+      "status": "exported",
+      "planned_source": "_sources/failure/oops.png",
+      "source": "_sources/failure/oops.png",
+      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-5f740ce9-bda0-428a-aa4c-f3bbc1306ccc.png",
+      "frames": [
+        "failure/oops_1.tga",
+        "failure/oops_2.tga",
+        "failure/oops_3.tga"
+      ]
+    }
+  ],
+  "review_sheet": "_previews/review-sheet.png",
+  "packaged_destination": "Kapow/UnimplementedArt"
+}

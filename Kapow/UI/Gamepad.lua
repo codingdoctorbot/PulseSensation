@@ -5,7 +5,7 @@
 -- buttons through OnGamePadButtonDown (no bindings are overridden):
 --
 --   D-pad up / down      previous / next setting (top to bottom, then the next column)
---   D-pad left / right   change a choice or dropdown, move between a row's buttons; elsewhere
+--   D-pad left / right   change a choice, slider or dropdown, move between a row's buttons; elsewhere
 --                        jump to the nearest setting in the column beside
 --   A (PAD1)             click: toggle a checkbox, next choice, press a button, type in a box
 --   B (PAD2)             close the window
@@ -182,7 +182,14 @@ end
 local function Cycle(row, dir)
 	local spec = row.spec
 	local values = {}
-	if spec.type == "choice" then
+	if spec.type == "slider" then
+		local v = (tonumber(spec.get()) or spec.min) + dir * spec.step
+		v = math.max(spec.min, math.min(spec.max, v))
+		Theme.PlayCheckSound(true)
+		spec.set(v)
+		row:RefreshValue()
+		return true
+	elseif spec.type == "choice" then
 		for i, choice in ipairs(spec.choices) do
 			values[i] = choice[1]
 		end
@@ -235,7 +242,7 @@ local function Horizontal(dir)
 		return
 	end
 	local row = t.row
-	if row and Enabled(t.widget) and (row.spec.type == "choice" or row.spec.type == "dropdown") then
+	if row and Enabled(t.widget) and (row.spec.type == "choice" or row.spec.type == "dropdown" or row.spec.type == "slider") then
 		Cycle(row, dir)
 		return
 	end

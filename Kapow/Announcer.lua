@@ -204,17 +204,28 @@ function A:Fire(id, values, opts)
 	ShowNext()
 end
 
--- Shows one event at once with sample values, for the window's Preview button.
+-- Shows one event at once with sample values, for the window's Preview button. art, when
+-- given, is shown in place of the event's own art (the Gallery's "Play on screen"), so a
+-- choice can be tried with the event's look before it is kept.
 local SAMPLE = { killer = "You", victim = "Hogger", count = 3, total = 5, name = "Bob", level = 42, amount = "12.3K", overkill = "1.2K" }
-function A:Preview(id)
+function A:Preview(id, art)
 	local def = ns.EVENT_BY_ID[id]
-	if def and def.hit then
+	if def and def.hit and not art then
 		ns.Test(id == "crit" and "pow" or (id == "kill" and "ko" or "overkill"))
 		return
 	end
+	local cfg = db.events[id]
+	if art then
+		local trial = {}
+		for field, value in pairs(cfg) do
+			trial[field] = value
+		end
+		trial.art = art
+		cfg = trial
+	end
 	local stage = EnsureStage(1)
 	busy[1] = true
-	ns.display.Play(stage, db.events[id], SAMPLE, OptsFor(1, {}), slotDone[1])
+	ns.display.Play(stage, cfg, SAMPLE, OptsFor(1, {}), slotDone[1])
 end
 
 -- ── Kill feed ─────────────────────────────────────────────────────────────────────────

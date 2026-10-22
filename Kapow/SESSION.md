@@ -55,6 +55,16 @@ produced in parallel by ChatGPT Codex. See `CHANGELOG.md` for what changed and `
 5. Get interrupted by a mob: INTERRUPTED needs `interruptedBy`; if it never shows, Forever does not fill it.
 6. Jump off something tall: Falling, Hard landing, Fell to death (`IsFalling()`).
 7. Profiles → **Export this**, paste the string into **Import**: long strings in the edit box.
+8. **Gallery** tab (2026-10-22, never opened in the client): layout fits the window, thumbnails and the looping
+   preview draw, the 512x512 VS texture loads, *Play on screen* shows the picked art, *Use for this event* sticks
+   after `/reload`, and the Events tab's three-button row (Preview / Art gallery / Reset event) is not clipped.
+   Controller navigation should reach the event dropdown, categories, thumbnails and buttons.
+9. **VS intro** (2026-10-22, never run in the client): VS intro tab → Test (`/kapow vs`) with and without a target.
+   Check: models draw and turn toward the middle (if they face outward, flip the sign of `FACING` in Versus.lua);
+   `SetAlpha` on the PlayerModel frames makes the models see-through (if not, try `SetModelAlpha`); the portrait zoom
+   frames chest and head (`ZOOM`); sliders drag and save; a real duel and a boss pull trigger it; in a dungeon or raid
+   the opponent's model draws (oUF does the same); if `SetUnit` errors there instead, turn on *Cautious opponent
+   check* and note it here.
 
 ## Open ideas
 

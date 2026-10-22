@@ -15,7 +15,7 @@
 
 local ROOT = arg[1] or "Kapow"
 -- TOC order, minus the window and minimap button (UI/), which the smoke test covers.
-local FILES = { "Kapow.lua", "Meter.lua", "ArtCatalog.lua", "SoundCatalog.lua", "Art.lua", "Events.lua", "Display.lua", "Themes.lua", "Profiles.lua", "Announcer.lua", "Detect.lua", "Attribution.lua", "Extras.lua", "Moments.lua" }
+local FILES = { "Kapow.lua", "Meter.lua", "ArtCatalog.lua", "SoundCatalog.lua", "Art.lua", "Events.lua", "Display.lua", "Themes.lua", "Profiles.lua", "Announcer.lua", "Detect.lua", "Attribution.lua", "Extras.lua", "Moments.lua", "Versus.lua" }
 local unpack = table.unpack or unpack
 
 local failures = 0

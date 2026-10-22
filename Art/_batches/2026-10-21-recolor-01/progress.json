@@ -1,0 +1,63 @@
+{
+  "status": "packaged_unimplemented",
+  "approval_status": "approved",
+  "entries": [
+    {
+      "name": "first-blood",
+      "status": "exported",
+      "source": "_sources/escalation/first-blood.png",
+      "frames": [
+        "escalation/first-blood_1.tga",
+        "escalation/first-blood_2.tga",
+        "escalation/first-blood_3.tga"
+      ]
+    },
+    {
+      "name": "ultra-kill",
+      "status": "exported",
+      "source": "_sources/escalation/ultra-kill.png",
+      "frames": [
+        "escalation/ultra-kill_1.tga",
+        "escalation/ultra-kill_2.tga",
+        "escalation/ultra-kill_3.tga"
+      ]
+    },
+    {
+      "name": "monster-kill",
+      "status": "exported",
+      "source": "_sources/escalation/monster-kill.png",
+      "frames": [
+        "escalation/monster-kill_1.tga",
+        "escalation/monster-kill_2.tga",
+        "escalation/monster-kill_3.tga"
+      ]
+    },
+    {
+      "name": "ludicrous-kill",
+      "status": "exported",
+      "source": "_sources/escalation/ludicrous-kill.png",
+      "frames": [
+        "escalation/ludicrous-kill_1.tga",
+        "escalation/ludicrous-kill_2.tga",
+        "escalation/ludicrous-kill_3.tga"
+      ]
+    },
+    {
+      "name": "dominating",
+      "status": "exported",
+      "source": "_sources/escalation/dominating.png",
+      "frames": [
+        "escalation/dominating_1.tga",
+        "escalation/dominating_2.tga",
+        "escalation/dominating_3.tga"
+      ]
+    }
+  ],
+  "generated_strips": 5,
+  "exported_frames": 15,
+  "review_sheet": "_previews/review-sheet.png",
+  "validation": "validation.json",
+  "cleanup_attempts": 1,
+  "cleanup_result": "partial; edge artifacts remain",
+  "packaged_destination": "Kapow/UnimplementedArt"
+}

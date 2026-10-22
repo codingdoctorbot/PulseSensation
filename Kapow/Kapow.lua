@@ -95,6 +95,7 @@ local DEFAULTS = {
 	annStreakBar = false, -- a draining bar: time left to chain your next kill into a multi-kill
 	uwu = false, -- UwU mode: a cute word floats up over your character on crits
 	uwuSound = "none", -- its sound, played only when the game tells the crit plainly
+	frameHold = "aftershock", -- three-frame art: "aftershock" (the art's timing) or "peak" (hold the peak, aftershock at the fade)
 	-- Extras.lua, all off by default.
 	comboCounter = false, -- "12 HITS" while you keep hitting your target; Combo banner when it ends
 	comboMin = 5, -- hits for the Combo banner
@@ -106,6 +107,21 @@ local DEFAULTS = {
 	reduceMotion = false, -- calmer: no movement, tilt or flash, shorter shows
 	partySync = false, -- tell groupmates who run KAPOW about your big moments (their kill feed)
 	gamepadNav = false, -- drive the settings window with a controller
+	-- VS intro (Versus.lua): you left, your opponent right, VS between. Off by default.
+	versus = false,
+	versusDuel = true, -- triggers, once versus is on
+	versusBoss = true,
+	versusCountdown = true, -- the FIGHT! after an arena, battleground or pull-timer countdown
+	versusCombat = false, -- every fight with an attackable target (frequent)
+	versusDuration = 3, -- seconds, 2 to 4
+	versusSize = 1, -- the whole intro
+	versusVsSize = 1, -- the VS art on top of that
+	versusPortraitAlpha = 0.35,
+	versusVsAlpha = 0.7,
+	versusY = 40, -- offset from screen centre
+	versusFallback = "you", -- no drawable opponent: "you" (you and VS), "vs" (VS alone), "skip"
+	versusBehind = true, -- draw under the interface (action bars, frames, banners)
+	versusStrictIdentity = false, -- cautious: no opponent model while the game hides its identity
 	-- Places (Extras.lua's unlock mode drags these; offsets from screen centre).
 	bannerX = 0,
 	bannerY = 260,
@@ -1001,6 +1017,9 @@ local function SyncSources()
 	if ns.moments then
 		ns.moments.Sync()
 	end
+	if ns.versus then
+		ns.versus.Sync()
+	end
 	if not db.enabled then
 		return
 	end
@@ -1086,7 +1105,7 @@ local SYNC_KEYS = {
 }
 function ns.Set(key, value)
 	db[key] = value
-	if SYNC_KEYS[key] then
+	if SYNC_KEYS[key] or string.sub(key, 1, 6) == "versus" then
 		SyncSources()
 	elseif key == "meter" and ns.meter then
 		ns.meter:Refresh()
@@ -1175,7 +1194,7 @@ local KILL_KEYS = {
 	stat = { "killStatistic", "kill statistic" },
 }
 
-local HELP = "/kapow opens settings  ·  test pow|ko|overkill|hit  ·  on|off  ·  kill event|death|died|line|stat|pet|log  ·  stats  ·  announce test  ·  profile [name]  ·  credits  ·  scale <n>  ·  pos <x> <y>  ·  unlock|lock  ·  records [reset]  ·  attribution recent|any|accurate  ·  numbers  ·  meter  ·  jitter  ·  minimap  ·  debug"
+local HELP = "/kapow opens settings  ·  test pow|ko|overkill|hit  ·  on|off  ·  kill event|death|died|line|stat|pet|log  ·  stats  ·  announce test  ·  vs  ·  profile [name]  ·  credits  ·  scale <n>  ·  pos <x> <y>  ·  unlock|lock  ·  records [reset]  ·  attribution recent|any|accurate  ·  numbers  ·  meter  ·  jitter  ·  minimap  ·  debug"
 
 SLASH_KAPOW1 = "/kapow"
 SLASH_KAPOW2 = "/comic" -- the name before KAPOW
@@ -1267,6 +1286,10 @@ SlashCmdList["KAPOW"] = function(input)
 	elseif cmd == "stats" then
 		if ns.detect then
 			ns.detect.ListKillStatistics()
+		end
+	elseif cmd == "vs" or cmd == "versus" then
+		if ns.versus then
+			ns.versus.Test()
 		end
 	elseif cmd == "credits" then
 		ns.PrintCredits()

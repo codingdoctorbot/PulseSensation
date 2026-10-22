@@ -1,0 +1,345 @@
+{
+  "check": "one basic isolated export validation",
+  "expected_frames": 15,
+  "actual_frames": 15,
+  "all_passed": true,
+  "files": [
+    {
+      "file": "football/kick-off_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 44342,
+      "nontransparent_bbox": [
+        4,
+        11,
+        252,
+        252
+      ],
+      "pass": true
+    },
+    {
+      "file": "football/kick-off_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 30906,
+      "nontransparent_bbox": [
+        4,
+        10,
+        252,
+        246
+      ],
+      "pass": true
+    },
+    {
+      "file": "football/kick-off_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 42056,
+      "nontransparent_bbox": [
+        4,
+        4,
+        249,
+        246
+      ],
+      "pass": true
+    },
+    {
+      "file": "football/full-time_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 42526,
+      "nontransparent_bbox": [
+        12,
+        5,
+        252,
+        241
+      ],
+      "pass": true
+    },
+    {
+      "file": "football/full-time_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 30555,
+      "nontransparent_bbox": [
+        4,
+        29,
+        252,
+        243
+      ],
+      "pass": true
+    },
+    {
+      "file": "football/full-time_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 43126,
+      "nontransparent_bbox": [
+        4,
+        9,
+        241,
+        247
+      ],
+      "pass": true
+    },
+    {
+      "file": "football/penalty_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 40988,
+      "nontransparent_bbox": [
+        19,
+        4,
+        252,
+        246
+      ],
+      "pass": true
+    },
+    {
+      "file": "football/penalty_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 27431,
+      "nontransparent_bbox": [
+        4,
+        21,
+        252,
+        235
+      ],
+      "pass": true
+    },
+    {
+      "file": "football/penalty_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 37498,
+      "nontransparent_bbox": [
+        4,
+        10,
+        252,
+        244
+      ],
+      "pass": true
+    },
+    {
+      "file": "football/yellow-card_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 38341,
+      "nontransparent_bbox": [
+        4,
+        13,
+        248,
+        246
+      ],
+      "pass": true
+    },
+    {
+      "file": "football/yellow-card_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 27190,
+      "nontransparent_bbox": [
+        9,
+        7,
+        252,
+        242
+      ],
+      "pass": true
+    },
+    {
+      "file": "football/yellow-card_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 37601,
+      "nontransparent_bbox": [
+        4,
+        20,
+        235,
+        243
+      ],
+      "pass": true
+    },
+    {
+      "file": "football/screamer_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 40431,
+      "nontransparent_bbox": [
+        18,
+        8,
+        252,
+        248
+      ],
+      "pass": true
+    },
+    {
+      "file": "football/screamer_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 31478,
+      "nontransparent_bbox": [
+        4,
+        11,
+        250,
+        243
+      ],
+      "pass": true
+    },
+    {
+      "file": "football/screamer_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 38982,
+      "nontransparent_bbox": [
+        4,
+        9,
+        243,
+        248
+      ],
+      "pass": true
+    }
+  ],
+  "observations": [
+    "All sports wordmarks readable, requested yellow card/net-corner/stadium motifs visible with distinct green/blue/orange/yellow palettes.",
+    "No apparent clipped lettering or cross-cell debris. PENALTY uses a generic orange flash rather than clear spot/goal-line cue; card/net effects stronger than restrained target at peak."
+  ],
+  "expected_sources": 5,
+  "actual_sources": 5,
+  "verification_scope": "One normal offline export/visual check; no in-game verification, no installation, no retries."
+}

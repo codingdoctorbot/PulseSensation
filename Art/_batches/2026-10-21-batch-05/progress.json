@@ -1,0 +1,66 @@
+{
+  "status": "packaged_unimplemented",
+  "approval_status": "approved",
+  "entries": [
+    {
+      "name": "round-1",
+      "category": "arcade",
+      "status": "exported",
+      "source": "_sources/arcade/round-1.png",
+      "frames": [
+        "arcade/round-1_1.tga",
+        "arcade/round-1_2.tga",
+        "arcade/round-1_3.tga"
+      ]
+    },
+    {
+      "name": "round-2",
+      "category": "arcade",
+      "status": "exported",
+      "source": "_sources/arcade/round-2.png",
+      "frames": [
+        "arcade/round-2_1.tga",
+        "arcade/round-2_2.tga",
+        "arcade/round-2_3.tga"
+      ]
+    },
+    {
+      "name": "final-round",
+      "category": "arcade",
+      "status": "exported",
+      "source": "_sources/arcade/final-round.png",
+      "frames": [
+        "arcade/final-round_1.tga",
+        "arcade/final-round_2.tga",
+        "arcade/final-round_3.tga"
+      ]
+    },
+    {
+      "name": "double-ko",
+      "category": "arcade",
+      "status": "exported",
+      "source": "_sources/arcade/double-ko.png",
+      "frames": [
+        "arcade/double-ko_1.tga",
+        "arcade/double-ko_2.tga",
+        "arcade/double-ko_3.tga"
+      ]
+    },
+    {
+      "name": "time-over",
+      "category": "arcade",
+      "status": "exported",
+      "source": "_sources/arcade/time-over.png",
+      "frames": [
+        "arcade/time-over_1.tga",
+        "arcade/time-over_2.tga",
+        "arcade/time-over_3.tga"
+      ]
+    }
+  ],
+  "generated_strips": 5,
+  "exported_frames": 15,
+  "review_sheet": "_previews/review-sheet.png",
+  "validation": "validation.json",
+  "packaged_destination": "Kapow/UnimplementedArt"
+}

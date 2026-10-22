@@ -1,0 +1,348 @@
+{
+  "check": "one basic isolated export validation",
+  "expected_frames": 15,
+  "actual_frames": 15,
+  "all_passed": true,
+  "files": [
+    {
+      "file": "arcade/round-1_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 48789,
+      "nontransparent_bbox": [
+        19,
+        18,
+        247,
+        244
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/round-1_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 43300,
+      "nontransparent_bbox": [
+        4,
+        12,
+        252,
+        246
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/round-1_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 49568,
+      "nontransparent_bbox": [
+        4,
+        12,
+        236,
+        241
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/round-2_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 48716,
+      "nontransparent_bbox": [
+        19,
+        46,
+        242,
+        227
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/round-2_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 36334,
+      "nontransparent_bbox": [
+        4,
+        49,
+        243,
+        224
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/round-2_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 44536,
+      "nontransparent_bbox": [
+        9,
+        43,
+        236,
+        241
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/final-round_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 44067,
+      "nontransparent_bbox": [
+        4,
+        12,
+        252,
+        241
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/final-round_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 29106,
+      "nontransparent_bbox": [
+        4,
+        4,
+        251,
+        241
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/final-round_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 38725,
+      "nontransparent_bbox": [
+        5,
+        8,
+        241,
+        246
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/double-ko_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 40287,
+      "nontransparent_bbox": [
+        4,
+        7,
+        248,
+        246
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/double-ko_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 32808,
+      "nontransparent_bbox": [
+        20,
+        34,
+        252,
+        245
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/double-ko_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 36881,
+      "nontransparent_bbox": [
+        14,
+        22,
+        245,
+        218
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/time-over_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 43574,
+      "nontransparent_bbox": [
+        31,
+        10,
+        248,
+        229
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/time-over_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 32324,
+      "nontransparent_bbox": [
+        9,
+        26,
+        246,
+        249
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/time-over_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 42107,
+      "nontransparent_bbox": [
+        9,
+        11,
+        225,
+        240
+      ],
+      "pass": true
+    }
+  ],
+  "observations": [
+    "All five exact phrases read correctly in all three frames: ROUND 1, ROUND 2, FINAL ROUND, DOUBLE K.O. with both dots, and TIME OVER. No unwanted exclamation marks or dots.",
+    "Five high-resolution transparent PNG strips export to15 uncompressed type2 32-bit256x256 RGBA TGAs; genuine transparent/nontransparent alpha present in every file.",
+    "Palette/motion variety is visible: red/blue horizontal ROUND1, cyan/violet wings ROUND2, gold/crimson diagonal FINALROUND, opposing red/blue DOUBLEKO impacts and cool cyan/blue broken-ring TIMEOVER.",
+    "No apparent clipped lettering or detached cross-cell edge fragments on this review sheet. Several brightest peak strokes extend beyond the requested central70 percent region but retain transparent outer margins.",
+    "Minor generated scale/glyph/anchor differences may remain between frames; no pixel-identical wordmark claim. TIMEOVER leans bright cyan/blue more than dark teal.",
+    "One normal offline export/visual check only, no retries or in-game verification. Approval pending; nothing copied into addon. Deferred mixed-event banners not generated."
+  ],
+  "expected_sources": 5,
+  "actual_sources": 5
+}

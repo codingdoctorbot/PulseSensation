@@ -1,0 +1,99 @@
+[
+  {
+    "name": "ludicrous-kill",
+    "word": "LUDICROUS KILL!",
+    "level": 5,
+    "category": "escalation",
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat popup animation sprite strip for a World of Warcraft addon.\nInput images 1 and 2 are style/composition references ONLY, not edit targets. Match their existing ivory/steel heavy italic condensed wordmark family, thick black outlines, subtle metal bevel and orange ember/metallic impact effects. Render only the NEW exact wording below.\nCreate ONE horizontal 3:1 sprite strip, exactly THREE equal SQUARE cells in ONE row, preferably 1536x512. Genuinely transparent alpha background. NO labels, grid, separators, frame numbers, scene, characters, logos, watermarks or painted checkerboard.\nEach cell contains the full SAME wordmark with EXACTLY the SAME font, glyph geometry, spelling, position and scale, centered at 50% width and 50% height within its cell. Lock wordmark anchor and geometry across the strip. Opaque ivory/steel lettering with thick black outer outline, readable at 256x256.\nLeft onset: tight starting burst. Middle peak: brighter more energetic burst and outward fragments. Right aftershock: diminishing glow and spread fragments. Three distinct coherent GENERATED art frames of changing effects, never software-scaled, rotated or faded copies; wordmark unchanged.\nCRITICAL LAYOUT: Make stickers SMALLER than references. Each word plus ALL effects stays within central 70% width and 70% height of its cell. Lettering about 60% cell width. Wide genuinely empty transparent gutters, no overlaps or clipping. Prefer bold shapes over tiny detail.\nVisual direction: Arena shooter escalation level 5. Two centered lines: LUDICROUS above KILL!. White-hot molten core with incandescent white-yellow sparks, orange-red edges and blazing diagonal slashes. Maximum escalation.\nText (verbatim in EACH of THREE cells): \"LUDICROUS KILL!\". Exact spelling and exclamation mark mandatory. No extra words.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/escalation/double-kill.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-01/_sources/escalation/monster-kill.png"
+    ],
+    "reference_roles": [
+      "style/composition reference; not edit target",
+      "style/composition reference; not edit target"
+    ],
+    "generator_mode": "built-in image_gen; generation with style references",
+    "approval_status": "pending",
+    "status": "planned",
+    "color_direction_timing": "Launched before user requested color variation; preserve legacy orange palette for review."
+  },
+  {
+    "name": "killing-spree",
+    "word": "KILLING SPREE!",
+    "level": 2,
+    "category": "escalation",
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat popup animation sprite strip for a World of Warcraft addon.\nInput images 1 and 2 are style/composition references ONLY, not edit targets. Match their existing ivory/steel heavy italic condensed wordmark family, thick black outlines, subtle metal bevel and orange ember/metallic impact effects. Render only the NEW exact wording below.\nCreate ONE horizontal 3:1 sprite strip, exactly THREE equal SQUARE cells in ONE row, preferably 1536x512. Genuinely transparent alpha background. NO labels, grid, separators, frame numbers, scene, characters, logos, watermarks or painted checkerboard.\nEach cell contains the full SAME wordmark with EXACTLY the SAME font, glyph geometry, spelling, position and scale, centered at 50% width and 50% height within its cell. Lock wordmark anchor and geometry across the strip. Opaque ivory/steel lettering with thick black outer outline, readable at 256x256.\nLeft onset: tight starting burst. Middle peak: brighter more energetic burst and outward fragments. Right aftershock: diminishing glow and spread fragments. Three distinct coherent GENERATED art frames of changing effects, never software-scaled, rotated or faded copies; wordmark unchanged.\nCRITICAL LAYOUT: Make stickers SMALLER than references. Each word plus ALL effects stays within central 70% width and 70% height of its cell. Lettering about 60% cell width. Wide genuinely empty transparent gutters, no overlaps or clipping. Prefer bold shapes over tiny detail.\nVisual direction: Arena shooter escalation level 2. Two centered lines: KILLING above SPREE!. Restrained compact orange embers, a small local burst, a few steel fragments and two subtle diagonal slashes. Intentionally MUCH less fiery than level 5 MONSTER; retain restrained open transparent spaces around lettering.\nText (verbatim in EACH of THREE cells): \"KILLING SPREE!\". Exact spelling and exclamation mark mandatory. No extra words.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/escalation/double-kill.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/escalation/multikill.png"
+    ],
+    "reference_roles": [
+      "style/composition reference; not edit target",
+      "style/composition reference; not edit target"
+    ],
+    "generator_mode": "built-in image_gen; generation with style references",
+    "approval_status": "pending",
+    "status": "planned",
+    "color_direction_timing": "Launched before user requested color variation; preserve legacy orange palette for review."
+  },
+  {
+    "name": "dominating",
+    "word": "DOMINATING!",
+    "level": 3,
+    "category": "escalation",
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat popup animation sprite strip for a World of Warcraft addon.\nInput images 1 and 2 are style/composition references ONLY, not edit targets. Match their existing ivory/steel heavy italic condensed wordmark family, thick black outlines, subtle metal bevel and orange ember/metallic impact effects. Render only the NEW exact wording below.\nCreate ONE horizontal 3:1 sprite strip, exactly THREE equal SQUARE cells in ONE row, preferably 1536x512. Genuinely transparent alpha background. NO labels, grid, separators, frame numbers, scene, characters, logos, watermarks or painted checkerboard.\nEach cell contains the full SAME wordmark with EXACTLY the SAME font, glyph geometry, spelling, position and scale, centered at 50% width and 50% height within its cell. Lock wordmark anchor and geometry across the strip. Opaque ivory/steel lettering with thick black outer outline, readable at 256x256.\nLeft onset: tight starting burst. Middle peak: brighter more energetic burst and outward fragments. Right aftershock: diminishing glow and spread fragments. Three distinct coherent GENERATED art frames of changing effects, never software-scaled, rotated or faded copies; wordmark unchanged.\nCRITICAL LAYOUT: Make stickers SMALLER than references. Each word plus ALL effects stays within central 70% width and 70% height of its cell. Lettering about 60% cell width. Wide genuinely empty transparent gutters, no overlaps or clipping. Prefer bold shapes over tiny detail.\nVisual direction: Arena shooter escalation level 3. ONE centered line. Strong molten orange burst, steel fragments and two diagonal slash marks. Medium energy, perceptibly more powerful than restrained KILLING SPREE yet below maximum white-hot intensity.\nText (verbatim in EACH of THREE cells): \"DOMINATING!\". Exact spelling and exclamation mark mandatory. No extra words.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/escalation/multikill.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-01/_sources/escalation/monster-kill.png"
+    ],
+    "reference_roles": [
+      "style/composition reference; not edit target",
+      "style/composition reference; not edit target"
+    ],
+    "generator_mode": "built-in image_gen; generation with style references",
+    "approval_status": "pending",
+    "status": "planned",
+    "color_direction_timing": "Launched before user requested color variation; preserve legacy orange palette for review."
+  },
+  {
+    "name": "unstoppable",
+    "word": "UNSTOPPABLE!",
+    "level": 4,
+    "category": "escalation",
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat popup animation sprite strip for a World of Warcraft addon.\nInput images 1 and 2 are TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, not edit targets. Match their existing ivory/steel heavy italic condensed wordmark family, thick black outlines and subtle metal bevel. DO NOT COPY the reference orange palette. Render only the NEW exact wording below.\nCreate ONE horizontal 3:1 sprite strip, exactly THREE equal SQUARE cells in ONE row, preferably 1536x512. Genuinely transparent alpha background. NO labels, grid, separators, frame numbers, scene, characters, logos, watermarks or painted checkerboard.\nEach cell contains the full SAME wordmark with EXACTLY the SAME font, glyph geometry, spelling, position and scale, centered at 50% width and 50% height within its cell. Lock wordmark anchor and geometry across the strip. Opaque ivory/steel lettering with thick black outer outline, readable at 256x256.\nLeft onset: tight starting burst. Middle peak: brighter more energetic burst and outward fragments. Right aftershock: diminishing glow and spread fragments. Three distinct coherent GENERATED art frames of changing effects, never software-scaled, rotated or faded copies; wordmark unchanged.\nCRITICAL LAYOUT: Make stickers SMALLER than references. Each word plus ALL effects stays within central 70% width and 70% height of its cell. Lettering about 60% cell width. Wide genuinely empty transparent gutters, no overlaps or clipping. Prefer bold shapes over tiny detail.\nVisual direction: Arena shooter escalation level 4. ONE centered line. Blazing electric CYAN and saturated BLUE diagonal slash marks and charged steel fragments. Strong electric blue/cyan plasma burst. NO orange or warm ember effects. Ivory/steel text remains. High energy level 4.\nText (verbatim in EACH of THREE cells): \"UNSTOPPABLE!\". Exact spelling and exclamation mark mandatory. No extra words.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/escalation/multikill.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-01/_sources/escalation/monster-kill.png"
+    ],
+    "reference_roles": [
+      "typography/material/frame structure only; do not copy reference orange palette",
+      "typography/material/frame structure only; do not copy reference orange palette"
+    ],
+    "generator_mode": "built-in image_gen; generation with style references",
+    "approval_status": "pending",
+    "status": "planned",
+    "palette": "electric cyan/blue",
+    "color_direction_timing": "Prompt updated before generation following user request for palette variation."
+  },
+  {
+    "name": "godlike",
+    "word": "GODLIKE!",
+    "level": 5,
+    "category": "escalation",
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat popup animation sprite strip for a World of Warcraft addon.\nInput images 1 and 2 are TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, not edit targets. Match their existing ivory/steel heavy italic condensed wordmark family, thick black outlines and subtle metal bevel. DO NOT COPY the reference orange palette. Render only the NEW exact wording below.\nCreate ONE horizontal 3:1 sprite strip, exactly THREE equal SQUARE cells in ONE row, preferably 1536x512. Genuinely transparent alpha background. NO labels, grid, separators, frame numbers, scene, characters, logos, watermarks or painted checkerboard.\nEach cell contains the full SAME wordmark with EXACTLY the SAME font, glyph geometry, spelling, position and scale, centered at 50% width and 50% height within its cell. Lock wordmark anchor and geometry across the strip. Opaque ivory/steel lettering with thick black outer outline, readable at 256x256.\nLeft onset: tight starting burst. Middle peak: brighter more energetic burst and outward fragments. Right aftershock: diminishing glow and spread fragments. Three distinct coherent GENERATED art frames of changing effects, never software-scaled, rotated or faded copies; wordmark unchanged.\nCRITICAL LAYOUT: Make stickers SMALLER than references. Each word plus ALL effects stays within central 70% width and 70% height of its cell. Lettering about 60% cell width. Wide genuinely empty transparent gutters, no overlaps or clipping. Prefer bold shapes over tiny detail.\nVisual direction: Arena shooter escalation level 5. ONE centered line. Luminous IVORY and bright GOLD core, golden sparks, steel fragments, small VIOLET accent sparks, and a faint but clearly visible thin GOLDEN HALO encircling behind the wordmark. Gold/ivory is dominant, no orange flame burst. Maximum escalation with luminous ivory-gold heart.\nText (verbatim in EACH of THREE cells): \"GODLIKE!\". Exact spelling and exclamation mark mandatory. No extra words.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/escalation/multikill.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-01/_sources/escalation/monster-kill.png"
+    ],
+    "reference_roles": [
+      "typography/material/frame structure only; do not copy reference orange palette",
+      "typography/material/frame structure only; do not copy reference orange palette"
+    ],
+    "generator_mode": "built-in image_gen; generation with style references",
+    "approval_status": "pending",
+    "status": "planned",
+    "palette": "gold/ivory with small violet accents",
+    "color_direction_timing": "Prompt updated before generation following user request for palette variation."
+  }
+]

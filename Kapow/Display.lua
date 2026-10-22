@@ -99,16 +99,19 @@ D.POSITIONS = {
 }
 D.POSITION_ORDER = { "comic", "banner", "low", "left", "right" }
 
--- Presets: whether the art flips through its three frames, and how the root moves.
+-- Presets: whether the art flips through its three frames, and how the root moves. Slam and
+-- Still show the peak frame only; their "three frames" twins move the same way and flip.
 D.ANIMS = {
 	flipbook = { label = "Flipbook pop", flip = true },
 	slam = { label = "Slam in", flip = false },
+	slamflip = { label = "Slam in (three frames)", flip = true },
 	bounce = { label = "Bounce", flip = true },
 	rise = { label = "Rise and fade", flip = true },
 	shake = { label = "Shake", flip = true },
 	static = { label = "Still", flip = false },
+	stillflip = { label = "Still (three frames)", flip = true, calm = true },
 }
-D.ANIM_ORDER = { "flipbook", "slam", "bounce", "rise", "shake", "static" }
+D.ANIM_ORDER = { "flipbook", "slam", "slamflip", "bounce", "rise", "shake", "static", "stillflip" }
 
 -- ── Building ──────────────────────────────────────────────────────────────────────────
 
@@ -213,6 +216,17 @@ end
 
 function BUILDERS.static(group, life)
 	Fade(group, life, 1)
+end
+
+BUILDERS.slamflip = BUILDERS.slam
+BUILDERS.stillflip = BUILDERS.static
+
+-- When the fade of each preset begins (Rise fades over its second half).
+local function FadeStart(preset, life)
+	if preset == "rise" then
+		return life * 0.5
+	end
+	return math.max(0, life - 0.35)
 end
 
 -- One animation group per preset and duration, built on first use (preset -> life -> group).
@@ -328,7 +342,7 @@ end
 function D.Play(stage, cfg, values, opts, onDone)
 	local entry = ns.art.Resolve(cfg.art)
 	local preset = D.ANIMS[cfg.anim] and cfg.anim or "slam"
-	if ns.db.reduceMotion and preset ~= "static" then
+	if ns.db.reduceMotion and preset ~= "static" and not D.ANIMS[preset].calm then
 		preset = D.ANIMS[preset].flip and "rise" or "static" -- no slam, bounce or shake
 	end
 	local flip = entry and D.ANIMS[preset].flip
@@ -380,13 +394,20 @@ function D.Play(stage, cfg, values, opts, onDone)
 	Group(stage, preset, life):Play()
 
 	if flip then
+		-- The art's timing: onset, peak, then the aftershock holds until the end. With
+		-- frameHold = "peak" (Experimental tab) the peak holds instead and the aftershock
+		-- arrives as the fade begins.
 		local times = ns.art.FRAME_TIMES
+		local aftershock = (times[1] + times[2]) * stretch
+		if ns.db.frameHold == "peak" then
+			aftershock = math.max(aftershock, FadeStart(preset, life))
+		end
 		C_Timer.After(times[1] * stretch, function()
 			if stage.showId == showId then
 				stage.tex:SetTexture(entry.frames[2])
 			end
 		end)
-		C_Timer.After((times[1] + times[2]) * stretch, function()
+		C_Timer.After(aftershock, function()
 			if stage.showId == showId then
 				stage.tex:SetTexture(entry.frames[3])
 			end

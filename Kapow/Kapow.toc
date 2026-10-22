@@ -34,11 +34,15 @@ Detect.lua
 Attribution.lua
 Extras.lua
 Moments.lua
+# VS intro: you and your opponent as 3D models with the VS art between (off by default).
+Versus.lua
 # Settings window and minimap button, ported from PulseHaptics' UI (no gamepad support yet).
 UI\Theme.lua
 UI\Rows.lua
 UI\Panel.lua
 UI\EventsPage.lua
+UI\GalleryPage.lua
+UI\VersusPage.lua
 UI\ProfilesPage.lua
 UI\ExperimentalPage.lua
 UI\ExtrasPage.lua

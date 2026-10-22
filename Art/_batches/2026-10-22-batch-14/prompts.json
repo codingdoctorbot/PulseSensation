@@ -1,0 +1,117 @@
+[
+  {
+    "name": "continue",
+    "key": "arcade/continue",
+    "word": "CONTINUE?",
+    "category": "arcade",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent arcade fighting-game combat-popup animation strip for World of Warcraft addon.\nInputs1/2 are inspected category TYPOGRAPHY/MATERIAL/THREE-FRAME structure references ONLY; NOT edit targets. NEW words/palette/silhouette below override reference words/hues/effects. Keep coherent angular slanted arcade brush family, no official game logo.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in one row, preferably1536x512 or higher. Left onset/middle peak/right aftershock. FULL EXACT wordmark in ALLTHREE cells, SAME glyphgeometry, scale, angle, opaque letters and centered50%/50% anchor. Animate effects only, three genuinely generated original art frames, never software-scaled/rotated/faded copies.\nGenuine TRANSPARENT ALPHA with antialiased letters/translucent effectedges, NO painted background/checkerboard, grid, frame labels/numbers, scenery, characters, watermarks, extra words.\nCRITICAL: MAKE ART SMALLER than references; entire word plus EVERY effect fits CENTRAL70% width/height of EACHcell. At least15% FULLY EMPTY transparent gutters on EVERY side INCLUDING peak. Compact bold strokes readable256, NO cross-cell fragments, overlap or clipping.\n\nVisual direction: Cream/IVORY slanted arcade BRUSH letters, thick navy-black outline, CYAN/MAGENTA CURVED REBOUND sweep suggesting a second chance. NO buttons, coins, numbers or supporting text. Exact QUESTION MARK, no exclamation.\nMotion: Onset narrow cyan/magenta curved rebound; peak compact brighter doubled-back sweep; aftershock short curved cyan/magenta trails.\nText VERBATIM in ALLTHREE cells: \"CONTINUE?\". Exact spelling/punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/you-win.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arcade/perfect.png"
+    ],
+    "reference_roles": [
+      "inspected arcade typography/material/frame structure only; not edit target; new palette override",
+      "inspected arcade typography/material/frame structure only; not edit target; new palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected arcade reference strips",
+    "status": "planned",
+    "approval_status": "pending",
+    "installed": false
+  },
+  {
+    "name": "game-over",
+    "key": "arcade/game-over",
+    "word": "GAME OVER",
+    "category": "arcade",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent arcade fighting-game combat-popup animation strip for World of Warcraft addon.\nInputs1/2 are inspected category TYPOGRAPHY/MATERIAL/THREE-FRAME structure references ONLY; NOT edit targets. NEW words/palette/silhouette below override reference words/hues/effects. Keep coherent angular slanted arcade brush family, no official game logo.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in one row, preferably1536x512 or higher. Left onset/middle peak/right aftershock. FULL EXACT wordmark in ALLTHREE cells, SAME glyphgeometry, scale, angle, opaque letters and centered50%/50% anchor. Animate effects only, three genuinely generated original art frames, never software-scaled/rotated/faded copies.\nGenuine TRANSPARENT ALPHA with antialiased letters/translucent effectedges, NO painted background/checkerboard, grid, frame labels/numbers, scenery, characters, watermarks, extra words.\nCRITICAL: MAKE ART SMALLER than references; entire word plus EVERY effect fits CENTRAL70% width/height of EACHcell. At least15% FULLY EMPTY transparent gutters on EVERY side INCLUDING peak. Compact bold strokes readable256, NO cross-cell fragments, overlap or clipping.\n\nVisual direction: TWO centered lines GAME / OVER. IVORY/SILVER arcade BRUSH lettering, deep CRIMSON/VIOLET DOWNWARD trails, thick navy-black outline. Strong decisive arcade end-screen stamp. NO punctuation.\nMotion: Onset short crimson/violet descending cuts; peak broad but compact downward brush stamp; aftershock separated downward short tails.\nText VERBATIM in ALLTHREE cells: \"GAME OVER\". Exact spelling/punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/you-lose.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/fight.png"
+    ],
+    "reference_roles": [
+      "inspected arcade typography/material/frame structure only; not edit target; new palette override",
+      "inspected arcade typography/material/frame structure only; not edit target; new palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected arcade reference strips",
+    "status": "planned",
+    "approval_status": "pending",
+    "installed": false
+  },
+  {
+    "name": "guard-break",
+    "key": "arcade/guard-break",
+    "word": "GUARD BREAK",
+    "category": "arcade",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent arcade fighting-game combat-popup animation strip for World of Warcraft addon.\nInputs1/2 are inspected category TYPOGRAPHY/MATERIAL/THREE-FRAME structure references ONLY; NOT edit targets. NEW words/palette/silhouette below override reference words/hues/effects. Keep coherent angular slanted arcade brush family, no official game logo.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in one row, preferably1536x512 or higher. Left onset/middle peak/right aftershock. FULL EXACT wordmark in ALLTHREE cells, SAME glyphgeometry, scale, angle, opaque letters and centered50%/50% anchor. Animate effects only, three genuinely generated original art frames, never software-scaled/rotated/faded copies.\nGenuine TRANSPARENT ALPHA with antialiased letters/translucent effectedges, NO painted background/checkerboard, grid, frame labels/numbers, scenery, characters, watermarks, extra words.\nCRITICAL: MAKE ART SMALLER than references; entire word plus EVERY effect fits CENTRAL70% width/height of EACHcell. At least15% FULLY EMPTY transparent gutters on EVERY side INCLUDING peak. Compact bold strokes readable256, NO cross-cell fragments, overlap or clipping.\n\nVisual direction: TWO centered lines GUARD / BREAK. CREAM/IVORY arcade BRUSH letters with dark navy outline. ORANGE/ELECTRIC BLUE angular FRACTURED GUARD ARC, compact sharp impact cuts. Defensive arc visibly broken, NO rocks, fireball burst or punctuation.\nMotion: Onset short cracked blue/orange arc; peak compact arc splits into angular segments with orange/blue sharp cuts; aftershock separated short arc segments. Text unchanged.\nText VERBATIM in ALLTHREE cells: \"GUARD BREAK\". Exact spelling/punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/fight.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arcade/counter.png"
+    ],
+    "reference_roles": [
+      "inspected arcade typography/material/frame structure only; not edit target; new palette override",
+      "inspected arcade typography/material/frame structure only; not edit target; new palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected arcade reference strips",
+    "status": "planned",
+    "approval_status": "pending",
+    "installed": false
+  },
+  {
+    "name": "blocked",
+    "key": "arcade/blocked",
+    "word": "BLOCKED!",
+    "category": "arcade",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent arcade fighting-game combat-popup animation strip for World of Warcraft addon.\nInputs1/2 are inspected category TYPOGRAPHY/MATERIAL/THREE-FRAME structure references ONLY; NOT edit targets. NEW words/palette/silhouette below override reference words/hues/effects. Keep coherent angular slanted arcade brush family, no official game logo.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in one row, preferably1536x512 or higher. Left onset/middle peak/right aftershock. FULL EXACT wordmark in ALLTHREE cells, SAME glyphgeometry, scale, angle, opaque letters and centered50%/50% anchor. Animate effects only, three genuinely generated original art frames, never software-scaled/rotated/faded copies.\nGenuine TRANSPARENT ALPHA with antialiased letters/translucent effectedges, NO painted background/checkerboard, grid, frame labels/numbers, scenery, characters, watermarks, extra words.\nCRITICAL: MAKE ART SMALLER than references; entire word plus EVERY effect fits CENTRAL70% width/height of EACHcell. At least15% FULLY EMPTY transparent gutters on EVERY side INCLUDING peak. Compact bold strokes readable256, NO cross-cell fragments, overlap or clipping.\n\nVisual direction: ONE centered line. IVORY/SILVER arcade BRUSH letters with deep navy outline. Cool CYAN/BLUE protective arc with TWO restrained deflection sparks. Compact solid defensive silhouette, distinct from fractured GUARD BREAK. NO orange fireball or rocks.\nMotion: Onset narrow intact cyan/blue defensive arc; peak brighter intact arc and two small deflected sparks; aftershock short blue arc gleam and two diminishing sparks. Text unchanged.\nText VERBATIM in ALLTHREE cells: \"BLOCKED!\". Exact spelling/punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arcade/counter.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arcade/perfect.png"
+    ],
+    "reference_roles": [
+      "inspected arcade typography/material/frame structure only; not edit target; new palette override",
+      "inspected arcade typography/material/frame structure only; not edit target; new palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected arcade reference strips",
+    "status": "planned",
+    "approval_status": "pending",
+    "installed": false
+  },
+  {
+    "name": "level-up",
+    "key": "arcade/level-up",
+    "word": "LEVEL UP!",
+    "category": "arcade",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent arcade fighting-game combat-popup animation strip for World of Warcraft addon.\nInputs1/2 are inspected category TYPOGRAPHY/MATERIAL/THREE-FRAME structure references ONLY; NOT edit targets. NEW words/palette/silhouette below override reference words/hues/effects. Keep coherent angular slanted arcade brush family, no official game logo.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in one row, preferably1536x512 or higher. Left onset/middle peak/right aftershock. FULL EXACT wordmark in ALLTHREE cells, SAME glyphgeometry, scale, angle, opaque letters and centered50%/50% anchor. Animate effects only, three genuinely generated original art frames, never software-scaled/rotated/faded copies.\nGenuine TRANSPARENT ALPHA with antialiased letters/translucent effectedges, NO painted background/checkerboard, grid, frame labels/numbers, scenery, characters, watermarks, extra words.\nCRITICAL: MAKE ART SMALLER than references; entire word plus EVERY effect fits CENTRAL70% width/height of EACHcell. At least15% FULLY EMPTY transparent gutters on EVERY side INCLUDING peak. Compact bold strokes readable256, NO cross-cell fragments, overlap or clipping.\n\nVisual direction: TWO centered lines LEVEL / UP!. CREAM/GOLD arcade BRUSH lettering, dark navy outline. CYAN RISING energy sweep with short GOLD UPWARD CHEVRON/glint, triumphant progression. NO level numbers or supporting text.\nMotion: Onset short upward cyan sweep and small gold chevron; peak brighter rising sweep and gold glint; aftershock short separated rising cyan tails and sparse gold glints.\nText VERBATIM in ALLTHREE cells: \"LEVEL UP!\". Exact spelling/punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/you-win.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arcade/perfect.png"
+    ],
+    "reference_roles": [
+      "inspected arcade typography/material/frame structure only; not edit target; new palette override",
+      "inspected arcade typography/material/frame structure only; not edit target; new palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected arcade reference strips",
+    "status": "planned",
+    "approval_status": "pending",
+    "installed": false
+  }
+]

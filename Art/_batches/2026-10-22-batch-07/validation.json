@@ -1,0 +1,345 @@
+{
+  "check": "one basic isolated export validation",
+  "expected_frames": 15,
+  "actual_frames": 15,
+  "all_passed": true,
+  "files": [
+    {
+      "file": "failure/pet-down_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 45894,
+      "nontransparent_bbox": [
+        31,
+        32,
+        230,
+        222
+      ],
+      "pass": true
+    },
+    {
+      "file": "failure/pet-down_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 34334,
+      "nontransparent_bbox": [
+        10,
+        12,
+        250,
+        230
+      ],
+      "pass": true
+    },
+    {
+      "file": "failure/pet-down_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 43365,
+      "nontransparent_bbox": [
+        5,
+        39,
+        240,
+        226
+      ],
+      "pass": true
+    },
+    {
+      "file": "tactical/assist_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 42611,
+      "nontransparent_bbox": [
+        16,
+        55,
+        236,
+        246
+      ],
+      "pass": true
+    },
+    {
+      "file": "tactical/assist_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 28484,
+      "nontransparent_bbox": [
+        6,
+        13,
+        250,
+        226
+      ],
+      "pass": true
+    },
+    {
+      "file": "tactical/assist_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 40552,
+      "nontransparent_bbox": [
+        7,
+        33,
+        245,
+        247
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/achievement_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 46930,
+      "nontransparent_bbox": [
+        7,
+        11,
+        247,
+        247
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/achievement_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 36207,
+      "nontransparent_bbox": [
+        23,
+        21,
+        250,
+        219
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/achievement_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 43528,
+      "nontransparent_bbox": [
+        5,
+        11,
+        239,
+        246
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/epic-loot_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 44250,
+      "nontransparent_bbox": [
+        4,
+        14,
+        252,
+        247
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/epic-loot_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 20455,
+      "nontransparent_bbox": [
+        4,
+        4,
+        252,
+        252
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/epic-loot_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 40211,
+      "nontransparent_bbox": [
+        12,
+        10,
+        244,
+        245
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/quest-complete_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 49201,
+      "nontransparent_bbox": [
+        12,
+        16,
+        243,
+        246
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/quest-complete_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 36067,
+      "nontransparent_bbox": [
+        15,
+        17,
+        245,
+        213
+      ],
+      "pass": true
+    },
+    {
+      "file": "comic/quest-complete_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 46404,
+      "nontransparent_bbox": [
+        4,
+        11,
+        228,
+        246
+      ],
+      "pass": true
+    }
+  ],
+  "observations": [
+    "All exact words and requested motifs readable; distinct palettes and three effects states visible.",
+    "No apparent word clipping or cross-cell debris. Several peak effects extend beyond70percent target; small lettering/anchor variation remains possible."
+  ],
+  "expected_sources": 5,
+  "actual_sources": 5,
+  "verification_scope": "One normal offline export/visual check; no in-game verification, no installation, no retries."
+}

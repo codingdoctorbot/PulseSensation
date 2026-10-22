@@ -1,0 +1,13 @@
+{
+  "prompt": "Use case: precise-object-edit.\nThe supplied transparent PNG is the EXACT EDIT TARGET: an existing horizontal 3:1, three equal square cells DOMINATING! teal/silver animation strip.\nPerform ONE narrowly targeted cleanup: remove detached partial teal fragments and stray little artifacts in the extreme side borders and gutters between cells, replacing only those stray bits with genuine transparency. Ensure transparent gutters at the exact one-third and two-third cell boundaries so splitting into equal thirds leaves no unrelated edge flecks.\nPreserve all THREE main teal stickers, each full exact \"DOMINATING!\" wordmark, ivory/steel glyphs, black outlines, palette, all main effect shapes, materials, positions and sizes. Preserve onset/peak/aftershock order. Do not redesign, recompose, redraw full art, add effects, alter text or change colors. Modest consistent equal-cell transparent gutter is allowed only if needed to isolate the existing stickers; avoid any other geometry change. Retain genuine transparent alpha background and antialiased edges. No grid, labels, numbers or painted checkerboard.",
+  "references": [
+    "/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-recolor-01/_sources/escalation/dominating-recolor-v1.png"
+  ],
+  "reference_roles": [
+    "exact recolored edit target"
+  ],
+  "planned_output": "_sources/escalation/dominating.png",
+  "attempt": 1,
+  "status": "source_saved",
+  "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-986e89d4-cee3-46ad-ab28-e4bb09b91f66.png"
+}

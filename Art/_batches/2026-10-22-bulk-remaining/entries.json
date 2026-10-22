@@ -1,0 +1,810 @@
+[
+  {
+    "key": "failure/pet-down",
+    "category": "failure",
+    "name": "pet-down",
+    "word": "PET DOWN!",
+    "priority": "P1",
+    "batch": "2026-10-22-batch-07",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: PET DOWN!: soft sky-blue rubbery letters, lavender/purple smoke puffs, tiny GOLD PAW PRINT; comic setback, no animal character, readable unchanged wordmark.\nText VERBATIM in ALL THREE cells: \"PET DOWN!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/failure/whiff.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/failure/nope.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override",
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/failure/pet-down.png"
+  },
+  {
+    "key": "tactical/assist",
+    "category": "tactical",
+    "name": "assist",
+    "word": "ASSIST!",
+    "priority": "P1b",
+    "batch": "2026-10-22-batch-07",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: ASSIST!: navy gunmetal clipped-corner HUD plate, ivory stencil, bright CYAN/BLUE edges; small abstract TWO HANDS HIGH-FIVING silhouette. No actual people/characters.\nText VERBATIM in ALL THREE cells: \"ASSIST!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/tactical/counter-terrorists-win.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/tactical/assist.png"
+  },
+  {
+    "key": "comic/achievement",
+    "category": "comic",
+    "name": "achievement",
+    "word": "ACHIEVEMENT!",
+    "priority": "P1b",
+    "batch": "2026-10-22-batch-07",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: ACHIEVEMENT!: bold cream/yellow flat comic letters with heavy black outline, GOLD SHIELD behind and restrained cyan glints/halftone, no fire.\nText VERBATIM in ALL THREE cells: \"ACHIEVEMENT!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/comic/pow.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/comic/achievement.png"
+  },
+  {
+    "key": "comic/epic-loot",
+    "category": "comic",
+    "name": "epic-loot",
+    "word": "EPIC LOOT!",
+    "priority": "P1b",
+    "batch": "2026-10-22-batch-07",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: EPIC LOOT!: chunky ivory/gold comic letters, PURPLE glow and violet diamond-shaped treasure sparkles, compact jewel-like silhouette.\nText VERBATIM in ALL THREE cells: \"EPIC LOOT!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/comic/pow.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/comic/epic-loot.png"
+  },
+  {
+    "key": "comic/quest-complete",
+    "category": "comic",
+    "name": "quest-complete",
+    "word": "QUEST COMPLETE!",
+    "priority": "P1b",
+    "batch": "2026-10-22-batch-07",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: QUEST COMPLETE!: two centered lines, parchment YELLOW/ivory comic letters with black outline, TEAL sweeping check-mark-like accent and rolled-paper curve, sparse gold sparkles.\nText VERBATIM in ALL THREE cells: \"QUEST COMPLETE!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/comic/pow.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/comic/quest-complete.png"
+  },
+  {
+    "key": "arena/honorable-kill",
+    "category": "arena",
+    "name": "honorable-kill",
+    "word": "HONORABLE KILL!",
+    "priority": "P1b",
+    "batch": "2026-10-22-batch-08",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: HONORABLE KILL!: two centered lines, ivory/gunmetal distressed industrial wordmark, deep RED accents and small CROSSED SWORDS silhouette, restrained steel fracture pieces.\nText VERBATIM in ALL THREE cells: \"HONORABLE KILL!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arena/fragged.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arena/gibbed.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override",
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/arena/honorable-kill.png"
+  },
+  {
+    "key": "comic/kapow",
+    "category": "comic",
+    "name": "kapow",
+    "word": "KAPOW!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-08",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: KAPOW!: addon's own name; oversized YELLOW letters, thick black outline, red offset shadow, flat jagged RED/ORANGE impact burst and sparse halftone. Classic comic, not rendered fiery rocks.\nText VERBATIM in ALL THREE cells: \"KAPOW!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/comic/pow.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/comic/kapow.png"
+  },
+  {
+    "key": "comic/bam",
+    "category": "comic",
+    "name": "bam",
+    "word": "BAM!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-08",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: BAM!: LIME/yellow letters with thick black outline, compact rounded BLUE smoke-cloud impact, springy punch motion and sparse halftone.\nText VERBATIM in ALL THREE cells: \"BAM!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/comic/pow.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/comic/bam.png"
+  },
+  {
+    "key": "comic/thwack",
+    "category": "comic",
+    "name": "thwack",
+    "word": "THWACK!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-08",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: THWACK!: ivory/yellow hand lettering, AQUA and ORANGE curved whipping swoosh, angular comic speed notches, no fire.\nText VERBATIM in ALL THREE cells: \"THWACK!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/comic/pow.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/comic/thwack.png"
+  },
+  {
+    "key": "comic/blam",
+    "category": "comic",
+    "name": "blam",
+    "word": "BLAM!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-08",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: BLAM!: bold YELLOW letters, black outline, MAGENTA/purple jagged lightning-panel silhouette with halftone.\nText VERBATIM in ALL THREE cells: \"BLAM!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/comic/pow.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/comic/blam.png"
+  },
+  {
+    "key": "anime/finish",
+    "category": "anime",
+    "name": "finish",
+    "word": "FINISH!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-09",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: FINISH!: huge IVORY manga brush wordmark, black outline, VIOLET/CYAN sharp diagonal manga speed panels and flash, no rock explosion.\nText VERBATIM in ALL THREE cells: \"FINISH!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/anime/critical.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/anime/finish.png"
+  },
+  {
+    "key": "anime/overdrive",
+    "category": "anime",
+    "name": "overdrive",
+    "word": "OVERDRIVE!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-09",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: OVERDRIVE!: ivory/GOLD brush letters, CYAN orbital energy ribbons with gold flares, compact oval silhouette; no fire.\nText VERBATIM in ALL THREE cells: \"OVERDRIVE!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/anime/critical.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/anime/overdrive.png"
+  },
+  {
+    "key": "anime/one-hit",
+    "category": "anime",
+    "name": "one-hit",
+    "word": "ONE HIT!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-09",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: ONE HIT!: two centered words if useful, white/black brush lettering, CRIMSON and white horizontal speed streaks with a compact manga shock diamond.\nText VERBATIM in ALL THREE cells: \"ONE HIT!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/anime/critical.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/anime/one-hit.png"
+  },
+  {
+    "key": "ninja/slice",
+    "category": "ninja",
+    "name": "slice",
+    "word": "SLICE!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-09",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: SLICE!: sharp IVORY/silver brush letters, single vivid CRIMSON diagonal cut and restrained black ink flecks, narrow slicing silhouette.\nText VERBATIM in ALL THREE cells: \"SLICE!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/ninja/executed.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/ninja/slice.png"
+  },
+  {
+    "key": "ninja/vanish",
+    "category": "ninja",
+    "name": "vanish",
+    "word": "VANISH!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-09",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: VANISH!: ivory brush letters, desaturated LAVENDER/STEEL smoke wisps and dark ink crescent, restrained fading flecks; letters remain fully readable in allframes, do not fade text.\nText VERBATIM in ALL THREE cells: \"VANISH!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/ninja/executed.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/ninja/vanish.png"
+  },
+  {
+    "key": "ninja/assassinated",
+    "category": "ninja",
+    "name": "assassinated",
+    "word": "ASSASSINATED!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-10",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: ASSASSINATED!: strong ivory/silver sharp brush lettering with black outline, SCARLET crossing katana-energy cuts and restrained black ink splatter. Full long word readable.\nText VERBATIM in ALL THREE cells: \"ASSASSINATED!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/ninja/executed.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/ninja/assassinated.png"
+  },
+  {
+    "key": "arena/humiliation",
+    "category": "arena",
+    "name": "humiliation",
+    "word": "HUMILIATION!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-10",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: HUMILIATION!: distressed dark GUNMETAL/ivory industrial lettering, RUST RED battered plate/fracture debris with small muted amber embers; heavy stamping motion, not cartoon/arcade.\nText VERBATIM in ALL THREE cells: \"HUMILIATION!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arena/fragged.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arena/gibbed.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override",
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/arena/humiliation.png"
+  },
+  {
+    "key": "arena/impressive",
+    "category": "arena",
+    "name": "impressive",
+    "word": "IMPRESSIVE!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-10",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: IMPRESSIVE!: bright IVORY/STEEL heavy industrial letters, electric BLUE metal glints, cool silver shatter fragments, compact angular metallic impact.\nText VERBATIM in ALL THREE cells: \"IMPRESSIVE!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arena/fragged.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arena/gibbed.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override",
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/arena/impressive.png"
+  },
+  {
+    "key": "arena/excellent",
+    "category": "arena",
+    "name": "excellent",
+    "word": "EXCELLENT!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-10",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: EXCELLENT!: heavy industrial/gothic metal letters, GOLD/ivory faces and deep dark outline, restrained gold/teal forge sparks and metal fragments; explicitly different from arcade brush EXCELLENT.\nText VERBATIM in ALL THREE cells: \"EXCELLENT!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arena/fragged.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arena/gibbed.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override",
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/arena/excellent.png"
+  },
+  {
+    "key": "failure/oops",
+    "category": "failure",
+    "name": "oops",
+    "word": "OOPS!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-10",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: OOPS!: rounded coral/PEACH cartoon letters with deep blue outline, PALE BLUE smoke puffs, small goofy yellow star, elastic squash surrounding effects.\nText VERBATIM in ALL THREE cells: \"OOPS!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/failure/whiff.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/failure/nope.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override",
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/failure/oops.png"
+  },
+  {
+    "key": "failure/denied",
+    "category": "failure",
+    "name": "denied",
+    "word": "DENIED!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-11",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: DENIED!: chunky ivory/RED cartoon stamp lettering, deep navy outline, compact RUBBER-STAMP/stop-cloud silhouette and violet rebound swoosh, no UI plate.\nText VERBATIM in ALL THREE cells: \"DENIED!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/failure/whiff.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/failure/nope.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override",
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/failure/denied.png"
+  },
+  {
+    "key": "failure/miss",
+    "category": "failure",
+    "name": "miss",
+    "word": "MISS!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-11",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: MISS!: slightly deflated SKY BLUE letters, deep blue outline, airy mint curved dashed motion arc and one tiny embarrassed yellow star, anticlimactic whiff energy.\nText VERBATIM in ALL THREE cells: \"MISS!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/failure/whiff.png",
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/failure/nope.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override",
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/failure/miss.png"
+  },
+  {
+    "key": "tactical/enemy-down",
+    "category": "tactical",
+    "name": "enemy-down",
+    "word": "ENEMY DOWN!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-11",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: ENEMY DOWN!: two centered lines, ivory stencil/navy gunmetal HUD plate, CYAN/SILVER chevrons and a restrained blue impact gleam.\nText VERBATIM in ALL THREE cells: \"ENEMY DOWN!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/tactical/counter-terrorists-win.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/tactical/enemy-down.png"
+  },
+  {
+    "key": "tactical/round-won",
+    "category": "tactical",
+    "name": "round-won",
+    "word": "ROUND WON!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-11",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: ROUND WON!: ivory/gold stencil/navy HUD plate, GOLD/TEAL victory edge glints and short chevrons, controlled clean geometry.\nText VERBATIM in ALL THREE cells: \"ROUND WON!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/tactical/counter-terrorists-win.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/tactical/round-won.png"
+  },
+  {
+    "key": "tactical/round-lost",
+    "category": "tactical",
+    "name": "round-lost",
+    "word": "ROUND LOST!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-11",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: ROUND LOST!: ivory/cool steel stencil/navy HUD plate, RED/ORANGE warning strips, subdued red light flecks, no fire.\nText VERBATIM in ALL THREE cells: \"ROUND LOST!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/tactical/counter-terrorists-win.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/tactical/round-lost.png"
+  },
+  {
+    "key": "football/kick-off",
+    "category": "football",
+    "name": "kick-off",
+    "word": "KICK-OFF!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-12",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: KICK-OFF!: bold WHITE/LIME italic sports lettering with navy outline, GREEN sweeping pitch-line arc and a compact ball-motion streak, no team marks.\nText VERBATIM in ALL THREE cells: \"KICK-OFF!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/football/goal.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/football/kick-off.png"
+  },
+  {
+    "key": "football/full-time",
+    "category": "football",
+    "name": "full-time",
+    "word": "FULL TIME!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-12",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: FULL TIME!: white/silver sports lettering, navy outline, BLUE/TEAL stadium arch/light sweep and restrained white confetti, no supporting tiny text.\nText VERBATIM in ALL THREE cells: \"FULL TIME!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/football/goal.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/football/full-time.png"
+  },
+  {
+    "key": "football/penalty",
+    "category": "football",
+    "name": "penalty",
+    "word": "PENALTY!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-12",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: PENALTY!: white/orange sports letters, navy outline, ORANGE/YELLOW spot/goal-line streak and compact tense angular sweep; no player character or logos.\nText VERBATIM in ALL THREE cells: \"PENALTY!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/football/goal.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/football/penalty.png"
+  },
+  {
+    "key": "football/yellow-card",
+    "category": "football",
+    "name": "yellow-card",
+    "word": "YELLOW CARD!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-12",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: YELLOW CARD!: two centered lines, white/yellow sports letters, navy outline, clear YELLOW RECTANGULAR CARD silhouette and two restrained black diagonal motion strokes. Distinct from existing RED CARD.\nText VERBATIM in ALL THREE cells: \"YELLOW CARD!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/football/goal.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/football/yellow-card.png"
+  },
+  {
+    "key": "football/screamer",
+    "category": "football",
+    "name": "screamer",
+    "word": "SCREAMER!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-12",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: SCREAMER!: bold white/lime sports wordmark, navy outline, electric CYAN/BLUE diagonal shot trail into a compact net-corner shape, tiny lime glints, no fireball.\nText VERBATIM in ALL THREE cells: \"SCREAMER!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/football/goal.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/football/screamer.png"
+  },
+  {
+    "key": "falling/splashdown",
+    "category": "falling",
+    "name": "splashdown",
+    "word": "SPLASHDOWN!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-13",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: SPLASHDOWN!: rounded WHITE/SKY BLUE lettering with deep navy outline, AQUA water splash and curved downward droplet arcs, no actual character.\nText VERBATIM in ALL THREE cells: \"SPLASHDOWN!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/falling/faceplant.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/falling/splashdown.png"
+  },
+  {
+    "key": "falling/oof",
+    "category": "falling",
+    "name": "oof",
+    "word": "OOF!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-13",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: OOF!: thick squashed PEACH/yellow cartoon wordmark with dark blue outline, lavender dust-puff landing and two small yellow dizzy stars, broad pancake silhouette.\nText VERBATIM in ALL THREE cells: \"OOF!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/falling/faceplant.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/falling/oof.png"
+  },
+  {
+    "key": "falling/crater",
+    "category": "falling",
+    "name": "crater",
+    "word": "CRATER!",
+    "priority": "P3",
+    "batch": "2026-10-22-batch-13",
+    "frame_size": [
+      256,
+      256
+    ],
+    "prompt": "Use case: stylized-concept.\nAsset type: transparent combat-popup three-frame animation strip for World of Warcraft addon.\nInputs are inspected category TYPOGRAPHY, MATERIAL and FRAME STRUCTURE references ONLY, NOT edit targets; do not copy their words, unwanted hues or oversized effect shapes. Apply the NEW wording and palette/silhouette below. Category typography must remain distinct, no identical recolored fireballs.\nONE horizontal3:1 strip, exactly THREE equal SQUARE cells in ONE row, ideally1536x512 or higher. Left onset / middle peak / right aftershock. Each cell has FULL EXACT wordmark, identical glyphgeometry, font, scale, angle, opaque letters and centered50%/50% anchor. Full readable wordmark allframes. Generate three original coherent ART states; animate surrounding effects, never software-scaled/rotated/faded copies. Onset restrained compact effects; peak brighter fuller but compact; aftershock dispersed diminishing effects. Lettering unchanged.\nGenuine TRANSPARENT ALPHA, antialiased lettering edges and translucent effects edges. No painted checkerboard/background, grid, labels, frame numbers, scenery, actual characters, official logos, watermarks or extra words. Small abstract silhouettes specifically requested below are allowed.\nCRITICAL: ALL art including EVERY effect fits CENTRAL70% width/height of its own cell. Make it SMALLER than reference art; wordmark about60% cellwidth, fully empty15% gutters on EVERY side including peak. Few compact bold strokes, NO cross-cell particles, overlap, clipping or detached border fragments. Clear readability at256. Two-word phrases may stack on TWO centered lines when useful.\n\nVisual direction: CRATER!: chunky IVORY/PURPLE rounded cartoon wordmark, deep plum outline, OCHRE/purple bowl-shaped ground-impact dust ring and a few angular stone chips, compact downward slam.\nText VERBATIM in ALL THREE cells: \"CRATER!\". Exact spelling and punctuation mandatory.",
+    "references": [
+      "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/falling/faceplant.png"
+    ],
+    "reference_roles": [
+      "category typography/material/frame structure only; not edit target; explicit palette override"
+    ],
+    "generator_mode": "built-in image_gen with inspected local category references",
+    "approval_status": "pending",
+    "installed": false,
+    "status": "planned",
+    "planned_source": "_sources/falling/crater.png"
+  }
+]

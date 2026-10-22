@@ -41,9 +41,17 @@ local function On(id)
 end
 
 local function Fire(id, values)
+	if ns.versus then
+		ns.versus.Trigger(id)
+	end
 	if ns.announcer and On(id) then
 		ns.announcer:Fire(id, values)
 	end
+end
+
+-- On, or wanted by the VS intro (Versus.lua), which starts on some of these moments.
+local function Needed(id)
+	return On(id) or (ns.versus and ns.versus.Wants(id))
 end
 
 local function Plain(v)
@@ -498,12 +506,12 @@ function M.Sync()
 	if not db.enabled then
 		return
 	end
-	local duels = On("duelstart") or On("duelwin") or On("duellose")
+	local duels = Needed("duelstart") or On("duelwin") or On("duellose")
 	Want("CHAT_MSG_SYSTEM", duels or On("countdown"))
 	Want("DUEL_REQUESTED", duels)
-	Want("START_TIMER", On("countdown") or On("countgo"))
-	Want("STOP_TIMER_OF_TYPE", On("countdown") or On("countgo"))
-	Want("ENCOUNTER_START", On("bosspull"))
+	Want("START_TIMER", On("countdown") or Needed("countgo"))
+	Want("STOP_TIMER_OF_TYPE", On("countdown") or Needed("countgo"))
+	Want("ENCOUNTER_START", Needed("bosspull"))
 	Want("ACHIEVEMENT_EARNED", On("achievement"))
 	Want("CHAT_MSG_LOOT", On("epicloot"))
 	Want("QUEST_TURNED_IN", On("quest"))

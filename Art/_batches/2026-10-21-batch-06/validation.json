@@ -1,0 +1,347 @@
+{
+  "check": "one basic isolated export validation",
+  "expected_frames": 15,
+  "actual_frames": 15,
+  "all_passed": true,
+  "files": [
+    {
+      "file": "arcade/great_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 44974,
+      "nontransparent_bbox": [
+        21,
+        17,
+        243,
+        246
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/great_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 35957,
+      "nontransparent_bbox": [
+        9,
+        11,
+        250,
+        227
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/great_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 45475,
+      "nontransparent_bbox": [
+        5,
+        24,
+        241,
+        222
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/excellent_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 37667,
+      "nontransparent_bbox": [
+        11,
+        25,
+        252,
+        245
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/excellent_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 26306,
+      "nontransparent_bbox": [
+        4,
+        4,
+        252,
+        249
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/excellent_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 37162,
+      "nontransparent_bbox": [
+        4,
+        29,
+        252,
+        246
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/new-record_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 37194,
+      "nontransparent_bbox": [
+        13,
+        12,
+        252,
+        245
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/new-record_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 22726,
+      "nontransparent_bbox": [
+        4,
+        5,
+        252,
+        238
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/new-record_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 35478,
+      "nontransparent_bbox": [
+        4,
+        10,
+        233,
+        247
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/finish-it_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 42182,
+      "nontransparent_bbox": [
+        8,
+        4,
+        252,
+        246
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/finish-it_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 27018,
+      "nontransparent_bbox": [
+        4,
+        21,
+        252,
+        252
+      ],
+      "pass": true
+    },
+    {
+      "file": "arcade/finish-it_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 41062,
+      "nontransparent_bbox": [
+        4,
+        7,
+        244,
+        247
+      ],
+      "pass": true
+    },
+    {
+      "file": "tactical/last-one-standing_1.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 37056,
+      "nontransparent_bbox": [
+        22,
+        53,
+        252,
+        231
+      ],
+      "pass": true
+    },
+    {
+      "file": "tactical/last-one-standing_2.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 21628,
+      "nontransparent_bbox": [
+        4,
+        25,
+        252,
+        232
+      ],
+      "pass": true
+    },
+    {
+      "file": "tactical/last-one-standing_3.tga",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "tga_image_type": 2,
+      "bits_per_pixel": 32,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_pixel_count": 33631,
+      "nontransparent_bbox": [
+        4,
+        36,
+        247,
+        214
+      ],
+      "pass": true
+    }
+  ],
+  "observations": [
+    "All five exact phrases and exclamation marks read correctly across all three frames. NEW RECORD has a readable secondary gold trophy; LAST ONE STANDING uses requested navy stencil plate and cyan/blue accents.",
+    "Five high-resolution PNG strips and15 uncompressed type2 32-bit256x256 RGBA TGAs present. Basic size/format/genuine-alpha checks pass.",
+    "Distinct palettes and movement present: cyan/red GREAT wings, violet/gold EXCELLENT crescents, gold/blue NEW RECORD trophy-victory streak, ivory/crimson/violet FINISH IT stamp, cool-blue tactical edge gleam.",
+    "Minor review concern: FINISH IT peak side slashes exceed requested70percent region and approach cell borders; a few tiny red edge flecks may bleed into neighboring frame margins. Readable main wordmarks are not apparently clipped. No retry or cleanup performed.",
+    "Some generated glyph/scale/anchor differences may remain. One normal offline check only; no in-game verification or addon copying. Pending user review."
+  ],
+  "expected_sources": 5,
+  "actual_sources": 5
+}

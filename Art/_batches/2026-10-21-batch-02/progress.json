@@ -1,0 +1,61 @@
+{
+  "status": "packaged_unimplemented",
+  "approval_status": "approved",
+  "entries": [
+    {
+      "name": "ludicrous-kill",
+      "status": "exported",
+      "source": "_sources/escalation/ludicrous-kill.png",
+      "frames": [
+        "escalation/ludicrous-kill_1.tga",
+        "escalation/ludicrous-kill_2.tga",
+        "escalation/ludicrous-kill_3.tga"
+      ]
+    },
+    {
+      "name": "killing-spree",
+      "status": "exported",
+      "source": "_sources/escalation/killing-spree.png",
+      "frames": [
+        "escalation/killing-spree_1.tga",
+        "escalation/killing-spree_2.tga",
+        "escalation/killing-spree_3.tga"
+      ]
+    },
+    {
+      "name": "dominating",
+      "status": "exported",
+      "source": "_sources/escalation/dominating.png",
+      "frames": [
+        "escalation/dominating_1.tga",
+        "escalation/dominating_2.tga",
+        "escalation/dominating_3.tga"
+      ]
+    },
+    {
+      "name": "unstoppable",
+      "status": "exported",
+      "source": "_sources/escalation/unstoppable.png",
+      "frames": [
+        "escalation/unstoppable_1.tga",
+        "escalation/unstoppable_2.tga",
+        "escalation/unstoppable_3.tga"
+      ]
+    },
+    {
+      "name": "godlike",
+      "status": "exported",
+      "source": "_sources/escalation/godlike.png",
+      "frames": [
+        "escalation/godlike_1.tga",
+        "escalation/godlike_2.tga",
+        "escalation/godlike_3.tga"
+      ]
+    }
+  ],
+  "generated_strips": 5,
+  "exported_frames": 15,
+  "review_sheet": "_previews/review-sheet.png",
+  "validation": "validation.json",
+  "packaged_destination": "Kapow/UnimplementedArt"
+}

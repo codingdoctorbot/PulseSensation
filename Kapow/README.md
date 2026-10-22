@@ -21,12 +21,26 @@ the window also works with a controller (D-pad, A, B, shoulder buttons for tabs)
   Encounters, Testing), then an event, then its look:
   - **Art**: any three-frame sequence from `Art/` by category (Comic, Anime, Arcade, Ninja, Arena, Escalation,
     Failure, Original), *Random* from one category or from everything, or *None* for text only.
-  - **Animation**: Flipbook pop, Slam in, Bounce, Rise and fade, Shake, Still. Flipbook, Bounce, Rise and Shake play
-    the art's frames (onset 80 ms, peak 120 ms, aftershock).
+  - **Animation**: Flipbook pop, Slam in, Slam in (three frames), Bounce, Rise and fade, Shake, Still, Still (three
+    frames). All but Slam in and Still play the art's frames (onset 80 ms, peak 120 ms, aftershock); Experimental ›
+    **Three-frame timing** can hold the peak instead, with the aftershock arriving as it fades.
   - **Title text** and **Detail line**: templates with tokens such as `{killer}`, `{victim}`, `{count}`, `{amount}`,
     `{name}`, `{level}`. Secret values (enemy names, damage) are drawn by the client, never read.
   - **Title color**, **Size**, **Position** (comic spot, top banner, low centre, left, right), **Sound**.
-  - **Preview** and **Reset event**.
+  - **Preview**, **Art gallery** and **Reset event**.
+- **Gallery**: every art sequence as a thumbnail, by category, a page of twenty at a time. Click one to see it play
+  (onset, peak, aftershock on a loop, slow motion with the Speed button) beside its three frames. **Use for this
+  event** keeps it for the event chosen at the top (the same event the Events tab edits), **Random from category**
+  picks from its category on every show, and **Play on screen** shows it once with the event's own animation, text
+  and position without keeping it. The event's current art is marked *in use*.
+- **VS intro** (off by default): you on the left and your opponent on the right as large, see-through 3D models,
+  with the VS art slamming in between, for 2 to 4 seconds. Plays on a duel start, a boss pull, a countdown's
+  FIGHT! and, optionally, every fight with an attackable target (at most once every 10 s). Sliders for duration
+  (3 s), size (100%), VS size (100%), model opacity (35%), VS opacity (70%) and height (40 px up); drawn behind the
+  interface unless switched off. The opponent's model is always tried, as unit frame addons do with their 3D
+  portraits; when there is no target or the model cannot be drawn, *No opponent model* shows you and VS, VS alone,
+  or skips. *Cautious opponent check* (off) skips the model whenever the game hides the opponent's identity. **Test** (or
+  `/kapow vs`) plays it over the window; with no target you face yourself.
 - **Extras** (everything off by default): combo counter, impact flash, low health warning and FINISH IT! (drawn
   from hidden health by the client's curve helpers), reduce motion, controller navigation, placing things by drag,
   personal records and party sync. The matching banners are in the Events tab's **Arcade** (combo, countdown,
@@ -149,6 +163,10 @@ up by applying the theme again.
 | `tactical/` | Strike Squad | Black Ops One |
 | `football/` | Soccer League | Graduate |
 | `falling/` | Falling | Bubblegum Sans |
+| `escalation/*-orange` | Escalation (orange) | Black Ops One |
+
+The orange category holds the original orange versions of FIRST BLOOD, ULTRA KILL, MONSTER KILL, LUDICROUS KILL and
+DOMINATING, kept beside their recolors. `arcade/versus` (VS) is 512x512; it is drawn at the normal art size.
 
 Each event's **Font** can be *Match the art* (the default: the art's category font, so random art brings its own
 lettering; text-only events use Black Ops One), one of the game's fonts, or any of the nine display fonts. A font
@@ -168,7 +186,11 @@ licenses, which must stay with the font files. In game: `/kapow credits` or **Fo
 2. Run `python3 scripts/make-art-catalog.py`. It checks every frame and font and regenerates `Kapow/ArtCatalog.lua`
    and `Kapow/FONT-CREDITS.md`; a message with a missing or unusable frame is left out and reported.
 3. The script also copies the new frames into `Kapow/Art`. `/reload`, and the new art shows up in every event's
-   Art menu.
+   Art menu and in the Gallery.
+
+Reviewed art delivered to `Kapow/UnimplementedArt` (with `inventory.json`) is promoted by
+`python3 scripts/promote-staged-art.py` (`--check` for a dry run): it checks each file's hash, copies it unchanged to
+`Art/`, adds it to the manifest with its prompt and batch, and never overwrites. Then run step 2.
 
 ## Falls and fight flow
 
