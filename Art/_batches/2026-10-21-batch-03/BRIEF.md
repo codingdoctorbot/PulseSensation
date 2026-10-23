@@ -4,15 +4,15 @@
 
 User explicitly approved this proposed batch: "okay sounds good generate go." Generate ONLY these FIVE new messages, THREE original animation frames each, then STOP for approval/rejection. Same ongoing generation subagent, GPT-6.1 Sol Medium, built-in imagegen. No extra subagents. No batch 04. No automatic copying into addon yet; the parent handles approved copying later. Existing batches and original orange alternatives remain intact.
 
-Write only /Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-03. Preserve all unrelated dirty work. Canonical repo is PulseSensation, not PulseSensation2; current addon Kapow (formerly PulseComic). Do not run main exporter, catalog builder, packaging or code changes.
+Write only /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-03. Preserve all unrelated dirty work. Canonical repo is PulseSensation, not PulseSensation2; current addon Kapow (formerly PulseComic). Do not run main exporter, catalog builder, packaging or code changes.
 
 ## Required reading and recovery
 
-- /Users/erik2/Developer/WoW/PulseSensation/AGENTS.md and /Users/erik2/Developer/WoW/DEVELOPMENT.md
-- /Users/erik2/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guidance
-- Applicable /Users/erik2/.agents/skills/wow-forever-dev/SKILL.md asset conventions
-- /Users/erik2/Developer/WoW/PulseSensation/Kapow/Generation/generationpromptdatabase.md, Part 1 and P1 category design data (not its installation instructions)
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_batches/workflow.json
+- /home/deck/developer/PulseSensation/AGENTS.md and /home/deck/developer/_from-mac/WoW/DEVELOPMENT.md
+- /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guidance
+- Applicable /home/deck/.agents/skills/wow-forever-dev/SKILL.md asset conventions
+- /home/deck/developer/PulseSensation/Kapow/Generation/generationpromptdatabase.md, Part 1 and P1 category design data (not its installation instructions)
+- /home/deck/developer/PulseSensation/Art/_batches/workflow.json
 
 After compaction read THIS brief, manifest.json and progress.json, then inventory source PNGs and exports. Save actual prompts, reference paths/roles and planned names BEFORE generation; save returned source paths immediately and update per-message state. Do not regenerate saved assets or duplicate in-flight calls. One call per message, at most three independent calls in parallel. No repeated polish/QA loops; report observed issues. One targeted repair only if an obvious blocking failure prevents a usable export; preserve its original and record why.
 
@@ -31,24 +31,24 @@ These palettes/styles were proposed to and approved by the user. Apply them in t
 Use view_image to inspect relevant full PNG strips before each call. Pass one or two appropriate inspected paths in referenced_image_paths for EVERY imagegen call. Role: category typography/material/frame-structure references, not edit targets. New artwork must use exact new wording, never copy reference words or unintended colors.
 
 WICKED SICK:
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_sources/escalation/rampage.png
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-recolor-01/_sources/escalation/monster-kill.png
+- /home/deck/developer/PulseSensation/Art/_sources/escalation/rampage.png
+- /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-recolor-01/_sources/escalation/monster-kill.png
 
 MVP:
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arena/fragged.png
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arena/gibbed.png
+- /home/deck/developer/PulseSensation/Art/_sources/arena/fragged.png
+- /home/deck/developer/PulseSensation/Art/_sources/arena/gibbed.png
 
 FLAWLESS:
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arcade/perfect.png
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arcade/super-combo.png
+- /home/deck/developer/PulseSensation/Art/_sources/arcade/perfect.png
+- /home/deck/developer/PulseSensation/Art/_sources/arcade/super-combo.png
 
 DEFEATED:
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_sources/failure/whiff.png
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_sources/failure/nope.png
+- /home/deck/developer/PulseSensation/Art/_sources/failure/whiff.png
+- /home/deck/developer/PulseSensation/Art/_sources/failure/nope.png
 
 TEAMMATE DOWN:
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_sources/tactical/counter-terrorists-win.png
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_sources/tactical/terrorists-win.png
+- /home/deck/developer/PulseSensation/Art/_sources/tactical/counter-terrorists-win.png
+- /home/deck/developer/PulseSensation/Art/_sources/tactical/terrorists-win.png
 
 ## Generation layout
 

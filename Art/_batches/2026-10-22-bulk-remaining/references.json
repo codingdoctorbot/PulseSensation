@@ -1,28 +1,28 @@
 {
   "failure": [
-    "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/failure/whiff.png",
-    "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/failure/nope.png"
+    "/home/deck/developer/PulseSensation/Art/_sources/failure/whiff.png",
+    "/home/deck/developer/PulseSensation/Art/_sources/failure/nope.png"
   ],
   "tactical": [
-    "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/tactical/counter-terrorists-win.png"
+    "/home/deck/developer/PulseSensation/Art/_sources/tactical/counter-terrorists-win.png"
   ],
   "comic": [
-    "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/comic/pow.png"
+    "/home/deck/developer/PulseSensation/Art/_sources/comic/pow.png"
   ],
   "arena": [
-    "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arena/fragged.png",
-    "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arena/gibbed.png"
+    "/home/deck/developer/PulseSensation/Art/_sources/arena/fragged.png",
+    "/home/deck/developer/PulseSensation/Art/_sources/arena/gibbed.png"
   ],
   "anime": [
-    "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/anime/critical.png"
+    "/home/deck/developer/PulseSensation/Art/_sources/anime/critical.png"
   ],
   "ninja": [
-    "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/ninja/executed.png"
+    "/home/deck/developer/PulseSensation/Art/_sources/ninja/executed.png"
   ],
   "football": [
-    "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/football/goal.png"
+    "/home/deck/developer/PulseSensation/Art/_sources/football/goal.png"
   ],
   "falling": [
-    "/Users/erik2/Developer/WoW/PulseSensation/Art/_sources/falling/faceplant.png"
+    "/home/deck/developer/PulseSensation/Art/_sources/falling/faceplant.png"
   ]
 }

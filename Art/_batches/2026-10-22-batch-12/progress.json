@@ -9,7 +9,7 @@
       "status": "exported",
       "planned_source": "_sources/football/kick-off.png",
       "source": "_sources/football/kick-off.png",
-      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-6e414287-bf3b-437d-91b0-c4bc3cf2750d.png",
+      "generated_path": "/home/deck/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-6e414287-bf3b-437d-91b0-c4bc3cf2750d.png",
       "frames": [
         "football/kick-off_1.tga",
         "football/kick-off_2.tga",
@@ -23,7 +23,7 @@
       "status": "exported",
       "planned_source": "_sources/football/full-time.png",
       "source": "_sources/football/full-time.png",
-      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-d9ee98d1-fbc4-413b-ac4b-10e45181abf7.png",
+      "generated_path": "/home/deck/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-d9ee98d1-fbc4-413b-ac4b-10e45181abf7.png",
       "frames": [
         "football/full-time_1.tga",
         "football/full-time_2.tga",
@@ -37,7 +37,7 @@
       "status": "exported",
       "planned_source": "_sources/football/penalty.png",
       "source": "_sources/football/penalty.png",
-      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-2a8d98d7-0b8f-4b96-bb11-2322f96bc073.png",
+      "generated_path": "/home/deck/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-2a8d98d7-0b8f-4b96-bb11-2322f96bc073.png",
       "frames": [
         "football/penalty_1.tga",
         "football/penalty_2.tga",
@@ -51,7 +51,7 @@
       "status": "exported",
       "planned_source": "_sources/football/yellow-card.png",
       "source": "_sources/football/yellow-card.png",
-      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-68d863fe-1442-4d09-8721-b93153dff916.png",
+      "generated_path": "/home/deck/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-68d863fe-1442-4d09-8721-b93153dff916.png",
       "frames": [
         "football/yellow-card_1.tga",
         "football/yellow-card_2.tga",
@@ -65,7 +65,7 @@
       "status": "exported",
       "planned_source": "_sources/football/screamer.png",
       "source": "_sources/football/screamer.png",
-      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-005b944e-25c7-48d8-ae55-ecbf4b9bb331.png",
+      "generated_path": "/home/deck/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-005b944e-25c7-48d8-ae55-ecbf4b9bb331.png",
       "frames": [
         "football/screamer_1.tga",
         "football/screamer_2.tga",

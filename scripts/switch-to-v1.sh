@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ADDONS_DIR="/Applications/World of Warcraft/_classic_beta_/Interface/AddOns"
-V1_DIR="/Users/erik2/Developer/WoW/PulseSensation"
+V1_DIR="/home/deck/developer/PulseSensation"
 
 echo "Switching WoW client symlinks to PulseSensation (Stable)..."
 ln -sfh "${V1_DIR}/PulseHaptics" "${ADDONS_DIR}/PulseHaptics"

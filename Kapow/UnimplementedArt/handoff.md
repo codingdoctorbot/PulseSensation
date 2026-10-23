@@ -1,6 +1,6 @@
 # KAPOW artwork handoff
 
-Snapshot: 22 October 2026. Repository: `/Users/erik2/Developer/WoW/PulseSensation`. Addon: **Kapow / KAPOW!**, formerly PulseComic. This is an artwork handoff, not a claim of completed addon integration or in-game verification.
+Snapshot: 22 October 2026. Repository: `/home/deck/developer/PulseSensation`. Addon: **Kapow / KAPOW!**, formerly PulseComic. This is an artwork handoff, not a claim of completed addon integration or in-game verification.
 
 ## Current status
 
@@ -13,17 +13,17 @@ Snapshot: 22 October 2026. Repository: `/Users/erik2/Developer/WoW/PulseSensatio
 
 | Location | Purpose |
 | --- | --- |
-| [inventory.json](/Users/erik2/Developer/WoW/PulseSensation/Kapow/UnimplementedArt/inventory.json) | Authoritative list of copied staging assets, category keys, frame order, dimensions, source manifests and SHA-256 hashes |
+| [inventory.json](/home/deck/developer/PulseSensation/Kapow/UnimplementedArt/inventory.json) | Authoritative list of copied staging assets, category keys, frame order, dimensions, source manifests and SHA-256 hashes |
 | This folder's `<category>/` directories | Selected new TGA sequences, ready for future integration |
 | `original-orange/escalation/` | Five original orange alternatives: first-blood, ultra-kill, monster-kill, ludicrous-kill, dominating; logical filenames remain unchanged within this variant folder |
-| [Batch workflow](/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/workflow.json) | Generation, review and copying state across all batches |
-| [Bulk review index](/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-22-bulk-remaining/review-index.md) | Seven complete animation sheets for batches 07–13 and accepted design caveats |
-| [Bulk prompts and provenance](/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-22-bulk-remaining/manifest.json) | All 33 messages from the bulk completion run, with links to their batch manifests |
-| [Final batch brief](/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-22-batch-14/BRIEF.md) | Exact final-five request and generation stop rule |
-| [Final batch manifest](/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-22-batch-14/manifest.json) | Final-five prompts, sources and approved export metadata |
-| [Final animation sheet](/Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-22-batch-14/_previews/review-sheet.png) | Onset, peak and aftershock of the last five |
-| [Master manifest](/Users/erik2/Developer/WoW/PulseSensation/Art/_metadata/manifest.json) | Existing 47-message source catalog; new staging assets have not been merged into it |
-| [Implementation plan](/Users/erik2/Developer/WoW/PulseSensation/Kapow/UnimplementedArt/implementation.md) | Proposed integration steps, event/theme mapping, VS concept and deferred brainstorming |
+| [Batch workflow](/home/deck/developer/PulseSensation/Art/_batches/workflow.json) | Generation, review and copying state across all batches |
+| [Bulk review index](/home/deck/developer/PulseSensation/Art/_batches/2026-10-22-bulk-remaining/review-index.md) | Seven complete animation sheets for batches 07–13 and accepted design caveats |
+| [Bulk prompts and provenance](/home/deck/developer/PulseSensation/Art/_batches/2026-10-22-bulk-remaining/manifest.json) | All 33 messages from the bulk completion run, with links to their batch manifests |
+| [Final batch brief](/home/deck/developer/PulseSensation/Art/_batches/2026-10-22-batch-14/BRIEF.md) | Exact final-five request and generation stop rule |
+| [Final batch manifest](/home/deck/developer/PulseSensation/Art/_batches/2026-10-22-batch-14/manifest.json) | Final-five prompts, sources and approved export metadata |
+| [Final animation sheet](/home/deck/developer/PulseSensation/Art/_batches/2026-10-22-batch-14/_previews/review-sheet.png) | Onset, peak and aftershock of the last five |
+| [Master manifest](/home/deck/developer/PulseSensation/Art/_metadata/manifest.json) | Existing 47-message source catalog; new staging assets have not been merged into it |
+| [Implementation plan](/home/deck/developer/PulseSensation/Kapow/UnimplementedArt/implementation.md) | Proposed integration steps, event/theme mapping, VS concept and deferred brainstorming |
 
 Names are `<category>/<message>_1.tga`, `_2.tga`, `_3.tga`, meaning **onset / peak / aftershock**. Files are uncompressed true-color TGA, 32-bit RGBA with alpha. Normal frames are 256×256; `arcade/versus_1.tga` through `_3.tga` are **512×512**, exported from native 724×724 source cells. The visible word is **VS**, while the logical filename is `versus`.
 
@@ -45,7 +45,7 @@ Keep the PNGs, original versions and prompt metadata. No new generation is requi
 
 ## Fonts
 
-Nine real static TTF families already cover all ten categories. The exact paths, pinned upstream sources, hashes and accompanying licenses are in [the font pack](/Users/erik2/Developer/WoW/PulseSensation/Art/_fonts/README.md) and [category-fonts.json](/Users/erik2/Developer/WoW/PulseSensation/Art/_fonts/category-fonts.json).
+Nine real static TTF families already cover all ten categories. The exact paths, pinned upstream sources, hashes and accompanying licenses are in [the font pack](/home/deck/developer/PulseSensation/Art/_fonts/README.md) and [category-fonts.json](/home/deck/developer/PulseSensation/Art/_fonts/category-fonts.json).
 
 | Category | Font |
 | --- | --- |

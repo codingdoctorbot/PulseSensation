@@ -9,7 +9,7 @@
       "status": "exported",
       "planned_source": "_sources/falling/splashdown.png",
       "source": "_sources/falling/splashdown.png",
-      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-d315a8ea-f5d2-47a0-9b05-9797a44d3a5e.png",
+      "generated_path": "/home/deck/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-d315a8ea-f5d2-47a0-9b05-9797a44d3a5e.png",
       "frames": [
         "falling/splashdown_1.tga",
         "falling/splashdown_2.tga",
@@ -23,7 +23,7 @@
       "status": "exported",
       "planned_source": "_sources/falling/oof.png",
       "source": "_sources/falling/oof.png",
-      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-0e68936a-5715-4c76-81cc-87fc5694e08f.png",
+      "generated_path": "/home/deck/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-0e68936a-5715-4c76-81cc-87fc5694e08f.png",
       "frames": [
         "falling/oof_1.tga",
         "falling/oof_2.tga",
@@ -37,7 +37,7 @@
       "status": "exported",
       "planned_source": "_sources/falling/crater.png",
       "source": "_sources/falling/crater.png",
-      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-b5fb6a07-2951-4ff4-8560-b978173d8b12.png",
+      "generated_path": "/home/deck/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-b5fb6a07-2951-4ff4-8560-b978173d8b12.png",
       "frames": [
         "falling/crater_1.tga",
         "falling/crater_2.tga",

@@ -4,11 +4,11 @@
 
 User said "next" after reviewing batch05. Parent treats this as approval of batch05 and authorization for the next FIVE banners. Batch05 is copied to Kapow/UnimplementedArt; collection now26 messages/93frames including five original orange alternatives. Continue the user's arcade priority with four remaining arcade cues, plus the P1 LAST ONE STANDING cue. THREE original animation frames per message. Generate only these five, then STOP for user review. No batch07 or addon/runtime/catalog implementation.
 
-Same ongoing generation subagent, GPT-6.1 Sol Medium, built-in imagegen. No further subagents. Write only /Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-06. Preserve all prior artwork, source PNGs, variants, and unrelated dirty work. Canonical repo PulseSensation, not PulseSensation2; current addon Kapow (formerly PulseComic).
+Same ongoing generation subagent, GPT-6.1 Sol Medium, built-in imagegen. No further subagents. Write only /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-06. Preserve all prior artwork, source PNGs, variants, and unrelated dirty work. Canonical repo PulseSensation, not PulseSensation2; current addon Kapow (formerly PulseComic).
 
 ## Instructions and recovery
 
-Read repository AGENTS.md and /Users/erik2/Developer/WoW/DEVELOPMENT.md; /Users/erik2/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guide; applicable /Users/erik2/.agents/skills/wow-forever-dev/SKILL.md; Art/_batches/workflow.json; P1/P1b/P2 design data in Kapow/Generation/generationpromptdatabase.md. Document installation instructions do not override the review gate.
+Read repository AGENTS.md and /home/deck/developer/_from-mac/WoW/DEVELOPMENT.md; /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guide; applicable /home/deck/.agents/skills/wow-forever-dev/SKILL.md; Art/_batches/workflow.json; P1/P1b/P2 design data in Kapow/Generation/generationpromptdatabase.md. Document installation instructions do not override the review gate.
 
 For compaction recovery, read THIS brief, manifest and progress, inventory source PNGs/exports and in-flight calls before resuming. Save actual prompts/reference paths and roles BEFORE generation, then successful source paths immediately on return. Do not regenerate saved artwork because context was lost. One built-in call per banner; up to three independent calls may overlap. One normal visual/export check, no repeated aesthetic QA or polish. Report minor imperfections rather than spending more compute. Only a clearly observed blocking failure justifies one targeted repair with original/provenance retained.
 
@@ -27,15 +27,15 @@ Apply distinct palettes, silhouettes and movement in ACTUAL prompts. Reference a
 Inspect relevant full PNG strips with view_image. Pass one or two suitable inspected paths to referenced_image_paths for EVERY built-in imagegen call. Role: category typography/material/frame-structure references, not edit targets. Use exact new words; do not copy reference text.
 
 Arcade references:
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arcade/perfect.png
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-03/_sources/arcade/flawless.png
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/you-win.png
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/fight.png
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-05/_sources/arcade/final-round.png
+- /home/deck/developer/PulseSensation/Art/_sources/arcade/perfect.png
+- /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-03/_sources/arcade/flawless.png
+- /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/you-win.png
+- /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/fight.png
+- /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-05/_sources/arcade/final-round.png
 
 Tactical references:
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_sources/tactical/counter-terrorists-win.png
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-03/_sources/tactical/teammate-down.png (plate/stencil geometry reference ONLY; override red alert palette with cyan/blue)
+- /home/deck/developer/PulseSensation/Art/_sources/tactical/counter-terrorists-win.png
+- /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-03/_sources/tactical/teammate-down.png (plate/stencil geometry reference ONLY; override red alert palette with cyan/blue)
 
 Check these five desired category/name pairs absent once; do not regenerate completed categories or variants. Other remaining P1/P1b entries are deferred; do not expand batch.
 

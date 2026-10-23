@@ -4,11 +4,11 @@
 
 User requested FIGHT and other Street Fighter-inspired battle text at higher priority, plus a versus asset as a SIXTH image at 512x512. Existing workflow remains: generation subagent, actual references, three matching generated animation frames per message, user reviews before copying. This batch is an explicit SIX-message exception to the normal five. Generate only these six sequences, then STOP. No batch 05, addon code/catalog integration, or runtime portrait implementation. Worker GPT-6.1 Sol Medium, built-in imagegen; no additional subagents.
 
-Write only /Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-04. Preserve every prior batch, orange variant and unrelated dirty work. Current addon Kapow (formerly PulseComic), canonical repository PulseSensation, not PulseSensation2.
+Write only /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-04. Preserve every prior batch, orange variant and unrelated dirty work. Current addon Kapow (formerly PulseComic), canonical repository PulseSensation, not PulseSensation2.
 
 ## Required reading and compaction recovery
 
-Read repo AGENTS.md and /Users/erik2/Developer/WoW/DEVELOPMENT.md; /Users/erik2/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guide; applicable /Users/erik2/.agents/skills/wow-forever-dev/SKILL.md; Art/_batches/workflow.json; Part 1 arcade and P1b/P2 design data in Kapow/Generation/generationpromptdatabase.md. The source document's installation steps do not override the review gate.
+Read repo AGENTS.md and /home/deck/developer/_from-mac/WoW/DEVELOPMENT.md; /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guide; applicable /home/deck/.agents/skills/wow-forever-dev/SKILL.md; Art/_batches/workflow.json; Part 1 arcade and P1b/P2 design data in Kapow/Generation/generationpromptdatabase.md. The source document's installation steps do not override the review gate.
 
 After compaction read this brief plus manifest/progress, inventory saved sources/exports and any in-flight calls before resuming. Save actual prompts/reference roles BEFORE calls; save successful source paths immediately on return. Never regenerate completed work because context was lost. One built-in call per message strip, up to three independent calls at once. No repeated aesthetic QA or polishing. One normal export/visual check. Preserve original if an observed blocking defect needs a targeted repair; no speculative retries.
 
@@ -27,10 +27,10 @@ User's portrait concept: player and enemy in-game 3D portraits, large/stretched,
 
 Inspect relevant full PNG strips with view_image. Use 1-2 appropriate inspected paths in referenced_image_paths for EVERY generation call. Reference role: typography/style/material and coherent frame structure, NOT edit target, NOT mandatory copying of exact palette/effect shape. Use only arcade family references for the new arcade text.
 
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arcade/counter.png
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arcade/perfect.png
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_sources/arcade/super-combo.png
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-03/_sources/arcade/flawless.png
+- /home/deck/developer/PulseSensation/Art/_sources/arcade/counter.png
+- /home/deck/developer/PulseSensation/Art/_sources/arcade/perfect.png
+- /home/deck/developer/PulseSensation/Art/_sources/arcade/super-combo.png
+- /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-03/_sources/arcade/flawless.png
 
 Palette/movement variety across the six is required by user: typography ties them together, not identical recolored bursts. Original arcade fighting-game inspiration; no official logos or copied UI. Do not regenerate existing arcade references.
 

@@ -9,7 +9,7 @@
       "status": "exported",
       "planned_source": "_sources/arena/honorable-kill.png",
       "source": "_sources/arena/honorable-kill.png",
-      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-3f6e4e2d-5826-44ba-80cb-003cf796ba25.png",
+      "generated_path": "/home/deck/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-3f6e4e2d-5826-44ba-80cb-003cf796ba25.png",
       "frames": [
         "arena/honorable-kill_1.tga",
         "arena/honorable-kill_2.tga",
@@ -23,7 +23,7 @@
       "status": "exported",
       "planned_source": "_sources/comic/kapow.png",
       "source": "_sources/comic/kapow.png",
-      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-77c49f21-86fb-478a-8ff3-4dae61ea87f2.png",
+      "generated_path": "/home/deck/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-77c49f21-86fb-478a-8ff3-4dae61ea87f2.png",
       "frames": [
         "comic/kapow_1.tga",
         "comic/kapow_2.tga",
@@ -37,7 +37,7 @@
       "status": "exported",
       "planned_source": "_sources/comic/bam.png",
       "source": "_sources/comic/bam.png",
-      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-9c54293c-408c-49e2-ae52-5918bc85fc86.png",
+      "generated_path": "/home/deck/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-9c54293c-408c-49e2-ae52-5918bc85fc86.png",
       "frames": [
         "comic/bam_1.tga",
         "comic/bam_2.tga",
@@ -51,7 +51,7 @@
       "status": "exported",
       "planned_source": "_sources/comic/thwack.png",
       "source": "_sources/comic/thwack.png",
-      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-477e7d81-4efc-4655-94d6-b11c040a82e5.png",
+      "generated_path": "/home/deck/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-477e7d81-4efc-4655-94d6-b11c040a82e5.png",
       "frames": [
         "comic/thwack_1.tga",
         "comic/thwack_2.tga",
@@ -65,7 +65,7 @@
       "status": "exported",
       "planned_source": "_sources/comic/blam.png",
       "source": "_sources/comic/blam.png",
-      "generated_path": "/Users/erik2/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-be3e8f15-6123-422c-9797-95ae1a5f4a77.png",
+      "generated_path": "/home/deck/.codex/generated_images/01a15f2f-e559-7d72-b925-7becd0a77902/exec-be3e8f15-6123-422c-9797-95ae1a5f4a77.png",
       "frames": [
         "comic/blam_1.tga",
         "comic/blam_2.tga",

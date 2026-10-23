@@ -2,7 +2,7 @@
 
 Completed artwork: 47 unique messages / 141 transparent, uncompressed 256x256 RGBA TGA frames. Last normal export completed successfully. Do not regenerate completed assets.
 
-Root: /Users/erik2/Developer/WoW/PulseSensation/Art
+Root: /home/deck/developer/PulseSensation/Art
 Theme folders: anime, comic, arcade, ninja, arena, escalation, failure, counterstrike, football, falling.
 Frame names: <message>_1.tga, _2.tga, _3.tga.
 SPLAT is shared from comic/splat into the falling category; RAMPAGE is shared from escalation into arena. No duplicate TGA sequences.

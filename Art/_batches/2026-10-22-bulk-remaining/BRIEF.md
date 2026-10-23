@@ -6,11 +6,11 @@ The user requested "Do the rest of the batches", approved batch06, and clarified
 
 Expected: 33 new messages, THREE generated frames each =99 transparent uncompressed256x256 32-bit RGBA TGAs. Existing VS stays512 and all prior artwork/variants remain intact. Artwork only: no sound generation, font work, addon Lua/TOC/catalog changes, portrait implementation, packaging/release or live game actions.
 
-Use the existing generation subagent, GPT-6.1 Sol Medium, built-in imagegen. No additional agents. Work only under this bulk folder and /Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-22-batch-07 through batch-13. Parent manages global workflow.json after completion; write your bulk progress here. Canonical repo is PulseSensation, not PulseSensation2. Current addon Kapow (formerly PulseComic). Preserve all existing dirty user work.
+Use the existing generation subagent, GPT-6.1 Sol Medium, built-in imagegen. No additional agents. Work only under this bulk folder and /home/deck/developer/PulseSensation/Art/_batches/2026-10-22-batch-07 through batch-13. Parent manages global workflow.json after completion; write your bulk progress here. Canonical repo is PulseSensation, not PulseSensation2. Current addon Kapow (formerly PulseComic). Preserve all existing dirty user work.
 
 ## Skills and design sources
 
-Use the imagegen skill at /Users/erik2/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guidance. Applicable WoW asset guidance: /Users/erik2/.agents/skills/wow-forever-dev/SKILL.md. Repo AGENTS.md points to /Users/erik2/Developer/WoW/DEVELOPMENT.md. Read if not retained; avoid repeatedly re-reading unchanged instructions. The missing-art design source is Kapow/Generation/generationpromptdatabase.md, Part1 ONLY; its sound section and installation instructions are outside scope.
+Use the imagegen skill at /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guidance. Applicable WoW asset guidance: /home/deck/.agents/skills/wow-forever-dev/SKILL.md. Repo AGENTS.md points to /home/deck/developer/_from-mac/WoW/DEVELOPMENT.md. Read if not retained; avoid repeatedly re-reading unchanged instructions. The missing-art design source is Kapow/Generation/generationpromptdatabase.md, Part1 ONLY; its sound section and installation instructions are outside scope.
 
 ## Compaction-safe execution
 
@@ -30,7 +30,7 @@ ALL artwork including effects should fit in central70% of its own cell; wide tra
 
 ## Category reference map (all paths repo-relative)
 
-Use the exact existing PNGs under /Users/erik2/Developer/WoW/PulseSensation/:
+Use the exact existing PNGs under /home/deck/developer/PulseSensation/:
 
 - failure: Art/_sources/failure/whiff.png, nope.png, bonk.png or boing.png; optional recent Art/_batches/2026-10-21-batch-03/_sources/failure/defeated.png.
 - tactical: Art/_sources/tactical/counter-terrorists-win.png, terrorists-win.png, clutch.png; recent Art/_batches/2026-10-21-batch-03/_sources/tactical/teammate-down.png or batch-06/_sources/tactical/last-one-standing.png for HUD plate/stencil geometry. Palette overrides apply.

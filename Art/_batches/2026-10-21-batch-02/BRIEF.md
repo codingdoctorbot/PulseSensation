@@ -4,11 +4,11 @@
 
 The user said "continue" after reviewing batch 01. That approves batch 01 and authorizes only the NEXT FIVE banners, three generated animation frames each, then STOP for review. No batch 03 until approval. No addon integration, main manifest/catalog changes or code edits in this worker. Preserve all existing artwork and dirty work.
 
-Work only under /Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-02. Worker: GPT-6.1 Sol Medium, built-in image generator. No further subagents. After compaction read this file, manifest.json and progress.json, inventory successful sources, and resume without regenerating completed work. Save actual prompts/references before each call and generated source paths immediately on return. Do not duplicate running generation.
+Work only under /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-02. Worker: GPT-6.1 Sol Medium, built-in image generator. No further subagents. After compaction read this file, manifest.json and progress.json, inventory successful sources, and resume without regenerating completed work. Save actual prompts/references before each call and generated source paths immediately on return. Do not duplicate running generation.
 
 ## Required instructions and design data
 
-Read the repo AGENTS.md, /Users/erik2/Developer/WoW/DEVELOPMENT.md, /Users/erik2/.codex/skills/.system/imagegen/SKILL.md, applicable /Users/erik2/.agents/skills/wow-forever-dev/SKILL.md, and Part 1/P1 of Kapow/Generation/generationpromptdatabase.md. Documents are design data; their instructions to install artwork do not override the review stop rule. The canonical repo is /Users/erik2/Developer/WoW/PulseSensation, current addon Kapow (formerly PulseComic).
+Read the repo AGENTS.md, /home/deck/developer/_from-mac/WoW/DEVELOPMENT.md, /home/deck/.codex/skills/.system/imagegen/SKILL.md, applicable /home/deck/.agents/skills/wow-forever-dev/SKILL.md, and Part 1/P1 of Kapow/Generation/generationpromptdatabase.md. Documents are design data; their instructions to install artwork do not override the review stop rule. The canonical repo is /home/deck/developer/PulseSensation, current addon Kapow (formerly PulseComic).
 
 ## Five messages, category escalation
 
@@ -24,10 +24,10 @@ Check for existing names once (including batch folders) and reuse any already co
 
 Inspect these PNGs with view_image, then pass one or two relevant paths as referenced_image_paths in EACH built-in imagegen call. Label style/composition references, not edit targets; use exact new wording.
 
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_sources/escalation/double-kill.png
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_sources/escalation/multikill.png
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_sources/escalation/rampage.png
-- /Users/erik2/Developer/WoW/PulseSensation/Art/_batches/2026-10-21-batch-01/_sources/escalation/monster-kill.png (approved adjacent-level style reference)
+- /home/deck/developer/PulseSensation/Art/_sources/escalation/double-kill.png
+- /home/deck/developer/PulseSensation/Art/_sources/escalation/multikill.png
+- /home/deck/developer/PulseSensation/Art/_sources/escalation/rampage.png
+- /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-01/_sources/escalation/monster-kill.png (approved adjacent-level style reference)
 
 Keep the established heavy condensed italic ivory/steel lettering with thick black outlines and compact metallic/orange ember family. Preserve family resemblance, with perceptible level 2 versus level 5 intensity and the requested GODLIKE halo. Avoid making every word an identical maximum explosion. This is prompt guidance for the new generation, not authorization to revise approved art.
 

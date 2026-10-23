@@ -1,6 +1,6 @@
 {
-  "from": "/Users/erik2/Developer/WoW/PulseSensation/PulseComic/Media/ExpansionPack",
-  "to": "/Users/erik2/Developer/WoW/PulseSensation/Art",
+  "from": "/home/deck/developer/PulseSensation/PulseComic/Media/ExpansionPack",
+  "to": "/home/deck/developer/PulseSensation/Art",
   "files": {
     "sources/anime--critical.png": "_sources/anime/critical.png",
     "anime/critical_01.tga": "anime/critical_1.tga",
