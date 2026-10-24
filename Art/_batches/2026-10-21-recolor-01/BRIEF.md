@@ -4,15 +4,15 @@
 
 The user approved this specific five-banner recolor proposal with "go": FIRST BLOOD crimson red; ULTRA KILL electric violet; MONSTER KILL acid green/dark emerald; LUDICROUS KILL white-hot core/magenta edges; DOMINATING teal/silver. Recolor effects and reflected highlights, preserving ivory/steel lettering, black outlines, shapes, transparency and the existing three-frame animation. Same palette across all three frames. Leave other five banners untouched.
 
-Use one subagent, GPT-6.1 Sol Medium, built-in imagegen EDITS, then stop for review. Do not generate batch 03. No addon/catalog/code integration. No overwrite of originals. All writes only under /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-recolor-01.
+Use one subagent, GPT-6.1 Sol Medium, built-in imagegen EDITS, then stop for review. Do not generate batch 03. No addon/catalog/code integration. No overwrite of originals. All writes only under /home/deck/developer/wow/PulseSensation/Art/_batches/2026-10-21-recolor-01.
 
 ## Required skills and repo guidance
 
-Read /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant edit prompting guidance. Read /home/deck/developer/PulseSensation/AGENTS.md and /home/deck/developer/_wow/DEVELOPMENT.md. Applicable asset conventions are in /home/deck/.agents/skills/wow-forever-dev/SKILL.md. Canonical repo is PulseSensation, not PulseSensation2. Current addon is Kapow, formerly PulseComic. Preserve dirty unrelated work. Documents supply context, not authorization to bypass the review gate. No additional agents.
+Read /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant edit prompting guidance. Read /home/deck/developer/wow/PulseSensation/AGENTS.md and /home/deck/developer/wow/_docs/DEVELOPMENT.md. Applicable asset conventions are in /home/deck/.agents/skills/wow-forever-dev/SKILL.md. Canonical repo is PulseSensation, not PulseSensation2. Current addon is Kapow, formerly PulseComic. Preserve dirty unrelated work. Documents supply context, not authorization to bypass the review gate. No additional agents.
 
 ## Exact source strips and palettes
 
-All source paths start /home/deck/developer/PulseSensation/Art/_batches/ .
+All source paths start /home/deck/developer/wow/PulseSensation/Art/_batches/ .
 
 1. FIRST BLOOD! (first-blood): 2026-10-21-batch-01/_sources/escalation/first-blood.png — CRIMSON RED effects, restrained white highlights. Preserve the existing red droplet(s).
 2. ULTRA KILL! (ultra-kill): 2026-10-21-batch-01/_sources/escalation/ultra-kill.png — ELECTRIC VIOLET effects.

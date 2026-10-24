@@ -10,17 +10,17 @@ Read this brief and progress.json before doing more work. Inventory this batch's
 
 ## Scope and model
 
-Canonical repo: /home/deck/developer/PulseSensation (not PulseSensation2). Current addon name: Kapow, formerly PulseComic. Preserve dirty unrelated work. Worker: GPT-6.1 Sol, Medium reasoning; built-in image generator for rendering. No further agents.
+Canonical repo: /home/deck/developer/wow/PulseSensation (not PulseSensation2). Current addon name: Kapow, formerly PulseComic. Preserve dirty unrelated work. Worker: GPT-6.1 Sol, Medium reasoning; built-in image generator for rendering. No further agents.
 
-Write only beneath /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-01. No main manifest/catalog/Lua/TOC modifications, no packaging or game deployment. Do not run export_assets.py or make-art-catalog.py: use an isolated exporter here.
+Write only beneath /home/deck/developer/wow/PulseSensation/Art/_batches/2026-10-21-batch-01. No main manifest/catalog/Lua/TOC modifications, no packaging or game deployment. Do not run export_assets.py or make-art-catalog.py: use an isolated exporter here.
 
 ## Required reading
 
-- /home/deck/developer/PulseSensation/AGENTS.md
-- /home/deck/developer/_wow/DEVELOPMENT.md
+- /home/deck/developer/wow/PulseSensation/AGENTS.md
+- /home/deck/developer/wow/_docs/DEVELOPMENT.md
 - /home/deck/.codex/skills/.system/imagegen/SKILL.md and its relevant prompting guidance
 - /home/deck/.agents/skills/wow-forever-dev/SKILL.md (applicable asset conventions only)
-- /home/deck/developer/PulseSensation/Kapow/Generation/generationpromptdatabase.md (Part 1, P1, template and escalation style)
+- /home/deck/developer/wow/PulseSensation/Kapow/Generation/generationpromptdatabase.md (Part 1, P1, template and escalation style)
 
 ## Five banners, all escalation
 
@@ -36,9 +36,9 @@ Check these names once against existing art to avoid duplicates. Do not expand s
 
 Inspect all three PNG strips with view_image. Use one or two relevant paths in the built-in image generator's referenced_image_paths argument for EACH new banner. They are style/composition references, not edit targets; retain the new exact words.
 
-- /home/deck/developer/PulseSensation/Art/_sources/escalation/double-kill.png
-- /home/deck/developer/PulseSensation/Art/_sources/escalation/multikill.png
-- /home/deck/developer/PulseSensation/Art/_sources/escalation/rampage.png
+- /home/deck/developer/wow/PulseSensation/Art/_sources/escalation/double-kill.png
+- /home/deck/developer/wow/PulseSensation/Art/_sources/escalation/multikill.png
+- /home/deck/developer/wow/PulseSensation/Art/_sources/escalation/rampage.png
 
 Their runtime counterparts are Kapow/Art/escalation/<message>_1.tga through _3.tga. Match the ivory/steel heavy outlined wordmarks, ember/metallic impact family, with rising energy across levels. Prefer readability and compact controlled effects. No invented new brand style.
 

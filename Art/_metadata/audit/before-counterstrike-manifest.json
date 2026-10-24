@@ -570,7 +570,7 @@
         "comic"
       ],
       "reference_images": [
-        "/home/deck/developer/PulseSensation/Art/_sources/_references/comic/pow.png"
+        "/home/deck/developer/wow/PulseSensation/Art/_sources/_references/comic/pow.png"
       ],
       "reference_role": "Original Media texture palette, bold lettering and comic burst identity",
       "visual_review": {
@@ -597,7 +597,7 @@
         "comic"
       ],
       "reference_images": [
-        "/home/deck/developer/PulseSensation/Art/_sources/_references/comic/overkill.png"
+        "/home/deck/developer/wow/PulseSensation/Art/_sources/_references/comic/overkill.png"
       ],
       "reference_role": "Original Media texture palette, bold lettering and comic burst identity",
       "visual_review": {
@@ -624,7 +624,7 @@
         "comic"
       ],
       "reference_images": [
-        "/home/deck/developer/PulseSensation/Art/_sources/_references/comic/ko.png"
+        "/home/deck/developer/wow/PulseSensation/Art/_sources/_references/comic/ko.png"
       ],
       "reference_role": "Original Media texture palette, bold lettering and comic burst identity",
       "visual_review": {
@@ -711,7 +711,7 @@
     ],
     "original_textures_preserved": true
   },
-  "delivery_root": "/home/deck/developer/PulseSensation/Art",
+  "delivery_root": "/home/deck/developer/wow/PulseSensation/Art",
   "layout": {
     "textures": "<theme>/<message>_<1|2|3>.tga",
     "sources": "_sources/<theme>/<message>.png",

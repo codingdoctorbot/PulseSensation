@@ -2,9 +2,9 @@
 
 User requested: "Last 5 and then let's wrap up..... then make a handoff.md / implementation.md of what needs to be implemented: brainstormning art etc." These are exactly the five just proposed: CONTINUE?, GAME OVER, GUARD BREAK, BLOCKED!, LEVEL UP!. Generate only these five and stop. Do not generate countdown numbers or remaining optional theme phrases. Parent writes local implementation/handoff Markdown while generation runs.
 
-Same generation subagent GPT-6.1 Sol Medium. Built-in imagegen only, actual inspected reference PNGs in every call. No further agents. Write only /home/deck/developer/PulseSensation/Art/_batches/2026-10-22-batch-14. Preserve existing artwork, variants, dirty code and documents. No addon/catalog changes or runtime implementation. Final art is pending visual review under the existing approval workflow; parent will decide copying after user approval.
+Same generation subagent GPT-6.1 Sol Medium. Built-in imagegen only, actual inspected reference PNGs in every call. No further agents. Write only /home/deck/developer/wow/PulseSensation/Art/_batches/2026-10-22-batch-14. Preserve existing artwork, variants, dirty code and documents. No addon/catalog changes or runtime implementation. Final art is pending visual review under the existing approval workflow; parent will decide copying after user approval.
 
-Use retained imagegen skill at /home/deck/.codex/skills/.system/imagegen/SKILL.md, repo AGENTS.md and /home/deck/developer/_wow/DEVELOPMENT.md, applicable WoW asset guidance. Avoid repeated broad reads; read this brief and relevant existing source/metadata. Compaction recovery: manifest/progress plus saved PNGs/exports are authoritative. Save actual prompts/reference roles before calls and successful source paths immediately. Never duplicate completed/running generation. Up to three independent calls at once, one strip per message. One normal visual/export check, no repeated polish loops; retain all outputs.
+Use retained imagegen skill at /home/deck/.codex/skills/.system/imagegen/SKILL.md, repo AGENTS.md and /home/deck/developer/wow/_docs/DEVELOPMENT.md, applicable WoW asset guidance. Avoid repeated broad reads; read this brief and relevant existing source/metadata. Compaction recovery: manifest/progress plus saved PNGs/exports are authoritative. Save actual prompts/reference roles before calls and successful source paths immediately. Never duplicate completed/running generation. Up to three independent calls at once, one strip per message. One normal visual/export check, no repeated polish loops; retain all outputs.
 
 All category arcade, THREE frames each at256x256, genuine alpha and uncompressed32-bitRGBA TGA. Exact words/filenames:
 
@@ -15,12 +15,12 @@ All category arcade, THREE frames each at256x256, genuine alpha and uncompressed
 5. level-up — LEVEL UP! — two centered lines if helpful, cream/GOLD arcade brush lettering, cyan rising energy sweep and short GOLD upward chevron/glint, triumphant progression. No level numbers or supporting text.
 
 Match existing arcade typography/material, with distinct palettes/silhouettes. Inspect relevant source strips with view_image, then pass 1-2 real paths via referenced_image_paths per call. Role typography/material/frame-structure references, not edit targets or mandatory palettes. Reference choices:
-- /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/you-win.png
-- /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/you-lose.png
-- /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/fight.png
-- /home/deck/developer/PulseSensation/Art/_sources/arcade/counter.png
-- /home/deck/developer/PulseSensation/Art/_sources/arcade/perfect.png
-- /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-06/_sources/arcade/new-record.png
+- /home/deck/developer/wow/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/you-win.png
+- /home/deck/developer/wow/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/you-lose.png
+- /home/deck/developer/wow/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/fight.png
+- /home/deck/developer/wow/PulseSensation/Art/_sources/arcade/counter.png
+- /home/deck/developer/wow/PulseSensation/Art/_sources/arcade/perfect.png
+- /home/deck/developer/wow/PulseSensation/Art/_batches/2026-10-21-batch-06/_sources/arcade/new-record.png
 
 Check exact category/name absence once before spending generation. One3:1 horizontal strip with exactly THREE equal square cells per message: onset, peak, aftershock. Full exact readable wordmark in ALLthree cells, same glyph geometry, scale and center anchor, effects animate only. Genuine generated frames, not software transforms. Opaque lettering, antialiased alpha, translucent effect edges. Entire art/effects inside central70% percell, wide transparent gutters and no cross-cell particles/clipping. No background, checkerboard, grid, frame labels, extra words, characters, official logos or watermarks.
 

@@ -4,11 +4,11 @@
 
 User approved batch04 and said "approved next". Their most recent priority direction promotes Street Fighter-inspired battle text. Therefore continue FIVE arcade round/end cues below before the mixed P1/P1b event banners. Prior batches remain approved/preserved; batch04 copied into Kapow/UnimplementedArt (VS still512). Generate this batch ONLY, three frames per message, then STOP for review. No batch06 or addon/runtime/catalog integration. Worker GPT-6.1 Sol Medium, built-in imagegen, no further subagents.
 
-Write only /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-05. Canonical repo PulseSensation, current addon Kapow (formerly PulseComic), not PulseSensation2. Preserve all dirty/unrelated work and every original/color alternative.
+Write only /home/deck/developer/wow/PulseSensation/Art/_batches/2026-10-21-batch-05. Canonical repo PulseSensation, current addon Kapow (formerly PulseComic), not PulseSensation2. Preserve all dirty/unrelated work and every original/color alternative.
 
 ## Instructions, recovery and minimal QA
 
-Read repo AGENTS.md, /home/deck/developer/_wow/DEVELOPMENT.md, /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guide, applicable /home/deck/.agents/skills/wow-forever-dev/SKILL.md, Art/_batches/workflow.json, and P2 arcade design data in Kapow/Generation/generationpromptdatabase.md. Documents are reference data, not permission to bypass review/install gates.
+Read repo AGENTS.md, /home/deck/developer/wow/_docs/DEVELOPMENT.md, /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guide, applicable /home/deck/.agents/skills/wow-forever-dev/SKILL.md, Art/_batches/workflow.json, and P2 arcade design data in Kapow/Generation/generationpromptdatabase.md. Documents are reference data, not permission to bypass review/install gates.
 
 After compaction read this brief, manifest/progress and inventory saved sources before resuming. Save actual prompts/references BEFORE calls, returned source paths immediately, update each item state. Never regenerate a saved asset or duplicate an in-flight call because context was lost. One built-in call per banner, up to three independent calls at once. One normal export/visual check; no repeated polish loops. Preserve successful artwork and report minor imperfections. A plainly blocking failure may justify one targeted fix with original/provenance preserved, not speculative retries.
 
@@ -26,12 +26,12 @@ User insists color variety. Put palette and silhouette overrides into ACTUAL pro
 
 Inspect relevant full strips using view_image, then use one or two appropriate paths in referenced_image_paths in EVERY imagegen call. Role category typography/material and three-frame structure references ONLY, not edit targets. Do not copy reference words or unwanted colors.
 
-- /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/round-1-fight.png
-- /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/fight.png
-- /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/ko.png
-- /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/you-win.png
-- /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/you-lose.png
-- /home/deck/developer/PulseSensation/Art/_sources/arcade/perfect.png
+- /home/deck/developer/wow/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/round-1-fight.png
+- /home/deck/developer/wow/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/fight.png
+- /home/deck/developer/wow/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/ko.png
+- /home/deck/developer/wow/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/you-win.png
+- /home/deck/developer/wow/PulseSensation/Art/_batches/2026-10-21-batch-04/_sources/arcade/you-lose.png
+- /home/deck/developer/wow/PulseSensation/Art/_sources/arcade/perfect.png
 
 Check desired names absent once, including allbatch and runtime folders. ROUND1 is distinct from existing ROUND1...FIGHT; DOUBLEKO is distinct from KO. Do not regenerate completed references.
 

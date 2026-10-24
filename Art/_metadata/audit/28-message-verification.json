@@ -47,6 +47,6 @@
     "prior_25_asset_metadata_unchanged": true,
     "qa_scope": "Obvious failures only; small alignment and other polish deferred"
   },
-  "delivery_root": "/home/deck/developer/PulseSensation/Art",
+  "delivery_root": "/home/deck/developer/wow/PulseSensation/Art",
   "organization": "Moved the single delivery collection to Art; three original remakes are comic; all frames use suffixes _1, _2, _3; no texture re-export or extra QA"
 }

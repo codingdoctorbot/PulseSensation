@@ -1,6 +1,6 @@
 # KAPOW artwork implementation plan
 
-Snapshot: 22 October 2026. This is a **future implementation plan and design discussion**, not completed work. Source references were inspected locally. No Lua/TOC/catalog changes were made in the artwork session. Read [handoff.md](/home/deck/developer/PulseSensation/Kapow/UnimplementedArt/handoff.md) and the inventory first; recheck current code and dirty work before implementing.
+Snapshot: 22 October 2026. This is a **future implementation plan and design discussion**, not completed work. Source references were inspected locally. No Lua/TOC/catalog changes were made in the artwork session. Read [handoff.md](/home/deck/developer/wow/PulseSensation/Kapow/UnimplementedArt/handoff.md) and the inventory first; recheck current code and dirty work before implementing.
 
 Final artwork state: all 69 new message keys are approved and copied into staging, including the final five. There are 222 TGA files including five orange alternatives. No approval/generation work remains; the remaining work below is addon integration and optional design work.
 
@@ -105,7 +105,7 @@ Integration checks should verify behavior, not merely mirror the code:
 1. Every registered asset resolves to exactly three existing files, with correct category/name paths and variant labels. Keep VS512 and other256 dimensions intact; compare promoted bytes to staging hashes.
 2. Check direct art choice, random category/all, font matching, defaults, apply-theme behavior, import/export and older saved profiles without resetting custom settings.
 3. Preview onset/peak/aftershock, timing, alpha, crop, rotation/scale and each chosen animation. Confirm baked title text is not duplicated and details remain readable.
-4. Run relevant existing Lua5.1-compatible checks/tests after actual code changes, for example `python3 /home/deck/developer/_wow/.devtools/wowdev.py check PulseSensation --tests`; add lint where relevant. Use the project tests rather than broad new mirror tests.
+4. Run relevant existing Lua5.1-compatible checks/tests after actual code changes, for example `python3 /home/deck/developer/wow/.devtools/wowdev.py check PulseSensation --tests`; add lint where relevant. Use the project tests rather than broad new mirror tests.
 5. In the real client, reload and test menus/fonts/textures, representative events, profiles, combat transitions and the optional VS stage. Verify trigger delivery and attribution independently of asset loading. Offline checks do not establish live event/security behavior.
 6. Inspect fresh logs if errors/taint appear. Preserve secret-safe presentation and protected ownership. Recheck the installed client version and source compatibility rather than copying retail assumptions.
 
