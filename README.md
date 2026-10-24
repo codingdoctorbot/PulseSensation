@@ -170,7 +170,8 @@ PulseHaptics is designed as a modular ecosystem of dedicated, standalone compani
 | **`PulseDebug`** | `/pdebug` | Telemetry HUD and real-time dual-trace oscilloscope. |
 | **`PulseChecklist`** | `/pcheck` | In-game QA tracking checklist for verifying all 190 cues with markdown export. |
 | **`PulseProfileReview`** | `/pulsereview` | Auditing tool for vetting profile cue allocations. |
-| **`Kapow`** *(alpha)* | `/kapow` | KAPOW!: animated comic, arcade, arena and sports popups for crits, kills, streaks, deaths and falls, with themes and shareable profiles. Standalone; see [`Kapow/README.md`](Kapow/README.md). |
+
+KAPOW! (formerly PulseComic) moved to its own [repository](https://github.com/codingdoctorbot/Kapow) on 22 October 2026. Its addon, master artwork, generation scripts and tests are maintained there. The older copy in this repository was compared with standalone Kapow and archived outside this checkout on 24 October 2026; it is no longer part of this suite.
 
 > *Parked in `_parked/` (not loaded, kept for future work): PulseCompass, PulseStudio, PulseAudio, PulseSync, PulseBridge, PulseProbe.*
 >

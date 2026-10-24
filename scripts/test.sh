@@ -31,7 +31,6 @@ SUITES=(
   "cue-audit PulseHaptics"
   "pulsedebug-test PulseDebug"
   "checklist-test PulseChecklist"
-  "kapow-test Kapow"
 )
 
 # ── Flags & Mode Selection ───────────────────────────────────────────────────
@@ -96,7 +95,7 @@ if [ $SKIP_LINT -eq 0 ]; then
   echo -e "${BOLD}[1/2] Static Analysis (luacheck)${NC}"
   if command -v luacheck >/dev/null 2>&1; then
     LINT_STATUS=0
-    LINT_OUT=$(luacheck PulseHaptics/ PulseDebug/ PulseChecklist/ Kapow/ 2>&1) || LINT_STATUS=$?
+    LINT_OUT=$(luacheck PulseHaptics/ PulseDebug/ PulseChecklist/ 2>&1) || LINT_STATUS=$?
     if [ $LINT_STATUS -eq 0 ]; then
       SUMMARY=$(tail -n 1 <<< "$LINT_OUT")
       echo -e "  ${GREEN}✓ PASS${NC}  ${DIM}${SUMMARY}${NC}"

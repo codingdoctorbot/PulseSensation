@@ -41,7 +41,6 @@ find PulseHaptics -name '*.lua' -exec luac -p {} +
 | `checklist-test.lua` | PulseChecklist's window and its account-wide saved table. Drives the real status button: cycling a status stamps `confirmedBy` with the current character, name, realm and class; cycling back to `untested` clears it; a status set by another character is marked and explained in the tooltip; and an entry saved before `confirmedBy` existed neither errors nor gets mislabelled |
 | `pulsedebug-test.lua` | PulseDebug's window (`UI.lua`), the one file here written entirely blind. Loads both PulseDebug files against a stub API and a fake Pulse, then drives the frame: every view renders and contains a token only it can produce, the Live toggle's OnUpdate ticks safely, the module reach-in scan finds `_Debug*` and skips modules without one, and a reach-in that throws is reported inline without taking the window down |
 | `engine-test.lua` | The asynchronous cancellation boundary. `StopAll` must void already-scheduled `PlayMode` steps and ramp steps, while a cue fired *after* it still plays |
-| `kapow-test.lua` | KAPOW's frame selection. Secret booleans are stand-in tables that throw on comparison; every (crit, dead) pair must show exactly one of POW!/K.O.!/OVERKILL! (or none) through the secret path, the plain path and the pre-12.0 fallback. Also the damage label (abbreviated when plain; a secret amount reaches `SetText` untouched after the abbreviator refuses it), the numbers toggle, attribution, throttle, on/off, and the debug width probe. The hit meter: three proportional rows, two lamps and the OVERKILL slide built 1000× their windows and pinned right; secret damage and health reaching `SetMinMaxValues`/`SetValue` untouched; which health reading each row uses; and the slide art anchored to the fill edge. Stand-in secrets refuse all arithmetic, and the source scan covers both files with string literals stripped. A source scan fails the suite if any possibly-secret name is branched on or compared, which the stand-ins alone cannot detect. Run with `Kapow` as the directory |
 
 ## Two things worth knowing
 
@@ -57,3 +56,5 @@ for an unset field (`if row.MeasureHeight then`, `if control.IncrementButton the
 Widening that list to a prefix like `Increment` would turn the *field*
 `control.IncrementButton` into a function and silently defeat the guard it is meant to
 test. Add exact names to `METHOD_NAMES` instead.
+
+KAPOW tests are maintained in the standalone `codingdoctorbot/Kapow` repository (`tests/kapow-test.lua` and `tests/ui-smoke.lua`). The older local copy was archived on 24 October 2026.

@@ -235,7 +235,6 @@ globals = {
     "PulseDB",
     "PulseCharDB",
     "PulseChecklistDB",
-    "KapowDB",
     "PulseDebugDB",
     "PulseDebugUI",
     "PulseProbe",
