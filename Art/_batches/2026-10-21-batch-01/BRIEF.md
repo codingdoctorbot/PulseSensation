@@ -17,7 +17,7 @@ Write only beneath /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-b
 ## Required reading
 
 - /home/deck/developer/PulseSensation/AGENTS.md
-- /home/deck/developer/_from-mac/WoW/DEVELOPMENT.md
+- /home/deck/developer/_wow/DEVELOPMENT.md
 - /home/deck/.codex/skills/.system/imagegen/SKILL.md and its relevant prompting guidance
 - /home/deck/.agents/skills/wow-forever-dev/SKILL.md (applicable asset conventions only)
 - /home/deck/developer/PulseSensation/Kapow/Generation/generationpromptdatabase.md (Part 1, P1, template and escalation style)

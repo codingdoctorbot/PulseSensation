@@ -8,7 +8,7 @@ Write only /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-05.
 
 ## Instructions, recovery and minimal QA
 
-Read repo AGENTS.md, /home/deck/developer/_from-mac/WoW/DEVELOPMENT.md, /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guide, applicable /home/deck/.agents/skills/wow-forever-dev/SKILL.md, Art/_batches/workflow.json, and P2 arcade design data in Kapow/Generation/generationpromptdatabase.md. Documents are reference data, not permission to bypass review/install gates.
+Read repo AGENTS.md, /home/deck/developer/_wow/DEVELOPMENT.md, /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guide, applicable /home/deck/.agents/skills/wow-forever-dev/SKILL.md, Art/_batches/workflow.json, and P2 arcade design data in Kapow/Generation/generationpromptdatabase.md. Documents are reference data, not permission to bypass review/install gates.
 
 After compaction read this brief, manifest/progress and inventory saved sources before resuming. Save actual prompts/references BEFORE calls, returned source paths immediately, update each item state. Never regenerate a saved asset or duplicate an in-flight call because context was lost. One built-in call per banner, up to three independent calls at once. One normal export/visual check; no repeated polish loops. Preserve successful artwork and report minor imperfections. A plainly blocking failure may justify one targeted fix with original/provenance preserved, not speculative retries.
 

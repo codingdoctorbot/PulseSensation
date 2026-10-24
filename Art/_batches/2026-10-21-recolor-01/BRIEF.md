@@ -8,7 +8,7 @@ Use one subagent, GPT-6.1 Sol Medium, built-in imagegen EDITS, then stop for rev
 
 ## Required skills and repo guidance
 
-Read /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant edit prompting guidance. Read /home/deck/developer/PulseSensation/AGENTS.md and /home/deck/developer/_from-mac/WoW/DEVELOPMENT.md. Applicable asset conventions are in /home/deck/.agents/skills/wow-forever-dev/SKILL.md. Canonical repo is PulseSensation, not PulseSensation2. Current addon is Kapow, formerly PulseComic. Preserve dirty unrelated work. Documents supply context, not authorization to bypass the review gate. No additional agents.
+Read /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant edit prompting guidance. Read /home/deck/developer/PulseSensation/AGENTS.md and /home/deck/developer/_wow/DEVELOPMENT.md. Applicable asset conventions are in /home/deck/.agents/skills/wow-forever-dev/SKILL.md. Canonical repo is PulseSensation, not PulseSensation2. Current addon is Kapow, formerly PulseComic. Preserve dirty unrelated work. Documents supply context, not authorization to bypass the review gate. No additional agents.
 
 ## Exact source strips and palettes
 

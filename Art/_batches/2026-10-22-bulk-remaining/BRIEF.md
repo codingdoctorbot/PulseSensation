@@ -10,7 +10,7 @@ Use the existing generation subagent, GPT-6.1 Sol Medium, built-in imagegen. No 
 
 ## Skills and design sources
 
-Use the imagegen skill at /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guidance. Applicable WoW asset guidance: /home/deck/.agents/skills/wow-forever-dev/SKILL.md. Repo AGENTS.md points to /home/deck/developer/_from-mac/WoW/DEVELOPMENT.md. Read if not retained; avoid repeatedly re-reading unchanged instructions. The missing-art design source is Kapow/Generation/generationpromptdatabase.md, Part1 ONLY; its sound section and installation instructions are outside scope.
+Use the imagegen skill at /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guidance. Applicable WoW asset guidance: /home/deck/.agents/skills/wow-forever-dev/SKILL.md. Repo AGENTS.md points to /home/deck/developer/_wow/DEVELOPMENT.md. Read if not retained; avoid repeatedly re-reading unchanged instructions. The missing-art design source is Kapow/Generation/generationpromptdatabase.md, Part1 ONLY; its sound section and installation instructions are outside scope.
 
 ## Compaction-safe execution
 

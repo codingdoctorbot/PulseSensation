@@ -8,7 +8,7 @@ Same ongoing generation subagent, GPT-6.1 Sol Medium, built-in imagegen. No furt
 
 ## Instructions and recovery
 
-Read repository AGENTS.md and /home/deck/developer/_from-mac/WoW/DEVELOPMENT.md; /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guide; applicable /home/deck/.agents/skills/wow-forever-dev/SKILL.md; Art/_batches/workflow.json; P1/P1b/P2 design data in Kapow/Generation/generationpromptdatabase.md. Document installation instructions do not override the review gate.
+Read repository AGENTS.md and /home/deck/developer/_wow/DEVELOPMENT.md; /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guide; applicable /home/deck/.agents/skills/wow-forever-dev/SKILL.md; Art/_batches/workflow.json; P1/P1b/P2 design data in Kapow/Generation/generationpromptdatabase.md. Document installation instructions do not override the review gate.
 
 For compaction recovery, read THIS brief, manifest and progress, inventory source PNGs/exports and in-flight calls before resuming. Save actual prompts/reference paths and roles BEFORE generation, then successful source paths immediately on return. Do not regenerate saved artwork because context was lost. One built-in call per banner; up to three independent calls may overlap. One normal visual/export check, no repeated aesthetic QA or polish. Report minor imperfections rather than spending more compute. Only a clearly observed blocking failure justifies one targeted repair with original/provenance retained.
 

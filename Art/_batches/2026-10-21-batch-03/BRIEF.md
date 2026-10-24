@@ -8,7 +8,7 @@ Write only /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-03.
 
 ## Required reading and recovery
 
-- /home/deck/developer/PulseSensation/AGENTS.md and /home/deck/developer/_from-mac/WoW/DEVELOPMENT.md
+- /home/deck/developer/PulseSensation/AGENTS.md and /home/deck/developer/_wow/DEVELOPMENT.md
 - /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guidance
 - Applicable /home/deck/.agents/skills/wow-forever-dev/SKILL.md asset conventions
 - /home/deck/developer/PulseSensation/Kapow/Generation/generationpromptdatabase.md, Part 1 and P1 category design data (not its installation instructions)

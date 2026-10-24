@@ -8,7 +8,7 @@ Write only /home/deck/developer/PulseSensation/Art/_batches/2026-10-21-batch-04.
 
 ## Required reading and compaction recovery
 
-Read repo AGENTS.md and /home/deck/developer/_from-mac/WoW/DEVELOPMENT.md; /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guide; applicable /home/deck/.agents/skills/wow-forever-dev/SKILL.md; Art/_batches/workflow.json; Part 1 arcade and P1b/P2 design data in Kapow/Generation/generationpromptdatabase.md. The source document's installation steps do not override the review gate.
+Read repo AGENTS.md and /home/deck/developer/_wow/DEVELOPMENT.md; /home/deck/.codex/skills/.system/imagegen/SKILL.md and relevant prompting guide; applicable /home/deck/.agents/skills/wow-forever-dev/SKILL.md; Art/_batches/workflow.json; Part 1 arcade and P1b/P2 design data in Kapow/Generation/generationpromptdatabase.md. The source document's installation steps do not override the review gate.
 
 After compaction read this brief plus manifest/progress, inventory saved sources/exports and any in-flight calls before resuming. Save actual prompts/reference roles BEFORE calls; save successful source paths immediately on return. Never regenerate completed work because context was lost. One built-in call per message strip, up to three independent calls at once. No repeated aesthetic QA or polishing. One normal export/visual check. Preserve original if an observed blocking defect needs a targeted repair; no speculative retries.
 
