@@ -1,3 +1,31 @@
+# PulseHaptics v0.4.0
+
+## Languages
+
+- PulseHaptics is now available in all 11 languages World of Warcraft supports: English,
+  German, Spanish (Spain and Latin America), French, Italian, Brazilian Portuguese, Russian, Korean, and Simplified and Traditional Chinese. Every settings page, the setup wizard, profiles, cue names, and chat
+  messages are translated.
+- The addon follows your game language automatically. To use a different one, choose it in
+  Quick Setup step 1 or under **Addon language** in Advanced Settings. A reload applies the
+  change, and Quick Setup reopens where you left it.
+- Vibration mode pickers show readable, translated names (Double Tap, Thud, ...). Saved
+  settings and `/pulse test <MODE>` still use the original mode IDs, which the tooltip shows.
+- Strings that are not translated yet fall back to English.
+
+## Quick Setup layout
+
+- Buttons size to their text, and hint lines fit the space available.
+- Step 5 shows every effect description in full; the window grows taller when a language
+  needs more room.
+- Controller hints use symbols every game font can display.
+
+## Compatibility
+
+Client interface entries are unchanged: `16001`, `120100`, `110200`, and `110100`.
+Existing profiles and settings are preserved.
+
+---
+
 # PulseHaptics v0.3.4
 
 ## Fixed

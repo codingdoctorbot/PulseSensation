@@ -2,7 +2,7 @@
 ### **Feel Azeroth in your hands.**
 
 [![WoW Version](https://img.shields.io/badge/World%20of%20Warcraft-Native%20Gamepad-blue.svg)](https://github.com/codingdoctorbot/PulseSensation)
-[![Status](https://img.shields.io/badge/Release-0.3.4-purple.svg)](https://github.com/codingdoctorbot/PulseSensation/releases)
+[![Status](https://img.shields.io/badge/Release-0.4.0-purple.svg)](https://github.com/codingdoctorbot/PulseSensation/releases)
 [![Performance](https://img.shields.io/badge/Performance-Zero--GC%20Tight%20Loops-brightgreen.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -10,10 +10,12 @@
 
 Feel the heavy, distinct thud of plate boots crushing cobblestone. Feel the viscous drag and resistance of deep water as you dive under. Feel the rhythmic hammer strikes of blacksmithing on an anvil, the hum of raw arcane energy swelling in your palms before a spell unleashes, and the violent crack of a critical hit.
 
-## New in v0.3.4
+## New in v0.4.0
 
-Closing Advanced Settings now cancels calibration ramps, motor tests, and temporary cue
-previews immediately. Normal gameplay haptics and saved settings are preserved.
+PulseHaptics now speaks all 11 languages World of Warcraft supports: English, German, Spanish (Spain and Latin America), French, Italian, Brazilian Portuguese, Russian, Korean, and Simplified and Traditional Chinese.
+It follows your game language automatically, or you can pick another in Quick Setup or under
+**Addon language** in Advanced Settings. Vibration modes show translated names, and the setup
+wizard adapts its layout to longer translations. See [CHANGELOG.md](CHANGELOG.md) for details.
 
 ---
 
