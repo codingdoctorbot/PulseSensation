@@ -3550,3 +3550,11 @@ function Registry:GetSchemaOptions()
 	end)
 	return list
 end
+
+-- Keep authored IDs and saved values unchanged; translate display metadata at login.
+if Pulse.Locale then
+	Pulse.Locale:RegisterTable(Pulse.HapticSchemas)
+	Pulse.Locale:RegisterTable(Pulse.Triggers)
+	Pulse.Locale:RegisterTable(PAGE_LAYOUT)
+	Pulse.Locale:RegisterTable(CATEGORY_LABELS, true)
+end

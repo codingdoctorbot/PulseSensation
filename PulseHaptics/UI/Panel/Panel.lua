@@ -28,6 +28,7 @@
 -- it show up here immediately where the old panel had to be closed and reopened.
 
 local ADDON_NAME, Pulse = ...
+local L = Pulse.L or function(text) return text end
 
 local Panel = Pulse.UI.Panel
 local Theme = Panel.Theme
@@ -227,7 +228,7 @@ local function buildWindow()
 	local closeButton = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
 	closeButton:SetSize(96, 22)
 	closeButton:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -16, 16)
-	closeButton:SetText(CLOSE or "Close")
+	closeButton:SetText(L("Close"))
 	Theme.StyleActionButton(closeButton, false)
 	closeButton:SetScript("OnClick", function()
 		Panel.Close()
@@ -282,14 +283,14 @@ local function buildWindow()
 		local versionStr = addonVersion()
 		if active then
 			f.StatusBadge:SetText(
-				("|cff00ff88●|r |cffffffffGamepad Active|r   |cff3a4b5d•|r   |cff8899aa%d Cues|r   |cff3a4b5d•|r   |cff667788%s|r"):format(
+				(L("|cff00ff88●|r |cffffffffGamepad Active|r   |cff3a4b5d•|r   |cff8899aa%d Cues|r   |cff3a4b5d•|r   |cff667788%s|r")):format(
 					numCues,
 					versionStr
 				)
 			)
 		else
 			f.StatusBadge:SetText(
-				("|cff666666●|r |cff888888Gamepad Inactive|r   |cff3a4b5d•|r   |cff8899aa%d Cues|r   |cff3a4b5d•|r   |cff667788%s|r"):format(
+				(L("|cff666666●|r |cff888888Gamepad Inactive|r   |cff3a4b5d•|r   |cff8899aa%d Cues|r   |cff3a4b5d•|r   |cff667788%s|r")):format(
 					numCues,
 					versionStr
 				)
@@ -348,7 +349,7 @@ local function buildWindow()
 		search:SetMaxBytes(64)
 		local cueCount = (Pulse.Triggers and #Pulse.Triggers) or 189
 		if search.Instructions then
-			search.Instructions:SetText(("Search %d cues..."):format(cueCount))
+			search.Instructions:SetText((L("Search %d cues...")):format(cueCount))
 		end
 
 		local borderLine = search:CreateTexture(nil, "OVERLAY")
@@ -418,7 +419,7 @@ function Panel.EnsureBuilt()
 
 	local ok, result = pcall(buildWindow)
 	if not ok then
-		print("Pulse: could not build the settings window (" .. tostring(result) .. ")")
+		print(L("Pulse: could not build the settings window (") .. tostring(result) .. ")")
 		return nil
 	end
 	frame = result
@@ -537,11 +538,11 @@ local function slashHandler(message)
 
 	if command == "debug" then
 		Pulse.debug = not Pulse.debug
-		print("Pulse: debug " .. (Pulse.debug and "ON — option changes and cue firings will print here." or "OFF"))
+		print(L("Pulse: debug ") .. (Pulse.debug and L("ON — option changes and cue firings will print here.") or "OFF"))
 		if Pulse.Engine and Pulse.Engine.GetLastError then
 			local lastErr, count = Pulse.Engine:GetLastError()
 			if count and count > 0 then
-				print(("Pulse: (Engine recorded %d errors. Last error: %s)"):format(count, tostring(lastErr)))
+				print((L("Pulse: (Engine recorded %d errors. Last error: %s)")):format(count, tostring(lastErr)))
 			end
 		end
 		return
@@ -551,9 +552,9 @@ local function slashHandler(message)
 		local arg = strtrim(rest or "")
 		if arg == "" then
 			print(
-				"Pulse: /pulse test <mode>|heartbeat|warningbeat — try one of: "
+				L("Pulse: /pulse test <mode>|heartbeat|warningbeat — try one of: ")
 					.. table.concat(Pulse.ModeOrder, ", ")
-					.. ", heartbeat, warningbeat"
+					.. L(", heartbeat, warningbeat")
 			)
 			return
 		end
@@ -562,12 +563,12 @@ local function slashHandler(message)
 			local method = (lowerArg == "heartbeat") and "TestHeartbeat" or "TestWarningBeat"
 			local health = Pulse.modules and Pulse.modules.Health
 			if not (health and health[method]) then
-				print("Pulse: that preview is unavailable.")
+				print(L("Pulse: that preview is unavailable."))
 				return
 			end
 			local ok, reason = health[method](health)
 			if not ok then
-				print("Pulse: " .. reason .. ", so there is nothing to test.")
+				print("Pulse: " .. reason .. L(", so there is nothing to test."))
 			end
 			return
 		end
@@ -579,8 +580,8 @@ local function slashHandler(message)
 					.. reason
 					.. (
 						reason == "no such mode"
-							and (' "' .. modeID .. '" — try one of: ' .. table.concat(Pulse.ModeOrder, ", "))
-						or ", so there is nothing to test."
+							and (' "' .. modeID .. L("\" — try one of: ") .. table.concat(Pulse.ModeOrder, ", "))
+						or L(", so there is nothing to test.")
 					)
 			)
 		end
@@ -591,7 +592,7 @@ local function slashHandler(message)
 		if Pulse.UI.Minimap and Pulse.UI.Minimap.Toggle then
 			Pulse.UI.Minimap:Toggle()
 			local cfg = Pulse.Database:Get("minimap")
-			print(("Pulse: minimap icon %s"):format((cfg and cfg.hide) and "hidden" or "shown"))
+			print((L("Pulse: minimap icon %s")):format((cfg and cfg.hide) and "hidden" or "shown"))
 		end
 		return
 	end
@@ -599,7 +600,7 @@ local function slashHandler(message)
 	if command == "stop" or command == "off" or command == "mute" then
 		if Pulse.Engine and Pulse.Engine.StopAll then
 			Pulse.Engine:StopAll()
-			print("Pulse: all haptic vibrations stopped.")
+			print(L("Pulse: all haptic vibrations stopped."))
 		end
 		return
 	end
@@ -610,7 +611,7 @@ local function slashHandler(message)
 		elseif _G.PulseDebugUI and type(_G.PulseDebugUI.Show) == "function" then
 			_G.PulseDebugUI.Show("scope")
 		else
-			print("Pulse: live oscilloscope is provided by the companion addon PulseDebug (/pdebug scope).")
+			print(L("Pulse: live oscilloscope is provided by the companion addon PulseDebug (/pdebug scope)."))
 		end
 		return
 	end
@@ -619,7 +620,7 @@ local function slashHandler(message)
 		local db = Pulse.Database
 		if db and db.SetAllCues then
 			local count = db:SetAllCues(true)
-			print(('Pulse: enabled all %d cues in profile "%s".'):format(count, db:GetActiveProfileName()))
+			print((L("Pulse: enabled all %d cues in profile \"%s\".")):format(count, db:GetActiveProfileName()))
 			Panel.MarkDirty()
 		end
 		return
@@ -629,7 +630,7 @@ local function slashHandler(message)
 		local db = Pulse.Database
 		if db and db.SetAllCues then
 			local count = db:SetAllCues(false)
-			print(('Pulse: disabled all %d cues in profile "%s".'):format(count, db:GetActiveProfileName()))
+			print((L("Pulse: disabled all %d cues in profile \"%s\".")):format(count, db:GetActiveProfileName()))
 			Panel.MarkDirty()
 		end
 		return
@@ -646,7 +647,7 @@ local function slashHandler(message)
 
 		if target == "" then
 			local _, activeName, why = db:GetProfileResolution()
-			print(('Pulse: active profile is "%s" (%s)'):format(activeName or "Default", why or "in force"))
+			print((L("Pulse: active profile is \"%s\" (%s)")):format(activeName or "Default", why or L("in force")))
 			return
 		end
 
@@ -670,9 +671,9 @@ local function slashHandler(message)
 
 		if matchName then
 			db:SetActiveProfileName(matchName)
-			print(('Pulse: switched to profile "%s"'):format(matchName))
+			print((L("Pulse: switched to profile \"%s\"")):format(matchName))
 		else
-			print(('Pulse: no profile matching "%s". Available: %s'):format(target, table.concat(names, ", ")))
+			print((L("Pulse: no profile matching \"%s\". Available: %s")):format(target, table.concat(names, ", ")))
 		end
 		return
 	end

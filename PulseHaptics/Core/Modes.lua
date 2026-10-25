@@ -419,3 +419,8 @@ for modeID, mode in pairs(Pulse.Modes) do
 		}
 	end
 end
+
+-- Keep authored IDs and saved values unchanged; translate display metadata at login.
+if Pulse.Locale then
+	Pulse.Locale:RegisterTable(Pulse.Modes)
+end

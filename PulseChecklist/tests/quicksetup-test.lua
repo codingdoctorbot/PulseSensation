@@ -219,6 +219,38 @@ for _, id in ipairs(ids) do
 end
 Q.Close()
 
+-- Language: cycling from Automatic picks a real language, offers a reload, and the reload resumes on step 1.
+local reloads = 0
+function ReloadUI()
+	reloads = reloads + 1
+end
+P.Database:Set("language", "auto")
+P.Locale:Initialize("auto")
+Q.Open(2)
+local stepOne = upvalue(Q.Open, "stepFrames")[1].navTargets
+local langTarget, reloadTarget = stepOne[#stepOne - 1], stepOne[#stepOne]
+langTarget.OnActivate()
+check("language cycles off automatic", P.Database:Get("language") ~= "auto", true)
+check("language change offers reload", reloadTarget.widget:IsShown(), true)
+reloadTarget.OnActivate()
+check("reload requested", reloads, 1)
+check("resume marker saved", P.Database:Get("quickSetupResumePending"), true)
+Q.Close()
+P.Database:Init() -- after the reload
+check("chosen language survives reload", P.Locale.requested, P.Database:Get("language"))
+check("wizard resumes after reload", Q.ResumeAfterReload(), true)
+check("resume opens language step", upvalue(Q.Open, "currentStep"), 1)
+check("resume marker consumed", P.Database:Get("quickSetupResumePending"), false)
+check("no reload pending after resume", reloadTarget.widget:IsShown(), false)
+check("resume runs once", Q.ResumeAfterReload(), false)
+for _ = 2, #P.Locale:GetOptions() do
+	langTarget.OnActivate()
+end
+check("language cycle wraps to automatic", P.Database:Get("language"), "auto")
+Q.Close()
+P.Database:Set("language", "auto")
+P.Database:Init()
+
 io.write((failures == 0 and "PASS" or "FAIL") .. ": " .. checks .. " wizard checks; " .. failures .. " failures\n")
 if failures > 0 then
 	os.exit(1)

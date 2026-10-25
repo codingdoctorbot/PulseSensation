@@ -28,6 +28,7 @@ local DB
 local DB_VERSION = 12
 
 local GLOBAL_DEFAULTS = {
+	language = "auto", -- UI preference; never belongs to a haptic profile.
 	masterEnabled = true,
 	defaultHapticSchema = "standard",
 	-- ON by default. The switch stays because a one-line-per-cue list is a legitimate
@@ -46,6 +47,7 @@ local GLOBAL_DEFAULTS = {
 	simpleView = false,
 	collapsedSections = {}, -- "PAGEID/Section label" -> true while that section is folded
 	quickSetupCompleted = false,
+	quickSetupResumePending = false, -- reopen the wizard after its language reload
 	quickSetupDefaultsPending = false, -- only new installs seed the wizard once
 }
 
@@ -1358,6 +1360,9 @@ function Database:Init()
 	end
 	invalidateResolution()
 	lastResolved = nil
+	if Pulse.Locale then
+		Pulse.Locale:Initialize(DB.language)
+	end
 end
 
 function Database:ApplyDefaults()
@@ -2892,6 +2897,10 @@ function Database:Set(key, value)
 	local default = GLOBAL_DEFAULTS[key]
 	if type(default) == "boolean" then
 		value = sanitizeBool(value)
+	elseif key == "language" then
+		if not Pulse.Locale or not Pulse.Locale:IsSupported(value) then
+			return
+		end
 	elseif key == "defaultHapticSchema" then
 		if not Pulse.HapticSchemas[value] then
 			return
@@ -3264,3 +3273,8 @@ end
 
 Database.GLOBAL_DEFAULTS = GLOBAL_DEFAULTS
 Database.PROFILE_DEFAULTS = PROFILE_DEFAULTS
+
+-- Keep authored IDs and saved values unchanged; translate display metadata at login.
+if Pulse.Locale then
+	Pulse.Locale:RegisterTable(Pulse.DEFAULT_PROFILE_METADATA)
+end

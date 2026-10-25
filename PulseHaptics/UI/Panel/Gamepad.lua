@@ -19,6 +19,7 @@
 --     Any stale window-owned overrides are cleared out of combat.
 
 local ADDON_NAME, Pulse = ...
+local L = Pulse.L or function(text) return text end
 
 local Panel = Pulse.UI.Panel
 local Theme = Panel.Theme
@@ -274,16 +275,16 @@ local function getRowSubTargets(row)
 		-- 3. Vibration Mode       (Theme.CUE_DROPDOWN_LEFT = 392)
 		-- 4. Try Texture (Play >) (Theme.CUE_PLAY_LEFT = 550)
 		if type(row.Control) == "table" and row.Control.IsShown and row.Control:IsShown() then
-			targets[#targets + 1] = { kind = "CHECK", widget = row.Control, label = "Enable Cue" }
+			targets[#targets + 1] = { kind = "CHECK", widget = row.Control, label = L("Enable Cue") }
 		end
 		if type(row.Slider) == "table" and row.Slider.IsShown and row.Slider:IsShown() then
-			targets[#targets + 1] = { kind = "SLIDER", widget = row.Slider, label = "Intensity Slider" }
+			targets[#targets + 1] = { kind = "SLIDER", widget = row.Slider, label = L("Intensity Slider") }
 		end
 		if type(row.Dropdown) == "table" and row.Dropdown.IsShown and row.Dropdown:IsShown() then
-			targets[#targets + 1] = { kind = "DROPDOWN", widget = row.Dropdown, label = "Vibration Mode" }
+			targets[#targets + 1] = { kind = "DROPDOWN", widget = row.Dropdown, label = L("Vibration Mode") }
 		end
 		if type(row.Play) == "table" and row.Play.IsShown and row.Play:IsShown() then
-			targets[#targets + 1] = { kind = "PLAY", widget = row.Play, label = "Try Texture" }
+			targets[#targets + 1] = { kind = "PLAY", widget = row.Play, label = L("Try Texture") }
 		end
 	else
 		-- Single-control row (e.g. Master Intensity slider, Checkbox, Button)
@@ -357,7 +358,7 @@ local function updateGamepadFooter()
 
 	if Panel.Popup and Panel.Popup.IsListOpen and Panel.Popup.IsListOpen() then
 		panel.UpdateGamepadLegend(
-			string.format("%s Browse Modes   •   %s Select   •   %s Cancel", glyphs.DPAD, glyphs.A, glyphs.B)
+			string.format(L("%s Browse Modes   •   %s Select   •   %s Cancel"), glyphs.DPAD, glyphs.A, glyphs.B)
 		)
 		return
 	end
@@ -365,7 +366,7 @@ local function updateGamepadFooter()
 	if mode == "SIDEBAR" then
 		panel.UpdateGamepadLegend(
 			string.format(
-				"%s Switch Category   •   %s Navigate   •   %s Select   •   %s Close",
+				L("%s Switch Category   •   %s Navigate   •   %s Select   •   %s Close"),
 				glyphs.SHOULDERS,
 				glyphs.DPAD,
 				glyphs.A,
@@ -381,7 +382,7 @@ local function updateGamepadFooter()
 		if isAdjustingSlider then
 			panel.UpdateGamepadLegend(
 				string.format(
-					"|cffffcc00◀/▶ Adjust Intensity|r   •   %s/%s Lock Value   •   %s Try Texture",
+					L("|cffffcc00◀/▶ Adjust Intensity|r   •   %s/%s Lock Value   •   %s Try Texture"),
 					glyphs.A,
 					glyphs.B,
 					glyphs.X
@@ -390,7 +391,7 @@ local function updateGamepadFooter()
 		elseif currentTarget.kind == "CHECK" then
 			panel.UpdateGamepadLegend(
 				string.format(
-					"%s Toggle   •   |cff38BDF8▶|r Next Control   •   %s Try Texture   •   %s Categories",
+					L("%s Toggle   •   |cff38BDF8▶|r Next Control   •   %s Try Texture   •   %s Categories"),
 					glyphs.A,
 					glyphs.X,
 					glyphs.B
@@ -399,7 +400,7 @@ local function updateGamepadFooter()
 		elseif currentTarget.kind == "DROPDOWN" then
 			panel.UpdateGamepadLegend(
 				string.format(
-					"%s Select Mode   •   |cff38BDF8◀/▶|r Controls   •   %s Try Texture   •   %s Categories",
+					L("%s Select Mode   •   |cff38BDF8◀/▶|r Controls   •   %s Try Texture   •   %s Categories"),
 					glyphs.A,
 					glyphs.X,
 					glyphs.B
@@ -408,7 +409,7 @@ local function updateGamepadFooter()
 		elseif currentTarget.kind == "SLIDER" then
 			panel.UpdateGamepadLegend(
 				string.format(
-					"%s Adjust Intensity   •   %s Quick Step   •   |cff38BDF8◀/▶|r Controls   •   %s Try Texture   •   %s Categories",
+					L("%s Adjust Intensity   •   %s Quick Step   •   |cff38BDF8◀/▶|r Controls   •   %s Try Texture   •   %s Categories"),
 					glyphs.A,
 					glyphs.TRIGGERS,
 					glyphs.X,
@@ -418,7 +419,7 @@ local function updateGamepadFooter()
 		elseif currentTarget.kind == "PLAY" then
 			panel.UpdateGamepadLegend(
 				string.format(
-					"%s/%s Try Texture   •   |cff38BDF8◀|r Controls   •   %s Categories",
+					L("%s/%s Try Texture   •   |cff38BDF8◀|r Controls   •   %s Categories"),
 					glyphs.A,
 					glyphs.X,
 					glyphs.B
@@ -426,7 +427,7 @@ local function updateGamepadFooter()
 			)
 		else
 			panel.UpdateGamepadLegend(
-				string.format("%s Activate   •   %s Try Texture   •   %s Categories", glyphs.A, glyphs.X, glyphs.B)
+				string.format(L("%s Activate   •   %s Try Texture   •   %s Categories"), glyphs.A, glyphs.X, glyphs.B)
 			)
 		end
 	end

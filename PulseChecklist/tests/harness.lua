@@ -598,6 +598,8 @@ local ADDON_NAME = "Pulse"
 local Pulse = {}
 
 local FILES = {
+	"Core/Locale.lua",
+	"Locales/enUS.lua",
 	"Core/Init.lua",
 	"Core/Database.lua",
 	"Core/Modes.lua",

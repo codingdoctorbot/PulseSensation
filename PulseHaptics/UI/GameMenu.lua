@@ -19,6 +19,7 @@
 --    groups active after the settings window closes.
 
 local ADDON_NAME, Pulse = ...
+local L = Pulse.L or function(text) return text end
 
 Pulse.UI = Pulse.UI or {}
 local GameMenu = {}
@@ -115,20 +116,20 @@ end
 local function getGamepadPrompt()
 	local style = detectPadStyle()
 	if style == "Shapes" then
-		return "|A:gamepad-ps-buttonsquare-normal:12:12|a Square: open settings"
+		return L("|A:gamepad-ps-buttonsquare-normal:12:12|a Square: open settings")
 	elseif style == "Letters" then
-		return "|A:gamepad-xbox1-buttonx-normal:12:12|a X: open settings"
+		return L("|A:gamepad-xbox1-buttonx-normal:12:12|a X: open settings")
 	elseif style == "Reverse" then
-		return "|A:gamepad-switch-128x-face-y-normal:12:12|a Y: open settings"
+		return L("|A:gamepad-switch-128x-face-y-normal:12:12|a Y: open settings")
 	end
-	return "Square / X: open settings"
+	return L("Square / X: open settings")
 end
 
 local function refreshPrompt()
 	if not banner or not banner.subtitle then
 		return
 	end
-	banner.subtitle:SetText(bound and getGamepadPrompt() or "Click to open settings")
+	banner.subtitle:SetText(bound and getGamepadPrompt() or L("Click to open settings"))
 end
 
 local function unbind()
@@ -155,7 +156,7 @@ end
 
 local function onClick()
 	if inCombat() then
-		print("|cff4cb8ffPulse:|r Cannot open settings during combat.")
+		print(L("|cff4cb8ffPulse:|r Cannot open settings during combat."))
 		return
 	end
 
@@ -275,7 +276,7 @@ local function createBanner()
 	b.title:SetHeight(14)
 	b.title:SetJustifyH("LEFT")
 	b.title:SetWordWrap(false)
-	b.title:SetText("Pulse Haptics")
+	b.title:SetText(L("Pulse Haptics"))
 	b.title:SetTextColor(0.298, 0.722, 1.000)
 
 	-- Subtitle: controller shortcut, or a mouse prompt when unbound.

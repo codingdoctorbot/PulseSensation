@@ -34,6 +34,7 @@
 --   row:SetRowEnabled(b) grey out / restore, including gamepad reachability
 
 local ADDON_NAME, Pulse = ...
+local L = Pulse.L or function(text) return text end
 
 local Panel = Pulse.UI.Panel
 local Theme = Panel.Theme
@@ -296,7 +297,7 @@ function Rows.CreateCheckbox(parent, spec)
 			-- A page switch shows how much of its page is on ("12 of 35 on") rather than a
 			-- bare ACTIVE/MUTED; everything else keeps the original badge.
 			local text = spec.badge and spec.badge(val)
-			statusBadge:SetText(text or (val and "|cff2dd4bf[ACTIVE]|r" or "|cff64748b[MUTED]|r"))
+			statusBadge:SetText(text or (val and ("|cff2dd4bf[" .. L("ACTIVE") .. "]|r") or ("|cff64748b[" .. L("MUTED") .. "]|r")))
 		end
 	end
 
@@ -970,7 +971,7 @@ function Rows.Create(parent, spec)
 	-- A single malformed spec should cost its own row, not the page it is on.
 	local ok, row = pcall(builder, parent, spec)
 	if not ok then
-		print(("Pulse: could not build settings row %q (%s)"):format(tostring(spec.label), tostring(row)))
+		print((L("Pulse: could not build settings row %q (%s)")):format(tostring(spec.label), tostring(row)))
 		return nil
 	end
 	return row

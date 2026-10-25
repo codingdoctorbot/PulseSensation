@@ -27,6 +27,7 @@ SUITES=(
   "navigation-test PulseHaptics"
   "calibration-close-test PulseHaptics"
   "quicksetup-test PulseHaptics"
+  "localization-test PulseHaptics"
   "phase2-test PulseHaptics"
   "cue-audit PulseHaptics"
   "pulsedebug-test PulseDebug"

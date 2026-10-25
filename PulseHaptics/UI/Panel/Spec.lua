@@ -27,6 +27,7 @@
 --      than deciding whether to register them, and their tooltips say so.
 
 local ADDON_NAME, Pulse = ...
+local L = Pulse.L or function(text) return text end
 
 local Panel = Pulse.UI.Panel
 
@@ -50,12 +51,12 @@ local NOTABLE_THROTTLE = 1.0
 local function formatThrottle(seconds)
 	if seconds >= 60 and seconds % 60 == 0 then
 		local minutes = seconds / 60
-		return minutes == 1 and "once a minute" or ("once every " .. minutes .. " minutes")
+		return minutes == 1 and L("once a minute") or (L("once every %d minutes"):format(minutes))
 	end
 	if seconds == math.floor(seconds) then
-		return "once every " .. seconds .. " seconds"
+		return L("once every %d seconds"):format(seconds)
 	end
-	return string.format("once every %.1f seconds", seconds)
+	return string.format(L("once every %.1f seconds"), seconds)
 end
 
 -- Ordered for how a tooltip is read: what it is, what it feels like, what changes how often
@@ -65,14 +66,14 @@ local function triggerTooltip(trigger)
 
 	local mode = trigger.mode and Pulse.Modes[trigger.mode]
 	if mode then
-		parts[#parts + 1] = "Feels like: " .. mode.label
+		parts[#parts + 1] = L("Feels like: %s"):format(mode.label)
 	elseif trigger.continuous then
 		parts[#parts + 1] =
-			"A continuous texture — a steady feeling for as long as it's happening, not a single pulse."
+			L("A continuous texture — a steady feeling for as long as it's happening, not a single pulse.")
 	end
 
 	if trigger.throttle and trigger.throttle >= NOTABLE_THROTTLE then
-		parts[#parts + 1] = "Fires at most " .. formatThrottle(trigger.throttle) .. "."
+		parts[#parts + 1] = L("Fires at most %s."):format(formatThrottle(trigger.throttle))
 	end
 
 	if trigger.caveat then
@@ -121,52 +122,52 @@ end
 
 local MODE_CATEGORIES = {
 	-- Snappy & Taps (11)
-	TAP = "Snappy & Taps",
-	DOUBLE_TAP = "Snappy & Taps",
-	TRIPLE_TAP = "Snappy & Taps",
-	LONG = "Snappy & Taps",
-	STUTTER = "Snappy & Taps",
-	RISING = "Snappy & Taps",
-	FALLING = "Snappy & Taps",
-	TICK = "Snappy & Taps",
-	CHIME = "Snappy & Taps",
-	BLIP = "Snappy & Taps",
-	CLICK = "Snappy & Taps",
+	TAP = L("Snappy & Taps"),
+	DOUBLE_TAP = L("Snappy & Taps"),
+	TRIPLE_TAP = L("Snappy & Taps"),
+	LONG = L("Snappy & Taps"),
+	STUTTER = L("Snappy & Taps"),
+	RISING = L("Snappy & Taps"),
+	FALLING = L("Snappy & Taps"),
+	TICK = L("Snappy & Taps"),
+	CHIME = L("Snappy & Taps"),
+	BLIP = L("Snappy & Taps"),
+	CLICK = L("Snappy & Taps"),
 
 	-- Heavy Impacts (12)
-	HEAVY = "Heavy Impacts",
-	THUD = "Heavy Impacts",
-	THUMP = "Heavy Impacts",
-	DEFLECT = "Heavy Impacts",
-	KNOCK = "Heavy Impacts",
-	SURGE = "Heavy Impacts",
-	PULSE_BEAT = "Heavy Impacts",
-	BURST = "Heavy Impacts",
-	IMPACT = "Heavy Impacts",
-	CRACK = "Heavy Impacts",
-	BRAKE = "Heavy Impacts",
-	WOBBLE = "Heavy Impacts",
+	HEAVY = L("Heavy Impacts"),
+	THUD = L("Heavy Impacts"),
+	THUMP = L("Heavy Impacts"),
+	DEFLECT = L("Heavy Impacts"),
+	KNOCK = L("Heavy Impacts"),
+	SURGE = L("Heavy Impacts"),
+	PULSE_BEAT = L("Heavy Impacts"),
+	BURST = L("Heavy Impacts"),
+	IMPACT = L("Heavy Impacts"),
+	CRACK = L("Heavy Impacts"),
+	BRAKE = L("Heavy Impacts"),
+	WOBBLE = L("Heavy Impacts"),
 
 	-- Textures & Patterns (12)
-	SNAP = "Textures & Patterns",
-	DRAW = "Textures & Patterns",
-	MICRO_TAP = "Textures & Patterns",
-	STACCATO = "Textures & Patterns",
-	RECOIL = "Textures & Patterns",
-	SHUTTLE = "Textures & Patterns",
-	TENSION = "Textures & Patterns",
-	TRIGGER_CLICK = "Textures & Patterns",
-	TRIGGER_PULL = "Textures & Patterns",
-	TRIGGER_TAP = "Textures & Patterns",
-	TRIGGER_BURST = "Textures & Patterns",
-	TRIGGER_RECOIL = "Textures & Patterns",
-	TRIGGER_ALTERNATE = "Textures & Patterns",
-	TRIGGER_TENSION = "Textures & Patterns",
-	PATTER = "Textures & Patterns",
-	HUM = "Textures & Patterns",
-	THRUM = "Textures & Patterns",
-	WAVE = "Textures & Patterns",
-	DRIFT = "Textures & Patterns",
+	SNAP = L("Textures & Patterns"),
+	DRAW = L("Textures & Patterns"),
+	MICRO_TAP = L("Textures & Patterns"),
+	STACCATO = L("Textures & Patterns"),
+	RECOIL = L("Textures & Patterns"),
+	SHUTTLE = L("Textures & Patterns"),
+	TENSION = L("Textures & Patterns"),
+	TRIGGER_CLICK = L("Textures & Patterns"),
+	TRIGGER_PULL = L("Textures & Patterns"),
+	TRIGGER_TAP = L("Textures & Patterns"),
+	TRIGGER_BURST = L("Textures & Patterns"),
+	TRIGGER_RECOIL = L("Textures & Patterns"),
+	TRIGGER_ALTERNATE = L("Textures & Patterns"),
+	TRIGGER_TENSION = L("Textures & Patterns"),
+	PATTER = L("Textures & Patterns"),
+	HUM = L("Textures & Patterns"),
+	THRUM = L("Textures & Patterns"),
+	WAVE = L("Textures & Patterns"),
+	DRIFT = L("Textures & Patterns"),
 }
 
 local function modeOptions()
@@ -177,7 +178,7 @@ local function modeOptions()
 			value = modeID,
 			label = modeID,
 			tooltip = mode and mode.label,
-			category = MODE_CATEGORIES[modeID] or "Other",
+			category = MODE_CATEGORIES[modeID] or L("Other"),
 		}
 	end
 	return options
@@ -207,8 +208,8 @@ local function cueIntensitySlider(trigger)
 	return {
 		kind = "slider",
 		child = true,
-		label = "Intensity",
-		tooltip = "Scales this cue on top of the overall intensity on the Pulse page.",
+		label = L("Intensity"),
+		tooltip = L("Scales this cue on top of the overall intensity on the Pulse page."),
 		min = 0.0,
 		max = 1.5,
 		step = 0.05,
@@ -228,11 +229,10 @@ local function cueModeDropdown(trigger)
 	return {
 		kind = "dropdown",
 		child = true,
-		label = "Feels like",
-		tooltip = 'Which of the preset shapes this specific cue plays when it fires. "'
+		label = L("Feels like"),
+		tooltip = L("Which of the preset shapes this specific cue plays when it fires. \"")
 			.. trigger.mode
-			.. '" is recommended — pick a different one to change how just '
-			.. 'this cue feels, without affecting anything else that also uses "'
+			.. L("\" is recommended — pick a different one to change how just this cue feels, without affecting anything else that also uses \"")
 			.. trigger.mode
 			.. '".',
 		options = modeOptions,
@@ -315,12 +315,9 @@ local function cueTestButton(trigger, labelOverride, child)
 
 	local tooltip
 	if trigger.continuous then
-		tooltip = "Play a few seconds of this texture at its current intensity. Module-driven "
-			.. "preview reproducing authentic physical dynamics and configured intensity."
+		tooltip = L("Play a few seconds of this texture at its current intensity. Module-driven preview reproducing authentic physical dynamics and configured intensity.")
 	else
-		tooltip = "Play this cue exactly as it is configured right now — its own intensity, "
-			.. 'and its own "Feels like" shape if you changed it. Works whether or not the '
-			.. "cue is switched on, and needs a connected controller."
+		tooltip = L("Play this cue exactly as it is configured right now — its own intensity, and its own \"Feels like\" shape if you changed it. Works whether or not the cue is switched on, and needs a connected controller.")
 	end
 
 	-- An overridden label means the Continuous textures page is using this preview button
@@ -341,12 +338,12 @@ local function cueTestButton(trigger, labelOverride, child)
 		kind = "button",
 		child = child,
 		label = labelOverride or ("Feel " .. (trigger.label or trigger.id)),
-		buttonText = "Play",
+		buttonText = L("Play"),
 		tooltip = tooltip,
 		onClick = function()
 			local ok, reason = Pulse:TestCue(trigger.id)
 			if not ok then
-				print("Pulse: " .. reason .. ", so there is nothing to test.")
+				print("Pulse: " .. reason .. L(", so there is nothing to test."))
 			end
 		end,
 		visibleWhen = visibleWhen,
@@ -360,7 +357,7 @@ end
 -- the same wall the dropdowns hit (UI/Panel/Popup.lua).
 --
 -- Same dialogs, same wording, same two buttons. The accept button names the action rather
--- than saying "Okay": at the point of deleting a profile the button should say Delete.
+-- than saying L("Okay"): at the point of deleting a profile the button should say Delete.
 
 local function confirm(text, acceptText, onAccept)
 	Panel.Popup.Confirm(text, acceptText, onAccept)
@@ -388,10 +385,30 @@ function Spec.BuildRootPage()
 	local store = database()
 
 	rows[#rows + 1] = {
+		kind = "dropdown",
+		label = L("Addon language"),
+		tooltip = L("Choose the addon display language. Automatic follows the game client. Missing translations use English. Changes apply after /reload."),
+		options = function() return Pulse.Locale:GetOptions() end,
+		get = function()
+			local value = store:Get("language")
+			return Pulse.Locale:IsSupported(value) and value or "auto"
+		end,
+		set = function(value)
+			if Pulse.Locale:IsSupported(value) then store:Set("language", value) end
+		end,
+	}
+	rows[#rows + 1] = {
+		kind = "text",
+		body = function()
+			return Pulse.Locale:NeedsReload() and L("Reload UI to apply the language change.") or ""
+		end,
+	}
+
+	rows[#rows + 1] = {
 		kind = "checkbox",
 		isMaster = true,
-		label = "Enable Pulse",
-		tooltip = "Master switch. With this off, nothing registers and nothing costs anything.",
+		label = L("Enable Pulse"),
+		tooltip = L("Master switch. With this off, nothing registers and nothing costs anything."),
 		get = function()
 			return store:Get("masterEnabled")
 		end,
@@ -402,9 +419,9 @@ function Spec.BuildRootPage()
 
 	rows[#rows + 1] = {
 		kind = "button",
-		label = "Quick Setup",
-		buttonText = "Run Wizard",
-		tooltip = "Launch the interactive onboarding wizard to configure controller hardware, combat haptics, world feedback, and immersion textures.",
+		label = L("Quick Setup"),
+		buttonText = L("Run Wizard"),
+		tooltip = L("Launch the interactive onboarding wizard to configure controller hardware, combat haptics, world feedback, and immersion textures."),
 		onClick = function()
 			if Panel and Panel.Close then
 				Panel.Close()
@@ -417,14 +434,12 @@ function Spec.BuildRootPage()
 
 	rows[#rows + 1] = {
 		kind = "dropdown",
-		label = "Profile",
-		tooltip = "Which saved cue configuration is active on this character. Every cue's "
-			.. "on/off, its intensity and its mode override belong to the profile picked "
-			.. "here; the master switch, the schema and the calibration stay global.",
+		label = L("Profile"),
+		tooltip = L("Which saved cue configuration is active on this character. Every cue's on/off, its intensity and its mode override belong to the profile picked here; the master switch, the schema and the calibration stay global."),
 		options = function()
 			local options = {}
 			for _, name in ipairs(store:GetProfileNames()) do
-				options[#options + 1] = { value = name, label = name }
+				options[#options + 1] = { value = name, label = Pulse.Locale:ProfileLabel(name) }
 			end
 			return options
 		end,
@@ -446,19 +461,20 @@ function Spec.BuildRootPage()
 		font = "GameFontDisableSmall",
 		gap = 6,
 		body = function()
-			local _, name, why = store:GetProfileResolution()
-			local line = ('Using "%s" — set for %s.'):format(name, why)
+			local scope, name = store:GetProfileResolution()
+			local why = Pulse.Locale:ProfileReason(scope)
+			local line = (L("Using \"%s\" — set for %s.")):format(Pulse.Locale:ProfileLabel(name), why)
 			if store:HasPendingProfileSwitch() then
-				line = line .. " Takes effect when you leave combat."
+				line = line .. L(" Takes effect when you leave combat.")
 			end
-			return line .. " Rules and management are on the Profiles page."
+			return line .. L(" Rules and management are on the Profiles page.")
 		end,
 	}
 
 	rows[#rows + 1] = {
 		kind = "slider",
-		label = "Overall intensity",
-		tooltip = "Multiplies every trigger's intensity. Part of the current profile, not global.",
+		label = L("Overall intensity"),
+		tooltip = L("Multiplies every trigger's intensity. Part of the current profile, not global."),
 		min = 0.0,
 		max = 1.0,
 		step = 0.05,
@@ -472,9 +488,8 @@ function Spec.BuildRootPage()
 
 	rows[#rows + 1] = {
 		kind = "checkbox",
-		label = "Simple view",
-		tooltip = "Shows only the page switches and this page. Every cue keeps its own settings; "
-			.. "turn this off to get every page back exactly as it was.",
+		label = L("Simple view"),
+		tooltip = L("Shows only the page switches and this page. Every cue keeps its own settings; turn this off to get every page back exactly as it was."),
 		get = function()
 			return store:Get("simpleView")
 		end,
@@ -486,11 +501,8 @@ function Spec.BuildRootPage()
 
 	rows[#rows + 1] = {
 		kind = "checkbox",
-		label = "Show per-cue detail controls",
-		tooltip = 'Adds each cue\'s own intensity slider, "Feels like" shape picker and any '
-			.. "bespoke dials to its page. On by default: uncheck for a compact one-line list "
-			.. "that is easier to read when you just want to switch cues on and off. Takes "
-			.. "effect immediately in this panel — no /reload needed.",
+		label = L("Show per-cue detail controls"),
+		tooltip = L("Adds each cue's own intensity slider, \"Feels like\" shape picker and any bespoke dials to its page. On by default: uncheck for a compact one-line list that is easier to read when you just want to switch cues on and off. Takes effect immediately in this panel — no /reload needed."),
 		get = function()
 			return store:Get("showAdvancedCueControls")
 		end,
@@ -501,11 +513,8 @@ function Spec.BuildRootPage()
 
 	rows[#rows + 1] = {
 		kind = "checkbox",
-		label = "Show a Play button on every cue",
-		tooltip = "Adds a row under each cue that plays it, so you can find out what "
-			.. "something feels like without waiting for it to happen. Useful while tuning, "
-			.. "but it doubles the length of every page. The mode tester below still works "
-			.. "either way. Takes effect immediately — no /reload needed.",
+		label = L("Show a Play button on every cue"),
+		tooltip = L("Adds a row under each cue that plays it, so you can find out what something feels like without waiting for it to happen. Useful while tuning, but it doubles the length of every page. The mode tester below still works either way. Takes effect immediately — no /reload needed."),
 		get = function()
 			return store:Get("showCueTestButtons")
 		end,
@@ -516,8 +525,8 @@ function Spec.BuildRootPage()
 
 	rows[#rows + 1] = {
 		kind = "checkbox",
-		label = "Show minimap icon",
-		tooltip = "Displays a shortcut button on the edge of your minimap for quick access to settings and toggling vibration.",
+		label = L("Show minimap icon"),
+		tooltip = L("Displays a shortcut button on the edge of your minimap for quick access to settings and toggling vibration."),
 		get = function()
 			local cfg = store:Get("minimap")
 			return not (cfg and cfg.hide)
@@ -534,8 +543,8 @@ function Spec.BuildRootPage()
 
 	rows[#rows + 1] = {
 		kind = "dropdown",
-		label = "Vibration schema",
-		tooltip = "Which physical motors each trigger drives. Try one, test a mode below, keep the one you can feel.",
+		label = L("Vibration schema"),
+		tooltip = L("Which physical motors each trigger drives. Try one, test a mode below, keep the one you can feel."),
 		options = function()
 			local options = {}
 			for _, schema in ipairs(Pulse.Registry:GetSchemaOptions()) do
@@ -557,8 +566,8 @@ function Spec.BuildRootPage()
 
 	rows[#rows + 1] = {
 		kind = "dropdown",
-		label = "Mode to test",
-		tooltip = "Pick a mode to test below.",
+		label = L("Mode to test"),
+		tooltip = L("Pick a mode to test below."),
 		options = modeOptions,
 		get = function()
 			return Spec.testModeID
@@ -570,14 +579,13 @@ function Spec.BuildRootPage()
 
 	rows[#rows + 1] = {
 		kind = "button",
-		label = "Test the selected mode",
-		buttonText = "Play",
-		tooltip = "There is no way to detect which motors a controller actually drives — "
-			.. "pick a schema above, then play a few modes to find out.",
+		label = L("Test the selected mode"),
+		buttonText = L("Play"),
+		tooltip = L("There is no way to detect which motors a controller actually drives — pick a schema above, then play a few modes to find out."),
 		onClick = function()
 			local ok, reason = Pulse:TestMode(Spec.testModeID or Pulse.ModeOrder[1])
 			if not ok then
-				print("Pulse: " .. reason .. ", so there is nothing to test.")
+				print("Pulse: " .. reason .. L(", so there is nothing to test."))
 			end
 		end,
 	}
@@ -586,17 +594,15 @@ function Spec.BuildRootPage()
 	-- a testing aid that resets on reload, not worth persisting across logins.
 	rows[#rows + 1] = {
 		kind = "checkbox",
-		label = "Debug logging",
-		tooltip = "Prints every option you change and every cue that actually fires to "
-			.. "chat, in real time. Same as /pulse debug — off by default, and resets to "
-			.. "off on /reload since it's a testing aid, not a saved preference.",
+		label = L("Debug logging"),
+		tooltip = L("Prints every option you change and every cue that actually fires to chat, in real time. Same as /pulse debug — off by default, and resets to off on /reload since it's a testing aid, not a saved preference."),
 		get = function()
 			return Pulse.debug
 		end,
 		set = function(value)
 			Pulse.debug = value and true or false
 			print(
-				"Pulse: debug " .. (Pulse.debug and "ON — option changes and cue firings will print here." or "OFF")
+				L("Pulse: debug ") .. (Pulse.debug and L("ON — option changes and cue firings will print here.") or "OFF")
 			)
 		end,
 	}
@@ -622,7 +628,7 @@ end
 -- ── One-line cue rows and folding sections (Phase 2) ──────────────────────────
 
 local function sectionKeyFor(page, section)
-	return page.id .. "/" .. section.label
+	return page.id .. "/" .. (section._englishLabel or section.label)
 end
 
 local function countOn(triggers)
@@ -650,7 +656,7 @@ local function sectionHeader(page, section)
 			database():SetSectionCollapsed(key, not database():IsSectionCollapsed(key))
 		end,
 		badge = function()
-			return ("%d of %d on"):format(countOn(section.triggers), #section.triggers)
+			return (L("%d of %d on")):format(countOn(section.triggers), #section.triggers)
 		end,
 	}
 end
@@ -698,13 +704,13 @@ function Spec.BuildCuePage(page)
 		rows[#rows + 1] = {
 			kind = "text",
 			gap = 6,
-			body = "|cff888888Loss of control cues are governed by the master switch on the main Pulse page.|r",
+			body = L("|cff888888Loss of control cues are governed by the master switch on the main Pulse page.|r"),
 		}
 	elseif page.id == "CONTROLLER_UI" then
 		rows[#rows + 1] = {
 			kind = "text",
 			gap = 6,
-			body = "|cff888888Controller UI cues are governed by the master switch on the main Pulse page.|r",
+			body = L("|cff888888Controller UI cues are governed by the master switch on the main Pulse page.|r"),
 		}
 	end
 	for _, section in ipairs(page.sections) do
@@ -728,8 +734,7 @@ function Spec.BuildSwitchesPage()
 	rows[#rows + 1] = {
 		kind = "text",
 		gap = 8,
-		body = "Turn whole pages of cues on or off. Each cue keeps its own setting underneath: "
-			.. "switching a page back on restores exactly what was there.",
+		body = L("Turn whole pages of cues on or off. Each cue keeps its own setting underneath: switching a page back on restores exactly what was there."),
 	}
 	for _, page in ipairs(Pulse.Registry:GetPages()) do
 		local gateID = page.hasCues and Pulse.Registry:GetPageGate(page.id)
@@ -745,8 +750,8 @@ function Spec.BuildSwitchesPage()
 				end
 			end
 			spec.badge = function(on)
-				local text = ("%d of %d cues on"):format(countOn(triggers), #triggers)
-				return on and ("|cff2dd4bf" .. text .. "|r") or ("|cff64748b" .. text .. " (page off)|r")
+				local text = (L("%d of %d cues on")):format(countOn(triggers), #triggers)
+				return on and ("|cff2dd4bf" .. text .. "|r") or ("|cff64748b" .. text .. L(" (page off)|r"))
 			end
 			rows[#rows + 1] = spec
 		end
@@ -830,29 +835,29 @@ function Spec.BuildCueIndexPage()
 			kind = "text",
 			font = "GameFontDisableSmall",
 			gap = 10,
-			body = ("Directory of all %d vibration cues in Pulse, in alphabetical order. Click any entry to jump directly to its controls."):format(
+			body = (L("Directory of all %d vibration cues in Pulse, in alphabetical order. Click any entry to jump directly to its controls.")):format(
 				#entries
 			),
 		},
 		{
 			kind = "button",
-			label = "Enable all cues",
-			buttonText = "Enable All",
-			tooltip = "Enable every vibration cue in the active profile in one sweep for testing and debugging.",
+			label = L("Enable all cues"),
+			buttonText = L("Enable All"),
+			tooltip = L("Enable every vibration cue in the active profile in one sweep for testing and debugging."),
 			onClick = function()
 				local count = database():SetAllCues(true)
-				print(("Pulse: enabled all %d cues in active profile."):format(count))
+				print((L("Pulse: enabled all %d cues in active profile.")):format(count))
 				Panel.MarkDirty()
 			end,
 		},
 		{
 			kind = "button",
-			label = "Disable all cues",
-			buttonText = "Disable All",
-			tooltip = "Disable every vibration cue in the active profile in one sweep for quiet testing or building a profile from scratch.",
+			label = L("Disable all cues"),
+			buttonText = L("Disable All"),
+			tooltip = L("Disable every vibration cue in the active profile in one sweep for quiet testing or building a profile from scratch."),
 			onClick = function()
 				local count = database():SetAllCues(false)
-				print(("Pulse: disabled all %d cues in active profile."):format(count))
+				print((L("Pulse: disabled all %d cues in active profile.")):format(count))
 				Panel.MarkDirty()
 			end,
 		},
@@ -872,7 +877,7 @@ function Spec.BuildCueIndexPage()
 			local count = letterCounts[currentLetter] or 1
 			rows[#rows + 1] = {
 				kind = "header",
-				label = ("%s (%d)"):format(currentLetter, count),
+				label = (L("%s (%d)")):format(currentLetter, count),
 			}
 		end
 
@@ -896,8 +901,8 @@ end
 -- The spec row names the actual specialization rather than saying "specialization", so
 -- the page reads as being about this character rather than about the feature.
 local function child_label_spec(specName, specID)
-	return specName and ("This specialization (" .. specName .. ")")
-		or ("This specialization (" .. tostring(specID) .. ")")
+	return specName and (L("This specialization (%s)"):format(specName))
+		or (L("This specialization (%s)"):format(tostring(specID)))
 end
 
 -- ── Profiles ──────────────────────────────────────────────────────────────────
@@ -922,12 +927,12 @@ function Spec.BuildProfilesPage()
 		if includeNone then
 			options[#options + 1] = {
 				value = "",
-				label = "No rule",
-				tooltip = "Leave this scope with no opinion and let the next one decide.",
+				label = L("No rule"),
+				tooltip = L("Leave this scope with no opinion and let the next one decide."),
 			}
 		end
 		for _, name in ipairs(store:GetProfileNames()) do
-			options[#options + 1] = { value = name, label = name }
+			options[#options + 1] = { value = name, label = Pulse.Locale:ProfileLabel(name) }
 		end
 		return options
 	end
@@ -951,25 +956,25 @@ function Spec.BuildProfilesPage()
 				else
 					local ok, reason = store:SetProfileForScope(scope, value)
 					if not ok then
-						print("Pulse: " .. (reason or "could not set that rule"))
+						print("Pulse: " .. (reason or L("could not set that rule")))
 					end
 				end
 			end,
 		}
 	end
 
-	rows[#rows + 1] = { kind = "header", label = "Active profile" }
+	rows[#rows + 1] = { kind = "header", label = L("Active profile") }
 
 	rows[#rows + 1] = {
 		kind = "text",
 		gap = 10,
 		body = function()
-			local _, name, why = store:GetProfileResolution()
-			local line = ("Pulse is using |cffffd100%s|r, because a rule is set for %s."):format(name, why)
+			local scope, name = store:GetProfileResolution()
+			local why = Pulse.Locale:ProfileReason(scope)
+			local line = (L("Pulse is using |cffffd100%s|r, because a rule is set for %s.")):format(Pulse.Locale:ProfileLabel(name), why)
 			if store:HasPendingProfileSwitch() then
 				line = line
-					.. "\n\nA profile change is waiting: cues re-register when you "
-					.. "leave combat, so nothing is rebuilt mid-pull."
+					.. L("\n\nA profile change is waiting: cues re-register when you leave combat, so nothing is rebuilt mid-pull.")
 			end
 			return line
 		end,
@@ -977,10 +982,8 @@ function Spec.BuildProfilesPage()
 
 	rows[#rows + 1] = {
 		kind = "dropdown",
-		label = "Profile",
-		tooltip = "Which profile to use right now. This writes to whichever rule is "
-			.. "currently in force, so picking here always changes what you are actually "
-			.. "using rather than editing a rule something more specific is overriding.",
+		label = L("Profile"),
+		tooltip = L("Which profile to use right now. This writes to whichever rule is currently in force, so picking here always changes what you are actually using rather than editing a rule something more specific is overriding."),
 		options = function()
 			return profileOptions(false)
 		end,
@@ -992,13 +995,12 @@ function Spec.BuildProfilesPage()
 		end,
 	}
 
-	rows[#rows + 1] = { kind = "header", label = "Rules" }
+	rows[#rows + 1] = { kind = "header", label = L("Rules") }
 
 	rows[#rows + 1] = {
 		kind = "text",
 		gap = 10,
-		body = "Most specific wins. A scope set to |cffffd100No rule|r has no opinion and "
-			.. "lets the one below it decide; with none of them set, Pulse uses Default.",
+		body = L("Most specific wins. A scope set to |cffffd100No rule|r has no opinion and lets the one below it decide; with none of them set, Pulse uses Default."),
 	}
 
 	-- Only offered when the character has a specialization to key on.
@@ -1006,8 +1008,7 @@ function Spec.BuildProfilesPage()
 	rows[#rows + 1] = ruleDropdown(
 		store.SCOPE_SPEC,
 		child_label_spec(specName, specID),
-		"Applies only while this character is in this specialization. Switching "
-			.. "specialization switches profile with it, with no further action from you.",
+		L("Applies only while this character is in this specialization. Switching specialization switches profile with it, with no further action from you."),
 		function()
 			local curID, curName = store:GetSpecInfo()
 			return child_label_spec(curName, curID)
@@ -1019,17 +1020,14 @@ function Spec.BuildProfilesPage()
 
 	rows[#rows + 1] = ruleDropdown(
 		store.SCOPE_CHARACTER,
-		"This character",
-		"Applies to this character whatever specialization it is in. This is the rule the "
-			.. "profile picker on the Pulse page has always written to."
+		L("This character"),
+		L("Applies to this character whatever specialization it is in. This is the rule the profile picker on the Pulse page has always written to.")
 	)
 
 	rows[#rows + 1] = ruleDropdown(
 		store.SCOPE_ACCOUNT,
-		"Every character",
-		"The fallback for any character with no rule of its own — including characters "
-			.. "you have not logged into yet. Set this to the profile you mostly want, then "
-			.. "override the handful of characters that differ."
+		L("Every character"),
+		L("The fallback for any character with no rule of its own — including characters you have not logged into yet. Set this to the profile you mostly want, then override the handful of characters that differ.")
 	)
 
 	-- Says out loud when a rule you just set is overridden by a more specific one. Without
@@ -1045,9 +1043,9 @@ function Spec.BuildProfilesPage()
 			local inForce = store:GetProfileResolution()
 			local shadowed = {}
 			local scopes = {
-				{ scope = store.SCOPE_SPEC, label = "This specialization" },
-				{ scope = store.SCOPE_CHARACTER, label = "This character" },
-				{ scope = store.SCOPE_ACCOUNT, label = "Every character" },
+				{ scope = store.SCOPE_SPEC, label = L("This specialization") },
+				{ scope = store.SCOPE_CHARACTER, label = L("This character") },
+				{ scope = store.SCOPE_ACCOUNT, label = L("Every character") },
 			}
 			for _, entry in ipairs(scopes) do
 				if entry.scope ~= inForce and store:GetProfileRule(entry.scope) then
@@ -1058,9 +1056,8 @@ function Spec.BuildProfilesPage()
 				return ""
 			end
 			return (
-				"Set but not in force: |cffffd100%s|r. A more specific rule above is "
-				.. "winning — clear it to let these take over."
-			):format(table.concat(shadowed, "|r, |cffffd100"))
+				L("Set but not in force: |cffffd100%s|r. A more specific rule above is winning — clear it to let these take over.")
+			):format(table.concat(shadowed, L("|r, |cffffd100")))
 		end,
 	}
 
@@ -1070,21 +1067,19 @@ function Spec.BuildProfilesPage()
 			child = true,
 			font = "GameFontDisableSmall",
 			gap = 6,
-			body = "This character reports no specialization, so there is no "
-				.. "per-specialization rule to set. The row appears by itself on a "
-				.. "character that has one.",
+			body = L("This character reports no specialization, so there is no per-specialization rule to set. The row appears by itself on a character that has one."),
 		}
 	end
 
-	rows[#rows + 1] = { kind = "header", label = "Manage" }
+	rows[#rows + 1] = { kind = "header", label = L("Manage") }
 
 	rows[#rows + 1] = {
 		kind = "button",
-		label = "New profile",
-		buttonText = "Create...",
-		tooltip = "Create a new profile from Registry.lua's stock defaults and switch to it.",
+		label = L("New profile"),
+		buttonText = L("Create..."),
+		tooltip = L("Create a new profile from Registry.lua's stock defaults and switch to it."),
 		onClick = function()
-			prompt("Name the new profile:", "", "Create", function(value)
+			prompt(L("Name the new profile:"), "", L("Create"), function(value)
 				report(store:CreateProfile(value))
 			end)
 		end,
@@ -1094,13 +1089,12 @@ function Spec.BuildProfilesPage()
 	-- cues by hand, the only way to make a profile being from stock defaults.
 	rows[#rows + 1] = {
 		kind = "button",
-		label = "Copy this profile",
-		buttonText = "Copy...",
-		tooltip = "Create a new profile that starts as an exact copy of the one in use, "
-			.. "and switch to it. The two are independent from the first edit.",
+		label = L("Copy this profile"),
+		buttonText = L("Copy..."),
+		tooltip = L("Create a new profile that starts as an exact copy of the one in use, and switch to it. The two are independent from the first edit."),
 		onClick = function()
 			local name = store:GetActiveProfileName()
-			prompt(('Copy "%s" to a new profile named:'):format(name), name .. " copy", "Copy", function(value)
+			prompt((L("Copy \"%s\" to a new profile named:")):format(name), name .. " copy", L("Copy"), function(value)
 				report(store:DuplicateProfile(name, value))
 			end)
 		end,
@@ -1112,13 +1106,12 @@ function Spec.BuildProfilesPage()
 
 	rows[#rows + 1] = {
 		kind = "button",
-		label = "Rename this profile",
-		buttonText = "Rename...",
-		tooltip = "Rename the profile in use. Every rule pointing at it follows the rename. "
-			.. "Built-in profiles can't be renamed.",
+		label = L("Rename this profile"),
+		buttonText = L("Rename..."),
+		tooltip = L("Rename the profile in use. Every rule pointing at it follows the rename. Built-in profiles can't be renamed."),
 		onClick = function()
 			local name = store:GetActiveProfileName()
-			prompt(('Rename "%s" to:'):format(name), name, "Rename", function(value)
+			prompt((L("Rename \"%s\" to:")):format(name), name, L("Rename"), function(value)
 				report(store:RenameProfile(name, value))
 			end)
 		end,
@@ -1127,13 +1120,12 @@ function Spec.BuildProfilesPage()
 
 	rows[#rows + 1] = {
 		kind = "button",
-		label = "Delete this profile",
-		buttonText = "Delete...",
-		tooltip = "Delete the profile in use. Every rule naming it is cleared, so those "
-			.. "scopes fall through to the next one down. Built-in profiles can't be deleted.",
+		label = L("Delete this profile"),
+		buttonText = L("Delete..."),
+		tooltip = L("Delete the profile in use. Every rule naming it is cleared, so those scopes fall through to the next one down. Built-in profiles can't be deleted."),
 		onClick = function()
 			local name = store:GetActiveProfileName()
-			confirm(('Delete profile "%s"? This can\'t be undone.'):format(name), "Delete", function()
+			confirm((L("Delete profile \"%s\"? This can't be undone.")):format(name), L("Delete"), function()
 				report(store:DeleteProfile(name))
 			end)
 		end,
@@ -1142,18 +1134,16 @@ function Spec.BuildProfilesPage()
 
 	rows[#rows + 1] = {
 		kind = "button",
-		label = "Reset this profile",
-		buttonText = "Reset...",
-		tooltip = "Put the profile in use back to its stock defaults — works on built-ins "
-			.. "too, restoring their curated content rather than blank Registry.lua defaults.",
+		label = L("Reset this profile"),
+		buttonText = L("Reset..."),
+		tooltip = L("Put the profile in use back to its stock defaults — works on built-ins too, restoring their curated content rather than blank Registry.lua defaults."),
 		onClick = function()
 			local name = store:GetActiveProfileName()
 			confirm(
 				(
-					'Reset profile "%s" to defaults? Every cue, intensity and mode '
-					.. "override in it goes back to stock values. This can't be undone."
+					L("Reset profile \"%s\" to defaults? Every cue, intensity and mode override in it goes back to stock values. This can't be undone.")
 				):format(name),
-				"Reset",
+				L("Reset"),
 				function()
 					report(store:ResetProfileToDefaults(name))
 				end
@@ -1163,24 +1153,24 @@ function Spec.BuildProfilesPage()
 
 	rows[#rows + 1] = {
 		kind = "button",
-		label = "Enable all cues in profile",
-		buttonText = "Enable All",
-		tooltip = "Turn on every cue in the active profile in one sweep (useful for testing/debugging).",
+		label = L("Enable all cues in profile"),
+		buttonText = L("Enable All"),
+		tooltip = L("Turn on every cue in the active profile in one sweep (useful for testing/debugging)."),
 		onClick = function()
 			local count = store:SetAllCues(true)
-			print(("Pulse: enabled all %d cues in profile %s."):format(count, store:GetActiveProfileName()))
+			print((L("Pulse: enabled all %d cues in profile %s.")):format(count, store:GetActiveProfileName()))
 			Panel.MarkDirty()
 		end,
 	}
 
 	rows[#rows + 1] = {
 		kind = "button",
-		label = "Disable all cues in profile",
-		buttonText = "Disable All",
-		tooltip = "Turn off every cue in the active profile in one sweep (useful for quiet debugging).",
+		label = L("Disable all cues in profile"),
+		buttonText = L("Disable All"),
+		tooltip = L("Turn off every cue in the active profile in one sweep (useful for quiet debugging)."),
 		onClick = function()
 			local count = store:SetAllCues(false)
-			print(("Pulse: disabled all %d cues in profile %s."):format(count, store:GetActiveProfileName()))
+			print((L("Pulse: disabled all %d cues in profile %s.")):format(count, store:GetActiveProfileName()))
 			Panel.MarkDirty()
 		end,
 	}
@@ -1201,22 +1191,13 @@ function Spec.BuildDefaultProfilesPage()
 	rows[#rows + 1] = {
 		kind = "text",
 		gap = 10,
-		body = "Curated starting setups balanced for specific roles and playstyles. "
-			.. "Unlike an empty configuration, each profile prioritizes the tactile signals "
-			.. "most critical to that activity while filtering out background noise.\n\n"
-			.. "|cffffd100Dungeons & Raids|r prioritize high signal-to-noise: threat loss, "
-			.. "defensive mitigations, interrupt windows, and spell completion ticks take precedence.\n"
-			.. "|cffffd100World Immersion|r profiles emphasize atmospheric game-feel: footstep "
-			.. "weight by armor type, mount strides, swimming resistance, weather changes, and exploration.\n"
-			.. "|cffffd100PvP|r provides pure tactical radar with zero ambient distraction.\n\n"
-			.. "Tip: Click |cffffd100Set for Spec|r to bind any profile to your active talent "
-			.. "specialization, or customize auto-switch rules on the |cffffd100Profiles|r page.",
+		body = L("Curated starting setups balanced for specific roles and playstyles. Unlike an empty configuration, each profile prioritizes the tactile signals most critical to that activity while filtering out background noise.\n\n|cffffd100Dungeons & Raids|r prioritize high signal-to-noise: threat loss, defensive mitigations, interrupt windows, and spell completion ticks take precedence.\n|cffffd100World Immersion|r profiles emphasize atmospheric game-feel: footstep weight by armor type, mount strides, swimming resistance, weather changes, and exploration.\n|cffffd100PvP|r provides pure tactical radar with zero ambient distraction.\n\nTip: Click |cffffd100Set for Spec|r to bind any profile to your active talent specialization, or customize auto-switch rules on the |cffffd100Profiles|r page."),
 	}
 
 	local sections = {
-		{ category = "dungeon", label = "Dungeons & Raids" },
-		{ category = "immersion", label = "World Immersion" },
-		{ category = "pvp", label = "Competitive & Baseline", includeGeneral = true },
+		{ category = "dungeon", label = L("Dungeons & Raids") },
+		{ category = "immersion", label = L("World Immersion") },
+		{ category = "pvp", label = L("Competitive & Baseline"), includeGeneral = true },
 	}
 
 	for _, sec in ipairs(sections) do
@@ -1234,7 +1215,7 @@ function Spec.BuildDefaultProfilesPage()
 					body = function()
 						local active = (store:GetActiveProfileName() == pID)
 						if active then
-							return ("|cffffd100%s|r  |cff00ff00[ACTIVE]|r"):format(pLabel)
+							return (L("|cffffd100%s|r  |cff00ff00[ACTIVE]|r")):format(pLabel)
 						else
 							return ("|cffffffff%s|r"):format(pLabel)
 						end
@@ -1249,9 +1230,9 @@ function Spec.BuildDefaultProfilesPage()
 					body = function()
 						local lines = {}
 						lines[#lines + 1] = meta.summary
-						lines[#lines + 1] = "|cffffd100Emphasizes:|r " .. meta.emphasizes
-						lines[#lines + 1] = "|cff888888Silences:|r " .. meta.silences
-						lines[#lines + 1] = ("|cff888888Recommended intensity:|r %d%%"):format(
+						lines[#lines + 1] = L("|cffffd100Emphasizes:|r %s"):format(meta.emphasizes)
+						lines[#lines + 1] = L("|cff888888Silences:|r %s"):format(meta.silences)
+						lines[#lines + 1] = (L("|cff888888Recommended intensity:|r %d%%")):format(
 							math.floor((meta.intensity or 0.7) * 100 + 0.5)
 						)
 						return table.concat(lines, "\n")
@@ -1261,34 +1242,34 @@ function Spec.BuildDefaultProfilesPage()
 				rows[#rows + 1] = {
 					kind = "button",
 					child = true,
-					label = "Switch to this profile",
-					buttonText = "Activate",
+					label = L("Switch to this profile"),
+					buttonText = L("Activate"),
 					buttonTextFunc = function()
-						return store:GetActiveProfileName() == pID and "Active" or "Activate"
+						return store:GetActiveProfileName() == pID and L("Active") or L("Activate")
 					end,
 					enabledWhen = function()
 						return store:GetActiveProfileName() ~= pID
 					end,
-					tooltip = ("Immediately switch to %s for the current character."):format(pLabel),
+					tooltip = (L("Immediately switch to %s for the current character.")):format(pLabel),
 					onClick = function()
 						store:SetActiveProfileName(pID)
-						print(('Pulse: activated profile "%s"'):format(pLabel))
+						print((L("Pulse: activated profile \"%s\"")):format(pLabel))
 					end,
 				}
 
 				rows[#rows + 1] = {
 					kind = "button",
 					child = true,
-					label = ("Auto-switch in %s"):format(specName or ("Spec " .. tostring(specID or 1))),
+					label = (L("Auto-switch in %s")):format(specName or (L("Spec %s"):format(tostring(specID or 1)))),
 					labelFunc = function()
 						local curID, curName = store:GetSpecInfo()
-						return ("Auto-switch in %s"):format(curName or ("Spec " .. tostring(curID or 1)))
+						return (L("Auto-switch in %s")):format(curName or (L("Spec %s"):format(tostring(curID or 1))))
 					end,
 					visibleWhen = function()
 						return store:GetSpecInfo() ~= nil
 					end,
-					buttonText = "Set for Spec",
-					tooltip = ("Automatically switch to %s whenever this character is in this specialization."):format(
+					buttonText = L("Set for Spec"),
+					tooltip = (L("Automatically switch to %s whenever this character is in this specialization.")):format(
 						pLabel
 					),
 					onClick = function()
@@ -1296,7 +1277,7 @@ function Spec.BuildDefaultProfilesPage()
 						local ok, reason = store:SetProfileForScope(store.SCOPE_SPEC, pID)
 						if ok then
 							print(
-								('Pulse: bound profile "%s" to specialization %s'):format(
+								(L("Pulse: bound profile \"%s\" to specialization %s")):format(
 									pLabel,
 									curName or tostring(curID)
 								)
@@ -1310,16 +1291,16 @@ function Spec.BuildDefaultProfilesPage()
 				rows[#rows + 1] = {
 					kind = "button",
 					child = true,
-					label = "Create editable copy",
-					buttonText = "Copy...",
-					tooltip = ("Create a new editable custom profile that starts as an exact copy of %s."):format(
+					label = L("Create editable copy"),
+					buttonText = L("Copy..."),
+					tooltip = (L("Create a new editable custom profile that starts as an exact copy of %s.")):format(
 						pLabel
 					),
 					onClick = function()
 						prompt(
-							('Copy "%s" to a new custom profile named:'):format(pLabel),
+							(L("Copy \"%s\" to a new custom profile named:")):format(pLabel),
 							pID .. " Copy",
-							"Copy",
+							L("Copy"),
 							function(value)
 								report(store:DuplicateProfile(pID, value))
 							end
@@ -1352,24 +1333,18 @@ function Spec.BuildCraftingPage()
 		return masterOn() and (store:GetCue("craftTexture") and true or false)
 	end
 
-	rows[#rows + 1] = { kind = "header", label = "Crafting texture" }
+	rows[#rows + 1] = { kind = "header", label = L("Crafting texture") }
 
 	rows[#rows + 1] = {
 		kind = "text",
 		gap = 10,
-		body = "A bed you feel for the length of a craft, with the profession's own work "
-			.. "rhythm struck over it. While a craft is running this replaces |cffffd100"
-			.. "Casting texture|r rather than layering with it, so one action is one "
-			.. "sensation.\n\nThe profession is read from the recipe by id, so it does not "
-			.. "depend on your language. Anything that does not resolve still gets a "
-			.. "generic work rhythm rather than going quiet.",
+		body = L("A bed you feel for the length of a craft, with the profession's own work rhythm struck over it. While a craft is running this replaces |cffffd100Casting texture|r rather than layering with it, so one action is one sensation.\n\nThe profession is read from the recipe by id, so it does not depend on your language. Anything that does not resolve still gets a generic work rhythm rather than going quiet."),
 	}
 
 	rows[#rows + 1] = {
 		kind = "checkbox",
-		label = "Feel crafting",
-		tooltip = "The master switch for this page. Also on the Casting page, where the "
-			.. "cue lives alongside the other casting cues.",
+		label = L("Feel crafting"),
+		tooltip = L("The master switch for this page. Also on the Casting page, where the cue lives alongside the other casting cues."),
 		get = function()
 			return store:GetCue("craftTexture")
 		end,
@@ -1382,10 +1357,8 @@ function Spec.BuildCraftingPage()
 	rows[#rows + 1] = {
 		kind = "slider",
 		child = true,
-		label = "Bed strength",
-		tooltip = "Multiplies the continuous layer under every craft, on top of each "
-			.. "profession's own weight. This is the part you feel for the whole craft "
-			.. "rather than the individual blows.",
+		label = L("Bed strength"),
+		tooltip = L("Multiplies the continuous layer under every craft, on top of each profession's own weight. This is the part you feel for the whole craft rather than the individual blows."),
 		min = 0.0,
 		max = 2.0,
 		step = 0.05,
@@ -1401,9 +1374,8 @@ function Spec.BuildCraftingPage()
 	rows[#rows + 1] = {
 		kind = "slider",
 		child = true,
-		label = "Strike strength",
-		tooltip = "Multiplies every impact, on top of each profession's own weight. Set "
-			.. "it to zero for a craft you feel but never get hit by.",
+		label = L("Strike strength"),
+		tooltip = L("Multiplies every impact, on top of each profession's own weight. Set it to zero for a craft you feel but never get hit by."),
 		min = 0.0,
 		max = 2.0,
 		step = 0.05,
@@ -1452,12 +1424,12 @@ function Spec.BuildCraftingPage()
 
 			rows[#rows + 1] = {
 				kind = "checkbox",
-				label = work.label,
-				tooltip = wantsRhythm and ("%s is felt as %s struck about %.1f times a second, over the bed."):format(
-					work.label,
-					work.mode or "an impact",
+				label = L(work.label),
+				tooltip = wantsRhythm and (L("%s is felt as %s struck about %.1f times a second, over the bed.")):format(
+					L(work.label),
+					work.mode or L("an impact"),
 					work.cadence
-				) or ("%s has no impacts — it is the bed alone, for the length of the craft."):format(work.label),
+				) or (L("%s has no impacts — it is the bed alone, for the length of the craft.")):format(L(work.label)),
 				get = function()
 					return store:GetTriggerSetting("craftTexture", onKey, 1) == 1
 				end,
@@ -1470,8 +1442,8 @@ function Spec.BuildCraftingPage()
 			rows[#rows + 1] = {
 				kind = "slider",
 				child = true,
-				label = "Strength",
-				tooltip = ("Scales both the bed and the strikes for %s, before the two " .. "shared strengths above."):format(
+				label = L("Strength"),
+				tooltip = (L("Scales both the bed and the strikes for %s, before the two shared strengths above.")):format(
 					work.label
 				),
 				min = 0.0,
@@ -1489,16 +1461,14 @@ function Spec.BuildCraftingPage()
 	end
 
 	professionRows(
-		"Professions with a rhythm",
-		"These strike. The shape and the rate come from the craft — a hammer is slower and "
-			.. "heavier than a pick — and the last blow lands on completion.",
+		L("Professions with a rhythm"),
+		L("These strike. The shape and the rate come from the craft — a hammer is slower and heavier than a pick — and the last blow lands on completion."),
 		true
 	)
 
 	professionRows(
-		"Professions without one",
-		"Nothing about these is percussive, so they get the bed alone. Inventing a hammer "
-			.. "for enchanting would be inventing a sensation that is not there.",
+		L("Professions without one"),
+		L("Nothing about these is percussive, so they get the bed alone. Inventing a hammer for enchanting would be inventing a sensation that is not there."),
 		false
 	)
 
@@ -1556,54 +1526,44 @@ function Spec.BuildModeTuningPage()
 				rows[#rows + 1] = tuningSlider(
 					modeID,
 					"lowMult",
-					"Low motor",
+					L("Low motor"),
 					0.0,
 					roleInfo.lowCeiling,
 					0.05,
-					"Multiplies "
-						.. modeID
-						.. "'s low-motor intensity. 1.0 is the authored "
-						.. "default; the top of this slider is where it stops making any further difference."
+					L("Multiplies %s's low-motor intensity. 1.0 is the authored default; the top of this slider is where it stops making any further difference."):format(modeID)
 				)
 			end
 			if roleInfo.hasHigh then
 				rows[#rows + 1] = tuningSlider(
 					modeID,
 					"highMult",
-					"High motor",
+					L("High motor"),
 					0.0,
 					roleInfo.highCeiling,
 					0.05,
-					"Multiplies "
-						.. modeID
-						.. "'s high-motor intensity. 1.0 is the authored "
-						.. "default; the top of this slider is where it stops making any further difference."
+					L("Multiplies %s's high-motor intensity. 1.0 is the authored default; the top of this slider is where it stops making any further difference."):format(modeID)
 				)
 			end
 			rows[#rows + 1] = tuningSlider(
 				modeID,
 				"durMult",
-				"Duration",
+				L("Duration"),
 				0.25,
 				3.0,
 				0.05,
-				"Speeds up or slows down "
-					.. modeID
-					.. " as a whole — both its pulses and "
-					.. "the gaps between them, so a multi-hit mode keeps its rhythm instead of "
-					.. "the hits stretching into their own gaps. 1.0 is the authored default."
+				L("Speeds up or slows down %s as a whole — both its pulses and the gaps between them, so a multi-hit mode keeps its rhythm instead of the hits stretching into their own gaps. 1.0 is the authored default."):format(modeID)
 			)
 
 			rows[#rows + 1] = {
 				kind = "button",
 				child = true,
-				label = "Feel " .. modeID,
-				buttonText = "Play",
-				tooltip = "Play " .. modeID .. " right now with whatever's currently set on its sliders above.",
+				label = L("Feel %s"):format(modeID),
+				buttonText = L("Play"),
+				tooltip = L("Play %s right now with whatever's currently set on its sliders above."):format(modeID),
 				onClick = function()
 					local ok, reason = Pulse:TestMode(modeID)
 					if not ok then
-						print("Pulse: " .. reason .. ", so there is nothing to test.")
+						print("Pulse: " .. reason .. L(", so there is nothing to test."))
 					end
 				end,
 			}
@@ -1612,14 +1572,13 @@ function Spec.BuildModeTuningPage()
 
 	rows[#rows + 1] = {
 		kind = "button",
-		label = "Reset motor & timing",
-		buttonText = "Reset...",
-		tooltip = "Reset every mode's motor and duration multiplier on this page "
-			.. "back to 1.0. Doesn't touch cues, per-cue intensity, or per-trigger mode picks.",
+		label = L("Reset motor & timing"),
+		buttonText = L("Reset..."),
+		tooltip = L("Reset every mode's motor and duration multiplier on this page back to 1.0. Doesn't touch cues, per-cue intensity, or per-trigger mode picks."),
 		onClick = function()
 			confirm(
-				"Reset every mode's motor and duration multiplier back to " .. "1.0? This can't be undone.",
-				"Reset",
+				L("Reset every mode's motor and duration multiplier back to 1.0? This can't be undone."),
+				L("Reset"),
 				function()
 					store:ResetModeTuning()
 				end
@@ -1649,18 +1608,18 @@ function Spec.BuildCalibrationPage()
 			onClick = function()
 				local ok, reason = run()
 				if not ok then
-					print("Pulse: " .. (reason or "could not run that"))
+					print("Pulse: " .. (reason or L("could not run that")))
 				end
 			end,
 		}
 	end
 
-	rows[#rows + 1] = { kind = "header", label = "Routing & Schema" }
+	rows[#rows + 1] = { kind = "header", label = L("Routing & Schema") }
 
 	rows[#rows + 1] = {
 		kind = "dropdown",
-		label = "Vibration schema",
-		tooltip = "Which physical motors each cue drives. Start with Standard Rumble, then calibrate the motors below.",
+		label = L("Vibration schema"),
+		tooltip = L("Which physical motors each cue drives. Start with Standard Rumble, then calibrate the motors below."),
 		options = function()
 			local options = {}
 			for _, schema in ipairs(Pulse.Registry:GetSchemaOptions()) do
@@ -1676,18 +1635,15 @@ function Spec.BuildCalibrationPage()
 		end,
 	}
 
-	rows[#rows + 1] = { kind = "header", label = "Hardware & Presets" }
+	rows[#rows + 1] = { kind = "header", label = L("Hardware & Presets") }
 
 	-- Picking from the dropdown only remembers the choice; Apply writes the values. A
 	-- preset overwrites trimming you may have spent a while on, so it must never happen as
 	-- a side effect of browsing the list.
 	rows[#rows + 1] = {
 		kind = "dropdown",
-		label = "Controller",
-		tooltip = "Which controller you are holding. Picking one changes nothing on its own "
-			.. "— press Apply below to load its starting values. These are starting points "
-			.. "reasoned from what kind of actuators each controller uses, not measurements: "
-			.. "Ramp is what measures YOUR controller, and whatever you enter afterwards wins.",
+		label = L("Controller"),
+		tooltip = L("Which controller you are holding. Picking one changes nothing on its own — press Apply below to load its starting values. These are starting points reasoned from what kind of actuators each controller uses, not measurements: Ramp is what measures YOUR controller, and whatever you enter afterwards wins."),
 		options = function()
 			local options = {}
 			for _, id in ipairs(Pulse.DEVICE_ORDER) do
@@ -1717,66 +1673,62 @@ function Spec.BuildCalibrationPage()
 			if not dev then
 				return ""
 			end
-			return ("Actuator profile: %s\n%s"):format(dev.label or id, dev.note or "")
+			return (L("Actuator profile: %s\n%s")):format(dev.label or id, dev.note or "")
 		end,
 	}
 
 	rows[#rows + 1] = probeButton(
-		"Load its starting values",
-		"Apply",
+		L("Load its starting values"),
+		L("Apply"),
 		function()
 			local id = store:GetDevicePreset()
 			local device = Pulse.Devices[id]
 			local confirmMsg = (
-				'Apply the "%s" starting point? This overwrites every motor\'s strength, '
-				.. "floor, timing and curve with that controller's values — any trimming you "
-				.. "have already done is lost."
+				L("Apply the \"%s\" starting point? This overwrites every motor's strength, floor, timing and curve with that controller's values — any trimming you have already done is lost.")
 			):format(device and device.label or id)
-			confirm(confirmMsg, "Apply", function()
+			confirm(confirmMsg, L("Apply"), function()
 				local ok, reason = store:ApplyDevicePreset(id)
-				report(ok, reason or "could not apply that preset")
+				report(ok, reason or L("could not apply that preset"))
 			end)
 			return true
 		end,
-		"Overwrite every motor's calibration with the selected controller's starting "
-			.. "values. Ask first, because this discards any trimming you have already done.",
+		L("Overwrite every motor's calibration with the selected controller's starting values. Ask first, because this discards any trimming you have already done."),
 		true
 	)
 
 	-- Optional, never automatic. Reads the controller's reported name and ids and says
 	-- which row it thinks you want; a wrong guess neither selects nor applies.
 	rows[#rows + 1] = probeButton(
-		"Which controller is this?",
-		"Detect",
+		L("Which controller is this?"),
+		L("Detect"),
 		function()
 			if type(Pulse.DetectDevice) ~= "function" then
-				return false, "detection unavailable"
+				return false, L("detection unavailable")
 			end
 			local deviceID, presetID, name = Pulse.DetectDevice()
 			if not deviceID then
-				return false, "no controller detected"
+				return false, L("no controller detected")
 			end
 			local device = presetID and Pulse.Devices[presetID]
 			if device then
 				print(
-					("Pulse: this looks like a %s%s. Pick it above, then press Apply."):format(
+					(L("Pulse: this looks like a %s%s. Pick it above, then press Apply.")):format(
 						device.label,
-						name and (' (reported as "' .. name .. '")') or ""
+						name and (L(" (reported as \"%s\")"):format(name)) or ""
 					)
 				)
 			elseif name then
 				print(
-					('Pulse: controller reports itself as "%s", which isn\'t in the list. Use Generic and Ramp each motor.'):format(
+					(L("Pulse: controller reports itself as \"%s\", which isn't in the list. Use Generic and Ramp each motor.")):format(
 						name
 					)
 				)
 			else
-				print("Pulse: controller found, but it reports no usable name. Use Generic and Ramp each motor.")
+				print(L("Pulse: controller found, but it reports no usable name. Use Generic and Ramp each motor."))
 			end
 			return true
 		end,
-		"Asks the controller what it is and suggests a row from the list above. Only "
-			.. "prints a suggestion — it never selects or applies anything for you.",
+		L("Asks the controller what it is and suggests a row from the list above. Only prints a suggestion — it never selects or applies anything for you."),
 		true
 	)
 
@@ -1793,43 +1745,38 @@ function Spec.BuildCalibrationPage()
 		-- left, so one row both labels the group and gives it a probe.
 		rows[#rows + 1] = probeButton(
 			label,
-			"Test",
+			L("Test"),
 			function()
 				return Pulse.Engine:ProbeChannel(channel, 0.5, 1.5)
 			end,
-			"Drive this motor at half power for a second and a half, bypassing every "
-				.. "setting on this page and every schema. If you feel nothing here, this channel "
-				.. "does not work on your controller and no amount of tuning below will change that."
+			L("Drive this motor at half power for a second and a half, bypassing every setting on this page and every schema. If you feel nothing here, this channel does not work on your controller and no amount of tuning below will change that.")
 		)
 
 		rows[#rows + 1] = probeButton(
-			"Find breakaway floor",
-			"Ramp",
+			L("Find breakaway floor"),
+			L("Ramp"),
 			function()
 				return Pulse.Engine:RampChannel(channel)
 			end,
 			string.format(
-				"Climbs this motor slowly from silence to %d%% power over %d seconds, ",
+				L("Climbs this motor slowly from silence to %d%% power over %d seconds, "),
 				math.floor(Pulse.RAMP_PEAK * 100 + 0.5),
 				math.floor((Pulse.RAMP_PEAK / Pulse.RAMP_STEP) * Pulse.RAMP_STEP_SECONDS + 0.5)
 			)
-				.. "printing each step to chat. Watch the chat, and note the number showing when "
-				.. "you FIRST feel anything — that is this motor's breakaway floor. Type it into "
-				.. "the slider below and quiet cues stop disappearing. Pressing Test cancels a "
-				.. "ramp in progress.",
+				.. L("printing each step to chat. Watch the chat, and note the number showing when you FIRST feel anything — that is this motor's breakaway floor. Type it into the slider below and quiet cues stop disappearing. Pressing Test cancels a ramp in progress."),
 			true
 		)
 
 		rows[#rows + 1] = probeButton(
-			"Mark floor from ramp",
-			"Set Floor",
+			L("Mark floor from ramp"),
+			L("Set Floor"),
 			function()
 				local floorVal, ramp = Pulse.Engine:GetRampReading()
 				if ramp and ramp.channel == channel then
 					store:SetChannelTuning(channel, "floor", floorVal, 0.0, 0.40)
 					Pulse.Engine:StopRamp(channel)
 					print(
-						("Pulse: captured %s breakaway floor at %.3f (ramp was at %.3f when clicked)"):format(
+						(L("Pulse: captured %s breakaway floor at %.3f (ramp was at %.3f when clicked)")):format(
 							channel,
 							floorVal,
 							ramp.magnitude
@@ -1837,15 +1784,13 @@ function Spec.BuildCalibrationPage()
 					)
 					return true
 				elseif ramp then
-					return false, ("a ramp is currently running on " .. ramp.channel .. ", not " .. channel)
+					return false, (L("a ramp is currently running on %s, not %s"):format(ramp.channel, channel))
 				else
 					return false,
-						"no ramp is running on this channel (press Ramp first, then Set Floor when you feel it)"
+						L("no ramp is running on this channel (press Ramp first, then Set Floor when you feel it)")
 				end
 			end,
-			"Captures the active vibration level from a running Ramp sweep and writes it "
-				.. "directly to this motor's Breakaway floor slider below, then stops the ramp. "
-				.. "Press this the moment you first feel the motor move!",
+			L("Captures the active vibration level from a running Ramp sweep and writes it directly to this motor's Breakaway floor slider below, then stops the ramp. Press this the moment you first feel the motor move!"),
 			true
 		)
 
@@ -1887,11 +1832,8 @@ function Spec.BuildCalibrationPage()
 
 	rows[#rows + 1] = {
 		kind = "slider",
-		label = "Change threshold",
-		tooltip = "How far a motor has to move before the addon bothers telling the client "
-			.. "about it. Raise it to cut the number of calls; too high and slow fades turn "
-			.. "into visible steps. Shared by every channel — this is a call-rate setting, "
-			.. "not a motor property.",
+		label = L("Change threshold"),
+		tooltip = L("How far a motor has to move before the addon bothers telling the client about it. Raise it to cut the number of calls; too high and slow fades turn into visible steps. Shared by every channel — this is a call-rate setting, not a motor property."),
 		min = 0.0,
 		max = 0.02,
 		step = 0.0005,
@@ -1905,15 +1847,13 @@ function Spec.BuildCalibrationPage()
 
 	rows[#rows + 1] = {
 		kind = "button",
-		label = "Reset calibration",
-		buttonText = "Reset...",
-		tooltip = "Put every motor's strength, floor, timing and curve back to the engine "
-			.. "defaults. Doesn't touch cues, per-cue intensity, mode tuning or your schema.",
+		label = L("Reset calibration"),
+		buttonText = L("Reset..."),
+		tooltip = L("Put every motor's strength, floor, timing and curve back to the engine defaults. Doesn't touch cues, per-cue intensity, mode tuning or your schema."),
 		onClick = function()
 			confirm(
-				"Reset every motor's strength, floor, timing and curve back to the "
-					.. "engine defaults? This can't be undone.",
-				"Reset",
+				L("Reset every motor's strength, floor, timing and curve back to the engine defaults? This can't be undone."),
+				L("Reset"),
 				function()
 					store:ResetChannelTuning()
 				end
@@ -1951,7 +1891,7 @@ function Spec.BuildContinuousPage()
 				}
 			end
 
-			local test = cueTestButton(trigger, "Feel this texture", true)
+			local test = cueTestButton(trigger, L("Feel this texture"), true)
 			if test then
 				rows[#rows + 1] = test
 			end
@@ -1992,26 +1932,26 @@ end
 function Spec.BuildPages()
 	local pages = {}
 
-	pages[#pages + 1] = { id = "root", label = "Pulse", indent = 0, simple = true, build = Spec.BuildRootPage }
+	pages[#pages + 1] = { id = "root", label = L("Pulse"), indent = 0, simple = true, build = Spec.BuildRootPage }
 	pages[#pages + 1] = {
 		id = "switches",
-		label = "Page switches",
+		label = L("Page switches"),
 		indent = 1,
 		simple = true,
 		build = Spec.BuildSwitchesPage,
 	}
 
 	-- First of the children, before the cue pages it indexes.
-	pages[#pages + 1] = { id = "cueIndex", label = "Cue index", indent = 1, build = Spec.BuildCueIndexPage }
+	pages[#pages + 1] = { id = "cueIndex", label = L("Cue index"), indent = 1, build = Spec.BuildCueIndexPage }
 	pages[#pages + 1] =
-		{ id = "profiles", label = "Profiles", indent = 1, simple = true, build = Spec.BuildProfilesPage }
+		{ id = "profiles", label = L("Profiles"), indent = 1, simple = true, build = Spec.BuildProfilesPage }
 	pages[#pages + 1] = {
 		id = "defaultProfiles",
-		label = "Default profiles",
+		label = L("Default profiles"),
 		indent = 1,
 		build = Spec.BuildDefaultProfilesPage,
 	}
-	pages[#pages + 1] = { id = "crafting", label = "Crafting", indent = 1, build = Spec.BuildCraftingPage }
+	pages[#pages + 1] = { id = "crafting", label = L("Crafting"), indent = 1, build = Spec.BuildCraftingPage }
 
 	for _, page in ipairs(Pulse.Registry:GetPages()) do
 		if page.hasCues then
@@ -2026,23 +1966,28 @@ function Spec.BuildPages()
 		end
 	end
 
-	pages[#pages + 1] = { id = "modeTuning", label = "Motor & Timing", indent = 1, build = Spec.BuildModeTuningPage }
+	pages[#pages + 1] = { id = "modeTuning", label = L("Motor & Timing"), indent = 1, build = Spec.BuildModeTuningPage }
 	pages[#pages + 1] = {
 		id = "calibration",
-		label = "Controller calibration",
+		label = L("Controller calibration"),
 		indent = 1,
 		build = Spec.BuildCalibrationPage,
 	}
 	pages[#pages + 1] = {
 		id = "continuous",
-		label = "Continuous textures",
+		label = L("Continuous textures"),
 		indent = 1,
 		build = Spec.BuildContinuousPage,
 	}
 
 	if Pulse.Guide and #Pulse.Guide > 0 then
-		pages[#pages + 1] = { id = "guide", label = "Guide", indent = 1, simple = true, build = Spec.BuildGuidePage }
+		pages[#pages + 1] = { id = "guide", label = L("Guide"), indent = 1, simple = true, build = Spec.BuildGuidePage }
 	end
 
 	return pages
+end
+
+-- Keep authored IDs and saved values unchanged; translate display metadata at login.
+if Pulse.Locale then
+	Pulse.Locale:RegisterTable(MODE_CATEGORIES, true)
 end

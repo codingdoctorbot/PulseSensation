@@ -254,6 +254,8 @@ end)
 local weatherFrame = CreateFrame("Frame")
 local currentWeatherType = 0
 local currentWeatherIntensity = 0
+-- Ambient weather should sit beneath gameplay cues, including in immersion profiles.
+local WEATHER_GAIN = 0.70
 local staticWeatherRole = { low = 0, high = 0 }
 
 local function weatherTick()
@@ -293,6 +295,8 @@ local function weatherTick()
 		staticWeatherRole.high = 0
 	end
 
+	staticWeatherRole.low = staticWeatherRole.low * WEATHER_GAIN
+	staticWeatherRole.high = staticWeatherRole.high * WEATHER_GAIN
 	Pulse:HoldRolesIfEnabled("weatherTexture", staticWeatherRole)
 end
 
@@ -373,7 +377,7 @@ function M:PreviewWeather(seconds, scale)
 	Pulse:StartContinuousPreview(seconds, function(elapsed)
 		local flutter = Pulse.Waves.Sine(rainLevel, patterRate, 0.45, 0, elapsed)
 		staticWeatherRole.low = 0
-		staticWeatherRole.high = Pulse.Haptics.MicroFlutter(flutter)
+		staticWeatherRole.high = Pulse.Haptics.MicroFlutter(flutter) * WEATHER_GAIN
 		Pulse.Engine:SetRoles("preview", staticWeatherRole, 0.1)
 	end)
 	return true

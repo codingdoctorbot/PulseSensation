@@ -41,6 +41,7 @@
 -- own tooltips use. Only the machinery underneath is Pulse's.
 
 local ADDON_NAME, Pulse = ...
+local L = Pulse.L or function(text) return text end
 
 local Panel = Pulse.UI.Panel
 local Theme = Panel.Theme
@@ -472,7 +473,7 @@ function Popup.OpenList(owner, options, selectedValue, onSelect, previewScale)
 			local catColMap = {}
 			local nextCol = 1
 			for _, opt in ipairs(options) do
-				local cat = opt.category or "Other"
+				local cat = opt.category or L("Other")
 				if not catColMap[cat] then
 					if nextCol <= numCols then
 						catColMap[cat] = nextCol
@@ -660,7 +661,7 @@ local function ensureDialog()
 
 	local cancel = CreateFrame("Button", nil, dialog, "UIPanelButtonTemplate")
 	cancel:SetSize(110, 22)
-	cancel:SetText(CANCEL or "Cancel")
+	cancel:SetText(L("Cancel"))
 	cancel:SetScript("OnClick", closeDialog)
 	dialog.Cancel = cancel
 
@@ -730,18 +731,18 @@ end
 local function refuseInCombat()
 	if InCombatLockdown and InCombatLockdown() then
 		local errorsFrame = _G.UIErrorsFrame
-		local msg = _G.ERR_NOT_IN_COMBAT or "You cannot do that while in combat."
+		local msg = _G.ERR_NOT_IN_COMBAT or L("You cannot do that while in combat.")
 		if errorsFrame and errorsFrame.AddMessage then
 			errorsFrame:AddMessage(msg, 1, 0.1, 0.1)
 		else
-			print("Pulse: not available in combat. Try again after combat.")
+			print(L("Pulse: not available in combat. Try again after combat."))
 		end
 		return true
 	end
 	return false
 end
 
--- A yes/no confirmation. `acceptText` names the action rather than saying "Okay": a button
+-- A yes/no confirmation. `acceptText` names the action rather than saying L("Okay"): a button
 -- that says what it does is the difference between reading the dialog and not.
 function Popup.Confirm(text, acceptText, onAccept)
 	if refuseInCombat() then
@@ -749,7 +750,7 @@ function Popup.Confirm(text, acceptText, onAccept)
 	end
 	ensureDialog()
 	dialog.Message:SetText(text)
-	dialog.Accept:SetText(acceptText or OKAY or "Okay")
+	dialog.Accept:SetText(acceptText or L("Okay"))
 	dialog.Accept:ClearAllPoints()
 	dialog.Cancel:ClearAllPoints()
 	dialog.onAccept = onAccept
@@ -764,7 +765,7 @@ function Popup.Prompt(text, defaultValue, acceptText, onAccept)
 	end
 	ensureDialog()
 	dialog.Message:SetText(text)
-	dialog.Accept:SetText(acceptText or ACCEPT or "Accept")
+	dialog.Accept:SetText(acceptText or L("Accept"))
 	dialog.Accept:ClearAllPoints()
 	dialog.Cancel:ClearAllPoints()
 	dialog.onAccept = onAccept

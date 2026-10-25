@@ -6,6 +6,7 @@
 -- Position and visibility are persisted in PulseDB.minimap.
 
 local ADDON_NAME, Pulse = ...
+local L = Pulse.L or function(text) return text end
 
 Pulse.UI = Pulse.UI or {}
 local MinimapButton = {}
@@ -51,31 +52,31 @@ local function showTooltip(owner)
 	end
 	GameTooltip:SetOwner(owner, "ANCHOR_LEFT")
 	GameTooltip:ClearLines()
-	GameTooltip:AddLine("Pulse Haptics", 0.30, 0.72, 1.00)
+	GameTooltip:AddLine(L("Pulse Haptics"), 0.30, 0.72, 1.00)
 
 	local master = Pulse.Database:Get("masterEnabled")
-	local statusText = master and "|cff00ff00Enabled|r" or "|cffff0000Disabled|r"
-	GameTooltip:AddLine(("Status: %s"):format(statusText), 1, 1, 1)
+	local statusText = master and ("|cff00ff00" .. L("Enabled") .. "|r") or ("|cffff0000" .. L("Disabled") .. "|r")
+	GameTooltip:AddLine((L("Status: %s")):format(statusText), 1, 1, 1)
 
 	local profileName = Pulse.Database:GetActiveProfileName() or "Default"
 	if Pulse.Database.HasPendingProfileSwitch and Pulse.Database:HasPendingProfileSwitch() then
 		GameTooltip:AddLine(
-			("Active Profile: |cffffd100%s|r |cffff8800(Pending exit from combat)|r"):format(profileName),
+			(L("Active Profile: |cffffd100%s|r |cffff8800(Pending exit from combat)|r")):format(Pulse.Locale:ProfileLabel(profileName)),
 			1,
 			1,
 			1
 		)
 	else
-		GameTooltip:AddLine(("Active Profile: |cffffd100%s|r"):format(profileName), 1, 1, 1)
+		GameTooltip:AddLine((L("Active Profile: |cffffd100%s|r")):format(Pulse.Locale:ProfileLabel(profileName)), 1, 1, 1)
 	end
 
 	local schema = Pulse.Database:Get("defaultHapticSchema") or "standard"
-	GameTooltip:AddLine(("Vibration Schema: |cffffd100%s|r"):format(schema), 1, 1, 1)
+	GameTooltip:AddLine((L("Vibration Schema: |cffffd100%s|r")):format(schema), 1, 1, 1)
 
 	GameTooltip:AddLine(" ")
-	GameTooltip:AddLine("|cff00ff00Left-Click:|r Open Settings", 0.85, 0.85, 0.85)
-	GameTooltip:AddLine("|cff00ff00Right-Click:|r Toggle Master On/Off", 0.85, 0.85, 0.85)
-	GameTooltip:AddLine("|cff888888Drag:|r Move Icon", 0.70, 0.70, 0.70)
+	GameTooltip:AddLine(L("|cff00ff00Left-Click:|r Open Settings"), 0.85, 0.85, 0.85)
+	GameTooltip:AddLine(L("|cff00ff00Right-Click:|r Toggle Master On/Off"), 0.85, 0.85, 0.85)
+	GameTooltip:AddLine(L("|cff888888Drag:|r Move Icon"), 0.70, 0.70, 0.70)
 	GameTooltip:Show()
 end
 
@@ -258,29 +259,29 @@ local function initLDB()
 			if not tooltip or not tooltip.AddLine then
 				return
 			end
-			tooltip:AddLine("Pulse Haptics", 0.30, 0.72, 1.00)
+			tooltip:AddLine(L("Pulse Haptics"), 0.30, 0.72, 1.00)
 			local master = Pulse.Database:Get("masterEnabled")
-			local statusText = master and "|cff00ff00Enabled|r" or "|cffff0000Disabled|r"
-			tooltip:AddLine(("Status: %s"):format(statusText), 1, 1, 1)
+			local statusText = master and ("|cff00ff00" .. L("Enabled") .. "|r") or ("|cffff0000" .. L("Disabled") .. "|r")
+			tooltip:AddLine((L("Status: %s")):format(statusText), 1, 1, 1)
 
 			local profileName = Pulse.Database:GetActiveProfileName() or "Default"
 			if Pulse.Database.HasPendingProfileSwitch and Pulse.Database:HasPendingProfileSwitch() then
 				tooltip:AddLine(
-					("Active Profile: |cffffd100%s|r |cffff8800(Pending exit from combat)|r"):format(profileName),
+					(L("Active Profile: |cffffd100%s|r |cffff8800(Pending exit from combat)|r")):format(Pulse.Locale:ProfileLabel(profileName)),
 					1,
 					1,
 					1
 				)
 			else
-				tooltip:AddLine(("Active Profile: |cffffd100%s|r"):format(profileName), 1, 1, 1)
+				tooltip:AddLine((L("Active Profile: |cffffd100%s|r")):format(Pulse.Locale:ProfileLabel(profileName)), 1, 1, 1)
 			end
 
 			local schema = Pulse.Database:Get("defaultHapticSchema") or "standard"
-			tooltip:AddLine(("Vibration Schema: |cffffd100%s|r"):format(schema), 1, 1, 1)
+			tooltip:AddLine((L("Vibration Schema: |cffffd100%s|r")):format(schema), 1, 1, 1)
 
 			tooltip:AddLine(" ")
-			tooltip:AddLine("|cff00ff00Left-Click:|r Open Settings", 0.85, 0.85, 0.85)
-			tooltip:AddLine("|cff00ff00Right-Click:|r Toggle Master On/Off", 0.85, 0.85, 0.85)
+			tooltip:AddLine(L("|cff00ff00Left-Click:|r Open Settings"), 0.85, 0.85, 0.85)
+			tooltip:AddLine(L("|cff00ff00Right-Click:|r Toggle Master On/Off"), 0.85, 0.85, 0.85)
 		end,
 	})
 	return ldbObj

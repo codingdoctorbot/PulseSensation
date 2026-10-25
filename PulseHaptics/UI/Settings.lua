@@ -19,6 +19,7 @@
 -- renders a paragraph or a wordmark.
 
 local ADDON_NAME, Pulse = ...
+local L = Pulse.L or function(text) return text end
 
 Pulse.UI = Pulse.UI or {}
 local UISettings = {}
@@ -91,12 +92,7 @@ local function firstFont(candidates)
 	return "GameFontNormal"
 end
 
-local BODY_TEXT = 'Every cue, its intensity and "feels like" shape, your profiles, per-mode motor and '
-	.. "timing tuning, controller calibration, the mode tester and the guide — all of it "
-	.. "is in Pulse's own window.\n\n"
-	.. "It draws itself rather than living as pages in this panel, which is what lets it "
-	.. "build only what you are looking at instead of every control in the addon at every "
-	.. "login."
+local BODY_TEXT = ("Every cue, its intensity and \"feels like\" shape, your profiles, per-mode motor and timing tuning, controller calibration, the mode tester and the guide — all of it is in Pulse's own window.\n\nIt draws itself rather than living as pages in this panel, which is what lets it build only what you are looking at instead of every control in the addon at every login.")
 
 -- Build
 
@@ -203,7 +199,7 @@ local function buildButton(canvas)
 	else
 		button:SetSize(280, 44)
 	end
-	button:SetText("Open Pulse settings")
+	button:SetText(L("Open Pulse settings"))
 	button:SetScript("OnClick", function()
 		local sp = _G.SettingsPanel
 		if sp and sp.Close then
@@ -245,7 +241,7 @@ function UISettings:Build()
 	local tagline = canvas:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
 	tagline:SetJustifyH("CENTER")
 	tagline:SetPoint("TOP", rule or wordmark, "BOTTOM", 0, -18)
-	tagline:SetText("What the game is doing, felt through the controller.")
+	tagline:SetText(L("What the game is doing, felt through the controller."))
 	tagline:SetTextColor(ACCENT.r, ACCENT.g, ACCENT.b)
 
 	local body = canvas:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
@@ -253,7 +249,7 @@ function UISettings:Build()
 	body:SetJustifyV("TOP")
 	body:SetSpacing(4)
 	body:SetPoint("TOP", tagline, "BOTTOM", 0, -22)
-	body:SetText(BODY_TEXT)
+	body:SetText(L(BODY_TEXT))
 
 	local open = buildButton(canvas)
 	open:SetPoint("TOP", body, "BOTTOM", 0, -22)
@@ -261,7 +257,7 @@ function UISettings:Build()
 	local quickSetupBtn = CreateFrame("Button", nil, canvas, "UIPanelButtonTemplate")
 	quickSetupBtn:SetSize(220, 26)
 	quickSetupBtn:SetPoint("TOP", open, "BOTTOM", 0, -8)
-	quickSetupBtn:SetText("Quick Setup Wizard")
+	quickSetupBtn:SetText(L("Quick Setup Wizard"))
 	if Pulse.UI and Pulse.UI.Panel and Pulse.UI.Panel.Theme and Pulse.UI.Panel.Theme.StyleActionButton then
 		Pulse.UI.Panel.Theme.StyleActionButton(quickSetupBtn, true)
 	end
@@ -285,9 +281,7 @@ function UISettings:Build()
 	hint:SetSpacing(2)
 	hint:SetPoint("TOP", quickSetupBtn, "BOTTOM", 0, -12)
 	hint:SetText(
-		"|cffffd100/pulseui|r opens it too. "
-			.. "|cffffd100/pulse setup|r re-opens Quick Setup, "
-			.. "|cffffd100/pulse test <mode>|r plays a shape."
+		L("|cffffd100/pulseui|r opens it too. |cffffd100/pulse setup|r re-opens Quick Setup, |cffffd100/pulse test <mode>|r plays a shape.")
 	)
 
 	local version = addonVersion()

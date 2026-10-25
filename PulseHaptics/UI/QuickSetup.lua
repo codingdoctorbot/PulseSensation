@@ -12,6 +12,7 @@
 --   6. Master Strength & Finish (Master intensity slider, live summary, save & play)
 
 local ADDON_NAME, Pulse = ...
+local L = Pulse.L or function(text) return text end
 
 Pulse.UI = Pulse.UI or {}
 local QuickSetup = {}
@@ -37,44 +38,44 @@ local THEME = {
 local CONTROLLER_OPTIONS = {
 	{
 		id = "dualsense",
-		label = "DualSense (PS5)",
-		desc = "Voice-coil actuators (LRA), ultra-low 0.025 floor, instant response",
+		label = L("DualSense (PS5)"),
+		desc = L("Voice-coil actuators (LRA), ultra-low 0.025 floor, instant response"),
 	},
-	{ id = "ds4", label = "DualShock 4 (PS4)", desc = "Dual asymmetrical ERM motors, balanced 75ms spin-up" },
+	{ id = "ds4", label = L("DualShock 4 (PS4)"), desc = L("Dual asymmetrical ERM motors, balanced 75ms spin-up") },
 	{
 		id = "xbox",
-		label = "Xbox One / Series",
-		desc = "Heavy left counterweight (85ms), light right counterweight (45ms)",
+		label = L("Xbox One / Series"),
+		desc = L("Heavy left counterweight (85ms), light right counterweight (45ms)"),
 	},
 	{
 		id = "xbox_elite",
-		label = "Xbox Elite Series 2",
-		desc = "Tuned for heavy chassis damping (+10% Low motor gain)",
+		label = L("Xbox Elite Series 2"),
+		desc = L("Tuned for heavy chassis damping (+10% Low motor gain)"),
 	},
-	{ id = "switchpro", label = "Nintendo Switch Pro", desc = "Tuned for HD Rumble voice-coil actuators" },
-	{ id = "8bitdo", label = "8BitDo / Other XInput", desc = "Calibrated for standard third-party ERM rumble curves" },
-	{ id = "steamdeck", label = "Steam Deck / Controller", desc = "Tuned for trackpad & chassis LRA haptics" },
-	{ id = "default", label = "Generic / Unknown", desc = "Engine defaults without device-specific calibration" },
+	{ id = "switchpro", label = L("Nintendo Switch Pro"), desc = L("Tuned for HD Rumble voice-coil actuators") },
+	{ id = "8bitdo", label = L("8BitDo / Other XInput"), desc = L("Calibrated for standard third-party ERM rumble curves") },
+	{ id = "steamdeck", label = L("Steam Deck / Controller"), desc = L("Tuned for trackpad & chassis LRA haptics") },
+	{ id = "default", label = L("Generic / Unknown"), desc = L("Engine defaults without device-specific calibration") },
 }
 
 local CLASS_LIST = {
-	{ id = "WARRIOR", label = "Warrior", color = { r = 0.78, g = 0.61, b = 0.43 } },
-	{ id = "PALADIN", label = "Paladin", color = { r = 0.96, g = 0.55, b = 0.73 } },
-	{ id = "HUNTER", label = "Hunter", color = { r = 0.67, g = 0.83, b = 0.45 } },
-	{ id = "ROGUE", label = "Rogue", color = { r = 1.00, g = 0.96, b = 0.41 } },
-	{ id = "PRIEST", label = "Priest", color = { r = 1.00, g = 1.00, b = 1.00 } },
-	{ id = "SHAMAN", label = "Shaman", color = { r = 0.00, g = 0.44, b = 0.87 } },
-	{ id = "MAGE", label = "Mage", color = { r = 0.25, g = 0.78, b = 0.92 } },
-	{ id = "WARLOCK", label = "Warlock", color = { r = 0.53, g = 0.53, b = 0.93 } },
-	{ id = "DRUID", label = "Druid", color = { r = 1.00, g = 0.49, b = 0.04 } },
-	{ id = "DEATHKNIGHT", label = "Death Knight", color = { r = 0.77, g = 0.12, b = 0.23 } },
+	{ id = "WARRIOR", label = L("Warrior"), color = { r = 0.78, g = 0.61, b = 0.43 } },
+	{ id = "PALADIN", label = L("Paladin"), color = { r = 0.96, g = 0.55, b = 0.73 } },
+	{ id = "HUNTER", label = L("Hunter"), color = { r = 0.67, g = 0.83, b = 0.45 } },
+	{ id = "ROGUE", label = L("Rogue"), color = { r = 1.00, g = 0.96, b = 0.41 } },
+	{ id = "PRIEST", label = L("Priest"), color = { r = 1.00, g = 1.00, b = 1.00 } },
+	{ id = "SHAMAN", label = L("Shaman"), color = { r = 0.00, g = 0.44, b = 0.87 } },
+	{ id = "MAGE", label = L("Mage"), color = { r = 0.25, g = 0.78, b = 0.92 } },
+	{ id = "WARLOCK", label = L("Warlock"), color = { r = 0.53, g = 0.53, b = 0.93 } },
+	{ id = "DRUID", label = L("Druid"), color = { r = 1.00, g = 0.49, b = 0.04 } },
+	{ id = "DEATHKNIGHT", label = L("Death Knight"), color = { r = 0.77, g = 0.12, b = 0.23 } },
 }
 
 local ROLE_LIST = {
-	{ id = "tank", label = "🛡️ Tank", desc = "Threat, mitigations, and CC" },
-	{ id = "healer", label = "💚 Healer", desc = "Heal casts and low-health triage" },
-	{ id = "melee", label = "⚔️ Melee DPS", desc = "Weapon swings, ability cadence, and auto-attack stops" },
-	{ id = "ranged", label = "🏹 Ranged DPS", desc = "Spell flow, instant casts, and interrupts" },
+	{ id = "tank", label = L("🛡️ Tank"), desc = L("Threat, mitigations, and CC") },
+	{ id = "healer", label = L("💚 Healer"), desc = L("Heal casts and low-health triage") },
+	{ id = "melee", label = L("⚔️ Melee DPS"), desc = L("Weapon swings, ability cadence, and auto-attack stops") },
+	{ id = "ranged", label = L("🏹 Ranged DPS"), desc = L("Spell flow, instant casts, and interrupts") },
 }
 
 -- Cues each role / class switches on. Mind the direction: critLanded, healCrit and
@@ -165,74 +166,74 @@ end
 local CONTINUOUS_OPTIONS = {
 	{
 		id = "glideThrust",
-		label = "Skyriding / Gliding Thrust",
-		desc = "Wind resistance & thrust surge while flying. Scales dynamically with your flight speed.",
+		label = L("Skyriding / Gliding Thrust"),
+		desc = L("Wind resistance & thrust surge while flying. Scales dynamically with your flight speed."),
 		default = false,
 	},
 	{
 		id = "locomotion",
-		label = "Footfalls & Mount Gait",
-		desc = "Rhythmic footsteps on foot and hoofbeat cadence while mounted, weighted by armor class.",
+		label = L("Footfalls & Mount Gait"),
+		desc = L("Rhythmic footsteps on foot and hoofbeat cadence while mounted, weighted by armor class."),
 		default = false,
 	},
 	{
 		id = "waterTexture",
-		label = "In Water (Buoyancy)",
-		desc = "Subtle hydrostatic floating texture when swimming or bobbing in bodies of water.",
+		label = L("In Water (Buoyancy)"),
+		desc = L("Subtle hydrostatic floating texture when swimming or bobbing in bodies of water."),
 		default = false,
 	},
 	{
 		id = "swimTexture",
-		label = "Swimming Resistance",
-		desc = "Hydrodynamic water drag that scales as you swim forward through rivers and seas.",
+		label = L("Swimming Resistance"),
+		desc = L("Hydrodynamic water drag that scales as you swim forward through rivers and seas."),
 		default = false,
 	},
 	{
 		id = "oceanTexture",
-		label = "Ocean Waves & Swell",
-		desc = "Slow, harmonic oceanic gravity swells and coastal tides while submerged in deep oceans.",
+		label = L("Ocean Waves & Swell"),
+		desc = L("Slow, harmonic oceanic gravity swells and coastal tides while submerged in deep oceans."),
 		default = false,
 	},
 	{
 		id = "castTexture",
-		label = "Spellcasting Channel Hum",
-		desc = "Continuous magical hum that builds during casts and channels steadily through your hands.",
+		label = L("Spellcasting Channel Hum"),
+		desc = L("Continuous magical hum that builds during casts and channels steadily through your hands."),
 		default = true,
 	},
 	{
 		id = "craftTexture",
-		label = "Crafting Rhythms",
-		desc = "Physical tool strikes: anvil hammer strokes, mining pickaxe impacts, tailoring stitches.",
+		label = L("Crafting Rhythms"),
+		desc = L("Physical tool strikes: anvil hammer strokes, mining pickaxe impacts, tailoring stitches."),
 		default = true,
 	},
 	{
 		id = "weatherTexture",
-		label = "Weather Atmosphere",
-		desc = "Light rain patter, crisp snow rustle, and deep desert sandstorm rumbles.",
+		label = L("Weather Atmosphere"),
+		desc = L("Light rain patter, crisp snow rustle, and deep desert sandstorm rumbles."),
 		default = false,
 	},
 	{
 		id = "breathTexture",
-		label = "Breath Depletion",
-		desc = "Rising heartbeat pulse that quickens and intensifies as your breath meter runs low underwater.",
+		label = L("Breath Depletion"),
+		desc = L("Rising heartbeat pulse that quickens and intensifies as your breath meter runs low underwater."),
 		default = true,
 	},
 	{
 		id = "lowHealthWarning",
-		label = "Low Health Heartbeat",
-		desc = "Urgent repeating cardiac 'lub-dub' rhythm in sync with screen warnings below 20% health.",
+		label = L("Low Health Heartbeat"),
+		desc = L("Urgent repeating cardiac 'lub-dub' rhythm in sync with screen warnings below 20% health."),
 		default = true,
 	},
 	{
 		id = "taxiRide",
-		label = "Flight Path Cruise",
-		desc = "Gentle steady engine-like cruise vibration while riding flight master gryphons, bats, or wyverns.",
+		label = L("Flight Path Cruise"),
+		desc = L("Gentle steady engine-like cruise vibration while riding flight master gryphons, bats, or wyverns."),
 		default = false,
 	},
 	{
 		id = "stealthTexture",
-		label = "Stealth Breathing Wave",
-		desc = "Slow, rhythmic breathing expansion wave keeping you aware of your stealth state.",
+		label = L("Stealth Breathing Wave"),
+		desc = L("Slow, rhythmic breathing expansion wave keeping you aware of your stealth state."),
 		default = false,
 	},
 }
@@ -580,16 +581,16 @@ function updateStepView()
 
 	if tabIndicatorL1 then
 		if currentStep > 1 then
-			tabIndicatorL1:SetText("|cff38BDF8[L1 / LB]|r")
+			tabIndicatorL1:SetText(L("|cff38BDF8[L1 / LB]|r"))
 		else
-			tabIndicatorL1:SetText("|cff444444[L1 / LB]|r")
+			tabIndicatorL1:SetText(L("|cff444444[L1 / LB]|r"))
 		end
 	end
 	if tabIndicatorR1 then
 		if currentStep < TOTAL_STEPS then
-			tabIndicatorR1:SetText("|cff38BDF8[R1 / RB]|r")
+			tabIndicatorR1:SetText(L("|cff38BDF8[R1 / RB]|r"))
 		else
-			tabIndicatorR1:SetText("|cff444444[R1 / RB]|r")
+			tabIndicatorR1:SetText(L("|cff444444[R1 / RB]|r"))
 		end
 	end
 
@@ -608,10 +609,10 @@ function updateStepView()
 
 	if navLegend then
 		if currentStep == TOTAL_STEPS then
-			navLegend:SetText("|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[A]|r Toggle Slider / Select")
+			navLegend:SetText(L("|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[A]|r Toggle Slider / Select"))
 		else
 			navLegend:SetText(
-				"|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[D-Pad]|r Navigate  •  |cff38BDF8[A]|r Select"
+				L("|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[D-Pad]|r Navigate  •  |cff38BDF8[A]|r Select")
 			)
 		end
 	end
@@ -634,15 +635,21 @@ local function buildStep1(container)
 
 	local title = sf:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
 	title:SetPoint("TOPLEFT", sf, "TOPLEFT", 10, -10)
-	title:SetText("Step 1: Choose Your Controller Hardware")
+	title:SetText(L("Step 1: Choose Your Controller Hardware"))
 	title:SetTextColor(THEME.accent.r, THEME.accent.g, THEME.accent.b)
+
+	-- Language cycles in place so gamepad players never need a dropdown.
+	local btnLanguage = createButton(sf, "", 200, 22, false)
+	btnLanguage:SetPoint("TOPRIGHT", sf, "TOPRIGHT", -10, -8)
+	title:SetPoint("RIGHT", btnLanguage, "LEFT", -8, 0)
+	title:SetJustifyH("LEFT")
 
 	local desc = sf:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	desc:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -6)
 	desc:SetPoint("RIGHT", sf, "RIGHT", -10, 0)
 	desc:SetJustifyH("LEFT")
 	desc:SetText(
-		"Pulse tunes motor spin-up attack, coast-down release, and breakaway friction to match your physical hardware actuators."
+		L("Pulse tunes motor spin-up attack, coast-down release, and breakaway friction to match your physical hardware actuators.")
 	)
 	desc:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
@@ -749,14 +756,53 @@ local function buildStep1(container)
 
 	local testLabel = testCard:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	testLabel:SetPoint("LEFT", testCard, "LEFT", 16, 0)
-	testLabel:SetText("Verify controller connection and motor calibration:")
+	testLabel:SetText(L("Verify controller connection and motor calibration:"))
 	testLabel:SetTextColor(THEME.textPrimary.r, THEME.textPrimary.g, THEME.textPrimary.b)
 
-	local btnTest = createButton(testCard, "Test Rumble", 140, 26, true)
+	local btnTest = createButton(testCard, L("Test Rumble"), 140, 26, true)
 	btnTest:SetPoint("RIGHT", testCard, "RIGHT", -12, 0)
 	btnTest:SetScript("OnClick", function()
 		testMode("HEAVY", 0.85)
 	end)
+
+	local btnReload = createButton(testCard, L("Reload & continue"), 150, 26, true)
+	btnReload:SetPoint("RIGHT", btnTest, "LEFT", -10, 0)
+	btnReload:SetScript("OnClick", function()
+		Pulse.Database:Set("quickSetupResumePending", true)
+		ReloadUI()
+	end)
+	testLabel:SetPoint("RIGHT", btnReload, "LEFT", -10, 0)
+	testLabel:SetJustifyH("LEFT")
+
+	local function languageValue()
+		local value = Pulse.Database:Get("language")
+		return Pulse.Locale:IsSupported(value) and value or "auto"
+	end
+	local function refreshLanguage()
+		local options = Pulse.Locale:GetOptions()
+		local value = languageValue()
+		for _, opt in ipairs(options) do
+			if opt.value == value then
+				btnLanguage:SetText("|cff2dd4bf" .. L("Language:") .. "|r " .. opt.label)
+			end
+		end
+		local pending = Pulse.Locale:NeedsReload()
+		btnReload:SetShown(pending)
+		testLabel:SetText(pending and L("Reload UI to apply the language change.")
+			or L("Verify controller connection and motor calibration:"))
+	end
+	btnLanguage:SetScript("OnClick", function()
+		local options = Pulse.Locale:GetOptions()
+		local value, nextIndex = languageValue(), 1
+		for i, opt in ipairs(options) do
+			if opt.value == value then
+				nextIndex = i % #options + 1
+			end
+		end
+		Pulse.Database:Set("language", options[nextIndex].value)
+		refreshLanguage()
+	end)
+	refreshLanguage()
 
 	local navTargets = {}
 	for _, c in ipairs(devCards) do
@@ -773,6 +819,20 @@ local function buildStep1(container)
 			btnTest:Click()
 		end,
 	}
+	navTargets[#navTargets + 1] = {
+		widget = btnLanguage,
+		OnActivate = function()
+			btnLanguage:Click()
+		end,
+	}
+	navTargets[#navTargets + 1] = {
+		widget = btnReload,
+		OnActivate = function()
+			if btnReload:IsShown() then
+				btnReload:Click()
+			end
+		end,
+	}
 	sf.navTargets = navTargets
 
 	sf.OnShowStep = function()
@@ -780,6 +840,7 @@ local function buildStep1(container)
 		for _, c in ipairs(devCards) do
 			c.refresh()
 		end
+		refreshLanguage()
 	end
 
 	return sf
@@ -793,14 +854,14 @@ local function buildStep2(container)
 
 	local title = sf:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
 	title:SetPoint("TOPLEFT", sf, "TOPLEFT", 10, -8)
-	title:SetText("Step 2: Combat Haptics & Class Role")
+	title:SetText(L("Step 2: Combat Haptics & Class Role"))
 	title:SetTextColor(THEME.accent.r, THEME.accent.g, THEME.accent.b)
 
 	local desc = sf:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	desc:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -4)
 	desc:SetPoint("RIGHT", sf, "RIGHT", -10, 0)
 	desc:SetJustifyH("LEFT")
-	desc:SetText("Choose your planned class & role, and configure offensive and defensive combat feedback.")
+	desc:SetText(L("Choose your planned class & role, and configure offensive and defensive combat feedback."))
 	desc:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
 	-- 1. Class & Role Selector Card
@@ -809,7 +870,7 @@ local function buildStep2(container)
 
 	local roleTitle = roleCard:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 	roleTitle:SetPoint("TOPLEFT", roleCard, "TOPLEFT", 12, -8)
-	roleTitle:SetText("1. Planned Class & Combat Role")
+	roleTitle:SetText(L("1. Planned Class & Combat Role"))
 	roleTitle:SetTextColor(THEME.accent.r, THEME.accent.g, THEME.accent.b)
 
 	-- Assigned once the Offensive/Defensive cards below exist; class and role clicks change
@@ -932,18 +993,18 @@ local function buildStep2(container)
 
 	local lblOff = offCard:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 	lblOff:SetPoint("LEFT", cbOff, "RIGHT", 10, 0)
-	lblOff:SetText("Offensive Combat Haptics")
+	lblOff:SetText(L("Offensive Combat Haptics"))
 
 	local descOff = offCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
 	descOff:SetPoint("TOPLEFT", cbOff, "BOTTOMLEFT", 4, -6)
 	descOff:SetPoint("RIGHT", offCard, "RIGHT", -110, 0)
 	descOff:SetJustifyH("LEFT")
 	descOff:SetText(
-		"Physical strikes for weapon swings (main & off hand), auto-shot arrows, ability execution cadence, and completed and instant spellcasts."
+		L("Physical strikes for weapon swings (main & off hand), auto-shot arrows, ability execution cadence, and completed and instant spellcasts.")
 	)
 	descOff:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
-	local btnTestOff = createButton(offCard, "Test Strike", 90, 24, false)
+	local btnTestOff = createButton(offCard, L("Test Strike"), 90, 24, false)
 	btnTestOff:SetPoint("TOPRIGHT", offCard, "TOPRIGHT", -12, -12)
 	btnTestOff:SetScript("OnClick", function()
 		testMode("IMPACT", 0.75)
@@ -992,18 +1053,18 @@ local function buildStep2(container)
 
 	local lblDef = defCard:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 	lblDef:SetPoint("LEFT", cbDef, "RIGHT", 10, 0)
-	lblDef:SetText("Defensive Combat & Threat Feedback")
+	lblDef:SetText(L("Defensive Combat & Threat Feedback"))
 
 	local descDef = defCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
 	descDef:SetPoint("TOPLEFT", cbDef, "BOTTOMLEFT", 4, -6)
 	descDef:SetPoint("RIGHT", defCard, "RIGHT", -110, 0)
 	descDef:SetJustifyH("LEFT")
 	descDef:SetText(
-		"Sensory radar for survival: immediate physical warnings when taking damage, getting critically hit, deflecting attacks, being healed, receiving debuffs, threat changes, or losing control."
+		L("Sensory radar for survival: immediate physical warnings when taking damage, getting critically hit, deflecting attacks, being healed, receiving debuffs, threat changes, or losing control.")
 	)
 	descDef:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
-	local btnTestDef = createButton(defCard, "Test Impact", 90, 24, false)
+	local btnTestDef = createButton(defCard, L("Test Impact"), 90, 24, false)
 	btnTestDef:SetPoint("TOPRIGHT", defCard, "TOPRIGHT", -12, -12)
 	btnTestDef:SetScript("OnClick", function()
 		-- THUD is critLanded's own mode: the hit this card is about.
@@ -1119,14 +1180,14 @@ local function buildStep3(container)
 
 	local title = sf:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
 	title:SetPoint("TOPLEFT", sf, "TOPLEFT", 10, -10)
-	title:SetText("Step 3: World & Target Interactions")
+	title:SetText(L("Step 3: World & Target Interactions"))
 	title:SetTextColor(THEME.accent.r, THEME.accent.g, THEME.accent.b)
 
 	local desc = sf:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	desc:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -6)
 	desc:SetPoint("RIGHT", sf, "RIGHT", -10, 0)
 	desc:SetJustifyH("LEFT")
-	desc:SetText("Configure tactile rewards for exploring Azeroth and sensory spatial awareness for targeting.")
+	desc:SetText(L("Configure tactile rewards for exploring Azeroth and sensory spatial awareness for targeting."))
 	desc:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
 	-- 1. World & Discovery Card
@@ -1138,7 +1199,7 @@ local function buildStep3(container)
 
 	local lblWorld = worldCard:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 	lblWorld:SetPoint("LEFT", cbWorld, "RIGHT", 10, 0)
-	lblWorld:SetText("World & Discovery Haptics")
+	lblWorld:SetText(L("World & Discovery Haptics"))
 
 	local descWorld = worldCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
 	descWorld:SetPoint("TOPLEFT", cbWorld, "BOTTOMLEFT", 4, -8)
@@ -1146,14 +1207,11 @@ local function buildStep3(container)
 	descWorld:SetJustifyH("LEFT")
 	descWorld:SetSpacing(3)
 	descWorld:SetText(
-		"Tactile sensations for living in the world of Azeroth:\n"
-			.. "• |cffffffffLoot Drops & Currency:|r Feel items and gold collected into your bags.\n"
-			.. "• |cffffffffQuests & Turn-ins:|r Physical confirmation upon accepting and completing objectives.\n"
-			.. "• |cffffffffProgression:|r Rewarding celebration pulses for leveling up, achievements, and XP gains."
+		L("Tactile sensations for living in the world of Azeroth:\n• |cffffffffLoot Drops & Currency:|r Feel items and gold collected into your bags.\n• |cffffffffQuests & Turn-ins:|r Physical confirmation upon accepting and completing objectives.\n• |cffffffffProgression:|r Rewarding celebration pulses for leveling up, achievements, and XP gains.")
 	)
 	descWorld:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
-	local btnTestWorld = createButton(worldCard, "Test Reward", 90, 24, false)
+	local btnTestWorld = createButton(worldCard, L("Test Reward"), 90, 24, false)
 	btnTestWorld:SetPoint("TOPRIGHT", worldCard, "TOPRIGHT", -12, -12)
 	btnTestWorld:SetScript("OnClick", function()
 		testMode("CHIME", 0.75)
@@ -1193,7 +1251,7 @@ local function buildStep3(container)
 
 	local lblTarget = targetCard:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 	lblTarget:SetPoint("LEFT", cbTarget, "RIGHT", 10, 0)
-	lblTarget:SetText("Target & Crosshair Feedback")
+	lblTarget:SetText(L("Target & Crosshair Feedback"))
 
 	local descTarget = targetCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
 	descTarget:SetPoint("TOPLEFT", cbTarget, "BOTTOMLEFT", 4, -8)
@@ -1201,14 +1259,11 @@ local function buildStep3(container)
 	descTarget:SetJustifyH("LEFT")
 	descTarget:SetSpacing(3)
 	descTarget:SetText(
-		"Sensory spatial awareness when aiming and selecting units:\n"
-			.. "• |cffffffffTarget Lock & Switch:|r Distinct click when acquiring a new target or cycling units.\n"
-			.. "• |cffffffffFocus Target:|r Physical confirmation when assigning or swapping your focus target.\n"
-			.. "• |cffffffffSoft Interaction:|r Tactile blip when your controller reticle aligns with an interactable NPC."
+		L("Sensory spatial awareness when aiming and selecting units:\n• |cffffffffTarget Lock & Switch:|r Distinct click when acquiring a new target or cycling units.\n• |cffffffffFocus Target:|r Physical confirmation when assigning or swapping your focus target.\n• |cffffffffSoft Interaction:|r Tactile blip when your controller reticle aligns with an interactable NPC.")
 	)
 	descTarget:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
-	local btnTestTarget = createButton(targetCard, "Test Lock", 90, 24, false)
+	local btnTestTarget = createButton(targetCard, L("Test Lock"), 90, 24, false)
 	btnTestTarget:SetPoint("TOPRIGHT", targetCard, "TOPRIGHT", -12, -12)
 	btnTestTarget:SetScript("OnClick", function()
 		testMode("DEFLECT", 0.75)
@@ -1284,14 +1339,14 @@ local function buildStep4(container)
 
 	local title = sf:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
 	title:SetPoint("TOPLEFT", sf, "TOPLEFT", 10, -10)
-	title:SetText("Step 4: Interface & Social Alerts")
+	title:SetText(L("Step 4: Interface & Social Alerts"))
 	title:SetTextColor(THEME.accent.r, THEME.accent.g, THEME.accent.b)
 
 	local desc = sf:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	desc:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -6)
 	desc:SetPoint("RIGHT", sf, "RIGHT", -10, 0)
 	desc:SetJustifyH("LEFT")
-	desc:SetText("Choose whether gamepad menu navigation and group communication produce controller vibration.")
+	desc:SetText(L("Choose whether gamepad menu navigation and group communication produce controller vibration."))
 	desc:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
 	-- 1. Controller UI Card
@@ -1303,7 +1358,7 @@ local function buildStep4(container)
 
 	local lblUI = uiCard:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 	lblUI:SetPoint("LEFT", cbUI, "RIGHT", 10, 0)
-	lblUI:SetText("Controller UI & Window Feedback")
+	lblUI:SetText(L("Controller UI & Window Feedback"))
 
 	local descUI = uiCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
 	descUI:SetPoint("TOPLEFT", cbUI, "BOTTOMLEFT", 4, -8)
@@ -1311,14 +1366,11 @@ local function buildStep4(container)
 	descUI:SetJustifyH("LEFT")
 	descUI:SetSpacing(3)
 	descUI:SetText(
-		"Brings Blizzard's native gamepad interface alive under your thumbs:\n"
-			.. "• |cffffffffRadial & Menus:|r Soft tactile micro-taps as your stick moves across buttons and tabs.\n"
-			.. "• |cffffffffWindows:|r Physical confirmation when opening bags, merchant shops, banks, and mail.\n"
-			.. "• |cffffffffDialogs & Prompts:|r Tactile prompt when NPC interaction windows or quest frames appear."
+		L("Brings Blizzard's native gamepad interface alive under your thumbs:\n• |cffffffffRadial & Menus:|r Soft tactile micro-taps as your stick moves across buttons and tabs.\n• |cffffffffWindows:|r Physical confirmation when opening bags, merchant shops, banks, and mail.\n• |cffffffffDialogs & Prompts:|r Tactile prompt when NPC interaction windows or quest frames appear.")
 	)
 	descUI:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
-	local btnTestUI = createButton(uiCard, "Test UI", 90, 24, false)
+	local btnTestUI = createButton(uiCard, L("Test UI"), 90, 24, false)
 	btnTestUI:SetPoint("TOPRIGHT", uiCard, "TOPRIGHT", -12, -12)
 	btnTestUI:SetScript("OnClick", function()
 		testMode("TAP", 0.75)
@@ -1359,7 +1411,7 @@ local function buildStep4(container)
 
 	local lblSocial = socialCard:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 	lblSocial:SetPoint("LEFT", cbSocial, "RIGHT", 10, 0)
-	lblSocial:SetText("Social & Group Communication")
+	lblSocial:SetText(L("Social & Group Communication"))
 
 	local descSocial = socialCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
 	descSocial:SetPoint("TOPLEFT", cbSocial, "BOTTOMLEFT", 4, -8)
@@ -1367,14 +1419,11 @@ local function buildStep4(container)
 	descSocial:SetJustifyH("LEFT")
 	descSocial:SetSpacing(3)
 	descSocial:SetText(
-		"Never miss an important group alert, even while looking away:\n"
-			.. "• |cffffffffDirect Whispers:|r Distinct personal communication blip on incoming whispers.\n"
-			.. "• |cffffffffParty & Raid Invites:|r Dual-pulse notification when receiving group invitations.\n"
-			.. "• |cffffffffQueue Pops & Ready Checks:|r High-priority attention-grabbing pulse when instances are ready."
+		L("Never miss an important group alert, even while looking away:\n• |cffffffffDirect Whispers:|r Distinct personal communication blip on incoming whispers.\n• |cffffffffParty & Raid Invites:|r Dual-pulse notification when receiving group invitations.\n• |cffffffffQueue Pops & Ready Checks:|r High-priority attention-grabbing pulse when instances are ready.")
 	)
 	descSocial:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
-	local btnTestSocial = createButton(socialCard, "Test Alert", 90, 24, false)
+	local btnTestSocial = createButton(socialCard, L("Test Alert"), 90, 24, false)
 	btnTestSocial:SetPoint("TOPRIGHT", socialCard, "TOPRIGHT", -12, -12)
 	btnTestSocial:SetScript("OnClick", function()
 		-- DOUBLE_TAP is readyCheck's own mode.
@@ -1450,7 +1499,7 @@ local function buildStep5(container)
 
 	local title = sf:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
 	title:SetPoint("TOPLEFT", sf, "TOPLEFT", 10, -8)
-	title:SetText("Step 5: Immersion & Continuous Textures")
+	title:SetText(L("Step 5: Immersion & Continuous Textures"))
 	title:SetTextColor(THEME.accent.r, THEME.accent.g, THEME.accent.b)
 
 	local desc = sf:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -1458,7 +1507,7 @@ local function buildStep5(container)
 	desc:SetPoint("RIGHT", sf, "RIGHT", -10, 0)
 	desc:SetJustifyH("LEFT")
 	desc:SetText(
-		"New setups enable casting, crafting, low-health and breath effects. Other effects start off; your saved choices are kept."
+		L("New setups enable casting, crafting, low-health and breath effects. Other effects start off; your saved choices are kept.")
 	)
 	desc:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
@@ -1471,11 +1520,11 @@ local function buildStep5(container)
 
 	local lblMaster = masterCard:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 	lblMaster:SetPoint("LEFT", cbMaster, "RIGHT", 8, 0)
-	lblMaster:SetText("Enable Continuous Immersion Haptics (Master)")
+	lblMaster:SetText(L("Enable Continuous Immersion Haptics (Master)"))
 
 	local subMaster = masterCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
 	subMaster:SetPoint("LEFT", lblMaster, "RIGHT", 12, 0)
-	subMaster:SetText("(Toggles all continuous sensations)")
+	subMaster:SetText(L("(Toggles all continuous sensations)"))
 	subMaster:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
 	local itemCards = {}
@@ -1595,14 +1644,14 @@ local function buildStep6(container)
 
 	local title = sf:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
 	title:SetPoint("TOPLEFT", sf, "TOPLEFT", 10, -10)
-	title:SetText("Step 6: Master Strength & Completion")
+	title:SetText(L("Step 6: Master Strength & Completion"))
 	title:SetTextColor(THEME.accent.r, THEME.accent.g, THEME.accent.b)
 
 	local desc = sf:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	desc:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -6)
 	desc:SetPoint("RIGHT", sf, "RIGHT", -10, 0)
 	desc:SetJustifyH("LEFT")
-	desc:SetText("Adjust your global master vibration strength. Individual cues can always be fine-tuned in settings.")
+	desc:SetText(L("Adjust your global master vibration strength. Individual cues can always be fine-tuned in settings."))
 	desc:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
 	-- Master Intensity Slider Card
@@ -1611,7 +1660,7 @@ local function buildStep6(container)
 
 	local sliderLabel = sliderCard:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 	sliderLabel:SetPoint("TOPLEFT", sliderCard, "TOPLEFT", 16, -14)
-	sliderLabel:SetText("Master Vibration Strength")
+	sliderLabel:SetText(L("Master Vibration Strength"))
 
 	local valLabel = sliderCard:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 	valLabel:SetPoint("TOPRIGHT", sliderCard, "TOPRIGHT", -16, -14)
@@ -1635,7 +1684,7 @@ local function buildStep6(container)
 		slider.Text:SetText("")
 	end
 
-	local btnFeel = createButton(sliderCard, "Feel Strength", 130, 26, false)
+	local btnFeel = createButton(sliderCard, L("Feel Strength"), 130, 26, false)
 	btnFeel:SetPoint("LEFT", slider, "RIGHT", 16, 0)
 	btnFeel:SetScript("OnClick", function()
 		-- Scale 1.0: the slider already wrote masterIntensity, which the engine applies.
@@ -1644,13 +1693,13 @@ local function buildStep6(container)
 
 	local sliderHint = sliderCard:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 	sliderHint:SetPoint("TOPLEFT", slider, "BOTTOMLEFT", 0, -12)
-	sliderHint:SetText("|cff38BDF8[A] Adjust Value|r  •  |cffffffff[→] Jump to Feel Button|r")
+	sliderHint:SetText(L("|cff38BDF8[A] Adjust Value|r  •  |cffffffff[→] Jump to Feel Button|r"))
 
 	local isSliderAdjusting = false
 	local function updateSliderHint()
 		if isSliderAdjusting then
 			sliderHint:SetText(
-				("|cff00ff00[Adjusting %d%%]|r Use |cffffffff[← / →]|r to Change, |cff38BDF8[A]|r Confirm & Feel"):format(
+				(L("|cff00ff00[Adjusting %d%%]|r Use |cffffffff[← / →]|r to Change, |cff38BDF8[A]|r Confirm & Feel")):format(
 					slider:GetValue() or 70
 				)
 			)
@@ -1662,7 +1711,7 @@ local function buildStep6(container)
 				quickFocusBox.accent:SetColorTexture(1.0, 0.85, 0.2, 1.0)
 			end
 		else
-			sliderHint:SetText("|cff38BDF8[A] Adjust Value|r  •  |cffffffff[→] Jump to Feel Button|r")
+			sliderHint:SetText(L("|cff38BDF8[A] Adjust Value|r  •  |cffffffff[→] Jump to Feel Button|r"))
 			if quickFocusBox and quickFocusBox.bTop then
 				quickFocusBox.bTop:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
 				quickFocusBox.bBottom:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
@@ -1691,7 +1740,7 @@ local function buildStep6(container)
 
 	local summaryTitle = summaryCard:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 	summaryTitle:SetPoint("TOPLEFT", summaryCard, "TOPLEFT", 16, -16)
-	summaryTitle:SetText("Setup Summary")
+	summaryTitle:SetText(L("Setup Summary"))
 	summaryTitle:SetTextColor(THEME.accent.r, THEME.accent.g, THEME.accent.b)
 
 	local summaryText = summaryCard:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -1703,7 +1752,7 @@ local function buildStep6(container)
 
 	local function refreshSummary()
 		local presetID = Pulse.Database:GetAppliedDevicePreset() or "default"
-		local devName = "Generic / Unknown"
+		local devName = L("Generic / Unknown")
 		for _, opt in ipairs(CONTROLLER_OPTIONS) do
 			if opt.id == presetID then
 				devName = opt.label
@@ -1719,7 +1768,7 @@ local function buildStep6(container)
 			end
 		end
 
-		local roleName = "no role chosen"
+		local roleName = L("no role chosen")
 		for _, r in ipairs(ROLE_LIST) do
 			if r.id == selectedRole then
 				roleName = r.label
@@ -1738,11 +1787,7 @@ local function buildStep6(container)
 
 		summaryText:SetText(
 			(
-				"• Selected Controller Hardware: |cffffffff%s|r\n"
-				.. "• Character Class & Planned Role: |cffffffff%s (%s)|r\n"
-				.. "• Active Continuous Textures: |cffffffff%d active|r\n"
-				.. "• Master Haptic Strength: |cffffffff%d%%|r\n\n"
-				.. "All preferences are saved directly to your active profile.\nYou can re-run this setup anytime by typing |cff4cb8ff/pulse setup|r."
+				L("• Selected Controller Hardware: |cffffffff%s|r\n• Character Class & Planned Role: |cffffffff%s (%s)|r\n• Active Continuous Textures: |cffffffff%d active|r\n• Master Haptic Strength: |cffffffff%d%%|r\n\nAll preferences are saved directly to your active profile.\nYou can re-run this setup anytime by typing |cff4cb8ff/pulse setup|r.")
 			):format(devName, className, roleName, contCount, curInt)
 		)
 	end
@@ -1836,7 +1881,7 @@ local function buildWindow()
 		titleText = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 		titleText:SetPoint("TOP", f, "TOP", 0, -5)
 	end
-	titleText:SetText("PULSE QUICK SETUP")
+	titleText:SetText(L("PULSE QUICK SETUP"))
 	if titleText.SetTextColor then
 		titleText:SetTextColor(THEME.accent.r, THEME.accent.g, THEME.accent.b)
 	end
@@ -1898,7 +1943,7 @@ local function buildWindow()
 	tabIndicatorL1 = l1Btn:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 	tabIndicatorL1:SetAllPoints(l1Btn)
 	tabIndicatorL1:SetJustifyH("LEFT")
-	tabIndicatorL1:SetText("|cff38BDF8[L1 / LB]|r")
+	tabIndicatorL1:SetText(L("|cff38BDF8[L1 / LB]|r"))
 	l1Btn:SetScript("OnClick", function()
 		if currentStep > 1 then
 			currentStep = currentStep - 1
@@ -1915,7 +1960,7 @@ local function buildWindow()
 	tabIndicatorR1 = r1Btn:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 	tabIndicatorR1:SetAllPoints(r1Btn)
 	tabIndicatorR1:SetJustifyH("RIGHT")
-	tabIndicatorR1:SetText("|cff38BDF8[R1 / RB]|r")
+	tabIndicatorR1:SetText(L("|cff38BDF8[R1 / RB]|r"))
 	r1Btn:SetScript("OnClick", function()
 		if currentStep < TOTAL_STEPS then
 			currentStep = currentStep + 1
@@ -1927,12 +1972,12 @@ local function buildWindow()
 	end)
 
 	local stepLabels = {
-		"1. Controller",
-		"2. Combat",
-		"3. World",
-		"4. Interface",
-		"5. Immersion",
-		"6. Finish",
+		L("1. Controller"),
+		L("2. Combat"),
+		L("3. World"),
+		L("4. Interface"),
+		L("5. Immersion"),
+		L("6. Finish"),
 	}
 	local tabW = 80
 	local startX = 70
@@ -1978,7 +2023,7 @@ local function buildWindow()
 	bottomRule:SetPoint("TOPRIGHT", bottomBar, "TOPRIGHT", 0, 0)
 	bottomRule:SetColorTexture(THEME.border.r, THEME.border.g, THEME.border.b, 0.4)
 
-	btnBack = createButton(bottomBar, "< Back", 100, 26, false)
+	btnBack = createButton(bottomBar, L("< Back"), 100, 26, false)
 	btnBack:SetPoint("LEFT", bottomBar, "LEFT", 0, 0)
 	btnBack:SetScript("OnClick", function()
 		if currentStep > 1 then
@@ -1993,9 +2038,9 @@ local function buildWindow()
 	navLegend = bottomBar:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 	navLegend:SetPoint("LEFT", bottomBar, "LEFT", 112, 0)
 	navLegend:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
-	navLegend:SetText("|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[D-Pad]|r Navigate  •  |cff38BDF8[A]|r Select")
+	navLegend:SetText(L("|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[D-Pad]|r Navigate  •  |cff38BDF8[A]|r Select"))
 
-	btnNext = createButton(bottomBar, "Next >", 110, 26, true)
+	btnNext = createButton(bottomBar, L("Next >"), 110, 26, true)
 	btnNext:SetPoint("RIGHT", bottomBar, "RIGHT", 0, 0)
 	btnNext:SetScript("OnClick", function()
 		if currentStep < TOTAL_STEPS then
@@ -2007,17 +2052,17 @@ local function buildWindow()
 		end
 	end)
 
-	btnFinish = createButton(bottomBar, "Save & Start Playing", 160, 26, true)
+	btnFinish = createButton(bottomBar, L("Save & Start Playing"), 160, 26, true)
 	btnFinish:SetPoint("RIGHT", bottomBar, "RIGHT", 0, 0)
 	btnFinish:SetScript("OnClick", function()
 		Pulse.Database:SetQuickSetupCompleted(true)
 		-- SURGE is levelUp's own mode.
 		testMode("SURGE", 0.75, true)
 		QuickSetup.Close()
-		print("|cff4cb8ffPulse:|r Quick setup complete! Type |cffffffff/pulse|r anytime to fine-tune settings.")
+		print(L("|cff4cb8ffPulse:|r Quick setup complete! Type |cffffffff/pulse|r anytime to fine-tune settings."))
 	end)
 
-	btnAdvanced = createButton(bottomBar, "Advanced Settings", 140, 26, false)
+	btnAdvanced = createButton(bottomBar, L("Advanced Settings"), 140, 26, false)
 	btnAdvanced:SetPoint("RIGHT", btnFinish, "LEFT", -10, 0)
 	btnAdvanced:SetScript("OnClick", function()
 		Pulse.Database:SetQuickSetupCompleted(true)
@@ -2091,7 +2136,7 @@ end
 
 function QuickSetup.Open(initialStep)
 	if InCombatLockdown and InCombatLockdown() then
-		print("|cffff5555Pulse:|r Cannot open Quick Setup during combat.")
+		print(L("|cffff5555Pulse:|r Cannot open Quick Setup during combat."))
 		return
 	end
 
@@ -2121,4 +2166,29 @@ function QuickSetup.Toggle()
 	else
 		QuickSetup.Open()
 	end
+end
+
+-- A language change reloads the UI; reopen the wizard on its language step afterwards.
+function QuickSetup.ResumeAfterReload()
+	if not Pulse.Database:Get("quickSetupResumePending") then
+		return false
+	end
+	Pulse.Database:Set("quickSetupResumePending", false)
+	QuickSetup.Open(1)
+	return true
+end
+
+local resumeWatcher = CreateFrame("Frame")
+resumeWatcher:RegisterEvent("PLAYER_ENTERING_WORLD")
+resumeWatcher:SetScript("OnEvent", function(self)
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	C_Timer.After(1, QuickSetup.ResumeAfterReload)
+end)
+
+-- Keep authored IDs and saved values unchanged; translate display metadata at login.
+if Pulse.Locale then
+	Pulse.Locale:RegisterTable(CONTROLLER_OPTIONS)
+	Pulse.Locale:RegisterTable(CLASS_LIST)
+	Pulse.Locale:RegisterTable(ROLE_LIST)
+	Pulse.Locale:RegisterTable(CONTINUOUS_OPTIONS)
 end

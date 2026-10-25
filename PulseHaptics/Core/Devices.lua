@@ -566,3 +566,9 @@ function Pulse.DetectDevice()
 
 	return deviceID, nil, name
 end
+
+if Pulse.Locale then
+	Pulse.Locale:RegisterTable(Pulse.CHANNEL_LABELS, true)
+	Pulse.Locale:RegisterTable(Pulse.CHANNEL_TUNABLES)
+	Pulse.Locale:RegisterTable(Pulse.Devices)
+end
