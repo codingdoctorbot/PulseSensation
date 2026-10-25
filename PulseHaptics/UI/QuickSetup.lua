@@ -1551,51 +1551,43 @@ local function buildStep5(container)
 	masterCard:SetPoint("TOPLEFT", sf, "TOPLEFT", 6, -64) -- room for a two-line translated intro
 
 	local cbMaster = createCheckbox(masterCard, 20)
-	cbMaster:SetPoint("LEFT", masterCard, "LEFT", 10, 0)
+	cbMaster:SetPoint("TOPLEFT", masterCard, "TOPLEFT", 10, -7)
 
 	local lblMaster = masterCard:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-	lblMaster:SetPoint("LEFT", cbMaster, "RIGHT", 8, 0)
+	lblMaster:SetPoint("TOPLEFT", masterCard, "TOPLEFT", 38, -9)
 	lblMaster:SetText(L("Enable Continuous Immersion Haptics (Master)"))
 
 	local subMaster = masterCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-	subMaster:SetPoint("LEFT", lblMaster, "RIGHT", 12, 0)
+	subMaster:SetPoint("TOPLEFT", lblMaster, "BOTTOMLEFT", 0, -2)
+	subMaster:SetWidth(634 - 38 - 10)
+	subMaster:SetJustifyH("LEFT")
 	subMaster:SetText(L("(Toggles all continuous sensations)"))
 	subMaster:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
-	-- 634 card - 10 inset - 20 checkbox - 8 gap - label - 12 gap - 10 inset
-	fitLine(subMaster, math.max(60, 572 - math.ceil(lblMaster:GetStringWidth() or 0)))
+	-- The note wraps under the label in full; the card and the grid below follow its height.
+	local masterH = math.max(34, math.ceil(18 + (lblMaster:GetStringHeight() or 14) + (subMaster:GetStringHeight() or 12)))
+	masterCard:SetHeight(masterH)
 
 	local itemCards = {}
-	local startY = -104
+	local startY = -64 - masterH - 6
 	local cardW = 310
 	local cardH = 51 -- name plus two description lines; longer text moves to the tooltip
 
-	for idx, opt in ipairs(CONTINUOUS_OPTIONS) do
-		local col = (idx - 1) % 2
-		local row = math.floor((idx - 1) / 2)
-		local x = col * (cardW + 14) + 6
-		local y = startY - row * (cardH + 4)
-
+	for _, opt in ipairs(CONTINUOUS_OPTIONS) do
 		local card = createCard(sf, cardW, cardH)
-		card:SetPoint("TOPLEFT", sf, "TOPLEFT", x, y)
 
 		local cb = createCheckbox(card, 20)
-		cb:SetPoint("LEFT", card, "LEFT", 8, 0)
+		cb:SetPoint("TOPLEFT", card, "TOPLEFT", 8, -5) -- top-aligned: rows grow with their text
 
 		local lbl = card:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-		lbl:SetPoint("TOPLEFT", cb, "TOPRIGHT", 8, -2)
-		lbl:SetPoint("RIGHT", card, "RIGHT", -66, 0)
+		lbl:SetPoint("TOPLEFT", card, "TOPLEFT", 36, -7)
 		lbl:SetJustifyH("LEFT")
 		lbl:SetText(opt.label)
 
 		local sub = card:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
 		sub:SetPoint("TOPLEFT", lbl, "BOTTOMLEFT", 0, -2)
-		sub:SetPoint("RIGHT", card, "RIGHT", -66, 0)
 		sub:SetJustifyH("LEFT")
 		sub:SetText(opt.desc)
 		sub:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
-		if sub.SetMaxLines then
-			sub:SetMaxLines(2)
-		end
 		card:EnableMouse(true)
 		card:SetScript("OnEnter", function(self)
 			GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
@@ -1608,10 +1600,13 @@ local function buildStep5(container)
 		end)
 
 		local btnPreview = createButton(card, L("Feel"), 56, 20, false)
-		btnPreview:SetPoint("RIGHT", card, "RIGHT", -6, 0)
-		-- Text ends at the button, whatever width its translated label needs.
-		lbl:SetPoint("RIGHT", btnPreview, "LEFT", -6, 0)
-		sub:SetPoint("RIGHT", btnPreview, "LEFT", -6, 0)
+		btnPreview:SetPoint("TOPRIGHT", card, "TOPRIGHT", -6, -5)
+		-- Text ends at the button, whatever width its translated label needs. An explicit
+		-- width makes the wrapped height measurable before the card is laid out.
+		local textW = cardW - 36 - btnPreview:GetWidth() - 12
+		lbl:SetWidth(textW)
+		sub:SetWidth(textW)
+		card.lbl, card.sub = lbl, sub
 		btnPreview:SetScript("OnClick", function()
 			if Pulse.TestCue then
 				reportTest(Pulse:TestCue(opt.id))
@@ -1635,6 +1630,24 @@ local function buildStep5(container)
 		itemCards[#itemCards + 1] = card
 		card.refresh()
 	end
+
+	-- Each row is as tall as its wordiest card, so translated descriptions show in full;
+	-- buildWindow grows the window when the rows need more room than it has.
+	local y = startY
+	for first = 1, #itemCards, 2 do
+		local rowH = cardH
+		for i = first, math.min(first + 1, #itemCards) do
+			local c = itemCards[i]
+			rowH = math.max(rowH, math.ceil(14 + (c.lbl:GetStringHeight() or 12) + (c.sub:GetStringHeight() or 24)))
+		end
+		for i = first, math.min(first + 1, #itemCards) do
+			local c = itemCards[i]
+			c:SetHeight(rowH)
+			c:SetPoint("TOPLEFT", sf, "TOPLEFT", (i - first) * (cardW + 14) + 6, y)
+		end
+		y = y - rowH - 4
+	end
+	sf.requiredHeight = -y + 2
 
 	cbMaster:SetScript("OnClick", function(self)
 		local val = self:GetChecked() and true or false
@@ -2063,6 +2076,16 @@ local function buildWindow()
 	stepFrames[4] = buildStep4(container)
 	stepFrames[5] = buildStep5(container)
 	stepFrames[6] = buildStep6(container)
+
+	-- Grow the window (never past the screen) when a step's translated text needs more room.
+	local overflow = 0
+	for _, step in ipairs(stepFrames) do
+		overflow = math.max(overflow, (step.requiredHeight or 0) - (550 - 58 - 48))
+	end
+	if overflow > 0 then
+		local screenH = UIParent and UIParent:GetHeight() or 768
+		f:SetHeight(math.min(550 + overflow, math.max(550, screenH - 40)))
+	end
 
 	-- Bottom Action Bar
 	local bottomBar = CreateFrame("Frame", nil, f)
