@@ -913,7 +913,7 @@ function Rows.CreateCueRow(parent, spec)
 		end
 		if dropdown then
 			dropdown:SetShown(detail)
-			setText(spec.mode.get())
+			setText(Pulse.ModeName(spec.mode.get()))
 		end
 		if play then
 			play:SetShown(spec.testShown())

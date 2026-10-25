@@ -379,6 +379,53 @@ Pulse.ModeOrder = {
 	"DRIFT",
 }
 
+-- Display names for the mode IDs. Saved settings and /pulse test keep the IDs.
+local L = Pulse.L or function(text)
+	return text
+end
+Pulse.ModeNames = {
+	TAP = L("Tap"),
+	DOUBLE_TAP = L("Double Tap"),
+	TRIPLE_TAP = L("Triple Tap"),
+	LONG = L("Long"),
+	HEAVY = L("Heavy"),
+	STUTTER = L("Stutter"),
+	RISING = L("Rising"),
+	FALLING = L("Falling"),
+	THUD = L("Thud"),
+	THUMP = L("Thump"),
+	DEFLECT = L("Deflect"),
+	TICK = L("Tick"),
+	CHIME = L("Chime"),
+	KNOCK = L("Knock"),
+	SURGE = L("Surge"),
+	PULSE_BEAT = L("Pulse Beat"),
+	BURST = L("Burst"),
+	IMPACT = L("Impact"),
+	CRACK = L("Crack"),
+	CLICK = L("Click"),
+	BRAKE = L("Brake"),
+	BLIP = L("Blip"),
+	WOBBLE = L("Wobble"),
+	SNAP = L("Snap"),
+	DRAW = L("Draw"),
+	MICRO_TAP = L("Micro Tap"),
+	STACCATO = L("Staccato"),
+	RECOIL = L("Recoil"),
+	SHUTTLE = L("Shuttle"),
+	TENSION = L("Tension"),
+	PATTER = L("Patter"),
+	HUM = L("Hum"),
+	THRUM = L("Thrum"),
+	WAVE = L("Wave"),
+	DRIFT = L("Drift"),
+}
+
+function Pulse.ModeName(modeID)
+	local name = Pulse.ModeNames[modeID]
+	return name and L(name) or tostring(modeID or "")
+end
+
 -- Derived per-mode role usage and multiplier ceilings, computed once from the authored
 -- steps above rather than hand-maintained — self-updating when a mode's shape changes, and
 -- impossible to typo out of sync with it. Continuous modes are excluded: none is read by a

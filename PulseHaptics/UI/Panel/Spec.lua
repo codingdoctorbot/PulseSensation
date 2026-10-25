@@ -176,8 +176,8 @@ local function modeOptions()
 		local mode = Pulse.Modes[modeID]
 		options[#options + 1] = {
 			value = modeID,
-			label = modeID,
-			tooltip = mode and mode.label,
+			label = Pulse.ModeName(modeID),
+			tooltip = (mode and mode.label and (mode.label .. "\n") or "") .. "|cff888888/pulse test " .. modeID .. "|r",
 			category = MODE_CATEGORIES[modeID] or L("Other"),
 		}
 	end
