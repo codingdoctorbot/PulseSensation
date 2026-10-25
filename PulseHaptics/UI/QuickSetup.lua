@@ -1609,6 +1609,9 @@ local function buildStep5(container)
 
 		local btnPreview = createButton(card, L("Feel"), 56, 20, false)
 		btnPreview:SetPoint("RIGHT", card, "RIGHT", -6, 0)
+		-- Text ends at the button, whatever width its translated label needs.
+		lbl:SetPoint("RIGHT", btnPreview, "LEFT", -6, 0)
+		sub:SetPoint("RIGHT", btnPreview, "LEFT", -6, 0)
 		btnPreview:SetScript("OnClick", function()
 			if Pulse.TestCue then
 				reportTest(Pulse:TestCue(opt.id))
