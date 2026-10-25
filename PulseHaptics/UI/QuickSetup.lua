@@ -21,6 +21,7 @@ Pulse.UI.QuickSetup = QuickSetup
 local FRAME_NAME = "PulseQuickSetupFrame"
 local frame
 local currentStep = 1
+local fitButton
 
 local THEME = {
 	bg = { r = 0.035, g = 0.040, b = 0.055, a = 1.0 },
@@ -277,6 +278,29 @@ local function createCard(parent, width, height)
 	return card
 end
 
+-- Translations run longer than English: buttons grow to their text instead of spilling out.
+fitButton = function(btn)
+	local label = btn.GetFontString and btn:GetFontString()
+	if label and label.GetStringWidth then
+		btn:SetWidth(math.max(btn.minWidth or 0, math.ceil(label:GetStringWidth() or 0) + 24))
+	end
+end
+
+-- Shrinks a one-line string slightly, then truncates, so it never runs under its neighbours.
+local function fitLine(fs, available)
+	fs:SetWidth(available)
+	if fs.SetWordWrap then
+		fs:SetWordWrap(false)
+	end
+	if fs.SetTextScale then
+		fs:SetTextScale(1)
+		local natural = fs.GetUnboundedStringWidth and fs:GetUnboundedStringWidth() or fs:GetStringWidth()
+		if natural and natural > available then
+			fs:SetTextScale(math.max(0.85, available / natural))
+		end
+	end
+end
+
 local function createButton(parent, text, width, height, isAccent)
 	local btn = CreateFrame("Button", nil, parent, "UIPanelButtonTemplate")
 	btn:SetSize(width or 120, height or 26)
@@ -285,6 +309,8 @@ local function createButton(parent, text, width, height, isAccent)
 	if Pulse.UI.Panel and Pulse.UI.Panel.Theme and Pulse.UI.Panel.Theme.StyleActionButton then
 		Pulse.UI.Panel.Theme.StyleActionButton(btn, isAccent)
 	end
+	btn.minWidth = width or 120
+	fitButton(btn)
 
 	return btn
 end
@@ -615,6 +641,14 @@ function updateStepView()
 				L("|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[D-Pad]|r Navigate  •  |cff38BDF8[A]|r Select")
 			)
 		end
+		-- The legend gets whatever the visible buttons leave free.
+		local used = 112 + 10
+		for _, btn in ipairs({ btnNext, btnFinish, btnAdvanced }) do
+			if btn and btn:IsShown() then
+				used = used + btn:GetWidth() + 10
+			end
+		end
+		fitLine(navLegend, math.max(80, 640 - used)) -- bottom bar: 676 window - 2 × 18 inset
 	end
 
 	local targets = stepFrames[currentStep] and stepFrames[currentStep].navTargets or {}
@@ -784,6 +818,7 @@ local function buildStep1(container)
 		for _, opt in ipairs(options) do
 			if opt.value == value then
 				btnLanguage:SetText("|cff2dd4bf" .. L("Language:") .. "|r " .. opt.label)
+				fitButton(btnLanguage)
 			end
 		end
 		local pending = Pulse.Locale:NeedsReload()
@@ -1526,6 +1561,8 @@ local function buildStep5(container)
 	subMaster:SetPoint("LEFT", lblMaster, "RIGHT", 12, 0)
 	subMaster:SetText(L("(Toggles all continuous sensations)"))
 	subMaster:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
+	-- 634 card - 10 inset - 20 checkbox - 8 gap - label - 12 gap - 10 inset
+	fitLine(subMaster, math.max(60, 572 - math.ceil(lblMaster:GetStringWidth() or 0)))
 
 	local itemCards = {}
 	local startY = -104
@@ -1706,13 +1743,13 @@ local function buildStep6(container)
 
 	local sliderHint = sliderCard:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 	sliderHint:SetPoint("TOPLEFT", slider, "BOTTOMLEFT", 0, -12)
-	sliderHint:SetText(L("|cff38BDF8[A] Adjust Value|r  •  |cffffffff[→] Jump to Feel Button|r"))
+	sliderHint:SetText(L("|cff38BDF8[A] Adjust Value|r  •  |cffffffff[>] Jump to Feel Button|r"))
 
 	local isSliderAdjusting = false
 	local function updateSliderHint()
 		if isSliderAdjusting then
 			sliderHint:SetText(
-				(L("|cff00ff00[Adjusting %d%%]|r Use |cffffffff[← / →]|r to Change, |cff38BDF8[A]|r Confirm & Feel")):format(
+				(L("|cff00ff00[Adjusting %d%%]|r Use |cffffffff[< / >]|r to Change, |cff38BDF8[A]|r Confirm & Feel")):format(
 					slider:GetValue() or 70
 				)
 			)
@@ -1724,7 +1761,7 @@ local function buildStep6(container)
 				quickFocusBox.accent:SetColorTexture(1.0, 0.85, 0.2, 1.0)
 			end
 		else
-			sliderHint:SetText(L("|cff38BDF8[A] Adjust Value|r  •  |cffffffff[→] Jump to Feel Button|r"))
+			sliderHint:SetText(L("|cff38BDF8[A] Adjust Value|r  •  |cffffffff[>] Jump to Feel Button|r"))
 			if quickFocusBox and quickFocusBox.bTop then
 				quickFocusBox.bTop:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
 				quickFocusBox.bBottom:SetColorTexture(THEME.accent.r, THEME.accent.g, THEME.accent.b, 1.0)
