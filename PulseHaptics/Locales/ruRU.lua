@@ -409,6 +409,7 @@ Pulse.Locale:Register("ruRU", {
  ["Experimental: watches whichever spells the Cooldown Manager's Essential category shows, not a hardcoded list. The exact live \"just became ready\" signal was never independently confirmed before this shipped — built on the same C_Spell.GetSpellCooldown transition-tracking this file already uses for the GCD heartbeat."] = "Экспериментально: отслеживает любые заклинания, отображаемые в категории «Основные» менеджера восстановления, а не фиксированный список. Точный сигнал готовности способности в игре («только что восстановилась») не был независимо подтвержден до релиза — построено на том же отслеживании переходов C_Spell.GetSpellCooldown, которое уже используется в этом файле для пульсации GCD.",
  ["Fast attack time constant used specifically for discrete impacts, clicks, and strikes. Gives snappy transients without making sustained immersion textures harsh."] = "Быстрая постоянная времени нарастания, используемая специально для дискретных ударов, щелчков и атак. Обеспечивает резкие переходные процессы, не делая продолжительные текстуры погружения грубыми.",
  ["Feared or charmed"] = "Страх или подчинение",
+ ["Feel"] = "Ощутить",
  ["Feel "] = "Ощутить ",
  ["Feel %s"] = "Ощутить %s",
  ["Feel Strength"] = "Сила ощущения",

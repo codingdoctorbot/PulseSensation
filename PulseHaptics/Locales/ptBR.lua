@@ -409,6 +409,7 @@ Pulse.Locale:Register("ptBR", {
  ["Experimental: watches whichever spells the Cooldown Manager's Essential category shows, not a hardcoded list. The exact live \"just became ready\" signal was never independently confirmed before this shipped — built on the same C_Spell.GetSpellCooldown transition-tracking this file already uses for the GCD heartbeat."] = "Experimental: monitora quaisquer feitiços exibidos na categoria Essencial do Gerenciador de Tempos de Recarga, e não uma lista fixa no código. O sinal exato em tempo real de \"acabou de ficar pronto\" nunca foi confirmado de forma independente antes deste lançamento — construído sobre o mesmo rastreamento de transição de C_Spell.GetSpellCooldown que este arquivo já utiliza para a pulsação do GCD.",
  ["Fast attack time constant used specifically for discrete impacts, clicks, and strikes. Gives snappy transients without making sustained immersion textures harsh."] = "Constante de tempo de ataque rápido usada especificamente para impactos discretos, cliques e golpes. Proporciona transientes rápidos sem tornar ríspidas as texturas contínuas de imersão.",
  ["Feared or charmed"] = "Aterrorizado ou encantado",
+ ["Feel"] = "Sentir",
  ["Feel "] = "Sentir ",
  ["Feel %s"] = "Sentir %s",
  ["Feel Strength"] = "Intensidade da sensação",

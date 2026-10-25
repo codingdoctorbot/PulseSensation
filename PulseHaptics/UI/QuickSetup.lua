@@ -1513,7 +1513,7 @@ local function buildStep5(container)
 
 	-- Master continuous banner
 	local masterCard = createCard(sf, 634, 34)
-	masterCard:SetPoint("TOPLEFT", sf, "TOPLEFT", 6, -50)
+	masterCard:SetPoint("TOPLEFT", sf, "TOPLEFT", 6, -64) -- room for a two-line translated intro
 
 	local cbMaster = createCheckbox(masterCard, 20)
 	cbMaster:SetPoint("LEFT", masterCard, "LEFT", 10, 0)
@@ -1528,15 +1528,15 @@ local function buildStep5(container)
 	subMaster:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
 
 	local itemCards = {}
-	local startY = -90
+	local startY = -104
 	local cardW = 310
-	local cardH = 46
+	local cardH = 51 -- name plus two description lines; longer text moves to the tooltip
 
 	for idx, opt in ipairs(CONTINUOUS_OPTIONS) do
 		local col = (idx - 1) % 2
 		local row = math.floor((idx - 1) / 2)
 		local x = col * (cardW + 14) + 6
-		local y = startY - row * (cardH + 5)
+		local y = startY - row * (cardH + 4)
 
 		local card = createCard(sf, cardW, cardH)
 		card:SetPoint("TOPLEFT", sf, "TOPLEFT", x, y)
@@ -1546,18 +1546,31 @@ local function buildStep5(container)
 
 		local lbl = card:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 		lbl:SetPoint("TOPLEFT", cb, "TOPRIGHT", 8, -2)
-		lbl:SetPoint("RIGHT", card, "RIGHT", -60, 0)
+		lbl:SetPoint("RIGHT", card, "RIGHT", -66, 0)
 		lbl:SetJustifyH("LEFT")
 		lbl:SetText(opt.label)
 
 		local sub = card:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
 		sub:SetPoint("TOPLEFT", lbl, "BOTTOMLEFT", 0, -2)
-		sub:SetPoint("RIGHT", card, "RIGHT", -60, 0)
+		sub:SetPoint("RIGHT", card, "RIGHT", -66, 0)
 		sub:SetJustifyH("LEFT")
 		sub:SetText(opt.desc)
 		sub:SetTextColor(THEME.textMuted.r, THEME.textMuted.g, THEME.textMuted.b)
+		if sub.SetMaxLines then
+			sub:SetMaxLines(2)
+		end
+		card:EnableMouse(true)
+		card:SetScript("OnEnter", function(self)
+			GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+			GameTooltip:SetText(opt.label)
+			GameTooltip:AddLine(opt.desc, 1, 1, 1, true)
+			GameTooltip:Show()
+		end)
+		card:SetScript("OnLeave", function()
+			GameTooltip:Hide()
+		end)
 
-		local btnPreview = createButton(card, "Feel", 48, 20, false)
+		local btnPreview = createButton(card, L("Feel"), 56, 20, false)
 		btnPreview:SetPoint("RIGHT", card, "RIGHT", -6, 0)
 		btnPreview:SetScript("OnClick", function()
 			if Pulse.TestCue then

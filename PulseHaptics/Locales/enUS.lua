@@ -409,6 +409,7 @@ Pulse.Locale:Register("enUS", {
  ["Experimental: watches whichever spells the Cooldown Manager's Essential category shows, not a hardcoded list. The exact live \"just became ready\" signal was never independently confirmed before this shipped — built on the same C_Spell.GetSpellCooldown transition-tracking this file already uses for the GCD heartbeat."] = "Experimental: watches whichever spells the Cooldown Manager's Essential category shows, not a hardcoded list. The exact live \"just became ready\" signal was never independently confirmed before this shipped — built on the same C_Spell.GetSpellCooldown transition-tracking this file already uses for the GCD heartbeat.",
  ["Fast attack time constant used specifically for discrete impacts, clicks, and strikes. Gives snappy transients without making sustained immersion textures harsh."] = "Fast attack time constant used specifically for discrete impacts, clicks, and strikes. Gives snappy transients without making sustained immersion textures harsh.",
  ["Feared or charmed"] = "Feared or charmed",
+ ["Feel"] = "Feel",
  ["Feel "] = "Feel ",
  ["Feel %s"] = "Feel %s",
  ["Feel Strength"] = "Feel Strength",

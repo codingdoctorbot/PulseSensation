@@ -409,6 +409,7 @@ Pulse.Locale:Register("koKR", {
  ["Experimental: watches whichever spells the Cooldown Manager's Essential category shows, not a hardcoded list. The exact live \"just became ready\" signal was never independently confirmed before this shipped — built on the same C_Spell.GetSpellCooldown transition-tracking this file already uses for the GCD heartbeat."] = "실험적 기능: 고정된 목록이 아니라 재사용 대기시간 관리자(Cooldown Manager)의 필수(Essential) 범주에 표시되는 주문을 추적합니다. 배포 전 \"방금 준비됨\" 신호의 정확한 실서버 동작은 독립적으로 확인되지 않았으며, 이 파일이 GCD 심장 박동에 이미 사용하는 것과 동일한 C_Spell.GetSpellCooldown 상태 전환 추적을 기반으로 구축되었습니다.",
  ["Fast attack time constant used specifically for discrete impacts, clicks, and strikes. Gives snappy transients without making sustained immersion textures harsh."] = "개별 충격, 클릭, 타격에 특별히 사용되는 빠른 어택 시상수입니다. 지속적인 몰입 질감을 거칠게 만들지 않으면서도 산뜻한 순간 반응을 제공합니다.",
  ["Feared or charmed"] = "공포 또는 매혹됨",
+ ["Feel"] = "느껴보기",
  ["Feel "] = "느껴보기: ",
  ["Feel %s"] = "%s 느끼기",
  ["Feel Strength"] = "진동 체감 강도",

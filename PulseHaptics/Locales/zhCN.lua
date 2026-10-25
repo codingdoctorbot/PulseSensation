@@ -409,6 +409,7 @@ Pulse.Locale:Register("zhCN", {
  ["Experimental: watches whichever spells the Cooldown Manager's Essential category shows, not a hardcoded list. The exact live \"just became ready\" signal was never independently confirmed before this shipped — built on the same C_Spell.GetSpellCooldown transition-tracking this file already uses for the GCD heartbeat."] = "实验性功能：监控冷却管理器“核心”类别中显示的法术，而非硬编码列表。发布前尚未独立实测验证准确的实机“刚准备就绪”信号——基于本文件已用于GCD心跳检测的相同C_Spell.GetSpellCooldown状态转换追踪构建。",
  ["Fast attack time constant used specifically for discrete impacts, clicks, and strikes. Gives snappy transients without making sustained immersion textures harsh."] = "专用于离散撞击、点击与打击的快速起振时间常数。提供干脆利落的瞬态响应，同时避免持续沉浸材质震感变得生硬刺手。",
  ["Feared or charmed"] = "恐惧或魅惑",
+ ["Feel"] = "体验",
  ["Feel "] = "体验 ",
  ["Feel %s"] = "感受 %s",
  ["Feel Strength"] = "体感强度",
