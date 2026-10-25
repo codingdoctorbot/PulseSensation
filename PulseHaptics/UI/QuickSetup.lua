@@ -656,9 +656,9 @@ local function buildStep1(container)
 	local selectedDevice = Pulse.Database:GetAppliedDevicePreset() or "default"
 	local devCards = {}
 
-	local startY = -60
+	local startY = -68
 	local cardW = 308
-	local cardH = 60
+	local cardH = 72 -- room for two-line translated descriptions
 
 	for idx, opt in ipairs(CONTROLLER_OPTIONS) do
 		local col = (idx - 1) % 2
@@ -692,7 +692,7 @@ local function buildStep1(container)
 
 		local activeBadge = card:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 		activeBadge:SetPoint("TOPRIGHT", card, "TOPRIGHT", -8, -8)
-		activeBadge:SetText("|cff2dd4bf[ACTIVE]|r")
+		activeBadge:SetText("|cff2dd4bf[" .. L("ACTIVE") .. "]|r")
 		activeBadge:Hide()
 		card.activeBadge = activeBadge
 
