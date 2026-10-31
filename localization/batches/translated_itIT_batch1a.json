@@ -1,0 +1,1324 @@
+{
+  "items": [
+    {
+      "source": " (page off)|r",
+      "target": " (pagina disattivata)|r"
+    },
+    {
+      "source": " (reported as \"",
+      "target": " (rilevato come \""
+    },
+    {
+      "source": " Rules and management are on the Profiles page.",
+      "target": " Le regole e la gestione si trovano nella pagina dei profili."
+    },
+    {
+      "source": " as a whole — both its pulses and the gaps between them, so a multi-hit mode keeps its rhythm instead of the hits stretching into their own gaps. 1.0 is the authored default.",
+      "target": " nel suo complesso — sia i suoi impulsi che gli intervalli tra di essi, in modo che una modalità a colpi multipli mantenga il proprio ritmo anziché espandere i colpi nei rispettivi intervalli. 1.0 è il valore predefinito originale."
+    },
+    {
+      "source": " right now with whatever's currently set on its sliders above.",
+      "target": " adesso con qualsiasi valore attualmente impostato sui suoi cursori in alto."
+    },
+    {
+      "source": "\" is recommended — pick a different one to change how just this cue feels, without affecting anything else that also uses \"",
+      "target": "\" è consigliata — scegline una diversa per modificare solo la sensazione di questo segnale, senza influenzare nient'altro che utilizzi anch'esso \""
+    },
+    {
+      "source": "\" — try one of: ",
+      "target": "\" — provane uno tra: "
+    },
+    {
+      "source": "%d of %d cues on",
+      "target": "%d di %d segnali attivi"
+    },
+    {
+      "source": "%d of %d on",
+      "target": "%d di %d attivi"
+    },
+    {
+      "source": "%s (%d)",
+      "target": "%s (%d)"
+    },
+    {
+      "source": "%s Activate   •   %s Try Texture   •   %s Categories",
+      "target": "%s Attiva   •   %s Prova texture   •   %s Categorie"
+    },
+    {
+      "source": "%s Adjust Intensity   •   %s Quick Step   •   |cff38BDF8◀/▶|r Controls   •   %s Try Texture   •   %s Categories",
+      "target": "%s Regola intensità   •   %s Passo rapido   •   |cff38BDF8◀/▶|r Controlli   •   %s Prova texture   •   %s Categorie"
+    },
+    {
+      "source": "%s Browse Modes   •   %s Select   •   %s Cancel",
+      "target": "%s Sfoglia modalità   •   %s Seleziona   •   %s Annulla"
+    },
+    {
+      "source": "%s Select Mode   •   |cff38BDF8◀/▶|r Controls   •   %s Try Texture   •   %s Categories",
+      "target": "%s Seleziona modalità   •   |cff38BDF8◀/▶|r Controlli   •   %s Prova texture   •   %s Categorie"
+    },
+    {
+      "source": "%s Switch Category   •   %s Navigate   •   %s Select   •   %s Close",
+      "target": "%s Cambia categoria   •   %s Naviga   •   %s Seleziona   •   %s Chiudi"
+    },
+    {
+      "source": "%s Toggle   •   |cff38BDF8▶|r Next Control   •   %s Try Texture   •   %s Categories",
+      "target": "%s Attiva/disattiva   •   |cff38BDF8▶|r Controllo successivo   •   %s Prova texture   •   %s Categorie"
+    },
+    {
+      "source": "%s is felt as %s struck about %.1f times a second, over the bed.",
+      "target": "%s viene percepito come %s scandito circa %.1f volte al secondo, sulla base continua."
+    },
+    {
+      "source": "%s/%s Try Texture   •   |cff38BDF8◀|r Controls   •   %s Categories",
+      "target": "%s/%s Prova texture   •   |cff38BDF8◀|r Controlli   •   %s Categorie"
+    },
+    {
+      "source": "(Toggles all continuous sensations)",
+      "target": "(Attiva o disattiva tutte le sensazioni continue)"
+    },
+    {
+      "source": ", heartbeat, warningbeat",
+      "target": ", heartbeat, warningbeat"
+    },
+    {
+      "source": ", not ",
+      "target": ", non "
+    },
+    {
+      "source": ", so there is nothing to test.",
+      "target": ", quindi non c'è nulla da provare."
+    },
+    {
+      "source": "0 = one soft pulse. 1 = a sharp lub, then a clearly separate softer dub. Derives the knock timing and intensity split automatically — see lowHealthTexture if you want those set by hand instead.",
+      "target": "0 = un impulso morbido. 1 = un \"lub\" marcato, seguito da un \"dub\" più morbido e chiaramente separato. Calcola automaticamente la temporizzazione dei colpi e la ripartizione dell'intensità — vedi lowHealthTexture se desideri invece impostarli manualmente."
+    },
+    {
+      "source": "1 = every scripted event, 3 = only the most severe. Higher means rarer, more significant warnings.",
+      "target": "1 = ogni evento programmato, 3 = solo i più gravi. Valori più alti indicano avvisi più rari e significativi."
+    },
+    {
+      "source": "3. World",
+      "target": "3. Mondo"
+    },
+    {
+      "source": "4. Interface",
+      "target": "4. Interfaccia"
+    },
+    {
+      "source": "5. Immersion",
+      "target": "5. Immersione"
+    },
+    {
+      "source": "6. Finish",
+      "target": "6. Conclusione"
+    },
+    {
+      "source": "< Back",
+      "target": "< Indietro"
+    },
+    {
+      "source": "A bright tick when you learn a new ability.",
+      "target": "Un tic chiaro quando apprendi una nuova abilità."
+    },
+    {
+      "source": "A crisp mechanical snap on the high motor.",
+      "target": "Uno scatto meccanico netto sul motore ad alta frequenza."
+    },
+    {
+      "source": "A dense 3-pulse tactical flurry.",
+      "target": "Una densa raffica tattica a 3 impulsi."
+    },
+    {
+      "source": "A dry click when you use an ability that has no cast time.",
+      "target": "Un clic secco quando utilizzi un'abilità senza tempo di lancio."
+    },
+    {
+      "source": "A heavy, decisive impact when your current target dies.",
+      "target": "Un impatto pesante e deciso quando il tuo bersaglio attuale muore."
+    },
+    {
+      "source": "A light click when a major UI panel is dismissed.",
+      "target": "Un clic leggero quando un pannello principale dell'interfaccia viene chiuso."
+    },
+    {
+      "source": "A light click when the last confirmation dialog closes.",
+      "target": "Un clic leggero quando l'ultima finestra di conferma si chiude."
+    },
+    {
+      "source": "A light tick when you step away from an NPC or close its window.",
+      "target": "Un tic leggero quando ti allontani da un PNG o chiudi la sua finestra."
+    },
+    {
+      "source": "A ringing anvil strike when repairing armor and weapons at a vendor.",
+      "target": "Un colpo d'incudine squillante quando ripari armature e armi presso un mercante."
+    },
+    {
+      "source": "A rising celebratory surge when you gain a level.",
+      "target": "Un'ondata crescente di celebrazione quando sali di livello."
+    },
+    {
+      "source": "A sharp alert pulse when your hostile target or focus turns to target you.",
+      "target": "Un impulso di allerta netto quando il tuo bersaglio ostile o il focus inizia a bersagliarti."
+    },
+    {
+      "source": "A sharp deflection tick when a cast of yours is rejected outright — out of range, not facing the target, still on cooldown.",
+      "target": "Un tic netto di deviazione quando un tuo lancio viene rifiutato all'istante — fuori portata, non sei rivolto verso il bersaglio o ancora in ricarica."
+    },
+    {
+      "source": "A sharp deflection tick when the game refuses an action — out of range, facing the wrong way, not enough resource, still on cooldown.",
+      "target": "Un tic netto di deviazione quando il gioco rifiuta un'azione — fuori portata, rivolto nella direzione errata, risorse insufficienti o ancora in ricarica."
+    },
+    {
+      "source": "A sharp snap when a harmful effect lands on you.",
+      "target": "Uno scatto netto quando subisci un effetto dannoso."
+    },
+    {
+      "source": "A sharp snap with a short tail.",
+      "target": "Uno scatto netto con una scia breve."
+    },
+    {
+      "source": "A short warning before a significant scripted boss ability, using Blizzard's own built-in Boss Warnings timeline.",
+      "target": "Un breve avviso prima di una significativa abilità programmata di un boss, utilizzando la sequenza temporale integrata degli avvisi per i boss di Blizzard."
+    },
+    {
+      "source": "A short, sharp tick instead of the normal one when the segment you land on can't be used.",
+      "target": "Un tic breve e netto anziché quello normale quando il settore su cui ti posizioni non può essere utilizzato."
+    },
+    {
+      "source": "A single dry click, lighter than a tick.",
+      "target": "Un singolo clic secco, più leggero di un tic."
+    },
+    {
+      "source": "A single very short, very hard hit.",
+      "target": "Un singolo colpo molto breve e molto duro."
+    },
+    {
+      "source": "A slow low/high oscillation — the caller supplies the phase.",
+      "target": "Una lenta oscillazione a bassa/alta frequenza — il chiamante fornisce la fase."
+    },
+    {
+      "source": "A soft tick followed by a brighter one.",
+      "target": "Un tic morbido seguito da uno più chiaro."
+    },
+    {
+      "source": "A soft tick when releasing the group targeting modifier back to normal navigation.",
+      "target": "Un tic morbido quando rilasci il modificatore di selezione del gruppo per tornare alla navigazione normale."
+    },
+    {
+      "source": "A soft tick when you cancel a radial selection instead of committing to it.",
+      "target": "Un tic morbido quando annulli una selezione radiale anziché confermarla."
+    },
+    {
+      "source": "A soft tick when you start auto-attacking with a ranged weapon (Auto Shot, Shoot, wands).",
+      "target": "Un tic morbido quando inizi l'attacco automatico con un'arma a distanza (Tiro Automatico, Tiro, bacchette)."
+    },
+    {
+      "source": "A soft tick when you start meleeing.",
+      "target": "Un tic morbido quando inizi l'attacco automatico in mischia."
+    },
+    {
+      "source": "A soft tick when you start resting in an inn or major city.",
+      "target": "Un tic morbido quando inizi a riposare in una locanda o in una città principale."
+    },
+    {
+      "source": "A soft tick when your melee auto-attack stops — catches walking out of range or a target dying without noticing.",
+      "target": "Un tic morbido quando il tuo attacco automatico in mischia si interrompe — rileva l'allontanamento fuori portata o la morte inosservata di un bersaglio."
+    },
+    {
+      "source": "A soft, quick tick.",
+      "target": "Un tic morbido e rapido."
+    },
+    {
+      "source": "A steady, low ambient texture.",
+      "target": "Una texture ambientale costante e a bassa frequenza."
+    },
+    {
+      "source": "A steady, stronger texture — meant to be scaled by the caller (e.g. speed).",
+      "target": "Una texture costante e più intensa — pensata per essere scalata dal chiamante (es. velocità)."
+    },
+    {
+      "source": "A tactile micro-tick each time the stack splitter quantity slider changes.",
+      "target": "Un micro-tic tattile ogni volta che cambia il cursore della quantità nella divisione delle pile."
+    },
+    {
+      "source": "A tactile recoil kick on every Auto Shot arrow, timed to the real shot, not estimated.",
+      "target": "Un rinculo tattile su ogni freccia di Tiro Automatico, sincronizzato con il colpo effettivo e non stimato."
+    },
+    {
+      "source": "A tap when a confirmation dialog opens.",
+      "target": "Un tocco all'apertura di una finestra di conferma."
+    },
+    {
+      "source": "A tap when an NPC or world object opens a window nothing else here covers.",
+      "target": "Un tocco quando un PNG o un oggetto del mondo apre una finestra non coperta da altre opzioni qui presenti."
+    },
+    {
+      "source": "A texture that builds as your gliding speed climbs toward a boost.",
+      "target": "Una texture che cresce all'aumentare della velocità di planata verso un'accelerazione."
+    },
+    {
+      "source": "A tick when a book, plaque, gravestone or signpost opens to be read.",
+      "target": "Un tic quando si apre per la lettura un libro, una targa, una lapide o un cartello stradale."
+    },
+    {
+      "source": "A tick when a piece of your gear's durability drops into the low or broken range.",
+      "target": "Un tic quando l'integrità di un pezzo del tuo equipaggiamento scende a un livello critico o si rompe."
+    },
+    {
+      "source": "A tiny blip when you gain experience.",
+      "target": "Un minuscolo blip quando ottieni esperienza."
+    },
+    {
+      "source": "A tiny low blip, for things that happen often.",
+      "target": "Un minuscolo blip a bassa frequenza, per eventi frequenti."
+    },
+    {
+      "source": "A triumphant dual-tone chime when you earn an achievement.",
+      "target": "Un rintocco trionfale a doppio tono quando compi un'impresa."
+    },
+    {
+      "source": "A very light micro-pulse.",
+      "target": "Un micro-impulso molto leggero."
+    },
+    {
+      "source": "A very light tick per combo point, building toward a full resource.",
+      "target": "Un tic leggerissimo per punto combo, che cresce verso la risorsa piena."
+    },
+    {
+      "source": "A very light tick when your equipped gear changes.",
+      "target": "Un tic leggerissimo quando cambia il tuo equipaggiamento indossato."
+    },
+    {
+      "source": "A very short, sharp tick when you avoid an incoming attack.",
+      "target": "Un tic molto breve e netto quando eviti un attacco in arrivo."
+    },
+    {
+      "source": "AFK or DND toggled",
+      "target": "Stato AFK o DND attivato/disattivato"
+    },
+    {
+      "source": "Ability pulse",
+      "target": "Impulso abilità"
+    },
+    {
+      "source": "Achievement earned",
+      "target": "Impresa compiuta"
+    },
+    {
+      "source": "Action bar page changed",
+      "target": "Pagina della barra delle azioni modificata"
+    },
+    {
+      "source": "Action bars",
+      "target": "Barre delle azioni"
+    },
+    {
+      "source": "Action failed",
+      "target": "Azione fallita"
+    },
+    {
+      "source": "Action feedback",
+      "target": "Risposta all'azione"
+    },
+    {
+      "source": "Activate",
+      "target": "Attiva"
+    },
+    {
+      "source": "Active Profile: |cffffd100%s|r",
+      "target": "Profilo attivo: |cffffd100%s|r"
+    },
+    {
+      "source": "Active profile",
+      "target": "Profilo attivo"
+    },
+    {
+      "source": "Actuator profile: %s\n%s",
+      "target": "Profilo attuatori: %s\n%s"
+    },
+    {
+      "source": "Addon language",
+      "target": "Lingua dell'addon"
+    },
+    {
+      "source": "Adjust your global master vibration strength. Individual cues can always be fine-tuned in settings.",
+      "target": "Regola l'intensità generale principale delle vibrazioni. I singoli segnali possono essere sempre perfezionati nelle impostazioni."
+    },
+    {
+      "source": "Advanced Settings",
+      "target": "Impostazioni avanzate"
+    },
+    {
+      "source": "Also fires when you cancel a cast yourself, or move out of range — it means \"your cast did not finish\", not specifically \"you were kicked\".",
+      "target": "Si attiva anche quando interrompi tu stesso un lancio o ti allontani fuori portata — indica che \"il tuo lancio non è terminato\", non nello specifico che \"sei stato interrotto\"."
+    },
+    {
+      "source": "Also fires when you switch to a target that is already mid-cast.",
+      "target": "Si attiva anche quando passi a un bersaglio che sta già lanciando un incantesimo."
+    },
+    {
+      "source": "Alternates between the motors — an unsteady, rolling feel.",
+      "target": "Alterna tra i motori — una sensazione irregolare e oscillante."
+    },
+    {
+      "source": "Alternating low thud and high snap across motors.",
+      "target": "Tonfo sordo e scatto netto alternati tra i motori."
+    },
+    {
+      "source": "Any other window",
+      "target": "Qualsiasi altra finestra"
+    },
+    {
+      "source": "Anything else",
+      "target": "Tutto il resto"
+    },
+    {
+      "source": "Applies only while this character is in this specialization. Switching specialization switches profile with it, with no further action from you.",
+      "target": "Si applica solo quando questo personaggio si trova in questa specializzazione. Il cambio di specializzazione cambia automaticamente anche il profilo, senza alcun ulteriore intervento."
+    },
+    {
+      "source": "Applies to this character whatever specialization it is in. This is the rule the profile picker on the Pulse page has always written to.",
+      "target": "Si applica a questo personaggio indipendentemente dalla sua specializzazione. Questa è la regola a cui il selettore del profilo nella pagina di Pulse ha sempre fatto riferimento."
+    },
+    {
+      "source": "Attack time (s)",
+      "target": "Tempo di attacco (s)"
+    },
+    {
+      "source": "Attentive triage. Emergency low health warnings, dispel/CC alerts, kick warnings, and heal completion confirmation with subdued personal damage.",
+      "target": "Gestione attenta delle emergenze. Avvisi d'emergenza per salute bassa, allerte dissoluzione/CC, avvisi di interruzione e conferma di completamento cure con danni personali attenuati."
+    },
+    {
+      "source": "Auto Shot fired",
+      "target": "Tiro Automatico scoccato"
+    },
+    {
+      "source": "Auto-switch in %s",
+      "target": "Cambio automatico in %s"
+    },
+    {
+      "source": "Automatic — game language",
+      "target": "Automatico — lingua del gioco"
+    },
+    {
+      "source": "Automatically switch to %s whenever this character is in this specialization.",
+      "target": "Passa automaticamente a %s ogni volta che questo personaggio si trova in questa specializzazione."
+    },
+    {
+      "source": "Battleground queue ready",
+      "target": "Coda del campo di battaglia pronta"
+    },
+    {
+      "source": "Bed strength",
+      "target": "Intensità della base continua"
+    },
+    {
+      "source": "Bends the relationship between what a cue asks for and what the motor is told. Below 1.0 makes quiet cues louder; above 1.0 makes them quieter and reserves more of the range for strong ones. 1.0 is the unbent default.",
+      "target": "Modifica la curva di risposta tra la richiesta del segnale e l'intensità inviata al motore. Valori inferiori a 1.0 rendono più intensi i segnali deboli; valori superiori a 1.0 li attenuano, riservando una porzione maggiore della scala per i segnali forti. 1.0 è il valore predefinito lineare."
+    },
+    {
+      "source": "Boss ability warning",
+      "target": "Avviso abilità del boss"
+    },
+    {
+      "source": "Boss chat warning",
+      "target": "Avviso chat del boss"
+    },
+    {
+      "source": "Boss encounter ended",
+      "target": "Scontro con il boss terminato"
+    },
+    {
+      "source": "Boss encounter started",
+      "target": "Scontro con il boss iniziato"
+    },
+    {
+      "source": "Breakaway floor",
+      "target": "Soglia di attivazione minima"
+    },
+    {
+      "source": "Builds from a low hum into a high pulse.",
+      "target": "Cresce da un ronzio a bassa frequenza a un impulso acuto."
+    },
+    {
+      "source": "CLICK %s:LeftButton",
+      "target": "CLICK %s:LeftButton"
+    },
+    {
+      "source": "Cancel",
+      "target": "Annulla"
+    },
+    {
+      "source": "Cast outcomes",
+      "target": "Esiti del lancio"
+    },
+    {
+      "source": "Cast presence (low)",
+      "target": "Presenza di lancio (bassa frequenza)"
+    },
+    {
+      "source": "Cast sent",
+      "target": "Lancio inviato"
+    },
+    {
+      "source": "Cast swell peak (high)",
+      "target": "Picco di crescendo del lancio (alta frequenza)"
+    },
+    {
+      "source": "Cast texture, cast finish confirmation, lockout/pushback warnings, proc glows, kick alerts",
+      "target": "Texture di lancio, conferma di completamento lancio, avvisi blocco/respingimento, effetti grafici di attivazione, avvisi di interruzione"
+    },
+    {
+      "source": "Casting",
+      "target": "Lancio incantesimi"
+    },
+    {
+      "source": "Casting texture",
+      "target": "Texture di lancio"
+    },
+    {
+      "source": "Change threshold",
+      "target": "Soglia di variazione"
+    },
+    {
+      "source": "Character & Status",
+      "target": "Personaggio e stato"
+    },
+    {
+      "source": "Character state",
+      "target": "Stato del personaggio"
+    },
+    {
+      "source": "Checked via C_UnitAuras.AuraIsBigDefensive. Occurrence only.",
+      "target": "Verificato tramite C_UnitAuras.AuraIsBigDefensive. Solo alla comparsa."
+    },
+    {
+      "source": "Choose the addon display language. Automatic follows the game client. Missing translations use English. Changes apply after /reload.",
+      "target": "Scegli la lingua di visualizzazione dell'addon. Con Automatico segue il client di gioco. Le traduzioni mancanti usano l'inglese. Le modifiche si applicano dopo /reload."
+    },
+    {
+      "source": "Click to open settings",
+      "target": "Clicca per aprire le impostazioni"
+    },
+    {
+      "source": "Climbs this motor slowly from silence to %d%% power over %d seconds, ",
+      "target": "Porta questo motore gradualmente dal silenzio al %d%% di potenza in %d secondi, "
+    },
+    {
+      "source": "Close",
+      "target": "Chiudi"
+    },
+    {
+      "source": "Combo point gained",
+      "target": "Punto combo ottenuto"
+    },
+    {
+      "source": "Companion tools",
+      "target": "Strumenti ausiliari"
+    },
+    {
+      "source": "Competitive & Baseline",
+      "target": "Competitivo e di base"
+    },
+    {
+      "source": "Configure tactile rewards for exploring Azeroth and sensory spatial awareness for targeting.",
+      "target": "Configura le risposte tattili per l'esplorazione di Azeroth e la consapevolezza spaziale per l'acquisizione dei bersagli."
+    },
+    {
+      "source": "Confirmation popup appeared",
+      "target": "Finestra di conferma apparsa"
+    },
+    {
+      "source": "Confirmation popup closed",
+      "target": "Finestra di conferma chiusa"
+    },
+    {
+      "source": "Confused or possessed",
+      "target": "Confuso o posseduto"
+    },
+    {
+      "source": "Conversation & reading",
+      "target": "Conversazioni e lettura"
+    },
+    {
+      "source": "Copy",
+      "target": "Copia"
+    },
+    {
+      "source": "Copy \"%s\" to a new custom profile named:",
+      "target": "Copia \"%s\" in un nuovo profilo personalizzato denominato:"
+    },
+    {
+      "source": "Copy \"%s\" to a new profile named:",
+      "target": "Copia \"%s\" in un nuovo profilo denominato:"
+    },
+    {
+      "source": "Copy this profile",
+      "target": "Copia questo profilo"
+    },
+    {
+      "source": "Copy...",
+      "target": "Copia..."
+    },
+    {
+      "source": "Create",
+      "target": "Crea"
+    },
+    {
+      "source": "Create a new editable custom profile that starts as an exact copy of %s.",
+      "target": "Crea un nuovo profilo personalizzato modificabile che parte come copia esatta di %s."
+    },
+    {
+      "source": "Create a new profile from Registry.lua's stock defaults and switch to it.",
+      "target": "Crea un nuovo profilo dai valori predefiniti in Registry.lua e passa ad esso."
+    },
+    {
+      "source": "Create a new profile that starts as an exact copy of the one in use, and switch to it. The two are independent from the first edit.",
+      "target": "Crea un nuovo profilo che parte come copia esatta di quello in uso e passa ad esso. I due rimarranno indipendenti fin dalla prima modifica."
+    },
+    {
+      "source": "Create editable copy",
+      "target": "Crea copia modificabile"
+    },
+    {
+      "source": "Create...",
+      "target": "Crea..."
+    },
+    {
+      "source": "Crest froth & spray",
+      "target": "Spuma e spruzzi della cresta"
+    },
+    {
+      "source": "Cue index",
+      "target": "Indice del segnale"
+    },
+    {
+      "source": "Danger start threshold",
+      "target": "Soglia di inizio pericolo"
+    },
+    {
+      "source": "Death Knight",
+      "target": "Cavaliere della Morte"
+    },
+    {
+      "source": "Debuff received",
+      "target": "Penalità ricevuta"
+    },
+    {
+      "source": "Debug logging",
+      "target": "Registro di debug"
+    },
+    {
+      "source": "Default",
+      "target": "Predefinito"
+    },
+    {
+      "source": "Default (Balanced Baseline)",
+      "target": "Predefinito (Base bilanciata)"
+    },
+    {
+      "source": "Default profiles",
+      "target": "Profili predefiniti"
+    },
+    {
+      "source": "Defensive",
+      "target": "Difensivo"
+    },
+    {
+      "source": "Delete",
+      "target": "Elimina"
+    },
+    {
+      "source": "Delete profile \"%s\"? This can't be undone.",
+      "target": "Eliminare il profilo \"%s\"? L'azione non può essere annullata."
+    },
+    {
+      "source": "Delete this profile",
+      "target": "Elimina questo profilo"
+    },
+    {
+      "source": "Delete...",
+      "target": "Elimina..."
+    },
+    {
+      "source": "Device",
+      "target": "Dispositivo"
+    },
+    {
+      "source": "Disable All",
+      "target": "Disattiva tutti"
+    },
+    {
+      "source": "Disable all cues",
+      "target": "Disattiva tutti i segnali"
+    },
+    {
+      "source": "Disable all cues in profile",
+      "target": "Disattiva tutti i segnali nel profilo"
+    },
+    {
+      "source": "Disable every vibration cue in the active profile in one sweep for quiet testing or building a profile from scratch.",
+      "target": "Disattiva in un colpo solo ogni segnale di vibrazione nel profilo attivo per testare in silenzio o creare un profilo da zero."
+    },
+    {
+      "source": "Disarmed",
+      "target": "Disarmato"
+    },
+    {
+      "source": "Displays a shortcut button on the edge of your minimap for quick access to settings and toggling vibration.",
+      "target": "Mostra un pulsante di scelta rapida sul bordo della minimappa per accedere rapidamente alle impostazioni e attivare o disattivare le vibrazioni."
+    },
+    {
+      "source": "Distinctiveness",
+      "target": "Distintività"
+    },
+    {
+      "source": "Distinguished from cancelling by Blizzard's own `isCancelled` flag, which it sets before ending the selection — so a cancel never counts as a choice.",
+      "target": "Distinto dall'annullamento grazie al flag `isCancelled` interno di Blizzard, che viene impostato prima di terminare la selezione — quindi un annullamento non viene mai considerato come una scelta."
+    },
+    {
+      "source": "Doubles as the catch-all: a loss-of-control type this addon does not recognise — a new one added by a patch — fires this generic cue instead of being silently dropped.",
+      "target": "Funge anche da raccoglitore generico: un tipo di perdita di controllo non riconosciuto da questo addon — introdotto ad esempio da una patch — attiverà questo segnale generico invece di essere ignorato in silenzio."
+    },
+    {
+      "source": "Druid",
+      "target": "Druido"
+    },
+    {
+      "source": "Dual asymmetrical ERM motors, balanced 75ms spin-up",
+      "target": "Doppi motori asimmetrici ERM, accelerazione bilanciata a 75 ms"
+    },
+    {
+      "source": "Dual-motor rumble & vibration schemas",
+      "target": "Schemi di vibrazione e rumble a doppio motore"
+    },
+    {
+      "source": "Duel request",
+      "target": "Richiesta di duello"
+    },
+    {
+      "source": "Dungeon queue popped",
+      "target": "Coda della spedizione pronta"
+    },
+    {
+      "source": "Dungeon: Caster",
+      "target": "Spedizione: Incantatore"
+    },
+    {
+      "source": "Dungeon: Caster DPS",
+      "target": "Spedizione: Assaltatore incantatore"
+    },
+    {
+      "source": "Dungeon: Healer",
+      "target": "Spedizione: Guaritore"
+    },
+    {
+      "source": "Dungeon: Hunter",
+      "target": "Spedizione: Cacciatore"
+    },
+    {
+      "source": "Dungeon: Melee",
+      "target": "Spedizione: Mischia"
+    },
+    {
+      "source": "Dungeon: Melee DPS",
+      "target": "Spedizione: Assaltatore da mischia"
+    },
+    {
+      "source": "Dungeon: Tank",
+      "target": "Spedizione: Difensore (Tank)"
+    },
+    {
+      "source": "Effort peak",
+      "target": "Picco di sforzo"
+    },
+    {
+      "source": "Empowered cast stage",
+      "target": "Fase di lancio potenziato"
+    },
+    {
+      "source": "Enable All",
+      "target": "Attiva tutti"
+    },
+    {
+      "source": "Enable Cue",
+      "target": "Attiva segnale"
+    },
+    {
+      "source": "Enable Pulse",
+      "target": "Attiva Pulse"
+    },
+    {
+      "source": "Enable all cues",
+      "target": "Attiva tutti i segnali"
+    },
+    {
+      "source": "Enable all cues in profile",
+      "target": "Attiva tutti i segnali nel profilo"
+    },
+    {
+      "source": "Enable every vibration cue in the active profile in one sweep for testing and debugging.",
+      "target": "Attiva in un colpo solo ogni segnale di vibrazione nel profilo attivo per scopi di prova e debug."
+    },
+    {
+      "source": "Encounter",
+      "target": "Scontro"
+    },
+    {
+      "source": "Entered a vehicle",
+      "target": "Ingresso in un veicolo"
+    },
+    {
+      "source": "Entered melee range",
+      "target": "Entrato a portata di mischia"
+    },
+    {
+      "source": "Environment",
+      "target": "Ambiente"
+    },
+    {
+      "source": "Equipment",
+      "target": "Equipaggiamento"
+    },
+    {
+      "source": "Every character",
+      "target": "Tutti i personaggi"
+    },
+    {
+      "source": "Evoker-only in practice. It stays registered for every class and simply never fires for the others.",
+      "target": "In pratica esclusivo per Evocatori. Rimane registrato per tutte le classi e semplicemente non si attiva mai per le altre."
+    },
+    {
+      "source": "Experience gained",
+      "target": "Esperienza ottenuta"
+    },
+    {
+      "source": "Experimental",
+      "target": "Sperimentale"
+    },
+    {
+      "source": "Fast attack time constant used specifically for discrete impacts, clicks, and strikes. Gives snappy transients without making sustained immersion textures harsh.",
+      "target": "Costante di tempo di attacco rapido utilizzata specificamente per impatti singoli, clic e colpi. Fornisce transitori scattanti senza rendere aspre le texture di immersione prolungate."
+    },
+    {
+      "source": "Feared or charmed",
+      "target": "Spaventato o ammaliato"
+    },
+    {
+      "source": "Feel ",
+      "target": "Sensazione "
+    },
+    {
+      "source": "Feel Strength",
+      "target": "Intensità percepita"
+    },
+    {
+      "source": "Feel this texture",
+      "target": "Prova questa texture"
+    },
+    {
+      "source": "Feels like",
+      "target": "Sensazione"
+    },
+    {
+      "source": "Feels like: ",
+      "target": "Sensazione: "
+    },
+    {
+      "source": "Find breakaway floor",
+      "target": "Trova soglia di attivazione minima"
+    },
+    {
+      "source": "Fires as an empowered cast of yours begins and ends.",
+      "target": "Si attiva all'inizio e alla fine di un tuo lancio potenziato."
+    },
+    {
+      "source": "Fires at most ",
+      "target": "Si attiva al massimo "
+    },
+    {
+      "source": "Fires for any summon confirmation dialog, not only a player summoning you.",
+      "target": "Si attiva per qualsiasi finestra di conferma di un'evocazione, non solo quando ti evoca un giocatore."
+    },
+    {
+      "source": "Fires on PLAYER_TARGET_DIED.",
+      "target": "Si attiva su PLAYER_TARGET_DIED."
+    },
+    {
+      "source": "Fires on input, so it also fires for casts that then fail. That is intentional: this is an input-acknowledgement cue, not a success cue.",
+      "target": "Si attiva alla pressione del tasto, quindi anche per i lanci che poi falliscono. È intenzionale: è un segnale di conferma dell'input, non di riuscita."
+    },
+    {
+      "source": "Fires on the change itself, not on every flag update.",
+      "target": "Si attiva alla variazione effettiva, non a ogni aggiornamento dello stato."
+    },
+    {
+      "source": "Fires on the crossing into low, not repeatedly while low.",
+      "target": "Si attiva nel momento in cui si scende a livello critico, non ripetutamente mentre rimane basso."
+    },
+    {
+      "source": "Fires on the yellow informational messages the game shows in the top centre of the screen.",
+      "target": "Si attiva sui messaggi informativi gialli mostrati dal gioco in alto al centro dello schermo."
+    },
+    {
+      "source": "Fires only when a queue enters the ready-to-enter state, not on every status update.",
+      "target": "Si attiva solo quando una coda diventa pronta per l'ingresso, non a ogni aggiornamento di stato."
+    },
+    {
+      "source": "Fires the instant you press a cast, before the server has confirmed it.",
+      "target": "Si attiva nell'istante in cui premi per lanciare, prima ancora che il server l'abbia confermato."
+    },
+    {
+      "source": "Fires upon arrival at destination when player control is restored.",
+      "target": "Si attiva all'arrivo a destinazione, quando viene ripristinato il controllo del personaggio."
+    },
+    {
+      "source": "Fires when a battleground or arena queue is ready to enter.",
+      "target": "Si attiva quando la coda per un campo di battaglia o un'arena è pronta per l'ingresso."
+    },
+    {
+      "source": "Fires when a boss encounter begins.",
+      "target": "Si attiva all'inizio di uno scontro con un boss."
+    },
+    {
+      "source": "Fires when a boss encounter ends, in victory or in a wipe.",
+      "target": "Si attiva al termine di uno scontro con un boss, sia in caso di vittoria che di sconfitta."
+    },
+    {
+      "source": "Fires when a flight master's map opens.",
+      "target": "Si attiva all'apertura della mappa del maestro di volo."
+    },
+    {
+      "source": "Fires when a loading screen ends and the world is back.",
+      "target": "Si attiva al termine di una schermata di caricamento, quando il mondo di gioco è nuovamente visibile."
+    },
+    {
+      "source": "Fires when a quest is handed in and its reward is taken.",
+      "target": "Si attiva quando una missione viene consegnata e la relativa ricompensa riscossa."
+    },
+    {
+      "source": "Fires when a quest's completion page opens, ready to hand in.",
+      "target": "Si attiva all'apertura della pagina di completamento di una missione, pronta per la consegna."
+    },
+    {
+      "source": "Fires when a quest's detail page opens, ready to accept.",
+      "target": "Si attiva all'apertura della pagina dei dettagli di una missione, pronta per essere accettata."
+    },
+    {
+      "source": "Fires when a ready check completes or times out.",
+      "target": "Si attiva al completamento o allo scadere del tempo di un appello."
+    },
+    {
+      "source": "Fires when a ready check starts.",
+      "target": "Si attiva all'inizio di un appello."
+    },
+    {
+      "source": "Fires when a role check starts.",
+      "target": "Si attiva all'inizio di un controllo del ruolo."
+    },
+    {
+      "source": "Fires when a trade window opens.",
+      "target": "Si attiva all'apertura di una finestra di scambio."
+    },
+    {
+      "source": "Fires when a vendor window opens.",
+      "target": "Si attiva all'apertura della finestra di un mercante."
+    },
+    {
+      "source": "Fires when an innkeeper asks to make this your home.",
+      "target": "Si attiva quando un locandiere chiede di impostare questo luogo come tua dimora."
+    },
+    {
+      "source": "Fires when gaining money with an open vendor window.",
+      "target": "Si attiva quando ricevi denaro con la finestra del mercante aperta."
+    },
+    {
+      "source": "Fires when group leadership changes hands.",
+      "target": "Si attiva quando il comando del gruppo passa a un altro giocatore."
+    },
+    {
+      "source": "Fires when one of your own casts begins.",
+      "target": "Si attiva all'inizio di un tuo lancio di incantesimo."
+    },
+    {
+      "source": "Fires when one of your own casts completes successfully — distinct from a cast simply ending.",
+      "target": "Si attiva quando un tuo lancio di incantesimo si completa con successo — differente dalla semplice conclusione del lancio."
+    },
+    {
+      "source": "Fires when one of your own casts ends, whether or not it completed.",
+      "target": "Si attiva al termine di un tuo lancio di incantesimo, indipendentemente dal suo completamento."
+    },
+    {
+      "source": "Fires when someone challenges you to a duel.",
+      "target": "Si attiva quando qualcuno ti sfida a duello."
+    },
+    {
+      "source": "Fires when someone invites you to a group.",
+      "target": "Si attiva quando qualcuno ti invita in un gruppo."
+    },
+    {
+      "source": "Fires when someone joins or leaves your group.",
+      "target": "Si attiva quando qualcuno entra o esce dal tuo gruppo."
+    },
+    {
+      "source": "Fires when someone offers you a resurrection and the accept dialog appears.",
+      "target": "Si attiva quando qualcuno ti offre una resurrezione e appare la finestra di accettazione."
+    },
+    {
+      "source": "Fires when someone summons you and the accept dialog appears.",
+      "target": "Si attiva quando qualcuno ti evoca e appare la finestra di accettazione."
+    },
+    {
+      "source": "Fires when spending money with an open vendor window.",
+      "target": "Si attiva quando spendi denaro con la finestra del mercante aperta."
+    },
+    {
+      "source": "Fires when the stable master's window opens.",
+      "target": "Si attiva all'apertura della finestra dello stalliere."
+    },
+    {
+      "source": "Fires when you accept a quest.",
+      "target": "Si attiva quando accetti una missione."
+    },
+    {
+      "source": "Fires when you are confused or possessed (CONFUSE, POSSESS).",
+      "target": "Si attiva quando sei confuso o posseduto (CONFUSE, POSSESS)."
+    },
+    {
+      "source": "Fires when you are disarmed (DISARM).",
+      "target": "Si attiva quando sei disarmato (DISARM)."
+    },
+    {
+      "source": "Fires when you are feared or charmed (FEAR, FEAR_MECHANIC, CHARM).",
+      "target": "Si attiva quando sei spaventato o ammaliato (FEAR, FEAR_MECHANIC, CHARM)."
+    },
+    {
+      "source": "Fires when you are resurrected or leave ghost form.",
+      "target": "Si attiva quando resusciti o abbandoni la forma spirituale."
+    },
+    {
+      "source": "Fires when you are rooted in place (ROOT). You can still act, so this is a rung below the cues that stop you entirely.",
+      "target": "Si attiva quando vieni immobilizzato (ROOT). Puoi ancora agire, quindi questo segnale si colloca un gradino sotto gli effetti che ti bloccano completamente."
+    },
+    {
+      "source": "Fires when you are silenced (SILENCE).",
+      "target": "Si attiva quando sei silenziato (SILENCE)."
+    },
+    {
+      "source": "Fires when you are stunned (STUN, STUN_MECHANIC).",
+      "target": "Si attiva quando sei stordito (STUN, STUN_MECHANIC)."
+    },
+    {
+      "source": "Fires when you change target, including when you clear it.",
+      "target": "Si attiva quando cambi bersaglio, anche quando lo deselezioni."
+    },
+    {
+      "source": "Fires when you die.",
+      "target": "Si attiva quando muori."
+    },
+    {
+      "source": "Fires when you enter a new zone.",
+      "target": "Si attiva quando entri in una nuova zona."
+    },
+    {
+      "source": "Fires when you enter a vehicle and your action bar is replaced.",
+      "target": "Si attiva quando sali su un veicolo e la tua barra delle azioni viene sostituita."
+    },
+    {
+      "source": "Fires when you leave a vehicle and your own action bar returns.",
+      "target": "Si attiva quando scendi da un veicolo e torna la tua normale barra delle azioni."
+    },
+    {
+      "source": "Fires when you set or clear your focus target.",
+      "target": "Si attiva quando imposti o rimuovi il tuo bersaglio del focus."
+    },
+    {
+      "source": "Fires when your class's secondary resource fills up — combo points, holy power, soul shards, chi, arcane charges, essence or runes, whichever your specialisation uses.",
+      "target": "Si attiva quando la risorsa secondaria della tua classe si riempie al massimo — punti combo, potere sacro, frammenti d'anima, chi, cariche arcane, essenza o rune, a seconda della tua specializzazione."
+    },
+    {
+      "source": "Fires when your focus target begins casting.",
+      "target": "Si attiva quando il tuo bersaglio del focus inizia a lanciare un incantesimo."
+    },
+    {
+      "source": "Fires when your own away or do-not-disturb flag actually changes.",
+      "target": "Si attiva quando il tuo stato di assente (AFK) o non disturbare (DND) cambia effettivamente."
+    },
+    {
+      "source": "Flight map opened",
+      "target": "Mappa di volo aperta"
+    },
+    {
+      "source": "Focus",
+      "target": "Focus"
+    },
+    {
+      "source": "Focus changed",
+      "target": "Focus modificato"
+    },
+    {
+      "source": "Focus started casting",
+      "target": "Il focus ha iniziato il lancio"
+    },
+    {
+      "source": "Focused element became unavailable",
+      "target": "L'elemento selezionato non è più disponibile"
+    },
+    {
+      "source": "Four rapid, sharp ticks.",
+      "target": "Quattro tic rapidi e netti."
+    },
+    {
+      "source": "Gait strength",
+      "target": "Intensità dell'andatura"
+    },
+    {
+      "source": "Gasp peak",
+      "target": "Picco del respiro affannoso"
+    },
+    {
+      "source": "Gear needs repair",
+      "target": "Equipaggiamento da riparare"
+    },
+    {
+      "source": "Generic / Unknown",
+      "target": "Generico / Sconosciuto"
+    },
+    {
+      "source": "Generic / unknown",
+      "target": "Generico / sconosciuto"
+    },
+    {
+      "source": "Gentle steady engine-like cruise vibration while riding flight master gryphons, bats, or wyverns.",
+      "target": "Leggera vibrazione di crociera costante, simile a un motore, mentre voli su grifoni, pipistrelli o viverne del maestro di volo."
+    },
+    {
+      "source": "Group changes",
+      "target": "Modifiche al gruppo"
+    },
+    {
+      "source": "Group readiness",
+      "target": "Prontezza del gruppo"
+    },
+    {
+      "source": "Group roster changed",
+      "target": "Composizione del gruppo modificata"
+    },
+    {
+      "source": "Group targeting active",
+      "target": "Selezione bersagli di gruppo attiva"
+    },
+    {
+      "source": "Group targeting released",
+      "target": "Selezione bersagli di gruppo rilasciata"
+    },
+    {
+      "source": "Hardware & Presets",
+      "target": "Hardware e preimpostazioni"
+    },
+    {
+      "source": "Harvest complete",
+      "target": "Raccolta completata"
+    },
+    {
+      "source": "Heal casts and low-health triage",
+      "target": "Lanci di cure e gestione emergenze a salute bassa"
+    },
+    {
+      "source": "Healing received",
+      "target": "Cura ricevuta"
+    },
+    {
+      "source": "Health & survival",
+      "target": "Salute e sopravvivenza"
+    },
+    {
+      "source": "Heart rate (BPM)",
+      "target": "Frequenza cardiaca (BPM)"
+    },
+    {
+      "source": "Heart rate (calm), BPM",
+      "target": "Frequenza cardiaca (a riposo), BPM"
+    },
+    {
+      "source": "Heavy Impacts",
+      "target": "Impatti pesanti"
+    },
+    {
+      "source": "Heavy left counterweight (85ms), light right counterweight (45ms)",
+      "target": "Contrappeso sinistro pesante (85 ms), contrappeso destro leggero (45 ms)"
+    },
+    {
+      "source": "High Motor Only",
+      "target": "Solo motore ad alta frequenza"
+    },
+    {
+      "source": "High motor",
+      "target": "Motore ad alta frequenza"
+    },
+    {
+      "source": "Hooks StackSplitFrame:UpdateStackText.",
+      "target": "Si aggancia a StackSplitFrame:UpdateStackText."
+    },
+    {
+      "source": "How far the hum swells either side of its baseline. 0 is a flat hold.",
+      "target": "L'ampiezza dell'oscillazione del ronzio rispetto alla sua linea di base. 0 corrisponde a un livello costante."
+    },
+    {
+      "source": "How fast the wingbeat-style undulation cycles.",
+      "target": "La velocità del ciclo di ondulazione simile a un battito d'ali."
+    },
+    {
+      "source": "How many seconds before the scripted moment this fires.",
+      "target": "Il numero di secondi di anticipo rispetto al momento programmato in cui questo si attiva."
+    },
+    {
+      "source": "How pronounced each stroke is against its own baseline. Higher values (0.80-1.0) allow the counterweight to physically spin down during the glide phase between strokes. 0 is a flat drag with no rhythm at all.",
+      "target": "Quanto è pronunciata ogni bracciata rispetto alla sua linea di base. Valori più alti (0.80-1.0) consentono al contrappeso di rallentare fisicamente durante la fase di scivolamento tra una bracciata e l'altra. 0 è un trascinamento uniforme senza alcun ritmo."
+    },
+    {
+      "source": "How steady the low motor stays regardless of speed. Only audible while actually gliding.",
+      "target": "Quanto rimane costante il motore a bassa frequenza indipendentemente dalla velocità. Percepibile solo durante la planata effettiva."
+    },
+    {
+      "source": "How strong the hum gets by the moment a regular cast completes. Only audible if \"Casting texture\" is also enabled on its own tab.",
+      "target": "L'intensità raggiunta dal ronzio nel momento in cui si completa un lancio normale. Percepibile solo se anche la \"Texture di lancio\" è abilitata nella propria scheda."
+    },
+    {
+      "source": "Hunter",
+      "target": "Cacciatore"
+    },
+    {
+      "source": "If nothing is happening",
+      "target": "Se non succede nulla"
+    },
+    {
+      "source": "Immediately switch to %s for the current character.",
+      "target": "Passa immediatamente a %s per il personaggio attuale."
+    },
+    {
+      "source": "Immersion: Caster",
+      "target": "Immersione: Incantatore"
+    },
+    {
+      "source": "Immersion: Melee",
+      "target": "Immersione: Mischia"
+    },
+    {
+      "source": "Immersion: Ranged",
+      "target": "Immersione: A distanza"
+    },
+    {
+      "source": "Impact attack (s)",
+      "target": "Attacco dell'impatto (s)"
+    },
+    {
+      "source": "Initial software voltage boost applied during transient onset to accelerate the motor rapidly to target speed. 1.0 is disabled.",
+      "target": "Incremento iniziale di tensione software applicato durante l'attacco transitorio per accelerare rapidamente il motore alla velocità desiderata. 1.0 corrisponde a disattivato."
+    },
+    {
+      "source": "Innkeeper hearth prompt",
+      "target": "Richiesta di dimora del locandiere"
+    },
+    {
+      "source": "Input device changed",
+      "target": "Dispositivo di input modificato"
+    },
+    {
+      "source": "Input mode",
+      "target": "Modalità di input"
+    },
+    {
+      "source": "Instant ability used",
+      "target": "Abilità istantanea utilizzata"
+    },
+    {
+      "source": "Intensity",
+      "target": "Intensità"
+    },
+    {
+      "source": "Intensity Slider",
+      "target": "Cursore dell'intensità"
+    },
+    {
+      "source": "Interface",
+      "target": "Interfaccia"
+    },
+    {
+      "source": "Interface & Accessibility",
+      "target": "Interfaccia e accessibilità"
+    },
+    {
+      "source": "Interface message",
+      "target": "Messaggio d'interfaccia"
+    },
+    {
+      "source": "Interface tab changed",
+      "target": "Scheda d'interfaccia modificata"
+    },
+    {
+      "source": "Inventory full warning",
+      "target": "Avviso inventario pieno"
+    },
+    {
+      "source": "Invites & requests",
+      "target": "Inviti e richieste"
+    },
+    {
+      "source": "Jarring physical weapon clatter",
+      "target": "Stridio metallico discordante di armi"
+    },
+    {
+      "source": "LRA (Classic ERM Emulation)",
+      "target": "LRA (Emulazione ERM classica)"
+    },
+    {
+      "source": "Landed",
+      "target": "Atterraggio"
+    },
+    {
+      "source": "Leave this scope with no opinion and let the next one decide.",
+      "target": "Lascia questo ambito senza preferenze e delega la decisione al livello successivo."
+    },
+    {
+      "source": "Left a vehicle",
+      "target": "Uscita da un veicolo"
+    },
+    {
+      "source": "Left melee range",
+      "target": "Uscito dalla portata di mischia"
+    },
+    {
+      "source": "Level up",
+      "target": "Aumento di livello"
+    },
+    {
+      "source": "Lifecycle (advanced)",
+      "target": "Ciclo di vita (avanzato)"
+    },
+    {
+      "source": "Load its starting values",
+      "target": "Carica i suoi valori iniziali"
+    },
+    {
+      "source": "Loading screen finished",
+      "target": "Schermata di caricamento terminata"
+    },
+    {
+      "source": "Loss of control",
+      "target": "Perdita di controllo"
+    },
+    {
+      "source": "Loss of control cues",
+      "target": "Segnali di perdita di controllo"
+    },
+    {
+      "source": "Low Health Heartbeat",
+      "target": "Battito cardiaco per salute bassa"
+    },
+    {
+      "source": "Low Motor Only",
+      "target": "Solo motore a bassa frequenza"
+    }
+  ]
+}

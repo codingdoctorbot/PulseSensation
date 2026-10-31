@@ -1,0 +1,297 @@
+{
+  "batch_id": 7,
+  "locale": "ruRU",
+  "count": 58,
+  "items": [
+    {
+      "id": 1211,
+      "source": " (reported as \"%s\")",
+      "target": " (сообщается как \"%s\")"
+    },
+    {
+      "id": 1212,
+      "source": "ACTIVE",
+      "target": "АКТИВНО"
+    },
+    {
+      "id": 1213,
+      "source": "Accept",
+      "target": "Принять"
+    },
+    {
+      "id": 1214,
+      "source": "Active",
+      "target": "Активно"
+    },
+    {
+      "id": 1215,
+      "source": "Alchemy",
+      "target": "Алхимия"
+    },
+    {
+      "id": 1216,
+      "source": "Apply",
+      "target": "Применить"
+    },
+    {
+      "id": 1217,
+      "source": "Blacksmithing",
+      "target": "Кузнечное дело"
+    },
+    {
+      "id": 1218,
+      "source": "Combat and life state",
+      "target": "Бой и состояние здоровья"
+    },
+    {
+      "id": 1219,
+      "source": "Combat texture",
+      "target": "Текстура боя"
+    },
+    {
+      "id": 1220,
+      "source": "Cooking",
+      "target": "Кулинария"
+    },
+    {
+      "id": 1221,
+      "source": "Detect",
+      "target": "Определить"
+    },
+    {
+      "id": 1222,
+      "source": "Disabled",
+      "target": "Отключено"
+    },
+    {
+      "id": 1223,
+      "source": "Duration",
+      "target": "Длительность"
+    },
+    {
+      "id": 1224,
+      "source": "Enabled",
+      "target": "Включено"
+    },
+    {
+      "id": 1225,
+      "source": "Enchanting",
+      "target": "Наложение чар"
+    },
+    {
+      "id": 1226,
+      "source": "Engineering",
+      "target": "Инженерное дело"
+    },
+    {
+      "id": 1227,
+      "source": "Experimental (game-feel)",
+      "target": "Экспериментально (ощущение от игры)"
+    },
+    {
+      "id": 1228,
+      "source": "Feel %s",
+      "target": "Ощутить %s"
+    },
+    {
+      "id": 1229,
+      "source": "Feels like: %s",
+      "target": "Ощущается как: %s"
+    },
+    {
+      "id": 1230,
+      "source": "Fires at most %s.",
+      "target": "Срабатывает не чаще %s."
+    },
+    {
+      "id": 1231,
+      "source": "First Aid",
+      "target": "Первая помощь"
+    },
+    {
+      "id": 1232,
+      "source": "Fishing",
+      "target": "Рыбная ловля"
+    },
+    {
+      "id": 1233,
+      "source": "Flight and mounts",
+      "target": "Полеты и средства передвижения"
+    },
+    {
+      "id": 1234,
+      "source": "Group and social",
+      "target": "Группа и общение"
+    },
+    {
+      "id": 1235,
+      "source": "Herbalism",
+      "target": "Травничество"
+    },
+    {
+      "id": 1236,
+      "source": "High motor (sharp rumble)",
+      "target": "Высокочастотный мотор (резкая вибрация)"
+    },
+    {
+      "id": 1237,
+      "source": "Inscription",
+      "target": "Начертание"
+    },
+    {
+      "id": 1238,
+      "source": "Jewelcrafting",
+      "target": "Ювелирное дело"
+    },
+    {
+      "id": 1239,
+      "source": "Leatherworking",
+      "target": "Кожевничество"
+    },
+    {
+      "id": 1240,
+      "source": "Low motor (heavy rumble)",
+      "target": "Низкочастотный мотор (глубокая вибрация)"
+    },
+    {
+      "id": 1241,
+      "source": "MUTED",
+      "target": "ЗАГЛУШЕНО"
+    },
+    {
+      "id": 1242,
+      "source": "Mining",
+      "target": "Горное дело"
+    },
+    {
+      "id": 1243,
+      "source": "Multiplies %s's high-motor intensity. 1.0 is the authored default; the top of this slider is where it stops making any further difference.",
+      "target": "Умножает интенсивность высокочастотного мотора для %s. 1.0 — авторское значение по умолчанию; верхнее положение ползунка — предел, выше которого разница не ощущается."
+    },
+    {
+      "id": 1244,
+      "source": "Multiplies %s's low-motor intensity. 1.0 is the authored default; the top of this slider is where it stops making any further difference.",
+      "target": "Умножает интенсивность низкочастотного мотора для %s. 1.0 — авторское значение по умолчанию; верхнее положение ползунка — предел, выше которого разница не ощущается."
+    },
+    {
+      "id": 1245,
+      "source": "Okay",
+      "target": "ОК"
+    },
+    {
+      "id": 1246,
+      "source": "Other crafting",
+      "target": "Прочее ремесло"
+    },
+    {
+      "id": 1247,
+      "source": "Play %s right now with whatever's currently set on its sliders above.",
+      "target": "Воспроизвести %s прямо сейчас с текущими настройками ползунков выше."
+    },
+    {
+      "id": 1248,
+      "source": "PvP",
+      "target": "PvP"
+    },
+    {
+      "id": 1249,
+      "source": "Ramp",
+      "target": "Нарастание"
+    },
+    {
+      "id": 1250,
+      "source": "Skinning",
+      "target": "Снятие шкур"
+    },
+    {
+      "id": 1251,
+      "source": "Spec %s",
+      "target": "Спек %s"
+    },
+    {
+      "id": 1252,
+      "source": "Speeds up or slows down %s as a whole — both its pulses and the gaps between them, so a multi-hit mode keeps its rhythm instead of the hits stretching into their own gaps. 1.0 is the authored default.",
+      "target": "Ускоряет или замедляет %s в целом — как его импульсы, так и паузы между ними, чтобы режим с несколькими ударами сохранял свой ритм, а не растягивал удары на паузы. 1.0 — авторское значение по умолчанию."
+    },
+    {
+      "id": 1253,
+      "source": "Tailoring",
+      "target": "Портняжное дело"
+    },
+    {
+      "id": 1254,
+      "source": "Target and focus",
+      "target": "Цель и фокус"
+    },
+    {
+      "id": 1255,
+      "source": "Test",
+      "target": "Проверить"
+    },
+    {
+      "id": 1256,
+      "source": "This specialization (%s)",
+      "target": "Эта специализация (%s)"
+    },
+    {
+      "id": 1257,
+      "source": "World (accessibility)",
+      "target": "Мир (доступность)"
+    },
+    {
+      "id": 1258,
+      "source": "World (game-feel)",
+      "target": "Мир (ощущение от игры)"
+    },
+    {
+      "id": 1259,
+      "source": "Your casting",
+      "target": "Ваше применение заклинаний"
+    },
+    {
+      "id": 1260,
+      "source": "a ramp is currently running on %s, not %s",
+      "target": "В данный момент нарастание выполняется на %s, а не на %s"
+    },
+    {
+      "id": 1261,
+      "source": "every character",
+      "target": "все персонажи"
+    },
+    {
+      "id": 1262,
+      "source": "nothing set — falling back to Default",
+      "target": "Ничего не настроено — возврат к значениям по умолчанию"
+    },
+    {
+      "id": 1263,
+      "source": "once every %d minutes",
+      "target": "один раз в %d мин."
+    },
+    {
+      "id": 1264,
+      "source": "once every %d seconds",
+      "target": "один раз в %d сек."
+    },
+    {
+      "id": 1265,
+      "source": "this character",
+      "target": "этот персонаж"
+    },
+    {
+      "id": 1266,
+      "source": "this specialization (%s)",
+      "target": "эта специализация (%s)"
+    },
+    {
+      "id": 1267,
+      "source": "|cff888888Silences:|r %s",
+      "target": "|cff888888Заглушает:|r %s"
+    },
+    {
+      "id": 1268,
+      "source": "|cffffd100Emphasizes:|r %s",
+      "target": "|cffffd100Подчеркивает:|r %s"
+    }
+  ]
+}

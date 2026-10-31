@@ -1,0 +1,1324 @@
+{
+  "items": [
+    {
+      "source": " (page off)|r",
+      "target": " (页面已关闭)|r"
+    },
+    {
+      "source": " (reported as \"",
+      "target": " (识别为 \""
+    },
+    {
+      "source": " Rules and management are on the Profiles page.",
+      "target": " 规则与管理请见配置文件页面。"
+    },
+    {
+      "source": " as a whole — both its pulses and the gaps between them, so a multi-hit mode keeps its rhythm instead of the hits stretching into their own gaps. 1.0 is the authored default.",
+      "target": " 作为一个整体——包括其脉冲以及脉冲之间的间隔，从而使多重打击模式保持其固有节奏，而不是让打击延伸进入其自身的间隔中。1.0 为作者设定的默认值。"
+    },
+    {
+      "source": " right now with whatever's currently set on its sliders above.",
+      "target": " 立即以其上方滑块的当前设定播放。"
+    },
+    {
+      "source": "\" is recommended — pick a different one to change how just this cue feels, without affecting anything else that also uses \"",
+      "target": "\" 为推荐设置——选择其它模式可以仅改变该提示的震感，而不会影响其他同样使用 \""
+    },
+    {
+      "source": "\" — try one of: ",
+      "target": "\" —— 推荐尝试："
+    },
+    {
+      "source": "%d of %d cues on",
+      "target": "%d / %d 个提示已开启"
+    },
+    {
+      "source": "%d of %d on",
+      "target": "%d / %d 个已开启"
+    },
+    {
+      "source": "%s (%d)",
+      "target": "%s (%d)"
+    },
+    {
+      "source": "%s Activate   •   %s Try Texture   •   %s Categories",
+      "target": "%s 激活   •   %s 测试震感   •   %s 分类"
+    },
+    {
+      "source": "%s Adjust Intensity   •   %s Quick Step   •   |cff38BDF8◀/▶|r Controls   •   %s Try Texture   •   %s Categories",
+      "target": "%s 调整强度   •   %s 快捷步进   •   |cff38BDF8◀/▶|r 控制项   •   %s 测试震感   •   %s 分类"
+    },
+    {
+      "source": "%s Browse Modes   •   %s Select   •   %s Cancel",
+      "target": "%s 浏览模式   •   %s 选择   •   %s 取消"
+    },
+    {
+      "source": "%s Select Mode   •   |cff38BDF8◀/▶|r Controls   •   %s Try Texture   •   %s Categories",
+      "target": "%s 选择模式   •   |cff38BDF8◀/▶|r 控制项   •   %s 测试震感   •   %s 分类"
+    },
+    {
+      "source": "%s Switch Category   •   %s Navigate   •   %s Select   •   %s Close",
+      "target": "%s 切换分类   •   %s 导航   •   %s 选择   •   %s 关闭"
+    },
+    {
+      "source": "%s Toggle   •   |cff38BDF8▶|r Next Control   •   %s Try Texture   •   %s Categories",
+      "target": "%s 切换   •   |cff38BDF8▶|r 下一个控制项   •   %s 测试震感   •   %s 分类"
+    },
+    {
+      "source": "%s is felt as %s struck about %.1f times a second, over the bed.",
+      "target": "%s 的感受如同 %s 在持续底震之上每秒敲击约 %.1f 次。"
+    },
+    {
+      "source": "%s/%s Try Texture   •   |cff38BDF8◀|r Controls   •   %s Categories",
+      "target": "%s/%s 测试震感   •   |cff38BDF8◀|r 控制项   •   %s 分类"
+    },
+    {
+      "source": "(Toggles all continuous sensations)",
+      "target": "(切换所有持续震感)"
+    },
+    {
+      "source": ", heartbeat, warningbeat",
+      "target": ", heartbeat, warningbeat"
+    },
+    {
+      "source": ", not ",
+      "target": ", 而非 "
+    },
+    {
+      "source": ", so there is nothing to test.",
+      "target": ", 因此无可测试内容。"
+    },
+    {
+      "source": "0 = one soft pulse. 1 = a sharp lub, then a clearly separate softer dub. Derives the knock timing and intensity split automatically — see lowHealthTexture if you want those set by hand instead.",
+      "target": "0 = 单次柔和脉冲。1 = 清脆的 lub 音，紧接着明显区分的柔和 dub 音。自动计算敲击间隔与强度分配——若想手动调整，请参阅 lowHealthTexture。"
+    },
+    {
+      "source": "1 = every scripted event, 3 = only the most severe. Higher means rarer, more significant warnings.",
+      "target": "1 = 所有脚本事件，3 = 仅最严重的事件。数值越高表示警报越罕见且越关键。"
+    },
+    {
+      "source": "3. World",
+      "target": "3. 世界"
+    },
+    {
+      "source": "4. Interface",
+      "target": "4. 界面"
+    },
+    {
+      "source": "5. Immersion",
+      "target": "5. 沉浸"
+    },
+    {
+      "source": "6. Finish",
+      "target": "6. 完成"
+    },
+    {
+      "source": "< Back",
+      "target": "< 返回"
+    },
+    {
+      "source": "A bright tick when you learn a new ability.",
+      "target": "学会新技能时，产生清脆的提示震动。"
+    },
+    {
+      "source": "A crisp mechanical snap on the high motor.",
+      "target": "轻震马达上清脆的机械敲击震动。"
+    },
+    {
+      "source": "A dense 3-pulse tactical flurry.",
+      "target": "密集的3脉冲战术疾风连击。"
+    },
+    {
+      "source": "A dry click when you use an ability that has no cast time.",
+      "target": "使用瞬发技能时，产生干脆的轻按震动。"
+    },
+    {
+      "source": "A heavy, decisive impact when your current target dies.",
+      "target": "当前目标死亡时，产生沉重且具决断感的撞击震动。"
+    },
+    {
+      "source": "A light click when a major UI panel is dismissed.",
+      "target": "关闭主要界面面板时，产生轻微的点击震动。"
+    },
+    {
+      "source": "A light click when the last confirmation dialog closes.",
+      "target": "关闭最后一个确认对话框时，产生轻微的点击震动。"
+    },
+    {
+      "source": "A light tick when you step away from an NPC or close its window.",
+      "target": "离开NPC或关闭其窗口时，产生轻微的提示震动。"
+    },
+    {
+      "source": "A ringing anvil strike when repairing armor and weapons at a vendor.",
+      "target": "在商人处修理护甲与武器时，产生铁砧敲击的清脆鸣响震动。"
+    },
+    {
+      "source": "A rising celebratory surge when you gain a level.",
+      "target": "提升等级时，产生逐渐增强的庆祝跃动震感。"
+    },
+    {
+      "source": "A sharp alert pulse when your hostile target or focus turns to target you.",
+      "target": "敌对目标或焦点目标转向以你为目标时，产生尖锐的警报脉冲。"
+    },
+    {
+      "source": "A sharp deflection tick when a cast of yours is rejected outright — out of range, not facing the target, still on cooldown.",
+      "target": "你的施法被直接拒绝时（超出范围、未面对目标、仍在冷却中），产生清脆的偏斜提示震动。"
+    },
+    {
+      "source": "A sharp deflection tick when the game refuses an action — out of range, facing the wrong way, not enough resource, still on cooldown.",
+      "target": "游戏拒绝某个动作时（超出范围、朝向错误、资源不足、仍在冷却中），产生清脆的偏斜提示震动。"
+    },
+    {
+      "source": "A sharp snap when a harmful effect lands on you.",
+      "target": "受到有害效果影响时，产生清脆的抽击震动。"
+    },
+    {
+      "source": "A sharp snap with a short tail.",
+      "target": "带有短尾音的清脆抽击震动。"
+    },
+    {
+      "source": "A short warning before a significant scripted boss ability, using Blizzard's own built-in Boss Warnings timeline.",
+      "target": "在重大首领脚本技能施放前发出简短预警，使用暴雪自带的内置首领预警时间线。"
+    },
+    {
+      "source": "A short, sharp tick instead of the normal one when the segment you land on can't be used.",
+      "target": "当停留的扇区不可用时，以简短干脆的提示震动代替常规震动。"
+    },
+    {
+      "source": "A single dry click, lighter than a tick.",
+      "target": "单次干脆的点击震动，比轻触提示更微弱。"
+    },
+    {
+      "source": "A single very short, very hard hit.",
+      "target": "单次极短促、极其强烈的冲击。"
+    },
+    {
+      "source": "A slow low/high oscillation — the caller supplies the phase.",
+      "target": "缓慢的重震/轻震交替振荡——由调用方提供相位。"
+    },
+    {
+      "source": "A soft tick followed by a brighter one.",
+      "target": "一次轻微的提示震动，随后伴随一次更清脆的提示震动。"
+    },
+    {
+      "source": "A soft tick when releasing the group targeting modifier back to normal navigation.",
+      "target": "松开小队目标修饰键恢复正常导航时，产生柔和的轻微提示震动。"
+    },
+    {
+      "source": "A soft tick when you cancel a radial selection instead of committing to it.",
+      "target": "取消轮盘选择而非确认时，产生柔和的轻微提示震动。"
+    },
+    {
+      "source": "A soft tick when you start auto-attacking with a ranged weapon (Auto Shot, Shoot, wands).",
+      "target": "使用远程武器开始自动攻击（自动射击、射击、魔杖）时，产生柔和的轻微提示震动。"
+    },
+    {
+      "source": "A soft tick when you start meleeing.",
+      "target": "开始近战自动攻击时，产生柔和的轻微提示震动。"
+    },
+    {
+      "source": "A soft tick when you start resting in an inn or major city.",
+      "target": "在旅店或主城进入休息状态时，产生柔和的轻微提示震动。"
+    },
+    {
+      "source": "A soft tick when your melee auto-attack stops — catches walking out of range or a target dying without noticing.",
+      "target": "近战自动攻击停止时产生柔和的轻微提示震动——用于提示走出近战范围或未注意到的目标死亡。"
+    },
+    {
+      "source": "A soft, quick tick.",
+      "target": "柔和短促的轻微提示震动。"
+    },
+    {
+      "source": "A steady, low ambient texture.",
+      "target": "平稳的低频环境氛围震感。"
+    },
+    {
+      "source": "A steady, stronger texture — meant to be scaled by the caller (e.g. speed).",
+      "target": "平稳且更强烈的材质震感——供调用方缩放调节（例如根据速度）。"
+    },
+    {
+      "source": "A tactile micro-tick each time the stack splitter quantity slider changes.",
+      "target": "拆分堆叠数量滑块每次改变时，产生触感微小的提示震动。"
+    },
+    {
+      "source": "A tactile recoil kick on every Auto Shot arrow, timed to the real shot, not estimated.",
+      "target": "每次自动射击箭矢射出时产生真实的后坐力冲击，精确同步于实际射击时刻，而非估算。"
+    },
+    {
+      "source": "A tap when a confirmation dialog opens.",
+      "target": "确认对话框弹出时产生轻触震动。"
+    },
+    {
+      "source": "A tap when an NPC or world object opens a window nothing else here covers.",
+      "target": "NPC或世界物体打开未被其他项涵盖的窗口时产生轻触震动。"
+    },
+    {
+      "source": "A texture that builds as your gliding speed climbs toward a boost.",
+      "target": "随着滑翔速度提升接近加速时逐渐增强的材质震感。"
+    },
+    {
+      "source": "A tick when a book, plaque, gravestone or signpost opens to be read.",
+      "target": "打开书籍、牌匾、墓碑或路标阅读时产生轻微提示震动。"
+    },
+    {
+      "source": "A tick when a piece of your gear's durability drops into the low or broken range.",
+      "target": "某件装备的耐久度降至过低或损坏区间时产生轻微提示震动。"
+    },
+    {
+      "source": "A tiny blip when you gain experience.",
+      "target": "获得经验值时产生微弱短促的提示震动。"
+    },
+    {
+      "source": "A tiny low blip, for things that happen often.",
+      "target": "适用于频繁发生事件的微弱低频轻颤。"
+    },
+    {
+      "source": "A triumphant dual-tone chime when you earn an achievement.",
+      "target": "获得成就时产生凯旋的双音调清鸣震动。"
+    },
+    {
+      "source": "A very light micro-pulse.",
+      "target": "极轻微的微脉冲震动。"
+    },
+    {
+      "source": "A very light tick per combo point, building toward a full resource.",
+      "target": "每个连击点数产生极轻微的提示震动，向满资源递增。"
+    },
+    {
+      "source": "A very light tick when your equipped gear changes.",
+      "target": "已装备的装备发生变更时产生极轻微的提示震动。"
+    },
+    {
+      "source": "A very short, sharp tick when you avoid an incoming attack.",
+      "target": "避开敌人攻击（闪避/招架/未命中）时产生极短促清脆的提示震动。"
+    },
+    {
+      "source": "AFK or DND toggled",
+      "target": "暂离或请勿打扰状态切换"
+    },
+    {
+      "source": "Ability pulse",
+      "target": "技能脉冲"
+    },
+    {
+      "source": "Achievement earned",
+      "target": "获得成就"
+    },
+    {
+      "source": "Action bar page changed",
+      "target": "动作条分页已切换"
+    },
+    {
+      "source": "Action bars",
+      "target": "动作条"
+    },
+    {
+      "source": "Action failed",
+      "target": "动作失败"
+    },
+    {
+      "source": "Action feedback",
+      "target": "动作反馈"
+    },
+    {
+      "source": "Activate",
+      "target": "激活"
+    },
+    {
+      "source": "Active Profile: |cffffd100%s|r",
+      "target": "当前配置文件：|cffffd100%s|r"
+    },
+    {
+      "source": "Active profile",
+      "target": "当前配置文件"
+    },
+    {
+      "source": "Actuator profile: %s\n%s",
+      "target": "执行器配置文件：%s\n%s"
+    },
+    {
+      "source": "Addon language",
+      "target": "插件语言"
+    },
+    {
+      "source": "Adjust your global master vibration strength. Individual cues can always be fine-tuned in settings.",
+      "target": "调节全局主震动强度。单个提示的强度始终可以在设置中进行微调。"
+    },
+    {
+      "source": "Advanced Settings",
+      "target": "高级设置"
+    },
+    {
+      "source": "Also fires when you cancel a cast yourself, or move out of range — it means \"your cast did not finish\", not specifically \"you were kicked\".",
+      "target": "当你自行取消施法或移出范围时也会触发——它的含义是“你的施法未能完成”，而非特指“你被法术反制/打断”。"
+    },
+    {
+      "source": "Also fires when you switch to a target that is already mid-cast.",
+      "target": "切换至正在施法中的目标时也会触发。"
+    },
+    {
+      "source": "Alternates between the motors — an unsteady, rolling feel.",
+      "target": "在不同马达之间交替——营造不稳定、翻滚的体感。"
+    },
+    {
+      "source": "Alternating low thud and high snap across motors.",
+      "target": "在马达间交替出现低频重击与高频抽击。"
+    },
+    {
+      "source": "Any other window",
+      "target": "任何其他窗口"
+    },
+    {
+      "source": "Anything else",
+      "target": "其他任何内容"
+    },
+    {
+      "source": "Applies only while this character is in this specialization. Switching specialization switches profile with it, with no further action from you.",
+      "target": "仅当此角色处于该专精时生效。切换专精将自动随之切换配置文件，无需任何额外操作。"
+    },
+    {
+      "source": "Applies to this character whatever specialization it is in. This is the rule the profile picker on the Pulse page has always written to.",
+      "target": "无论该角色处于何种专精均生效。这是 Pulse 页面上的配置文件选择器一直以来写入的规则。"
+    },
+    {
+      "source": "Attack time (s)",
+      "target": "起振时间 (秒)"
+    },
+    {
+      "source": "Attentive triage. Emergency low health warnings, dispel/CC alerts, kick warnings, and heal completion confirmation with subdued personal damage.",
+      "target": "专注救急支援。紧急低生命值预警、驱散/控制警报、打断警报以及治疗完成确认，同时降低自身承受伤害的提示干扰。"
+    },
+    {
+      "source": "Auto Shot fired",
+      "target": "自动射击已发射"
+    },
+    {
+      "source": "Auto-switch in %s",
+      "target": "在 %s 中自动切换"
+    },
+    {
+      "source": "Automatic — game language",
+      "target": "自动 — 游戏语言"
+    },
+    {
+      "source": "Automatically switch to %s whenever this character is in this specialization.",
+      "target": "每当该角色处于此专精时，自动切换至 %s。"
+    },
+    {
+      "source": "Battleground queue ready",
+      "target": "战场排队就绪"
+    },
+    {
+      "source": "Bed strength",
+      "target": "底震强度"
+    },
+    {
+      "source": "Bends the relationship between what a cue asks for and what the motor is told. Below 1.0 makes quiet cues louder; above 1.0 makes them quieter and reserves more of the range for strong ones. 1.0 is the unbent default.",
+      "target": "调节提示请求强度与马达实际输出之间的响应曲线。低于1.0会放大微弱提示；高于1.0会削弱微弱提示并将更多动态范围留给强烈冲击。1.0 为未作调节的默认值。"
+    },
+    {
+      "source": "Boss ability warning",
+      "target": "首领技能预警"
+    },
+    {
+      "source": "Boss chat warning",
+      "target": "首领喊话预警"
+    },
+    {
+      "source": "Boss encounter ended",
+      "target": "首领战结束"
+    },
+    {
+      "source": "Boss encounter started",
+      "target": "首领战开始"
+    },
+    {
+      "source": "Breakaway floor",
+      "target": "启转阈值"
+    },
+    {
+      "source": "Builds from a low hum into a high pulse.",
+      "target": "从低频嗡鸣逐渐增强为高频脉冲。"
+    },
+    {
+      "source": "CLICK %s:LeftButton",
+      "target": "CLICK %s:LeftButton"
+    },
+    {
+      "source": "Cancel",
+      "target": "取消"
+    },
+    {
+      "source": "Cast outcomes",
+      "target": "施法结果"
+    },
+    {
+      "source": "Cast presence (low)",
+      "target": "施法常驻感 (低频)"
+    },
+    {
+      "source": "Cast sent",
+      "target": "施法请求已发送"
+    },
+    {
+      "source": "Cast swell peak (high)",
+      "target": "施法渐强峰值 (高频)"
+    },
+    {
+      "source": "Cast texture, cast finish confirmation, lockout/pushback warnings, proc glows, kick alerts",
+      "target": "施法材质震动、施法完成确认、沉默/推迟施法预警、触发高亮、打断警报"
+    },
+    {
+      "source": "Casting",
+      "target": "正在施法"
+    },
+    {
+      "source": "Casting texture",
+      "target": "施法材质震动"
+    },
+    {
+      "source": "Change threshold",
+      "target": "变更阈值"
+    },
+    {
+      "source": "Character & Status",
+      "target": "角色与状态"
+    },
+    {
+      "source": "Character state",
+      "target": "角色状态"
+    },
+    {
+      "source": "Checked via C_UnitAuras.AuraIsBigDefensive. Occurrence only.",
+      "target": "通过 C_UnitAuras.AuraIsBigDefensive 检查。仅在发生时触发。"
+    },
+    {
+      "source": "Choose the addon display language. Automatic follows the game client. Missing translations use English. Changes apply after /reload.",
+      "target": "选择插件显示语言。“自动”将跟随游戏客户端语言。缺失的本地化文本将回退显示为英文。更改在重载界面（/reload）后生效。"
+    },
+    {
+      "source": "Click to open settings",
+      "target": "点击打开设置"
+    },
+    {
+      "source": "Climbs this motor slowly from silence to %d%% power over %d seconds, ",
+      "target": "使该马达从静音缓慢攀升至 %d%% 功率，历时 %d 秒，"
+    },
+    {
+      "source": "Close",
+      "target": "关闭"
+    },
+    {
+      "source": "Combo point gained",
+      "target": "获得连击点数"
+    },
+    {
+      "source": "Companion tools",
+      "target": "配套工具"
+    },
+    {
+      "source": "Competitive & Baseline",
+      "target": "竞技与基础"
+    },
+    {
+      "source": "Configure tactile rewards for exploring Azeroth and sensory spatial awareness for targeting.",
+      "target": "配置探索艾泽拉斯的触觉奖励以及用于目标选择的空间感知震动。"
+    },
+    {
+      "source": "Confirmation popup appeared",
+      "target": "确认弹窗出现"
+    },
+    {
+      "source": "Confirmation popup closed",
+      "target": "确认弹窗关闭"
+    },
+    {
+      "source": "Confused or possessed",
+      "target": "迷乱或被心控"
+    },
+    {
+      "source": "Conversation & reading",
+      "target": "对话与阅读"
+    },
+    {
+      "source": "Copy",
+      "target": "复制"
+    },
+    {
+      "source": "Copy \"%s\" to a new custom profile named:",
+      "target": "将“%s”复制到名为以下内容的新自定义配置文件："
+    },
+    {
+      "source": "Copy \"%s\" to a new profile named:",
+      "target": "将“%s”复制到名为以下内容的新配置文件："
+    },
+    {
+      "source": "Copy this profile",
+      "target": "复制此配置文件"
+    },
+    {
+      "source": "Copy...",
+      "target": "复制..."
+    },
+    {
+      "source": "Create",
+      "target": "创建"
+    },
+    {
+      "source": "Create a new editable custom profile that starts as an exact copy of %s.",
+      "target": "创建一个新的可编辑自定义配置文件，初始内容为 %s 的完整副本。"
+    },
+    {
+      "source": "Create a new profile from Registry.lua's stock defaults and switch to it.",
+      "target": "基于 Registry.lua 的内置默认值创建新配置文件并切换至该文件。"
+    },
+    {
+      "source": "Create a new profile that starts as an exact copy of the one in use, and switch to it. The two are independent from the first edit.",
+      "target": "创建一个以当前使用配置为完全副本的新配置文件并切换至该文件。从初次编辑起两者即完全独立。"
+    },
+    {
+      "source": "Create editable copy",
+      "target": "创建可编辑副本"
+    },
+    {
+      "source": "Create...",
+      "target": "创建..."
+    },
+    {
+      "source": "Crest froth & spray",
+      "target": "浪头泡沫与飞沫"
+    },
+    {
+      "source": "Cue index",
+      "target": "提示索引"
+    },
+    {
+      "source": "Danger start threshold",
+      "target": "危险起始阈值"
+    },
+    {
+      "source": "Death Knight",
+      "target": "死亡骑士"
+    },
+    {
+      "source": "Debuff received",
+      "target": "受到减益效果"
+    },
+    {
+      "source": "Debug logging",
+      "target": "调试日志"
+    },
+    {
+      "source": "Default",
+      "target": "默认"
+    },
+    {
+      "source": "Default (Balanced Baseline)",
+      "target": "默认 (平衡基准)"
+    },
+    {
+      "source": "Default profiles",
+      "target": "默认配置文件"
+    },
+    {
+      "source": "Defensive",
+      "target": "防御"
+    },
+    {
+      "source": "Delete",
+      "target": "删除"
+    },
+    {
+      "source": "Delete profile \"%s\"? This can't be undone.",
+      "target": "确定删除配置文件“%s”？此操作无法撤销。"
+    },
+    {
+      "source": "Delete this profile",
+      "target": "删除此配置文件"
+    },
+    {
+      "source": "Delete...",
+      "target": "删除..."
+    },
+    {
+      "source": "Device",
+      "target": "设备"
+    },
+    {
+      "source": "Disable All",
+      "target": "全部禁用"
+    },
+    {
+      "source": "Disable all cues",
+      "target": "禁用所有提示"
+    },
+    {
+      "source": "Disable all cues in profile",
+      "target": "禁用配置文件中的所有提示"
+    },
+    {
+      "source": "Disable every vibration cue in the active profile in one sweep for quiet testing or building a profile from scratch.",
+      "target": "一键禁用当前配置文件中的每个震动提示，用于静音测试或从零开始构建配置文件。"
+    },
+    {
+      "source": "Disarmed",
+      "target": "被缴械"
+    },
+    {
+      "source": "Displays a shortcut button on the edge of your minimap for quick access to settings and toggling vibration.",
+      "target": "在小地图边缘显示快捷按钮，以便快速打开设置和切换震动开关。"
+    },
+    {
+      "source": "Distinctiveness",
+      "target": "辨识度"
+    },
+    {
+      "source": "Distinguished from cancelling by Blizzard's own `isCancelled` flag, which it sets before ending the selection — so a cancel never counts as a choice.",
+      "target": "通过暴雪自带的 `isCancelled` 标记与取消操作区分开来，该标记在结束选择前设置——因此取消绝不会被计为确认选择。"
+    },
+    {
+      "source": "Doubles as the catch-all: a loss-of-control type this addon does not recognise — a new one added by a patch — fires this generic cue instead of being silently dropped.",
+      "target": "兼作通用兜底处理：若插件无法识别某种失控类型（例如补丁新增的类型），将触发此通用提示，而非被静默忽略。"
+    },
+    {
+      "source": "Druid",
+      "target": "德鲁伊"
+    },
+    {
+      "source": "Dual asymmetrical ERM motors, balanced 75ms spin-up",
+      "target": "双非对称 ERM 马达，平衡 75 毫秒起转"
+    },
+    {
+      "source": "Dual-motor rumble & vibration schemas",
+      "target": "双马达震动方案"
+    },
+    {
+      "source": "Duel request",
+      "target": "决斗请求"
+    },
+    {
+      "source": "Dungeon queue popped",
+      "target": "地下城排队就绪"
+    },
+    {
+      "source": "Dungeon: Caster",
+      "target": "地下城：法系"
+    },
+    {
+      "source": "Dungeon: Caster DPS",
+      "target": "地下城：法系输出"
+    },
+    {
+      "source": "Dungeon: Healer",
+      "target": "地下城：治疗"
+    },
+    {
+      "source": "Dungeon: Hunter",
+      "target": "地下城：猎人"
+    },
+    {
+      "source": "Dungeon: Melee",
+      "target": "地下城：近战"
+    },
+    {
+      "source": "Dungeon: Melee DPS",
+      "target": "地下城：近战输出"
+    },
+    {
+      "source": "Dungeon: Tank",
+      "target": "地下城：坦克"
+    },
+    {
+      "source": "Effort peak",
+      "target": "发力峰值"
+    },
+    {
+      "source": "Empowered cast stage",
+      "target": "蓄力施法阶段"
+    },
+    {
+      "source": "Enable All",
+      "target": "全部启用"
+    },
+    {
+      "source": "Enable Cue",
+      "target": "启用提示"
+    },
+    {
+      "source": "Enable Pulse",
+      "target": "启用 Pulse"
+    },
+    {
+      "source": "Enable all cues",
+      "target": "启用所有提示"
+    },
+    {
+      "source": "Enable all cues in profile",
+      "target": "启用配置文件中的所有提示"
+    },
+    {
+      "source": "Enable every vibration cue in the active profile in one sweep for testing and debugging.",
+      "target": "一键启用当前配置文件中的每个震动提示，用于测试与调试。"
+    },
+    {
+      "source": "Encounter",
+      "target": "首领战斗"
+    },
+    {
+      "source": "Entered a vehicle",
+      "target": "进入载具"
+    },
+    {
+      "source": "Entered melee range",
+      "target": "进入近战范围"
+    },
+    {
+      "source": "Environment",
+      "target": "环境"
+    },
+    {
+      "source": "Equipment",
+      "target": "装备"
+    },
+    {
+      "source": "Every character",
+      "target": "所有角色"
+    },
+    {
+      "source": "Evoker-only in practice. It stays registered for every class and simply never fires for the others.",
+      "target": "实际上仅适用于唤魔师。它对所有职业保持注册状态，但对其他职业绝不触发。"
+    },
+    {
+      "source": "Experience gained",
+      "target": "获得经验值"
+    },
+    {
+      "source": "Experimental",
+      "target": "实验性"
+    },
+    {
+      "source": "Fast attack time constant used specifically for discrete impacts, clicks, and strikes. Gives snappy transients without making sustained immersion textures harsh.",
+      "target": "专用于离散撞击、点击与打击的快速起振时间常数。提供干脆利落的瞬态响应，同时避免持续沉浸材质震感变得生硬刺手。"
+    },
+    {
+      "source": "Feared or charmed",
+      "target": "恐惧或魅惑"
+    },
+    {
+      "source": "Feel ",
+      "target": "体验 "
+    },
+    {
+      "source": "Feel Strength",
+      "target": "体感强度"
+    },
+    {
+      "source": "Feel this texture",
+      "target": "体验此震感"
+    },
+    {
+      "source": "Feels like",
+      "target": "体感效果"
+    },
+    {
+      "source": "Feels like: ",
+      "target": "体感效果："
+    },
+    {
+      "source": "Find breakaway floor",
+      "target": "查找启转阈值"
+    },
+    {
+      "source": "Fires as an empowered cast of yours begins and ends.",
+      "target": "在你的蓄力施法开始和结束时触发。"
+    },
+    {
+      "source": "Fires at most ",
+      "target": "最多触发 "
+    },
+    {
+      "source": "Fires for any summon confirmation dialog, not only a player summoning you.",
+      "target": "在出现任何召唤确认对话框时触发，不仅限于其他玩家召唤你。"
+    },
+    {
+      "source": "Fires on PLAYER_TARGET_DIED.",
+      "target": "在收到 PLAYER_TARGET_DIED 事件时触发。"
+    },
+    {
+      "source": "Fires on input, so it also fires for casts that then fail. That is intentional: this is an input-acknowledgement cue, not a success cue.",
+      "target": "在按键输入时触发，因此对于随后失败的施法也会触发。这是有意设计的：本提示为按键确认提示，而非成功提示。"
+    },
+    {
+      "source": "Fires on the change itself, not on every flag update.",
+      "target": "仅在状态本身发生改变时触发，而非在每次标记刷新时触发。"
+    },
+    {
+      "source": "Fires on the crossing into low, not repeatedly while low.",
+      "target": "仅在耐久度跌入过低区间时触发一次，而非在低耐久状态下重复触发。"
+    },
+    {
+      "source": "Fires on the yellow informational messages the game shows in the top centre of the screen.",
+      "target": "在屏幕顶部中央显示黄色游戏提示信息时触发。"
+    },
+    {
+      "source": "Fires only when a queue enters the ready-to-enter state, not on every status update.",
+      "target": "仅在排队进入“可进入”状态时触发，而非在每次状态更新时触发。"
+    },
+    {
+      "source": "Fires the instant you press a cast, before the server has confirmed it.",
+      "target": "在你按下施法瞬间触发，无需等待服务器确认。"
+    },
+    {
+      "source": "Fires upon arrival at destination when player control is restored.",
+      "target": "在到达目的地且玩家角色控制权恢复时触发。"
+    },
+    {
+      "source": "Fires when a battleground or arena queue is ready to enter.",
+      "target": "战场或竞技场排队准备就绪可进入时触发。"
+    },
+    {
+      "source": "Fires when a boss encounter begins.",
+      "target": "首领战开始时触发。"
+    },
+    {
+      "source": "Fires when a boss encounter ends, in victory or in a wipe.",
+      "target": "首领战结束时触发（无论是获胜还是团灭）。"
+    },
+    {
+      "source": "Fires when a flight master's map opens.",
+      "target": "飞行管理员地图打开时触发。"
+    },
+    {
+      "source": "Fires when a loading screen ends and the world is back.",
+      "target": "加载界面结束且游戏世界重新显现时触发。"
+    },
+    {
+      "source": "Fires when a quest is handed in and its reward is taken.",
+      "target": "交付任务并领取奖励时触发。"
+    },
+    {
+      "source": "Fires when a quest's completion page opens, ready to hand in.",
+      "target": "任务完成页面打开、准备交付任务时触发。"
+    },
+    {
+      "source": "Fires when a quest's detail page opens, ready to accept.",
+      "target": "任务详情页面打开、准备接受任务时触发。"
+    },
+    {
+      "source": "Fires when a ready check completes or times out.",
+      "target": "就位确认完成或超时时触发。"
+    },
+    {
+      "source": "Fires when a ready check starts.",
+      "target": "发起就位确认时触发。"
+    },
+    {
+      "source": "Fires when a role check starts.",
+      "target": "发起职责确认时触发。"
+    },
+    {
+      "source": "Fires when a trade window opens.",
+      "target": "交易窗口打开时触发。"
+    },
+    {
+      "source": "Fires when a vendor window opens.",
+      "target": "商人窗口打开时触发。"
+    },
+    {
+      "source": "Fires when an innkeeper asks to make this your home.",
+      "target": "旅店老板询问是否将此处设为家时触发。"
+    },
+    {
+      "source": "Fires when gaining money with an open vendor window.",
+      "target": "商人窗口打开状态下获得金钱时触发。"
+    },
+    {
+      "source": "Fires when group leadership changes hands.",
+      "target": "队伍领袖变更时触发。"
+    },
+    {
+      "source": "Fires when one of your own casts begins.",
+      "target": "你自身的施法开始时触发。"
+    },
+    {
+      "source": "Fires when one of your own casts completes successfully — distinct from a cast simply ending.",
+      "target": "你自身的施法成功完成时触发——与施法单纯结束有所区别。"
+    },
+    {
+      "source": "Fires when one of your own casts ends, whether or not it completed.",
+      "target": "你自身的施法结束时触发（无论是否成功完成）。"
+    },
+    {
+      "source": "Fires when someone challenges you to a duel.",
+      "target": "有人向你发起决斗挑战时触发。"
+    },
+    {
+      "source": "Fires when someone invites you to a group.",
+      "target": "有人邀请你加入队伍时触发。"
+    },
+    {
+      "source": "Fires when someone joins or leaves your group.",
+      "target": "有人加入或离开你的队伍时触发。"
+    },
+    {
+      "source": "Fires when someone offers you a resurrection and the accept dialog appears.",
+      "target": "有人对你施放复活且弹出接受复活对话框时触发。"
+    },
+    {
+      "source": "Fires when someone summons you and the accept dialog appears.",
+      "target": "有人召唤你且弹出接受召唤对话框时触发。"
+    },
+    {
+      "source": "Fires when spending money with an open vendor window.",
+      "target": "商人窗口打开状态下花费金钱时触发。"
+    },
+    {
+      "source": "Fires when the stable master's window opens.",
+      "target": "兽栏管理员窗口打开时触发。"
+    },
+    {
+      "source": "Fires when you accept a quest.",
+      "target": "接受任务时触发。"
+    },
+    {
+      "source": "Fires when you are confused or possessed (CONFUSE, POSSESS).",
+      "target": "当你陷入迷乱或被心控（CONFUSE、POSSESS）时触发。"
+    },
+    {
+      "source": "Fires when you are disarmed (DISARM).",
+      "target": "当你被缴械（DISARM）时触发。"
+    },
+    {
+      "source": "Fires when you are feared or charmed (FEAR, FEAR_MECHANIC, CHARM).",
+      "target": "当你受到恐惧或魅惑（FEAR、FEAR_MECHANIC、CHARM）时触发。"
+    },
+    {
+      "source": "Fires when you are resurrected or leave ghost form.",
+      "target": "当你复活或脱离灵魂形态时触发。"
+    },
+    {
+      "source": "Fires when you are rooted in place (ROOT). You can still act, so this is a rung below the cues that stop you entirely.",
+      "target": "当你被定身（ROOT）时触发。你仍可行动，因此其提示级别低于完全限制行动的失控效果。"
+    },
+    {
+      "source": "Fires when you are silenced (SILENCE).",
+      "target": "当你被沉默（SILENCE）时触发。"
+    },
+    {
+      "source": "Fires when you are stunned (STUN, STUN_MECHANIC).",
+      "target": "当你被昏迷（STUN、STUN_MECHANIC）时触发。"
+    },
+    {
+      "source": "Fires when you change target, including when you clear it.",
+      "target": "切换目标时触发（包括清除当前目标）。"
+    },
+    {
+      "source": "Fires when you die.",
+      "target": "死亡时触发。"
+    },
+    {
+      "source": "Fires when you enter a new zone.",
+      "target": "进入新区域时触发。"
+    },
+    {
+      "source": "Fires when you enter a vehicle and your action bar is replaced.",
+      "target": "进入载具且动作条被替换时触发。"
+    },
+    {
+      "source": "Fires when you leave a vehicle and your own action bar returns.",
+      "target": "离开载具且原有动作条恢复时触发。"
+    },
+    {
+      "source": "Fires when you set or clear your focus target.",
+      "target": "设置或清除焦点目标时触发。"
+    },
+    {
+      "source": "Fires when your class's secondary resource fills up — combo points, holy power, soul shards, chi, arcane charges, essence or runes, whichever your specialisation uses.",
+      "target": "当职业副资源蓄满时触发——连击点数、圣能、灵魂碎片、真气、奥术充能、精华或符文，视当前专精所用资源而定。"
+    },
+    {
+      "source": "Fires when your focus target begins casting.",
+      "target": "焦点目标开始施法时触发。"
+    },
+    {
+      "source": "Fires when your own away or do-not-disturb flag actually changes.",
+      "target": "自身的暂离或请勿打扰状态发生改变时触发。"
+    },
+    {
+      "source": "Flight map opened",
+      "target": "飞行地图已打开"
+    },
+    {
+      "source": "Focus",
+      "target": "焦点"
+    },
+    {
+      "source": "Focus changed",
+      "target": "焦点目标已更改"
+    },
+    {
+      "source": "Focus started casting",
+      "target": "焦点目标开始施法"
+    },
+    {
+      "source": "Focused element became unavailable",
+      "target": "焦点元素变为不可用"
+    },
+    {
+      "source": "Four rapid, sharp ticks.",
+      "target": "四次快速清脆的提示震动。"
+    },
+    {
+      "source": "Gait strength",
+      "target": "步态强度"
+    },
+    {
+      "source": "Gasp peak",
+      "target": "喘息峰值"
+    },
+    {
+      "source": "Gear needs repair",
+      "target": "装备需要修理"
+    },
+    {
+      "source": "Generic / Unknown",
+      "target": "通用 / 未知"
+    },
+    {
+      "source": "Generic / unknown",
+      "target": "通用 / 未知"
+    },
+    {
+      "source": "Gentle steady engine-like cruise vibration while riding flight master gryphons, bats, or wyverns.",
+      "target": "骑乘飞行管理员的狮鹫、蝙蝠或双足飞龙时，产生类似引擎巡航般平缓稳定的震动。"
+    },
+    {
+      "source": "Group changes",
+      "target": "队伍变动"
+    },
+    {
+      "source": "Group readiness",
+      "target": "队伍就位"
+    },
+    {
+      "source": "Group roster changed",
+      "target": "队伍名册已变更"
+    },
+    {
+      "source": "Group targeting active",
+      "target": "小队目标选择已激活"
+    },
+    {
+      "source": "Group targeting released",
+      "target": "小队目标选择已释放"
+    },
+    {
+      "source": "Hardware & Presets",
+      "target": "硬件与预设"
+    },
+    {
+      "source": "Harvest complete",
+      "target": "采集完成"
+    },
+    {
+      "source": "Heal casts and low-health triage",
+      "target": "治疗施法与低生命急救"
+    },
+    {
+      "source": "Healing received",
+      "target": "受到治疗"
+    },
+    {
+      "source": "Health & survival",
+      "target": "生命与生存"
+    },
+    {
+      "source": "Heart rate (BPM)",
+      "target": "心率 (BPM)"
+    },
+    {
+      "source": "Heart rate (calm), BPM",
+      "target": "心率 (平静)，BPM"
+    },
+    {
+      "source": "Heavy Impacts",
+      "target": "重度撞击"
+    },
+    {
+      "source": "Heavy left counterweight (85ms), light right counterweight (45ms)",
+      "target": "左侧重配重块 (85毫秒)，右侧轻配重块 (45毫秒)"
+    },
+    {
+      "source": "High Motor Only",
+      "target": "仅轻震马达"
+    },
+    {
+      "source": "High motor",
+      "target": "轻震马达"
+    },
+    {
+      "source": "Hooks StackSplitFrame:UpdateStackText.",
+      "target": "挂钩 StackSplitFrame:UpdateStackText。"
+    },
+    {
+      "source": "How far the hum swells either side of its baseline. 0 is a flat hold.",
+      "target": "嗡鸣声围绕基线起伏膨胀的幅度。0 表示平稳维持。"
+    },
+    {
+      "source": "How fast the wingbeat-style undulation cycles.",
+      "target": "振翅式起伏波动的循环速率。"
+    },
+    {
+      "source": "How many seconds before the scripted moment this fires.",
+      "target": "在脚本时刻到来前多少秒触发。"
+    },
+    {
+      "source": "How pronounced each stroke is against its own baseline. Higher values (0.80-1.0) allow the counterweight to physically spin down during the glide phase between strokes. 0 is a flat drag with no rhythm at all.",
+      "target": "每个划行动作相对于其基线的明显程度。较高的数值（0.80-1.0）允许配重块在两次划水之间的滑行阶段自然减速。0 为完全没有节奏的单调拖拽。"
+    },
+    {
+      "source": "How steady the low motor stays regardless of speed. Only audible while actually gliding.",
+      "target": "无论速度如何，重震马达保持平稳的程度。仅在实际滑翔时可被感知。"
+    },
+    {
+      "source": "How strong the hum gets by the moment a regular cast completes. Only audible if \"Casting texture\" is also enabled on its own tab.",
+      "target": "常规施法完成瞬间嗡鸣达到的强度。仅在对应标签页中同样启用了“施法材质震动”时方可感知。"
+    },
+    {
+      "source": "Hunter",
+      "target": "猎人"
+    },
+    {
+      "source": "If nothing is happening",
+      "target": "如果没有事件发生"
+    },
+    {
+      "source": "Immediately switch to %s for the current character.",
+      "target": "立即为当前角色切换至 %s。"
+    },
+    {
+      "source": "Immersion: Caster",
+      "target": "沉浸：法系"
+    },
+    {
+      "source": "Immersion: Melee",
+      "target": "沉浸：近战"
+    },
+    {
+      "source": "Immersion: Ranged",
+      "target": "沉浸：远程"
+    },
+    {
+      "source": "Impact attack (s)",
+      "target": "撞击起振 (秒)"
+    },
+    {
+      "source": "Initial software voltage boost applied during transient onset to accelerate the motor rapidly to target speed. 1.0 is disabled.",
+      "target": "在瞬态开始时应用的初始软件电压增强，以使马达迅速加速至目标转速。1.0 为禁用。"
+    },
+    {
+      "source": "Innkeeper hearth prompt",
+      "target": "旅店老板炉石绑定提示"
+    },
+    {
+      "source": "Input device changed",
+      "target": "输入设备已更改"
+    },
+    {
+      "source": "Input mode",
+      "target": "输入模式"
+    },
+    {
+      "source": "Instant ability used",
+      "target": "已使用瞬发技能"
+    },
+    {
+      "source": "Intensity",
+      "target": "强度"
+    },
+    {
+      "source": "Intensity Slider",
+      "target": "强度滑块"
+    },
+    {
+      "source": "Interface",
+      "target": "界面"
+    },
+    {
+      "source": "Interface & Accessibility",
+      "target": "界面与辅助功能"
+    },
+    {
+      "source": "Interface message",
+      "target": "界面信息"
+    },
+    {
+      "source": "Interface tab changed",
+      "target": "界面标签页已切换"
+    },
+    {
+      "source": "Inventory full warning",
+      "target": "背包已满警告"
+    },
+    {
+      "source": "Invites & requests",
+      "target": "邀请与请求"
+    },
+    {
+      "source": "Jarring physical weapon clatter",
+      "target": "剧烈的物理武器碰撞声"
+    },
+    {
+      "source": "LRA (Classic ERM Emulation)",
+      "target": "LRA (经典 ERM 模拟)"
+    },
+    {
+      "source": "Landed",
+      "target": "着陆"
+    },
+    {
+      "source": "Leave this scope with no opinion and let the next one decide.",
+      "target": "保持当前作用域未设定，交由下一层级决定。"
+    },
+    {
+      "source": "Left a vehicle",
+      "target": "离开载具"
+    },
+    {
+      "source": "Left melee range",
+      "target": "离开近战范围"
+    },
+    {
+      "source": "Level up",
+      "target": "升级"
+    },
+    {
+      "source": "Lifecycle (advanced)",
+      "target": "生命周期 (高级)"
+    },
+    {
+      "source": "Load its starting values",
+      "target": "加载其初始预设值"
+    },
+    {
+      "source": "Loading screen finished",
+      "target": "加载界面结束"
+    },
+    {
+      "source": "Loss of control",
+      "target": "失去控制"
+    },
+    {
+      "source": "Loss of control cues",
+      "target": "失去控制提示"
+    },
+    {
+      "source": "Low Health Heartbeat",
+      "target": "低生命值心跳"
+    },
+    {
+      "source": "Low Motor Only",
+      "target": "仅重震马达"
+    }
+  ]
+}

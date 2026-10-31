@@ -1,0 +1,432 @@
+{
+  "items": [
+    {
+      "source": "1. Controller",
+      "target": "1. 컨트롤러"
+    },
+    {
+      "source": "8BitDo (Ultimate / Pro 2)",
+      "target": "8BitDo (Ultimate / Pro 2)"
+    },
+    {
+      "source": "8BitDo / Other XInput",
+      "target": "8BitDo / 기타 XInput"
+    },
+    {
+      "source": "A bright tick when the game switches between controller and mouse-and-keyboard.",
+      "target": "게임이 컨트롤러와 마우스/키보드 사이에서 전환될 때 발생하는 선명한 틱 진동입니다."
+    },
+    {
+      "source": "A bright tick when you commit to a radial segment by letting the stick return to centre.",
+      "target": "스틱을 중앙으로 복귀시켜 원형 메뉴 구획을 확정할 때 발생하는 선명한 틱 진동입니다."
+    },
+    {
+      "source": "A distinct tap when holding the controller modifier to target party or raid members.",
+      "target": "파티원이나 공격대원을 대상으로 지정하기 위해 컨트롤러 보조 키를 누르고 있을 때 느껴지는 뚜렷한 탭 진동입니다."
+    },
+    {
+      "source": "A falling pulse when the controller hands control back to your character.",
+      "target": "컨트롤러가 캐릭터로 제어권을 다시 넘겨줄 때 발생하는 하강 펄스 진동입니다."
+    },
+    {
+      "source": "A rising pulse when the controller radial menu opens.",
+      "target": "컨트롤러 원형 메뉴가 열릴 때 발생하는 상승 펄스 진동입니다."
+    },
+    {
+      "source": "A rising pulse when the controller starts driving a UI panel instead of your character.",
+      "target": "컨트롤러가 캐릭터 대신 UI 창을 제어하기 시작할 때 발생하는 상승 펄스 진동입니다."
+    },
+    {
+      "source": "A short, sharp tick when controller focus runs into the edge of a list or grid and can't go further.",
+      "target": "컨트롤러 포커스가 목록이나 격자의 가장자리에 도달하여 더 이상 이동할 수 없을 때 울리는 짧고 날카로운 틱 진동입니다."
+    },
+    {
+      "source": "A tactile click when native gamepad or action targeting triggers an interaction with the soft target.",
+      "target": "기본 게임패드 또는 액션 대상 지정 기능이 소프트 타깃과의 상호작용을 실행할 때 발생하는 촉각 클릭 진동입니다."
+    },
+    {
+      "source": "A very light tick each time controller focus moves to a different interface element.",
+      "target": "컨트롤러 포커스가 다른 인터페이스 요소로 이동할 때마다 울리는 아주 가벼운 틱 진동입니다."
+    },
+    {
+      "source": "A very light tick per segment as you sweep the stick around the radial — the wheel gets detents you can feel.",
+      "target": "스틱으로 원형 메뉴를 회전할 때 구획마다 발생하는 아주 가벼운 틱 진동입니다. 손끝에 느껴지는 걸림(멈춤쇠) 효과를 제공합니다."
+    },
+    {
+      "source": "ACTIONBAR_PAGE_CHANGED. Useful on a controller specifically, where the bar you're on isn't always where your eyes are. Does not cover the vehicle/override/possess bar swaps, which are their own events and would want their own cue if they turn out to matter.",
+      "target": "ACTIONBAR_PAGE_CHANGED. 시선이 항상 현재 행동 단축바에 머물지 않는 컨트롤러 조작 시 특히 유용합니다. 탈것/대체/지배 바 전환은 별도의 이벤트이며 중요할 경우 고유한 신호가 필요하므로 여기에 포함되지 않습니다."
+    },
+    {
+      "source": "Apply the \"%s\" starting point? This overwrites every motor's strength, floor, timing and curve with that controller's values — any trimming you have already done is lost.",
+      "target": "\"%s\" 시작 설정을 적용하시겠습니까? 모든 모터의 강도, 시동 임계값, 타이밍 및 감응 곡선이 해당 컨트롤러의 기본값으로 덮어씌워지며, 이미 조정한 미세 설정은 모두 사라집니다."
+    },
+    {
+      "source": "Asks the controller what it is and suggests a row from the list above. Only prints a suggestion — it never selects or applies anything for you.",
+      "target": "컨트롤러 종류를 확인하고 위 목록에서 적합한 항목을 추천합니다. 추천 내용만 표시하며, 설정을 자동으로 선택하거나 적용하지는 않습니다."
+    },
+    {
+      "source": "Balances this motor against the others. Raise it if this motor is the weak one on your controller, lower it if it drowns everything else out. This is the knob the old \"Low Motor Only\"/\"High Motor Only\" schemas were being misused for — those still exist, but for a motor that is actually dead, not merely quieter.",
+      "target": "이 모터와 다른 모터의 균형을 조정합니다. 컨트롤러에서 이 모터의 진동이 약하면 값을 올리고, 다른 진동을 묻히게 할 정도로 강하면 값을 낮추세요. 이 조절 슬라이더는 과거 '저속 모터 전용'/'고속 모터 전용' 스키마가 잘못 사용되던 문제를 해결하기 위한 것입니다. 해당 스키마는 단순히 모터 진동이 약한 경우가 아니라 모터가 실제로 작동하지 않을 때를 위해 여전히 제공됩니다."
+    },
+    {
+      "source": "Both rumble motors work normally. Start here, then balance their strength on the Controller calibration page.",
+      "target": "두 진동 모터가 정상적으로 작동합니다. 이 설정으로 시작한 후, 컨트롤러 보정 페이지에서 각 모터의 강도 균형을 맞추세요."
+    },
+    {
+      "source": "Bound to the right-stick press in Blizzard's own radial.",
+      "target": "블리자드 기본 원형 메뉴에서 오른쪽 스틱 누르기 버튼에 지정되어 있습니다."
+    },
+    {
+      "source": "Brings Blizzard's native gamepad interface alive under your thumbs:\n• |cffffffffRadial & Menus:|r Soft tactile micro-taps as your stick moves across buttons and tabs.\n• |cffffffffWindows:|r Physical confirmation when opening bags, merchant shops, banks, and mail.\n• |cffffffffDialogs & Prompts:|r Tactile prompt when NPC interaction windows or quest frames appear.",
+      "target": "엄지손가락 끝으로 블리자드 기본 게임패드 인터페이스의 생생한 감각을 느껴보세요:\n• |cffffffff원형 메뉴 및 메뉴:|r 스틱이 버튼과 탭 사이를 이동할 때 부드러운 미세 촉각 탭이 울립니다.\n• |cffffffff창:|r 가방, 상점, 은행, 우편함을 열 때 물리적인 확인 진동이 발생합니다.\n• |cffffffff대화창 및 안내:|r NPC 상호작용 창이나 퀘스트 창이 나타날 때 촉각 알림이 울립니다."
+    },
+    {
+      "source": "Captures the active vibration level from a running Ramp sweep and writes it directly to this motor's Breakaway floor slider below, then stops the ramp. Press this the moment you first feel the motor move!",
+      "target": "진행 중인 램프 테스트 스윕에서 활성 진동 수치를 캡처하여 아래 해당 모터의 시동 임계값 슬라이더에 직접 기록한 후 램프 테스트를 중지합니다. 모터가 회전하기 시작하는 것이 느껴지는 바로 그 순간에 누르세요!"
+    },
+    {
+      "source": "Choose whether gamepad menu navigation and group communication produce controller vibration.",
+      "target": "게임패드 메뉴 탐색 및 파티/공격대 의사소통 시 컨트롤러 진동을 발생시킬지 선택합니다."
+    },
+    {
+      "source": "Clears any vibration still in flight when the controller disconnects.",
+      "target": "컨트롤러 연결이 끊어질 때 출력 중인 잔여 진동을 즉시 제거합니다."
+    },
+    {
+      "source": "Controller",
+      "target": "컨트롤러"
+    },
+    {
+      "source": "Controller Interactions",
+      "target": "컨트롤러 상호작용"
+    },
+    {
+      "source": "Controller UI",
+      "target": "컨트롤러 UI"
+    },
+    {
+      "source": "Controller UI & Window Feedback",
+      "target": "컨트롤러 UI 및 창 피드백"
+    },
+    {
+      "source": "Controller battery low",
+      "target": "컨트롤러 배터리 부족"
+    },
+    {
+      "source": "Controller calibration",
+      "target": "컨트롤러 보정"
+    },
+    {
+      "source": "Controller connected",
+      "target": "컨트롤러 연결됨"
+    },
+    {
+      "source": "Controller disconnected",
+      "target": "컨트롤러 연결 끊김"
+    },
+    {
+      "source": "Controllers differ in which motors they have, and the game never reports whether a vibration actually happened. Nothing can detect this for you, so you have to feel it.\n\nPick a mode from the **Mode to test** dropdown near the top of the panel and press **Play**. Try a few — sharp ones, sustained ones, textures. Pay attention to which ones you can feel clearly, which are faint, and which do not arrive at all.\n\nIf some were missing or silent, check two places:\n\nThe **Vibration schema** dropdown near the top of the panel. A schema decides which motor each pulse drives, and swapping it works around a controller that only drives one of them.\n\nThe **Controller calibration** page. Real motors need a minimum amount of power just to start spinning (their breakaway floor). If quiet cues vanish entirely, use the **Ramp** tool there to calibrate your motor floors and balance their strength.",
+      "target": "컨트롤러마다 장착된 모터의 종류가 다르며, 게임 엔진은 진동이 실제로 출력되었는지 여부를 알려주지 않습니다. 시스템이 이를 대신 감지할 수 없으므로 직접 느껴봐야 합니다.\n\n패널 상단의 **테스트할 모드** 드롭다운에서 모드를 선택하고 **재생**을 누르세요. 날카로운 진동, 지속적인 진동, 질감 진동 등 여러 가지를 시도해 보세요. 어떤 진동이 또렷하게 느껴지는지, 어떤 것이 희미하거나 아예 느껴지지 않는지 주의 깊게 살펴보세요.\n\n일부 진동이 누락되었거나 느껴지지 않는다면 다음 두 곳을 확인하세요:\n\n패널 상단의 **진동 스키마** 드롭다운: 스키마는 각 펄스가 구동할 모터를 결정하므로, 이를 변경하여 하나의 모터만 작동하는 컨트롤러 문제를 해결할 수 있습니다.\n\n**컨트롤러 보정** 페이지: 실제 모터는 회전을 시작하기 위해 최소한의 전력(시동 임계값)이 필요합니다. 약한 신호가 완전히 묻혀버린다면 해당 페이지의 **램프 테스트** 도구를 사용하여 모터의 시동 임계값을 보정하고 강도 균형을 맞추세요."
+    },
+    {
+      "source": "Drive this motor at half power for a second and a half, bypassing every setting on this page and every schema. If you feel nothing here, this channel does not work on your controller and no amount of tuning below will change that.",
+      "target": "이 페이지의 모든 설정과 진동 스키마를 무시하고 이 모터를 1.5초 동안 절반 출력으로 구동합니다. 여기서 아무것도 느껴지지 않는다면 해당 채널은 컨트롤러에서 지원되지 않는 것이며, 아래의 어떤 설정으로도 이를 변경할 수 없습니다."
+    },
+    {
+      "source": "DualSense (PS5)",
+      "target": "DualSense (PS5)"
+    },
+    {
+      "source": "DualShock 4 (PS4)",
+      "target": "DualShock 4 (PS4)"
+    },
+    {
+      "source": "Engine defaults without device-specific calibration",
+      "target": "기기별 보정이 적용되지 않은 엔진 기본값"
+    },
+    {
+      "source": "Every cue, its intensity and \"feels like\" shape, your profiles, per-mode motor and timing tuning, controller calibration, the mode tester and the guide — all of it is in Pulse's own window.\n\nIt draws itself rather than living as pages in this panel, which is what lets it build only what you are looking at instead of every control in the addon at every login.",
+      "target": "모든 신호와 강도, '체감 형태', 프로필, 모드별 모터 및 타이밍 미세 조정, 컨트롤러 보정, 모드 테스터, 가이드 등 모든 기능이 Pulse 자체 창에 들어 있습니다.\n\n이 기능들은 본 패널의 일반 페이지 대신 자체 창으로 렌더링되므로, 로그인할 때마다 애드온의 모든 컨트롤을 일괄 생성하는 대신 사용자가 현재 보고 있는 화면만 효율적으로 구성합니다."
+    },
+    {
+      "source": "Fires once when the controller's battery drops into its low or critical range.",
+      "target": "컨트롤러 배터리가 부족하거나 위험 수준으로 떨어졌을 때 한 번 발생합니다."
+    },
+    {
+      "source": "Fires when a controller connects.",
+      "target": "컨트롤러가 연결되었을 때 발생합니다."
+    },
+    {
+      "source": "Fires when the element controller focus is currently on becomes disabled.",
+      "target": "컨트롤러 포커스가 위치한 요소가 비활성화될 때 발생합니다."
+    },
+    {
+      "source": "First: switch controller support on",
+      "target": "1단계: 컨트롤러 지원 켜기"
+    },
+    {
+      "source": "How sharply the high motor ramps in with speed. 1 = linear, higher = holds back more until near max speed. Only audible while actually gliding.",
+      "target": "속도 증가에 따라 고속 모터가 얼마나 급격하게 상승할지 설정합니다. 1 = 선형적 상승, 더 높은 값 = 최고 속도에 도달할 때까지 진동을 억제합니다. 실제로 활공 중일 때만 체감할 수 있습니다."
+    },
+    {
+      "source": "Interface released controller focus",
+      "target": "인터페이스의 컨트롤러 포커스 해제"
+    },
+    {
+      "source": "Interface took controller focus",
+      "target": "인터페이스의 컨트롤러 포커스 획득"
+    },
+    {
+      "source": "Launch the interactive onboarding wizard to configure controller hardware, combat haptics, world feedback, and immersion textures.",
+      "target": "대화형 초기 설정 마법사를 시작하여 컨트롤러 하드웨어, 전투 햅틱, 환경 피드백 및 몰입 질감을 구성합니다."
+    },
+    {
+      "source": "Mark floor from ramp",
+      "target": "램프 테스트에서 시동 임계값 지정"
+    },
+    {
+      "source": "Master switch for all menu, window, tab, and radial controller haptics. Turn off to silence all UI navigation haptics at once while keeping combat and world rumble active.",
+      "target": "모든 메뉴, 창, 탭 및 원형 메뉴의 컨트롤러 햅틱을 제어하는 마스터 스위치입니다. 전투 및 환경 진동은 유지한 채 모든 UI 탐색 햅틱을 한 번에 끄려면 이 기능을 비활성화하세요."
+    },
+    {
+      "source": "Menu & controller UI haptics",
+      "target": "메뉴 및 컨트롤러 UI 햅틱"
+    },
+    {
+      "source": "Nintendo Switch Pro",
+      "target": "Nintendo Switch Pro"
+    },
+    {
+      "source": "Overall gasp-knock strength — fixed per beat, not scaled by danger (2026-09-16: a danger-scaled lub/dub risked landing under the controller motor's own minimum activation threshold at low danger, causing missing \"dub\" knocks live). Urgency comes from heartRateCalm/heartRateCritical instead. Only audible if \"Underwater breath texture\" is also enabled on its own tab.",
+      "target": "전체 숨 헐떡임 노크 강도 — 박자당 고정되며 위험도에 비례하지 않습니다 (2026-09-16: 위험도 비례식 심장박동 진동은 위험도가 낮을 때 컨트롤러 모터의 최소 활성화 임계값 밑으로 떨어져 두 번째 노크가 누락될 위험이 있었습니다). 긴박감은 heartRateCalm/heartRateCritical 설정으로 대체 표현됩니다. 해당 탭에서 '수중 호흡 질감'도 활성화되어 있어야 체감할 수 있습니다."
+    },
+    {
+      "source": "Overwrite every motor's calibration with the selected controller's starting values. Ask first, because this discards any trimming you have already done.",
+      "target": "모든 모터의 보정값을 선택한 컨트롤러의 초기 기본값으로 덮어씁니다. 이미 조정한 미세 설정이 모두 초기화되므로 확인 창이 먼저 표시됩니다."
+    },
+    {
+      "source": "PLAYER_SOFT_TARGET_INTERACTION. Fires when native gamepad/action interact executes on the current soft target.",
+      "target": "PLAYER_SOFT_TARGET_INTERACTION. 기본 게임패드/액션 상호작용이 현재 소프트 타깃에 대해 실행될 때 발생합니다."
+    },
+    {
+      "source": "Passively polled from GamepadRadial:IsShown() to eliminate EventRegistry callback taint during radial menu activation.",
+      "target": "원형 메뉴 활성화 중 EventRegistry 콜백 오염(taint)을 방지하기 위해 GamepadRadial:IsShown() 상태를 수동적으로 확인(폴링)합니다."
+    },
+    {
+      "source": "Passively polled from GamepadRadial:IsShown(). Picking a segment that opens a panel also closes the radial.",
+      "target": "GamepadRadial:IsShown() 상태를 수동적으로 확인(폴링)합니다. 창을 여는 구획을 선택하면 원형 메뉴도 함께 닫힙니다."
+    },
+    {
+      "source": "Passively polled from SmartNavigation focus state. Fires when controller navigation gains focus on a UI element.",
+      "target": "SmartNavigation 포커스 상태를 수동적으로 확인(폴링)합니다. 컨트롤러 탐색이 UI 요소에 포커스를 맞출 때 발생합니다."
+    },
+    {
+      "source": "Passively polled from SmartNavigation focus state. Fires when controller navigation releases focus back to world control.",
+      "target": "SmartNavigation 포커스 상태를 수동적으로 확인(폴링)합니다. 컨트롤러 탐색이 포커스를 해제하고 조작권을 게임 환경으로 반환할 때 발생합니다."
+    },
+    {
+      "source": "Passively polled from SmartNavigation's currentButton every 0.05s to eliminate execution taint when gamepad mode is toggled. Fires on real focus changes rather than stick motion. Gated on gamepad UI being active.",
+      "target": "게임패드 모드 전환 시 실행 오염(taint)을 방지하기 위해 SmartNavigation의 currentButton을 0.05초마다 수동적으로 확인(폴링)합니다. 스틱 움직임 대신 실제 포커스 변경 시 발생합니다. 게임패드 UI가 활성화되어 있을 때만 동작합니다."
+    },
+    {
+      "source": "Passively polled via GroupTargeting.isTargetingActive to eliminate execution taint when targeting stops or gamepad mode is toggled.",
+      "target": "대상 지정이 중단되거나 게임패드 모드가 전환될 때 실행 오염(taint)을 방지하기 위해 GroupTargeting.isTargetingActive를 통해 수동적으로 확인(폴링)합니다."
+    },
+    {
+      "source": "Play this cue exactly as it is configured right now — its own intensity, and its own \"Feels like\" shape if you changed it. Works whether or not the cue is switched on, and needs a connected controller.",
+      "target": "현재 설정된 그대로 이 신호를 테스트 재생합니다. 고유 강도 및 변경한 '체감 형태'가 그대로 반영됩니다. 신호의 활성화 여부와 관계없이 작동하며, 컨트롤러가 연결되어 있어야 합니다."
+    },
+    {
+      "source": "Polled from StaticPopup1..4's IsShown() four times a second rather than hooked. StaticPopup_Show is called from all over Blizzard's UI by code that then touches protected frames, and this addon already has one taint incident from exactly that shape (Modules/ControllerUI.lua's ActivateRadial note). Untested.",
+      "target": "함수 후킹 대신 StaticPopup1..4의 IsShown() 상태를 초당 4회 주기적으로 확인(폴링)합니다. StaticPopup_Show는 블리자드 UI 전역에서 보호된 프레임을 다루는 코드에 의해 호출되며, 이 애드온에서도 정확히 이 구조로 인해 한 차례 실행 오염(taint) 문제가 발생한 바 있습니다(Modules/ControllerUI.lua의 ActivateRadial 주석 참조). 아직 테스트되지 않았습니다."
+    },
+    {
+      "source": "Produces no vibration — the controller is gone. Turning it off changes nothing you can feel: the engine clears in-flight vibration whenever it loses the device, because it has to.",
+      "target": "컨트롤러 연결이 해제되었으므로 진동이 발생하지 않습니다. 이 설정을 꺼도 체감상 달라지는 것은 없습니다. 엔진은 기기 연결이 끊어지면 당연히 출력 중인 진동을 강제로 초기화하기 때문입니다."
+    },
+    {
+      "source": "Pulse is engineered to drive both the Low (heavy counterweight) and High (sharp tick) rumble motors in concert across all supported gamepads.\n\nVibration schemas define how logical haptic roles map to physical motors: **Standard Rumble** routes low-frequency signals to the heavy motor and high-frequency signals to the sharp motor; **High Motor Only** or **Low Motor Only** collapse signals when a motor is mechanically silent; and **Swapped / Inverted** reverses the mapping for custom grips.",
+      "target": "Pulse는 지원되는 모든 게임패드에서 저속(묵직한 무게추) 및 고속(날카로운 틱) 진동 모터를 조화롭게 구동하도록 설계되었습니다.\n\n진동 스키마는 논리적 햅틱 역할을 물리적 모터에 매핑하는 방식을 정의합니다. **표준 진동**은 저주파 신호를 묵직한 모터로, 고주파 신호를 날카로운 모터로 라우팅합니다. **고속 모터 전용** 또는 **저속 모터 전용**은 특정 모터가 기계적으로 작동하지 않을 때 신호를 통합하며, **반전 / 맞바꿈**은 특수한 그립 방식을 위해 모터 매핑을 반대로 뒤집습니다."
+    },
+    {
+      "source": "Pulse provides purpose-built default profiles engineered for specific roles and activities — browse them on the dedicated **Default profiles** page:\n\n• **Dungeon & Raid Roles** (Tank, Healer, Melee DPS, Caster DPS, Hunter) prioritize high signal-to-noise: threat loss, mitigations, kick windows, and spell completion ticks take priority over ambient clutter.\n• **World Immersion** (Melee, Caster, Ranged) maximizes atmospheric game-feel: footstep weight by armor type, mount strides, swimming resistance, weather, and exploration.\n• **PvP** delivers pure tactical radar with zero ambient distraction.\n\nOn the **Profiles** page, you can configure automatic rules that switch profiles on the fly when you change talent specializations, or create custom copies of any default profile. To protect combat performance, any profile switch requested while fighting is safely deferred until combat ends.",
+      "target": "Pulse는 특정 역할 및 활동에 맞게 특수 설계된 기본 프로필을 제공합니다. 전용 **기본 프로필** 페이지에서 확인해 보세요:\n\n• **던전 및 공격대 역할**(탱커, 힐러, 근접 딜러, 캐스터 딜러, 사냥꾼): 높은 신호 대 잡음비를 우선시하여 주변 환경의 잡다한 진동보다 위협 수준 상실, 피해 감소기 작동, 차단 타이밍, 주문 시전 완료 틱을 우선 전달합니다.\n• **오픈 월드 몰입**(근접, 캐스터, 원거리): 방어구 유형별 발걸음 무게감, 탈것의 질주, 수영 저항, 날씨, 탐험 등 분위기 넘치는 손맛을 극대화합니다.\n• **PvP**: 주변 환경 방해 요소를 배제하고 순수한 전술 레이더 감각을 전달합니다.\n\n**프로필** 페이지에서는 특성 전문화를 변경할 때 프로필을 즉시 자동 전환하는 규칙을 구성하거나, 기본 프로필을 복사하여 맞춤 설정할 수 있습니다. 전투 중 성능 저하를 방지하기 위해 전투 진행 중 요청된 프로필 전환은 전투가 끝날 때까지 안전하게 지연됩니다."
+    },
+    {
+      "source": "Pulse turns what's happening in the game into controller vibration — landing hard, gliding fast, taking a critical hit, a storm rolling in. It's texture for ordinary play, closer to what a console game's rumble does than to a notification.\n\nIt also carries a second, separate set of controls: a full accessibility toggle set imported from Tremor, this addon's sibling project. Those work the same way Tremor's own cues do — an event happens, one pulse tells you about it — but they share Pulse's channel with everything else here, which is a real difference worth understanding. See \"The Accessibility section\" below.",
+      "target": "Pulse는 강한 착지, 고속 활공, 치명타 피격, 몰아치는 폭풍우 등 게임 내에서 일어나는 상황을 컨트롤러 진동으로 변환합니다. 단순한 알림 기능이라기보다는 일반적인 플레이 경험을 풍부하게 만드는 콘솔 게임의 진동 손맛(질감)에 가깝습니다.\n\n또한 본 애드온의 자매 프로젝트인 Tremor에서 가져온 전체 접근성 토글 세트라는 두 번째 독립 컨트롤 세트도 포함되어 있습니다. 이는 Tremor의 신호와 동일하게 작동하여 특정 이벤트가 발생하면 하나의 펄스로 이를 알려주지만, 여기 있는 다른 모든 기능과 Pulse의 진동 채널을 공유한다는 점에서 중요한 차이가 있습니다. 자세한 내용은 아래의 '접근성 섹션'을 참조하세요."
+    },
+    {
+      "source": "Pulse: captured %s breakaway floor at %.3f (ramp was at %.3f when clicked)",
+      "target": "Pulse: %s 모터의 시동 임계값을 %.3f(으)로 캡처했습니다 (클릭 시 램프 수치: %.3f)"
+    },
+    {
+      "source": "Pulse: controller found, but it reports no usable name. Use Generic and Ramp each motor.",
+      "target": "Pulse: 컨트롤러를 찾았으나 인식 가능한 이름을 보고하지 않았습니다. 일반(Generic) 프리셋을 선택하고 각 모터의 램프 테스트를 실행하세요."
+    },
+    {
+      "source": "Pulse: controller reports itself as \"%s\", which isn't in the list. Use Generic and Ramp each motor.",
+      "target": "Pulse: 컨트롤러가 목록에 없는 \"%s\"(으)로 감지되었습니다. 일반(Generic) 프리셋을 선택하고 각 모터의 램프 테스트를 실행하세요."
+    },
+    {
+      "source": "Ramps up in three steps, then releases.",
+      "target": "3단계로 서서히 강해진 후 해제됩니다."
+    },
+    {
+      "source": "Reset calibration",
+      "target": "보정값 초기화"
+    },
+    {
+      "source": "Reverses the rumble motors: heavy low-frequency thuds go to the High motor, and sharp high-frequency ticks go to the Low motor. For reverse-wired or custom controller grips.",
+      "target": "진동 모터를 반대로 전환합니다. 묵직한 저주파 쿵 충격은 고속 모터로 전달되고, 날카로운 고주파 틱 진동은 저속 모터로 전달됩니다. 배선이 반대로 되어 있거나 특수한 컨트롤러 그립을 사용할 때 적합합니다."
+    },
+    {
+      "source": "Second: find out what your controller can do",
+      "target": "2단계: 내 컨트롤러의 성능 확인하기"
+    },
+    {
+      "source": "Sensory spatial awareness when aiming and selecting units:\n• |cffffffffTarget Lock & Switch:|r Distinct click when acquiring a new target or cycling units.\n• |cffffffffFocus Target:|r Physical confirmation when assigning or swapping your focus target.\n• |cffffffffSoft Interaction:|r Tactile blip when your controller reticle aligns with an interactable NPC.",
+      "target": "대상을 조준하고 선택할 때 전달되는 감각적 공간 인지 피드백:\n• |cffffffff대상 고정 및 전환:|r 새로운 대상을 잡거나 유닛을 순환 선택할 때 또렷한 클릭 진동이 울립니다.\n• |cffffffff주시 대상:|r 주시 대상을 지정하거나 변경할 때 물리적인 확인 진동이 발생합니다.\n• |cffffffff소프트 상호작용:|r 컨트롤러 조준선이 상호작용 가능한 NPC와 일치할 때 촉각 반응이 발생합니다."
+    },
+    {
+      "source": "Steam Controller (v1)",
+      "target": "Steam Controller (v1)"
+    },
+    {
+      "source": "Steam Controller 2 (2026)",
+      "target": "Steam Controller 2 (2026)"
+    },
+    {
+      "source": "Steam Deck (LCD & OLED)",
+      "target": "Steam Deck (LCD & OLED)"
+    },
+    {
+      "source": "Steam Deck / Controller",
+      "target": "Steam Deck / Controller"
+    },
+    {
+      "source": "Step 1: Choose Your Controller Hardware",
+      "target": "1단계: 컨트롤러 하드웨어 선택"
+    },
+    {
+      "source": "Switch Pro Controller",
+      "target": "Switch Pro Controller"
+    },
+    {
+      "source": "Switches every cue on the Controller Interactions page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "컨트롤러 상호작용 페이지의 모든 신호를 한 번에 켜거나 끕니다. 각 신호의 개별 하위 설정은 그대로 유지됩니다."
+    },
+    {
+      "source": "The most promising cue here: a radial is an analog sweep through discrete stops, which is exactly what haptics are good at, and it's the one that could let you pick a segment without looking. Blizzard already change-gates this and applies its own stick hysteresis, so it should not fire continuously while you hold a direction. Untested whether the rate still feels like too much.",
+      "target": "여기서 가장 기대되는 햅틱 신호입니다. 원형 메뉴는 구분된 정지 지점들을 아날로그 방식으로 훑는 구조로, 햅틱 피드백이 가장 뛰어난 역량을 발휘하는 영역이자 화면을 보지 않고도 구획을 선택할 수 있게 해 주는 기능입니다. 블리자드가 이미 변경 감지 및 스틱 히스테리시스를 자체적으로 적용하고 있어 방향을 유지하고 있는 동안 연속으로 발동하지는 않습니다. 다만 진동 발생 빈도가 과하게 느껴지는지 여부는 아직 테스트되지 않았습니다."
+    },
+    {
+      "source": "The smallest value that makes this motor actually spin. Anything above zero is remapped into the range above this floor, so a quiet cue still moves the mass instead of dying silently. Zero input still means completely off. Use \"Ramp\" below to find your controller's real figure.",
+      "target": "이 모터가 실제로 회전하기 시작하는 최소 수치(시동 임계값)입니다. 0보다 큰 모든 값은 이 임계값 이상의 범위로 재매핑되므로, 미세한 신호도 묻히지 않고 모터 추를 확실히 움직입니다. 입력값이 0이면 완전히 꺼진 상태를 유지합니다. 컨트롤러의 실제 수치를 찾으려면 아래 '램프 테스트'를 사용하세요."
+    },
+    {
+      "source": "There is no way to detect which motors a controller actually drives — pick a schema above, then play a few modes to find out.",
+      "target": "컨트롤러가 실제로 어떤 모터를 구동하는지 자동으로 감지할 수 있는 방법은 없습니다. 위에서 진동 스키마를 선택한 후 몇 가지 모드를 테스트 재생하여 확인해 보세요."
+    },
+    {
+      "source": "Use when the high motor produces nothing you can feel at all. Everything collapses onto the low motor. If it works but is just weak, use Standard and raise its Strength on the Controller calibration page instead.",
+      "target": "고속 모터에서 진동이 전혀 느껴지지 않을 때 사용합니다. 모든 신호가 저속 모터로 통합됩니다. 모터가 작동하지만 진동이 약할 뿐이라면 표준(Standard) 스키마를 사용하고 컨트롤러 보정 페이지에서 해당 모터의 강도를 높이세요."
+    },
+    {
+      "source": "Use when the low motor produces nothing you can feel at all. Everything collapses onto the high motor. If the low motor works but is just weak, use Standard and raise its Strength on the Controller calibration page instead.",
+      "target": "저속 모터에서 진동이 전혀 느껴지지 않을 때 사용합니다. 모든 신호가 고속 모터로 통합됩니다. 저속 모터가 작동하지만 진동이 약할 뿐이라면 표준(Standard) 스키마를 사용하고 컨트롤러 보정 페이지에서 해당 모터의 강도를 높이세요."
+    },
+    {
+      "source": "Verify controller connection and motor calibration:",
+      "target": "컨트롤러 연결 및 모터 보정 상태 확인:"
+    },
+    {
+      "source": "What the game is doing, felt through the controller.",
+      "target": "게임 내의 상황을 컨트롤러 진동으로 체감할 수 있습니다."
+    },
+    {
+      "source": "Which controller is this?",
+      "target": "사용 중인 컨트롤러가 무엇인가요?"
+    },
+    {
+      "source": "Which controller you are holding. Picking one changes nothing on its own — press Apply below to load its starting values. These are starting points reasoned from what kind of actuators each controller uses, not measurements: Ramp is what measures YOUR controller, and whatever you enter afterwards wins.",
+      "target": "현재 쥐고 있는 컨트롤러의 종류입니다. 목록에서 선택하는 것만으로는 아무것도 변경되지 않으며, 아래의 적용 버튼을 눌러야 초기 기본값이 불러와집니다. 이 값들은 각 컨트롤러의 액추에이터 특성을 기반으로 추정한 시작 기준점일 뿐 실제 측정값이 아닙니다. 사용자의 컨트롤러를 직접 측정하는 것은 '램프 테스트'이며, 이후 직접 입력한 값이 항상 우선 적용됩니다."
+    },
+    {
+      "source": "Which saved cue configuration is active on this character. Every cue's on/off, its intensity and its mode override belong to the profile picked here; the master switch, the schema and the calibration stay global.",
+      "target": "현재 캐릭터에 활성화된 저장 신호 구성 프로필입니다. 각 신호의 활성화 여부, 강도 및 모드 재지정 설정은 여기서 선택한 프로필에 종속되며, 마스터 스위치, 진동 스키마, 모터 보정값은 모든 캐릭터 공용으로 유지됩니다."
+    },
+    {
+      "source": "Work down this list in order.\n\nIs controller support on? See the first section — this is by far the most common cause.\n\nDoes the controller vibrate at all? Test a mode from the panel. If that's silent, the problem is the controller or the game, not your settings.\n\nIs Pulse switched on, and is the trigger you're waiting for switched on? Both have to be — and for an Accessibility trigger, check the section's master switch too, if it has one.\n\nIs it a texture rather than a pulse? Textures only run while their cause is actually happening — nothing to feel while standing still.\n\nIs the motor's breakaway floor too low? Some gamepads require a higher minimum floor to overcome mechanical inertia. Check the **Controller calibration** page and test the motor ramp.",
+      "target": "다음 목록을 순서대로 점검해 보세요.\n\n컨트롤러 지원이 켜져 있습니까? 첫 번째 섹션을 확인하세요. 대부분의 문제가 여기서 발생합니다.\n\n컨트롤러가 전혀 진동하지 않습니까? 패널에서 모드를 테스트해 보세요. 여전히 반응이 없다면 설정 문제가 아니라 컨트롤러 하드웨어 또는 게임 자체의 문제입니다.\n\nPulse가 켜져 있고, 기다리고 있는 트리거가 활성화되어 있습니까? 두 가지 모두 켜져 있어야 합니다. 접근성 트리거의 경우 해당 섹션의 마스터 스위치가 있다면 이 역시 켜져 있는지 확인하세요.\n\n단발성 펄스가 아니라 지속 질감 진동입니까? 질감 진동은 해당 상황이 실제로 발생 중일 때만 동작합니다. 가만히 서 있을 때는 아무것도 느껴지지 않습니다.\n\n모터의 시동 임계값이 너무 낮게 설정되어 있습니까? 일부 게임패드는 기계적 관성을 극복하기 위해 더 높은 최소 임계값이 필요합니다. **컨트롤러 보정** 페이지를 확인하고 모터 램프 테스트를 진행해 보세요."
+    },
+    {
+      "source": "World of Warcraft ignores controllers entirely until you turn them on, and this is off by default. Pairing the controller to your computer is not enough — the game has to be told separately.\n\nType this into chat, then restart the game:\n\n    /console GamePadEnable 1\n\nUntil that is done nothing here can work, and nothing will warn you. If Pulse seems completely dead, check this first.",
+      "target": "World of Warcraft는 직접 켜기 전까지는 컨트롤러를 완전히 무시하며, 기본값은 비활성화 상태입니다. 컨트롤러를 컴퓨터에 페어링하는 것만으로는 부족하며, 게임 클라이언트에 별도로 설정해 주어야 합니다.\n\n채팅창에 다음 명령어를 입력한 후 게임을 재시작하세요:\n\n    /console GamePadEnable 1\n\n이 설정을 완료하기 전까지는 애드온의 어떤 기능도 작동하지 않으며 아무런 경고도 표시되지 않습니다. Pulse가 전혀 반응하지 않는다면 이 부분부터 먼저 확인하세요."
+    },
+    {
+      "source": "Xbox (One / Series)",
+      "target": "Xbox (One / Series)"
+    },
+    {
+      "source": "Xbox Elite Series 2",
+      "target": "Xbox Elite Series 2"
+    },
+    {
+      "source": "Xbox One / Series",
+      "target": "Xbox One / Series"
+    },
+    {
+      "source": "a ramp is currently running on ",
+      "target": "현재 램프 테스트가 진행 중인 채널: "
+    },
+    {
+      "source": "no controller detected",
+      "target": "감지된 컨트롤러 없음"
+    },
+    {
+      "source": "no ramp is running on this channel (press Ramp first, then Set Floor when you feel it)",
+      "target": "이 채널에서 실행 중인 램프 테스트가 없습니다 (먼저 램프를 누른 후 진동이 느껴지면 임계값 지정을 누르세요)"
+    },
+    {
+      "source": "printing each step to chat. Watch the chat, and note the number showing when you FIRST feel anything — that is this motor's breakaway floor. Type it into the slider below and quiet cues stop disappearing. Pressing Test cancels a ramp in progress.",
+      "target": "각 단계를 채팅창에 출력합니다. 채팅창을 확인하고 진동이 '처음으로' 느껴졌을 때 표시된 숫자를 기억하세요. 그 숫자가 바로 이 모터의 시동 임계값입니다. 아래 슬라이더에 해당 수치를 입력하면 미세한 신호가 사라지지 않고 출력됩니다. 테스트 버튼을 누르면 진행 중인 램프 테스트가 취소됩니다."
+    },
+    {
+      "source": "pro controller",
+      "target": "Pro Controller"
+    },
+    {
+      "source": "|A:gamepad-ps-buttonsquare-normal:12:12|a Square: open settings",
+      "target": "|A:gamepad-ps-buttonsquare-normal:12:12|a 네모: 설정 열기"
+    },
+    {
+      "source": "|A:gamepad-switch-128x-face-y-normal:12:12|a Y: open settings",
+      "target": "|A:gamepad-switch-128x-face-y-normal:12:12|a Y: 설정 열기"
+    },
+    {
+      "source": "|A:gamepad-xbox1-buttonx-normal:12:12|a X: open settings",
+      "target": "|A:gamepad-xbox1-buttonx-normal:12:12|a X: 설정 열기"
+    },
+    {
+      "source": "|cff00ff88●|r |cffffffffGamepad Active|r   |cff3a4b5d•|r   |cff8899aa%d Cues|r   |cff3a4b5d•|r   |cff667788%s|r",
+      "target": "|cff00ff88●|r |cffffffff게임패드 활성|r   |cff3a4b5d•|r   |cff8899aa%d개 신호|r   |cff3a4b5d•|r   |cff667788%s|r"
+    },
+    {
+      "source": "|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[D-Pad]|r Navigate  •  |cff38BDF8[A]|r Select",
+      "target": "|cff38BDF8[L1/R1]|r 탭  •  |cff38BDF8[D-Pad]|r 탐색  •  |cff38BDF8[A]|r 선택"
+    },
+    {
+      "source": "|cff666666●|r |cff888888Gamepad Inactive|r   |cff3a4b5d•|r   |cff8899aa%d Cues|r   |cff3a4b5d•|r   |cff667788%s|r",
+      "target": "|cff666666●|r |cff888888게임패드 비활성|r   |cff3a4b5d•|r   |cff8899aa%d개 신호|r   |cff3a4b5d•|r   |cff667788%s|r"
+    },
+    {
+      "source": "|cff888888Controller UI cues are governed by the master switch on the main Pulse page.|r",
+      "target": "|cff888888컨트롤러 UI 신호는 Pulse 메인 페이지의 마스터 스위치를 통해 제어됩니다.|r"
+    },
+    {
+      "source": "• Selected Controller Hardware: |cffffffff%s|r\n• Character Class & Planned Role: |cffffffff%s (%s)|r\n• Active Continuous Textures: |cffffffff%d active|r\n• Master Haptic Strength: |cffffffff%d%%|r\n\nAll preferences are saved directly to your active profile.\nYou can re-run this setup anytime by typing |cff4cb8ff/pulse setup|r.",
+      "target": "• 선택한 컨트롤러 하드웨어: |cffffffff%s|r\n• 캐릭터 직업 및 예정된 역할: |cffffffff%s (%s)|r\n• 활성 지속 질감: |cffffffff%d개 활성|r\n• 마스터 햅틱 강도: |cffffffff%d%%|r\n\n모든 설정은 현재 활성화된 프로필에 직접 저장됩니다.\n언제든지 |cff4cb8ff/pulse setup|r 명령어를 입력하여 이 설정을 다시 실행할 수 있습니다."
+    }
+  ]
+}

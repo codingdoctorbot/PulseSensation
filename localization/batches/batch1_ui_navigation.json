@@ -1,0 +1,3312 @@
+{
+  "batch_id": 1,
+  "name": "Core Navigation & UI Controls",
+  "count": 661,
+  "items": [
+    {
+      "id": 2,
+      "source": " (page off)|r",
+      "signature": ""
+    },
+    {
+      "id": 3,
+      "source": " (reported as \"",
+      "signature": ""
+    },
+    {
+      "id": 4,
+      "source": " Rules and management are on the Profiles page.",
+      "signature": ""
+    },
+    {
+      "id": 6,
+      "source": " as a whole — both its pulses and the gaps between them, so a multi-hit mode keeps its rhythm instead of the hits stretching into their own gaps. 1.0 is the authored default.",
+      "signature": ""
+    },
+    {
+      "id": 7,
+      "source": " right now with whatever's currently set on its sliders above.",
+      "signature": ""
+    },
+    {
+      "id": 8,
+      "source": "\" is recommended — pick a different one to change how just this cue feels, without affecting anything else that also uses \"",
+      "signature": ""
+    },
+    {
+      "id": 9,
+      "source": "\" — try one of: ",
+      "signature": ""
+    },
+    {
+      "id": 10,
+      "source": "%d of %d cues on",
+      "signature": "d,d"
+    },
+    {
+      "id": 11,
+      "source": "%d of %d on",
+      "signature": "d,d"
+    },
+    {
+      "id": 12,
+      "source": "%s (%d)",
+      "signature": "s,d"
+    },
+    {
+      "id": 13,
+      "source": "%s Activate   •   %s Try Texture   •   %s Categories",
+      "signature": "s,s,s"
+    },
+    {
+      "id": 14,
+      "source": "%s Adjust Intensity   •   %s Quick Step   •   |cff38BDF8◀/▶|r Controls   •   %s Try Texture   •   %s Categories",
+      "signature": "s,s,s,s"
+    },
+    {
+      "id": 15,
+      "source": "%s Browse Modes   •   %s Select   •   %s Cancel",
+      "signature": "s,s,s"
+    },
+    {
+      "id": 16,
+      "source": "%s Select Mode   •   |cff38BDF8◀/▶|r Controls   •   %s Try Texture   •   %s Categories",
+      "signature": "s,s,s"
+    },
+    {
+      "id": 17,
+      "source": "%s Switch Category   •   %s Navigate   •   %s Select   •   %s Close",
+      "signature": "s,s,s,s"
+    },
+    {
+      "id": 18,
+      "source": "%s Toggle   •   |cff38BDF8▶|r Next Control   •   %s Try Texture   •   %s Categories",
+      "signature": "s,s,s"
+    },
+    {
+      "id": 20,
+      "source": "%s is felt as %s struck about %.1f times a second, over the bed.",
+      "signature": "s,s,f"
+    },
+    {
+      "id": 21,
+      "source": "%s/%s Try Texture   •   |cff38BDF8◀|r Controls   •   %s Categories",
+      "signature": "s,s,s"
+    },
+    {
+      "id": 24,
+      "source": "(Toggles all continuous sensations)",
+      "signature": ""
+    },
+    {
+      "id": 25,
+      "source": ", heartbeat, warningbeat",
+      "signature": ""
+    },
+    {
+      "id": 26,
+      "source": ", not ",
+      "signature": ""
+    },
+    {
+      "id": 27,
+      "source": ", so there is nothing to test.",
+      "signature": ""
+    },
+    {
+      "id": 28,
+      "source": "0 = one soft pulse. 1 = a sharp lub, then a clearly separate softer dub. Derives the knock timing and intensity split automatically — see lowHealthTexture if you want those set by hand instead.",
+      "signature": ""
+    },
+    {
+      "id": 29,
+      "source": "1 = every scripted event, 3 = only the most severe. Higher means rarer, more significant warnings.",
+      "signature": ""
+    },
+    {
+      "id": 34,
+      "source": "3. World",
+      "signature": ""
+    },
+    {
+      "id": 35,
+      "source": "4. Interface",
+      "signature": ""
+    },
+    {
+      "id": 36,
+      "source": "5. Immersion",
+      "signature": ""
+    },
+    {
+      "id": 37,
+      "source": "6. Finish",
+      "signature": ""
+    },
+    {
+      "id": 40,
+      "source": "< Back",
+      "signature": ""
+    },
+    {
+      "id": 50,
+      "source": "A bright tick when you learn a new ability.",
+      "signature": ""
+    },
+    {
+      "id": 58,
+      "source": "A crisp mechanical snap on the high motor.",
+      "signature": ""
+    },
+    {
+      "id": 60,
+      "source": "A dense 3-pulse tactical flurry.",
+      "signature": ""
+    },
+    {
+      "id": 65,
+      "source": "A dry click when you use an ability that has no cast time.",
+      "signature": ""
+    },
+    {
+      "id": 78,
+      "source": "A heavy, decisive impact when your current target dies.",
+      "signature": ""
+    },
+    {
+      "id": 80,
+      "source": "A light click when a major UI panel is dismissed.",
+      "signature": ""
+    },
+    {
+      "id": 81,
+      "source": "A light click when the last confirmation dialog closes.",
+      "signature": ""
+    },
+    {
+      "id": 89,
+      "source": "A light tick when you step away from an NPC or close its window.",
+      "signature": ""
+    },
+    {
+      "id": 99,
+      "source": "A ringing anvil strike when repairing armor and weapons at a vendor.",
+      "signature": ""
+    },
+    {
+      "id": 100,
+      "source": "A rising celebratory surge when you gain a level.",
+      "signature": ""
+    },
+    {
+      "id": 103,
+      "source": "A sharp alert pulse when your hostile target or focus turns to target you.",
+      "signature": ""
+    },
+    {
+      "id": 104,
+      "source": "A sharp deflection tick when a cast of yours is rejected outright — out of range, not facing the target, still on cooldown.",
+      "signature": ""
+    },
+    {
+      "id": 105,
+      "source": "A sharp deflection tick when the game refuses an action — out of range, facing the wrong way, not enough resource, still on cooldown.",
+      "signature": ""
+    },
+    {
+      "id": 110,
+      "source": "A sharp snap when a harmful effect lands on you.",
+      "signature": ""
+    },
+    {
+      "id": 111,
+      "source": "A sharp snap with a short tail.",
+      "signature": ""
+    },
+    {
+      "id": 114,
+      "source": "A short warning before a significant scripted boss ability, using Blizzard's own built-in Boss Warnings timeline.",
+      "signature": ""
+    },
+    {
+      "id": 115,
+      "source": "A short, sharp tick instead of the normal one when the segment you land on can't be used.",
+      "signature": ""
+    },
+    {
+      "id": 117,
+      "source": "A single dry click, lighter than a tick.",
+      "signature": ""
+    },
+    {
+      "id": 118,
+      "source": "A single very short, very hard hit.",
+      "signature": ""
+    },
+    {
+      "id": 119,
+      "source": "A slow low/high oscillation — the caller supplies the phase.",
+      "signature": ""
+    },
+    {
+      "id": 122,
+      "source": "A soft tick followed by a brighter one.",
+      "signature": ""
+    },
+    {
+      "id": 123,
+      "source": "A soft tick when releasing the group targeting modifier back to normal navigation.",
+      "signature": ""
+    },
+    {
+      "id": 125,
+      "source": "A soft tick when you cancel a radial selection instead of committing to it.",
+      "signature": ""
+    },
+    {
+      "id": 127,
+      "source": "A soft tick when you start auto-attacking with a ranged weapon (Auto Shot, Shoot, wands).",
+      "signature": ""
+    },
+    {
+      "id": 128,
+      "source": "A soft tick when you start meleeing.",
+      "signature": ""
+    },
+    {
+      "id": 129,
+      "source": "A soft tick when you start resting in an inn or major city.",
+      "signature": ""
+    },
+    {
+      "id": 130,
+      "source": "A soft tick when your melee auto-attack stops — catches walking out of range or a target dying without noticing.",
+      "signature": ""
+    },
+    {
+      "id": 132,
+      "source": "A soft, quick tick.",
+      "signature": ""
+    },
+    {
+      "id": 134,
+      "source": "A steady, low ambient texture.",
+      "signature": ""
+    },
+    {
+      "id": 135,
+      "source": "A steady, stronger texture — meant to be scaled by the caller (e.g. speed).",
+      "signature": ""
+    },
+    {
+      "id": 140,
+      "source": "A tactile micro-tick each time the stack splitter quantity slider changes.",
+      "signature": ""
+    },
+    {
+      "id": 141,
+      "source": "A tactile recoil kick on every Auto Shot arrow, timed to the real shot, not estimated.",
+      "signature": ""
+    },
+    {
+      "id": 143,
+      "source": "A tap when a confirmation dialog opens.",
+      "signature": ""
+    },
+    {
+      "id": 144,
+      "source": "A tap when an NPC or world object opens a window nothing else here covers.",
+      "signature": ""
+    },
+    {
+      "id": 145,
+      "source": "A texture that builds as your gliding speed climbs toward a boost.",
+      "signature": ""
+    },
+    {
+      "id": 146,
+      "source": "A tick when a book, plaque, gravestone or signpost opens to be read.",
+      "signature": ""
+    },
+    {
+      "id": 147,
+      "source": "A tick when a piece of your gear's durability drops into the low or broken range.",
+      "signature": ""
+    },
+    {
+      "id": 148,
+      "source": "A tiny blip when you gain experience.",
+      "signature": ""
+    },
+    {
+      "id": 149,
+      "source": "A tiny low blip, for things that happen often.",
+      "signature": ""
+    },
+    {
+      "id": 150,
+      "source": "A triumphant dual-tone chime when you earn an achievement.",
+      "signature": ""
+    },
+    {
+      "id": 151,
+      "source": "A very light micro-pulse.",
+      "signature": ""
+    },
+    {
+      "id": 156,
+      "source": "A very light tick per combo point, building toward a full resource.",
+      "signature": ""
+    },
+    {
+      "id": 161,
+      "source": "A very light tick when your equipped gear changes.",
+      "signature": ""
+    },
+    {
+      "id": 162,
+      "source": "A very short, sharp tick when you avoid an incoming attack.",
+      "signature": ""
+    },
+    {
+      "id": 164,
+      "source": "AFK or DND toggled",
+      "signature": ""
+    },
+    {
+      "id": 165,
+      "source": "Ability pulse",
+      "signature": ""
+    },
+    {
+      "id": 166,
+      "source": "Achievement earned",
+      "signature": ""
+    },
+    {
+      "id": 167,
+      "source": "Action bar page changed",
+      "signature": ""
+    },
+    {
+      "id": 168,
+      "source": "Action bars",
+      "signature": ""
+    },
+    {
+      "id": 169,
+      "source": "Action failed",
+      "signature": ""
+    },
+    {
+      "id": 170,
+      "source": "Action feedback",
+      "signature": ""
+    },
+    {
+      "id": 171,
+      "source": "Activate",
+      "signature": ""
+    },
+    {
+      "id": 172,
+      "source": "Active Profile: |cffffd100%s|r",
+      "signature": "s"
+    },
+    {
+      "id": 174,
+      "source": "Active profile",
+      "signature": ""
+    },
+    {
+      "id": 175,
+      "source": "Actuator profile: %s\n%s",
+      "signature": "s,s"
+    },
+    {
+      "id": 176,
+      "source": "Addon language",
+      "signature": ""
+    },
+    {
+      "id": 179,
+      "source": "Adjust your global master vibration strength. Individual cues can always be fine-tuned in settings.",
+      "signature": ""
+    },
+    {
+      "id": 180,
+      "source": "Advanced Settings",
+      "signature": ""
+    },
+    {
+      "id": 181,
+      "source": "Also fires when you cancel a cast yourself, or move out of range — it means \"your cast did not finish\", not specifically \"you were kicked\".",
+      "signature": ""
+    },
+    {
+      "id": 182,
+      "source": "Also fires when you switch to a target that is already mid-cast.",
+      "signature": ""
+    },
+    {
+      "id": 183,
+      "source": "Alternates between the motors — an unsteady, rolling feel.",
+      "signature": ""
+    },
+    {
+      "id": 184,
+      "source": "Alternating low thud and high snap across motors.",
+      "signature": ""
+    },
+    {
+      "id": 189,
+      "source": "Any other window",
+      "signature": ""
+    },
+    {
+      "id": 190,
+      "source": "Anything else",
+      "signature": ""
+    },
+    {
+      "id": 191,
+      "source": "Applies only while this character is in this specialization. Switching specialization switches profile with it, with no further action from you.",
+      "signature": ""
+    },
+    {
+      "id": 192,
+      "source": "Applies to this character whatever specialization it is in. This is the rule the profile picker on the Pulse page has always written to.",
+      "signature": ""
+    },
+    {
+      "id": 198,
+      "source": "Attack time (s)",
+      "signature": ""
+    },
+    {
+      "id": 199,
+      "source": "Attentive triage. Emergency low health warnings, dispel/CC alerts, kick warnings, and heal completion confirmation with subdued personal damage.",
+      "signature": ""
+    },
+    {
+      "id": 201,
+      "source": "Auto Shot fired",
+      "signature": ""
+    },
+    {
+      "id": 203,
+      "source": "Auto-switch in %s",
+      "signature": "s"
+    },
+    {
+      "id": 204,
+      "source": "Automatic — game language",
+      "signature": ""
+    },
+    {
+      "id": 205,
+      "source": "Automatically switch to %s whenever this character is in this specialization.",
+      "signature": "s"
+    },
+    {
+      "id": 211,
+      "source": "Battleground queue ready",
+      "signature": ""
+    },
+    {
+      "id": 212,
+      "source": "Bed strength",
+      "signature": ""
+    },
+    {
+      "id": 214,
+      "source": "Bends the relationship between what a cue asks for and what the motor is told. Below 1.0 makes quiet cues louder; above 1.0 makes them quieter and reserves more of the range for strong ones. 1.0 is the unbent default.",
+      "signature": ""
+    },
+    {
+      "id": 215,
+      "source": "Boss ability warning",
+      "signature": ""
+    },
+    {
+      "id": 216,
+      "source": "Boss chat warning",
+      "signature": ""
+    },
+    {
+      "id": 217,
+      "source": "Boss encounter ended",
+      "signature": ""
+    },
+    {
+      "id": 218,
+      "source": "Boss encounter started",
+      "signature": ""
+    },
+    {
+      "id": 223,
+      "source": "Breakaway floor",
+      "signature": ""
+    },
+    {
+      "id": 229,
+      "source": "Builds from a low hum into a high pulse.",
+      "signature": ""
+    },
+    {
+      "id": 230,
+      "source": "CLICK %s:LeftButton",
+      "signature": "s"
+    },
+    {
+      "id": 235,
+      "source": "Cancel",
+      "signature": ""
+    },
+    {
+      "id": 238,
+      "source": "Cast outcomes",
+      "signature": ""
+    },
+    {
+      "id": 239,
+      "source": "Cast presence (low)",
+      "signature": ""
+    },
+    {
+      "id": 240,
+      "source": "Cast sent",
+      "signature": ""
+    },
+    {
+      "id": 241,
+      "source": "Cast swell peak (high)",
+      "signature": ""
+    },
+    {
+      "id": 242,
+      "source": "Cast texture, cast finish confirmation, lockout/pushback warnings, proc glows, kick alerts",
+      "signature": ""
+    },
+    {
+      "id": 243,
+      "source": "Casting",
+      "signature": ""
+    },
+    {
+      "id": 244,
+      "source": "Casting texture",
+      "signature": ""
+    },
+    {
+      "id": 245,
+      "source": "Change threshold",
+      "signature": ""
+    },
+    {
+      "id": 247,
+      "source": "Character & Status",
+      "signature": ""
+    },
+    {
+      "id": 248,
+      "source": "Character state",
+      "signature": ""
+    },
+    {
+      "id": 249,
+      "source": "Checked via C_UnitAuras.AuraIsBigDefensive. Occurrence only.",
+      "signature": ""
+    },
+    {
+      "id": 250,
+      "source": "Choose the addon display language. Automatic follows the game client. Missing translations use English. Changes apply after /reload.",
+      "signature": ""
+    },
+    {
+      "id": 254,
+      "source": "Click to open settings",
+      "signature": ""
+    },
+    {
+      "id": 255,
+      "source": "Climbs this motor slowly from silence to %d%% power over %d seconds, ",
+      "signature": "d,d"
+    },
+    {
+      "id": 256,
+      "source": "Close",
+      "signature": ""
+    },
+    {
+      "id": 258,
+      "source": "Combo point gained",
+      "signature": ""
+    },
+    {
+      "id": 261,
+      "source": "Companion tools",
+      "signature": ""
+    },
+    {
+      "id": 262,
+      "source": "Competitive & Baseline",
+      "signature": ""
+    },
+    {
+      "id": 264,
+      "source": "Configure tactile rewards for exploring Azeroth and sensory spatial awareness for targeting.",
+      "signature": ""
+    },
+    {
+      "id": 265,
+      "source": "Confirmation popup appeared",
+      "signature": ""
+    },
+    {
+      "id": 266,
+      "source": "Confirmation popup closed",
+      "signature": ""
+    },
+    {
+      "id": 271,
+      "source": "Confused or possessed",
+      "signature": ""
+    },
+    {
+      "id": 285,
+      "source": "Conversation & reading",
+      "signature": ""
+    },
+    {
+      "id": 286,
+      "source": "Copy",
+      "signature": ""
+    },
+    {
+      "id": 287,
+      "source": "Copy \"%s\" to a new custom profile named:",
+      "signature": "s"
+    },
+    {
+      "id": 288,
+      "source": "Copy \"%s\" to a new profile named:",
+      "signature": "s"
+    },
+    {
+      "id": 289,
+      "source": "Copy this profile",
+      "signature": ""
+    },
+    {
+      "id": 290,
+      "source": "Copy...",
+      "signature": ""
+    },
+    {
+      "id": 297,
+      "source": "Create",
+      "signature": ""
+    },
+    {
+      "id": 298,
+      "source": "Create a new editable custom profile that starts as an exact copy of %s.",
+      "signature": "s"
+    },
+    {
+      "id": 299,
+      "source": "Create a new profile from Registry.lua's stock defaults and switch to it.",
+      "signature": ""
+    },
+    {
+      "id": 300,
+      "source": "Create a new profile that starts as an exact copy of the one in use, and switch to it. The two are independent from the first edit.",
+      "signature": ""
+    },
+    {
+      "id": 301,
+      "source": "Create editable copy",
+      "signature": ""
+    },
+    {
+      "id": 302,
+      "source": "Create...",
+      "signature": ""
+    },
+    {
+      "id": 303,
+      "source": "Crest froth & spray",
+      "signature": ""
+    },
+    {
+      "id": 305,
+      "source": "Cue index",
+      "signature": ""
+    },
+    {
+      "id": 309,
+      "source": "Danger start threshold",
+      "signature": ""
+    },
+    {
+      "id": 310,
+      "source": "Death Knight",
+      "signature": ""
+    },
+    {
+      "id": 311,
+      "source": "Debuff received",
+      "signature": ""
+    },
+    {
+      "id": 312,
+      "source": "Debug logging",
+      "signature": ""
+    },
+    {
+      "id": 313,
+      "source": "Default",
+      "signature": ""
+    },
+    {
+      "id": 314,
+      "source": "Default (Balanced Baseline)",
+      "signature": ""
+    },
+    {
+      "id": 315,
+      "source": "Default profiles",
+      "signature": ""
+    },
+    {
+      "id": 316,
+      "source": "Defensive",
+      "signature": ""
+    },
+    {
+      "id": 318,
+      "source": "Delete",
+      "signature": ""
+    },
+    {
+      "id": 319,
+      "source": "Delete profile \"%s\"? This can't be undone.",
+      "signature": "s"
+    },
+    {
+      "id": 321,
+      "source": "Delete this profile",
+      "signature": ""
+    },
+    {
+      "id": 322,
+      "source": "Delete...",
+      "signature": ""
+    },
+    {
+      "id": 324,
+      "source": "Device",
+      "signature": ""
+    },
+    {
+      "id": 326,
+      "source": "Disable All",
+      "signature": ""
+    },
+    {
+      "id": 327,
+      "source": "Disable all cues",
+      "signature": ""
+    },
+    {
+      "id": 328,
+      "source": "Disable all cues in profile",
+      "signature": ""
+    },
+    {
+      "id": 329,
+      "source": "Disable every vibration cue in the active profile in one sweep for quiet testing or building a profile from scratch.",
+      "signature": ""
+    },
+    {
+      "id": 330,
+      "source": "Disarmed",
+      "signature": ""
+    },
+    {
+      "id": 333,
+      "source": "Displays a shortcut button on the edge of your minimap for quick access to settings and toggling vibration.",
+      "signature": ""
+    },
+    {
+      "id": 335,
+      "source": "Distinctiveness",
+      "signature": ""
+    },
+    {
+      "id": 336,
+      "source": "Distinguished from cancelling by Blizzard's own `isCancelled` flag, which it sets before ending the selection — so a cancel never counts as a choice.",
+      "signature": ""
+    },
+    {
+      "id": 339,
+      "source": "Doubles as the catch-all: a loss-of-control type this addon does not recognise — a new one added by a patch — fires this generic cue instead of being silently dropped.",
+      "signature": ""
+    },
+    {
+      "id": 345,
+      "source": "Druid",
+      "signature": ""
+    },
+    {
+      "id": 346,
+      "source": "Dual asymmetrical ERM motors, balanced 75ms spin-up",
+      "signature": ""
+    },
+    {
+      "id": 347,
+      "source": "Dual-motor rumble & vibration schemas",
+      "signature": ""
+    },
+    {
+      "id": 350,
+      "source": "Duel request",
+      "signature": ""
+    },
+    {
+      "id": 351,
+      "source": "Dungeon queue popped",
+      "signature": ""
+    },
+    {
+      "id": 352,
+      "source": "Dungeon: Caster",
+      "signature": ""
+    },
+    {
+      "id": 353,
+      "source": "Dungeon: Caster DPS",
+      "signature": ""
+    },
+    {
+      "id": 354,
+      "source": "Dungeon: Healer",
+      "signature": ""
+    },
+    {
+      "id": 355,
+      "source": "Dungeon: Hunter",
+      "signature": ""
+    },
+    {
+      "id": 356,
+      "source": "Dungeon: Melee",
+      "signature": ""
+    },
+    {
+      "id": 357,
+      "source": "Dungeon: Melee DPS",
+      "signature": ""
+    },
+    {
+      "id": 358,
+      "source": "Dungeon: Tank",
+      "signature": ""
+    },
+    {
+      "id": 362,
+      "source": "Effort peak",
+      "signature": ""
+    },
+    {
+      "id": 363,
+      "source": "Empowered cast stage",
+      "signature": ""
+    },
+    {
+      "id": 364,
+      "source": "Enable All",
+      "signature": ""
+    },
+    {
+      "id": 366,
+      "source": "Enable Cue",
+      "signature": ""
+    },
+    {
+      "id": 367,
+      "source": "Enable Pulse",
+      "signature": ""
+    },
+    {
+      "id": 368,
+      "source": "Enable all cues",
+      "signature": ""
+    },
+    {
+      "id": 369,
+      "source": "Enable all cues in profile",
+      "signature": ""
+    },
+    {
+      "id": 370,
+      "source": "Enable every vibration cue in the active profile in one sweep for testing and debugging.",
+      "signature": ""
+    },
+    {
+      "id": 371,
+      "source": "Encounter",
+      "signature": ""
+    },
+    {
+      "id": 373,
+      "source": "Entered a vehicle",
+      "signature": ""
+    },
+    {
+      "id": 374,
+      "source": "Entered melee range",
+      "signature": ""
+    },
+    {
+      "id": 376,
+      "source": "Environment",
+      "signature": ""
+    },
+    {
+      "id": 377,
+      "source": "Equipment",
+      "signature": ""
+    },
+    {
+      "id": 379,
+      "source": "Every character",
+      "signature": ""
+    },
+    {
+      "id": 382,
+      "source": "Evoker-only in practice. It stays registered for every class and simply never fires for the others.",
+      "signature": ""
+    },
+    {
+      "id": 384,
+      "source": "Experience gained",
+      "signature": ""
+    },
+    {
+      "id": 385,
+      "source": "Experimental",
+      "signature": ""
+    },
+    {
+      "id": 389,
+      "source": "Fast attack time constant used specifically for discrete impacts, clicks, and strikes. Gives snappy transients without making sustained immersion textures harsh.",
+      "signature": ""
+    },
+    {
+      "id": 390,
+      "source": "Feared or charmed",
+      "signature": ""
+    },
+    {
+      "id": 391,
+      "source": "Feel ",
+      "signature": ""
+    },
+    {
+      "id": 392,
+      "source": "Feel Strength",
+      "signature": ""
+    },
+    {
+      "id": 394,
+      "source": "Feel this texture",
+      "signature": ""
+    },
+    {
+      "id": 395,
+      "source": "Feels like",
+      "signature": ""
+    },
+    {
+      "id": 396,
+      "source": "Feels like: ",
+      "signature": ""
+    },
+    {
+      "id": 397,
+      "source": "Find breakaway floor",
+      "signature": ""
+    },
+    {
+      "id": 398,
+      "source": "Fires as an empowered cast of yours begins and ends.",
+      "signature": ""
+    },
+    {
+      "id": 399,
+      "source": "Fires at most ",
+      "signature": ""
+    },
+    {
+      "id": 401,
+      "source": "Fires for any summon confirmation dialog, not only a player summoning you.",
+      "signature": ""
+    },
+    {
+      "id": 409,
+      "source": "Fires on PLAYER_TARGET_DIED.",
+      "signature": ""
+    },
+    {
+      "id": 411,
+      "source": "Fires on input, so it also fires for casts that then fail. That is intentional: this is an input-acknowledgement cue, not a success cue.",
+      "signature": ""
+    },
+    {
+      "id": 414,
+      "source": "Fires on the change itself, not on every flag update.",
+      "signature": ""
+    },
+    {
+      "id": 415,
+      "source": "Fires on the crossing into low, not repeatedly while low.",
+      "signature": ""
+    },
+    {
+      "id": 416,
+      "source": "Fires on the yellow informational messages the game shows in the top centre of the screen.",
+      "signature": ""
+    },
+    {
+      "id": 418,
+      "source": "Fires only when a queue enters the ready-to-enter state, not on every status update.",
+      "signature": ""
+    },
+    {
+      "id": 420,
+      "source": "Fires the instant you press a cast, before the server has confirmed it.",
+      "signature": ""
+    },
+    {
+      "id": 421,
+      "source": "Fires upon arrival at destination when player control is restored.",
+      "signature": ""
+    },
+    {
+      "id": 422,
+      "source": "Fires when a battleground or arena queue is ready to enter.",
+      "signature": ""
+    },
+    {
+      "id": 423,
+      "source": "Fires when a boss encounter begins.",
+      "signature": ""
+    },
+    {
+      "id": 424,
+      "source": "Fires when a boss encounter ends, in victory or in a wipe.",
+      "signature": ""
+    },
+    {
+      "id": 429,
+      "source": "Fires when a flight master's map opens.",
+      "signature": ""
+    },
+    {
+      "id": 431,
+      "source": "Fires when a loading screen ends and the world is back.",
+      "signature": ""
+    },
+    {
+      "id": 434,
+      "source": "Fires when a quest is handed in and its reward is taken.",
+      "signature": ""
+    },
+    {
+      "id": 435,
+      "source": "Fires when a quest's completion page opens, ready to hand in.",
+      "signature": ""
+    },
+    {
+      "id": 436,
+      "source": "Fires when a quest's detail page opens, ready to accept.",
+      "signature": ""
+    },
+    {
+      "id": 437,
+      "source": "Fires when a ready check completes or times out.",
+      "signature": ""
+    },
+    {
+      "id": 438,
+      "source": "Fires when a ready check starts.",
+      "signature": ""
+    },
+    {
+      "id": 439,
+      "source": "Fires when a role check starts.",
+      "signature": ""
+    },
+    {
+      "id": 440,
+      "source": "Fires when a trade window opens.",
+      "signature": ""
+    },
+    {
+      "id": 441,
+      "source": "Fires when a vendor window opens.",
+      "signature": ""
+    },
+    {
+      "id": 442,
+      "source": "Fires when an innkeeper asks to make this your home.",
+      "signature": ""
+    },
+    {
+      "id": 443,
+      "source": "Fires when gaining money with an open vendor window.",
+      "signature": ""
+    },
+    {
+      "id": 444,
+      "source": "Fires when group leadership changes hands.",
+      "signature": ""
+    },
+    {
+      "id": 446,
+      "source": "Fires when one of your own casts begins.",
+      "signature": ""
+    },
+    {
+      "id": 447,
+      "source": "Fires when one of your own casts completes successfully — distinct from a cast simply ending.",
+      "signature": ""
+    },
+    {
+      "id": 448,
+      "source": "Fires when one of your own casts ends, whether or not it completed.",
+      "signature": ""
+    },
+    {
+      "id": 452,
+      "source": "Fires when someone challenges you to a duel.",
+      "signature": ""
+    },
+    {
+      "id": 453,
+      "source": "Fires when someone invites you to a group.",
+      "signature": ""
+    },
+    {
+      "id": 455,
+      "source": "Fires when someone joins or leaves your group.",
+      "signature": ""
+    },
+    {
+      "id": 456,
+      "source": "Fires when someone offers you a resurrection and the accept dialog appears.",
+      "signature": ""
+    },
+    {
+      "id": 457,
+      "source": "Fires when someone summons you and the accept dialog appears.",
+      "signature": ""
+    },
+    {
+      "id": 458,
+      "source": "Fires when spending money with an open vendor window.",
+      "signature": ""
+    },
+    {
+      "id": 463,
+      "source": "Fires when the stable master's window opens.",
+      "signature": ""
+    },
+    {
+      "id": 464,
+      "source": "Fires when you accept a quest.",
+      "signature": ""
+    },
+    {
+      "id": 465,
+      "source": "Fires when you are confused or possessed (CONFUSE, POSSESS).",
+      "signature": ""
+    },
+    {
+      "id": 466,
+      "source": "Fires when you are disarmed (DISARM).",
+      "signature": ""
+    },
+    {
+      "id": 467,
+      "source": "Fires when you are feared or charmed (FEAR, FEAR_MECHANIC, CHARM).",
+      "signature": ""
+    },
+    {
+      "id": 469,
+      "source": "Fires when you are resurrected or leave ghost form.",
+      "signature": ""
+    },
+    {
+      "id": 470,
+      "source": "Fires when you are rooted in place (ROOT). You can still act, so this is a rung below the cues that stop you entirely.",
+      "signature": ""
+    },
+    {
+      "id": 471,
+      "source": "Fires when you are silenced (SILENCE).",
+      "signature": ""
+    },
+    {
+      "id": 472,
+      "source": "Fires when you are stunned (STUN, STUN_MECHANIC).",
+      "signature": ""
+    },
+    {
+      "id": 474,
+      "source": "Fires when you change target, including when you clear it.",
+      "signature": ""
+    },
+    {
+      "id": 475,
+      "source": "Fires when you die.",
+      "signature": ""
+    },
+    {
+      "id": 478,
+      "source": "Fires when you enter a new zone.",
+      "signature": ""
+    },
+    {
+      "id": 479,
+      "source": "Fires when you enter a vehicle and your action bar is replaced.",
+      "signature": ""
+    },
+    {
+      "id": 481,
+      "source": "Fires when you leave a vehicle and your own action bar returns.",
+      "signature": ""
+    },
+    {
+      "id": 484,
+      "source": "Fires when you set or clear your focus target.",
+      "signature": ""
+    },
+    {
+      "id": 486,
+      "source": "Fires when your class's secondary resource fills up — combo points, holy power, soul shards, chi, arcane charges, essence or runes, whichever your specialisation uses.",
+      "signature": ""
+    },
+    {
+      "id": 489,
+      "source": "Fires when your focus target begins casting.",
+      "signature": ""
+    },
+    {
+      "id": 491,
+      "source": "Fires when your own away or do-not-disturb flag actually changes.",
+      "signature": ""
+    },
+    {
+      "id": 499,
+      "source": "Flight map opened",
+      "signature": ""
+    },
+    {
+      "id": 503,
+      "source": "Focus",
+      "signature": ""
+    },
+    {
+      "id": 504,
+      "source": "Focus changed",
+      "signature": ""
+    },
+    {
+      "id": 505,
+      "source": "Focus started casting",
+      "signature": ""
+    },
+    {
+      "id": 507,
+      "source": "Focused element became unavailable",
+      "signature": ""
+    },
+    {
+      "id": 513,
+      "source": "Four rapid, sharp ticks.",
+      "signature": ""
+    },
+    {
+      "id": 516,
+      "source": "Gait strength",
+      "signature": ""
+    },
+    {
+      "id": 517,
+      "source": "Gasp peak",
+      "signature": ""
+    },
+    {
+      "id": 518,
+      "source": "Gear needs repair",
+      "signature": ""
+    },
+    {
+      "id": 519,
+      "source": "Generic / Unknown",
+      "signature": ""
+    },
+    {
+      "id": 520,
+      "source": "Generic / unknown",
+      "signature": ""
+    },
+    {
+      "id": 522,
+      "source": "Gentle steady engine-like cruise vibration while riding flight master gryphons, bats, or wyverns.",
+      "signature": ""
+    },
+    {
+      "id": 524,
+      "source": "Group changes",
+      "signature": ""
+    },
+    {
+      "id": 525,
+      "source": "Group readiness",
+      "signature": ""
+    },
+    {
+      "id": 526,
+      "source": "Group roster changed",
+      "signature": ""
+    },
+    {
+      "id": 527,
+      "source": "Group targeting active",
+      "signature": ""
+    },
+    {
+      "id": 528,
+      "source": "Group targeting released",
+      "signature": ""
+    },
+    {
+      "id": 533,
+      "source": "Hardware & Presets",
+      "signature": ""
+    },
+    {
+      "id": 534,
+      "source": "Harvest complete",
+      "signature": ""
+    },
+    {
+      "id": 535,
+      "source": "Heal casts and low-health triage",
+      "signature": ""
+    },
+    {
+      "id": 536,
+      "source": "Healing received",
+      "signature": ""
+    },
+    {
+      "id": 537,
+      "source": "Health & survival",
+      "signature": ""
+    },
+    {
+      "id": 538,
+      "source": "Heart rate (BPM)",
+      "signature": ""
+    },
+    {
+      "id": 539,
+      "source": "Heart rate (calm), BPM",
+      "signature": ""
+    },
+    {
+      "id": 541,
+      "source": "Heavy Impacts",
+      "signature": ""
+    },
+    {
+      "id": 542,
+      "source": "Heavy left counterweight (85ms), light right counterweight (45ms)",
+      "signature": ""
+    },
+    {
+      "id": 543,
+      "source": "High Motor Only",
+      "signature": ""
+    },
+    {
+      "id": 544,
+      "source": "High motor",
+      "signature": ""
+    },
+    {
+      "id": 551,
+      "source": "Hooks StackSplitFrame:UpdateStackText.",
+      "signature": ""
+    },
+    {
+      "id": 554,
+      "source": "How far the hum swells either side of its baseline. 0 is a flat hold.",
+      "signature": ""
+    },
+    {
+      "id": 555,
+      "source": "How fast the wingbeat-style undulation cycles.",
+      "signature": ""
+    },
+    {
+      "id": 558,
+      "source": "How many seconds before the scripted moment this fires.",
+      "signature": ""
+    },
+    {
+      "id": 561,
+      "source": "How pronounced each stroke is against its own baseline. Higher values (0.80-1.0) allow the counterweight to physically spin down during the glide phase between strokes. 0 is a flat drag with no rhythm at all.",
+      "signature": ""
+    },
+    {
+      "id": 563,
+      "source": "How steady the low motor stays regardless of speed. Only audible while actually gliding.",
+      "signature": ""
+    },
+    {
+      "id": 564,
+      "source": "How strong the hum gets by the moment a regular cast completes. Only audible if \"Casting texture\" is also enabled on its own tab.",
+      "signature": ""
+    },
+    {
+      "id": 566,
+      "source": "Hunter",
+      "signature": ""
+    },
+    {
+      "id": 569,
+      "source": "If nothing is happening",
+      "signature": ""
+    },
+    {
+      "id": 570,
+      "source": "Immediately switch to %s for the current character.",
+      "signature": "s"
+    },
+    {
+      "id": 571,
+      "source": "Immersion: Caster",
+      "signature": ""
+    },
+    {
+      "id": 572,
+      "source": "Immersion: Melee",
+      "signature": ""
+    },
+    {
+      "id": 573,
+      "source": "Immersion: Ranged",
+      "signature": ""
+    },
+    {
+      "id": 575,
+      "source": "Impact attack (s)",
+      "signature": ""
+    },
+    {
+      "id": 578,
+      "source": "Initial software voltage boost applied during transient onset to accelerate the motor rapidly to target speed. 1.0 is disabled.",
+      "signature": ""
+    },
+    {
+      "id": 579,
+      "source": "Innkeeper hearth prompt",
+      "signature": ""
+    },
+    {
+      "id": 580,
+      "source": "Input device changed",
+      "signature": ""
+    },
+    {
+      "id": 581,
+      "source": "Input mode",
+      "signature": ""
+    },
+    {
+      "id": 582,
+      "source": "Instant ability used",
+      "signature": ""
+    },
+    {
+      "id": 584,
+      "source": "Intensity",
+      "signature": ""
+    },
+    {
+      "id": 585,
+      "source": "Intensity Slider",
+      "signature": ""
+    },
+    {
+      "id": 589,
+      "source": "Interface",
+      "signature": ""
+    },
+    {
+      "id": 590,
+      "source": "Interface & Accessibility",
+      "signature": ""
+    },
+    {
+      "id": 591,
+      "source": "Interface message",
+      "signature": ""
+    },
+    {
+      "id": 593,
+      "source": "Interface tab changed",
+      "signature": ""
+    },
+    {
+      "id": 595,
+      "source": "Inventory full warning",
+      "signature": ""
+    },
+    {
+      "id": 596,
+      "source": "Invites & requests",
+      "signature": ""
+    },
+    {
+      "id": 601,
+      "source": "Jarring physical weapon clatter",
+      "signature": ""
+    },
+    {
+      "id": 603,
+      "source": "LRA (Classic ERM Emulation)",
+      "signature": ""
+    },
+    {
+      "id": 604,
+      "source": "Landed",
+      "signature": ""
+    },
+    {
+      "id": 611,
+      "source": "Leave this scope with no opinion and let the next one decide.",
+      "signature": ""
+    },
+    {
+      "id": 613,
+      "source": "Left a vehicle",
+      "signature": ""
+    },
+    {
+      "id": 614,
+      "source": "Left melee range",
+      "signature": ""
+    },
+    {
+      "id": 615,
+      "source": "Level up",
+      "signature": ""
+    },
+    {
+      "id": 617,
+      "source": "Lifecycle (advanced)",
+      "signature": ""
+    },
+    {
+      "id": 619,
+      "source": "Load its starting values",
+      "signature": ""
+    },
+    {
+      "id": 620,
+      "source": "Loading screen finished",
+      "signature": ""
+    },
+    {
+      "id": 628,
+      "source": "Loss of control",
+      "signature": ""
+    },
+    {
+      "id": 629,
+      "source": "Loss of control cues",
+      "signature": ""
+    },
+    {
+      "id": 630,
+      "source": "Low Health Heartbeat",
+      "signature": ""
+    },
+    {
+      "id": 631,
+      "source": "Low Motor Only",
+      "signature": ""
+    },
+    {
+      "id": 632,
+      "source": "Low health",
+      "signature": ""
+    },
+    {
+      "id": 634,
+      "source": "Low health texture",
+      "signature": ""
+    },
+    {
+      "id": 635,
+      "source": "Low motor",
+      "signature": ""
+    },
+    {
+      "id": 636,
+      "source": "Low motor holds a steady presence, floored so it's never silent while gliding; high motor eases in from near-silent toward thrillPeak as speed climbs, shaped by thrillCurve.",
+      "signature": ""
+    },
+    {
+      "id": 640,
+      "source": "Mage",
+      "signature": ""
+    },
+    {
+      "id": 642,
+      "source": "Manage",
+      "signature": ""
+    },
+    {
+      "id": 644,
+      "source": "Master Vibration Strength",
+      "signature": ""
+    },
+    {
+      "id": 646,
+      "source": "Master switch for every loss-of-control cue below. With this off, none of them fire and no loss-of-control events are registered at all.",
+      "signature": ""
+    },
+    {
+      "id": 647,
+      "source": "Master switch. With this off, nothing registers and nothing costs anything.",
+      "signature": ""
+    },
+    {
+      "id": 648,
+      "source": "Melee auto-attack started",
+      "signature": ""
+    },
+    {
+      "id": 649,
+      "source": "Melee auto-attack stopped",
+      "signature": ""
+    },
+    {
+      "id": 651,
+      "source": "Menus & tabs",
+      "signature": ""
+    },
+    {
+      "id": 652,
+      "source": "Messages",
+      "signature": ""
+    },
+    {
+      "id": 654,
+      "source": "Minimum severity",
+      "signature": ""
+    },
+    {
+      "id": 656,
+      "source": "Mode to test",
+      "signature": ""
+    },
+    {
+      "id": 657,
+      "source": "Most specific wins. A scope set to |cffffd100No rule|r has no opinion and lets the one below it decide; with none of them set, Pulse uses Default.",
+      "signature": ""
+    },
+    {
+      "id": 663,
+      "source": "Movement",
+      "signature": ""
+    },
+    {
+      "id": 664,
+      "source": "Movement & Travel",
+      "signature": ""
+    },
+    {
+      "id": 667,
+      "source": "Multiplies every trigger's intensity. Part of the current profile, not global.",
+      "signature": ""
+    },
+    {
+      "id": 672,
+      "source": "Name the new profile:",
+      "signature": ""
+    },
+    {
+      "id": 674,
+      "source": "Navigation",
+      "signature": ""
+    },
+    {
+      "id": 676,
+      "source": "New profile",
+      "signature": ""
+    },
+    {
+      "id": 678,
+      "source": "Next >",
+      "signature": ""
+    },
+    {
+      "id": 681,
+      "source": "No rule",
+      "signature": ""
+    },
+    {
+      "id": 683,
+      "source": "None (full sensory richness)",
+      "signature": ""
+    },
+    {
+      "id": 684,
+      "source": "None (stock defaults)",
+      "signature": ""
+    },
+    {
+      "id": 689,
+      "source": "ON — option changes and cue firings will print here.",
+      "signature": ""
+    },
+    {
+      "id": 691,
+      "source": "Ocean Waves & Swell",
+      "signature": ""
+    },
+    {
+      "id": 692,
+      "source": "Ocean waves & swell",
+      "signature": ""
+    },
+    {
+      "id": 693,
+      "source": "Ocean zones only (guessed from zone name)",
+      "signature": ""
+    },
+    {
+      "id": 694,
+      "source": "Off by default and deliberately the faintest cue in the addon: this fires for EVERY NPC you talk to, which in a city is constantly. Try it before leaving it on. Untested.",
+      "signature": ""
+    },
+    {
+      "id": 701,
+      "source": "Offensive",
+      "signature": ""
+    },
+    {
+      "id": 704,
+      "source": "One cue for both directions, same reasoning as the navigation edge cue — a motor can't tell you which way you went.",
+      "signature": ""
+    },
+    {
+      "id": 705,
+      "source": "One full-bodied hit on both motors.",
+      "signature": ""
+    },
+    {
+      "id": 706,
+      "source": "One long, sombre pulse when a spirit healer's window opens.",
+      "signature": ""
+    },
+    {
+      "id": 708,
+      "source": "One sharp, heavy impact — fast attack, fast decay.",
+      "signature": ""
+    },
+    {
+      "id": 709,
+      "source": "One strong, sustained pulse.",
+      "signature": ""
+    },
+    {
+      "id": 710,
+      "source": "One sustained pulse.",
+      "signature": ""
+    },
+    {
+      "id": 713,
+      "source": "Open Pulse settings",
+      "signature": ""
+    },
+    {
+      "id": 714,
+      "source": "Other",
+      "signature": ""
+    },
+    {
+      "id": 716,
+      "source": "Overall heave amplitude of the oceanic swell. Sets the physical displacement intensity of the slow motor.",
+      "signature": ""
+    },
+    {
+      "id": 717,
+      "source": "Overall intensity",
+      "signature": ""
+    },
+    {
+      "id": 719,
+      "source": "Overall strength. Meant to sit at the edge of perception — if you notice it as a vibration rather than as being submerged, it is too high. Inherits the old idleFloatAmplitude, which was live-tuned to 0.04.",
+      "signature": ""
+    },
+    {
+      "id": 720,
+      "source": "Overdrive kick",
+      "signature": ""
+    },
+    {
+      "id": 721,
+      "source": "Overdrive time (s)",
+      "signature": ""
+    },
+    {
+      "id": 723,
+      "source": "Own motor",
+      "signature": ""
+    },
+    {
+      "id": 724,
+      "source": "PLAYER_ALIVE also fires when you release to a graveyard, so this can fire while you are still a ghost.",
+      "signature": ""
+    },
+    {
+      "id": 726,
+      "source": "PLAYER_SOFT_FRIEND_CHANGED, occurrence-only, no payload. Worth pairing with the hostile cue above only if you can tell two TICKs apart — if not, give one of them a different shape with its own \"Feels like\" dropdown.",
+      "signature": ""
+    },
+    {
+      "id": 729,
+      "source": "PULSE QUICK SETUP",
+      "signature": ""
+    },
+    {
+      "id": 731,
+      "source": "Pacified or school-locked",
+      "signature": ""
+    },
+    {
+      "id": 732,
+      "source": "Page switches",
+      "signature": ""
+    },
+    {
+      "id": 733,
+      "source": "Paladin",
+      "signature": ""
+    },
+    {
+      "id": 737,
+      "source": "Passively polled by observing IsEnabled() on the currently focused element. Fires if the element becomes disabled while focused.",
+      "signature": ""
+    },
+    {
+      "id": 743,
+      "source": "Passively polled via GetUIPanel every 0.05s to eliminate UIParentPanelManager execution taint on protected frames.",
+      "signature": ""
+    },
+    {
+      "id": 744,
+      "source": "Passively polled via GetUIPanel every 0.05s. Detects when major UI panels are dismissed without callback taint.",
+      "signature": ""
+    },
+    {
+      "id": 746,
+      "source": "Passively polled via GroupTargeting.isTargetingActive. Fires when the group targeting modifier is released.",
+      "signature": ""
+    },
+    {
+      "id": 752,
+      "source": "Physical tool strikes: anvil hammer strokes, mining pickaxe impacts, tailoring stitches.",
+      "signature": ""
+    },
+    {
+      "id": 753,
+      "source": "Pick a mode to test below.",
+      "signature": ""
+    },
+    {
+      "id": 756,
+      "source": "Play",
+      "signature": ""
+    },
+    {
+      "id": 757,
+      "source": "Play ",
+      "signature": ""
+    },
+    {
+      "id": 758,
+      "source": "Play a few seconds of this texture at its current intensity. Module-driven preview reproducing authentic physical dynamics and configured intensity.",
+      "signature": ""
+    },
+    {
+      "id": 761,
+      "source": "Presence floor (low)",
+      "signature": ""
+    },
+    {
+      "id": 763,
+      "source": "Priest",
+      "signature": ""
+    },
+    {
+      "id": 764,
+      "source": "Prints every option you change and every cue that actually fires to chat, in real time. Same as /pulse debug — off by default, and resets to off on /reload since it's a testing aid, not a saved preference.",
+      "signature": ""
+    },
+    {
+      "id": 770,
+      "source": "Profile",
+      "signature": ""
+    },
+    {
+      "id": 771,
+      "source": "Profiles",
+      "signature": ""
+    },
+    {
+      "id": 772,
+      "source": "Profiles and automatic rules",
+      "signature": ""
+    },
+    {
+      "id": 773,
+      "source": "Progression",
+      "signature": ""
+    },
+    {
+      "id": 774,
+      "source": "Progressive low build leading to a sharp high break.",
+      "signature": ""
+    },
+    {
+      "id": 775,
+      "source": "Pull / glide balance",
+      "signature": ""
+    },
+    {
+      "id": 776,
+      "source": "Pulse",
+      "signature": ""
+    },
+    {
+      "id": 779,
+      "source": "Pulse is using |cffffd100%s|r, because a rule is set for %s.",
+      "signature": "s,s"
+    },
+    {
+      "id": 781,
+      "source": "Pulse tunes motor spin-up attack, coast-down release, and breakaway friction to match your physical hardware actuators.",
+      "signature": ""
+    },
+    {
+      "id": 783,
+      "source": "Pulse: (Engine recorded %d errors. Last error: %s)",
+      "signature": "d,s"
+    },
+    {
+      "id": 784,
+      "source": "Pulse: /pulse test <mode>|heartbeat|warningbeat — try one of: ",
+      "signature": ""
+    },
+    {
+      "id": 785,
+      "source": "Pulse: activated profile \"%s\"",
+      "signature": "s"
+    },
+    {
+      "id": 786,
+      "source": "Pulse: active profile is \"%s\" (%s)",
+      "signature": "s,s"
+    },
+    {
+      "id": 788,
+      "source": "Pulse: bound profile \"%s\" to specialization %s",
+      "signature": "s,s"
+    },
+    {
+      "id": 792,
+      "source": "Pulse: could not build settings row %q (%s)",
+      "signature": "q,s"
+    },
+    {
+      "id": 793,
+      "source": "Pulse: could not build the settings window (",
+      "signature": ""
+    },
+    {
+      "id": 794,
+      "source": "Pulse: debug ",
+      "signature": ""
+    },
+    {
+      "id": 795,
+      "source": "Pulse: disabled all %d cues in active profile.",
+      "signature": "d"
+    },
+    {
+      "id": 796,
+      "source": "Pulse: disabled all %d cues in profile \"%s\".",
+      "signature": "d,s"
+    },
+    {
+      "id": 797,
+      "source": "Pulse: disabled all %d cues in profile %s.",
+      "signature": "d,s"
+    },
+    {
+      "id": 798,
+      "source": "Pulse: enabled all %d cues in active profile.",
+      "signature": "d"
+    },
+    {
+      "id": 799,
+      "source": "Pulse: enabled all %d cues in profile \"%s\".",
+      "signature": "d,s"
+    },
+    {
+      "id": 800,
+      "source": "Pulse: enabled all %d cues in profile %s.",
+      "signature": "d,s"
+    },
+    {
+      "id": 801,
+      "source": "Pulse: live oscilloscope is provided by the companion addon PulseDebug (/pdebug scope).",
+      "signature": ""
+    },
+    {
+      "id": 802,
+      "source": "Pulse: minimap icon %s",
+      "signature": "s"
+    },
+    {
+      "id": 803,
+      "source": "Pulse: no profile matching \"%s\". Available: %s",
+      "signature": "s,s"
+    },
+    {
+      "id": 805,
+      "source": "Pulse: switched to profile \"%s\"",
+      "signature": "s"
+    },
+    {
+      "id": 806,
+      "source": "Pulse: that preview is unavailable.",
+      "signature": ""
+    },
+    {
+      "id": 807,
+      "source": "Pulse: this looks like a %s%s. Pick it above, then press Apply.",
+      "signature": "s,s"
+    },
+    {
+      "id": 811,
+      "source": "Pure flavour — nothing depends on it. Untested.",
+      "signature": ""
+    },
+    {
+      "id": 812,
+      "source": "Pure novelty. Off by default forever, basically — nobody asked for this one.",
+      "signature": ""
+    },
+    {
+      "id": 814,
+      "source": "Put every motor's strength, floor, timing and curve back to the engine defaults. Doesn't touch cues, per-cue intensity, mode tuning or your schema.",
+      "signature": ""
+    },
+    {
+      "id": 815,
+      "source": "Put the profile in use back to its stock defaults — works on built-ins too, restoring their curated content rather than blank Registry.lua defaults.",
+      "signature": ""
+    },
+    {
+      "id": 817,
+      "source": "PvP (Tactical Radar)",
+      "signature": ""
+    },
+    {
+      "id": 818,
+      "source": "Quest accepted",
+      "signature": ""
+    },
+    {
+      "id": 819,
+      "source": "Quest offered",
+      "signature": ""
+    },
+    {
+      "id": 820,
+      "source": "Quest ready to hand in",
+      "signature": ""
+    },
+    {
+      "id": 821,
+      "source": "Quest turned in",
+      "signature": ""
+    },
+    {
+      "id": 822,
+      "source": "Questing",
+      "signature": ""
+    },
+    {
+      "id": 823,
+      "source": "Questing & Exploration",
+      "signature": ""
+    },
+    {
+      "id": 824,
+      "source": "Quests",
+      "signature": ""
+    },
+    {
+      "id": 825,
+      "source": "Quick Setup",
+      "signature": ""
+    },
+    {
+      "id": 826,
+      "source": "Quick Setup Wizard",
+      "signature": ""
+    },
+    {
+      "id": 827,
+      "source": "Radial menu",
+      "signature": ""
+    },
+    {
+      "id": 828,
+      "source": "Radial menu closed",
+      "signature": ""
+    },
+    {
+      "id": 829,
+      "source": "Radial menu opened",
+      "signature": ""
+    },
+    {
+      "id": 830,
+      "source": "Radial page changed",
+      "signature": ""
+    },
+    {
+      "id": 831,
+      "source": "Radial segment changed",
+      "signature": ""
+    },
+    {
+      "id": 832,
+      "source": "Radial segment chosen",
+      "signature": ""
+    },
+    {
+      "id": 833,
+      "source": "Radial segment unavailable",
+      "signature": ""
+    },
+    {
+      "id": 834,
+      "source": "Radial selection cancelled",
+      "signature": ""
+    },
+    {
+      "id": 840,
+      "source": "Ranged auto-repeat started",
+      "signature": ""
+    },
+    {
+      "id": 841,
+      "source": "Ranged auto-repeat stopped",
+      "signature": ""
+    },
+    {
+      "id": 842,
+      "source": "Rapid staccato triple-click on the high motor.",
+      "signature": ""
+    },
+    {
+      "id": 844,
+      "source": "Reading something",
+      "signature": ""
+    },
+    {
+      "id": 855,
+      "source": "Reads the segment's own IsEnabled() — the same value Blizzard reads to grey the highlight out, so this matches what you see on screen. Fires in place of \"Radial segment changed\", not alongside it.",
+      "signature": ""
+    },
+    {
+      "id": 857,
+      "source": "Ready check",
+      "signature": ""
+    },
+    {
+      "id": 858,
+      "source": "Ready check finished",
+      "signature": ""
+    },
+    {
+      "id": 859,
+      "source": "Release time (s)",
+      "signature": ""
+    },
+    {
+      "id": 860,
+      "source": "Reload UI",
+      "signature": ""
+    },
+    {
+      "id": 861,
+      "source": "Reload UI to apply the language change.",
+      "signature": ""
+    },
+    {
+      "id": 862,
+      "source": "Reload the interface to apply your selected addon language.",
+      "signature": ""
+    },
+    {
+      "id": 863,
+      "source": "Rename",
+      "signature": ""
+    },
+    {
+      "id": 864,
+      "source": "Rename \"%s\" to:",
+      "signature": "s"
+    },
+    {
+      "id": 865,
+      "source": "Rename the profile in use. Every rule pointing at it follows the rename. Built-in profiles can't be renamed.",
+      "signature": ""
+    },
+    {
+      "id": 866,
+      "source": "Rename this profile",
+      "signature": ""
+    },
+    {
+      "id": 867,
+      "source": "Rename...",
+      "signature": ""
+    },
+    {
+      "id": 868,
+      "source": "Repaired equipment",
+      "signature": ""
+    },
+    {
+      "id": 870,
+      "source": "Reset",
+      "signature": ""
+    },
+    {
+      "id": 874,
+      "source": "Reset every motor's strength, floor, timing and curve back to the engine defaults? This can't be undone.",
+      "signature": ""
+    },
+    {
+      "id": 876,
+      "source": "Reset profile \"%s\" to defaults? Every cue, intensity and mode override in it goes back to stock values. This can't be undone.",
+      "signature": "s"
+    },
+    {
+      "id": 877,
+      "source": "Reset this profile",
+      "signature": ""
+    },
+    {
+      "id": 878,
+      "source": "Reset...",
+      "signature": ""
+    },
+    {
+      "id": 879,
+      "source": "Resources",
+      "signature": ""
+    },
+    {
+      "id": 880,
+      "source": "Response curve",
+      "signature": ""
+    },
+    {
+      "id": 881,
+      "source": "Resting",
+      "signature": ""
+    },
+    {
+      "id": 883,
+      "source": "Resurrection offered",
+      "signature": ""
+    },
+    {
+      "id": 885,
+      "source": "Rewards",
+      "signature": ""
+    },
+    {
+      "id": 889,
+      "source": "Rogue",
+      "signature": ""
+    },
+    {
+      "id": 890,
+      "source": "Role poll",
+      "signature": ""
+    },
+    {
+      "id": 891,
+      "source": "Rooted",
+      "signature": ""
+    },
+    {
+      "id": 892,
+      "source": "Routing & Schema",
+      "signature": ""
+    },
+    {
+      "id": 893,
+      "source": "Rules",
+      "signature": ""
+    },
+    {
+      "id": 894,
+      "source": "Run Wizard",
+      "signature": ""
+    },
+    {
+      "id": 895,
+      "source": "Run cadence (steps/s)",
+      "signature": ""
+    },
+    {
+      "id": 897,
+      "source": "Same polled mechanism as \"Confirmation popup appeared\". Untested.",
+      "signature": ""
+    },
+    {
+      "id": 901,
+      "source": "Save & Start Playing",
+      "signature": ""
+    },
+    {
+      "id": 902,
+      "source": "Scales both the bed and the strikes for %s, before the two shared strengths above.",
+      "signature": "s"
+    },
+    {
+      "id": 903,
+      "source": "Scales this cue on top of the overall intensity on the Pulse page.",
+      "signature": ""
+    },
+    {
+      "id": 904,
+      "source": "School lockouts are frequent in melee-heavy content. Off by default because a cue every kick you eat can crowd out the ones that mean you cannot act at all.",
+      "signature": ""
+    },
+    {
+      "id": 906,
+      "source": "Search %d cues...",
+      "signature": "d"
+    },
+    {
+      "id": 911,
+      "source": "Secondary resource full",
+      "signature": ""
+    },
+    {
+      "id": 915,
+      "source": "Set Floor",
+      "signature": ""
+    },
+    {
+      "id": 916,
+      "source": "Set but not in force: |cffffd100%s|r. A more specific rule above is winning — clear it to let these take over.",
+      "signature": "s"
+    },
+    {
+      "id": 917,
+      "source": "Set for Spec",
+      "signature": ""
+    },
+    {
+      "id": 918,
+      "source": "Setup Summary",
+      "signature": ""
+    },
+    {
+      "id": 919,
+      "source": "Shaman",
+      "signature": ""
+    },
+    {
+      "id": 921,
+      "source": "Shares its pulse pattern with the target cue. If your focus is also your target, you get one cue rather than two.",
+      "signature": ""
+    },
+    {
+      "id": 924,
+      "source": "Sharp high kick layered with heavy low kick and rumble decay.",
+      "signature": ""
+    },
+    {
+      "id": 925,
+      "source": "Show a Play button on every cue",
+      "signature": ""
+    },
+    {
+      "id": 926,
+      "source": "Show minimap icon",
+      "signature": ""
+    },
+    {
+      "id": 927,
+      "source": "Show per-cue detail controls",
+      "signature": ""
+    },
+    {
+      "id": 928,
+      "source": "Shows only the page switches and this page. Every cue keeps its own settings; turn this off to get every page back exactly as it was.",
+      "signature": ""
+    },
+    {
+      "id": 929,
+      "source": "Silenced",
+      "signature": ""
+    },
+    {
+      "id": 930,
+      "source": "Simple view",
+      "signature": ""
+    },
+    {
+      "id": 933,
+      "source": "Slow, harmonic oceanic gravity swells and coastal tides while submerged in deep oceans.",
+      "signature": ""
+    },
+    {
+      "id": 935,
+      "source": "Snappy & Taps",
+      "signature": ""
+    },
+    {
+      "id": 937,
+      "source": "Social & Group",
+      "signature": ""
+    },
+    {
+      "id": 938,
+      "source": "Social & Group Communication",
+      "signature": ""
+    },
+    {
+      "id": 939,
+      "source": "Soft target interact",
+      "signature": ""
+    },
+    {
+      "id": 941,
+      "source": "Special casting",
+      "signature": ""
+    },
+    {
+      "id": 942,
+      "source": "Speeds up or slows down ",
+      "signature": ""
+    },
+    {
+      "id": 946,
+      "source": "Spirit healer",
+      "signature": ""
+    },
+    {
+      "id": 947,
+      "source": "Split left and right",
+      "signature": ""
+    },
+    {
+      "id": 948,
+      "source": "Square / X: open settings",
+      "signature": ""
+    },
+    {
+      "id": 949,
+      "source": "Stable opened",
+      "signature": ""
+    },
+    {
+      "id": 950,
+      "source": "Stack split ratchet",
+      "signature": ""
+    },
+    {
+      "id": 951,
+      "source": "Standard Rumble",
+      "signature": ""
+    },
+    {
+      "id": 952,
+      "source": "Standard balance across all categories",
+      "signature": ""
+    },
+    {
+      "id": 954,
+      "source": "Status: %s",
+      "signature": "s"
+    },
+    {
+      "id": 965,
+      "source": "Step 4: Interface & Social Alerts",
+      "signature": ""
+    },
+    {
+      "id": 967,
+      "source": "Step 6: Master Strength & Completion",
+      "signature": ""
+    },
+    {
+      "id": 968,
+      "source": "Steps per second at full running speed. Scaled by how fast you are actually moving.",
+      "signature": ""
+    },
+    {
+      "id": 969,
+      "source": "Steps per second at normal walking speed.",
+      "signature": ""
+    },
+    {
+      "id": 970,
+      "source": "Strength",
+      "signature": ""
+    },
+    {
+      "id": 973,
+      "source": "Strike strength",
+      "signature": ""
+    },
+    {
+      "id": 974,
+      "source": "Stroke depth",
+      "signature": ""
+    },
+    {
+      "id": 975,
+      "source": "Stroke rate, fast (Hz)",
+      "signature": ""
+    },
+    {
+      "id": 976,
+      "source": "Stroke rate, slow (Hz)",
+      "signature": ""
+    },
+    {
+      "id": 977,
+      "source": "Strokes per second at barely-moving speed.",
+      "signature": ""
+    },
+    {
+      "id": 979,
+      "source": "Stunned",
+      "signature": ""
+    },
+    {
+      "id": 981,
+      "source": "Summon offered",
+      "signature": ""
+    },
+    {
+      "id": 982,
+      "source": "Swapped / Inverted Rumble",
+      "signature": ""
+    },
+    {
+      "id": 983,
+      "source": "Swell depth",
+      "signature": ""
+    },
+    {
+      "id": 984,
+      "source": "Swell rate (Hz)",
+      "signature": ""
+    },
+    {
+      "id": 985,
+      "source": "Swell strength",
+      "signature": ""
+    },
+    {
+      "id": 989,
+      "source": "Switch to this profile",
+      "signature": ""
+    },
+    {
+      "id": 990,
+      "source": "Switches every cue on the Casting page on or off at once. Each cue keeps its own setting underneath.",
+      "signature": ""
+    },
+    {
+      "id": 991,
+      "source": "Switches every cue on the Character & Status page on or off at once. Each cue keeps its own setting underneath.",
+      "signature": ""
+    },
+    {
+      "id": 995,
+      "source": "Switches every cue on the Interface & Accessibility page on or off at once. Each cue keeps its own setting underneath.",
+      "signature": ""
+    },
+    {
+      "id": 996,
+      "source": "Switches every cue on the Movement & Travel page on or off at once. Each cue keeps its own setting underneath.",
+      "signature": ""
+    },
+    {
+      "id": 997,
+      "source": "Switches every cue on the Social & Group page on or off at once. Each cue keeps its own setting underneath.",
+      "signature": ""
+    },
+    {
+      "id": 998,
+      "source": "Switches every cue on the Target & Focus page on or off at once. Each cue keeps its own setting underneath.",
+      "signature": ""
+    },
+    {
+      "id": 999,
+      "source": "Switches every cue on the World & Environment page on or off at once. Each cue keeps its own setting underneath.",
+      "signature": ""
+    },
+    {
+      "id": 1002,
+      "source": "Talking to someone",
+      "signature": ""
+    },
+    {
+      "id": 1003,
+      "source": "Target",
+      "signature": ""
+    },
+    {
+      "id": 1004,
+      "source": "Target & Crosshair Feedback",
+      "signature": ""
+    },
+    {
+      "id": 1005,
+      "source": "Target & Focus",
+      "signature": ""
+    },
+    {
+      "id": 1006,
+      "source": "Target changed",
+      "signature": ""
+    },
+    {
+      "id": 1007,
+      "source": "Target died",
+      "signature": ""
+    },
+    {
+      "id": 1008,
+      "source": "Target started casting",
+      "signature": ""
+    },
+    {
+      "id": 1010,
+      "source": "Target used major defensive",
+      "signature": ""
+    },
+    {
+      "id": 1011,
+      "source": "Target's cast stopped",
+      "signature": ""
+    },
+    {
+      "id": 1012,
+      "source": "Targeted by enemy",
+      "signature": ""
+    },
+    {
+      "id": 1013,
+      "source": "Targeting",
+      "signature": ""
+    },
+    {
+      "id": 1017,
+      "source": "Test Alert",
+      "signature": ""
+    },
+    {
+      "id": 1018,
+      "source": "Test Impact",
+      "signature": ""
+    },
+    {
+      "id": 1019,
+      "source": "Test Lock",
+      "signature": ""
+    },
+    {
+      "id": 1020,
+      "source": "Test Reward",
+      "signature": ""
+    },
+    {
+      "id": 1021,
+      "source": "Test Rumble",
+      "signature": ""
+    },
+    {
+      "id": 1022,
+      "source": "Test Strike",
+      "signature": ""
+    },
+    {
+      "id": 1023,
+      "source": "Test UI",
+      "signature": ""
+    },
+    {
+      "id": 1024,
+      "source": "Test the selected mode",
+      "signature": ""
+    },
+    {
+      "id": 1025,
+      "source": "Textures & Patterns",
+      "signature": ""
+    },
+    {
+      "id": 1026,
+      "source": "The Accessibility section",
+      "signature": ""
+    },
+    {
+      "id": 1027,
+      "source": "The Cue Index directory",
+      "signature": ""
+    },
+    {
+      "id": 1028,
+      "source": "The _QUIET variant covers failures the game prints no error for, so this can fire with nothing visible on screen.",
+      "signature": ""
+    },
+    {
+      "id": 1031,
+      "source": "The experimental section",
+      "signature": ""
+    },
+    {
+      "id": 1033,
+      "source": "The lightest possible tick when a conversation window opens with any NPC.",
+      "signature": ""
+    },
+    {
+      "id": 1034,
+      "source": "The master switch for this page. Also on the Casting page, where the cue lives alongside the other casting cues.",
+      "signature": ""
+    },
+    {
+      "id": 1042,
+      "source": "This character",
+      "signature": ""
+    },
+    {
+      "id": 1043,
+      "source": "This character reports no specialization, so there is no per-specialization rule to set. The row appears by itself on a character that has one.",
+      "signature": ""
+    },
+    {
+      "id": 1044,
+      "source": "This specialization",
+      "signature": ""
+    },
+    {
+      "id": 1045,
+      "source": "This specialization (",
+      "signature": ""
+    },
+    {
+      "id": 1051,
+      "source": "Three rhythmic thuds.",
+      "signature": ""
+    },
+    {
+      "id": 1052,
+      "source": "Three-stage rising tension building on the low motor.",
+      "signature": ""
+    },
+    {
+      "id": 1053,
+      "source": "Thrill curve (high)",
+      "signature": ""
+    },
+    {
+      "id": 1054,
+      "source": "Thrill peak (high)",
+      "signature": ""
+    },
+    {
+      "id": 1055,
+      "source": "Time in seconds for a complete wave cycle. Real oceanic swells roll every 8 to 12 seconds (~0.10 Hz). Shorter periods feel like choppy coastal chop; longer periods feel like open-ocean rollers.",
+      "signature": ""
+    },
+    {
+      "id": 1056,
+      "source": "Tracked cooldown ready",
+      "signature": ""
+    },
+    {
+      "id": 1057,
+      "source": "Trade opened",
+      "signature": ""
+    },
+    {
+      "id": 1059,
+      "source": "Triggers, modes, and motor tuning",
+      "signature": ""
+    },
+    {
+      "id": 1060,
+      "source": "Try Texture",
+      "signature": ""
+    },
+    {
+      "id": 1061,
+      "source": "Tuned for HD Rumble voice-coil actuators",
+      "signature": ""
+    },
+    {
+      "id": 1064,
+      "source": "Turn off every cue in the active profile in one sweep (useful for quiet debugging).",
+      "signature": ""
+    },
+    {
+      "id": 1065,
+      "source": "Turn on every cue in the active profile in one sweep (useful for testing/debugging).",
+      "signature": ""
+    },
+    {
+      "id": 1066,
+      "source": "Turn whole pages of cues on or off. Each cue keeps its own setting underneath: switching a page back on restores exactly what was there.",
+      "signature": ""
+    },
+    {
+      "id": 1067,
+      "source": "Two crisp ticks when a cooldown the built-in Cooldown Manager is tracking comes off cooldown.",
+      "signature": ""
+    },
+    {
+      "id": 1068,
+      "source": "Two heavier hits with a gap between them.",
+      "signature": ""
+    },
+    {
+      "id": 1069,
+      "source": "Two kinds of trigger: pulses and textures",
+      "signature": ""
+    },
+    {
+      "id": 1070,
+      "source": "Two rhythmic thuds.",
+      "signature": ""
+    },
+    {
+      "id": 1072,
+      "source": "Two soft ticks when the action bar pages to a different set of abilities.",
+      "signature": ""
+    },
+    {
+      "id": 1073,
+      "source": "Two soft ticks when you page the radial left or right with the shoulder buttons.",
+      "signature": ""
+    },
+    {
+      "id": 1078,
+      "source": "UI focus moved",
+      "signature": ""
+    },
+    {
+      "id": 1079,
+      "source": "UI navigation hit an edge",
+      "signature": ""
+    },
+    {
+      "id": 1080,
+      "source": "UI panel closed",
+      "signature": ""
+    },
+    {
+      "id": 1081,
+      "source": "UI panel opened",
+      "signature": ""
+    },
+    {
+      "id": 1084,
+      "source": "Untested whether this also fires on every instant-cast press rather than only real cast-bar completions — if so, it'll feel far too frequent to read as \"that landed\" specifically. Check before relying on it.",
+      "signature": ""
+    },
+    {
+      "id": 1086,
+      "source": "Untested.",
+      "signature": ""
+    },
+    {
+      "id": 1089,
+      "source": "Use the old estimator",
+      "signature": ""
+    },
+    {
+      "id": 1093,
+      "source": "Using \"%s\" — set for %s.",
+      "signature": "s,s"
+    },
+    {
+      "id": 1095,
+      "source": "Vendor window opened",
+      "signature": ""
+    },
+    {
+      "id": 1097,
+      "source": "Vibration Mode",
+      "signature": ""
+    },
+    {
+      "id": 1098,
+      "source": "Vibration Schema: |cffffd100%s|r",
+      "signature": "s"
+    },
+    {
+      "id": 1099,
+      "source": "Vibration schema",
+      "signature": ""
+    },
+    {
+      "id": 1101,
+      "source": "Voice-coil actuators (LRA), ultra-low 0.025 floor, instant response",
+      "signature": ""
+    },
+    {
+      "id": 1102,
+      "source": "Walk cadence (steps/s)",
+      "signature": ""
+    },
+    {
+      "id": 1103,
+      "source": "Warlock",
+      "signature": ""
+    },
+    {
+      "id": 1104,
+      "source": "Warning lead time",
+      "signature": ""
+    },
+    {
+      "id": 1105,
+      "source": "Warrior",
+      "signature": ""
+    },
+    {
+      "id": 1106,
+      "source": "Watches UNIT_TARGET and target swaps for hostile units whose target is the player. Uses UnitIsUnit('targettarget', 'player') with defensive secrecy guards.",
+      "signature": ""
+    },
+    {
+      "id": 1108,
+      "source": "Wave cycle (seconds)",
+      "signature": ""
+    },
+    {
+      "id": 1109,
+      "source": "Wave period (sec)",
+      "signature": ""
+    },
+    {
+      "id": 1110,
+      "source": "Wave steepness",
+      "signature": ""
+    },
+    {
+      "id": 1111,
+      "source": "Weapon or gear swapped",
+      "signature": ""
+    },
+    {
+      "id": 1120,
+      "source": "What this does",
+      "signature": ""
+    },
+    {
+      "id": 1121,
+      "source": "When mobs are pulled socially — aggroing because a neighbour was pulled — the game often reports status 0 even though you have aggro.",
+      "signature": ""
+    },
+    {
+      "id": 1125,
+      "source": "Which of the preset shapes this specific cue plays when it fires. \"",
+      "signature": ""
+    },
+    {
+      "id": 1126,
+      "source": "Which physical motors each cue drives. Start with Standard Rumble, then calibrate the motors below.",
+      "signature": ""
+    },
+    {
+      "id": 1127,
+      "source": "Which physical motors each trigger drives. Try one, test a mode below, keep the one you can feel.",
+      "signature": ""
+    },
+    {
+      "id": 1128,
+      "source": "Which profile to use right now. This writes to whichever rule is currently in force, so picking here always changes what you are actually using rather than editing a rule something more specific is overriding.",
+      "signature": ""
+    },
+    {
+      "id": 1131,
+      "source": "Wind amplitude",
+      "signature": ""
+    },
+    {
+      "id": 1132,
+      "source": "Wind resistance & thrust surge while flying. Scales dynamically with your flight speed.",
+      "signature": ""
+    },
+    {
+      "id": 1136,
+      "source": "Windows",
+      "signature": ""
+    },
+    {
+      "id": 1140,
+      "source": "World",
+      "signature": ""
+    },
+    {
+      "id": 1142,
+      "source": "World & Environment",
+      "signature": ""
+    },
+    {
+      "id": 1143,
+      "source": "World Immersion",
+      "signature": ""
+    },
+    {
+      "id": 1149,
+      "source": "You are alive again",
+      "signature": ""
+    },
+    {
+      "id": 1151,
+      "source": "You died",
+      "signature": ""
+    },
+    {
+      "id": 1152,
+      "source": "You have aggro",
+      "signature": ""
+    },
+    {
+      "id": 1154,
+      "source": "Your cast ended",
+      "signature": ""
+    },
+    {
+      "id": 1155,
+      "source": "Your cast failed",
+      "signature": ""
+    },
+    {
+      "id": 1157,
+      "source": "Your cast started",
+      "signature": ""
+    },
+    {
+      "id": 1158,
+      "source": "Your cast succeeded",
+      "signature": ""
+    },
+    {
+      "id": 1162,
+      "source": "Zone changed",
+      "signature": ""
+    },
+    {
+      "id": 1164,
+      "source": "an impact",
+      "signature": ""
+    },
+    {
+      "id": 1165,
+      "source": "could not apply that preset",
+      "signature": ""
+    },
+    {
+      "id": 1166,
+      "source": "could not run that",
+      "signature": ""
+    },
+    {
+      "id": 1167,
+      "source": "could not set that rule",
+      "signature": ""
+    },
+    {
+      "id": 1168,
+      "source": "detection unavailable",
+      "signature": ""
+    },
+    {
+      "id": 1169,
+      "source": "in force",
+      "signature": ""
+    },
+    {
+      "id": 1172,
+      "source": "no role chosen",
+      "signature": ""
+    },
+    {
+      "id": 1173,
+      "source": "once a minute",
+      "signature": ""
+    },
+    {
+      "id": 1174,
+      "source": "once every ",
+      "signature": ""
+    },
+    {
+      "id": 1175,
+      "source": "once every %.1f seconds",
+      "signature": "f"
+    },
+    {
+      "id": 1181,
+      "source": "|cff00ff00Left-Click:|r Open Settings",
+      "signature": ""
+    },
+    {
+      "id": 1182,
+      "source": "|cff00ff00Right-Click:|r Toggle Master On/Off",
+      "signature": ""
+    },
+    {
+      "id": 1183,
+      "source": "|cff00ff00[Adjusting %d%%]|r Use |cffffffff[← / →]|r to Change, |cff38BDF8[A]|r Confirm & Feel",
+      "signature": "d"
+    },
+    {
+      "id": 1186,
+      "source": "|cff38BDF8[L1 / LB]|r",
+      "signature": ""
+    },
+    {
+      "id": 1187,
+      "source": "|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[A]|r Toggle Slider / Select",
+      "signature": ""
+    },
+    {
+      "id": 1189,
+      "source": "|cff38BDF8[R1 / RB]|r",
+      "signature": ""
+    },
+    {
+      "id": 1190,
+      "source": "|cff444444[L1 / LB]|r",
+      "signature": ""
+    },
+    {
+      "id": 1191,
+      "source": "|cff444444[R1 / RB]|r",
+      "signature": ""
+    },
+    {
+      "id": 1193,
+      "source": "|cff4cb8ffPulse:|r Quick setup complete! Type |cffffffff/pulse|r anytime to fine-tune settings.",
+      "signature": ""
+    },
+    {
+      "id": 1194,
+      "source": "|cff4db8ff✔ |r",
+      "signature": ""
+    },
+    {
+      "id": 1197,
+      "source": "|cff888888Drag:|r Move Icon",
+      "signature": ""
+    },
+    {
+      "id": 1198,
+      "source": "|cff888888Loss of control cues are governed by the master switch on the main Pulse page.|r",
+      "signature": ""
+    },
+    {
+      "id": 1199,
+      "source": "|cff888888Recommended intensity:|r %d%%",
+      "signature": "d"
+    },
+    {
+      "id": 1201,
+      "source": "|cffffcc00◀/▶ Adjust Intensity|r   •   %s/%s Lock Value   •   %s Try Texture",
+      "signature": "s,s,s"
+    },
+    {
+      "id": 1202,
+      "source": "|cffffd100%s|r  |cff00ff00[ACTIVE]|r",
+      "signature": "s"
+    },
+    {
+      "id": 1203,
+      "source": "|cffffd100/pulseui|r opens it too. |cffffd100/pulse setup|r re-opens Quick Setup, |cffffd100/pulse test <mode>|r plays a shape.",
+      "signature": ""
+    },
+    {
+      "id": 1204,
+      "source": "|r, |cffffd100",
+      "signature": ""
+    },
+    {
+      "id": 1206,
+      "source": "• |r",
+      "signature": ""
+    },
+    {
+      "id": 1207,
+      "source": "⚔️ Melee DPS",
+      "signature": ""
+    },
+    {
+      "id": 1208,
+      "source": "🏹 Ranged DPS",
+      "signature": ""
+    },
+    {
+      "id": 1209,
+      "source": "💚 Healer",
+      "signature": ""
+    },
+    {
+      "id": 1210,
+      "source": "🛡️ Tank",
+      "signature": ""
+    }
+  ]
+}

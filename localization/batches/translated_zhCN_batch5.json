@@ -1,0 +1,436 @@
+{
+  "items": [
+    {
+      "source": "%s has no impacts — it is the bed alone, for the length of the craft.",
+      "target": "%s 没有敲击震颤——在制造全程仅有基底震颤。"
+    },
+    {
+      "source": "A bed you feel for the length of a craft, with the profession's own work rhythm struck over it. While a craft is running this replaces |cffffd100Casting texture|r rather than layering with it, so one action is one sensation.\n\nThe profession is read from the recipe by id, so it does not depend on your language. Anything that does not resolve still gets a generic work rhythm rather than going quiet.",
+      "target": "制造期间持续感知的基底震颤，其上叠加了该专业特有的劳作节奏。在制造进行时，此效果会替换|cffffd100施法材质震动|r而非与之叠加，从而确保一次动作仅对应一种体感。\n\n专业信息通过配方ID直接读取，因此不依赖你所使用的语言。任何未能识别的配方仍会获得通用的工作节奏，而不会陷入静音。"
+    },
+    {
+      "source": "A bright chime when gathering an herb node, mineral vein, or skinning loot completes.",
+      "target": "当采集草药点、矿脉或完成剥皮拾取时，产生清脆的鸣响提示。"
+    },
+    {
+      "source": "A bright tick when an item enters your bags — looted, crafted, or mailed.",
+      "target": "当物品进入你的背包时（无论是拾取、制造还是邮件获得），产生清脆的提示震动。"
+    },
+    {
+      "source": "A bright tick when you learn a new recipe or pattern.",
+      "target": "当你学会新的配方或图纸时，产生清脆的提示震动。"
+    },
+    {
+      "source": "A chime when a craft completes successfully.",
+      "target": "当制造成功完成时，产生清脆鸣响提示。"
+    },
+    {
+      "source": "A chime when the auction house opens.",
+      "target": "当拍卖行打开时，产生清脆鸣响提示。"
+    },
+    {
+      "source": "A heavy latch thud when closing a personal bank or guild bank vault.",
+      "target": "当关闭个人银行或公会公用银行时，产生门闩合上的沉重撞击感。"
+    },
+    {
+      "source": "A light coin clink when depositing or withdrawing money from a bank or guild bank.",
+      "target": "在银行或公会银行存入或提取金钱时，产生轻微的金币碰撞震动。"
+    },
+    {
+      "source": "A light coin-like tick when selling an item to a merchant.",
+      "target": "向商人出售物品时，产生类似金币声的轻微提示震动。"
+    },
+    {
+      "source": "A light tick when a profession or weapon skill goes up a point.",
+      "target": "当专业技能或武器技能提升一点时，产生轻微的提示震动。"
+    },
+    {
+      "source": "A light tick when an item enters your bag and occupies a slot.",
+      "target": "当物品进入背包并占据一个格子时，产生轻微的提示震动。"
+    },
+    {
+      "source": "A playful tick on some of your own emotes.",
+      "target": "当你执行某些表情动作时，产生轻快的提示震动。"
+    },
+    {
+      "source": "A playful tick when an NPC emotes, yells, or whispers near you.",
+      "target": "当附近的 NPC 执行表情动作、大喊或密语时，产生轻快的提示震动。"
+    },
+    {
+      "source": "A pleasant chime when you gain honor — a PvP kill or objective.",
+      "target": "当你获得荣誉时（PvP击杀或达成目标），产生悦耳的鸣响提示。"
+    },
+    {
+      "source": "A pleasant chime when you gain reputation with a faction.",
+      "target": "当你获得某个阵营的声望时，产生悦耳的鸣响提示。"
+    },
+    {
+      "source": "A pleasant chime whenever your shapeshift form changes.",
+      "target": "每当你的变形形态改变时，产生悦耳的鸣响提示。"
+    },
+    {
+      "source": "A soft chime when a crafting cast begins.",
+      "target": "当制造施法开始时，产生柔和的鸣响提示。"
+    },
+    {
+      "source": "A soft tick when the item leaves the cursor.",
+      "target": "当物品离开光标时，产生柔和的提示震动。"
+    },
+    {
+      "source": "A solid tap when buying an item from a merchant.",
+      "target": "从商人处购买物品时，产生沉稳的轻触震动。"
+    },
+    {
+      "source": "A subtle thud when a consumable or item is used and empties a bag slot.",
+      "target": "当使用消耗品或物品并清空一个背包格子时，产生微妙的顿挫震动。"
+    },
+    {
+      "source": "A very light tick when you loot money.",
+      "target": "当你拾取金钱时，产生极轻微的提示震动。"
+    },
+    {
+      "source": "An urgent stutter vibration when your bags become full or when you attempt an action with a full inventory.",
+      "target": "当你的背包已满或尝试在背包已满时执行操作，产生急促的断续颤动。"
+    },
+    {
+      "source": "Auction house opened",
+      "target": "拍卖行已打开"
+    },
+    {
+      "source": "Bank gold transfer",
+      "target": "银行金币存取"
+    },
+    {
+      "source": "Bank opened",
+      "target": "银行已打开"
+    },
+    {
+      "source": "Battle.net whisper received",
+      "target": "收到 Battle.net 密语"
+    },
+    {
+      "source": "CURSOR_CHANGED, with C_Cursor.GetCursorItem() checked only for presence — never read, never compared, so a secret item can't break it (truthiness on a non-secret-boolean is legal). Distinct from this addon's own \"Item obtained\": that's loot arriving in your bags, this is you physically holding something.",
+      "target": "CURSOR_CHANGED 事件，仅通过 C_Cursor.GetCursorItem() 检查物品是否存在——绝不读取或比较具体内容，因此隐藏物品不会引发异常（对非保密布尔值进行真值判断是完全合法的）。与本插件自身的“获得物品”不同：后者是指战利品进入背包，而此处是指你实际上用鼠标拿起了物品。"
+    },
+    {
+      "source": "Calibrated for standard third-party ERM rumble curves",
+      "target": "针对标准第三方 ERM 震动曲线校准"
+    },
+    {
+      "source": "Craft finished",
+      "target": "制造完成"
+    },
+    {
+      "source": "Craft started",
+      "target": "制造开始"
+    },
+    {
+      "source": "Crafting",
+      "target": "制造"
+    },
+    {
+      "source": "Crafting Rhythms",
+      "target": "制造节奏"
+    },
+    {
+      "source": "Crafting texture",
+      "target": "制造材质震动"
+    },
+    {
+      "source": "Distinct from this addon's own \"Gold looted\"/\"Item obtained\" (World category) — this is Tremor's original item-award cue, kept alongside rather than merged, since the underlying events differ.",
+      "target": "与本插件自身的“拾取金币”/“获得物品”（属于“世界”分类）不同——这是 Tremor 原版的物品奖励提示，由于底层事件不同，因此予以保留并存而非合并。"
+    },
+    {
+      "source": "Distinguished from craftStopped by whether the cast actually succeeded, which Core/CastActivity.lua tracks across the cast lifecycle rather than guessing from one event. Untested.",
+      "target": "通过施法是否真正成功来与 craftStopped 区分，Core/CastActivity.lua 在整个施法生命周期中全程追踪，而非仅凭单个事件推断。未测试。"
+    },
+    {
+      "source": "Dungeons & Raids",
+      "target": "地下城与团队副本"
+    },
+    {
+      "source": "Feel crafting",
+      "target": "感知制造"
+    },
+    {
+      "source": "Fires on BAG_OVERFLOW_WITH_FULL_INVENTORY, UI_ERROR_MESSAGE (inventory full error) and when free bag slots drop to zero.",
+      "target": "当触发 BAG_OVERFLOW_WITH_FULL_INVENTORY、UI_ERROR_MESSAGE（背包已满错误）以及可用背包格子降为零时触发。"
+    },
+    {
+      "source": "Fires on BAG_UPDATE_DELAYED when total free bag slots decrease. Complements Item obtained (which tracks ITEM_PUSH fly-in loot animations).",
+      "target": "当可用背包空格总数减少时于 BAG_UPDATE_DELAYED 触发。作为“获得物品”（追踪 ITEM_PUSH 飞入背包拾取动画）的补充。"
+    },
+    {
+      "source": "Fires on BAG_UPDATE_DELAYED when total free bag slots increase while not interacting with a merchant, bank, or mail.",
+      "target": "当未与商人、银行或邮件交互期间可用背包空格总数增加时，于 BAG_UPDATE_DELAYED 触发。"
+    },
+    {
+      "source": "Fires on LOOT_READY when gathering loot is ready.",
+      "target": "当采集拾取准备就绪时于 LOOT_READY 触发。"
+    },
+    {
+      "source": "Fires on money changes with an open bank frame or guild bank money update.",
+      "target": "当银行面板处于打开状态下金钱发生变动，或公会银行金币更新时触发。"
+    },
+    {
+      "source": "Fires when a dungeon or raid finder queue pops and the accept dialog appears.",
+      "target": "当地下城或团队查找器队列就绪并弹出确认对话框时触发。"
+    },
+    {
+      "source": "Fires when a group loot roll opens and the roll buttons appear.",
+      "target": "当队伍战利品掷骰开始且掷骰按钮出现时触发。"
+    },
+    {
+      "source": "Fires when a loot window opens.",
+      "target": "当拾取窗口打开时触发。"
+    },
+    {
+      "source": "Fires when a profession or crafting window opens.",
+      "target": "当专业技能或制造窗口打开时触发。"
+    },
+    {
+      "source": "Fires when loot is awarded to you.",
+      "target": "当战利品分配给你时触发。"
+    },
+    {
+      "source": "Fires when raid target markers are set or cleared.",
+      "target": "当设置或清除团队目标标记时触发。"
+    },
+    {
+      "source": "Fires when repairing durability at a merchant.",
+      "target": "在商人处修理装备耐久度时触发。"
+    },
+    {
+      "source": "Fires when someone invites you to a guild.",
+      "target": "当有人邀请你加入公会时触发。"
+    },
+    {
+      "source": "Fires when the bank window opens.",
+      "target": "当银行窗口打开时触发。"
+    },
+    {
+      "source": "Fires when the game asks you to confirm a loot roll.",
+      "target": "当游戏提示你确认战利品掷骰时触发。"
+    },
+    {
+      "source": "Fires when the mailbox opens.",
+      "target": "当邮箱窗口打开时触发。"
+    },
+    {
+      "source": "Fires when you receive a Battle.net whisper.",
+      "target": "当你收到 Battle.net 密语时触发。"
+    },
+    {
+      "source": "Fires when you receive a whisper.",
+      "target": "当你收到密语时触发。"
+    },
+    {
+      "source": "Gold looted",
+      "target": "拾取金币"
+    },
+    {
+      "source": "Guild bank opened",
+      "target": "公会银行已打开"
+    },
+    {
+      "source": "Guild invite",
+      "target": "公会邀请"
+    },
+    {
+      "source": "Honor gained",
+      "target": "获得荣誉"
+    },
+    {
+      "source": "Item consumed from bag",
+      "target": "消耗背包内物品"
+    },
+    {
+      "source": "Item cursor",
+      "target": "物品光标"
+    },
+    {
+      "source": "Item obtained",
+      "target": "获得物品"
+    },
+    {
+      "source": "Item placed in bag",
+      "target": "物品放入背包"
+    },
+    {
+      "source": "Learned a new recipe",
+      "target": "学会新配方"
+    },
+    {
+      "source": "Loot & inventory",
+      "target": "拾取与背包"
+    },
+    {
+      "source": "Loot received",
+      "target": "获得战利品"
+    },
+    {
+      "source": "Loot roll confirmation",
+      "target": "确认战利品掷骰"
+    },
+    {
+      "source": "Loot roll started",
+      "target": "战利品掷骰开始"
+    },
+    {
+      "source": "Loot window opened",
+      "target": "拾取窗口已打开"
+    },
+    {
+      "source": "Mailbox opened",
+      "target": "邮箱已打开"
+    },
+    {
+      "source": "Multiplies every impact, on top of each profession's own weight. Set it to zero for a craft you feel but never get hit by.",
+      "target": "在各专业自身权重的基础上，成倍调节每次敲击的力度。若希望制造时仅有触感而无剧烈敲击感，可将其设为零。"
+    },
+    {
+      "source": "Multiplies every impact, on top of each profession's own weight. Set to zero for a craft you feel but never get hit by.",
+      "target": "在各专业自身权重的基础上，成倍调节每次敲击的力度。若希望制造时仅有触感而无剧烈敲击感，可设为零。"
+    },
+    {
+      "source": "Multiplies the continuous layer under every craft, on top of each profession's own weight. This is the part you feel for the whole craft rather than the individual blows.",
+      "target": "在各专业自身权重的基础上，成倍调节每次制造底层的持续震感。这是在整个制造过程中持续感知的震动，而非单次的敲击感。"
+    },
+    {
+      "source": "NPC emote nearby",
+      "target": "附近 NPC 表情动作"
+    },
+    {
+      "source": "Never miss an important group alert, even while looking away:\n• |cffffffffDirect Whispers:|r Distinct personal communication blip on incoming whispers.\n• |cffffffffParty & Raid Invites:|r Dual-pulse notification when receiving group invitations.\n• |cffffffffQueue Pops & Ready Checks:|r High-priority attention-grabbing pulse when instances are ready.",
+      "target": "即使视线移开，也绝不错过重要的队伍提醒：\n• |cffffffff直接密语：|r收到密语时产生清晰独特的个人通讯轻触提示。\n• |cffffffff小队与团队邀请：|r收到组队邀请时产生双脉冲震动通知。\n• |cffffffff排队就绪与就位确认：|r副本就绪时产生高优先级、引人注目的警示脉冲。"
+    },
+    {
+      "source": "Noisy. In a raid this event fires very frequently. Kept for completeness and defaulted off.",
+      "target": "较为杂乱。在团队副本中该事件触发极其频繁。为保证功能完整而保留，默认关闭。"
+    },
+    {
+      "source": "Not filtered by rarity yet — fires for anything, common items included.",
+      "target": "暂未按品质过滤——对任何物品均会触发，包括普通品质物品。"
+    },
+    {
+      "source": "One pattern for every kind of refusal. May also do nothing inside dungeons and raids.",
+      "target": "对所有类型的拒绝行为采用同一种震动模式。在地下城和团队副本中可能不产生任何效果。"
+    },
+    {
+      "source": "Party invite",
+      "target": "小队邀请"
+    },
+    {
+      "source": "Party leader changed",
+      "target": "队长已变更"
+    },
+    {
+      "source": "Performed an emote",
+      "target": "执行了表情动作"
+    },
+    {
+      "source": "Picked up an item",
+      "target": "拿起物品"
+    },
+    {
+      "source": "Profession skill increased",
+      "target": "专业技能提升"
+    },
+    {
+      "source": "Profession window opened",
+      "target": "专业技能窗口已打开"
+    },
+    {
+      "source": "Professions with a rhythm",
+      "target": "具有工作节奏的专业"
+    },
+    {
+      "source": "Professions without one",
+      "target": "无工作节奏的专业"
+    },
+    {
+      "source": "Purchased item from vendor",
+      "target": "从商人处购买物品"
+    },
+    {
+      "source": "Pure flavor, sibling to \"Performed an emote\" above. Fires often in busy areas with lots of ambient NPCs — this is opt-in noise, not a curated signal, same as its sibling. Off by default.",
+      "target": "纯属趣味氛围效果，与上方的“执行了表情动作”为同类功能。在拥有大量环境 NPC 的繁华区域触发频繁——与同类功能一样，属于可自选开启的氛围效果，而非精选信号。默认关闭。"
+    },
+    {
+      "source": "Put down an item",
+      "target": "放下物品"
+    },
+    {
+      "source": "Raid marker changed",
+      "target": "团队标记已变更"
+    },
+    {
+      "source": "Raiding",
+      "target": "团队副本"
+    },
+    {
+      "source": "Raiding (Encounter Focus)",
+      "target": "团队副本（首领战专注）"
+    },
+    {
+      "source": "Reads GetShapeshiftForm()/UPDATE_SHAPESHIFT_FORM, the player's own state — one generic cue for any change, not split by direction, since forms chain (e.g. Bear -> Cat -> Moonkin) without necessarily passing back through no-form in between.",
+      "target": "读取玩家自身状态 GetShapeshiftForm()/UPDATE_SHAPESHIFT_FORM——任何形态变更均触发统一的通用提示，不区分变形方向，因为形态之间可连续切换（例如：熊形态 -> 猎豹形态 -> 枭兽形态），期间无需变回人形态。"
+    },
+    {
+      "source": "Reads the skill-up chat feed rather than SKILL_LINES_CHANGED, which also fires for unrelated skill-list changes. Occurrence-only, no text parsing — this says a skill went up, not which one or to what. Deliberately light: early profession levelling fires this constantly.",
+      "target": "读取技能提升聊天信息流，而非 SKILL_LINES_CHANGED（后者在无关技能列表变更时也会触发）。仅检测事件发生，不解析具体文本——仅提示某项技能获得了提升，而不区分具体是哪项或升到了多少级。震感特意调得较轻微：在前期升级专业技能时会频繁触发。"
+    },
+    {
+      "source": "Reputation gained",
+      "target": "获得声望"
+    },
+    {
+      "source": "Same weight and shape as the vendor, mailbox and bank cues alongside it — all four are \"a window you walked up to has opened\", and they deliberately feel alike rather than each inventing a signature.",
+      "target": "与一旁的商人、邮箱及银行提示具有相同的强度与体感形态——四者均属于“走到近前打开的交互窗口”，特意设计为相同的触觉体验，而非各自发明独立的手感模式。"
+    },
+    {
+      "source": "Shapeshift form changed",
+      "target": "变形形态已改变"
+    },
+    {
+      "source": "Sold item to vendor",
+      "target": "向商人出售物品"
+    },
+    {
+      "source": "TRADE_SKILL_CRAFT_BEGIN via Core/CastActivity.lua. Untested — no crafting cue has ever existed in this addon, so nothing here has been felt. Off by default.",
+      "target": "通过 Core/CastActivity.lua 捕获 TRADE_SKILL_CRAFT_BEGIN。未测试——此前本插件中从未存在制造提示，因此此处的效果尚无实测体感。默认关闭。"
+    },
+    {
+      "source": "Tactile sensations for living in the world of Azeroth:\n• |cffffffffLoot Drops & Currency:|r Feel items and gold collected into your bags.\n• |cffffffffQuests & Turn-ins:|r Physical confirmation upon accepting and completing objectives.\n• |cffffffffProgression:|r Rewarding celebration pulses for leveling up, achievements, and XP gains.",
+      "target": "畅游艾泽拉斯世界的触觉体验：\n• |cffffffff掉落战利品与货币：|r感知收入背包的物品与金币。\n• |cffffffff任务与交付：|r接取和完成目标时产生明确的实体确认感。\n• |cffffffff角色成长：|r升级、获得成就与获取经验值时产生令人振奋的庆祝脉冲。"
+    },
+    {
+      "source": "The other edge of the same CURSOR_CHANGED transition. Fires whether the item was placed somewhere or the drag was simply cancelled — the event doesn't distinguish, and nothing readable does.",
+      "target": "同一 CURSOR_CHANGED 状态转换的另一端。无论物品是被放置到某处还是拖拽被单纯取消，均会触发——该事件本身无法区分，也没有任何可读取的接口能够区分。"
+    },
+    {
+      "source": "The work itself while you craft — a bed for the length of it, with the profession's own rhythm struck on top. A hammer for blacksmithing, a pick for mining, nothing percussive for tailoring or enchanting.",
+      "target": "制造过程中的劳作体感——全程伴有基底震颤，其上叠加该专业特有的劳作节奏。锻造时如铁锤敲击，采矿时如矿镐凿击，而裁缝或附魔则没有任何打击震感。"
+    },
+    {
+      "source": "These strike. The shape and the rate come from the craft — a hammer is slower and heavier than a pick — and the last blow lands on completion.",
+      "target": "这些产生敲击震感。震动的形态与频率取决于制造类别——铁锤敲击比矿镐凿击更缓慢且沉重——最后一下重击在制造完成时落下。"
+    },
+    {
+      "source": "Two solid hits when an item attaches to the cursor.",
+      "target": "当物品附着在光标上时，产生两次沉稳的敲击震动。"
+    },
+    {
+      "source": "Two taps when the guild bank opens — heavier than the personal bank, because it is a bigger door.",
+      "target": "公会银行打开时产生两次轻触震动——比个人银行更厚重，因为那是一扇更大的门。"
+    },
+    {
+      "source": "Vault door closed",
+      "target": "金库大门已关闭"
+    },
+    {
+      "source": "Whisper received",
+      "target": "收到密语"
+    }
+  ]
+}

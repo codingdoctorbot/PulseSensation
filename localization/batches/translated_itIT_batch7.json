@@ -1,0 +1,297 @@
+{
+  "batch_id": 7,
+  "locale": "itIT",
+  "count": 58,
+  "items": [
+    {
+      "id": 1211,
+      "source": " (reported as \"%s\")",
+      "target": " (segnalato come \"%s\")"
+    },
+    {
+      "id": 1212,
+      "source": "ACTIVE",
+      "target": "ATTIVO"
+    },
+    {
+      "id": 1213,
+      "source": "Accept",
+      "target": "Accetta"
+    },
+    {
+      "id": 1214,
+      "source": "Active",
+      "target": "Attivo"
+    },
+    {
+      "id": 1215,
+      "source": "Alchemy",
+      "target": "Alchimia"
+    },
+    {
+      "id": 1216,
+      "source": "Apply",
+      "target": "Applica"
+    },
+    {
+      "id": 1217,
+      "source": "Blacksmithing",
+      "target": "Forgiatura"
+    },
+    {
+      "id": 1218,
+      "source": "Combat and life state",
+      "target": "Combattimento e stato vitale"
+    },
+    {
+      "id": 1219,
+      "source": "Combat texture",
+      "target": "Texture di combattimento"
+    },
+    {
+      "id": 1220,
+      "source": "Cooking",
+      "target": "Cucina"
+    },
+    {
+      "id": 1221,
+      "source": "Detect",
+      "target": "Rileva"
+    },
+    {
+      "id": 1222,
+      "source": "Disabled",
+      "target": "Disattivato"
+    },
+    {
+      "id": 1223,
+      "source": "Duration",
+      "target": "Durata"
+    },
+    {
+      "id": 1224,
+      "source": "Enabled",
+      "target": "Attivato"
+    },
+    {
+      "id": 1225,
+      "source": "Enchanting",
+      "target": "Incantamento"
+    },
+    {
+      "id": 1226,
+      "source": "Engineering",
+      "target": "Ingegneria"
+    },
+    {
+      "id": 1227,
+      "source": "Experimental (game-feel)",
+      "target": "Sperimentale (sensazione di gioco)"
+    },
+    {
+      "id": 1228,
+      "source": "Feel %s",
+      "target": "Senti %s"
+    },
+    {
+      "id": 1229,
+      "source": "Feels like: %s",
+      "target": "Sembra: %s"
+    },
+    {
+      "id": 1230,
+      "source": "Fires at most %s.",
+      "target": "Si attiva al massimo %s."
+    },
+    {
+      "id": 1231,
+      "source": "First Aid",
+      "target": "Primo Soccorso"
+    },
+    {
+      "id": 1232,
+      "source": "Fishing",
+      "target": "Pesca"
+    },
+    {
+      "id": 1233,
+      "source": "Flight and mounts",
+      "target": "Volo e cavalcature"
+    },
+    {
+      "id": 1234,
+      "source": "Group and social",
+      "target": "Gruppo e socialità"
+    },
+    {
+      "id": 1235,
+      "source": "Herbalism",
+      "target": "Erboristeria"
+    },
+    {
+      "id": 1236,
+      "source": "High motor (sharp rumble)",
+      "target": "Motore ad alta frequenza (vibrazione nitida)"
+    },
+    {
+      "id": 1237,
+      "source": "Inscription",
+      "target": "Runografia"
+    },
+    {
+      "id": 1238,
+      "source": "Jewelcrafting",
+      "target": "Oreficeria"
+    },
+    {
+      "id": 1239,
+      "source": "Leatherworking",
+      "target": "Conciatura"
+    },
+    {
+      "id": 1240,
+      "source": "Low motor (heavy rumble)",
+      "target": "Motore a bassa frequenza (vibrazione pesante)"
+    },
+    {
+      "id": 1241,
+      "source": "MUTED",
+      "target": "MUTATO"
+    },
+    {
+      "id": 1242,
+      "source": "Mining",
+      "target": "Estrazione"
+    },
+    {
+      "id": 1243,
+      "source": "Multiplies %s's high-motor intensity. 1.0 is the authored default; the top of this slider is where it stops making any further difference.",
+      "target": "Moltiplica l'intensità del motore ad alta frequenza di %s. 1,0 è il valore predefinito; il limite superiore di questo cursore è il punto in cui cessa di produrre qualsiasi ulteriore differenza."
+    },
+    {
+      "id": 1244,
+      "source": "Multiplies %s's low-motor intensity. 1.0 is the authored default; the top of this slider is where it stops making any further difference.",
+      "target": "Moltiplica l'intensità del motore a bassa frequenza di %s. 1,0 è il valore predefinito; il limite superiore di questo cursore è il punto in cui cessa di produrre qualsiasi ulteriore differenza."
+    },
+    {
+      "id": 1245,
+      "source": "Okay",
+      "target": "OK"
+    },
+    {
+      "id": 1246,
+      "source": "Other crafting",
+      "target": "Altro artigianato"
+    },
+    {
+      "id": 1247,
+      "source": "Play %s right now with whatever's currently set on its sliders above.",
+      "target": "Riproduci %s adesso con qualsiasi valore attualmente impostato sui suoi cursori in alto."
+    },
+    {
+      "id": 1248,
+      "source": "PvP",
+      "target": "PvP"
+    },
+    {
+      "id": 1249,
+      "source": "Ramp",
+      "target": "Rampa"
+    },
+    {
+      "id": 1250,
+      "source": "Skinning",
+      "target": "Scuoiatura"
+    },
+    {
+      "id": 1251,
+      "source": "Spec %s",
+      "target": "Spec. %s"
+    },
+    {
+      "id": 1252,
+      "source": "Speeds up or slows down %s as a whole — both its pulses and the gaps between them, so a multi-hit mode keeps its rhythm instead of the hits stretching into their own gaps. 1.0 is the authored default.",
+      "target": "Accelera o rallenta %s nel suo complesso — sia i suoi impulsi che gli intervalli tra di essi, in modo che una modalità a colpi multipli mantenga il proprio ritmo anziché espandere i colpi nei rispettivi intervalli. 1.0 è il valore predefinito originale."
+    },
+    {
+      "id": 1253,
+      "source": "Tailoring",
+      "target": "Sartoria"
+    },
+    {
+      "id": 1254,
+      "source": "Target and focus",
+      "target": "Bersaglio e focus"
+    },
+    {
+      "id": 1255,
+      "source": "Test",
+      "target": "Prova"
+    },
+    {
+      "id": 1256,
+      "source": "This specialization (%s)",
+      "target": "Questa specializzazione (%s)"
+    },
+    {
+      "id": 1257,
+      "source": "World (accessibility)",
+      "target": "Mondo (accessibilità)"
+    },
+    {
+      "id": 1258,
+      "source": "World (game-feel)",
+      "target": "Mondo (sensazione di gioco)"
+    },
+    {
+      "id": 1259,
+      "source": "Your casting",
+      "target": "I tuoi lanci"
+    },
+    {
+      "id": 1260,
+      "source": "a ramp is currently running on %s, not %s",
+      "target": "Una rampa è attualmente in esecuzione su %s, non su %s"
+    },
+    {
+      "id": 1261,
+      "source": "every character",
+      "target": "tutti i personaggi"
+    },
+    {
+      "id": 1262,
+      "source": "nothing set — falling back to Default",
+      "target": "Nessuna impostazione — ritorno al valore predefinito"
+    },
+    {
+      "id": 1263,
+      "source": "once every %d minutes",
+      "target": "una volta ogni %d minuti"
+    },
+    {
+      "id": 1264,
+      "source": "once every %d seconds",
+      "target": "una volta ogni %d secondi"
+    },
+    {
+      "id": 1265,
+      "source": "this character",
+      "target": "questo personaggio"
+    },
+    {
+      "id": 1266,
+      "source": "this specialization (%s)",
+      "target": "questa specializzazione (%s)"
+    },
+    {
+      "id": 1267,
+      "source": "|cff888888Silences:|r %s",
+      "target": "|cff888888Silenzi:|r %s"
+    },
+    {
+      "id": 1268,
+      "source": "|cffffd100Emphasizes:|r %s",
+      "target": "|cffffd100Enfatizza:|r %s"
+    }
+  ]
+}

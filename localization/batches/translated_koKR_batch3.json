@@ -1,0 +1,616 @@
+{
+  "items": [
+    {
+      "source": "\n\nA profile change is waiting: cues re-register when you leave combat, so nothing is rebuilt mid-pull.",
+      "target": "\n\n프로필 변경 대기 중: 전투에서 벗어나면 신호가 다시 등록되므로 전투 도중에는 아무것도 재구성되지 않습니다."
+    },
+    {
+      "source": " Takes effect when you leave combat.",
+      "target": " 전투에서 벗어나면 적용됩니다."
+    },
+    {
+      "source": "1. Planned Class & Combat Role",
+      "target": "1. 예정된 직업 및 전투 역할"
+    },
+    {
+      "source": "2. Combat",
+      "target": "2. 전투"
+    },
+    {
+      "source": "A crisp tap when a major full-screen or side UI panel opens (character sheet, spellbook, quest log, etc.).",
+      "target": "주요 전체 화면 또는 측면 UI 창(캐릭터 정보, 마법책, 퀘스트 목록 등)이 열릴 때 산뜻하게 톡 치는 감각입니다."
+    },
+    {
+      "source": "A dense three-pulse tactical flurry on Windfury extra attacks, detected via sub-50% weapon speed PLAYER_SWING timing.",
+      "target": "무기 속도의 50% 미만 PLAYER_SWING 타이밍으로 감지되는 질풍 추가 공격 시 3회의 묵직한 전술적 연속 진동이 발생합니다."
+    },
+    {
+      "source": "A dense three-pulse tactical flurry when the client receives UNIT_SPELLCAST_SUCCEEDED for Windfury Attack (Spell ID 25504).",
+      "target": "클라이언트가 질풍 공격(주문 ID 25504)에 대한 UNIT_SPELLCAST_SUCCEEDED를 수신할 때 조밀한 3회 전술적 연속 진동이 발생합니다."
+    },
+    {
+      "source": "A distinct physical tap to land with each main-hand weapon swing.",
+      "target": "주 장비 무기로 휘두를 때마다 전달되는 또렷한 물리적 타격감입니다."
+    },
+    {
+      "source": "A faint constant on the slow motor for as long as a cast or channel lasts, underneath the swell. This is the part that says \"something is happening\"; the swell is the part that says \"it is nearly done\". Zero leaves only the swell.",
+      "target": "주문 시전이나 정신 집중이 지속되는 동안 점진적 고조 진동 아래에서 저주파 모터로 은은하게 울리는 지속 진동입니다. 이 부분은 \"무언가 진행 중임\"을 알리며, 고조 진동은 \"완료가 임박함\"을 알립니다. 0으로 설정하면 고조 진동만 남습니다."
+    },
+    {
+      "source": "A faint continuous hum for as long as you're casting or channelling.",
+      "target": "주문을 시전하거나 정신 집중하는 동안 유지되는 은은하고 지속적인 윙 소리 진동입니다."
+    },
+    {
+      "source": "A firm hit that bleeds away — slowing to a stop.",
+      "target": "단단한 충격 후 점차 약해지며 천천히 멈추는 진동입니다."
+    },
+    {
+      "source": "A heavy thud when your target activates a major defensive cooldown (e.g. Shield Wall, Ice Block, Divine Shield, Turtle, Cloak).",
+      "target": "대상이 주요 방어 생존기(예: 방패 벽, 얼음 방패, 천상의 보호막, 거북의 상, 그림자 망토)를 활성화할 때 울리는 묵직한 충격입니다."
+    },
+    {
+      "source": "A light tick estimated to land with each off-hand weapon swing, while dual-wielding.",
+      "target": "쌍수 무기 착용 시 보조 장비 무기로 휘두를 때마다 전달되는 것으로 추정되는 가벼운 짤깍임입니다."
+    },
+    {
+      "source": "A near-silent breathing wave while stealthed or invisible.",
+      "target": "은신 또는 투명 상태일 때 느껴지는 거의 소리 없는 호흡 파동입니다."
+    },
+    {
+      "source": "A pleasant chime when you receive a critical heal.",
+      "target": "치명타 치유를 받을 때 울리는 기분 좋은 맑은 차임입니다."
+    },
+    {
+      "source": "A quick tap when a boss raid-warns, yells, emotes, or whispers during a fight — a text-channel fallback for bossAbilityWarning above.",
+      "target": "전투 중 우두머리가 공격대 경보, 외침, 감정 표현, 귓속말을 보낼 때 울리는 빠른 탭 진동입니다. 위의 bossAbilityWarning에 대한 텍스트 채널 대체 수단입니다."
+    },
+    {
+      "source": "A sharp metallic parry clang.",
+      "target": "날카로운 금속성의 무기 막기 챙 소리 진동입니다."
+    },
+    {
+      "source": "A sharp thump when an attack against you crits.",
+      "target": "받은 공격이 치명타로 적중했을 때 발생하는 날카롭고 묵직한 충격입니다."
+    },
+    {
+      "source": "A short deflecting tick when a craft is abandoned or interrupted.",
+      "target": "전문 기술 제작이 중단되거나 취소되었을 때 빗겨 나가는 듯한 짧은 짤깍임입니다."
+    },
+    {
+      "source": "A soft tick when your ranged auto-attack stops — catches walking out of range or getting interrupted without noticing.",
+      "target": "원거리 자동 사격이 멈출 때 발생하는 부드러운 짤깍임입니다. 사거리 밖으로 벗어나거나 알아차리지 못한 채 중단되는 상황을 감지합니다."
+    },
+    {
+      "source": "A tank-facing cue. Off by default because for anyone else losing threat is the normal, desirable state.",
+      "target": "방어 전담(탱커) 전용 신호입니다. 탱커 외 다른 역할에게는 위협 수준을 잃는 것이 정상적이고 바람직한 상태이므로 기본적으로 비활성화되어 있습니다."
+    },
+    {
+      "source": "A very light tap for an ordinary heal — deliberately gentle, distinct from the sharper healCrit pulse.",
+      "target": "일반 치유 시 발생하는 매우 가벼운 탭 진동입니다. 더 날카로운 healCrit 진동과 구분되도록 의도적으로 부드럽게 설정되었습니다."
+    },
+    {
+      "source": "A very light tap for an ordinary hit — deliberately gentle, distinct from the sharper critLanded pulse.",
+      "target": "일반 공격 피격 시 발생하는 매우 가벼운 탭 진동입니다. 더 날카로운 critLanded 진동과 구분되도록 의도적으로 부드럽게 설정되었습니다."
+    },
+    {
+      "source": "A very light tick every time you use an ability, while in combat.",
+      "target": "전투 중 능력을 사용할 때마다 발생하는 매우 가벼운 짤깍임입니다."
+    },
+    {
+      "source": "Active Profile: |cffffd100%s|r |cffff8800(Pending exit from combat)|r",
+      "target": "활성 프로필: |cffffd100%s|r |cffff8800(전투 종료 대기 중)|r"
+    },
+    {
+      "source": "An electric burst when a reactive spell or talent lights up on your action bar.",
+      "target": "행동 단축바에서 반응형 주문이나 특성이 활성화되어 반짝일 때 터져 나오는 짜릿한 진동입니다."
+    },
+    {
+      "source": "Apply parry haste",
+      "target": "무기 막기 가속 적용"
+    },
+    {
+      "source": "Atmospheric and arcane. Flowing spellcast textures, elemental channeling, environmental wind and weather, flight gliding, and magical world interactions.",
+      "target": "신비롭고 몽환적인 분위기. 흐르는 듯한 주문 시전 질감, 원소 정신 집중, 주변 바람과 날씨, 활강 비행, 마법 세계와의 상호작용을 담고 있습니다."
+    },
+    {
+      "source": "Auto-shot cadence, weapon swings, pet status, trap triggers, execute range, boss mechanics",
+      "target": "자동 사격 리듬, 무기 휘두르기, 소환수 상태, 덫 발동, 마무리 일격 범위, 우두머리 기술"
+    },
+    {
+      "source": "Bends the motor response with a smoothstep curve (3x^2 - 2x^3) to widen contrast between gentle background textures and heavy combat impacts. When unchecked, standard linear scaling is used.",
+      "target": "스무스스텝 곡선(3x^2 - 2x^3)으로 모터 반응을 조정하여 은은한 배경 질감과 강렬한 전투 충격 간의 대비를 넓힙니다. 선택을 해제하면 표준 선형 스케일이 사용됩니다."
+    },
+    {
+      "source": "Boss mechanics, heavy damage taken, personal cooldowns, debuffs, execute range, interrupt windows",
+      "target": "우두머리 기술, 대량의 피해 받음, 개인 생존기, 약화 효과, 마무리 일격 범위, 시전 차단 타이밍"
+    },
+    {
+      "source": "COMBAT_TEXT_UPDATE's SPELL_AURA_START_HARMFUL messageType, ruling out EXTRA_ATTACKS. Occurrence only — the amount on this feed is a secret value. Not confirmed to fire; off by default.",
+      "target": "EXTRA_ATTACKS를 제외한 COMBAT_TEXT_UPDATE의 SPELL_AURA_START_HARMFUL 메시지 유형을 읽습니다. 발생 여부만 감지하며 수치는 비밀 값입니다. 실제 발동 여부는 미확인 상태이며 기본적으로 꺼져 있습니다."
+    },
+    {
+      "source": "Channel hum (high)",
+      "target": "정신 집중 윙 소리 (고주파)"
+    },
+    {
+      "source": "Choose your planned class & role, and configure offensive and defensive combat feedback.",
+      "target": "예정된 직업과 역할을 선택하고 공격 및 방어 전투 피드백을 구성합니다."
+    },
+    {
+      "source": "Combat",
+      "target": "전투"
+    },
+    {
+      "source": "Combo points, resource cap, execute range, kick alert, boss telegraphs, burst cooldowns",
+      "target": "연계 점수, 자원 최대치, 마무리 일격 범위, 시전 차단 경보, 우두머리 공격 예고, 순간 폭딜 쿨다운"
+    },
+    {
+      "source": "Commanding protection. High threat alerts, mitigation tracking, crowd control, and kick windows. Silences non-combat clutter.",
+      "target": "지휘관의 든든한 방어. 높은 위협 수준 경보, 피해 완화 추적, 군중 제어 효과, 시전 차단 타이밍을 제공하며 전투 외 불필요한 진동을 묵음 처리합니다."
+    },
+    {
+      "source": "Confirmed live 2026-09-17: PLAYER_ENTER_COMBAT/PLAYER_LEAVE_COMBAT specifically track the auto-attack toggle, not the broader in-combat state combatEnter/combatLeave already cover — kept as its own cue pair rather than merged with autoRepeatStart/Stop, since melee and ranged are a different event pair on a different frame.",
+      "target": "2026-09-17 실서버 확인: PLAYER_ENTER_COMBAT/PLAYER_LEAVE_COMBAT은 combatEnter/combatLeave가 이미 다루는 광범위한 전투 상태가 아니라 자동 공격 토글만을 구체적으로 추적합니다. 근접과 원거리는 서로 다른 프레임의 별개 이벤트 쌍이므로 autoRepeatStart/Stop과 통합하지 않고 독립된 신호 쌍으로 유지했습니다."
+    },
+    {
+      "source": "Confirmed live 2026-09-17: START_AUTOREPEAT_SPELL/STOP_AUTOREPEAT_SPELL fire reliably on this client. See meleeAttackStart for the separate melee equivalent.",
+      "target": "2026-09-17 실서버 확인: 이 클라이언트에서 START_AUTOREPEAT_SPELL/STOP_AUTOREPEAT_SPELL이 안정적으로 발동합니다. 별도의 근접 공격 대응 이벤트는 meleeAttackStart를 참조하세요."
+    },
+    {
+      "source": "Confirmed live 2026-09-17: UNIT_SPELLCAST_SUCCEEDED fires with spellID 75 once per arrow — a genuine per-shot signal, not a prediction. Melee auto-attack has no equivalent: the traditional swing-timer technique reads the combat log, and this same session confirmed COMBAT_LOG_EVENT_UNFILTERED errors on registration for an addon frame under Midnight, full stop. See weaponSwingMain/weaponSwingOff below for the estimated (not measured) melee equivalent, built anyway with that limitation stated plainly. Hunter-specific; other classes' ranged auto-repeat (Shoot, wands) untested.",
+      "target": "2026-09-17 실서버 확인: 화살 1발당 주문 ID 75로 UNIT_SPELLCAST_SUCCEEDED가 발동합니다. 이는 예측이 아닌 실제 발사 신호입니다. 근접 자동 공격에는 이에 해당하는 신호가 없습니다. 전통적인 휘두르기 타이머 방식은 전투 기록을 읽는데, 이번 세션에서 Midnight 환경 애드온 프레임의 COMBAT_LOG_EVENT_UNFILTERED 등록 시 오류가 발생하는 것을 최종 확인했습니다. 아래의 weaponSwingMain/weaponSwingOff는 이러한 한계를 명시하고 구축된 근접 공격 추정치(실측치 아님)입니다. 사냥꾼 전용이며 다른 직업의 원거리 자동 반복(사격, 마법봉)은 테스트되지 않았습니다."
+    },
+    {
+      "source": "Confirmed live, 2026-09-15: COMBAT_TEXT_UPDATE's DAMAGE_CRIT/SPELL_DAMAGE_CRIT fires when you are crit, not when you land one — the reverse of this cue's original name and description. The `critLanded` id and COMBAT category are kept as-is rather than renamed, so this stays the same saved preference for anyone who already toggled it.",
+      "target": "2026-09-15 실서버 확인: COMBAT_TEXT_UPDATE의 DAMAGE_CRIT/SPELL_DAMAGE_CRIT은 내가 치명타를 입힐 때가 아니라 자신이 치명타 공격을 받았을 때 발동합니다. 이는 이 신호의 원래 이름 및 설명과 반대입니다. 이미 설정을 변경한 사용자의 저장된 설정을 유지하기 위해 `critLanded` ID와 COMBAT 범주는 이름을 바꾸지 않고 그대로 유지됩니다."
+    },
+    {
+      "source": "Continuous magical hum that builds during casts and channels steadily through your hands.",
+      "target": "주문을 시전하거나 정신 집중하는 동안 점점 고조되며 손으로 일정하게 전해지는 지속적인 마법 윙 소리 진동입니다."
+    },
+    {
+      "source": "Control & Threat",
+      "target": "제어 및 위협 수준"
+    },
+    {
+      "source": "Craft interrupted",
+      "target": "전문 기술 제작 중단됨"
+    },
+    {
+      "source": "Curated starting setups balanced for specific roles and playstyles. Unlike an empty configuration, each profile prioritizes the tactile signals most critical to that activity while filtering out background noise.\n\n|cffffd100Dungeons & Raids|r prioritize high signal-to-noise: threat loss, defensive mitigations, interrupt windows, and spell completion ticks take precedence.\n|cffffd100World Immersion|r profiles emphasize atmospheric game-feel: footstep weight by armor type, mount strides, swimming resistance, weather changes, and exploration.\n|cffffd100PvP|r provides pure tactical radar with zero ambient distraction.\n\nTip: Click |cffffd100Set for Spec|r to bind any profile to your active talent specialization, or customize auto-switch rules on the |cffffd100Profiles|r page.",
+      "target": "특정 역할과 플레이 스타일에 맞춰 세심하게 조정된 초기 설정입니다. 빈 설정과 달리 각 프로필은 주변 소음을 걸러내고 해당 활동에 가장 중요한 촉각 신호를 우선시합니다.\n\n|cffffd100던전 및 공격대|r 프로필은 높은 신호 대 잡음비를 우선시하여 위협 수준 상실, 방어 생존기, 시전 차단 타이밍, 주문 시전 완료 짤깍임을 강조합니다.\n|cffffd100세계 몰입|r 프로필은 방어구 무게에 따른 발걸음, 탈것의 질주, 수영 저항, 날씨 변화 및 탐험 등 생생한 분위기를 강조합니다.\n|cffffd100PvP|r 프로필은 주변 환경의 방해 없이 순수한 전술적 레이더 역할을 제공합니다.\n\n팁: |cffffd100전문화에 설정|r을 클릭하여 원하는 프로필을 현재 활성화된 전문화에 연결하거나 |cffffd100프로필|r 페이지에서 자동 전환 규칙을 맞춤 설정할 수 있습니다."
+    },
+    {
+      "source": "Damage taken",
+      "target": "피해 받음"
+    },
+    {
+      "source": "Defensive Combat & Threat Feedback",
+      "target": "방어 전투 및 위협 수준 피드백"
+    },
+    {
+      "source": "Detected via the global cooldown (spell 61304 ticking), not a per-ability read — so it only fires for abilities that trigger the GCD, and fires once per GCD even if what you pressed doesn't share a name with it. Off by default — this is the one idea in the whole catalogue that genuinely competes for channel time during a pull. Try it, but it's not for everyone.",
+      "target": "개별 능력 단위 조회가 아닌 전역 재사용 대기시간(주문 61304 틱)을 통해 감지되므로, GCD를 유발하는 능력에 대해서만 발동하며 누른 기술 이름이 달라도 GCD당 한 번만 발동합니다. 기본적으로 꺼져 있습니다. 이는 전체 카탈로그 중 전투 도중 채널 대역폭을 가장 많이 차지하는 항목입니다. 사용해 볼 수는 있지만 모든 분께 적합하지는 않을 수 있습니다."
+    },
+    {
+      "source": "Discordant combat spam",
+      "target": "불협화음 같은 전투 피드백 도배"
+    },
+    {
+      "source": "Entering combat",
+      "target": "전투 시작"
+    },
+    {
+      "source": "Estimator only, and ignored while the real event is in use. Recalculates the predicted next swing when you parry an incoming attack (real formula: reduces remaining time by 40% of weapon speed, floored at 20%).",
+      "target": "추정치일 뿐이며 실제 이벤트가 사용되는 동안에는 무시됩니다. 적의 공격을 무기 막기했을 때 예상되는 다음 휘두르기 시간을 다시 계산합니다 (실제 공식: 남은 시간을 40% of weapon speed만큼 단축, 최소 20%로 제한)."
+    },
+    {
+      "source": "Everything under the Accessibility headings is imported from Tremor, this addon's sibling — the same events, the same triggers, built for telling you about things you'd otherwise have to see, like a stun landing or your cast breaking.\n\nOne thing did not carry over: Tremor plays one cue at a time and makes the most urgent one win, on the reasoning that a late or blended signal is worse than none. Pulse doesn't work that way — everything here can layer together, which is what makes the movement and combat textures feel good, but it means an accessibility cue can arrive blended with something else rather than standing alone the way it would in Tremor.\n\nIf precise, unambiguous accessibility signals matter more to you than game-feel texture, Tremor on its own is built specifically for that and doesn't have this tradeoff. The two are not meant to run at the same time.",
+      "target": "접근성 항목의 모든 기능은 이 애드온의 자매 애드온인 Tremor에서 가져온 것입니다. 기절에 걸리거나 주문 시전이 끊기는 등 화면을 직접 보지 않고는 알기 어려운 상황을 전달하기 위해 동일한 이벤트와 트리거로 제작되었습니다.\n\n한 가지 차이점은 전달 방식입니다. Tremor는 늦거나 뒤섞인 신호가 차라리 없는 것보다 못하다는 판단 아래 한 번에 하나의 신호만 재생하고 가장 시급한 신호를 우선합니다. 반면 Pulse는 신호가 서로 중첩될 수 있도록 작동하여 이동 및 전투 질감을 생생하게 살려주지만, 그로 인해 접근성 신호가 Tremor처럼 단독으로 울리지 않고 다른 진동과 섞여 전달될 수 있습니다.\n\n손맛의 질감보다 정확하고 명확한 접근성 신호가 더 중요하다면, 이 같은 절충 없이 해당 목적에만 맞춰 제작된 Tremor를 사용하는 것이 좋습니다. 두 애드온은 동시에 실행하도록 설계되지 않았습니다."
+    },
+    {
+      "source": "Excessive combat telegraph alarms",
+      "target": "과도한 전투 공격 예고 경보"
+    },
+    {
+      "source": "Experimental. Listens for the client spellcast event of Windfury Attack (Spell ID 25504). Dependent on the server emitting UNIT_SPELLCAST_SUCCEEDED for item proc extra attacks.",
+      "target": "실험적 기능입니다. 질풍 공격(주문 ID 25504)의 클라이언트 주문 시전 이벤트를 감지합니다. 서버가 아이템 발동 추가 공격에 대해 UNIT_SPELLCAST_SUCCEEDED를 내보내는지 여부에 의존합니다."
+    },
+    {
+      "source": "Experimental. Measures the interval between consecutive main-hand swings. Extra attacks arrive well under 50% of weapon speed without needing combat log access. Confirmed working on WoW Forever.",
+      "target": "실험적 기능입니다. 주 장비의 연속 휘두르기 간격을 측정합니다. 전투 기록 접근 없이도 추가 공격이 50% of weapon speed 미만의 짧은 간격으로 도달합니다. WoW Forever에서 정상 작동이 확인되었습니다."
+    },
+    {
+      "source": "Experimental: watches whichever spells the Cooldown Manager's Essential category shows, not a hardcoded list. The exact live \"just became ready\" signal was never independently confirmed before this shipped — built on the same C_Spell.GetSpellCooldown transition-tracking this file already uses for the GCD heartbeat.",
+      "target": "실험적 기능: 고정된 목록이 아니라 재사용 대기시간 관리자(Cooldown Manager)의 필수(Essential) 범주에 표시되는 주문을 추적합니다. 배포 전 \"방금 준비됨\" 신호의 정확한 실서버 동작은 독립적으로 확인되지 않았으며, 이 파일이 GCD 심장 박동에 이미 사용하는 것과 동일한 C_Spell.GetSpellCooldown 상태 전환 추적을 기반으로 구축되었습니다."
+    },
+    {
+      "source": "Fires for a craft that stopped without succeeding — moving, being interrupted, or cancelling. Untested.",
+      "target": "이동, 시전 방해, 취소 등으로 제작이 완료되지 못하고 중단되었을 때 발동합니다. 테스트되지 않았습니다."
+    },
+    {
+      "source": "Fires on SPELL_ACTIVATION_OVERLAY_GLOW_SHOW for procs such as Clearcasting, Nightfall, Overpower, Revenge, Riposte, or Art of War.",
+      "target": "선명한 예지, 황혼, 제압, 복수, 반격, 전쟁의 기술과 같은 효과 발동 시 SPELL_ACTIVATION_OVERLAY_GLOW_SHOW에서 발동합니다."
+    },
+    {
+      "source": "Fires specifically when a channelled spell of yours is cut short by an interrupt, not when it simply ends.",
+      "target": "자신의 정신 집중 주문이 단순히 끝났을 때가 아니라 시전 방해로 중단되었을 때 구체적으로 발동합니다."
+    },
+    {
+      "source": "Fires when a channelled spell of yours ends, whether it ran to completion or was cut short.",
+      "target": "자신의 정신 집중 주문이 정상 완료되었거나 도중에 중단되었을 때 발동합니다."
+    },
+    {
+      "source": "Fires when one of your own casts is interrupted or cancelled before completion.",
+      "target": "자신의 시전 주문이 완료되기 전에 방해받거나 취소되었을 때 발동합니다."
+    },
+    {
+      "source": "Fires when you are pacified or a spell school is locked out (PACIFY, PACIFYSILENCE, SCHOOL_INTERRUPT).",
+      "target": "평화 상태(공격 불가)가 되거나 주문 계열이 차단되었을 때(PACIFY, PACIFYSILENCE, SCHOOL_INTERRUPT) 발동합니다."
+    },
+    {
+      "source": "Fires when you begin channelling a spell.",
+      "target": "주문 정신 집중을 시작할 때 발동합니다."
+    },
+    {
+      "source": "Fires when you drop off the top of your target's threat table.",
+      "target": "대상의 위협 수준 1순위에서 밀려났을 때 발동합니다."
+    },
+    {
+      "source": "Fires when you drop out of combat.",
+      "target": "전투에서 벗어났을 때 발동합니다."
+    },
+    {
+      "source": "Fires when you enter combat.",
+      "target": "전투에 돌입했을 때 발동합니다."
+    },
+    {
+      "source": "Fires when you take over threat on your target (status 2 or 3).",
+      "target": "대상에 대한 위협 수준을 넘겨받아 어그로를 획득했을 때(상태 2 또는 3) 발동합니다."
+    },
+    {
+      "source": "Fires when your current target begins casting. The cue is the occurrence only — which spell it is cannot be read.",
+      "target": "현재 대상이 주문 시전을 시작할 때 발동합니다. 발동 여부만 감지하며 어떤 주문인지는 읽을 수 없습니다."
+    },
+    {
+      "source": "Fires when your current target begins channelling.",
+      "target": "현재 대상이 정신 집중을 시작할 때 발동합니다."
+    },
+    {
+      "source": "Fires when your focus target begins channelling.",
+      "target": "주시 대상이 정신 집중을 시작할 때 발동합니다."
+    },
+    {
+      "source": "Fires when your target's spellcast is interrupted by a kick, stun, or counter-spell.",
+      "target": "발차기, 기절, 마법 차단 등으로 대상의 주문 시전이 차단되었을 때 발동합니다."
+    },
+    {
+      "source": "Fires when your target's spellcast stops before it finishes.",
+      "target": "대상의 주문 시전이 완료되기 전에 멈췄을 때 발동합니다."
+    },
+    {
+      "source": "Fires when your threat on your target rises to high-but-not-tanking (status 1).",
+      "target": "대상에 대한 위협 수준이 탱킹 직전 수준까지 높아졌을 때(상태 1) 발동합니다."
+    },
+    {
+      "source": "Flat sustained level while channelling, distinct from a regular cast's swell.",
+      "target": "일반 시전의 점진적 고조와 구별되는, 정신 집중 동안 유지되는 일정한 지속 진동 세기입니다."
+    },
+    {
+      "source": "Fluid spellcasting pacing. Continuous channel bed during casts, crisp completion snap, lockout warnings, and proc notifications.",
+      "target": "유연한 주문 시전 리듬감. 시전 중 지속적인 진동 바탕, 산뜻한 시전 완료 스냅, 주문 계열 차단 경고, 강화 효과 발동 알림을 제공합니다."
+    },
+    {
+      "source": "Focus started channelling",
+      "target": "주시 대상 정신 집중 시작"
+    },
+    {
+      "source": "Full loss-of-control suite, kick opportunities, lockouts, panic health warning, combat enter/leave",
+      "target": "완전한 제어 상실 피드백, 시전 차단 기회, 주문 차단, 위기 생명력 경보, 전투 시작 및 종료"
+    },
+    {
+      "source": "Heart rate (critical), BPM",
+      "target": "심장 박동 (위기), BPM"
+    },
+    {
+      "source": "High-clarity encounter triage. Critical raid mechanics, debuffs, boss abilities, and personal survival alerts with world clutter silenced.",
+      "target": "명확한 전투 상황 판단. 불필요한 환경 진동을 묵음 처리하고 주요 공격대 패턴, 약화 효과, 우두머리 기술, 개인 생존 경보를 우선 전달합니다."
+    },
+    {
+      "source": "High-tempo physical execution. Snappy combo points and resource spenders, execute range alerts, boss telegraphs, and kick windows.",
+      "target": "빠른 템포의 물리적 전투. 산뜻한 연계 점수 및 자원 소모, 마무리 일격 범위 경보, 우두머리 공격 예고, 시전 차단 타이밍을 제공합니다."
+    },
+    {
+      "source": "Hit with a critical strike",
+      "target": "치명타 피격"
+    },
+    {
+      "source": "How far a motor has to move before the addon bothers telling the client about it. Raise it to cut the number of calls; too high and slow fades turn into visible steps. Shared by every channel — this is a call-rate setting, not a motor property.",
+      "target": "애드온이 클라이언트에 값을 전달하기 전까지 모터 값이 변화해야 하는 최소 폭입니다. 값을 높이면 호출 횟수를 줄일 수 있지만, 너무 높이면 서서히 사라지는 효과가 뚝뚝 끊겨 느껴질 수 있습니다. 모든 채널이 공유하며 모터 속성이 아닌 호출 빈도 설정입니다."
+    },
+    {
+      "source": "How strong the stealth hum is overall. Meant to sit just at the edge of perception — if you notice it as a vibration rather than a presence, it is too high.",
+      "target": "은신 윙 소리 진동의 전반적인 세기입니다. 감각의 경계선에 머물도록 설계되었습니다. 단순한 존재감이 아니라 명확한 진동으로 느껴진다면 너무 높은 것입니다."
+    },
+    {
+      "source": "Landed a critical heal",
+      "target": "치명타 치유 적중"
+    },
+    {
+      "source": "Learned a new spell",
+      "target": "새로운 주문 배움"
+    },
+    {
+      "source": "Leaving combat",
+      "target": "전투 종료"
+    },
+    {
+      "source": "Life & combat state",
+      "target": "생명력 및 전투 상태"
+    },
+    {
+      "source": "Locomotion & footsteps by armor weight, mount strides, weather, swimming drag, parry/blocks, full loot/quest haptics",
+      "target": "방어구 무게에 따른 이동 및 발소리, 탈것 발걸음, 날씨, 수영 저항, 무기 막기/방패 막기, 전리품 및 퀘스트 전체 햅틱"
+    },
+    {
+      "source": "Locomotion clatter, weapon swings, loot popups, world dialogs",
+      "target": "이동 소음, 무기 휘두르기, 전리품 팝업, 세계 대화창"
+    },
+    {
+      "source": "Low health alarms, heal cast success, self/enemy interrupt warnings, dispellable CC",
+      "target": "생명력 위험 경보, 치유 시전 성공, 아군/적 시전 차단 경고, 해제 가능한 군중 제어 효과"
+    },
+    {
+      "source": "MEASURED as of 2026-09-21, not estimated. Driven by Forever's PLAYER_SWING event, which carries swingDuration and a MainHand/OffHand/Ranged type, both confirmed non-secret, and which Blizzard's own swing timer consumes. Note this is a SWING, not necessarily a connection — whether it also fires on a miss, dodge or parry is untested, and a \"successful hit\" cue would need a different source. The old weapon-speed estimator is kept as a fallback and engages automatically if the event ever disappears; it predicted swing times from UnitAttackSpeed with a haste cache, range and stun gating and a parry-haste correction, and drifted with nothing to correct against.",
+      "target": "2026-09-21 기준 추정치가 아닌 실측치(MEASURED)입니다. swingDuration 및 MainHand/OffHand/Ranged 유형을 포함하는 Forever의 PLAYER_SWING 이벤트를 기반으로 동작하며, 둘 다 비밀 값이 아님이 확인되었고 블리자드 자체 휘두르기 타이머에서도 사용됩니다. 이는 휘두르기(SWING) 자체를 의미하며 반드시 명중을 뜻하지는 않습니다. 빗맞힘, 회피, 무기 막기 시에도 발동하는지는 테스트되지 않았으며 \"적중 성공\" 신호는 다른 소스가 필요합니다. 이전의 무기 속도 추정기는 대체 수단으로 유지되어 이벤트가 사라질 경우 자동으로 활성화됩니다. 이전 추정기는 가속 캐시, 사거리 및 기절 제한, 무기 막기 가속 보정이 적용된 UnitAttackSpeed로 휘두르기 시간을 예측했으나 보정 기준이 없어 오차가 누적되었습니다."
+    },
+    {
+      "source": "Mirrors critLanded's split exactly: HEAL_CRIT on the same personal COMBAT_TEXT_UPDATE feed. critLanded's incoming-vs-outgoing direction was independently confirmed live (2026-09-15) for damage; the same direction for heals is inferred by analogy (same feed, same self-scoped design), not separately re-tested — worth confirming live before trusting it's \"you were healed\" rather than \"you landed a heal\" if that distinction matters to you.",
+      "target": "critLanded의 방식을 그대로 따릅니다. 동일한 개인 COMBAT_TEXT_UPDATE 피드의 HEAL_CRIT입니다. critLanded의 받는 피해와 입히는 피해 방향성은 2026-09-15 실서버에서 피해에 대해 독립적으로 확인되었으며, 치유에 대해서도 동일한 피드와 자신 대상 설계라는 점에서 유추 적용되었습니다(별도 재테스트 미실시). \"내가 치유를 받음\"과 \"내가 치유를 적중시킴\"의 구분이 중요하다면 실서버에서 확인해 볼 가치가 있습니다."
+    },
+    {
+      "source": "Most triggers are a **pulse** — something happens, you feel one short burst, then it's gone.\n\nSome are a **texture** instead — a faint, continuous feeling for as long as something is true. Swimming, gliding, casting, riding a flight path, weathering a storm: these fade in in the moment they start and fade out the instant they stop, rather than announcing themselves once. They're built to layer underneath pulses rather than compete with them — a critical hit still lands as a distinct thump even while a casting texture is quietly running underneath it.\n\nMost textures ship switched off, on purpose: a constant hum is a bigger ask than an occasional pulse, and it's worth trying deliberately rather than discovering by accident.",
+      "target": "대부분의 트리거는 **펄스**입니다. 어떤 일이 발생하면 한 번 짧은 진동이 느껴진 뒤 사라집니다.\n\n반면 일부는 **질감**입니다. 특정 상태가 유지되는 동안 은은하고 지속적인 감각이 이어집니다. 수영, 활강, 시전, 비행 경로 이용, 폭풍우 등은 일회성 신호로 울리는 대신 시작될 때 서서히 나타나고 끝날 때 즉시 사라집니다. 이러한 질감은 펄스와 경쟁하지 않고 아래에 은은하게 깔리도록 설계되었습니다. 시전 질감이 아래에서 조용히 흐르는 동안에도 치명타 적중 시 묵직한 충격이 또렷하게 느껴집니다.\n\n지속적인 윙 소리는 이따금 울리는 펄스보다 피로감이 클 수 있으므로, 대부분의 질감은 의도적으로 비활성화된 상태로 제공됩니다. 우연히 겪기보다는 직접 선택하여 사용해 보시는 것을 권장합니다."
+    },
+    {
+      "source": "Naturalistic scout feel. Locomotion, flight gliding, wilderness weather, tracking/stealth cues, world exploration, and bow release.",
+      "target": "자연 친화적인 정찰자 느낌. 이동, 활강 비행, 야생의 날씨, 추적/은신 신호, 세계 탐험, 활 시위 놓기 진동을 제공합니다."
+    },
+    {
+      "source": "Note the event name: Forever uses LEARNED_SPELL_IN_SKILL_LINE, not the older LEARNED_SPELL_IN_TAB, which is absent from this client's documentation entirely. Can fire more than once for a single visit to a trainer if you buy several ranks.",
+      "target": "이벤트 이름에 주의하세요: Forever는 이전의 LEARNED_SPELL_IN_TAB 대신 LEARNED_SPELL_IN_SKILL_LINE을 사용하며, 이전 이벤트는 이 클라이언트 문서에 전혀 없습니다. 상급자에게 한 번 방문하여 여러 등급을 배울 경우 한 번 이상 발동할 수 있습니다."
+    },
+    {
+      "source": "Off by default and mounted-only by default, on purpose: a texture that plays whenever you move is the most fatiguing thing in this addon and the most likely to make you switch it off wholesale. Uses shaped transient layers with fast-attack kicks and exponential decay to produce crisp, distinct footfalls without motor hum in between. Distinct timbres (boots, hooves, paws, heavy claws/pads, metal) drive both Low (body mass) and High (impact crispness) motors in concert. Speed is read out of combat only and held through a fight; snares and boosts are not tracked there, which is a deliberate trade for never touching a secret value. Goes quiet while swimming, flying, gliding, riding a flight path, or airborne after a jump — each of those has its own cue and footfalls have nothing to add to them.",
+      "target": "의도적으로 기본적으로 꺼져 있으며 탈것 탑승 시에만 켜지도록 되어 있습니다. 움직일 때마다 울리는 질감은 이 애드온에서 가장 큰 피로감을 주며 애드온 전체를 끄게 만드는 주원인이 될 수 있기 때문입니다. 모터의 윙 소리 없이 또렷하고 깔끔한 발걸음을 구현하기 위해 빠른 어택과 지수 감쇄를 적용한 과도 응답 레이어를 사용합니다. 다양한 음색(장화, 발굽, 발바닥, 육중한 발톱, 금속)이 저주파 모터(신체 질량)와 고주파 모터(타격감의 명확성)를 동시에 구동합니다. 이동 속도는 비전투 상태에서만 읽어 전투 중 유지됩니다. 비밀 값에 일절 접근하지 않기 위해 감속이나 가속 효과는 추적하지 않습니다. 수영, 비행, 활강, 비행 경로 이동, 점프 중 체공 상태에서는 발걸음 신호가 무의미하므로 각자의 전용 신호가 우선되어 발걸음은 묵음 처리됩니다."
+    },
+    {
+      "source": "Off by default. Suppresses \"Casting texture\" for the length of a craft so the two do not layer into one lumpy sensation. The profession is read by id from the recipe (C_TradeSkillUI.GetProfessionInfoByRecipeID), so no name matching and no localisation problem — but that field is documented nilable, and anything that does not resolve falls back to a generic work rhythm rather than going quiet. Gathering is NOT covered: swinging a pick at an ore node is not a recipe and has no recipe id. Per-profession toggles and strengths are on the Crafting page. Entirely untested.",
+      "target": "기본적으로 비활성화되어 있습니다. 제작이 진행되는 동안 \"시전 질감\"을 억제하여 두 감각이 불쾌하게 뭉개지지 않도록 합니다. 전문 기술은 제조법에서 ID(C_TradeSkillUI.GetProfessionInfoByRecipeID)로 읽어오므로 이름 매칭이나 현지화 문제가 없습니다. 단, 해당 필드는 nil을 반환할 수 있는 것으로 문서화되어 있어 확인되지 않는 항목은 침묵하는 대신 일반 작업 리듬으로 대체됩니다. 채집은 적용되지 않습니다. 광맥에 곡괭이를 휘두르는 것은 제조법이 아니며 제조법 ID도 없습니다. 전문 기술별 토글 및 강도는 전문 기술 페이지에서 설정할 수 있습니다. 완전히 테스트되지 않은 상태입니다."
+    },
+    {
+      "source": "Off means swings come from Forever's own PLAYER_SWING event — a real per-swing signal, confirmed non-secret and proven live. On forces the old prediction built from weapon speed instead. You should not need this: if Blizzard ever removes the event, Pulse detects that and falls back on its own. It exists so a patch that changes the event's BEHAVIOUR rather than removing it still leaves you a working cue.",
+      "target": "끄면 Forever 자체의 PLAYER_SWING 이벤트(비밀 값이 아니며 실서버에서 입증된 실제 휘두르기 신호)를 통해 휘두르기를 감지합니다. 켜면 무기 속도로 계산하던 이전 예측 방식을 강제로 사용합니다. 일반적으로 이 설정은 필요하지 않습니다. 블리자드가 이벤트를 제거하더라도 Pulse가 이를 감지하여 자동으로 대체 방식을 사용합니다. 이 옵션은 이벤트가 삭제되는 대신 동작 방식이 변경되는 패치가 적용되더라도 신호가 계속 정상 작동하도록 하기 위해 존재합니다."
+    },
+    {
+      "source": "Offensive Combat Haptics",
+      "target": "공격 전투 햅틱"
+    },
+    {
+      "source": "Paced ranged rhythm with melee-weaving support. Auto-shot timing, weapon swings, pet status, trap triggers, and boss mechanics.",
+      "target": "밀리위빙(근접 평타 섞어 치기)을 지원하는 절제된 원거리 리듬. 자동 사격 타이밍, 무기 휘두르기, 소환수 상태, 덫 발동, 우두머리 기술을 제공합니다."
+    },
+    {
+      "source": "Physical strikes for weapon swings (main & off hand), auto-shot arrows, ability execution cadence, and completed and instant spellcasts.",
+      "target": "무기 휘두르기(주 장비 및 보조 장비), 자동 사격 화살, 능력 사용 리듬, 완료된 시전 및 즉시 시전 주문에 대한 물리적 타격감입니다."
+    },
+    {
+      "source": "Pulse: not available in combat. Try again after combat.",
+      "target": "Pulse: 전투 중에는 사용할 수 없습니다. 전투가 끝난 후 다시 시도하세요."
+    },
+    {
+      "source": "Pure competitive reaction. Instant tactical alerts for stuns, silences, disarms, lockouts, panic health warnings, and combat transitions.",
+      "target": "순수한 대전 반응 속도. 기절, 침묵, 무장 해제, 주문 차단, 위기 생명력 경보, 전투 전환에 대한 즉각적인 전술 경보를 제공합니다."
+    },
+    {
+      "source": "Reads Blizzard's own default-UI LowHealthFrame (:IsShown()), not UnitHealth — that read is unconditionally secret, and the earlier color-curve attempt was confirmed dead too. LowHealthFrame's widget state is confirmed non-secret in-game instead. Very rarely can also fire for an unrelated reason (a fullscreen UI panel open in combat) — narrow enough to document rather than guard against. No `mode` field: this no longer plays a Core/Modes.lua shape, it drives Engine:Hold directly, same mechanism as lowHealthTexture.",
+      "target": "UnitHealth 대신 블리자드 기본 UI의 LowHealthFrame(:IsShown())을 읽습니다. UnitHealth는 무조건 비밀 값이며 이전의 색상 곡선 시도 역시 작동하지 않는 것으로 확인되었습니다. 반면 LowHealthFrame의 위젯 상태는 게임 내에서 비밀 값이 아닌 것으로 확인되었습니다. 매우 드물게 무관한 이유(전투 중 전체 화면 UI 창이 열려 있는 경우)로 발동할 수도 있으나, 별도 차단 로직을 두기보다는 문서로 안내할 만큼 드문 현상입니다. `mode` 필드가 없습니다. 더 이상 Core/Modes.lua의 형태를 재생하지 않으며 lowHealthTexture와 동일한 메커니즘으로 Engine:Hold를 직접 구동합니다."
+    },
+    {
+      "source": "Reads Blizzard's own pre-scripted encounter timeline (C_EncounterEvents), not real-time combat data — pre-computed metadata, not something Secret Values blocks. No confirmed \"targeted at you\" flag: this can say something big is coming, not that it's coming for you specifically.",
+      "target": "실시간 전투 데이터가 아니라 블리자드의 사전 스크립트된 전투 타임라인(C_EncounterEvents)을 읽습니다. 이는 사전 계산된 메타데이터이므로 비밀 값 시스템에 의해 차단되지 않습니다. \"자신 대상 지정\" 플래그는 확인되지 않았습니다. 즉, 강력한 공격이 오고 있다는 것은 알 수 있지만 그것이 자신을 특정하여 향하는지는 알 수 없습니다."
+    },
+    {
+      "source": "Reads CHAT_MSG_RAID_WARNING/MONSTER_YELL/MONSTER_EMOTE/MONSTER_WHISPER, gated on being inside an active encounter (ENCOUNTER_START/END) — never on C_EncounterEvents, so this works even if that namespace's data turns out unreliable. Occurrence-only: says a boss communicated something, not what or whether it's aimed at you. Known false-positive: a player manually using the raid-warning channel during a live pull also fires this — not filtered, since telling a boss-sent raid warning from a player-sent one isn't reliable.",
+      "target": "활성화된 보스전 내부(ENCOUNTER_START/END)로 제한하여 CHAT_MSG_RAID_WARNING/MONSTER_YELL/MONSTER_EMOTE/MONSTER_WHISPER를 읽습니다. C_EncounterEvents를 거치지 않으므로 해당 네임스페이스의 데이터가 불안정하더라도 정상 작동합니다. 발생 여부만 감지하며 우두머리가 무언가를 말했다는 것만 전달할 뿐 내용이나 자신을 향한 것인지는 알 수 없습니다. 알려진 오작동: 전투 진행 중 플레이어가 수동으로 공격대 경보 채널을 사용하는 경우에도 발동합니다. 우두머리가 보낸 경보와 플레이어가 보낸 경보를 안정적으로 구분하기 어렵기 때문에 필터링하지 않습니다."
+    },
+    {
+      "source": "Reads COMBAT_TEXT_UPDATE's DAMAGE/SPELL_DAMAGE/DAMAGE_CRIT/SPELL_DAMAGE_CRIT messageTypes rather than UNIT_COMBAT, for no-churn reasons rather than necessity — UNIT_COMBAT's \"WOUND\" mechanism was believed dead (reported not firing 2026-09-15) but was confirmed live and firing on 2026-09-16 after all; this cue already worked on COMBAT_TEXT_UPDATE by then, so it wasn't switched back. The suspicion that UNIT_COMBAT has been non-functional since Cataclysm-era patches should not be trusted as settled. Deliberately TICK, not THUD — a routine hit should read as noticeably gentler than critLanded's own pulse, not the same weight repeated constantly. Its own Intensity slider (the generic per-cue one every trigger gets) defaults to 0.3 rather than 1.0, same reasoning: it fires far more often than a crit or a dodge, so it needs to stay in the background rather than compete with them.",
+      "target": "불필요한 코드 변경을 방지하기 위해 UNIT_COMBAT 대신 COMBAT_TEXT_UPDATE의 DAMAGE/SPELL_DAMAGE/DAMAGE_CRIT/SPELL_DAMAGE_CRIT 메시지 유형을 읽습니다. UNIT_COMBAT의 \"WOUND\" 메커니즘은 작동하지 않는 것으로 추정되었으나(2026-09-15 미발동 보고) 2026-09-16에 정상 발동하는 것으로 확인되었습니다. 하지만 이 신호가 이미 COMBAT_TEXT_UPDATE에서 정상 작동하고 있었으므로 되돌리지 않았습니다. UNIT_COMBAT이 대격변 시절 패치 이후 작동하지 않는다는 의혹은 정설로 받아들이지 않는 것이 좋습니다. 동일한 무게감이 계속 반복되지 않도록 critLanded의 펄스보다 눈에 띄게 부드럽게 느껴지도록 THUD(묵직한 충격)가 아닌 TICK(가벼운 짤깍임)으로 의도 설정되었습니다. 치명타나 회피보다 훨씬 자주 발생하므로 다른 신호와 경쟁하지 않고 배경에 머물도록 강도 슬라이더 기본값이 1.0이 아닌 0.3으로 설정되어 있습니다."
+    },
+    {
+      "source": "Reads COMBAT_TEXT_UPDATE's FACTION messageType — same personal combat-text feed critLanded/damageTaken already use, occurrence-only, no amount or faction name read.",
+      "target": "critLanded/damageTaken이 이미 사용하는 것과 동일한 개인 전투 텍스트 피드인 COMBAT_TEXT_UPDATE의 FACTION 메시지 유형을 읽습니다. 수치나 평판 세력 이름은 읽지 않으며 발생 여부만 감지합니다."
+    },
+    {
+      "source": "Reads COMBAT_TEXT_UPDATE's HONOR_GAINED messageType — same personal combat-text feed critLanded/damageTaken already use, occurrence-only, no amount read.",
+      "target": "critLanded/damageTaken이 이미 사용하는 것과 동일한 개인 전투 텍스트 피드인 COMBAT_TEXT_UPDATE의 HONOR_GAINED 메시지 유형을 읽습니다. 획득 수치는 읽지 않으며 발생 여부만 감지합니다."
+    },
+    {
+      "source": "Reads HEAL/PERIODIC_HEAL/HEAL_CRIT — same feed and direction caveat as healCrit above. Same TICK/0.3-intensity treatment as damageTaken, for the same reason: this fires far more often than a crit heal, especially under any HoT, so it stays in the background rather than competing with it.",
+      "target": "HEAL/PERIODIC_HEAL/HEAL_CRIT을 읽습니다. 위의 healCrit과 동일한 피드 및 방향성 주의사항이 적용됩니다. damageTaken과 마찬가지로 TICK/0.3 강도로 처리되었습니다. 특히 지속 치유(HoT) 상황에서 치명타 치유보다 훨씬 자주 발생하므로, 다른 신호와 경쟁하지 않고 은은하게 배경에 머물도록 하기 위함입니다."
+    },
+    {
+      "source": "Reads IsStealthed(), the player's own boolean state — not an aura scan, which would be both expensive and liable to return secret values. First cue built on Core/Waves.lua. Untested.",
+      "target": "연산 비용이 크고 비밀 값을 반환하기 쉬운 오라 검사 대신 플레이어 자신의 불리언 상태인 IsStealthed()를 읽습니다. Core/Waves.lua를 기반으로 구축된 최초의 신호입니다. 테스트되지 않았습니다."
+    },
+    {
+      "source": "Same source as weaponSwingMain above — PLAYER_SWING, filtered to the OffHand swing type. Silent if you're not dual-wielding. Parry haste has never affected off-hand timing, so that correction does not apply here even on the fallback estimator.",
+      "target": "위의 weaponSwingMain과 동일한 소스인 PLAYER_SWING을 사용하며 OffHand 휘두르기 유형으로 필터링됩니다. 쌍수 무기를 착용하지 않은 경우 신호가 울리지 않습니다. 무기 막기 가속은 보조 장비 타이밍에 영향을 주지 않으므로 대체 추정기에서도 해당 보정이 적용되지 않습니다."
+    },
+    {
+      "source": "Second steepening point — the steepest segment of all, climbing to heartRateCritical by zero breath. Requested live 2026-09-16 as ~15% breath remaining.",
+      "target": "두 번째 급경사 구간입니다. 가장 가파른 구간으로 호흡이 0이 될 때까지 heartRateCritical을 향해 치솟습니다. 2026-09-16 실서버 테스트에서 호흡이 약 15% 남았을 때로 요청되었습니다."
+    },
+    {
+      "source": "Sensory radar for survival: immediate physical warnings when taking damage, getting critically hit, deflecting attacks, being healed, receiving debuffs, threat changes, or losing control.",
+      "target": "생존을 위한 감각 레이더: 피해 받음, 치명타 피격, 공격 방어/흘리기, 치유 받음, 약화 효과 부여, 위협 수준 변화, 제어 상실 시 즉각적인 물리적 경고를 제공합니다."
+    },
+    {
+      "source": "Shares its shape with \"Learned a new spell\" on purpose — both are the same moment to a player, just in different systems.",
+      "target": "의도적으로 \"새로운 주문 배움\"과 동일한 진동 형태를 공유합니다. 서로 다른 시스템이지만 플레이어에게는 동일한 순간이기 때문입니다."
+    },
+    {
+      "source": "Shares the social-pull limitation of the threat-rising cue.",
+      "target": "위협 수준 상승 신호와 동일한 애드온 간 연동(social-pull) 제한 사항을 공유합니다."
+    },
+    {
+      "source": "Slow, rhythmic breathing expansion wave keeping you aware of your stealth state.",
+      "target": "은신 상태임을 지속적으로 인지할 수 있도록 돕는 느리고 주기적인 호흡 확장 파동입니다."
+    },
+    {
+      "source": "Spell activation proc",
+      "target": "주문 활성화 효과 발동"
+    },
+    {
+      "source": "Spell flow, instant casts, and interrupts",
+      "target": "주문 연계, 즉시 시전, 시전 차단"
+    },
+    {
+      "source": "Spellcasting Channel Hum",
+      "target": "주문 시전 정신 집중 윙 소리"
+    },
+    {
+      "source": "Stealth Breathing Wave",
+      "target": "은신 호흡 파동"
+    },
+    {
+      "source": "Stealth baseline",
+      "target": "은신 기본 진동"
+    },
+    {
+      "source": "Stealth texture",
+      "target": "은신 질감"
+    },
+    {
+      "source": "Step 2: Combat Haptics & Class Role",
+      "target": "2단계: 전투 햅틱 및 직업 역할"
+    },
+    {
+      "source": "Switches every cue on the Combat page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "전투 페이지의 모든 신호를 한 번에 켜거나 끕니다. 개별 신호의 세부 설정은 그대로 유지됩니다."
+    },
+    {
+      "source": "Switches every cue on the Control & Threat page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "제어 및 위협 수준 페이지의 모든 신호를 한 번에 켜거나 끕니다. 개별 신호의 세부 설정은 그대로 유지됩니다."
+    },
+    {
+      "source": "Target started channelling",
+      "target": "대상이 정신 집중 시작함"
+    },
+    {
+      "source": "The standard authored baseline. Balanced game-feel across combat, environment, movement, and alerts.",
+      "target": "표준 기본 설정입니다. 전투, 환경, 이동, 경보 전반에 걸쳐 균형 잡힌 손맛을 제공합니다."
+    },
+    {
+      "source": "Threat",
+      "target": "위협 수준"
+    },
+    {
+      "source": "Threat loss/warning, heavy hits taken, defensive cooldowns, crowd control, enemy kick windows",
+      "target": "위협 수준 상실/경고, 큰 피해 받음, 방어 생존기, 군중 제어 효과, 적 시전 차단 타이밍"
+    },
+    {
+      "source": "Threat lost",
+      "target": "위협 수준 상실"
+    },
+    {
+      "source": "Threat rising",
+      "target": "위협 수준 상승"
+    },
+    {
+      "source": "Threat, mitigations, and CC",
+      "target": "위협 수준, 피해 완화, 군중 제어"
+    },
+    {
+      "source": "Two separate addons exist alongside Pulse, each with its own slash command — neither is required, and neither changes anything Pulse itself does.\n\n**PulseChecklist** (/pulsecheck or /pcheck) opens a standalone checklist window listing every trigger, for tracking which ones you've actually confirmed feel right on your own hardware.\n\n**PulseDebug** (/pdebug or /pd) opens an interactive diagnostic window with live telemetry — inspect currently blended layers, monitor real-time channel output, review a timestamped event log, and inspect module states.",
+      "target": "Pulse와 함께 사용할 수 있는 두 개의 독립된 애드온이 존재하며 각각 고유한 슬래시(/) 명령어가 있습니다. 두 애드온 모두 필수가 아니며 Pulse 자체의 동작을 변경하지 않습니다.\n\n**PulseChecklist** (/pulsecheck 또는 /pcheck)는 모든 트리거가 나열된 독립 체크리스트 창을 열어 보유한 기기에서 어떤 진동이 실제로 적절하게 느껴지는지 확인할 수 있도록 돕습니다.\n\n**PulseDebug** (/pdebug 또는 /pd)는 실시간 원격 측정이 포함된 대화형 진단 창을 엽니다. 현재 혼합된 레이어 검사, 실시간 채널 출력 모니터링, 타임스탬프가 찍힌 이벤트 로그 검토, 모듈 상태 점검이 가능합니다."
+    },
+    {
+      "source": "Two soft ticks when you switch tabs inside a panel — Character, Spellbook, the map's zone tabs, and so on.",
+      "target": "창 내부에서 탭(캐릭터 정보, 마법책, 지도의 지역 탭 등)을 전환할 때 울리는 두 번의 부드러운 짤깍임입니다."
+    },
+    {
+      "source": "Untested — the interruptedBy value itself is confirmed against Blizzard's own casting-bar code, not live. What's NOT confirmed: whether interruptedBy comes back secret for your own channel (the event is flagged SecretWhenUnitSpellCastRestricted in Blizzard's API docs). If this never fires, that's the first thing to check, not a sign the logic above is wrong.",
+      "target": "테스트되지 않음 — interruptedBy 값 자체는 실서버가 아닌 블리자드 자체 시전 바 코드와 일치하는 것으로 확인되었습니다. 확인되지 않은 사항: 자신의 정신 집중 주문에 대해 interruptedBy가 비밀 값으로 반환되는지 여부입니다(블리자드 API 문서에서 이 이벤트는 SecretWhenUnitSpellCastRestricted 플래그가 지정되어 있음). 만약 이 신호가 발동하지 않는다면 위의 로직 오류가 아니라 이 부분을 가장 먼저 확인해야 합니다."
+    },
+    {
+      "source": "Uses WoW Forever's native C_SwingTimer range checking.",
+      "target": "WoW Forever 기본 C_SwingTimer 사거리 확인을 사용합니다."
+    },
+    {
+      "source": "Visceral physical game-feel. Armor-weighted footstep gait, terrain landings, parry and block impacts, swimming drag, weather, and rich world looting.",
+      "target": "생생하고 묵직한 물리적 손맛. 방어구 무게에 따른 발걸음, 지형 착지, 무기 막기 및 방패 막기 충격, 수영 저항, 날씨, 풍부한 전리품 획득 햅틱을 제공합니다."
+    },
+    {
+      "source": "Weapon swing (main hand)",
+      "target": "무기 휘두르기 (주 장비)"
+    },
+    {
+      "source": "Weapon swing (off hand)",
+      "target": "무기 휘두르기 (보조 장비)"
+    },
+    {
+      "source": "Weapon swings, ability cadence, and auto-attack stops",
+      "target": "무기 휘두르기, 능력 사용 리듬, 자동 공격 멈춤"
+    },
+    {
+      "source": "Windfury (spellcast hook)",
+      "target": "질풍 (주문 시전 후크)"
+    },
+    {
+      "source": "Windfury (swing burst)",
+      "target": "질풍 (휘두르기 연속 발동)"
+    },
+    {
+      "source": "Windfury extra attacks",
+      "target": "질풍 추가 공격"
+    },
+    {
+      "source": "With dozens of cues across movement, combat, environment, and interface systems, you might know what you want to adjust without knowing which tab owns it.\n\nThe **Cue index** page lists every cue in Pulse alphabetically, grouped under clean letter headers with real-time status dots showing whether each cue is currently enabled. Clicking any line jumps directly to that cue's page and settings.\n\nSearching the Cue Index searches all cue names, descriptions, and locations simultaneously, serving as an instant directory across the entire addon.",
+      "target": "이동, 전투, 환경, 인터페이스 시스템 전반에 걸쳐 수십 개의 신호가 있으므로 어떤 탭에 속해 있는지 모르더라도 조정하고 싶은 항목을 찾을 수 있습니다.\n\n**신호 색인** 페이지는 Pulse의 모든 신호를 가나다순으로 나열하고 깔끔한 머리글자 아래에 그룹화하여 각 신호의 현재 활성화 여부를 실시간 상태 표시점으로 보여줍니다. 아무 줄이나 클릭하면 해당 신호의 페이지와 설정으로 바로 이동합니다.\n\n신호 색인을 검색하면 모든 신호 이름, 설명, 위치를 동시에 검색하여 애드온 전체를 아우르는 즉각적인 색인 디렉터리 역할을 합니다."
+    },
+    {
+      "source": "You cannot do that while in combat.",
+      "target": "전투 중에는 해당 작업을 수행할 수 없습니다."
+    },
+    {
+      "source": "You parried, dodged, or blocked",
+      "target": "공격을 무기 막기, 회피, 또는 방패 막기함"
+    },
+    {
+      "source": "Your cast interrupted",
+      "target": "자신의 시전 차단됨"
+    },
+    {
+      "source": "Your channel ended",
+      "target": "자신의 정신 집중 종료됨"
+    },
+    {
+      "source": "Your channel interrupted",
+      "target": "자신의 정신 집중 차단됨"
+    },
+    {
+      "source": "Your channel started",
+      "target": "자신의 정신 집중 시작됨"
+    },
+    {
+      "source": "|cff4cb8ffPulse:|r Cannot open settings during combat.",
+      "target": "|cff4cb8ffPulse:|r 전투 중에는 설정을 열 수 없습니다."
+    },
+    {
+      "source": "|cffff5555Pulse:|r Cannot open Quick Setup during combat.",
+      "target": "|cffff5555Pulse:|r 전투 중에는 빠른 설정을 열 수 없습니다."
+    }
+  ]
+}

@@ -1,0 +1,544 @@
+{
+  "items": [
+    {
+      "id": 19,
+      "source": "%s has no impacts — it is the bed alone, for the length of the craft.",
+      "target": "%s hat keine Schläge — es ist allein die Grundschwingung für die Dauer des Herstellungsvorgangs."
+    },
+    {
+      "id": 43,
+      "source": "A bed you feel for the length of a craft, with the profession's own work rhythm struck over it. While a craft is running this replaces |cffffd100Casting texture|r rather than layering with it, so one action is one sensation.\n\nThe profession is read from the recipe by id, so it does not depend on your language. Anything that does not resolve still gets a generic work rhythm rather than going quiet.",
+      "target": "Eine Grundschwingung, die Ihr für die Dauer eines Herstellungsvorgangs spürt, überlagert vom berufseigenen Arbeitsrhythmus. Während eine Herstellung läuft, ersetzt dies die |cffffd100Zauberwirk-Textur|r, anstatt sich mit ihr zu schichten, sodass eine Aktion genau eine Empfindung erzeugt.\n\nDer Beruf wird anhand der ID aus dem Rezept ausgelesen, ist also unabhängig von Eurer Sprache. Alles, was nicht zugeordnet werden kann, erhält dennoch einen allgemeinen Arbeitsrhythmus, anstatt stumm zu bleiben."
+    },
+    {
+      "id": 44,
+      "source": "A bright chime when gathering an herb node, mineral vein, or skinning loot completes.",
+      "target": "Ein helles Klingeln, wenn das Sammeln an einem Kräuterknoten, einer Mineralader oder von Kürschnerbeute abgeschlossen ist."
+    },
+    {
+      "id": 45,
+      "source": "A bright tick when an item enters your bags — looted, crafted, or mailed.",
+      "target": "Ein heller Klick, wenn ein Gegenstand in Euren Taschen landet — erbeutet, hergestellt oder per Post erhalten."
+    },
+    {
+      "id": 51,
+      "source": "A bright tick when you learn a new recipe or pattern.",
+      "target": "Ein heller Klick, wenn Ihr ein neues Rezept oder Muster erlernt."
+    },
+    {
+      "id": 52,
+      "source": "A chime when a craft completes successfully.",
+      "target": "Ein Klingeln, wenn ein Herstellungsvorgang erfolgreich abgeschlossen ist."
+    },
+    {
+      "id": 53,
+      "source": "A chime when the auction house opens.",
+      "target": "Ein Klingeln, wenn sich das Auktionshaus öffnet."
+    },
+    {
+      "id": 76,
+      "source": "A heavy latch thud when closing a personal bank or guild bank vault.",
+      "target": "Ein schwerer, dumpfer Riegelschlag beim Schließen der persönlichen Bank oder eines Gildenbanktresors."
+    },
+    {
+      "id": 82,
+      "source": "A light coin clink when depositing or withdrawing money from a bank or guild bank.",
+      "target": "Ein leises Münzklirren beim Einzahlen oder Abheben von Geld auf der Bank oder Gildenbank."
+    },
+    {
+      "id": 83,
+      "source": "A light coin-like tick when selling an item to a merchant.",
+      "target": "Ein leichter, münzartiger Klick beim Verkauf eines Gegenstands an einen Händler."
+    },
+    {
+      "id": 86,
+      "source": "A light tick when a profession or weapon skill goes up a point.",
+      "target": "Ein leichter Klick, wenn eine Berufs- oder Waffenfertigkeit um einen Punkt steigt."
+    },
+    {
+      "id": 87,
+      "source": "A light tick when an item enters your bag and occupies a slot.",
+      "target": "Ein leichter Klick, wenn ein Gegenstand in Eure Tasche wandert und einen Platz belegt."
+    },
+    {
+      "id": 92,
+      "source": "A playful tick on some of your own emotes.",
+      "target": "Ein spielerischer Klick bei einigen Eurer eigenen Emotes."
+    },
+    {
+      "id": 93,
+      "source": "A playful tick when an NPC emotes, yells, or whispers near you.",
+      "target": "Ein spielerischer Klick, wenn ein NSC in Eurer Nähe ein Emote ausführt, schreit oder flüstert."
+    },
+    {
+      "id": 94,
+      "source": "A pleasant chime when you gain honor — a PvP kill or objective.",
+      "target": "Ein angenehmes Klingeln, wenn Ihr Ehre erhaltet — durch einen PvP-Sieg oder ein Einsatzziel."
+    },
+    {
+      "id": 95,
+      "source": "A pleasant chime when you gain reputation with a faction.",
+      "target": "Ein angenehmes Klingeln, wenn Ihr Ruf bei einer Fraktion erlangt."
+    },
+    {
+      "id": 97,
+      "source": "A pleasant chime whenever your shapeshift form changes.",
+      "target": "Ein angenehmes Klingeln bei jedem Wechsel Eurer Gestaltwandlung."
+    },
+    {
+      "id": 120,
+      "source": "A soft chime when a crafting cast begins.",
+      "target": "Ein sanftes Klingeln zu Beginn eines Herstellungs-Zaubers."
+    },
+    {
+      "id": 124,
+      "source": "A soft tick when the item leaves the cursor.",
+      "target": "Ein sanfter Klick, wenn der Gegenstand den Cursor verlässt."
+    },
+    {
+      "id": 133,
+      "source": "A solid tap when buying an item from a merchant.",
+      "target": "Ein kräftiges Antippen beim Kauf eines Gegenstands von einem Händler."
+    },
+    {
+      "id": 137,
+      "source": "A subtle thud when a consumable or item is used and empties a bag slot.",
+      "target": "Ein dezenter dumpfer Schlag, wenn ein Verbrauchsgegenstand genutzt wird und einen Taschenplatz freigibt."
+    },
+    {
+      "id": 160,
+      "source": "A very light tick when you loot money.",
+      "target": "Ein sehr leichter Klick beim Plündern von Geld."
+    },
+    {
+      "id": 187,
+      "source": "An urgent stutter vibration when your bags become full or when you attempt an action with a full inventory.",
+      "target": "Eine dringliche Stotter-Vibration, wenn Eure Taschen voll sind oder wenn Ihr eine Aktion mit vollem Inventar versucht."
+    },
+    {
+      "id": 200,
+      "source": "Auction house opened",
+      "target": "Auktionshaus geöffnet"
+    },
+    {
+      "id": 207,
+      "source": "Bank gold transfer",
+      "target": "Bank-Goldtransfer"
+    },
+    {
+      "id": 208,
+      "source": "Bank opened",
+      "target": "Bank geöffnet"
+    },
+    {
+      "id": 210,
+      "source": "Battle.net whisper received",
+      "target": "Battle.net-Flüsternachricht empfangen"
+    },
+    {
+      "id": 232,
+      "source": "CURSOR_CHANGED, with C_Cursor.GetCursorItem() checked only for presence — never read, never compared, so a secret item can't break it (truthiness on a non-secret-boolean is legal). Distinct from this addon's own \"Item obtained\": that's loot arriving in your bags, this is you physically holding something.",
+      "target": "CURSOR_CHANGED, wobei C_Cursor.GetCursorItem() nur auf Vorhandensein geprüft wird — wird nie gelesen, nie verglichen, sodass ein verborgener Gegenstand dies nicht stören kann (Wahrheitsprüfung auf einem nicht-geheimen Boolean ist zulässig). Unterscheidet sich vom addoneigenen „Gegenstand erhalten“: jenes betrifft Beute, die in Euren Taschen ankommt; dies hier ist das physische Halten eines Objekts."
+    },
+    {
+      "id": 234,
+      "source": "Calibrated for standard third-party ERM rumble curves",
+      "target": "Kalibriert für standardmäßige ERM-Rumble-Kurven von Drittanbietern"
+    },
+    {
+      "id": 291,
+      "source": "Craft finished",
+      "target": "Herstellung abgeschlossen"
+    },
+    {
+      "id": 293,
+      "source": "Craft started",
+      "target": "Herstellung begonnen"
+    },
+    {
+      "id": 294,
+      "source": "Crafting",
+      "target": "Handwerk"
+    },
+    {
+      "id": 295,
+      "source": "Crafting Rhythms",
+      "target": "Handwerksrhythmen"
+    },
+    {
+      "id": 296,
+      "source": "Crafting texture",
+      "target": "Handwerks-Textur"
+    },
+    {
+      "id": 334,
+      "source": "Distinct from this addon's own \"Gold looted\"/\"Item obtained\" (World category) — this is Tremor's original item-award cue, kept alongside rather than merged, since the underlying events differ.",
+      "target": "Unterscheidet sich vom addoneigenen „Gold geplündert“/„Gegenstand erhalten“ (Kategorie Welt) — dies ist Tremors ursprüngliches Gegenstandsbelohnungs-Signal, das separat beibehalten statt zusammengeführt wurde, da sich die zugrundeliegenden Ereignisse unterscheiden."
+    },
+    {
+      "id": 337,
+      "source": "Distinguished from craftStopped by whether the cast actually succeeded, which Core/CastActivity.lua tracks across the cast lifecycle rather than guessing from one event. Untested.",
+      "target": "Wird von craftStopped dadurch unterschieden, ob das Wirken tatsächlich erfolgreich war, was Core/CastActivity.lua über den gesamten Zauberlebenszyklus verfolgt, anstatt es anhand eines einzelnen Ereignisses zu erraten. Ungetestet."
+    },
+    {
+      "id": 359,
+      "source": "Dungeons & Raids",
+      "target": "Dungeons & Schlachtzüge"
+    },
+    {
+      "id": 393,
+      "source": "Feel crafting",
+      "target": "Handwerk spüren"
+    },
+    {
+      "id": 404,
+      "source": "Fires on BAG_OVERFLOW_WITH_FULL_INVENTORY, UI_ERROR_MESSAGE (inventory full error) and when free bag slots drop to zero.",
+      "target": "Löst bei BAG_OVERFLOW_WITH_FULL_INVENTORY, UI_ERROR_MESSAGE (Fehlermeldung bei vollem Inventar) und beim Absinken freier Taschenplätze auf null aus."
+    },
+    {
+      "id": 405,
+      "source": "Fires on BAG_UPDATE_DELAYED when total free bag slots decrease. Complements Item obtained (which tracks ITEM_PUSH fly-in loot animations).",
+      "target": "Löst bei BAG_UPDATE_DELAYED aus, wenn die Gesamtzahl freier Taschenplätze sinkt. Ergänzt „Gegenstand erhalten“ (welches ITEM_PUSH-Einblendanimationen der Beute verfolgt)."
+    },
+    {
+      "id": 406,
+      "source": "Fires on BAG_UPDATE_DELAYED when total free bag slots increase while not interacting with a merchant, bank, or mail.",
+      "target": "Löst bei BAG_UPDATE_DELAYED aus, wenn die Gesamtzahl freier Taschenplätze zunimmt, während nicht mit einem Händler, einer Bank oder der Post interagiert wird."
+    },
+    {
+      "id": 408,
+      "source": "Fires on LOOT_READY when gathering loot is ready.",
+      "target": "Löst bei LOOT_READY aus, sobald Sammelbeute bereitsteht."
+    },
+    {
+      "id": 412,
+      "source": "Fires on money changes with an open bank frame or guild bank money update.",
+      "target": "Löst bei Geldänderungen bei geöffnetem Bankfenster oder bei einer Geldaktualisierung der Gildenbank aus."
+    },
+    {
+      "id": 428,
+      "source": "Fires when a dungeon or raid finder queue pops and the accept dialog appears.",
+      "target": "Löst aus, wenn die Warteschlange des Dungeon- oder Schlachtzugsbrowsers aufploppt und der Bestätigungsdialog erscheint."
+    },
+    {
+      "id": 430,
+      "source": "Fires when a group loot roll opens and the roll buttons appear.",
+      "target": "Löst aus, wenn ein Gruppenbeutewurf startet und die Würfelschaltflächen erscheinen."
+    },
+    {
+      "id": 432,
+      "source": "Fires when a loot window opens.",
+      "target": "Löst aus, wenn sich ein Beutefenster öffnet."
+    },
+    {
+      "id": 433,
+      "source": "Fires when a profession or crafting window opens.",
+      "target": "Löst aus, wenn sich ein Berufs- oder Handwerksfenster öffnet."
+    },
+    {
+      "id": 445,
+      "source": "Fires when loot is awarded to you.",
+      "target": "Löst aus, wenn Euch Beute zugeteilt wird."
+    },
+    {
+      "id": 450,
+      "source": "Fires when raid target markers are set or cleared.",
+      "target": "Löst aus, wenn Schlachtzugssymbole gesetzt oder entfernt werden."
+    },
+    {
+      "id": 451,
+      "source": "Fires when repairing durability at a merchant.",
+      "target": "Löst bei der Reparatur von Haltbarkeit bei einem Händler aus."
+    },
+    {
+      "id": 454,
+      "source": "Fires when someone invites you to a guild.",
+      "target": "Löst aus, wenn Euch jemand in eine Gilde einlädt."
+    },
+    {
+      "id": 459,
+      "source": "Fires when the bank window opens.",
+      "target": "Löst aus, wenn sich das Bankfenster öffnet."
+    },
+    {
+      "id": 461,
+      "source": "Fires when the game asks you to confirm a loot roll.",
+      "target": "Löst aus, wenn das Spiel eine Bestätigung für einen Beutewurf verlangt."
+    },
+    {
+      "id": 462,
+      "source": "Fires when the mailbox opens.",
+      "target": "Löst aus, wenn sich der Briefkasten öffnet."
+    },
+    {
+      "id": 482,
+      "source": "Fires when you receive a Battle.net whisper.",
+      "target": "Löst aus, wenn Ihr eine Battle.net-Flüsternachricht empfangt."
+    },
+    {
+      "id": 483,
+      "source": "Fires when you receive a whisper.",
+      "target": "Löst aus, wenn Ihr eine Flüsternachricht empfangt."
+    },
+    {
+      "id": 523,
+      "source": "Gold looted",
+      "target": "Gold geplündert"
+    },
+    {
+      "id": 530,
+      "source": "Guild bank opened",
+      "target": "Gildenbank geöffnet"
+    },
+    {
+      "id": 531,
+      "source": "Guild invite",
+      "target": "Gildeneinladung"
+    },
+    {
+      "id": 549,
+      "source": "Honor gained",
+      "target": "Ehre erhalten"
+    },
+    {
+      "id": 597,
+      "source": "Item consumed from bag",
+      "target": "Gegenstand aus Tasche verbraucht"
+    },
+    {
+      "id": 598,
+      "source": "Item cursor",
+      "target": "Gegenstands-Cursor"
+    },
+    {
+      "id": 599,
+      "source": "Item obtained",
+      "target": "Gegenstand erhalten"
+    },
+    {
+      "id": 600,
+      "source": "Item placed in bag",
+      "target": "Gegenstand in Tasche platziert"
+    },
+    {
+      "id": 609,
+      "source": "Learned a new recipe",
+      "target": "Neues Rezept erlernt"
+    },
+    {
+      "id": 623,
+      "source": "Loot & inventory",
+      "target": "Beute & Inventar"
+    },
+    {
+      "id": 624,
+      "source": "Loot received",
+      "target": "Beute erhalten"
+    },
+    {
+      "id": 625,
+      "source": "Loot roll confirmation",
+      "target": "Beutewurf-Bestätigung"
+    },
+    {
+      "id": 626,
+      "source": "Loot roll started",
+      "target": "Beutewurf gestartet"
+    },
+    {
+      "id": 627,
+      "source": "Loot window opened",
+      "target": "Beutefenster geöffnet"
+    },
+    {
+      "id": 641,
+      "source": "Mailbox opened",
+      "target": "Briefkasten geöffnet"
+    },
+    {
+      "id": 665,
+      "source": "Multiplies every impact, on top of each profession's own weight. Set it to zero for a craft you feel but never get hit by.",
+      "target": "Multipliziert jeden Schlag zusätzlich zum Eigengewicht des jeweiligen Berufs. Auf null setzen für eine Herstellung, die Ihr spüren könnt, ohne von Schlägen getroffen zu werden."
+    },
+    {
+      "id": 666,
+      "source": "Multiplies every impact, on top of each profession's own weight. Set to zero for a craft you feel but never get hit by.",
+      "target": "Multipliziert jeden Schlag zusätzlich zum Eigengewicht des jeweiligen Berufs. Auf null setzen für eine Herstellung, die Ihr spürt, ohne von Schlägen getroffen zu werden."
+    },
+    {
+      "id": 670,
+      "source": "Multiplies the continuous layer under every craft, on top of each profession's own weight. This is the part you feel for the whole craft rather than the individual blows.",
+      "target": "Multipliziert die kontinuierliche Ebene unter jeder Herstellung zusätzlich zum Eigengewicht des jeweiligen Berufs. Dies ist der Teil, den Ihr während des gesamten Herstellungsvorgangs spürt, anstelle der einzelnen Schläge."
+    },
+    {
+      "id": 671,
+      "source": "NPC emote nearby",
+      "target": "NSC-Emote in der Nähe"
+    },
+    {
+      "id": 675,
+      "source": "Never miss an important group alert, even while looking away:\n• |cffffffffDirect Whispers:|r Distinct personal communication blip on incoming whispers.\n• |cffffffffParty & Raid Invites:|r Dual-pulse notification when receiving group invitations.\n• |cffffffffQueue Pops & Ready Checks:|r High-priority attention-grabbing pulse when instances are ready.",
+      "target": "Verpasst keine wichtigen Gruppenwarnungen, selbst wenn Ihr gerade wegschaut:\n• |cffffffffDirekte Flüsternachrichten:|r Deutlicher persönlicher Kommunikations-Impuls bei eingehenden Flüsternachrichten.\n• |cffffffffGruppen- & Schlachtzugseinladungen:|r Doppel-Puls-Benachrichtigung beim Erhalt von Gruppeneinladungen.\n• |cffffffffWarteschlangen-Aufruf & Bereitschaftschecks:|r Signalstarker Puls mit hoher Priorität, wenn Instanzen bereitstehen."
+    },
+    {
+      "id": 682,
+      "source": "Noisy. In a raid this event fires very frequently. Kept for completeness and defaulted off.",
+      "target": "Unruhig. In einem Schlachtzug löst dieses Ereignis sehr häufig aus. Der Vollständigkeit halber beibehalten und standardmäßig deaktiviert."
+    },
+    {
+      "id": 685,
+      "source": "Not filtered by rarity yet — fires for anything, common items included.",
+      "target": "Noch nicht nach Seltenheit gefiltert — löst bei allem aus, einschließlich gewöhnlicher Gegenstände."
+    },
+    {
+      "id": 707,
+      "source": "One pattern for every kind of refusal. May also do nothing inside dungeons and raids.",
+      "target": "Ein einheitliches Muster für jede Art von Zurückweisung. Bleibt in Dungeons und Schlachtzügen möglicherweise wirkungslos."
+    },
+    {
+      "id": 735,
+      "source": "Party invite",
+      "target": "Gruppeneinladung"
+    },
+    {
+      "id": 736,
+      "source": "Party leader changed",
+      "target": "Gruppenleiter gewechselt"
+    },
+    {
+      "id": 749,
+      "source": "Performed an emote",
+      "target": "Ein Emote ausgeführt"
+    },
+    {
+      "id": 754,
+      "source": "Picked up an item",
+      "target": "Gegenstand aufgenommen"
+    },
+    {
+      "id": 766,
+      "source": "Profession skill increased",
+      "target": "Berufsfertigkeit gesteigert"
+    },
+    {
+      "id": 767,
+      "source": "Profession window opened",
+      "target": "Berufsfenster geöffnet"
+    },
+    {
+      "id": 768,
+      "source": "Professions with a rhythm",
+      "target": "Berufe mit Arbeitsrhythmus"
+    },
+    {
+      "id": 769,
+      "source": "Professions without one",
+      "target": "Berufe ohne Arbeitsrhythmus"
+    },
+    {
+      "id": 808,
+      "source": "Purchased item from vendor",
+      "target": "Gegenstand beim Händler gekauft"
+    },
+    {
+      "id": 810,
+      "source": "Pure flavor, sibling to \"Performed an emote\" above. Fires often in busy areas with lots of ambient NPCs — this is opt-in noise, not a curated signal, same as its sibling. Off by default.",
+      "target": "Reines Flair, verwandt mit „Ein Emote ausgeführt“ weiter oben. Löst in belebten Gebieten mit vielen Umgebungs-NSCs häufig aus — dies ist zuschaltbare Lebendigkeit, kein selektiertes Signal, genau wie das Gegenstück. Standardmäßig deaktiviert."
+    },
+    {
+      "id": 813,
+      "source": "Put down an item",
+      "target": "Gegenstand abgelegt"
+    },
+    {
+      "id": 835,
+      "source": "Raid marker changed",
+      "target": "Schlachtzugssymbol geändert"
+    },
+    {
+      "id": 836,
+      "source": "Raiding",
+      "target": "Schlachtzüge"
+    },
+    {
+      "id": 837,
+      "source": "Raiding (Encounter Focus)",
+      "target": "Schlachtzüge (Begegnungs-Fokus)"
+    },
+    {
+      "id": 852,
+      "source": "Reads GetShapeshiftForm()/UPDATE_SHAPESHIFT_FORM, the player's own state — one generic cue for any change, not split by direction, since forms chain (e.g. Bear -> Cat -> Moonkin) without necessarily passing back through no-form in between.",
+      "target": "Liest GetShapeshiftForm()/UPDATE_SHAPESHIFT_FORM, den eigenen Zustand des Spielers aus — ein allgemeines Signal für jeden Wechsel, nicht nach Richtung getrennt, da Gestalten aneinandergereiht werden können (z. B. Bär -> Katze -> Mondkin), ohne zwischendurch zwingend die Normalgestalt einzunehmen."
+    },
+    {
+      "id": 856,
+      "source": "Reads the skill-up chat feed rather than SKILL_LINES_CHANGED, which also fires for unrelated skill-list changes. Occurrence-only, no text parsing — this says a skill went up, not which one or to what. Deliberately light: early profession levelling fires this constantly.",
+      "target": "Liest den Fertigkeitsaufstiegs-Chatverlauf aus statt SKILL_LINES_CHANGED, welches auch bei unabhängigen Änderungen der Fertigkeitenliste auslöst. Reine Ereignisauslösung ohne Textanalyse — signalisiert lediglich den Anstieg einer Fertigkeit, nicht welche oder auf welchen Wert. Bewusst dezent gehalten: Das Steigern von Berufen auf niedrigen Stufen löst dies fortlaufend aus."
+    },
+    {
+      "id": 869,
+      "source": "Reputation gained",
+      "target": "Ruf erhalten"
+    },
+    {
+      "id": 899,
+      "source": "Same weight and shape as the vendor, mailbox and bank cues alongside it — all four are \"a window you walked up to has opened\", and they deliberately feel alike rather than each inventing a signature.",
+      "target": "Gleiches Gewicht und gleiche Form wie die Signale für Händler, Briefkasten und Bank daneben — alle vier bedeuten „ein Fenster, an das Ihr herangetreten seid, hat sich geöffnet“, und sie fühlen sich bewusst einheitlich an, anstatt jeweils ein eigenes Signalmuster zu erfinden."
+    },
+    {
+      "id": 920,
+      "source": "Shapeshift form changed",
+      "target": "Gestaltwandlung geändert"
+    },
+    {
+      "id": 940,
+      "source": "Sold item to vendor",
+      "target": "Gegenstand an Händler verkauft"
+    },
+    {
+      "id": 1000,
+      "source": "TRADE_SKILL_CRAFT_BEGIN via Core/CastActivity.lua. Untested — no crafting cue has ever existed in this addon, so nothing here has been felt. Off by default.",
+      "target": "TRADE_SKILL_CRAFT_BEGIN über Core/CastActivity.lua. Ungetestet — in diesem Addon gab es bisher kein Herstellungs-Signal, daher wurde hier noch nichts erfühlt. Standardmäßig deaktiviert."
+    },
+    {
+      "id": 1001,
+      "source": "Tactile sensations for living in the world of Azeroth:\n• |cffffffffLoot Drops & Currency:|r Feel items and gold collected into your bags.\n• |cffffffffQuests & Turn-ins:|r Physical confirmation upon accepting and completing objectives.\n• |cffffffffProgression:|r Rewarding celebration pulses for leveling up, achievements, and XP gains.",
+      "target": "Taktile Empfindungen für das Leben in der Welt von Azeroth:\n• |cffffffffBeute & Währung:|r Spürt Gegenstände und Gold, die in Euren Taschen landen.\n• |cffffffffQuests & Abgaben:|r Physische Bestätigung beim Annehmen und Abschließen von Aufgaben.\n• |cffffffffFortschritt:|r Belohnende Festimpulse für Stufenaufstiege, Erfolge und Erfahrungspunkte."
+    },
+    {
+      "id": 1036,
+      "source": "The other edge of the same CURSOR_CHANGED transition. Fires whether the item was placed somewhere or the drag was simply cancelled — the event doesn't distinguish, and nothing readable does.",
+      "target": "Die andere Flanke desselben CURSOR_CHANGED-Übergangs. Löst aus, egal ob der Gegenstand irgendwo abgelegt oder das Ziehen einfach abgebrochen wurde — das Ereignis unterscheidet dies nicht, und kein auslesbarer Zustand tut dies."
+    },
+    {
+      "id": 1039,
+      "source": "The work itself while you craft — a bed for the length of it, with the profession's own rhythm struck on top. A hammer for blacksmithing, a pick for mining, nothing percussive for tailoring or enchanting.",
+      "target": "Die eigentliche Arbeit beim Herstellen — eine Grundschwingung für die gesamte Dauer, überlagert vom berufseigenen Arbeitsrhythmus. Ein Hammer beim Schmieden, eine Spitzhacke beim Bergbau, nichts Schlagendes bei der Schneiderei oder Verzauberkunst."
+    },
+    {
+      "id": 1041,
+      "source": "These strike. The shape and the rate come from the craft — a hammer is slower and heavier than a pick — and the last blow lands on completion.",
+      "target": "Diese schlagen zu. Die Form und Geschwindigkeit hängen von der Herstellung ab — ein Hammer ist langsamer und wuchtiger als eine Spitzhacke — und der letzte Schlag trifft bei Fertigstellung."
+    },
+    {
+      "id": 1075,
+      "source": "Two solid hits when an item attaches to the cursor.",
+      "target": "Zwei kräftige Treffer, wenn ein Gegenstand an den Cursor angeheftet wird."
+    },
+    {
+      "id": 1077,
+      "source": "Two taps when the guild bank opens — heavier than the personal bank, because it is a bigger door.",
+      "target": "Zwei Impulse beim Öffnen der Gildenbank — wuchtiger als bei der persönlichen Bank, da es sich um eine größere Tür handelt."
+    },
+    {
+      "id": 1094,
+      "source": "Vault door closed",
+      "target": "Tresortür geschlossen"
+    },
+    {
+      "id": 1130,
+      "source": "Whisper received",
+      "target": "Flüsternachricht empfangen"
+    }
+  ]
+}

@@ -1,0 +1,544 @@
+{
+  "items": [
+    {
+      "source": "%s has no impacts — it is the bed alone, for the length of the craft.",
+      "target": "%s에는 타격 진동이 없습니다. 제작이 진행되는 동안 바탕 진동만 지속됩니다.",
+      "id": 19
+    },
+    {
+      "source": "A bed you feel for the length of a craft, with the profession's own work rhythm struck over it. While a craft is running this replaces |cffffd100Casting texture|r rather than layering with it, so one action is one sensation.\n\nThe profession is read from the recipe by id, so it does not depend on your language. Anything that does not resolve still gets a generic work rhythm rather than going quiet.",
+      "target": "제작이 진행되는 동안 느껴지는 바탕 진동으로, 그 위에 전문 기술 고유의 작업 리듬이 타격감으로 더해집니다. 제작이 진행되는 동안에는 |cffffd100시전 질감|r과 겹치는 대신 이를 대체하므로, 하나의 행동이 하나의 감각으로 전달됩니다.\n\n전문 기술은 제조법 ID로 확인하므로 언어 설정과 무관하게 동작합니다. 식별되지 않는 항목도 무반응으로 남지 않고 일반 작업 리듬으로 출력됩니다.",
+      "id": 43
+    },
+    {
+      "source": "A bright chime when gathering an herb node, mineral vein, or skinning loot completes.",
+      "target": "약초 지점, 광맥 채집 또는 무두질 획득품 수집이 완료될 때 울리는 맑은 차임입니다.",
+      "id": 44
+    },
+    {
+      "source": "A bright tick when an item enters your bags — looted, crafted, or mailed.",
+      "target": "아이템이 가방에 들어올 때(전리품 획득, 제작, 우편 수령) 울리는 선명한 틱 진동입니다.",
+      "id": 45
+    },
+    {
+      "source": "A bright tick when you learn a new recipe or pattern.",
+      "target": "새로운 제조법이나 도안을 배울 때 울리는 선명한 틱 진동입니다.",
+      "id": 51
+    },
+    {
+      "source": "A chime when a craft completes successfully.",
+      "target": "제작이 성공적으로 완료될 때 울리는 맑은 차임입니다.",
+      "id": 52
+    },
+    {
+      "source": "A chime when the auction house opens.",
+      "target": "경매장 창이 열릴 때 울리는 맑은 차임입니다.",
+      "id": 53
+    },
+    {
+      "source": "A heavy latch thud when closing a personal bank or guild bank vault.",
+      "target": "개인 은행이나 길드 금고를 닫을 때 울리는 묵직한 걸쇠 쿵 충격입니다.",
+      "id": 76
+    },
+    {
+      "source": "A light coin clink when depositing or withdrawing money from a bank or guild bank.",
+      "target": "은행이나 길드 금고에 돈을 입금하거나 출금할 때 발생하는 가벼운 동전 짤랑임입니다.",
+      "id": 82
+    },
+    {
+      "source": "A light coin-like tick when selling an item to a merchant.",
+      "target": "상인에게 아이템을 판매할 때 발생하는 동전 소리 같은 가벼운 틱 진동입니다.",
+      "id": 83
+    },
+    {
+      "source": "A light tick when a profession or weapon skill goes up a point.",
+      "target": "전문 기술 또는 무기 숙련도가 1점 상승할 때 울리는 가벼운 틱 진동입니다.",
+      "id": 86
+    },
+    {
+      "source": "A light tick when an item enters your bag and occupies a slot.",
+      "target": "아이템이 가방에 들어와 칸을 차지할 때 발생하는 가벼운 틱 진동입니다.",
+      "id": 87
+    },
+    {
+      "source": "A playful tick on some of your own emotes.",
+      "target": "자신의 일부 감정 표현 시 발생하는 유쾌한 틱 진동입니다.",
+      "id": 92
+    },
+    {
+      "source": "A playful tick when an NPC emotes, yells, or whispers near you.",
+      "target": "주변의 NPC가 감정 표현, 외침, 귓속말을 할 때 발생하는 유쾌한 틱 진동입니다.",
+      "id": 93
+    },
+    {
+      "source": "A pleasant chime when you gain honor — a PvP kill or objective.",
+      "target": "명예 점수를 획득할 때(PvP 처치 또는 목표 완수) 울리는 기분 좋은 맑은 차임입니다.",
+      "id": 94
+    },
+    {
+      "source": "A pleasant chime when you gain reputation with a faction.",
+      "target": "진영 평판을 획득할 때 울리는 기분 좋은 맑은 차임입니다.",
+      "id": 95
+    },
+    {
+      "source": "A pleasant chime whenever your shapeshift form changes.",
+      "target": "변신 형태가 변경될 때마다 울리는 기분 좋은 맑은 차임입니다.",
+      "id": 97
+    },
+    {
+      "source": "A soft chime when a crafting cast begins.",
+      "target": "제작 시전이 시작될 때 울리는 부드러운 차임입니다.",
+      "id": 120
+    },
+    {
+      "source": "A soft tick when the item leaves the cursor.",
+      "target": "아이템이 커서에서 벗어날 때 발생하는 부드러운 틱 진동입니다.",
+      "id": 124
+    },
+    {
+      "source": "A solid tap when buying an item from a merchant.",
+      "target": "상인에게서 아이템을 구매할 때 발생하는 단단한 탭 진동입니다.",
+      "id": 133
+    },
+    {
+      "source": "A subtle thud when a consumable or item is used and empties a bag slot.",
+      "target": "소모품이나 아이템을 사용하여 가방 칸이 빌 때 울리는 은은한 쿵 충격입니다.",
+      "id": 137
+    },
+    {
+      "source": "A very light tick when you loot money.",
+      "target": "돈을 획득할 때 울리는 아주 가벼운 틱 진동입니다.",
+      "id": 160
+    },
+    {
+      "source": "An urgent stutter vibration when your bags become full or when you attempt an action with a full inventory.",
+      "target": "가방이 가득 차거나 소지품이 가득 찬 상태에서 행동을 시도할 때 울리는 긴박한 끊김 진동입니다.",
+      "id": 187
+    },
+    {
+      "source": "Auction house opened",
+      "target": "경매장 열림",
+      "id": 200
+    },
+    {
+      "source": "Bank gold transfer",
+      "target": "은행 골드 거래",
+      "id": 207
+    },
+    {
+      "source": "Bank opened",
+      "target": "은행 열림",
+      "id": 208
+    },
+    {
+      "source": "Battle.net whisper received",
+      "target": "Battle.net 귓속말 수신",
+      "id": 210
+    },
+    {
+      "source": "CURSOR_CHANGED, with C_Cursor.GetCursorItem() checked only for presence — never read, never compared, so a secret item can't break it (truthiness on a non-secret-boolean is legal). Distinct from this addon's own \"Item obtained\": that's loot arriving in your bags, this is you physically holding something.",
+      "target": "CURSOR_CHANGED 이벤트로 감지하며, C_Cursor.GetCursorItem()의 존재 여부만 확인합니다. 값을 읽거나 비교하지 않으므로 비공개 아이템이 오류를 일으키지 않습니다(비밀이 아닌 불리언의 참/거짓 확인은 허용됨). 이 애드온의 \"아이템 획득\" 신호와는 다릅니다. 전자는 가방에 전리품이 들어오는 것이고, 이것은 커서로 무언가를 직접 집어 들고 있는 상태입니다.",
+      "id": 232
+    },
+    {
+      "source": "Calibrated for standard third-party ERM rumble curves",
+      "target": "표준 서드파티 ERM 진동 감응 곡선에 맞춰 보정됨",
+      "id": 234
+    },
+    {
+      "source": "Craft finished",
+      "target": "제작 완료",
+      "id": 291
+    },
+    {
+      "source": "Craft started",
+      "target": "제작 시작",
+      "id": 293
+    },
+    {
+      "source": "Crafting",
+      "target": "제작",
+      "id": 294
+    },
+    {
+      "source": "Crafting Rhythms",
+      "target": "제작 리듬",
+      "id": 295
+    },
+    {
+      "source": "Crafting texture",
+      "target": "제작 질감",
+      "id": 296
+    },
+    {
+      "source": "Distinct from this addon's own \"Gold looted\"/\"Item obtained\" (World category) — this is Tremor's original item-award cue, kept alongside rather than merged, since the underlying events differ.",
+      "target": "이 애드온의 \"골드 획득\"/\"아이템 획득\"(오픈 월드 범주) 신호와는 다릅니다. 기본 이벤트가 다르기 때문에 통합하지 않고 나란히 유지된 Tremor의 고유 아이템 보상 신호입니다.",
+      "id": 334
+    },
+    {
+      "source": "Distinguished from craftStopped by whether the cast actually succeeded, which Core/CastActivity.lua tracks across the cast lifecycle rather than guessing from one event. Untested.",
+      "target": "craftStopped와는 시전이 실제로 성공했는지 여부로 구분되며, Core/CastActivity.lua가 단일 이벤트를 추측하는 대신 시전 수명 주기 전반을 추적합니다. 테스트되지 않았습니다.",
+      "id": 337
+    },
+    {
+      "source": "Dungeons & Raids",
+      "target": "던전 및 공격대",
+      "id": 359
+    },
+    {
+      "source": "Feel crafting",
+      "target": "제작 체감",
+      "id": 393
+    },
+    {
+      "source": "Fires on BAG_OVERFLOW_WITH_FULL_INVENTORY, UI_ERROR_MESSAGE (inventory full error) and when free bag slots drop to zero.",
+      "target": "BAG_OVERFLOW_WITH_FULL_INVENTORY, UI_ERROR_MESSAGE(소지품 가득 참 오류) 이벤트가 발생하거나 여유 가방 칸이 0으로 떨어질 때 발생합니다.",
+      "id": 404
+    },
+    {
+      "source": "Fires on BAG_UPDATE_DELAYED when total free bag slots decrease. Complements Item obtained (which tracks ITEM_PUSH fly-in loot animations).",
+      "target": "총 여유 가방 칸이 감소할 때 BAG_UPDATE_DELAYED에서 발생합니다. 아이템 획득(ITEM_PUSH 날아오는 전리품 애니메이션을 추적)을 보완합니다.",
+      "id": 405
+    },
+    {
+      "source": "Fires on BAG_UPDATE_DELAYED when total free bag slots increase while not interacting with a merchant, bank, or mail.",
+      "target": "상인, 은행, 우편과 상호작용하지 않는 동안 총 여유 가방 칸이 증가할 때 BAG_UPDATE_DELAYED에서 발생합니다.",
+      "id": 406
+    },
+    {
+      "source": "Fires on LOOT_READY when gathering loot is ready.",
+      "target": "채집 전리품이 준비되었을 때 LOOT_READY에서 발생합니다.",
+      "id": 408
+    },
+    {
+      "source": "Fires on money changes with an open bank frame or guild bank money update.",
+      "target": "은행 창이 열려 있을 때 돈이 변경되거나 길드 금고 금액이 업데이트될 때 발생합니다.",
+      "id": 412
+    },
+    {
+      "source": "Fires when a dungeon or raid finder queue pops and the accept dialog appears.",
+      "target": "던전 또는 공격대 찾기 대기열이 열리고 수락 대화창이 나타날 때 발생합니다.",
+      "id": 428
+    },
+    {
+      "source": "Fires when a group loot roll opens and the roll buttons appear.",
+      "target": "파티 전리품 주사위 굴림이 시작되고 주사위 버튼이 나타날 때 발생합니다.",
+      "id": 430
+    },
+    {
+      "source": "Fires when a loot window opens.",
+      "target": "전리품 창이 열릴 때 발생합니다.",
+      "id": 432
+    },
+    {
+      "source": "Fires when a profession or crafting window opens.",
+      "target": "전문 기술 또는 제작 창이 열릴 때 발생합니다.",
+      "id": 433
+    },
+    {
+      "source": "Fires when loot is awarded to you.",
+      "target": "전리품이 자신에게 주어질 때 발생합니다.",
+      "id": 445
+    },
+    {
+      "source": "Fires when raid target markers are set or cleared.",
+      "target": "공격대 대상 징표가 지정되거나 해제될 때 발생합니다.",
+      "id": 450
+    },
+    {
+      "source": "Fires when repairing durability at a merchant.",
+      "target": "상인에게서 내구도를 수리할 때 발생합니다.",
+      "id": 451
+    },
+    {
+      "source": "Fires when someone invites you to a guild.",
+      "target": "길드 초대를 받았을 때 발생합니다.",
+      "id": 454
+    },
+    {
+      "source": "Fires when the bank window opens.",
+      "target": "은행 창이 열릴 때 발생합니다.",
+      "id": 459
+    },
+    {
+      "source": "Fires when the game asks you to confirm a loot roll.",
+      "target": "전리품 주사위 굴림 확인을 요청받을 때 발생합니다.",
+      "id": 461
+    },
+    {
+      "source": "Fires when the mailbox opens.",
+      "target": "우편함이 열릴 때 발생합니다.",
+      "id": 462
+    },
+    {
+      "source": "Fires when you receive a Battle.net whisper.",
+      "target": "Battle.net 귓속말을 수신할 때 발생합니다.",
+      "id": 482
+    },
+    {
+      "source": "Fires when you receive a whisper.",
+      "target": "귓속말을 수신할 때 발생합니다.",
+      "id": 483
+    },
+    {
+      "source": "Gold looted",
+      "target": "골드 획득",
+      "id": 523
+    },
+    {
+      "source": "Guild bank opened",
+      "target": "길드 금고 열림",
+      "id": 530
+    },
+    {
+      "source": "Guild invite",
+      "target": "길드 초대",
+      "id": 531
+    },
+    {
+      "source": "Honor gained",
+      "target": "명예 획득",
+      "id": 549
+    },
+    {
+      "source": "Item consumed from bag",
+      "target": "가방에서 아이템 소모",
+      "id": 597
+    },
+    {
+      "source": "Item cursor",
+      "target": "아이템 커서",
+      "id": 598
+    },
+    {
+      "source": "Item obtained",
+      "target": "아이템 획득",
+      "id": 599
+    },
+    {
+      "source": "Item placed in bag",
+      "target": "가방에 아이템 넣음",
+      "id": 600
+    },
+    {
+      "source": "Learned a new recipe",
+      "target": "새로운 제조법 배움",
+      "id": 609
+    },
+    {
+      "source": "Loot & inventory",
+      "target": "전리품 및 소지품",
+      "id": 623
+    },
+    {
+      "source": "Loot received",
+      "target": "전리품 수령",
+      "id": 624
+    },
+    {
+      "source": "Loot roll confirmation",
+      "target": "전리품 주사위 굴림 확인",
+      "id": 625
+    },
+    {
+      "source": "Loot roll started",
+      "target": "전리품 주사위 굴림 시작",
+      "id": 626
+    },
+    {
+      "source": "Loot window opened",
+      "target": "전리품 창 열림",
+      "id": 627
+    },
+    {
+      "source": "Mailbox opened",
+      "target": "우편함 열림",
+      "id": 641
+    },
+    {
+      "source": "Multiplies every impact, on top of each profession's own weight. Set it to zero for a craft you feel but never get hit by.",
+      "target": "각 전문 기술 고유의 가중치에 더해 모든 타격감을 증폭합니다. 타격감 없이 지속 감각만 느끼며 제작하려면 0으로 설정하세요.",
+      "id": 665
+    },
+    {
+      "source": "Multiplies every impact, on top of each profession's own weight. Set to zero for a craft you feel but never get hit by.",
+      "target": "각 전문 기술 고유의 가중치에 더해 모든 타격감을 증폭합니다. 타격감 없이 지속 감각만 느끼며 제작하려면 0으로 설정하세요.",
+      "id": 666
+    },
+    {
+      "source": "Multiplies the continuous layer under every craft, on top of each profession's own weight. This is the part you feel for the whole craft rather than the individual blows.",
+      "target": "각 전문 기술 고유의 가중치에 더해 모든 제작 아래 깔리는 지속 계층을 증폭합니다. 이는 개별 타격이 아니라 제작 과정 전체에 걸쳐 느껴지는 부분입니다.",
+      "id": 670
+    },
+    {
+      "source": "NPC emote nearby",
+      "target": "주변 NPC 감정 표현",
+      "id": 671
+    },
+    {
+      "source": "Never miss an important group alert, even while looking away:\n• |cffffffffDirect Whispers:|r Distinct personal communication blip on incoming whispers.\n• |cffffffffParty & Raid Invites:|r Dual-pulse notification when receiving group invitations.\n• |cffffffffQueue Pops & Ready Checks:|r High-priority attention-grabbing pulse when instances are ready.",
+      "target": "시선을 다른 곳에 두고 있어도 중요한 파티/공격대 알림을 놓치지 마세요:\n• |cffffffff귓속말 직접 수신:|r 귓속말이 도착할 때 발생하는 또렷한 개인 의사소통 블립 알림입니다.\n• |cffffffff파티 및 공격대 초대:|r 파티/공격대 초대를 받을 때 울리는 2중 펄스 알림입니다.\n• |cffffffff대기열 입장 및 전투 준비 확인:|r 인스턴스 준비가 완료되었을 때 시선을 사로잡는 높은 우선순위의 펄스입니다.",
+      "id": 675
+    },
+    {
+      "source": "Noisy. In a raid this event fires very frequently. Kept for completeness and defaulted off.",
+      "target": "빈번하게 발생합니다. 공격대에서는 이 이벤트가 매우 자주 발생합니다. 완전성을 위해 유지되었으며 기본적으로 꺼져 있습니다.",
+      "id": 682
+    },
+    {
+      "source": "Not filtered by rarity yet — fires for anything, common items included.",
+      "target": "아직 희귀도별로 필터링되지 않습니다. 일반 아이템을 포함한 모든 아이템에 대해 발생합니다.",
+      "id": 685
+    },
+    {
+      "source": "One pattern for every kind of refusal. May also do nothing inside dungeons and raids.",
+      "target": "모든 종류의 거절에 대한 단일 패턴입니다. 던전 및 공격대 내부에서는 아무 작동도 하지 않을 수 있습니다.",
+      "id": 707
+    },
+    {
+      "source": "Party invite",
+      "target": "파티 초대",
+      "id": 735
+    },
+    {
+      "source": "Party leader changed",
+      "target": "파티장 변경",
+      "id": 736
+    },
+    {
+      "source": "Performed an emote",
+      "target": "감정 표현 수행",
+      "id": 749
+    },
+    {
+      "source": "Picked up an item",
+      "target": "아이템 집어 듦",
+      "id": 754
+    },
+    {
+      "source": "Profession skill increased",
+      "target": "전문 기술 숙련도 상승",
+      "id": 766
+    },
+    {
+      "source": "Profession window opened",
+      "target": "전문 기술 창 열림",
+      "id": 767
+    },
+    {
+      "source": "Professions with a rhythm",
+      "target": "리듬이 있는 전문 기술",
+      "id": 768
+    },
+    {
+      "source": "Professions without one",
+      "target": "리듬이 없는 전문 기술",
+      "id": 769
+    },
+    {
+      "source": "Purchased item from vendor",
+      "target": "상인에게서 아이템 구매",
+      "id": 808
+    },
+    {
+      "source": "Pure flavor, sibling to \"Performed an emote\" above. Fires often in busy areas with lots of ambient NPCs — this is opt-in noise, not a curated signal, same as its sibling. Off by default.",
+      "target": "순수한 분위기 연출용으로 위의 \"감정 표현 수행\"과 한 쌍입니다. 주변 NPC가 많은 혼잡한 지역에서 자주 발생합니다. 형제 신호와 마찬가지로 정제된 신호가 아니라 선택형 배경 반응입니다. 기본적으로 꺼져 있습니다.",
+      "id": 810
+    },
+    {
+      "source": "Put down an item",
+      "target": "아이템 내려놓음",
+      "id": 813
+    },
+    {
+      "source": "Raid marker changed",
+      "target": "공격대 징표 변경",
+      "id": 835
+    },
+    {
+      "source": "Raiding",
+      "target": "공격대",
+      "id": 836
+    },
+    {
+      "source": "Raiding (Encounter Focus)",
+      "target": "공격대 (우두머리 전투 집중)",
+      "id": 837
+    },
+    {
+      "source": "Reads GetShapeshiftForm()/UPDATE_SHAPESHIFT_FORM, the player's own state — one generic cue for any change, not split by direction, since forms chain (e.g. Bear -> Cat -> Moonkin) without necessarily passing back through no-form in between.",
+      "target": "플레이어 자신의 상태인 GetShapeshiftForm()/UPDATE_SHAPESHIFT_FORM을 읽습니다. 변신 형태가 중간에 원래 형태로 돌아가지 않고 연속으로 전환(예: 곰 -> 표범 -> 달빛야수)될 수 있으므로 전환 방향별로 나누지 않고 모든 변경에 대해 하나의 일반 신호로 처리합니다.",
+      "id": 852
+    },
+    {
+      "source": "Reads the skill-up chat feed rather than SKILL_LINES_CHANGED, which also fires for unrelated skill-list changes. Occurrence-only, no text parsing — this says a skill went up, not which one or to what. Deliberately light: early profession levelling fires this constantly.",
+      "target": "관련 없는 기술 목록 변경 시에도 발생하는 SKILL_LINES_CHANGED 대신 숙련도 상승 채팅 피드를 읽습니다. 텍스트 분석 없이 발생 여부만 감지하며, 어떤 기술이 얼마나 올랐는지는 확인하지 않고 기술이 올랐다는 사실만 전달합니다. 전문 기술 초반 숙련도 상승 시 계속해서 발생하므로 의도적으로 가볍게 설계되었습니다.",
+      "id": 856
+    },
+    {
+      "source": "Reputation gained",
+      "target": "평판 획득",
+      "id": 869
+    },
+    {
+      "source": "Same weight and shape as the vendor, mailbox and bank cues alongside it — all four are \"a window you walked up to has opened\", and they deliberately feel alike rather than each inventing a signature.",
+      "target": "나란히 있는 상인, 우편함, 은행 신호와 동일한 가중치 및 감각 형태를 가집니다. 네 가지 모두 \"직접 다가간 창이 열림\"에 해당하며, 각자 별개의 신호 패턴을 만들기보다는 의도적으로 유사한 느낌을 주도록 설계되었습니다.",
+      "id": 899
+    },
+    {
+      "source": "Shapeshift form changed",
+      "target": "변신 형태 변경됨",
+      "id": 920
+    },
+    {
+      "source": "Sold item to vendor",
+      "target": "상인에게 아이템 판매",
+      "id": 940
+    },
+    {
+      "source": "TRADE_SKILL_CRAFT_BEGIN via Core/CastActivity.lua. Untested — no crafting cue has ever existed in this addon, so nothing here has been felt. Off by default.",
+      "target": "Core/CastActivity.lua를 통한 TRADE_SKILL_CRAFT_BEGIN 이벤트입니다. 테스트되지 않음 — 이 애드온에 제작 신호가 존재한 적이 없으므로 여기 있는 어떤 것도 체감 테스트를 거치지 않았습니다. 기본적으로 꺼져 있습니다.",
+      "id": 1000
+    },
+    {
+      "source": "Tactile sensations for living in the world of Azeroth:\n• |cffffffffLoot Drops & Currency:|r Feel items and gold collected into your bags.\n• |cffffffffQuests & Turn-ins:|r Physical confirmation upon accepting and completing objectives.\n• |cffffffffProgression:|r Rewarding celebration pulses for leveling up, achievements, and XP gains.",
+      "target": "아제로스의 세계에 살아 숨 쉬는 듯한 촉각 경험을 선사합니다:\n• |cffffffff전리품 획득 및 화폐:|r 가방에 들어오는 아이템과 골드의 감각을 느껴보세요.\n• |cffffffff퀘스트 및 완료 보고:|r 목표를 수락하고 완료할 때 물리적인 확인 진동이 울립니다.\n• |cffffffff성장:|r 레벨 업, 업적 달성, 경험치 획득 시 보람찬 축하 펄스가 발생합니다.",
+      "id": 1001
+    },
+    {
+      "source": "The other edge of the same CURSOR_CHANGED transition. Fires whether the item was placed somewhere or the drag was simply cancelled — the event doesn't distinguish, and nothing readable does.",
+      "target": "동일한 CURSOR_CHANGED 상태 변화의 반대쪽 시점입니다. 아이템을 어딘가에 내려놓았거나 단순히 드래그를 취소했는지 여부에 관계없이 발생합니다. 이벤트 자체나 읽을 수 있는 데이터로 이를 구분할 수는 없습니다.",
+      "id": 1036
+    },
+    {
+      "source": "The work itself while you craft — a bed for the length of it, with the profession's own rhythm struck on top. A hammer for blacksmithing, a pick for mining, nothing percussive for tailoring or enchanting.",
+      "target": "제작이 진행되는 동안의 작업 자체를 표현합니다. 제작 시간 동안 이어지는 바탕 진동 위에 전문 기술 고유의 리듬이 타격감으로 더해집니다. 대장기술은 망치질, 채광은 곡괭이질이며, 재봉술이나 마법부여는 타격 진동이 없습니다.",
+      "id": 1039
+    },
+    {
+      "source": "These strike. The shape and the rate come from the craft — a hammer is slower and heavier than a pick — and the last blow lands on completion.",
+      "target": "이것은 타격을 가합니다. 타격의 형태와 속도는 제작의 종류에 따라 달라집니다(망치질은 곡괭이질보다 느리고 묵직함). 마지막 타격은 제작 완료 시점에 전달됩니다.",
+      "id": 1041
+    },
+    {
+      "source": "Two solid hits when an item attaches to the cursor.",
+      "target": "아이템이 커서에 붙을 때 울리는 두 번의 단단한 충격입니다.",
+      "id": 1075
+    },
+    {
+      "source": "Two taps when the guild bank opens — heavier than the personal bank, because it is a bigger door.",
+      "target": "길드 금고가 열릴 때 울리는 두 번의 탭 진동입니다. 더 큰 문이므로 개인 은행보다 묵직합니다.",
+      "id": 1077
+    },
+    {
+      "source": "Vault door closed",
+      "target": "금고 문 닫힘",
+      "id": 1094
+    },
+    {
+      "source": "Whisper received",
+      "target": "귓속말 수신",
+      "id": 1130
+    }
+  ]
+}

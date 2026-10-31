@@ -1,0 +1,769 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "source": "\n\nA profile change is waiting: cues re-register when you leave combat, so nothing is rebuilt mid-pull.",
+      "target": "\n\nHay un cambio de perfil en espera: las señales se vuelven a registrar al salir de combate para no reconstruir nada en pleno combate."
+    },
+    {
+      "id": 5,
+      "source": " Takes effect when you leave combat.",
+      "target": " Surte efecto al salir de combate."
+    },
+    {
+      "id": 31,
+      "source": "1. Planned Class & Combat Role",
+      "target": "1. Clase prevista y función de combate"
+    },
+    {
+      "id": 33,
+      "source": "2. Combat",
+      "target": "2. Combate"
+    },
+    {
+      "id": 59,
+      "source": "A crisp tap when a major full-screen or side UI panel opens (character sheet, spellbook, quest log, etc.).",
+      "target": "Un toque seco cuando se abre un panel principal de la interfaz a pantalla completa o lateral (panel de personaje, libro de hechizos, registro de misiones, etc.)."
+    },
+    {
+      "id": 61,
+      "source": "A dense three-pulse tactical flurry on Windfury extra attacks, detected via sub-50% weapon speed PLAYER_SWING timing.",
+      "target": "Una densa ráfaga táctica de tres pulsos en los ataques adicionales de Viento Furioso, detectada mediante el intervalo de PLAYER_SWING a menos del 50 por ciento de la velocidad del arma."
+    },
+    {
+      "id": 62,
+      "source": "A dense three-pulse tactical flurry when the client receives UNIT_SPELLCAST_SUCCEEDED for Windfury Attack (Spell ID 25504).",
+      "target": "Una densa ráfaga táctica de tres pulsos cuando el cliente recibe UNIT_SPELLCAST_SUCCEEDED para Ataque Viento Furioso (id de hechizo 25504)."
+    },
+    {
+      "id": 63,
+      "source": "A distinct physical tap to land with each main-hand weapon swing.",
+      "target": "Un toque físico distintivo al conectar cada golpe de arma de la mano derecha."
+    },
+    {
+      "id": 66,
+      "source": "A faint constant on the slow motor for as long as a cast or channel lasts, underneath the swell. This is the part that says \"something is happening\"; the swell is the part that says \"it is nearly done\". Zero leaves only the swell.",
+      "target": "Una vibración constante y tenue en el motor lento mientras dura un lanzamiento o una canalización, por debajo de la oscilación creciente. Esta es la parte que indica que «algo está ocurriendo»; el aumento creciente es la parte que indica que «está casi listo». Si se ajusta a cero, solo queda la oscilación creciente."
+    },
+    {
+      "id": 67,
+      "source": "A faint continuous hum for as long as you're casting or channelling.",
+      "target": "Un zumbido continuo y tenue mientras estás lanzando o canalizando."
+    },
+    {
+      "id": 71,
+      "source": "A firm hit that bleeds away — slowing to a stop.",
+      "target": "Un golpe firme que se disipa gradualmente, ralentizándose hasta detenerse."
+    },
+    {
+      "id": 77,
+      "source": "A heavy thud when your target activates a major defensive cooldown (e.g. Shield Wall, Ice Block, Divine Shield, Turtle, Cloak).",
+      "target": "Un golpe sordo e intenso cuando tu objetivo activa una facultad defensiva importante con tiempo de reutilización (p. ej., Muro de escudo, Bloque de hielo, Escudo divino, Tortuga, Capa)."
+    },
+    {
+      "id": 84,
+      "source": "A light tick estimated to land with each off-hand weapon swing, while dual-wielding.",
+      "target": "Un ligero chasquido estimado para acompañar cada golpe de arma con la mano izquierda al usar doble empuñadura."
+    },
+    {
+      "id": 90,
+      "source": "A near-silent breathing wave while stealthed or invisible.",
+      "target": "Una onda de respiración casi inaudible mientras estás en sigilo o invisible."
+    },
+    {
+      "id": 96,
+      "source": "A pleasant chime when you receive a critical heal.",
+      "target": "Un campanilleo agradable cuando recibes una sanación crítica."
+    },
+    {
+      "id": 98,
+      "source": "A quick tap when a boss raid-warns, yells, emotes, or whispers during a fight — a text-channel fallback for bossAbilityWarning above.",
+      "target": "Un toque rápido cuando un jefe emite un aviso de banda, grita, realiza una emoción o susurra durante un encuentro: una alternativa basada en el canal de chat para bossAbilityWarning (mencionada arriba)."
+    },
+    {
+      "id": 109,
+      "source": "A sharp metallic parry clang.",
+      "target": "Un tintineo metálico y seco de parada."
+    },
+    {
+      "id": 112,
+      "source": "A sharp thump when an attack against you crits.",
+      "target": "Un golpe seco e intenso cuando un ataque contra ti asesta un golpe crítico."
+    },
+    {
+      "id": 113,
+      "source": "A short deflecting tick when a craft is abandoned or interrupted.",
+      "target": "Un breve chasquido de desvío cuando se abandona o interrumpe una creación."
+    },
+    {
+      "id": 131,
+      "source": "A soft tick when your ranged auto-attack stops — catches walking out of range or getting interrupted without noticing.",
+      "target": "Un chasquido suave cuando tu ataque automático a distancia se detiene; detecta si te sales del alcance o si sufres una interrupción sin darte cuenta."
+    },
+    {
+      "id": 142,
+      "source": "A tank-facing cue. Off by default because for anyone else losing threat is the normal, desirable state.",
+      "target": "Una señal orientada a tanques. Desactivada por defecto, ya que para cualquier otra función perder la amenaza es el estado normal y deseable."
+    },
+    {
+      "id": 152,
+      "source": "A very light tap for an ordinary heal — deliberately gentle, distinct from the sharper healCrit pulse.",
+      "target": "Un toque muy ligero para una sanación normal, deliberadamente suave y diferenciado del pulso más seco de healCrit."
+    },
+    {
+      "id": 153,
+      "source": "A very light tap for an ordinary hit — deliberately gentle, distinct from the sharper critLanded pulse.",
+      "target": "Un toque muy ligero para un golpe normal, deliberadamente suave y diferenciado del pulso más seco de critLanded."
+    },
+    {
+      "id": 155,
+      "source": "A very light tick every time you use an ability, while in combat.",
+      "target": "Un chasquido muy ligero cada vez que usas una facultad durante el combate."
+    },
+    {
+      "id": 173,
+      "source": "Active Profile: |cffffd100%s|r |cffff8800(Pending exit from combat)|r",
+      "target": "Perfil activo: |cffffd100%s|r |cffff8800(Pendiente de salir de combate)|r"
+    },
+    {
+      "id": 186,
+      "source": "An electric burst when a reactive spell or talent lights up on your action bar.",
+      "target": "Una descarga eléctrica cuando un hechizo o talento reactivo se ilumina en tu barra de acción."
+    },
+    {
+      "id": 193,
+      "source": "Apply parry haste",
+      "target": "Aplicar celeridad por parada"
+    },
+    {
+      "id": 197,
+      "source": "Atmospheric and arcane. Flowing spellcast textures, elemental channeling, environmental wind and weather, flight gliding, and magical world interactions.",
+      "target": "Atmosférico y arcano. Texturas fluidas de lanzamiento de hechizos, canalizaciones elementales, viento y clima ambiental, planeo en vuelo e interacciones mágicas con el mundo."
+    },
+    {
+      "id": 202,
+      "source": "Auto-shot cadence, weapon swings, pet status, trap triggers, execute range, boss mechanics",
+      "target": "Cadencia de disparo automático, golpes de arma, estado de la mascota, activación de trampas, rango de Ejecutar y mecánicas de jefes."
+    },
+    {
+      "id": 213,
+      "source": "Bends the motor response with a smoothstep curve (3x^2 - 2x^3) to widen contrast between gentle background textures and heavy combat impacts. When unchecked, standard linear scaling is used.",
+      "target": "Modifica la respuesta de los motores mediante una curva smoothstep (3x^2 - 2x^3) para ampliar el contraste entre las texturas suaves de fondo y los impactos intensos de combate. Si se desmarca, se utiliza un escalado lineal estándar."
+    },
+    {
+      "id": 219,
+      "source": "Boss mechanics, heavy damage taken, personal cooldowns, debuffs, execute range, interrupt windows",
+      "target": "Mecánicas de jefes, daño severo recibido, facultades con tiempo de reutilización personales, perjuicios, rango de Ejecutar e intervalos de interrupción."
+    },
+    {
+      "id": 231,
+      "source": "COMBAT_TEXT_UPDATE's SPELL_AURA_START_HARMFUL messageType, ruling out EXTRA_ATTACKS. Occurrence only — the amount on this feed is a secret value. Not confirmed to fire; off by default.",
+      "target": "Tipo de mensaje SPELL_AURA_START_HARMFUL de COMBAT_TEXT_UPDATE, descartando EXTRA_ATTACKS. Solo registro de ocurrencia: la cantidad en este canal es un valor secreto. No está confirmado que se active; desactivado por defecto."
+    },
+    {
+      "id": 246,
+      "source": "Channel hum (high)",
+      "target": "Zumbido de canalización (motor rápido)"
+    },
+    {
+      "id": 252,
+      "source": "Choose your planned class & role, and configure offensive and defensive combat feedback.",
+      "target": "Elige tu clase y función previstas y configura las respuestas táctiles ofensivas y defensivas en combate."
+    },
+    {
+      "id": 257,
+      "source": "Combat",
+      "target": "Combate"
+    },
+    {
+      "id": 259,
+      "source": "Combo points, resource cap, execute range, kick alert, boss telegraphs, burst cooldowns",
+      "target": "Puntos de combo, límite de recursos, rango de Ejecutar, alerta de interrupción, avisos de jefes y tiempos de reutilización de daño explosivo."
+    },
+    {
+      "id": 260,
+      "source": "Commanding protection. High threat alerts, mitigation tracking, crowd control, and kick windows. Silences non-combat clutter.",
+      "target": "Protección dominante. Alertas de amenaza alta, seguimiento de mitigación, control de masas e intervalos de interrupción. Silencia distracciones fuera de combate."
+    },
+    {
+      "id": 267,
+      "source": "Confirmed live 2026-09-17: PLAYER_ENTER_COMBAT/PLAYER_LEAVE_COMBAT specifically track the auto-attack toggle, not the broader in-combat state combatEnter/combatLeave already cover — kept as its own cue pair rather than merged with autoRepeatStart/Stop, since melee and ranged are a different event pair on a different frame.",
+      "target": "Confirmado en vivo el 17/09/2026: PLAYER_ENTER_COMBAT/PLAYER_LEAVE_COMBAT rastrean específicamente el estado del ataque automático, no el estado general de combate que combatEnter/combatLeave ya cubren; se mantiene como un par de señales independiente en lugar de fusionarse con autoRepeatStart/Stop, ya que el combate cuerpo a cuerpo y a distancia son pares de eventos distintos en marcos diferentes."
+    },
+    {
+      "id": 268,
+      "source": "Confirmed live 2026-09-17: START_AUTOREPEAT_SPELL/STOP_AUTOREPEAT_SPELL fire reliably on this client. See meleeAttackStart for the separate melee equivalent.",
+      "target": "Confirmado en vivo el 17/09/2026: START_AUTOREPEAT_SPELL/STOP_AUTOREPEAT_SPELL se activan con total fiabilidad en este cliente. Consulta meleeAttackStart para el equivalente específico cuerpo a cuerpo."
+    },
+    {
+      "id": 269,
+      "source": "Confirmed live 2026-09-17: UNIT_SPELLCAST_SUCCEEDED fires with spellID 75 once per arrow — a genuine per-shot signal, not a prediction. Melee auto-attack has no equivalent: the traditional swing-timer technique reads the combat log, and this same session confirmed COMBAT_LOG_EVENT_UNFILTERED errors on registration for an addon frame under Midnight, full stop. See weaponSwingMain/weaponSwingOff below for the estimated (not measured) melee equivalent, built anyway with that limitation stated plainly. Hunter-specific; other classes' ranged auto-repeat (Shoot, wands) untested.",
+      "target": "Confirmado en vivo el 17/09/2026: UNIT_SPELLCAST_SUCCEEDED se activa con spellID 75 una vez por flecha: una señal auténtica por disparo, no una predicción. El ataque automático cuerpo a cuerpo no tiene equivalente: la técnica clásica de temporizador de golpe lee el registro de combate, y en esta misma sesión se confirmó que COMBAT_LOG_EVENT_UNFILTERED arroja errores al registrarse en el marco de un accesorio bajo Midnight, sin excepción. Consulta más abajo weaponSwingMain/weaponSwingOff para ver el equivalente estimado (no medido) cuerpo a cuerpo, desarrollado con esa limitación documentada expresamente. Específico de cazadores; no se ha probado la repetición automática a distancia de otras clases (Disparo con varitas)."
+    },
+    {
+      "id": 270,
+      "source": "Confirmed live, 2026-09-15: COMBAT_TEXT_UPDATE's DAMAGE_CRIT/SPELL_DAMAGE_CRIT fires when you are crit, not when you land one — the reverse of this cue's original name and description. The `critLanded` id and COMBAT category are kept as-is rather than renamed, so this stays the same saved preference for anyone who already toggled it.",
+      "target": "Confirmado en vivo el 15/09/2026: DAMAGE_CRIT/SPELL_DAMAGE_CRIT de COMBAT_TEXT_UPDATE se activa cuando recibes un golpe crítico, no cuando lo asestas: lo opuesto al nombre y descripción originales de esta señal. El identificador `critLanded` y la categoría COMBAT se mantienen tal cual en lugar de renombrarse para conservar la preferencia guardada de quienes ya la habían configurado."
+    },
+    {
+      "id": 273,
+      "source": "Continuous magical hum that builds during casts and channels steadily through your hands.",
+      "target": "Zumbido mágico continuo que aumenta gradualmente durante los lanzamientos y canalizaciones transmitiéndose de forma constante en tus manos."
+    },
+    {
+      "id": 275,
+      "source": "Control & Threat",
+      "target": "Control y amenaza"
+    },
+    {
+      "id": 292,
+      "source": "Craft interrupted",
+      "target": "Creación interrumpida"
+    },
+    {
+      "id": 306,
+      "source": "Curated starting setups balanced for specific roles and playstyles. Unlike an empty configuration, each profile prioritizes the tactile signals most critical to that activity while filtering out background noise.\n\n|cffffd100Dungeons & Raids|r prioritize high signal-to-noise: threat loss, defensive mitigations, interrupt windows, and spell completion ticks take precedence.\n|cffffd100World Immersion|r profiles emphasize atmospheric game-feel: footstep weight by armor type, mount strides, swimming resistance, weather changes, and exploration.\n|cffffd100PvP|r provides pure tactical radar with zero ambient distraction.\n\nTip: Click |cffffd100Set for Spec|r to bind any profile to your active talent specialization, or customize auto-switch rules on the |cffffd100Profiles|r page.",
+      "target": "Configuraciones iniciales seleccionadas y equilibradas para funciones y estilos de juego concretos. A diferencia de una configuración vacía, cada perfil prioriza las señales táctiles más críticas para dicha actividad mientras filtra el ruido de fondo.\n\n|cffffd100Mazmorras y bandas|r prioriza una alta relación señal-ruido: la pérdida de amenaza, las mitigaciones defensivas, los intervalos de interrupción y los avisos de finalización de hechizos tienen prioridad.\nLos perfiles de |cffffd100Inmersión en el mundo|r enfatizan la ambientación del juego: el peso de los pasos según el tipo de armadura, el trote de las monturas, la resistencia al nadar, los cambios climáticos y la exploración.\n|cffffd100JcJ|r proporciona un radar puramente táctico sin ninguna distracción ambiental.\n\nConsejo: haz clic en |cffffd100Asignar a especialización|r para vincular cualquier perfil a tu especialización de talentos activa, o personaliza las reglas de cambio automático en la pestaña |cffffd100Perfiles|r."
+    },
+    {
+      "id": 308,
+      "source": "Damage taken",
+      "target": "Daño recibido"
+    },
+    {
+      "id": 317,
+      "source": "Defensive Combat & Threat Feedback",
+      "target": "Respuesta táctil defensiva en combate y amenaza"
+    },
+    {
+      "id": 323,
+      "source": "Detected via the global cooldown (spell 61304 ticking), not a per-ability read — so it only fires for abilities that trigger the GCD, and fires once per GCD even if what you pressed doesn't share a name with it. Off by default — this is the one idea in the whole catalogue that genuinely competes for channel time during a pull. Try it, but it's not for everyone.",
+      "target": "Detectado a través del tiempo de reutilización global (GCD, activación del hechizo 61304), no como una lectura individual por facultad; por tanto, solo se activa con facultades que activan el GCD y lo hace una sola vez por GCD, incluso si lo que pulsaste no comparte nombre con él. Desactivado por defecto: esta es la única función de todo el catálogo que realmente compite por el tiempo de emisión del canal durante un combate. Pruébalo, pero no es para todo el mundo."
+    },
+    {
+      "id": 331,
+      "source": "Discordant combat spam",
+      "target": "Saturación de señales inconexas en combate"
+    },
+    {
+      "id": 375,
+      "source": "Entering combat",
+      "target": "Entrando en combate"
+    },
+    {
+      "id": 378,
+      "source": "Estimator only, and ignored while the real event is in use. Recalculates the predicted next swing when you parry an incoming attack (real formula: reduces remaining time by 40% of weapon speed, floored at 20%).",
+      "target": "Solo estimación, e ignorado mientras el evento real esté en uso. Recalcula el siguiente golpe previsto cuando paras un ataque entrante (fórmula real: reduce el tiempo restante un 40% o hasta un mínimo del 20%)."
+    },
+    {
+      "id": 381,
+      "source": "Everything under the Accessibility headings is imported from Tremor, this addon's sibling — the same events, the same triggers, built for telling you about things you'd otherwise have to see, like a stun landing or your cast breaking.\n\nOne thing did not carry over: Tremor plays one cue at a time and makes the most urgent one win, on the reasoning that a late or blended signal is worse than none. Pulse doesn't work that way — everything here can layer together, which is what makes the movement and combat textures feel good, but it means an accessibility cue can arrive blended with something else rather than standing alone the way it would in Tremor.\n\nIf precise, unambiguous accessibility signals matter more to you than game-feel texture, Tremor on its own is built specifically for that and doesn't have this tradeoff. The two are not meant to run at the same time.",
+      "target": "Todo lo que se encuentra bajo los encabezados de Accesibilidad proviene de Tremor, el accesorio hermano de este: los mismos eventos, los mismos desencadenantes, diseñados para informarte de cosas que de otro modo tendrías que ver, como recibir un aturdimiento o que se interrumpa tu lanzamiento.\n\nHay un detalle que no se trasladó: Tremor reproduce una sola señal cada vez y da prioridad a la más urgente, bajo la premisa de que una señal retrasada o combinada es peor que ninguna. Pulse no funciona así: aquí todo puede superponerse en capas, que es lo que hace que las texturas de movimiento y combate se sientan tan bien, pero significa que una señal de accesibilidad puede llegar combinada con otra en lugar de percibirse aislada como ocurriría en Tremor.\n\nSi para ti las señales de accesibilidad precisas e inequívocas son más importantes que la textura inmersiva del juego, Tremor está diseñado específicamente para ello y no presenta este compromiso. Ambos accesorios no están pensados para ejecutarse al mismo tiempo."
+    },
+    {
+      "id": 383,
+      "source": "Excessive combat telegraph alarms",
+      "target": "Alarmas excesivas de avisos en combate"
+    },
+    {
+      "id": 386,
+      "source": "Experimental. Listens for the client spellcast event of Windfury Attack (Spell ID 25504). Dependent on the server emitting UNIT_SPELLCAST_SUCCEEDED for item proc extra attacks.",
+      "target": "Experimental. Escucha el evento de lanzamiento de hechizo del cliente para Ataque Viento Furioso (id de hechizo 25504). Depende de que el servidor emita UNIT_SPELLCAST_SUCCEEDED para los ataques adicionales por activación de objetos."
+    },
+    {
+      "id": 387,
+      "source": "Experimental. Measures the interval between consecutive main-hand swings. Extra attacks arrive well under 50% of weapon speed without needing combat log access. Confirmed working on WoW Forever.",
+      "target": "Experimental. Mide el intervalo entre golpes consecutivos de la mano derecha. Los ataques adicionales llegan muy por debajo del 50% o menos de la velocidad del arma sin necesidad de acceder al registro de combate. Confirmado su funcionamiento en WoW Forever."
+    },
+    {
+      "id": 388,
+      "source": "Experimental: watches whichever spells the Cooldown Manager's Essential category shows, not a hardcoded list. The exact live \"just became ready\" signal was never independently confirmed before this shipped — built on the same C_Spell.GetSpellCooldown transition-tracking this file already uses for the GCD heartbeat.",
+      "target": "Experimental: supervisa los hechizos que aparezcan en la categoría Esencial del gestor de tiempos de reutilización, no una lista fija en el código. La señal exacta en vivo de «acaba de estar listo» nunca se confirmó de forma independiente antes de publicarse; está desarrollada con el mismo seguimiento de transición C_Spell.GetSpellCooldown que este archivo ya utiliza para el pulso del GCD."
+    },
+    {
+      "id": 400,
+      "source": "Fires for a craft that stopped without succeeding — moving, being interrupted, or cancelling. Untested.",
+      "target": "Se activa con una creación que se detuvo sin completarse: al moverse, ser interrumpido o cancelar. No probado."
+    },
+    {
+      "id": 410,
+      "source": "Fires on SPELL_ACTIVATION_OVERLAY_GLOW_SHOW for procs such as Clearcasting, Nightfall, Overpower, Revenge, Riposte, or Art of War.",
+      "target": "Se activa en SPELL_ACTIVATION_OVERLAY_GLOW_SHOW para activaciones como Lanzamiento libre, Ocaso, Abrumar, Revancha, Respuesta o El arte de la guerra."
+    },
+    {
+      "id": 419,
+      "source": "Fires specifically when a channelled spell of yours is cut short by an interrupt, not when it simply ends.",
+      "target": "Se activa específicamente cuando uno de tus hechizos canalizados se interrumpe de forma prematura, no cuando termina de forma natural."
+    },
+    {
+      "id": 425,
+      "source": "Fires when a channelled spell of yours ends, whether it ran to completion or was cut short.",
+      "target": "Se activa cuando termina uno de tus hechizos canalizados, ya sea al completarse o al interrumpirse antes de tiempo."
+    },
+    {
+      "id": 449,
+      "source": "Fires when one of your own casts is interrupted or cancelled before completion.",
+      "target": "Se activa cuando uno de tus propios lanzamientos se interrumpe o cancela antes de completarse."
+    },
+    {
+      "id": 468,
+      "source": "Fires when you are pacified or a spell school is locked out (PACIFY, PACIFYSILENCE, SCHOOL_INTERRUPT).",
+      "target": "Se activa cuando estás pacificado o se bloquea una escuela de magia (PACIFY, PACIFYSILENCE, SCHOOL_INTERRUPT)."
+    },
+    {
+      "id": 473,
+      "source": "Fires when you begin channelling a spell.",
+      "target": "Se activa cuando empiezas a canalizar un hechizo."
+    },
+    {
+      "id": 476,
+      "source": "Fires when you drop off the top of your target's threat table.",
+      "target": "Se activa cuando pierdes el primer puesto en la tabla de amenaza de tu objetivo."
+    },
+    {
+      "id": 477,
+      "source": "Fires when you drop out of combat.",
+      "target": "Se activa cuando sales de combate."
+    },
+    {
+      "id": 480,
+      "source": "Fires when you enter combat.",
+      "target": "Se activa cuando entras en combate."
+    },
+    {
+      "id": 485,
+      "source": "Fires when you take over threat on your target (status 2 or 3).",
+      "target": "Se activa cuando asumes la amenaza principal sobre tu objetivo (estado 2 o 3)."
+    },
+    {
+      "id": 487,
+      "source": "Fires when your current target begins casting. The cue is the occurrence only — which spell it is cannot be read.",
+      "target": "Se activa cuando tu objetivo actual empieza a lanzar un hechizo. La señal solo indica la ocurrencia; no se puede leer de qué hechizo se trata."
+    },
+    {
+      "id": 488,
+      "source": "Fires when your current target begins channelling.",
+      "target": "Se activa cuando tu objetivo actual empieza a canalizar."
+    },
+    {
+      "id": 490,
+      "source": "Fires when your focus target begins channelling.",
+      "target": "Se activa cuando tu objetivo del foco empieza a canalizar."
+    },
+    {
+      "id": 492,
+      "source": "Fires when your target's spellcast is interrupted by a kick, stun, or counter-spell.",
+      "target": "Se activa cuando el lanzamiento de un hechizo de tu objetivo es interrumpido por una patada, aturdimiento o contraconjuro."
+    },
+    {
+      "id": 493,
+      "source": "Fires when your target's spellcast stops before it finishes.",
+      "target": "Se activa cuando el lanzamiento de un hechizo de tu objetivo se detiene antes de terminar."
+    },
+    {
+      "id": 494,
+      "source": "Fires when your threat on your target rises to high-but-not-tanking (status 1).",
+      "target": "Se activa cuando tu nivel de amenaza sobre tu objetivo sube a alto pero sin llegar a tanquear (estado 1)."
+    },
+    {
+      "id": 497,
+      "source": "Flat sustained level while channelling, distinct from a regular cast's swell.",
+      "target": "Nivel constante y sostenido mientras canalizas, a diferencia del aumento progresivo de un lanzamiento convencional."
+    },
+    {
+      "id": 502,
+      "source": "Fluid spellcasting pacing. Continuous channel bed during casts, crisp completion snap, lockout warnings, and proc notifications.",
+      "target": "Ritmo fluido al lanzar hechizos. Base continua durante las canalizaciones, chasquido nítido al completarse, avisos de bloqueo de escuela y notificaciones de activación."
+    },
+    {
+      "id": 506,
+      "source": "Focus started channelling",
+      "target": "El objetivo del foco ha empezado a canalizar"
+    },
+    {
+      "id": 515,
+      "source": "Full loss-of-control suite, kick opportunities, lockouts, panic health warning, combat enter/leave",
+      "target": "Conjunto completo de pérdida de control, oportunidades de corte, bloqueos de escuela, aviso de salud crítica y entrada/salida de combate."
+    },
+    {
+      "id": 540,
+      "source": "Heart rate (critical), BPM",
+      "target": "Frecuencia cardíaca (crítica), PPM"
+    },
+    {
+      "id": 545,
+      "source": "High-clarity encounter triage. Critical raid mechanics, debuffs, boss abilities, and personal survival alerts with world clutter silenced.",
+      "target": "Filtrado táctico de gran claridad para encuentros. Mecánicas críticas de banda, perjuicios, facultades de jefes y alertas de supervivencia personal silenciando las distracciones del mundo."
+    },
+    {
+      "id": 547,
+      "source": "High-tempo physical execution. Snappy combo points and resource spenders, execute range alerts, boss telegraphs, and kick windows.",
+      "target": "Ejecución física de alto ritmo. Puntos de combo y facultades consumidoras instantáneos, alertas de rango de Ejecutar, avisos de jefes e intervalos de interrupción."
+    },
+    {
+      "id": 548,
+      "source": "Hit with a critical strike",
+      "target": "Golpe crítico recibido"
+    },
+    {
+      "id": 553,
+      "source": "How far a motor has to move before the addon bothers telling the client about it. Raise it to cut the number of calls; too high and slow fades turn into visible steps. Shared by every channel — this is a call-rate setting, not a motor property.",
+      "target": "Cuánto debe cambiar un motor antes de que el accesorio se moleste en comunicárselo al cliente. Auméntalo para reducir la cantidad de llamadas; si es demasiado alto, las transiciones graduales lentas se percibirán como saltos bruscos. Compartido por todos los canales: es un ajuste de frecuencia de llamadas, no una propiedad física del motor."
+    },
+    {
+      "id": 565,
+      "source": "How strong the stealth hum is overall. Meant to sit just at the edge of perception — if you notice it as a vibration rather than a presence, it is too high.",
+      "target": "La intensidad general del zumbido de sigilo. Está pensado para situarse en el límite mismo de la percepción: si lo notas como una vibración evidente en lugar de una presencia sutil, está demasiado alto."
+    },
+    {
+      "id": 605,
+      "source": "Landed a critical heal",
+      "target": "Sanación crítica asestada"
+    },
+    {
+      "id": 610,
+      "source": "Learned a new spell",
+      "target": "Nuevo hechizo aprendido"
+    },
+    {
+      "id": 612,
+      "source": "Leaving combat",
+      "target": "Saliendo de combate"
+    },
+    {
+      "id": 616,
+      "source": "Life & combat state",
+      "target": "Salud y estado de combate"
+    },
+    {
+      "id": 621,
+      "source": "Locomotion & footsteps by armor weight, mount strides, weather, swimming drag, parry/blocks, full loot/quest haptics",
+      "target": "Locomoción y pasos según el peso de la armadura, trote de monturas, clima, resistencia al nadar, paradas y bloqueos, y háptica completa para botín y misiones."
+    },
+    {
+      "id": 622,
+      "source": "Locomotion clatter, weapon swings, loot popups, world dialogs",
+      "target": "Sonidos de locomoción, golpes de arma, ventanas de botín y diálogos del mundo."
+    },
+    {
+      "id": 633,
+      "source": "Low health alarms, heal cast success, self/enemy interrupt warnings, dispellable CC",
+      "target": "Alarmas de salud baja, éxito al lanzar sanaciones, avisos de interrupción propios y enemigos, y control de masas disipable."
+    },
+    {
+      "id": 639,
+      "source": "MEASURED as of 2026-09-21, not estimated. Driven by Forever's PLAYER_SWING event, which carries swingDuration and a MainHand/OffHand/Ranged type, both confirmed non-secret, and which Blizzard's own swing timer consumes. Note this is a SWING, not necessarily a connection — whether it also fires on a miss, dodge or parry is untested, and a \"successful hit\" cue would need a different source. The old weapon-speed estimator is kept as a fallback and engages automatically if the event ever disappears; it predicted swing times from UnitAttackSpeed with a haste cache, range and stun gating and a parry-haste correction, and drifted with nothing to correct against.",
+      "target": "MEDIDO a fecha de 21/09/2026, no estimado. Controlado por el evento PLAYER_SWING de Forever, que proporciona swingDuration y un tipo MainHand/OffHand/Ranged (ambos confirmados como no secretos) y que el propio temporizador de golpes de Blizzard consume. Ten en cuenta que esto es un GOLPE, no necesariamente un impacto certero: aún no se ha probado si también se activa al fallar, esquivar o parar, y una señal de «impacto con éxito» requeriría un origen distinto. El antiguo estimador basado en la velocidad de arma se mantiene como alternativa de respaldo y se activa automáticamente si el evento desaparece; predecía los tiempos de golpe a partir de UnitAttackSpeed con una caché de celeridad, filtros de rango y aturdimiento y una corrección de celeridad por parada, pero sufría desviaciones sin ninguna referencia directa de ajuste."
+    },
+    {
+      "id": 655,
+      "source": "Mirrors critLanded's split exactly: HEAL_CRIT on the same personal COMBAT_TEXT_UPDATE feed. critLanded's incoming-vs-outgoing direction was independently confirmed live (2026-09-15) for damage; the same direction for heals is inferred by analogy (same feed, same self-scoped design), not separately re-tested — worth confirming live before trusting it's \"you were healed\" rather than \"you landed a heal\" if that distinction matters to you.",
+      "target": "Reproduce exactamente la división de critLanded: HEAL_CRIT en el mismo canal personal de COMBAT_TEXT_UPDATE. La dirección entrante frente a saliente de critLanded se confirmó en directo de forma independiente (15/09/2026) para el daño; la misma dirección para las sanaciones se deduce por analogía (mismo canal, mismo diseño limitado a uno mismo), sin haberse vuelto a probar por separado: conviene verificarlo en directo antes de dar por sentado que es «te han sanado» en lugar de «has asestado una sanación» si esa distinción te resulta importante."
+    },
+    {
+      "id": 658,
+      "source": "Most triggers are a **pulse** — something happens, you feel one short burst, then it's gone.\n\nSome are a **texture** instead — a faint, continuous feeling for as long as something is true. Swimming, gliding, casting, riding a flight path, weathering a storm: these fade in in the moment they start and fade out the instant they stop, rather than announcing themselves once. They're built to layer underneath pulses rather than compete with them — a critical hit still lands as a distinct thump even while a casting texture is quietly running underneath it.\n\nMost textures ship switched off, on purpose: a constant hum is a bigger ask than an occasional pulse, and it's worth trying deliberately rather than discovering by accident.",
+      "target": "La mayoría de los desencadenantes son un **pulso**: ocurre algo, sientes una breve vibración y desaparece.\n\nOtros son en cambio una **textura**: una sensación tenue y continua mientras se mantenga una condición. Nadar, planear, lanzar un hechizo, viajar en una ruta de vuelo o soportar una tormenta: aparecen progresivamente en el momento en que comienzan y se desvanecen al instante en que terminan, en lugar de emitir un aviso puntual. Están diseñadas para superponerse por debajo de los pulsos en lugar de competir con ellos: un golpe crítico sigue sintiéndose como un golpe seco e inequívoco incluso mientras una textura de lanzamiento suena sutilmente por debajo.\n\nLa mayoría de las texturas vienen desactivadas por defecto de forma deliberada: un zumbido constante exige más atención que un pulso puntual, y conviene probarlas conscientemente en lugar de encontrárselas por accidente."
+    },
+    {
+      "id": 673,
+      "source": "Naturalistic scout feel. Locomotion, flight gliding, wilderness weather, tracking/stealth cues, world exploration, and bow release.",
+      "target": "Sensación natural de explorador. Locomoción, planeo en vuelo, clima en la naturaleza, señales de rastreo y sigilo, exploración del mundo y disparo de arco."
+    },
+    {
+      "id": 686,
+      "source": "Note the event name: Forever uses LEARNED_SPELL_IN_SKILL_LINE, not the older LEARNED_SPELL_IN_TAB, which is absent from this client's documentation entirely. Can fire more than once for a single visit to a trainer if you buy several ranks.",
+      "target": "Fíjate en el nombre del evento: Forever utiliza LEARNED_SPELL_IN_SKILL_LINE, no el antiguo LEARNED_SPELL_IN_TAB, que no aparece en la documentación de este cliente. Puede activarse más de una vez en una sola visita al instructor si compras varios rangos."
+    },
+    {
+      "id": 695,
+      "source": "Off by default and mounted-only by default, on purpose: a texture that plays whenever you move is the most fatiguing thing in this addon and the most likely to make you switch it off wholesale. Uses shaped transient layers with fast-attack kicks and exponential decay to produce crisp, distinct footfalls without motor hum in between. Distinct timbres (boots, hooves, paws, heavy claws/pads, metal) drive both Low (body mass) and High (impact crispness) motors in concert. Speed is read out of combat only and held through a fight; snares and boosts are not tracked there, which is a deliberate trade for never touching a secret value. Goes quiet while swimming, flying, gliding, riding a flight path, or airborne after a jump — each of those has its own cue and footfalls have nothing to add to them.",
+      "target": "Desactivado por defecto y, a propósito, exclusivo para monturas: una textura que se activa cada vez que te mueves es lo más agotador de este accesorio y lo que con mayor probabilidad haría que lo desactivaras por completo. Utiliza capas transitorias moduladas con pulsos de ataque rápido y atenuación exponencial para generar pisadas nítidas e independientes sin zumbido continuo del motor de por medio. Varios timbres distintos (botas, pezuñas, patas, garras/almohadillas pesadas o metal) controlan al unísono tanto el motor lento (masa corporal) como el motor rápido (nitidez del impacto). La velocidad se lee únicamente fuera de combate y se mantiene durante toda la pelea; las ralentizaciones y aumentos de velocidad no se rastrean ahí, una concesión deliberada para evitar leer valores secretos. Se silencia por completo al nadar, volar, planear, desplazarse en una ruta de vuelo o estar en el aire tras saltar; cada una de esas situaciones tiene su propia señal y las pisadas no aportarían nada."
+    },
+    {
+      "id": 699,
+      "source": "Off by default. Suppresses \"Casting texture\" for the length of a craft so the two do not layer into one lumpy sensation. The profession is read by id from the recipe (C_TradeSkillUI.GetProfessionInfoByRecipeID), so no name matching and no localisation problem — but that field is documented nilable, and anything that does not resolve falls back to a generic work rhythm rather than going quiet. Gathering is NOT covered: swinging a pick at an ore node is not a recipe and has no recipe id. Per-profession toggles and strengths are on the Crafting page. Entirely untested.",
+      "target": "Desactivado por defecto. Suprime la «Textura de lanzamiento» mientras dura la creación para que ambas no se superpongan en una sensación confusa. La profesión se lee por identificador a partir de la receta (C_TradeSkillUI.GetProfessionInfoByRecipeID), por lo que no depende de nombres ni causa problemas de localización; no obstante, dicho campo está documentado como capaz de devolver nil, y todo lo que no se resuelva recurre a un ritmo de trabajo genérico en lugar de silenciarse. La recolección NO está cubierta: dar un picotazo a una veta mineral no es una receta y carece de identificador de receta. Los interruptores e intensidades por profesión se encuentran en la página de Fabricación. Completamente sin probar."
+    },
+    {
+      "id": 700,
+      "source": "Off means swings come from Forever's own PLAYER_SWING event — a real per-swing signal, confirmed non-secret and proven live. On forces the old prediction built from weapon speed instead. You should not need this: if Blizzard ever removes the event, Pulse detects that and falls back on its own. It exists so a patch that changes the event's BEHAVIOUR rather than removing it still leaves you a working cue.",
+      "target": "«Desactivado» significa que los golpes provienen del evento PLAYER_SWING propio de Forever: una señal real por golpe, confirmada como no secreta y verificada en directo. «Activado» fuerza en su lugar la antigua predicción calculada a partir de la velocidad de arma. No deberías necesitar esto: si Blizzard elimina alguna vez el evento, Pulse lo detecta y recurre automáticamente a la alternativa. Existe para que, si un parche cambia el COMPORTAMIENTO del evento en lugar de eliminarlo, sigas disponiendo de una señal funcional."
+    },
+    {
+      "id": 702,
+      "source": "Offensive Combat Haptics",
+      "target": "Háptica de combate ofensivo"
+    },
+    {
+      "id": 730,
+      "source": "Paced ranged rhythm with melee-weaving support. Auto-shot timing, weapon swings, pet status, trap triggers, and boss mechanics.",
+      "target": "Ritmo cadencioso a distancia con compatibilidad para alternancia cuerpo a cuerpo (melee-weaving). Tiempos de disparo automático, golpes de arma, estado de la mascota, activación de trampas y mecánicas de jefes."
+    },
+    {
+      "id": 751,
+      "source": "Physical strikes for weapon swings (main & off hand), auto-shot arrows, ability execution cadence, and completed and instant spellcasts.",
+      "target": "Impactos físicos para golpes de arma (mano derecha e izquierda), flechas de disparo automático, cadencia de ejecución de facultades y lanzamientos de hechizos instantáneos y completados."
+    },
+    {
+      "id": 804,
+      "source": "Pulse: not available in combat. Try again after combat.",
+      "target": "Pulse: no disponible en combate. Vuelve a intentarlo después del combate."
+    },
+    {
+      "id": 809,
+      "source": "Pure competitive reaction. Instant tactical alerts for stuns, silences, disarms, lockouts, panic health warnings, and combat transitions.",
+      "target": "Pura reacción competitiva. Alertas tácticas instantáneas para aturdimientos, silencios, desarmes, bloqueos de escuela, avisos de salud crítica y transiciones de combate."
+    },
+    {
+      "id": 845,
+      "source": "Reads Blizzard's own default-UI LowHealthFrame (:IsShown()), not UnitHealth — that read is unconditionally secret, and the earlier color-curve attempt was confirmed dead too. LowHealthFrame's widget state is confirmed non-secret in-game instead. Very rarely can also fire for an unrelated reason (a fullscreen UI panel open in combat) — narrow enough to document rather than guard against. No `mode` field: this no longer plays a Core/Modes.lua shape, it drives Engine:Hold directly, same mechanism as lowHealthTexture.",
+      "target": "Lee el marco LowHealthFrame de la interfaz predeterminada de Blizzard (:IsShown()), no UnitHealth; esa lectura es incondicionalmente secreta, y el intento previo con curvas de color también se confirmó inoperativo. En cambio, el estado del marco de LowHealthFrame está confirmado como no secreto en el juego. En casos muy excepcionales, también puede activarse por un motivo ajeno (un panel de interfaz a pantalla completa abierto en combate): un caso tan aislado que basta con documentarlo en lugar de programar protecciones. Sin campo `mode`: ya no reproduce un patrón de Core/Modes.lua, sino que controla Engine:Hold directamente, el mismo mecanismo que lowHealthTexture."
+    },
+    {
+      "id": 846,
+      "source": "Reads Blizzard's own pre-scripted encounter timeline (C_EncounterEvents), not real-time combat data — pre-computed metadata, not something Secret Values blocks. No confirmed \"targeted at you\" flag: this can say something big is coming, not that it's coming for you specifically.",
+      "target": "Lee la cronología de encuentros programada de la propia Blizzard (C_EncounterEvents), no datos de combate en tiempo real: son metadatos precalculados, no algo bloqueado por los Valores Secretos. Sin indicador confirmado de «dirigido a ti»: esto puede indicar que se aproxima algo importante, no que vaya dirigido a ti en concreto."
+    },
+    {
+      "id": 847,
+      "source": "Reads CHAT_MSG_RAID_WARNING/MONSTER_YELL/MONSTER_EMOTE/MONSTER_WHISPER, gated on being inside an active encounter (ENCOUNTER_START/END) — never on C_EncounterEvents, so this works even if that namespace's data turns out unreliable. Occurrence-only: says a boss communicated something, not what or whether it's aimed at you. Known false-positive: a player manually using the raid-warning channel during a live pull also fires this — not filtered, since telling a boss-sent raid warning from a player-sent one isn't reliable.",
+      "target": "Lee CHAT_MSG_RAID_WARNING/MONSTER_YELL/MONSTER_EMOTE/MONSTER_WHISPER, restringido a estar dentro de un encuentro activo (ENCOUNTER_START/END), nunca en C_EncounterEvents, por lo que funciona incluso si los datos de ese espacio de nombres resultan poco fiables. Solo ocurrencia: indica que un jefe ha comunicado algo, no qué ha dicho ni si va dirigido a ti. Falso positivo conocido: un jugador que use manualmente el canal de aviso de banda durante el combate también activará esto; no se filtra, ya que distinguir un aviso de banda emitido por un jefe de uno enviado por un jugador no es fiable."
+    },
+    {
+      "id": 848,
+      "source": "Reads COMBAT_TEXT_UPDATE's DAMAGE/SPELL_DAMAGE/DAMAGE_CRIT/SPELL_DAMAGE_CRIT messageTypes rather than UNIT_COMBAT, for no-churn reasons rather than necessity — UNIT_COMBAT's \"WOUND\" mechanism was believed dead (reported not firing 2026-09-15) but was confirmed live and firing on 2026-09-16 after all; this cue already worked on COMBAT_TEXT_UPDATE by then, so it wasn't switched back. The suspicion that UNIT_COMBAT has been non-functional since Cataclysm-era patches should not be trusted as settled. Deliberately TICK, not THUD — a routine hit should read as noticeably gentler than critLanded's own pulse, not the same weight repeated constantly. Its own Intensity slider (the generic per-cue one every trigger gets) defaults to 0.3 rather than 1.0, same reasoning: it fires far more often than a crit or a dodge, so it needs to stay in the background rather than compete with them.",
+      "target": "Lee los tipos de mensaje DAMAGE/SPELL_DAMAGE/DAMAGE_CRIT/SPELL_DAMAGE_CRIT de COMBAT_TEXT_UPDATE en lugar de UNIT_COMBAT, por estabilidad más que por necesidad: se creía que el mecanismo «WOUND» de UNIT_COMBAT estaba inactivo (se notificó que no se activaba el 15/09/2026), pero finalmente se confirmó en vivo y funcionando el 16/09/2026; para entonces esta señal ya funcionaba con COMBAT_TEXT_UPDATE, así que no se revirtió. La sospecha de que UNIT_COMBAT lleva inoperativo desde los parches de Cataclysm no debe darse por definitiva. Es deliberadamente un CHASQUIDO LIGERO y no un GOLPE SORDO: un golpe rutinario debe percibirse notablemente más suave que el pulso de critLanded, no con el mismo peso repetido constantemente. Su propio deslizador de intensidad (el genérico por señal que recibe cada desencadenante) tiene un valor por defecto de 0,3 en lugar de 1,0 por el mismo motivo: se activa con mucha más frecuencia que un golpe crítico o una esquiva, por lo que debe permanecer en segundo plano en lugar de competir con ellos."
+    },
+    {
+      "id": 849,
+      "source": "Reads COMBAT_TEXT_UPDATE's FACTION messageType — same personal combat-text feed critLanded/damageTaken already use, occurrence-only, no amount or faction name read.",
+      "target": "Lee el tipo de mensaje FACTION de COMBAT_TEXT_UPDATE: el mismo canal personal de texto de combate que ya utilizan critLanded y damageTaken; solo ocurrencia, sin leer cantidad ni nombre de facción."
+    },
+    {
+      "id": 850,
+      "source": "Reads COMBAT_TEXT_UPDATE's HONOR_GAINED messageType — same personal combat-text feed critLanded/damageTaken already use, occurrence-only, no amount read.",
+      "target": "Lee el tipo de mensaje HONOR_GAINED de COMBAT_TEXT_UPDATE: el mismo canal personal de texto de combate que ya utilizan critLanded y damageTaken; solo ocurrencia, sin leer ninguna cantidad."
+    },
+    {
+      "id": 853,
+      "source": "Reads HEAL/PERIODIC_HEAL/HEAL_CRIT — same feed and direction caveat as healCrit above. Same TICK/0.3-intensity treatment as damageTaken, for the same reason: this fires far more often than a crit heal, especially under any HoT, so it stays in the background rather than competing with it.",
+      "target": "Lee HEAL/PERIODIC_HEAL/HEAL_CRIT: mismo canal y advertencia de dirección que healCrit anteriormente. Mismo tratamiento de CHASQUIDO LIGERO e intensidad 0,3 que damageTaken, por la misma razón: esto se activa con mucha más frecuencia que una sanación crítica, especialmente con cualquier sanación en el tiempo (HoT), por lo que debe mantenerse en segundo plano en lugar de competir con ella."
+    },
+    {
+      "id": 854,
+      "source": "Reads IsStealthed(), the player's own boolean state — not an aura scan, which would be both expensive and liable to return secret values. First cue built on Core/Waves.lua. Untested.",
+      "target": "Lee IsStealthed(), el estado booleano propio del jugador, no un escaneo de auras, que resultaría costoso y propenso a devolver valores secretos. Primera señal desarrollada sobre Core/Waves.lua. No probado."
+    },
+    {
+      "id": 898,
+      "source": "Same source as weaponSwingMain above — PLAYER_SWING, filtered to the OffHand swing type. Silent if you're not dual-wielding. Parry haste has never affected off-hand timing, so that correction does not apply here even on the fallback estimator.",
+      "target": "Mismo origen que weaponSwingMain arriba: PLAYER_SWING, filtrado para el tipo de golpe de la mano izquierda (OffHand). Silencioso si no llevas doble empuñadura. La celeridad por parada nunca ha afectado a los tiempos de la mano izquierda, por lo que esa corrección no se aplica aquí ni siquiera en el estimador alternativo."
+    },
+    {
+      "id": 907,
+      "source": "Second steepening point — the steepest segment of all, climbing to heartRateCritical by zero breath. Requested live 2026-09-16 as ~15% breath remaining.",
+      "target": "Segundo punto de incremento: el tramo más pronunciado de todos, aumentando hasta heartRateCritical al agotarse la respiración. Solicitado en vivo el 16/09/2026 cuando queda ~15% restante de respiración."
+    },
+    {
+      "id": 913,
+      "source": "Sensory radar for survival: immediate physical warnings when taking damage, getting critically hit, deflecting attacks, being healed, receiving debuffs, threat changes, or losing control.",
+      "target": "Radar sensorial para la supervivencia: advertencias físicas inmediatas al recibir daño, sufrir golpes críticos, desviar ataques, recibir sanación o perjuicios, cambios de amenaza o pérdida de control."
+    },
+    {
+      "id": 922,
+      "source": "Shares its shape with \"Learned a new spell\" on purpose — both are the same moment to a player, just in different systems.",
+      "target": "Comparte deliberadamente el mismo patrón con «Nuevo hechizo aprendido»: ambos representan el mismo momento para el jugador, solo que en sistemas distintos."
+    },
+    {
+      "id": 923,
+      "source": "Shares the social-pull limitation of the threat-rising cue.",
+      "target": "Comparte la limitación de atracción en grupo de la señal de aumento de amenaza."
+    },
+    {
+      "id": 934,
+      "source": "Slow, rhythmic breathing expansion wave keeping you aware of your stealth state.",
+      "target": "Onda de expansión lenta y rítmica como una respiración que te mantiene consciente de tu estado de sigilo."
+    },
+    {
+      "id": 943,
+      "source": "Spell activation proc",
+      "target": "Activación de hechizo (proc)"
+    },
+    {
+      "id": 944,
+      "source": "Spell flow, instant casts, and interrupts",
+      "target": "Fluidez de hechizos, lanzamientos instantáneos e interrupciones"
+    },
+    {
+      "id": 945,
+      "source": "Spellcasting Channel Hum",
+      "target": "Zumbido de canalización de hechizos"
+    },
+    {
+      "id": 955,
+      "source": "Stealth Breathing Wave",
+      "target": "Onda de respiración en sigilo"
+    },
+    {
+      "id": 956,
+      "source": "Stealth baseline",
+      "target": "Base de sigilo"
+    },
+    {
+      "id": 957,
+      "source": "Stealth texture",
+      "target": "Textura de sigilo"
+    },
+    {
+      "id": 963,
+      "source": "Step 2: Combat Haptics & Class Role",
+      "target": "Paso 2: Háptica de combate y función de clase"
+    },
+    {
+      "id": 992,
+      "source": "Switches every cue on the Combat page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Activa o desactiva a la vez todas las señales de la página de Combate. Cada señal conserva su configuración individual subyacente."
+    },
+    {
+      "id": 993,
+      "source": "Switches every cue on the Control & Threat page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Activa o desactiva a la vez todas las señales de la página de Control y amenaza. Cada señal conserva su configuración individual subyacente."
+    },
+    {
+      "id": 1009,
+      "source": "Target started channelling",
+      "target": "El objetivo ha empezado a canalizar"
+    },
+    {
+      "id": 1038,
+      "source": "The standard authored baseline. Balanced game-feel across combat, environment, movement, and alerts.",
+      "target": "La configuración de referencia estándar. Sensaciones equilibradas en combate, entorno, movimiento y alertas."
+    },
+    {
+      "id": 1046,
+      "source": "Threat",
+      "target": "Amenaza"
+    },
+    {
+      "id": 1047,
+      "source": "Threat loss/warning, heavy hits taken, defensive cooldowns, crowd control, enemy kick windows",
+      "target": "Pérdida/aviso de amenaza, impactos intensos recibidos, defensas con tiempo de reutilización, control de masas y ventanas de corte al enemigo"
+    },
+    {
+      "id": 1048,
+      "source": "Threat lost",
+      "target": "Amenaza perdida"
+    },
+    {
+      "id": 1049,
+      "source": "Threat rising",
+      "target": "Amenaza en aumento"
+    },
+    {
+      "id": 1050,
+      "source": "Threat, mitigations, and CC",
+      "target": "Amenaza, mitigaciones y control de masas"
+    },
+    {
+      "id": 1071,
+      "source": "Two separate addons exist alongside Pulse, each with its own slash command — neither is required, and neither changes anything Pulse itself does.\n\n**PulseChecklist** (/pulsecheck or /pcheck) opens a standalone checklist window listing every trigger, for tracking which ones you've actually confirmed feel right on your own hardware.\n\n**PulseDebug** (/pdebug or /pd) opens an interactive diagnostic window with live telemetry — inspect currently blended layers, monitor real-time channel output, review a timestamped event log, and inspect module states.",
+      "target": "Existen dos accesorios independientes junto a Pulse, cada uno con su propio comando con barra (/): ninguno es obligatorio y ninguno modifica el comportamiento de Pulse.\n\n**PulseChecklist** (/pulsecheck o /pcheck) abre una ventana de lista de comprobación independiente con todos los desencadenantes, para registrar cuáles has confirmado que se sienten bien en tu propio dispositivo.\n\n**PulseDebug** (/pdebug o /pd) abre una ventana de diagnóstico interactiva con telemetría en tiempo real: inspecciona las capas combinadas actualmente, monitoriza la salida del canal en tiempo real, revisa un registro de eventos con marca de tiempo y examina el estado de los módulos."
+    },
+    {
+      "id": 1074,
+      "source": "Two soft ticks when you switch tabs inside a panel — Character, Spellbook, the map's zone tabs, and so on.",
+      "target": "Dos chasquidos suaves cuando cambias de pestaña dentro de un panel: Personaje, Libro de hechizos, pestañas de zona del mapa, etcétera."
+    },
+    {
+      "id": 1085,
+      "source": "Untested — the interruptedBy value itself is confirmed against Blizzard's own casting-bar code, not live. What's NOT confirmed: whether interruptedBy comes back secret for your own channel (the event is flagged SecretWhenUnitSpellCastRestricted in Blizzard's API docs). If this never fires, that's the first thing to check, not a sign the logic above is wrong.",
+      "target": "No probado: el valor de interruptedBy se ha confirmado con el código de la propia barra de lanzamiento de Blizzard, no en vivo. Lo que NO está confirmado es si interruptedBy devuelve un valor secreto para tu propia canalización (el evento está marcado como SecretWhenUnitSpellCastRestricted en la documentación de la API de Blizzard). Si esto nunca se activa, es lo primero que debes comprobar, no una señal de que la lógica anterior sea errónea."
+    },
+    {
+      "id": 1092,
+      "source": "Uses WoW Forever's native C_SwingTimer range checking.",
+      "target": "Utiliza la comprobación de alcance nativa C_SwingTimer de WoW Forever."
+    },
+    {
+      "id": 1100,
+      "source": "Visceral physical game-feel. Armor-weighted footstep gait, terrain landings, parry and block impacts, swimming drag, weather, and rich world looting.",
+      "target": "Sensaciones físicas viscerales en el juego. Pasos según el peso de la armadura, aterrizajes en el terreno, impactos por parada y bloqueo, arrastre al nadar, clima y una rica interacción al despojar en el mundo."
+    },
+    {
+      "id": 1112,
+      "source": "Weapon swing (main hand)",
+      "target": "Golpe de arma (mano derecha)"
+    },
+    {
+      "id": 1113,
+      "source": "Weapon swing (off hand)",
+      "target": "Golpe de arma (mano izquierda)"
+    },
+    {
+      "id": 1114,
+      "source": "Weapon swings, ability cadence, and auto-attack stops",
+      "target": "Golpes de arma, cadencia de facultades y paradas del ataque automático"
+    },
+    {
+      "id": 1133,
+      "source": "Windfury (spellcast hook)",
+      "target": "Viento Furioso (gancho de lanzamiento)"
+    },
+    {
+      "id": 1134,
+      "source": "Windfury (swing burst)",
+      "target": "Viento Furioso (ráfaga de golpes)"
+    },
+    {
+      "id": 1135,
+      "source": "Windfury extra attacks",
+      "target": "Ataques adicionales de Viento Furioso"
+    },
+    {
+      "id": 1137,
+      "source": "With dozens of cues across movement, combat, environment, and interface systems, you might know what you want to adjust without knowing which tab owns it.\n\nThe **Cue index** page lists every cue in Pulse alphabetically, grouped under clean letter headers with real-time status dots showing whether each cue is currently enabled. Clicking any line jumps directly to that cue's page and settings.\n\nSearching the Cue Index searches all cue names, descriptions, and locations simultaneously, serving as an instant directory across the entire addon.",
+      "target": "Con docenas de señales repartidas entre los sistemas de movimiento, combate, entorno e interfaz, es posible que sepas qué quieres ajustar sin saber en qué pestaña se encuentra.\n\nLa página **Índice de señales** enumera todas las señales de Pulse en orden alfabético, agrupadas bajo cabeceras por letra bien definidas y con puntos de estado en tiempo real que indican si cada señal está activada. Al hacer clic en cualquier línea se accede directamente a la página y a los ajustes de esa señal.\n\nAl realizar una búsqueda en el índice de señales, se exploran simultáneamente los nombres, descripciones y ubicaciones de todas las señales, sirviendo como un directorio instantáneo para todo el accesorio."
+    },
+    {
+      "id": 1150,
+      "source": "You cannot do that while in combat.",
+      "target": "No puedes hacer eso durante el combate."
+    },
+    {
+      "id": 1153,
+      "source": "You parried, dodged, or blocked",
+      "target": "Has parado, esquivado o bloqueado"
+    },
+    {
+      "id": 1156,
+      "source": "Your cast interrupted",
+      "target": "Tu lanzamiento se ha interrumpido"
+    },
+    {
+      "id": 1159,
+      "source": "Your channel ended",
+      "target": "Tu canalización ha finalizado"
+    },
+    {
+      "id": 1160,
+      "source": "Your channel interrupted",
+      "target": "Tu canalización se ha interrumpido"
+    },
+    {
+      "id": 1161,
+      "source": "Your channel started",
+      "target": "Tu canalización ha comenzado"
+    },
+    {
+      "id": 1192,
+      "source": "|cff4cb8ffPulse:|r Cannot open settings during combat.",
+      "target": "|cff4cb8ffPulse:|r No se puede abrir la configuración durante el combate."
+    },
+    {
+      "id": 1200,
+      "source": "|cffff5555Pulse:|r Cannot open Quick Setup during combat.",
+      "target": "|cffff5555Pulse:|r No se puede abrir la Configuración rápida durante el combate."
+    }
+  ]
+}

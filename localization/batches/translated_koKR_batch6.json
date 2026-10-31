@@ -1,0 +1,229 @@
+{
+  "items": [
+    {
+      "id": 22,
+      "source": "'s high-motor intensity. 1.0 is the authored default; the top of this slider is where it stops making any further difference.",
+      "target": "'s 고속 모터 강도. 1.0이 제작 기본값이며, 슬라이더를 최대로 올려도 그 이상의 차이는 발생하지 않습니다."
+    },
+    {
+      "id": 23,
+      "source": "'s low-motor intensity. 1.0 is the authored default; the top of this slider is where it stops making any further difference.",
+      "target": "'s 저속 모터 강도. 1.0이 제작 기본값이며, 슬라이더를 최대로 올려도 그 이상의 차이는 발생하지 않습니다."
+    },
+    {
+      "id": 41,
+      "source": "A **trigger** is an occasion — something happening that you want to feel. A **mode** is a feeling — the shape of the vibration itself.\n\nEvery trigger plays one mode, and many triggers share one. You can customize this relationship at two levels:\n\n**Per-cue customization**: Enable advanced controls to change what a specific cue \"Feels like\" from its dropdown, or adjust its individual intensity slider without affecting other cues.\n\n**Motor & Timing page**: Reshape any vibration mode across the entire addon — adjust its low motor or high motor balance, and speed up or slow down its duration envelope.",
+      "target": "**트리거**는 계기(상황)입니다 — 게임 내에서 직접 체감하고 싶은 사건을 의미합니다. **모드**는 느낌입니다 — 진동 파형 자체의 형태를 뜻합니다.\n\n각 트리거는 하나의 모드를 재생하며, 여러 트리거가 동일한 모드를 공유하기도 합니다. 이러한 관계는 두 가지 수준에서 사용자 정의할 수 있습니다:\n\n**신호별 사용자 정의**: 고급 설정을 활성화하여 드롭다운 메뉴에서 특정 신호의 \"체감 형태\"를 변경하거나, 다른 신호에 영향을 주지 않고 개별 강도 슬라이더를 조정할 수 있습니다.\n\n**모터 및 타이밍 페이지**: 애드온 전체의 진동 모드 형태를 재구성할 수 있습니다 — 저속 모터와 고속 모터의 균형을 조정하고 지속 시간 포락선 속도를 빠르게 하거나 느리게 설정할 수 있습니다."
+    },
+    {
+      "id": 42,
+      "source": "A barely-there fade, for the quietest ambient onset.",
+      "target": "가장 은은한 환경 효과의 시작을 위한, 거의 느껴지지 않을 만큼 미세한 페이드 진동입니다."
+    },
+    {
+      "id": 57,
+      "source": "A continuous texture — a steady feeling for as long as it's happening, not a single pulse.",
+      "target": "지속 질감 — 단발성 펄스가 아니라 상황이 진행되는 동안 내내 유지되는 균일한 진동입니다."
+    },
+    {
+      "id": 70,
+      "source": "A few triggers, in both the game-feel and Accessibility parts of the panel, rest on questions about the game that have no settled answer yet.\n\nWhen one of them fails it does not produce an error. It simply never fires, and there is nothing to fix. They may also change or stop working after any game update.\n\nTry them if you're curious. Don't build a habit on one.",
+      "target": "패널의 게임 체감(손맛) 및 접근성 항목에 포함된 일부 트리거는 게임 메커니즘상 아직 명확히 규명되지 않은 요소에 의존합니다.\n\n이러한 트리거가 실패하더라도 오류가 발생하지는 않습니다. 단지 작동하지 않을 뿐이며, 별도로 해결할 수 있는 문제가 아닙니다. 또한 게임 업데이트에 따라 동작이 변경되거나 작동을 멈출 수도 있습니다.\n\n궁금하다면 사용해 보셔도 좋으나, 지나치게 의존하지는 마세요."
+    },
+    {
+      "id": 73,
+      "source": "A firm mechanical detent on the high motor.",
+      "target": "고속 모터에서 느껴지는 확실한 기계식 걸림(멈춤쇠) 진동입니다."
+    },
+    {
+      "id": 106,
+      "source": "A sharp double-knock ('lub-dub') repeating at its own independent rate while Blizzard's own low-health screen flash is active.",
+      "target": "블리자드 기본 낮은 생명력 화면 깜빡임이 활성화되어 있는 동안 독립적인 주기로 반복되는 날카로운 이중 타격('쿵-쾅') 진동입니다."
+    },
+    {
+      "id": 107,
+      "source": "A sharp double-knock ('lub-dub') timed to each pulse of Blizzard's own low-health screen flash, rather than a single beat.",
+      "target": "단일 박동 대신 블리자드 기본 낮은 생명력 화면 깜빡임의 펄스마다 정확히 맞춰 울리는 날카로운 이중 타격('쿵-쾅') 진동입니다."
+    },
+    {
+      "id": 177,
+      "source": "Adds a row under each cue that plays it, so you can find out what something feels like without waiting for it to happen. Useful while tuning, but it doubles the length of every page. The mode tester below still works either way. Takes effect immediately — no /reload needed.",
+      "target": "각 신호 아래에 해당 진동을 재생할 수 있는 행을 추가하여, 게임 내에서 이벤트가 발생하기를 기다리지 않고도 어떤 감각인지 바로 확인할 수 있습니다. 설정을 미세 조정할 때 유용하지만 각 페이지의 길이가 두 배로 늘어납니다. 아래의 모드 테스터는 이 옵션과 관계없이 항상 작동합니다. 즉시 적용되며 /reload가 필요하지 않습니다."
+    },
+    {
+      "id": 178,
+      "source": "Adds each cue's own intensity slider, \"Feels like\" shape picker and any bespoke dials to its page. On by default: uncheck for a compact one-line list that is easier to read when you just want to switch cues on and off. Takes effect immediately in this panel — no /reload needed.",
+      "target": "각 신호의 페이지에 고유 강도 슬라이더, \"체감 형태\" 선택 메뉴 및 맞춤형 조절 다이얼을 표시합니다. 기본적으로 활성화되어 있습니다. 신호의 켜짐/꺼짐 상태만 간단히 전환하고 싶다면 체크를 해제하여 읽기 편한 한 줄 형태의 압축 목록으로 전환하세요. 이 패널에 즉시 적용되며 /reload가 필요하지 않습니다."
+    },
+    {
+      "id": 188,
+      "source": "Anatomical lub-dub cardiac rhythm.",
+      "target": "해부학적 심장 박동('쿵-쾅') 리듬입니다."
+    },
+    {
+      "id": 263,
+      "source": "Complements rather than duplicates a \"resource full\" cue — this ticks on every point, not just the cap. Reads UnitPower(\"player\", Enum.PowerType.ComboPoints) via UNIT_POWER_UPDATE, firing only when the count increases — confirmed live 2026-09-16 that this event also fires on the drop back to 0 after a finisher, so an unfiltered version would tick on that reset too. An ability that grants more than one point in a single event ticks once, not once per point — a simplification, not confirmed against every point-granting ability.",
+      "target": "\"자원 가득 참\" 신호와 중복되지 않고 상호 보완하는 기능입니다 — 최대치에 도달했을 때뿐만 아니라 점수를 획득할 때마다 틱 진동을 울립니다. UNIT_POWER_UPDATE를 통해 UnitPower(\"player\", Enum.PowerType.ComboPoints)를 확인하고 점수가 증가할 때만 발동합니다. 2026-09-16 실서버 검증 결과, 이 이벤트는 마무리 일격(피니셔) 사용 후 점수가 0으로 초기화될 때도 발생하므로, 필터링되지 않은 버전에서는 초기화 시에도 틱이 울릴 수 있습니다. 한 번의 이벤트로 2점 이상을 획득하는 능력은 점수당 1회가 아니라 1회만 틱 진동을 출력합니다 — 이는 단순화된 처리이며, 모든 점수 획득 능력을 전수 검증한 것은 아닙니다."
+    },
+    {
+      "id": 274,
+      "source": "Continuous textures",
+      "target": "지속 질감 진동"
+    },
+    {
+      "id": 304,
+      "source": "Crisp high-frequency motor vibration applied right as the wave crest reaches peak amplitude. Fades out smoothly when submerged.",
+      "target": "파도 정점이 최고 진폭에 도달하는 순간 울리는 산뜻한 고속 모터 진동입니다. 물속에 완전히 잠기면 부드럽게 사라집니다."
+    },
+    {
+      "id": 338,
+      "source": "Does nothing on a specialisation with no secondary resource. Expect it to fire often on a class that refills constantly, such as a rogue rebuilding combo points. Not a duplicate of this addon's own \"Combo point gained\" above — that ticks per point, this fires once on reaching the cap for any of the seven candidate resources.",
+      "target": "보조 자원이 없는 전문화에서는 아무런 동작도 하지 않습니다. 연계 점수를 계속해서 채우는 도적과 같이 자원을 지속적으로 재생성하는 직업에서는 자주 발동합니다. 위쪽에 있는 본 애드온의 \"연계 점수 획득\" 신호와 중복되지 않습니다. 해당 신호는 점수마다 틱 진동을 울리지만, 이 신호는 7가지 대상 자원 중 어느 하나라도 최대치에 도달했을 때 한 번만 발동합니다."
+    },
+    {
+      "id": 360,
+      "source": "Duration of the software overdrive kick. 0.030s on heavy ERM counterweights, 0.0 on LRAs.",
+      "target": "소프트웨어 오버드라이브 킥의 지속 시간입니다. 무거운 ERM 무게추 모터의 경우 0.030초, LRA 모터의 경우 0.0초입니다."
+    },
+    {
+      "id": 365,
+      "source": "Enable Continuous Immersion Haptics (Master)",
+      "target": "지속 몰입 햅틱 활성화 (마스터)"
+    },
+    {
+      "id": 529,
+      "source": "Guide",
+      "target": "가이드"
+    },
+    {
+      "id": 546,
+      "source": "High-motor ceiling at full gliding speed. Only audible while actually gliding.",
+      "target": "최고 활강 속도에서의 고속 모터 상한값입니다. 실제로 활강 중일 때만 체감할 수 있습니다."
+    },
+    {
+      "id": 550,
+      "source": "Hooks Blizzard's shared tab plumbing (TabSystemMixin:SetTab, TabSystemOwnerMixin:SetTab, PanelTemplates_SetTab). Filtered on those functions' own `isUserAction` argument where they provide one, so a panel setting its own tab as it opens stays silent and only a tab YOU changed fires. Two known gaps: PanelTemplates_SetTab is the legacy path and has no such flag, so a few older panels may still fire on open; and the two mixin hooks only reach panels created AFTER Pulse loads, because Mixin() copies function references onto a frame at creation. Most big tabbed panels are load-on-demand and so are covered, but anything built before this addon isn't. Expect this one to be patchy.",
+      "target": "블리자드의 공용 탭 시스템(TabSystemMixin:SetTab, TabSystemOwnerMixin:SetTab, PanelTemplates_SetTab)에 후크를 연결합니다. 해당 함수에서 제공하는 `isUserAction` 인수를 기반으로 필터링하므로, 창이 열릴 때 자체적으로 탭을 전환하는 동작은 무음으로 유지되고 플레이어가 직접 전환한 탭에서만 진동이 발동합니다. 알려진 한계 두 가지: PanelTemplates_SetTab은 레거시 방식이라 해당 플래그가 없어 일부 구형 패널은 열릴 때 진동이 발생할 수 있습니다. 또한 Mixin()은 프레임 생성 시 함수 참조를 복사하므로 두 믹스인 후크는 Pulse가 로드된 '이후' 생성된 창에만 연결됩니다. 대부분의 대형 탭 패널은 필요 시 로드(load-on-demand)되므로 정상 적용되지만, 애드온 로드 전에 이미 구성된 요소는 제외됩니다. 따라서 일부 창에서는 작동하지 않을 수 있습니다."
+    },
+    {
+      "id": 557,
+      "source": "How long this motor takes to reach a new, stronger level during continuous textures. Higher is softer and more gradual; lower is snappier. 0.075 reproduces the engine's old behaviour at 60fps.",
+      "target": "지속 질감 진동 중 이 모터가 더 강한 새로운 진동 수준에 도달하는 데 걸리는 시간입니다. 값이 클수록 부드럽고 점진적이며, 작을수록 즉각적이고 또렷합니다. 0.075는 60fps 환경에서 기존 엔진의 동작을 재현합니다."
+    },
+    {
+      "id": 560,
+      "source": "How often the lub-dub repeats while the warning stays active. Higher is more urgent; lower is less annoying. Independent of the screen flash's own (fixed, ~57 BPM) rate — this is a separate timer, not synced to it.",
+      "target": "경고가 활성화되어 있는 동안 심장 박동('쿵-쾅')이 반복되는 빈도입니다. 값이 클수록 더 긴박하게 느껴지며, 작을수록 덜 거슬립니다. 화면 깜빡임의 고정된 주기(~57 BPM)와는 무관하게 별도의 독립 타이머로 동작합니다."
+    },
+    {
+      "id": 568,
+      "source": "INPUT_DEVICE_INTERFACE_TRANSITION, carrying newMode/oldMode. This event is FOREVER-ONLY — it was not found anywhere in the retail Midnight archive used for comparison, so don't expect this cue to do anything on retail. Fires on any transition in either direction; the payload would let it be split into separate entered/left cues later if that's worth having.",
+      "target": "newMode/oldMode를 전달하는 INPUT_DEVICE_INTERFACE_TRANSITION 이벤트입니다. 이 이벤트는 WoW Forever(Classic) 전용입니다 — 비교 분석에 사용된 본섭(Retail) Midnight 아카이브 어디에서도 발견되지 않았으므로 본섭에서는 작동하지 않습니다. 어느 방향으로든 전환이 일어날 때 발동하며, 페이로드를 통해 추후 필요에 따라 진입/이탈 신호로 분리할 수도 있습니다."
+    },
+    {
+      "id": 583,
+      "source": "Instants and completed casts arrive on the same event, so \"Cast succeeded\" has always fired for both. Core/CastActivity.lua tells them apart by whether a START was seen first; this is the instant half. Leave \"Cast succeeded\" off if you want only one of the two. Untested.",
+      "target": "즉시 시전 주문과 시전 완료 주문은 동일한 이벤트로 수신되므로, 기존에는 \"주문 시전 성공\" 신호가 두 경우 모두 발동했습니다. Core/CastActivity.lua에서는 사전에 START 이벤트가 감지되었는지 여부로 둘을 구분하며, 본 항목은 즉시 시전에 해당합니다. 둘 중 하나만 사용하고 싶다면 \"주문 시전 성공\" 신호를 꺼두세요. (미검증)"
+    },
+    {
+      "id": 659,
+      "source": "Motor & Timing",
+      "target": "모터 및 타이밍"
+    },
+    {
+      "id": 669,
+      "source": "Multiplies the baseline while fully submerged rather than bobbing at the surface, via IsSubmerged(). Set to 1.0 to feel the same either way. UNVERIFIED: IsSubmerged is confirmed present in the client API list, but whether it really distinguishes the two cases here has not been checked live.",
+      "target": "IsSubmerged()를 통해 수면에 떠 있는 상태가 아닌 완전히 잠수했을 때의 기본 진동을 배속합니다. 어느 상태에서든 동일하게 느끼려면 1.0으로 설정하세요. (미검증: IsSubmerged 함수가 클라이언트 API 목록에 존재하는 것은 확인되었으나, 게임 내에서 두 상황을 실제로 구분하는지는 실서버에서 확인되지 않았습니다.)"
+    },
+    {
+      "id": 687,
+      "source": "Nothing about these is percussive, so they get the bed alone. Inventing a hammer for enchanting would be inventing a sensation that is not there.",
+      "target": "이러한 작업에는 어떠한 타격감도 수반되지 않으므로 기저 진동만 단독으로 적용됩니다. 마법부여에 망치질 같은 진동을 추가하는 것은 실제와 맞지 않는 가상의 감각을 꾸며내는 것과 같습니다."
+    },
+    {
+      "id": 688,
+      "source": "OFF BY DEFAULT, and that is deliberate. A rolling swell suggests ocean, and this cue fires in rivers, lakes and canals too, where it would read as wrong rather than as atmosphere — Classic has no wave physics for it to be tracking, so it would be inventing something the world is not doing. Flat presence is the honest default. Raise it if you want a swell anyway; it is a good sensation, just not a true one.",
+      "target": "기본적으로 꺼져 있으며, 이는 의도된 설정입니다. 출렁이는 파도 진동은 대양을 연상시키지만, 이 신호는 강, 호수, 수로에서도 발동하므로 분위기를 살리기보다는 오히려 어색하게 느껴질 수 있습니다. 클래식에는 추적할 수 있는 파도 물리 엔진이 없으므로, 게임 세상에 실제로 존재하지 않는 현상을 인위적으로 만들어내는 셈이 됩니다. 따라서 잔잔한 기본 존재감이 가장 솔직한 기본값입니다. 그럼에도 파도의 너울을 느끼고 싶다면 값을 올려보세요. 손끝에 느껴지는 감각 자체는 훌륭하지만, 실제 게임 세상을 정직하게 반영한 것은 아닙니다."
+    },
+    {
+      "id": 696,
+      "source": "Off by default — a continuous texture, not a notification.",
+      "target": "기본적으로 비활성화됨 — 알림이 아닌 지속 질감 진동입니다."
+    },
+    {
+      "id": 727,
+      "source": "PLAYER_SOFT_INTERACT_CHANGED. Unlike its two siblings this one DOES carry a payload (oldTarget/newTarget GUIDs) and is flagged SecretWhenUnitIdentityRestricted in Blizzard's own docs, so this cue deliberately reads none of it and fires on the occurrence alone. Probably the most useful of the three: it's the one that says \"there is something here\" while you're looking around.",
+      "target": "PLAYER_SOFT_INTERACT_CHANGED. 다른 두 자매 이벤트와 달리 이 이벤트는 실제로 페이로드(oldTarget/newTarget GUID)를 전달하며, 블리자드 공식 문서상 SecretWhenUnitIdentityRestricted로 분류되어 있습니다. 따라서 이 신호는 보안 정보를 일체 읽지 않고 오직 이벤트 발생 사실에만 반응하여 작동합니다. 세 가지 이벤트 중 가장 유용할 것입니다. 주변을 둘러볼 때 \"여기에 무언가 있다\"는 것을 손끝으로 알려주는 신호입니다."
+    },
+    {
+      "id": 747,
+      "source": "Patter frequency (Hz)",
+      "target": "토닥임 주파수 (Hz)"
+    },
+    {
+      "id": 748,
+      "source": "Perceptual S-Curve",
+      "target": "지각적 S-자 곡선"
+    },
+    {
+      "id": 777,
+      "source": "Pulse Haptics",
+      "target": "Pulse Haptics"
+    },
+    {
+      "id": 787,
+      "source": "Pulse: all haptic vibrations stopped.",
+      "target": "Pulse: 모든 햅틱 진동이 중지되었습니다."
+    },
+    {
+      "id": 872,
+      "source": "Reset every mode's motor and duration multiplier back to 1.0? This can't be undone.",
+      "target": "모든 모드의 모터 및 지속 시간 배율을 1.0으로 초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다."
+    },
+    {
+      "id": 873,
+      "source": "Reset every mode's motor and duration multiplier on this page back to 1.0. Doesn't touch cues, per-cue intensity, or per-trigger mode picks.",
+      "target": "이 페이지에 있는 모든 모드의 모터 및 지속 시간 배율을 1.0으로 초기화합니다. 신호, 신호별 강도 또는 트리거별 모드 선택은 변경되지 않습니다."
+    },
+    {
+      "id": 875,
+      "source": "Reset motor & timing",
+      "target": "모터 및 타이밍 초기화"
+    },
+    {
+      "id": 909,
+      "source": "Second-harmonic content, which is what makes a stroke feel like pull-then-glide rather than a symmetric swell. Six earlier tuning rounds all felt \"rough\" because they modulated the amplitude of a constant; a pure sine cannot express this asymmetry and that is most likely why. 0 reverts to a plain swell.",
+      "target": "2차 고조파 성분으로, 영법 스트로크 시 대칭적인 너울 대신 '당겼다 미끄러지는(당김 후 글라이딩)' 손맛을 만들어 냅니다. 이전 6차례의 튜닝 과정에서는 상수의 진폭만을 변조했기 때문에 모두 \"거칠게\" 느껴졌습니다. 순수 사인파로는 이러한 비대칭성을 표현할 수 없기 때문이었을 가능성이 높습니다. 0으로 설정하면 단순한 너울로 되돌아갑니다."
+    },
+    {
+      "id": 953,
+      "source": "Starts high, fades into a low hum.",
+      "target": "높은 진동으로 시작하여 낮은 웅웅거림으로 잦아듭니다."
+    },
+    {
+      "id": 966,
+      "source": "Step 5: Immersion & Continuous Textures",
+      "target": "5단계: 몰입감 및 지속 질감 진동"
+    },
+    {
+      "id": 1063,
+      "source": "Tuned for trackpad & chassis LRA haptics",
+      "target": "트랙패드 및 섀시 LRA 햅틱에 맞춤 조정됨"
+    },
+    {
+      "id": 1088,
+      "source": "Urgent repeating cardiac 'lub-dub' rhythm in sync with screen warnings below 20% health.",
+      "target": "생명력 20% 미만 시 화면 경고와 동기화되어 긴박하게 반복되는 심장 박동('쿵-쾅') 리듬입니다."
+    },
+    {
+      "id": 1138,
+      "source": "With this turned off, navigation, edge bumps, radial wheels, tab switches, and popups produce no haptics and unhook from the interface to save processing.",
+      "target": "이 설정을 끄면 탐색, 가장자리 충돌, 원형 메뉴 휠, 탭 전환, 팝업 창에서 햅틱 피드백이 발생하지 않으며, 인터페이스 후크를 해제하여 시스템 리소스를 절약합니다."
+    },
+    {
+      "id": 1141,
+      "source": "World & Discovery Haptics",
+      "target": "세계 및 탐험 햅틱"
+    }
+  ]
+}

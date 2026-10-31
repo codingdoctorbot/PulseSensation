@@ -1,0 +1,544 @@
+{
+  "items": [
+    {
+      "id": 19,
+      "source": "%s has no impacts — it is the bed alone, for the length of the craft.",
+      "target": "%s не имеет ударов — только фоновый гул на протяжении всего создания предмета."
+    },
+    {
+      "id": 43,
+      "source": "A bed you feel for the length of a craft, with the profession's own work rhythm struck over it. While a craft is running this replaces |cffffd100Casting texture|r rather than layering with it, so one action is one sensation.\n\nThe profession is read from the recipe by id, so it does not depend on your language. Anything that does not resolve still gets a generic work rhythm rather than going quiet.",
+      "target": "Фоновый гул, ощущаемый на протяжении всего создания предмета, поверх которого накладывается рабочий ритм конкретной профессии. Во время создания предмета этот эффект заменяет |cffffd100текстуру применения заклинаний|r, а не накладывается поверх нее, благодаря чему одно действие создает одно цельное ощущение.\n\nПрофессия определяется по ID из рецепта и не зависит от языка клиента. Для всего, что не удается распознать, по-прежнему используется базовый рабочий ритм вместо тишины."
+    },
+    {
+      "id": 44,
+      "source": "A bright chime when gathering an herb node, mineral vein, or skinning loot completes.",
+      "target": "Звонкий перезвон при завершении сбора трав, разработки залежей руды или добычи со снятия шкур."
+    },
+    {
+      "id": 45,
+      "source": "A bright tick when an item enters your bags — looted, crafted, or mailed.",
+      "target": "Четкий щелчок, когда предмет попадает в ваши сумки — в качестве добычи, созданный или полученный по почте."
+    },
+    {
+      "id": 51,
+      "source": "A bright tick when you learn a new recipe or pattern.",
+      "target": "Четкий щелчок при изучении нового рецепта или выкройки."
+    },
+    {
+      "id": 52,
+      "source": "A chime when a craft completes successfully.",
+      "target": "Перезвон при успешном завершении создания предмета."
+    },
+    {
+      "id": 53,
+      "source": "A chime when the auction house opens.",
+      "target": "Перезвон при открытии аукциона."
+    },
+    {
+      "id": 76,
+      "source": "A heavy latch thud when closing a personal bank or guild bank vault.",
+      "target": "Тяжелый глухой удар засова при закрытии личного банка или сейфа банка гильдии."
+    },
+    {
+      "id": 82,
+      "source": "A light coin clink when depositing or withdrawing money from a bank or guild bank.",
+      "target": "Легкий звон монет при внесении или снятии денег в банке или банке гильдии."
+    },
+    {
+      "id": 83,
+      "source": "A light coin-like tick when selling an item to a merchant.",
+      "target": "Легкий щелчок, напоминающий звон монеты, при продаже предмета торговцу."
+    },
+    {
+      "id": 86,
+      "source": "A light tick when a profession or weapon skill goes up a point.",
+      "target": "Легкий щелчок при повышении навыка профессии или владения оружием на единицу."
+    },
+    {
+      "id": 87,
+      "source": "A light tick when an item enters your bag and occupies a slot.",
+      "target": "Легкий щелчок, когда предмет попадает в вашу сумку и занимает ячейку."
+    },
+    {
+      "id": 92,
+      "source": "A playful tick on some of your own emotes.",
+      "target": "Игривый щелчок при использовании некоторых ваших эмоций."
+    },
+    {
+      "id": 93,
+      "source": "A playful tick when an NPC emotes, yells, or whispers near you.",
+      "target": "Игривый щелчок, когда NPC рядом с вами выражает эмоцию, кричит или шепчет."
+    },
+    {
+      "id": 94,
+      "source": "A pleasant chime when you gain honor — a PvP kill or objective.",
+      "target": "Приятный перезвон при получении чести — за PvP-убийство или выполнение задачи."
+    },
+    {
+      "id": 95,
+      "source": "A pleasant chime when you gain reputation with a faction.",
+      "target": "Приятный перезвон при повышении репутации с фракцией."
+    },
+    {
+      "id": 97,
+      "source": "A pleasant chime whenever your shapeshift form changes.",
+      "target": "Приятный перезвон при любой смене облика."
+    },
+    {
+      "id": 120,
+      "source": "A soft chime when a crafting cast begins.",
+      "target": "Мягкий перезвон при начале создания предмета."
+    },
+    {
+      "id": 124,
+      "source": "A soft tick when the item leaves the cursor.",
+      "target": "Мягкий щелчок, когда предмет открепляется от курсора."
+    },
+    {
+      "id": 133,
+      "source": "A solid tap when buying an item from a merchant.",
+      "target": "Ощутимый импульс при покупке предмета у торговца."
+    },
+    {
+      "id": 137,
+      "source": "A subtle thud when a consumable or item is used and empties a bag slot.",
+      "target": "Едва уловимый глухой толчок, когда расходуемый или иной предмет используется и освобождает ячейку в сумке."
+    },
+    {
+      "id": 160,
+      "source": "A very light tick when you loot money.",
+      "target": "Очень легкий щелчок при сборе денег."
+    },
+    {
+      "id": 187,
+      "source": "An urgent stutter vibration when your bags become full or when you attempt an action with a full inventory.",
+      "target": "Тревожная прерывистая вибрация, когда ваши сумки заполняются или вы пытаетесь совершить действие при переполненном инвентаре."
+    },
+    {
+      "id": 200,
+      "source": "Auction house opened",
+      "target": "Аукцион открыт"
+    },
+    {
+      "id": 207,
+      "source": "Bank gold transfer",
+      "target": "Перевод золота в банке"
+    },
+    {
+      "id": 208,
+      "source": "Bank opened",
+      "target": "Банк открыт"
+    },
+    {
+      "id": 210,
+      "source": "Battle.net whisper received",
+      "target": "Получено сообщение Battle.net"
+    },
+    {
+      "id": 232,
+      "source": "CURSOR_CHANGED, with C_Cursor.GetCursorItem() checked only for presence — never read, never compared, so a secret item can't break it (truthiness on a non-secret-boolean is legal). Distinct from this addon's own \"Item obtained\": that's loot arriving in your bags, this is you physically holding something.",
+      "target": "CURSOR_CHANGED с проверкой C_Cursor.GetCursorItem() только на наличие — без чтения и сравнения значений, поэтому секретный предмет не вызовет сбоя (проверка истинности для несекретного булева значения допустима). Отличается от сигнала аддона «Получен предмет»: там речь идет о попадании добычи в сумки, а здесь вы физически удерживаете что-то на курсоре."
+    },
+    {
+      "id": 234,
+      "source": "Calibrated for standard third-party ERM rumble curves",
+      "target": "Откалибровано под стандартные кривые вибрации сторонних ERM-моторов"
+    },
+    {
+      "id": 291,
+      "source": "Craft finished",
+      "target": "Создание предмета завершено"
+    },
+    {
+      "id": 293,
+      "source": "Craft started",
+      "target": "Создание предмета начато"
+    },
+    {
+      "id": 294,
+      "source": "Crafting",
+      "target": "Ремесло"
+    },
+    {
+      "id": 295,
+      "source": "Crafting Rhythms",
+      "target": "Ритмы ремесла"
+    },
+    {
+      "id": 296,
+      "source": "Crafting texture",
+      "target": "Текстура ремесла"
+    },
+    {
+      "id": 334,
+      "source": "Distinct from this addon's own \"Gold looted\"/\"Item obtained\" (World category) — this is Tremor's original item-award cue, kept alongside rather than merged, since the underlying events differ.",
+      "target": "Отличается от собственных сигналов аддона «Собрано золото»/«Получен предмет» (категория «Мир») — это оригинальный сигнал выдачи предмета из Tremor, сохраненный параллельно, а не объединенный с ними, так как базовые события различаются."
+    },
+    {
+      "id": 337,
+      "source": "Distinguished from craftStopped by whether the cast actually succeeded, which Core/CastActivity.lua tracks across the cast lifecycle rather than guessing from one event. Untested.",
+      "target": "Отличается от craftStopped фактом успешного завершения применения, который Core/CastActivity.lua отслеживает на протяжении всего жизненного цикла каста, а не угадывает по одному событию. Не протестировано."
+    },
+    {
+      "id": 359,
+      "source": "Dungeons & Raids",
+      "target": "Подземелья и рейды"
+    },
+    {
+      "id": 393,
+      "source": "Feel crafting",
+      "target": "Ощущение ремесла"
+    },
+    {
+      "id": 404,
+      "source": "Fires on BAG_OVERFLOW_WITH_FULL_INVENTORY, UI_ERROR_MESSAGE (inventory full error) and when free bag slots drop to zero.",
+      "target": "Срабатывает при BAG_OVERFLOW_WITH_FULL_INVENTORY, UI_ERROR_MESSAGE (ошибка переполнения инвентаря) и когда число свободных ячеек в сумках падает до нуля."
+    },
+    {
+      "id": 405,
+      "source": "Fires on BAG_UPDATE_DELAYED when total free bag slots decrease. Complements Item obtained (which tracks ITEM_PUSH fly-in loot animations).",
+      "target": "Срабатывает при BAG_UPDATE_DELAYED при уменьшении общего числа свободных ячеек в сумках. Дополняет сигнал «Получен предмет» (который отслеживает всплывающие анимации добычи ITEM_PUSH)."
+    },
+    {
+      "id": 406,
+      "source": "Fires on BAG_UPDATE_DELAYED when total free bag slots increase while not interacting with a merchant, bank, or mail.",
+      "target": "Срабатывает при BAG_UPDATE_DELAYED при увеличении общего числа свободных ячеек в сумках, если нет активного взаимодействия с торговцем, банком или почтой."
+    },
+    {
+      "id": 408,
+      "source": "Fires on LOOT_READY when gathering loot is ready.",
+      "target": "Срабатывает при LOOT_READY, когда добыча от сбора ресурсов готова."
+    },
+    {
+      "id": 412,
+      "source": "Fires on money changes with an open bank frame or guild bank money update.",
+      "target": "Срабатывает при изменении баланса денег при открытом окне банка или обновлении средств банка гильдии."
+    },
+    {
+      "id": 428,
+      "source": "Fires when a dungeon or raid finder queue pops and the accept dialog appears.",
+      "target": "Срабатывает, когда подходит очередь в поиск подземелий или рейдов и появляется окно подтверждения входа."
+    },
+    {
+      "id": 430,
+      "source": "Fires when a group loot roll opens and the roll buttons appear.",
+      "target": "Срабатывает при начале группового розыгрыша добычи и появлении кнопок броска."
+    },
+    {
+      "id": 432,
+      "source": "Fires when a loot window opens.",
+      "target": "Срабатывает при открытии окна добычи."
+    },
+    {
+      "id": 433,
+      "source": "Fires when a profession or crafting window opens.",
+      "target": "Срабатывает при открытии окна профессии или ремесла."
+    },
+    {
+      "id": 445,
+      "source": "Fires when loot is awarded to you.",
+      "target": "Срабатывает, когда вам присуждается добыча."
+    },
+    {
+      "id": 450,
+      "source": "Fires when raid target markers are set or cleared.",
+      "target": "Срабатывает при установке или снятии меток рейда."
+    },
+    {
+      "id": 451,
+      "source": "Fires when repairing durability at a merchant.",
+      "target": "Срабатывает при починке прочности экипировки у торговца."
+    },
+    {
+      "id": 454,
+      "source": "Fires when someone invites you to a guild.",
+      "target": "Срабатывает при получении приглашения в гильдию."
+    },
+    {
+      "id": 459,
+      "source": "Fires when the bank window opens.",
+      "target": "Срабатывает при открытии окна банка."
+    },
+    {
+      "id": 461,
+      "source": "Fires when the game asks you to confirm a loot roll.",
+      "target": "Срабатывает, когда игра запрашивает подтверждение розыгрыша добычи."
+    },
+    {
+      "id": 462,
+      "source": "Fires when the mailbox opens.",
+      "target": "Срабатывает при открытии почтового ящика."
+    },
+    {
+      "id": 482,
+      "source": "Fires when you receive a Battle.net whisper.",
+      "target": "Срабатывает при получении сообщения Battle.net."
+    },
+    {
+      "id": 483,
+      "source": "Fires when you receive a whisper.",
+      "target": "Срабатывает при получении личного сообщения."
+    },
+    {
+      "id": 523,
+      "source": "Gold looted",
+      "target": "Собрано золото"
+    },
+    {
+      "id": 530,
+      "source": "Guild bank opened",
+      "target": "Банк гильдии открыт"
+    },
+    {
+      "id": 531,
+      "source": "Guild invite",
+      "target": "Приглашение в гильдию"
+    },
+    {
+      "id": 549,
+      "source": "Honor gained",
+      "target": "Получена честь"
+    },
+    {
+      "id": 597,
+      "source": "Item consumed from bag",
+      "target": "Предмет из сумки израсходован"
+    },
+    {
+      "id": 598,
+      "source": "Item cursor",
+      "target": "Предмет на курсоре"
+    },
+    {
+      "id": 599,
+      "source": "Item obtained",
+      "target": "Получен предмет"
+    },
+    {
+      "id": 600,
+      "source": "Item placed in bag",
+      "target": "Предмет помещен в сумку"
+    },
+    {
+      "id": 609,
+      "source": "Learned a new recipe",
+      "target": "Изучен новый рецепт"
+    },
+    {
+      "id": 623,
+      "source": "Loot & inventory",
+      "target": "Добыча и инвентарь"
+    },
+    {
+      "id": 624,
+      "source": "Loot received",
+      "target": "Добыча получена"
+    },
+    {
+      "id": 625,
+      "source": "Loot roll confirmation",
+      "target": "Подтверждение розыгрыша добычи"
+    },
+    {
+      "id": 626,
+      "source": "Loot roll started",
+      "target": "Розыгрыш добычи начат"
+    },
+    {
+      "id": 627,
+      "source": "Loot window opened",
+      "target": "Окно добычи открыто"
+    },
+    {
+      "id": 641,
+      "source": "Mailbox opened",
+      "target": "Почтовый ящик открыт"
+    },
+    {
+      "id": 665,
+      "source": "Multiplies every impact, on top of each profession's own weight. Set it to zero for a craft you feel but never get hit by.",
+      "target": "Множитель силы каждого удара сверх базового веса профессии. Установите в ноль, если хотите ощущать процесс ремесла без резких ударов."
+    },
+    {
+      "id": 666,
+      "source": "Multiplies every impact, on top of each profession's own weight. Set to zero for a craft you feel but never get hit by.",
+      "target": "Множитель каждого удара сверх базового веса профессии. Установите в ноль, если хотите ощущать процесс ремесла без резких ударов."
+    },
+    {
+      "id": 670,
+      "source": "Multiplies the continuous layer under every craft, on top of each profession's own weight. This is the part you feel for the whole craft rather than the individual blows.",
+      "target": "Множитель непрерывного слоя вибрации ремесла сверх базового веса профессии. Это ощущение длится на протяжении всего создания предмета в отличие от отдельных ударов."
+    },
+    {
+      "id": 671,
+      "source": "NPC emote nearby",
+      "target": "Эмоция NPC поблизости"
+    },
+    {
+      "id": 675,
+      "source": "Never miss an important group alert, even while looking away:\n• |cffffffffDirect Whispers:|r Distinct personal communication blip on incoming whispers.\n• |cffffffffParty & Raid Invites:|r Dual-pulse notification when receiving group invitations.\n• |cffffffffQueue Pops & Ready Checks:|r High-priority attention-grabbing pulse when instances are ready.",
+      "target": "Не пропускайте важные групповые оповещения, даже отвернувшись от экрана:\n• |cffffffffЛичные сообщения:|r Отчетливый сигнал личного сообщения при входящем шепоте.\n• |cffffffffПриглашения в группу и рейд:|r Двойной импульс при получении приглашений в группу.\n• |cffffffffПодбор группы и проверка готовности:|r Высокоприоритетный привлекающий внимание импульс при готовности подземелья."
+    },
+    {
+      "id": 682,
+      "source": "Noisy. In a raid this event fires very frequently. Kept for completeness and defaulted off.",
+      "target": "Шумный сигнал. В рейде это событие срабатывает очень часто. Сохранено для полноты и по умолчанию отключено."
+    },
+    {
+      "id": 685,
+      "source": "Not filtered by rarity yet — fires for anything, common items included.",
+      "target": "Пока без фильтрации по качеству — срабатывает для любых предметов, включая обычные."
+    },
+    {
+      "id": 707,
+      "source": "One pattern for every kind of refusal. May also do nothing inside dungeons and raids.",
+      "target": "Один паттерн для любого вида отказа. Также может ничего не делать внутри подземелий и рейдов."
+    },
+    {
+      "id": 735,
+      "source": "Party invite",
+      "target": "Приглашение в группу"
+    },
+    {
+      "id": 736,
+      "source": "Party leader changed",
+      "target": "Лидер группы изменен"
+    },
+    {
+      "id": 749,
+      "source": "Performed an emote",
+      "target": "Использована эмоция"
+    },
+    {
+      "id": 754,
+      "source": "Picked up an item",
+      "target": "Предмет взят"
+    },
+    {
+      "id": 766,
+      "source": "Profession skill increased",
+      "target": "Навык профессии повышен"
+    },
+    {
+      "id": 767,
+      "source": "Profession window opened",
+      "target": "Окно профессии открыто"
+    },
+    {
+      "id": 768,
+      "source": "Professions with a rhythm",
+      "target": "Профессии с ритмом"
+    },
+    {
+      "id": 769,
+      "source": "Professions without one",
+      "target": "Профессии без ритма"
+    },
+    {
+      "id": 808,
+      "source": "Purchased item from vendor",
+      "target": "Предмет куплен у торговца"
+    },
+    {
+      "id": 810,
+      "source": "Pure flavor, sibling to \"Performed an emote\" above. Fires often in busy areas with lots of ambient NPCs — this is opt-in noise, not a curated signal, same as its sibling. Off by default.",
+      "target": "Исключительно для атмосферы, аналог сигнала «Использована эмоция» выше. Часто срабатывает в оживленных местах со множеством окружающих NPC — это включаемый по желанию шум, а не выверенный сигнал. По умолчанию отключено."
+    },
+    {
+      "id": 813,
+      "source": "Put down an item",
+      "target": "Предмет опущен"
+    },
+    {
+      "id": 835,
+      "source": "Raid marker changed",
+      "target": "Метка рейда изменена"
+    },
+    {
+      "id": 836,
+      "source": "Raiding",
+      "target": "Рейды"
+    },
+    {
+      "id": 837,
+      "source": "Raiding (Encounter Focus)",
+      "target": "Рейды (фокус на сражениях)"
+    },
+    {
+      "id": 852,
+      "source": "Reads GetShapeshiftForm()/UPDATE_SHAPESHIFT_FORM, the player's own state — one generic cue for any change, not split by direction, since forms chain (e.g. Bear -> Cat -> Moonkin) without necessarily passing back through no-form in between.",
+      "target": "Считывает GetShapeshiftForm()/UPDATE_SHAPESHIFT_FORM, собственное состояние игрока — один общий сигнал для любого изменения без разделения по направлению, так как формы могут переключаться подряд (напр., Медведь -> Кошка -> Лунный совух) без промежуточного возврата к обычному облику."
+    },
+    {
+      "id": 856,
+      "source": "Reads the skill-up chat feed rather than SKILL_LINES_CHANGED, which also fires for unrelated skill-list changes. Occurrence-only, no text parsing — this says a skill went up, not which one or to what. Deliberately light: early profession levelling fires this constantly.",
+      "target": "Считывает сообщения о повышении навыка в чате, а не событие SKILL_LINES_CHANGED, которое также срабатывает при посторонних изменениях списка навыков. Фиксирует только сам факт без парсинга текста — сообщает, что навык повысился, но не какой именно и до какого уровня. Нарочито легкий сигнал: при начальной прокачке профессии он срабатывает постоянно."
+    },
+    {
+      "id": 869,
+      "source": "Reputation gained",
+      "target": "Получена репутация"
+    },
+    {
+      "id": 899,
+      "source": "Same weight and shape as the vendor, mailbox and bank cues alongside it — all four are \"a window you walked up to has opened\", and they deliberately feel alike rather than each inventing a signature.",
+      "target": "Имеет тот же вес и форму, что и соседние сигналы торговца, почтового ящика и банка — все четыре означают «открылось окно, к которому вы подошли», и намеренно ощущаются одинаково, а не используют уникальный рисунок."
+    },
+    {
+      "id": 920,
+      "source": "Shapeshift form changed",
+      "target": "Облик изменен"
+    },
+    {
+      "id": 940,
+      "source": "Sold item to vendor",
+      "target": "Предмет продан торговцу"
+    },
+    {
+      "id": 1000,
+      "source": "TRADE_SKILL_CRAFT_BEGIN via Core/CastActivity.lua. Untested — no crafting cue has ever existed in this addon, so nothing here has been felt. Off by default.",
+      "target": "TRADE_SKILL_CRAFT_BEGIN через Core/CastActivity.lua. Не протестировано — ранее в этом аддоне не существовало сигналов ремесла, поэтому ничего из этого пока не проверялось на практике. По умолчанию отключено."
+    },
+    {
+      "id": 1001,
+      "source": "Tactile sensations for living in the world of Azeroth:\n• |cffffffffLoot Drops & Currency:|r Feel items and gold collected into your bags.\n• |cffffffffQuests & Turn-ins:|r Physical confirmation upon accepting and completing objectives.\n• |cffffffffProgression:|r Rewarding celebration pulses for leveling up, achievements, and XP gains.",
+      "target": "Тактильные ощущения от жизни в мире Азерота:\n• |cffffffffДобыча и валюта:|r Ощущайте предметы и золото, попадающие в ваши сумки.\n• |cffffffffЗадания и их сдача:|r Физическое подтверждение при принятии и выполнении задач.\n• |cffffffffПрогресс:|r Приятные праздничные импульсы при повышении уровня, получении достижений и опыта."
+    },
+    {
+      "id": 1036,
+      "source": "The other edge of the same CURSOR_CHANGED transition. Fires whether the item was placed somewhere or the drag was simply cancelled — the event doesn't distinguish, and nothing readable does.",
+      "target": "Вторая фаза того же перехода события CURSOR_CHANGED. Срабатывает независимо от того, был ли предмет куда-то помещен или перетаскивание было просто отменено — само событие их не различает, и никакие доступные данные тоже."
+    },
+    {
+      "id": 1039,
+      "source": "The work itself while you craft — a bed for the length of it, with the profession's own rhythm struck on top. A hammer for blacksmithing, a pick for mining, nothing percussive for tailoring or enchanting.",
+      "target": "Сам процесс создания предмета — фоновый гул на протяжении всего времени с ритмом конкретной профессии поверх него. Молот для кузнечного дела, кирка для горного дела, и ничего ударного для портняжного дела или наложения чар."
+    },
+    {
+      "id": 1041,
+      "source": "These strike. The shape and the rate come from the craft — a hammer is slower and heavier than a pick — and the last blow lands on completion.",
+      "target": "Эти эффекты наносят удары. Форма и частота зависят от ремесла — молот бьет медленнее и тяжелее кирки, а последний удар приходится ровно на завершение создания."
+    },
+    {
+      "id": 1075,
+      "source": "Two solid hits when an item attaches to the cursor.",
+      "target": "Два отчетливых удара, когда предмет прикрепляется к курсору."
+    },
+    {
+      "id": 1077,
+      "source": "Two taps when the guild bank opens — heavier than the personal bank, because it is a bigger door.",
+      "target": "Два импульса при открытии банка гильдии — тяжелее, чем у личного банка, потому что и дверь здесь массивнее."
+    },
+    {
+      "id": 1094,
+      "source": "Vault door closed",
+      "target": "Дверь сейфа закрыта"
+    },
+    {
+      "id": 1130,
+      "source": "Whisper received",
+      "target": "Получено личное сообщение"
+    }
+  ]
+}

@@ -1,0 +1,547 @@
+{
+  "batch_id": 5,
+  "name": "Economy, Social, Interface & Crafting",
+  "count": 108,
+  "items": [
+    {
+      "id": 19,
+      "source": "%s has no impacts — it is the bed alone, for the length of the craft.",
+      "signature": "s"
+    },
+    {
+      "id": 43,
+      "source": "A bed you feel for the length of a craft, with the profession's own work rhythm struck over it. While a craft is running this replaces |cffffd100Casting texture|r rather than layering with it, so one action is one sensation.\n\nThe profession is read from the recipe by id, so it does not depend on your language. Anything that does not resolve still gets a generic work rhythm rather than going quiet.",
+      "signature": ""
+    },
+    {
+      "id": 44,
+      "source": "A bright chime when gathering an herb node, mineral vein, or skinning loot completes.",
+      "signature": ""
+    },
+    {
+      "id": 45,
+      "source": "A bright tick when an item enters your bags — looted, crafted, or mailed.",
+      "signature": ""
+    },
+    {
+      "id": 51,
+      "source": "A bright tick when you learn a new recipe or pattern.",
+      "signature": ""
+    },
+    {
+      "id": 52,
+      "source": "A chime when a craft completes successfully.",
+      "signature": ""
+    },
+    {
+      "id": 53,
+      "source": "A chime when the auction house opens.",
+      "signature": ""
+    },
+    {
+      "id": 76,
+      "source": "A heavy latch thud when closing a personal bank or guild bank vault.",
+      "signature": ""
+    },
+    {
+      "id": 82,
+      "source": "A light coin clink when depositing or withdrawing money from a bank or guild bank.",
+      "signature": ""
+    },
+    {
+      "id": 83,
+      "source": "A light coin-like tick when selling an item to a merchant.",
+      "signature": ""
+    },
+    {
+      "id": 86,
+      "source": "A light tick when a profession or weapon skill goes up a point.",
+      "signature": ""
+    },
+    {
+      "id": 87,
+      "source": "A light tick when an item enters your bag and occupies a slot.",
+      "signature": ""
+    },
+    {
+      "id": 92,
+      "source": "A playful tick on some of your own emotes.",
+      "signature": ""
+    },
+    {
+      "id": 93,
+      "source": "A playful tick when an NPC emotes, yells, or whispers near you.",
+      "signature": ""
+    },
+    {
+      "id": 94,
+      "source": "A pleasant chime when you gain honor — a PvP kill or objective.",
+      "signature": ""
+    },
+    {
+      "id": 95,
+      "source": "A pleasant chime when you gain reputation with a faction.",
+      "signature": ""
+    },
+    {
+      "id": 97,
+      "source": "A pleasant chime whenever your shapeshift form changes.",
+      "signature": ""
+    },
+    {
+      "id": 120,
+      "source": "A soft chime when a crafting cast begins.",
+      "signature": ""
+    },
+    {
+      "id": 124,
+      "source": "A soft tick when the item leaves the cursor.",
+      "signature": ""
+    },
+    {
+      "id": 133,
+      "source": "A solid tap when buying an item from a merchant.",
+      "signature": ""
+    },
+    {
+      "id": 137,
+      "source": "A subtle thud when a consumable or item is used and empties a bag slot.",
+      "signature": ""
+    },
+    {
+      "id": 160,
+      "source": "A very light tick when you loot money.",
+      "signature": ""
+    },
+    {
+      "id": 187,
+      "source": "An urgent stutter vibration when your bags become full or when you attempt an action with a full inventory.",
+      "signature": ""
+    },
+    {
+      "id": 200,
+      "source": "Auction house opened",
+      "signature": ""
+    },
+    {
+      "id": 207,
+      "source": "Bank gold transfer",
+      "signature": ""
+    },
+    {
+      "id": 208,
+      "source": "Bank opened",
+      "signature": ""
+    },
+    {
+      "id": 210,
+      "source": "Battle.net whisper received",
+      "signature": ""
+    },
+    {
+      "id": 232,
+      "source": "CURSOR_CHANGED, with C_Cursor.GetCursorItem() checked only for presence — never read, never compared, so a secret item can't break it (truthiness on a non-secret-boolean is legal). Distinct from this addon's own \"Item obtained\": that's loot arriving in your bags, this is you physically holding something.",
+      "signature": ""
+    },
+    {
+      "id": 234,
+      "source": "Calibrated for standard third-party ERM rumble curves",
+      "signature": ""
+    },
+    {
+      "id": 291,
+      "source": "Craft finished",
+      "signature": ""
+    },
+    {
+      "id": 293,
+      "source": "Craft started",
+      "signature": ""
+    },
+    {
+      "id": 294,
+      "source": "Crafting",
+      "signature": ""
+    },
+    {
+      "id": 295,
+      "source": "Crafting Rhythms",
+      "signature": ""
+    },
+    {
+      "id": 296,
+      "source": "Crafting texture",
+      "signature": ""
+    },
+    {
+      "id": 334,
+      "source": "Distinct from this addon's own \"Gold looted\"/\"Item obtained\" (World category) — this is Tremor's original item-award cue, kept alongside rather than merged, since the underlying events differ.",
+      "signature": ""
+    },
+    {
+      "id": 337,
+      "source": "Distinguished from craftStopped by whether the cast actually succeeded, which Core/CastActivity.lua tracks across the cast lifecycle rather than guessing from one event. Untested.",
+      "signature": ""
+    },
+    {
+      "id": 359,
+      "source": "Dungeons & Raids",
+      "signature": ""
+    },
+    {
+      "id": 393,
+      "source": "Feel crafting",
+      "signature": ""
+    },
+    {
+      "id": 404,
+      "source": "Fires on BAG_OVERFLOW_WITH_FULL_INVENTORY, UI_ERROR_MESSAGE (inventory full error) and when free bag slots drop to zero.",
+      "signature": ""
+    },
+    {
+      "id": 405,
+      "source": "Fires on BAG_UPDATE_DELAYED when total free bag slots decrease. Complements Item obtained (which tracks ITEM_PUSH fly-in loot animations).",
+      "signature": ""
+    },
+    {
+      "id": 406,
+      "source": "Fires on BAG_UPDATE_DELAYED when total free bag slots increase while not interacting with a merchant, bank, or mail.",
+      "signature": ""
+    },
+    {
+      "id": 408,
+      "source": "Fires on LOOT_READY when gathering loot is ready.",
+      "signature": ""
+    },
+    {
+      "id": 412,
+      "source": "Fires on money changes with an open bank frame or guild bank money update.",
+      "signature": ""
+    },
+    {
+      "id": 428,
+      "source": "Fires when a dungeon or raid finder queue pops and the accept dialog appears.",
+      "signature": ""
+    },
+    {
+      "id": 430,
+      "source": "Fires when a group loot roll opens and the roll buttons appear.",
+      "signature": ""
+    },
+    {
+      "id": 432,
+      "source": "Fires when a loot window opens.",
+      "signature": ""
+    },
+    {
+      "id": 433,
+      "source": "Fires when a profession or crafting window opens.",
+      "signature": ""
+    },
+    {
+      "id": 445,
+      "source": "Fires when loot is awarded to you.",
+      "signature": ""
+    },
+    {
+      "id": 450,
+      "source": "Fires when raid target markers are set or cleared.",
+      "signature": ""
+    },
+    {
+      "id": 451,
+      "source": "Fires when repairing durability at a merchant.",
+      "signature": ""
+    },
+    {
+      "id": 454,
+      "source": "Fires when someone invites you to a guild.",
+      "signature": ""
+    },
+    {
+      "id": 459,
+      "source": "Fires when the bank window opens.",
+      "signature": ""
+    },
+    {
+      "id": 461,
+      "source": "Fires when the game asks you to confirm a loot roll.",
+      "signature": ""
+    },
+    {
+      "id": 462,
+      "source": "Fires when the mailbox opens.",
+      "signature": ""
+    },
+    {
+      "id": 482,
+      "source": "Fires when you receive a Battle.net whisper.",
+      "signature": ""
+    },
+    {
+      "id": 483,
+      "source": "Fires when you receive a whisper.",
+      "signature": ""
+    },
+    {
+      "id": 523,
+      "source": "Gold looted",
+      "signature": ""
+    },
+    {
+      "id": 530,
+      "source": "Guild bank opened",
+      "signature": ""
+    },
+    {
+      "id": 531,
+      "source": "Guild invite",
+      "signature": ""
+    },
+    {
+      "id": 549,
+      "source": "Honor gained",
+      "signature": ""
+    },
+    {
+      "id": 597,
+      "source": "Item consumed from bag",
+      "signature": ""
+    },
+    {
+      "id": 598,
+      "source": "Item cursor",
+      "signature": ""
+    },
+    {
+      "id": 599,
+      "source": "Item obtained",
+      "signature": ""
+    },
+    {
+      "id": 600,
+      "source": "Item placed in bag",
+      "signature": ""
+    },
+    {
+      "id": 609,
+      "source": "Learned a new recipe",
+      "signature": ""
+    },
+    {
+      "id": 623,
+      "source": "Loot & inventory",
+      "signature": ""
+    },
+    {
+      "id": 624,
+      "source": "Loot received",
+      "signature": ""
+    },
+    {
+      "id": 625,
+      "source": "Loot roll confirmation",
+      "signature": ""
+    },
+    {
+      "id": 626,
+      "source": "Loot roll started",
+      "signature": ""
+    },
+    {
+      "id": 627,
+      "source": "Loot window opened",
+      "signature": ""
+    },
+    {
+      "id": 641,
+      "source": "Mailbox opened",
+      "signature": ""
+    },
+    {
+      "id": 665,
+      "source": "Multiplies every impact, on top of each profession's own weight. Set it to zero for a craft you feel but never get hit by.",
+      "signature": ""
+    },
+    {
+      "id": 666,
+      "source": "Multiplies every impact, on top of each profession's own weight. Set to zero for a craft you feel but never get hit by.",
+      "signature": ""
+    },
+    {
+      "id": 670,
+      "source": "Multiplies the continuous layer under every craft, on top of each profession's own weight. This is the part you feel for the whole craft rather than the individual blows.",
+      "signature": ""
+    },
+    {
+      "id": 671,
+      "source": "NPC emote nearby",
+      "signature": ""
+    },
+    {
+      "id": 675,
+      "source": "Never miss an important group alert, even while looking away:\n• |cffffffffDirect Whispers:|r Distinct personal communication blip on incoming whispers.\n• |cffffffffParty & Raid Invites:|r Dual-pulse notification when receiving group invitations.\n• |cffffffffQueue Pops & Ready Checks:|r High-priority attention-grabbing pulse when instances are ready.",
+      "signature": ""
+    },
+    {
+      "id": 682,
+      "source": "Noisy. In a raid this event fires very frequently. Kept for completeness and defaulted off.",
+      "signature": ""
+    },
+    {
+      "id": 685,
+      "source": "Not filtered by rarity yet — fires for anything, common items included.",
+      "signature": ""
+    },
+    {
+      "id": 707,
+      "source": "One pattern for every kind of refusal. May also do nothing inside dungeons and raids.",
+      "signature": ""
+    },
+    {
+      "id": 735,
+      "source": "Party invite",
+      "signature": ""
+    },
+    {
+      "id": 736,
+      "source": "Party leader changed",
+      "signature": ""
+    },
+    {
+      "id": 749,
+      "source": "Performed an emote",
+      "signature": ""
+    },
+    {
+      "id": 754,
+      "source": "Picked up an item",
+      "signature": ""
+    },
+    {
+      "id": 766,
+      "source": "Profession skill increased",
+      "signature": ""
+    },
+    {
+      "id": 767,
+      "source": "Profession window opened",
+      "signature": ""
+    },
+    {
+      "id": 768,
+      "source": "Professions with a rhythm",
+      "signature": ""
+    },
+    {
+      "id": 769,
+      "source": "Professions without one",
+      "signature": ""
+    },
+    {
+      "id": 808,
+      "source": "Purchased item from vendor",
+      "signature": ""
+    },
+    {
+      "id": 810,
+      "source": "Pure flavor, sibling to \"Performed an emote\" above. Fires often in busy areas with lots of ambient NPCs — this is opt-in noise, not a curated signal, same as its sibling. Off by default.",
+      "signature": ""
+    },
+    {
+      "id": 813,
+      "source": "Put down an item",
+      "signature": ""
+    },
+    {
+      "id": 835,
+      "source": "Raid marker changed",
+      "signature": ""
+    },
+    {
+      "id": 836,
+      "source": "Raiding",
+      "signature": ""
+    },
+    {
+      "id": 837,
+      "source": "Raiding (Encounter Focus)",
+      "signature": ""
+    },
+    {
+      "id": 852,
+      "source": "Reads GetShapeshiftForm()/UPDATE_SHAPESHIFT_FORM, the player's own state — one generic cue for any change, not split by direction, since forms chain (e.g. Bear -> Cat -> Moonkin) without necessarily passing back through no-form in between.",
+      "signature": ""
+    },
+    {
+      "id": 856,
+      "source": "Reads the skill-up chat feed rather than SKILL_LINES_CHANGED, which also fires for unrelated skill-list changes. Occurrence-only, no text parsing — this says a skill went up, not which one or to what. Deliberately light: early profession levelling fires this constantly.",
+      "signature": ""
+    },
+    {
+      "id": 869,
+      "source": "Reputation gained",
+      "signature": ""
+    },
+    {
+      "id": 899,
+      "source": "Same weight and shape as the vendor, mailbox and bank cues alongside it — all four are \"a window you walked up to has opened\", and they deliberately feel alike rather than each inventing a signature.",
+      "signature": ""
+    },
+    {
+      "id": 920,
+      "source": "Shapeshift form changed",
+      "signature": ""
+    },
+    {
+      "id": 940,
+      "source": "Sold item to vendor",
+      "signature": ""
+    },
+    {
+      "id": 1000,
+      "source": "TRADE_SKILL_CRAFT_BEGIN via Core/CastActivity.lua. Untested — no crafting cue has ever existed in this addon, so nothing here has been felt. Off by default.",
+      "signature": ""
+    },
+    {
+      "id": 1001,
+      "source": "Tactile sensations for living in the world of Azeroth:\n• |cffffffffLoot Drops & Currency:|r Feel items and gold collected into your bags.\n• |cffffffffQuests & Turn-ins:|r Physical confirmation upon accepting and completing objectives.\n• |cffffffffProgression:|r Rewarding celebration pulses for leveling up, achievements, and XP gains.",
+      "signature": ""
+    },
+    {
+      "id": 1036,
+      "source": "The other edge of the same CURSOR_CHANGED transition. Fires whether the item was placed somewhere or the drag was simply cancelled — the event doesn't distinguish, and nothing readable does.",
+      "signature": ""
+    },
+    {
+      "id": 1039,
+      "source": "The work itself while you craft — a bed for the length of it, with the profession's own rhythm struck on top. A hammer for blacksmithing, a pick for mining, nothing percussive for tailoring or enchanting.",
+      "signature": ""
+    },
+    {
+      "id": 1041,
+      "source": "These strike. The shape and the rate come from the craft — a hammer is slower and heavier than a pick — and the last blow lands on completion.",
+      "signature": ""
+    },
+    {
+      "id": 1075,
+      "source": "Two solid hits when an item attaches to the cursor.",
+      "signature": ""
+    },
+    {
+      "id": 1077,
+      "source": "Two taps when the guild bank opens — heavier than the personal bank, because it is a bigger door.",
+      "signature": ""
+    },
+    {
+      "id": 1094,
+      "source": "Vault door closed",
+      "signature": ""
+    },
+    {
+      "id": 1130,
+      "source": "Whisper received",
+      "signature": ""
+    }
+  ]
+}

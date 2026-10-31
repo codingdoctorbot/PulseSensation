@@ -1,0 +1,769 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "source": "\n\nA profile change is waiting: cues re-register when you leave combat, so nothing is rebuilt mid-pull.",
+      "target": "\n\n配置文件更改已挂起：提示效果将在你脱离战斗后重新注册，避免在战斗过程中重建任何内容。"
+    },
+    {
+      "id": 5,
+      "source": " Takes effect when you leave combat.",
+      "target": " 脱离战斗后生效。"
+    },
+    {
+      "id": 31,
+      "source": "1. Planned Class & Combat Role",
+      "target": "1. 计划的职业与战斗职责"
+    },
+    {
+      "id": 33,
+      "source": "2. Combat",
+      "target": "2. 战斗"
+    },
+    {
+      "id": 59,
+      "source": "A crisp tap when a major full-screen or side UI panel opens (character sheet, spellbook, quest log, etc.).",
+      "target": "当打开主要的全屏或侧边界面面板（角色面板、法术书、任务日志等）时，产生清脆的轻触震动。"
+    },
+    {
+      "id": 61,
+      "source": "A dense three-pulse tactical flurry on Windfury extra attacks, detected via sub-50% weapon speed PLAYER_SWING timing.",
+      "target": "当触发风怒额外攻击时，产生密集的3脉冲战术疾风连击，通过低于50%武器速度的PLAYER_SWING时间间隔检测。"
+    },
+    {
+      "id": 62,
+      "source": "A dense three-pulse tactical flurry when the client receives UNIT_SPELLCAST_SUCCEEDED for Windfury Attack (Spell ID 25504).",
+      "target": "当客户端接收到风怒攻击（法术ID 25504）的UNIT_SPELLCAST_SUCCEEDED事件时，产生密集的3脉冲战术疾风连击。"
+    },
+    {
+      "id": 63,
+      "source": "A distinct physical tap to land with each main-hand weapon swing.",
+      "target": "主手武器每次挥动命中时，产生明确的实体轻触震动。"
+    },
+    {
+      "id": 66,
+      "source": "A faint constant on the slow motor for as long as a cast or channel lasts, underneath the swell. This is the part that says \"something is happening\"; the swell is the part that says \"it is nearly done\". Zero leaves only the swell.",
+      "target": "在施法或引导持续期间，重震马达在渐强震动之下维持微弱的恒定震动。这部分负责传达“正在施法”；渐强部分则传达“即将完成”。设为0则仅保留渐强震动。"
+    },
+    {
+      "id": 67,
+      "source": "A faint continuous hum for as long as you're casting or channelling.",
+      "target": "在施法或引导持续期间，产生微弱的持续嗡鸣震动。"
+    },
+    {
+      "id": 71,
+      "source": "A firm hit that bleeds away — slowing to a stop.",
+      "target": "一次扎实的重击并逐渐消退——缓缓停止。"
+    },
+    {
+      "id": 77,
+      "source": "A heavy thud when your target activates a major defensive cooldown (e.g. Shield Wall, Ice Block, Divine Shield, Turtle, Cloak).",
+      "target": "当你的目标激活主要防御性大招（例如盾墙、寒冰屏障、圣盾术、灵龟守护、暗影斗篷）时，产生沉重的重击震动。"
+    },
+    {
+      "id": 84,
+      "source": "A light tick estimated to land with each off-hand weapon swing, while dual-wielding.",
+      "target": "双持武器时，预估副手武器每次挥动命中时产生轻微的提示震动。"
+    },
+    {
+      "id": 90,
+      "source": "A near-silent breathing wave while stealthed or invisible.",
+      "target": "处于潜行或隐形状态时，产生近乎无声的呼吸起伏波浪感震动。"
+    },
+    {
+      "id": 96,
+      "source": "A pleasant chime when you receive a critical heal.",
+      "target": "当你受到爆击治疗时，产生悦耳的鸣响震动。"
+    },
+    {
+      "id": 98,
+      "source": "A quick tap when a boss raid-warns, yells, emotes, or whispers during a fight — a text-channel fallback for bossAbilityWarning above.",
+      "target": "首领在战斗中发送团队警告、喊道、动作表情或密语时，产生迅速的轻触震动——作为上述bossAbilityWarning的文本频道备用方案。"
+    },
+    {
+      "id": 109,
+      "source": "A sharp metallic parry clang.",
+      "target": "清脆的金属招架撞击感震动。"
+    },
+    {
+      "id": 112,
+      "source": "A sharp thump when an attack against you crits.",
+      "target": "针对你的攻击产生爆击时，产生剧烈的重击震动。"
+    },
+    {
+      "id": 113,
+      "source": "A short deflecting tick when a craft is abandoned or interrupted.",
+      "target": "当制造被放弃或打断时，产生短促的偏转提示震动。"
+    },
+    {
+      "id": 131,
+      "source": "A soft tick when your ranged auto-attack stops — catches walking out of range or getting interrupted without noticing.",
+      "target": "当你的远程自动射击停止时产生轻柔的提示震动——用于提示不经意间超出距离或被意外打断。"
+    },
+    {
+      "id": 142,
+      "source": "A tank-facing cue. Off by default because for anyone else losing threat is the normal, desirable state.",
+      "target": "面向坦克的专属提示。默认关闭，因为对其他任何职责来说，脱离仇恨才是正常且期望的状态。"
+    },
+    {
+      "id": 152,
+      "source": "A very light tap for an ordinary heal — deliberately gentle, distinct from the sharper healCrit pulse.",
+      "target": "普通治疗产生极轻微的轻触震动——特意设计得较为柔和，有别于更加强烈的healCrit爆击脉冲。"
+    },
+    {
+      "id": 153,
+      "source": "A very light tap for an ordinary hit — deliberately gentle, distinct from the sharper critLanded pulse.",
+      "target": "普通命中产生极轻微的轻触震动——特意设计得较为柔和，有别于更加强烈的critLanded爆击脉冲。"
+    },
+    {
+      "id": 155,
+      "source": "A very light tick every time you use an ability, while in combat.",
+      "target": "在战斗中，每次使用技能都会产生极轻微的提示震动。"
+    },
+    {
+      "id": 173,
+      "source": "Active Profile: |cffffd100%s|r |cffff8800(Pending exit from combat)|r",
+      "target": "当前配置文件：|cffffd100%s|r |cffff8800(等待脱离战斗)|r"
+    },
+    {
+      "id": 186,
+      "source": "An electric burst when a reactive spell or talent lights up on your action bar.",
+      "target": "当触发类法术或天赋在动作条上高亮激活时，产生触电般的脉冲爆发。"
+    },
+    {
+      "id": 193,
+      "source": "Apply parry haste",
+      "target": "应用招架加速"
+    },
+    {
+      "id": 197,
+      "source": "Atmospheric and arcane. Flowing spellcast textures, elemental channeling, environmental wind and weather, flight gliding, and magical world interactions.",
+      "target": "氛围与奥术沉浸。流畅的施法材质震动、元素引导、环境风雨天气、飞行滑翔以及魔法世界的交互反馈。"
+    },
+    {
+      "id": 202,
+      "source": "Auto-shot cadence, weapon swings, pet status, trap triggers, execute range, boss mechanics",
+      "target": "自动射击节奏、武器挥动、宠物状态、陷阱触发、斩杀血线、首领机制"
+    },
+    {
+      "id": 213,
+      "source": "Bends the motor response with a smoothstep curve (3x^2 - 2x^3) to widen contrast between gentle background textures and heavy combat impacts. When unchecked, standard linear scaling is used.",
+      "target": "使用平滑过渡曲线（3x^2 - 2x^3）调节马达响应，以拉大柔和背景材质震动与剧烈战斗撞击之间的对比度。未勾选时，使用标准线性缩放。"
+    },
+    {
+      "id": 219,
+      "source": "Boss mechanics, heavy damage taken, personal cooldowns, debuffs, execute range, interrupt windows",
+      "target": "首领机制、承受重度伤害、个人自保冷却技能、减益效果、斩杀血线、打断时机"
+    },
+    {
+      "id": 231,
+      "source": "COMBAT_TEXT_UPDATE's SPELL_AURA_START_HARMFUL messageType, ruling out EXTRA_ATTACKS. Occurrence only — the amount on this feed is a secret value. Not confirmed to fire; off by default.",
+      "target": "COMBAT_TEXT_UPDATE的SPELL_AURA_START_HARMFUL消息类型，排除了EXTRA_ATTACKS。仅检测发生与否——该数据流中的数值属于私密值。尚未确认是否触发；默认关闭。"
+    },
+    {
+      "id": 246,
+      "source": "Channel hum (high)",
+      "target": "引导法术嗡鸣（高频）"
+    },
+    {
+      "id": 252,
+      "source": "Choose your planned class & role, and configure offensive and defensive combat feedback.",
+      "target": "选择你计划的职业与职责，并配置进攻与防御战斗反馈。"
+    },
+    {
+      "id": 257,
+      "source": "Combat",
+      "target": "战斗"
+    },
+    {
+      "id": 259,
+      "source": "Combo points, resource cap, execute range, kick alert, boss telegraphs, burst cooldowns",
+      "target": "连击点数、资源上限、斩杀血线、打断预警、首领技能预警、爆发冷却技能"
+    },
+    {
+      "id": 260,
+      "source": "Commanding protection. High threat alerts, mitigation tracking, crowd control, and kick windows. Silences non-combat clutter.",
+      "target": "掌控与守护。高仇恨预警、减伤监控、控制技能与打断时机。静音非战斗冗余震动。"
+    },
+    {
+      "id": 267,
+      "source": "Confirmed live 2026-09-17: PLAYER_ENTER_COMBAT/PLAYER_LEAVE_COMBAT specifically track the auto-attack toggle, not the broader in-combat state combatEnter/combatLeave already cover — kept as its own cue pair rather than merged with autoRepeatStart/Stop, since melee and ranged are a different event pair on a different frame.",
+      "target": "2026-09-17实机确认：PLAYER_ENTER_COMBAT/PLAYER_LEAVE_COMBAT专用于追踪自动攻击开关，而非combatEnter/combatLeave已涵盖的更广泛战斗状态——作为独立的提示配对保留，而非合并至autoRepeatStart/Stop，因为近战和远程在不同框架上对应不同的事件对。"
+    },
+    {
+      "id": 268,
+      "source": "Confirmed live 2026-09-17: START_AUTOREPEAT_SPELL/STOP_AUTOREPEAT_SPELL fire reliably on this client. See meleeAttackStart for the separate melee equivalent.",
+      "target": "2026-09-17实机确认：START_AUTOREPEAT_SPELL/STOP_AUTOREPEAT_SPELL在此客户端上稳定触发。独立的近战等效事件请参阅meleeAttackStart。"
+    },
+    {
+      "id": 269,
+      "source": "Confirmed live 2026-09-17: UNIT_SPELLCAST_SUCCEEDED fires with spellID 75 once per arrow — a genuine per-shot signal, not a prediction. Melee auto-attack has no equivalent: the traditional swing-timer technique reads the combat log, and this same session confirmed COMBAT_LOG_EVENT_UNFILTERED errors on registration for an addon frame under Midnight, full stop. See weaponSwingMain/weaponSwingOff below for the estimated (not measured) melee equivalent, built anyway with that limitation stated plainly. Hunter-specific; other classes' ranged auto-repeat (Shoot, wands) untested.",
+      "target": "2026-09-17实机确认：UNIT_SPELLCAST_SUCCEEDED每支箭都会触发一次（法术ID 75）——属于真实可靠的单发信号，而非估算。近战自动攻击没有直接等效事件：传统的挥动计时器技术需要读取战斗日志，而同一测试已完全证实Midnight架构下插件框架注册COMBAT_LOG_EVENT_UNFILTERED会报错。下方weaponSwingMain/weaponSwingOff即为估算（非实测）的近战替代方案，在此明确说明该局限性。本项仅限猎人；其他职业的远程自动重复攻击（射击、魔杖）未经测试。"
+    },
+    {
+      "id": 270,
+      "source": "Confirmed live, 2026-09-15: COMBAT_TEXT_UPDATE's DAMAGE_CRIT/SPELL_DAMAGE_CRIT fires when you are crit, not when you land one — the reverse of this cue's original name and description. The `critLanded` id and COMBAT category are kept as-is rather than renamed, so this stays the same saved preference for anyone who already toggled it.",
+      "target": "2026-09-15实机确认：COMBAT_TEXT_UPDATE的DAMAGE_CRIT/SPELL_DAMAGE_CRIT是在你被暴击时触发，而非你打出暴击时——与该提示原本的名称和描述恰好相反。保留`critLanded`标识符和COMBAT类别不变而不作重命名，以便此前已调整过设置的玩家保留偏好。"
+    },
+    {
+      "id": 273,
+      "source": "Continuous magical hum that builds during casts and channels steadily through your hands.",
+      "target": "在施法期间逐渐增强并通过双手平稳传导的持续法术嗡鸣。"
+    },
+    {
+      "id": 275,
+      "source": "Control & Threat",
+      "target": "控制与仇恨"
+    },
+    {
+      "id": 292,
+      "source": "Craft interrupted",
+      "target": "制造被打断"
+    },
+    {
+      "id": 306,
+      "source": "Curated starting setups balanced for specific roles and playstyles. Unlike an empty configuration, each profile prioritizes the tactile signals most critical to that activity while filtering out background noise.\n\n|cffffd100Dungeons & Raids|r prioritize high signal-to-noise: threat loss, defensive mitigations, interrupt windows, and spell completion ticks take precedence.\n|cffffd100World Immersion|r profiles emphasize atmospheric game-feel: footstep weight by armor type, mount strides, swimming resistance, weather changes, and exploration.\n|cffffd100PvP|r provides pure tactical radar with zero ambient distraction.\n\nTip: Click |cffffd100Set for Spec|r to bind any profile to your active talent specialization, or customize auto-switch rules on the |cffffd100Profiles|r page.",
+      "target": "针对特定职责和游戏风格精心调校的初始配置。与空白配置不同，每个配置文件都优先强化对该场景最关键的触觉信号，同时过滤背景杂音。\n\n|cffffd100地下城与团队副本|r优先保证高信噪比：仇恨丢失、防御减伤、打断时机以及施法完成提示震动享有最高优先级。\n|cffffd100大世界沉浸|r配置文件侧重环境游戏体感：不同护甲类型的脚步重量感、坐骑步伐、游泳阻力、天气变化以及探索互动。\n|cffffd100PvP|r提供纯粹的战术雷达感知，杜绝环境干扰。\n\n提示：点击|cffffd100按专精设定|r可将任意配置文件绑定至当前激活的天赋专精，或在|cffffd100配置文件|r页面自定义自动切换规则。"
+    },
+    {
+      "id": 308,
+      "source": "Damage taken",
+      "target": "受到伤害"
+    },
+    {
+      "id": 317,
+      "source": "Defensive Combat & Threat Feedback",
+      "target": "防御战斗与仇恨反馈"
+    },
+    {
+      "id": 323,
+      "source": "Detected via the global cooldown (spell 61304 ticking), not a per-ability read — so it only fires for abilities that trigger the GCD, and fires once per GCD even if what you pressed doesn't share a name with it. Off by default — this is the one idea in the whole catalogue that genuinely competes for channel time during a pull. Try it, but it's not for everyone.",
+      "target": "通过公共冷却时间（GCD，法术61304脉冲）检测，而非读取特定技能——因此仅在使用触发GCD的技能时触发，且每个GCD只触发一次，即使按下的技能与其不同名也是如此。默认关闭——这是整个目录中唯一会在开怪战斗期间明显占用震动通道的设计。可以尝试一下，但并不适合所有人。"
+    },
+    {
+      "id": 331,
+      "source": "Discordant combat spam",
+      "target": "杂乱的战斗干扰信息"
+    },
+    {
+      "id": 375,
+      "source": "Entering combat",
+      "target": "进入战斗"
+    },
+    {
+      "id": 378,
+      "source": "Estimator only, and ignored while the real event is in use. Recalculates the predicted next swing when you parry an incoming attack (real formula: reduces remaining time by 40% of weapon speed, floored at 20%).",
+      "target": "仅为估算值，在真实事件启用时将被忽略。当你招架一次近战攻击时，重新计算预期的下一次攻击动作（实际公式：将剩余时间缩短 40% of 武器速度，下限为 20%）。"
+    },
+    {
+      "id": 381,
+      "source": "Everything under the Accessibility headings is imported from Tremor, this addon's sibling — the same events, the same triggers, built for telling you about things you'd otherwise have to see, like a stun landing or your cast breaking.\n\nOne thing did not carry over: Tremor plays one cue at a time and makes the most urgent one win, on the reasoning that a late or blended signal is worse than none. Pulse doesn't work that way — everything here can layer together, which is what makes the movement and combat textures feel good, but it means an accessibility cue can arrive blended with something else rather than standing alone the way it would in Tremor.\n\nIf precise, unambiguous accessibility signals matter more to you than game-feel texture, Tremor on its own is built specifically for that and doesn't have this tradeoff. The two are not meant to run at the same time.",
+      "target": "“辅助功能”标题下的所有内容均源自本插件的姐妹插件 Tremor——采用相同的事件、相同的触发器，旨在提示那些你原本必须依靠视觉才能察觉的事情，例如受到昏迷或施法被打断。\n\n唯有一点没有沿用：Tremor 一次只播放一个提示并以最高优先级的信号为准，理由是延迟或混合的信号比没有信号更糟。Pulse 的运作方式并非如此——此处的所有震动都可以叠加融合，这正是让移动和战斗材质震动体感出色的原因，但也意味着辅助功能提示可能会与其他效果混合传达，而无法像在 Tremor 中那样独立呈现。\n\n如果你觉得精准无歧义的辅助功能信号比游戏触感材质更重要，Tremor 本身就是为此专门打造的，不存在这种权衡。两者不应同时运行。"
+    },
+    {
+      "id": 383,
+      "source": "Excessive combat telegraph alarms",
+      "target": "过度的战斗技能预警提示"
+    },
+    {
+      "id": 386,
+      "source": "Experimental. Listens for the client spellcast event of Windfury Attack (Spell ID 25504). Dependent on the server emitting UNIT_SPELLCAST_SUCCEEDED for item proc extra attacks.",
+      "target": "实验性功能。监听风怒攻击（法术ID 25504）的客户端施法事件。依赖于服务器为物品触发的额外攻击发送UNIT_SPELLCAST_SUCCEEDED。"
+    },
+    {
+      "id": 387,
+      "source": "Experimental. Measures the interval between consecutive main-hand swings. Extra attacks arrive well under 50% of weapon speed without needing combat log access. Confirmed working on WoW Forever.",
+      "target": "实验性功能。测量主手连续挥动之间的时间间隔。无需访问战斗日志，额外攻击的到达间隔远低于 50% of 武器速度。已确认在 WoW Forever 上正常运作。"
+    },
+    {
+      "id": 388,
+      "source": "Experimental: watches whichever spells the Cooldown Manager's Essential category shows, not a hardcoded list. The exact live \"just became ready\" signal was never independently confirmed before this shipped — built on the same C_Spell.GetSpellCooldown transition-tracking this file already uses for the GCD heartbeat.",
+      "target": "实验性功能：监控冷却管理器“核心”类别中显示的法术，而非硬编码列表。发布前尚未独立实测验证准确的实机“刚准备就绪”信号——基于本文件已用于GCD心跳检测的相同C_Spell.GetSpellCooldown状态转换追踪构建。"
+    },
+    {
+      "id": 400,
+      "source": "Fires for a craft that stopped without succeeding — moving, being interrupted, or cancelling. Untested.",
+      "target": "当制造未成功即停止时触发——移动、被打断或手动取消。未经测试。"
+    },
+    {
+      "id": 410,
+      "source": "Fires on SPELL_ACTIVATION_OVERLAY_GLOW_SHOW for procs such as Clearcasting, Nightfall, Overpower, Revenge, Riposte, or Art of War.",
+      "target": "当触发SPELL_ACTIVATION_OVERLAY_GLOW_SHOW时针对特效触发，例如节能施法、暮光、压制、复仇、反击或战争艺术。"
+    },
+    {
+      "id": 419,
+      "source": "Fires specifically when a channelled spell of yours is cut short by an interrupt, not when it simply ends.",
+      "target": "专用于你的引导法术被外部打断中断时触发，而非自然结束。"
+    },
+    {
+      "id": 425,
+      "source": "Fires when a channelled spell of yours ends, whether it ran to completion or was cut short.",
+      "target": "当你的引导法术结束时触发，无论其完整引导完毕还是中途被打断。"
+    },
+    {
+      "id": 449,
+      "source": "Fires when one of your own casts is interrupted or cancelled before completion.",
+      "target": "当你自己的施法在完成前被打断或取消时触发。"
+    },
+    {
+      "id": 468,
+      "source": "Fires when you are pacified or a spell school is locked out (PACIFY, PACIFYSILENCE, SCHOOL_INTERRUPT).",
+      "target": "当你处于无法攻击状态或某个法术派系被锁定时触发（PACIFY、PACIFYSILENCE、SCHOOL_INTERRUPT）。"
+    },
+    {
+      "id": 473,
+      "source": "Fires when you begin channelling a spell.",
+      "target": "当你开始引导法术时触发。"
+    },
+    {
+      "id": 476,
+      "source": "Fires when you drop off the top of your target's threat table.",
+      "target": "当你从目标的仇恨列表首位掉落时触发。"
+    },
+    {
+      "id": 477,
+      "source": "Fires when you drop out of combat.",
+      "target": "当你脱离战斗时触发。"
+    },
+    {
+      "id": 480,
+      "source": "Fires when you enter combat.",
+      "target": "当你进入战斗时触发。"
+    },
+    {
+      "id": 485,
+      "source": "Fires when you take over threat on your target (status 2 or 3).",
+      "target": "当你获取目标的最高仇恨时触发（状态2或3）。"
+    },
+    {
+      "id": 487,
+      "source": "Fires when your current target begins casting. The cue is the occurrence only — which spell it is cannot be read.",
+      "target": "当你的当前目标开始施法时触发。提示仅代表事件发生——无法读取具体是哪个法术。"
+    },
+    {
+      "id": 488,
+      "source": "Fires when your current target begins channelling.",
+      "target": "当你的当前目标开始引导法术时触发。"
+    },
+    {
+      "id": 490,
+      "source": "Fires when your focus target begins channelling.",
+      "target": "当你的焦点目标开始引导法术时触发。"
+    },
+    {
+      "id": 492,
+      "source": "Fires when your target's spellcast is interrupted by a kick, stun, or counter-spell.",
+      "target": "当你的目标的施法被脚踢、昏迷或法术反制打断时触发。"
+    },
+    {
+      "id": 493,
+      "source": "Fires when your target's spellcast stops before it finishes.",
+      "target": "当你的目标的施法在完成前停止时触发。"
+    },
+    {
+      "id": 494,
+      "source": "Fires when your threat on your target rises to high-but-not-tanking (status 1).",
+      "target": "当你对目标的仇恨上升至较高但尚未成为主目标时触发（状态1）。"
+    },
+    {
+      "id": 497,
+      "source": "Flat sustained level while channelling, distinct from a regular cast's swell.",
+      "target": "引导期间保持平稳持续的震动强度，有别于常规施法的渐强震动。"
+    },
+    {
+      "id": 502,
+      "source": "Fluid spellcasting pacing. Continuous channel bed during casts, crisp completion snap, lockout warnings, and proc notifications.",
+      "target": "行云流水的施法节奏。施法期间的持续引导震动基底、清脆利落的施法完成脆响、法系锁定预警以及特效触发提示。"
+    },
+    {
+      "id": 506,
+      "source": "Focus started channelling",
+      "target": "焦点目标开始引导法术"
+    },
+    {
+      "id": 515,
+      "source": "Full loss-of-control suite, kick opportunities, lockouts, panic health warning, combat enter/leave",
+      "target": "全面的失去控制提示组、打断时机、法系锁定、紧急低血量预警、进入/脱离战斗"
+    },
+    {
+      "id": 540,
+      "source": "Heart rate (critical), BPM",
+      "target": "心率（危险），BPM"
+    },
+    {
+      "id": 545,
+      "source": "High-clarity encounter triage. Critical raid mechanics, debuffs, boss abilities, and personal survival alerts with world clutter silenced.",
+      "target": "高清晰度的首领战信息分流。关键团队副本机制、减益效果、首领技能与个人生存预警，同时静音大世界冗余震动。"
+    },
+    {
+      "id": 547,
+      "source": "High-tempo physical execution. Snappy combo points and resource spenders, execute range alerts, boss telegraphs, and kick windows.",
+      "target": "快节奏的物理打击感。清脆利落的连击点数与资源消耗反馈、斩杀血线预警、首领技能预警与打断时机。"
+    },
+    {
+      "id": 548,
+      "source": "Hit with a critical strike",
+      "target": "受到爆击"
+    },
+    {
+      "id": 553,
+      "source": "How far a motor has to move before the addon bothers telling the client about it. Raise it to cut the number of calls; too high and slow fades turn into visible steps. Shared by every channel — this is a call-rate setting, not a motor property.",
+      "target": "马达强度需要发生多大变化，插件才会向客户端回报。调高此值可减少调用次数；若调得过高，平缓淡出可能会变成肉眼可察觉的阶梯式顿挫。所有通道共享此项——这是调用频率设定，而非马达硬件属性。"
+    },
+    {
+      "id": 565,
+      "source": "How strong the stealth hum is overall. Meant to sit just at the edge of perception — if you notice it as a vibration rather than a presence, it is too high.",
+      "target": "潜行嗡鸣震动的整体强度。设计初衷是刚好处于感知的临界点——如果你明显感觉它是一阵震动而非某种存在感，说明强度过高了。"
+    },
+    {
+      "id": 605,
+      "source": "Landed a critical heal",
+      "target": "造成爆击治疗"
+    },
+    {
+      "id": 610,
+      "source": "Learned a new spell",
+      "target": "学会新法术"
+    },
+    {
+      "id": 612,
+      "source": "Leaving combat",
+      "target": "脱离战斗"
+    },
+    {
+      "id": 616,
+      "source": "Life & combat state",
+      "target": "生命值与战斗状态"
+    },
+    {
+      "id": 621,
+      "source": "Locomotion & footsteps by armor weight, mount strides, weather, swimming drag, parry/blocks, full loot/quest haptics",
+      "target": "按护甲重量区分的移动与脚步震动、坐骑步伐、天气、游泳阻力、招架/格挡、完整的拾取/任务触感"
+    },
+    {
+      "id": 622,
+      "source": "Locomotion clatter, weapon swings, loot popups, world dialogs",
+      "target": "移动声响、武器挥动、拾取弹窗、世界对话"
+    },
+    {
+      "id": 633,
+      "source": "Low health alarms, heal cast success, self/enemy interrupt warnings, dispellable CC",
+      "target": "低生命值警报、治疗施法成功、自身/敌方打断预警、可驱散控制"
+    },
+    {
+      "id": 639,
+      "source": "MEASURED as of 2026-09-21, not estimated. Driven by Forever's PLAYER_SWING event, which carries swingDuration and a MainHand/OffHand/Ranged type, both confirmed non-secret, and which Blizzard's own swing timer consumes. Note this is a SWING, not necessarily a connection — whether it also fires on a miss, dodge or parry is untested, and a \"successful hit\" cue would need a different source. The old weapon-speed estimator is kept as a fallback and engages automatically if the event ever disappears; it predicted swing times from UnitAttackSpeed with a haste cache, range and stun gating and a parry-haste correction, and drifted with nothing to correct against.",
+      "target": "截至2026-09-21已改为【实测】而非估算。由Forever版本的PLAYER_SWING事件驱动，该事件包含swingDuration以及MainHand/OffHand/Ranged类型，两者均确认为非私密数据，且暴雪自家的挥动计时器也是读取该事件。请注意这是【挥动】，不一定代表命中——未命中、闪躲或招架时是否也会触发尚未经测试，而“成功命中”提示需要不同的数据源。旧版武器速度估算器被保留作为后备方案，若该事件失效则会自动接管；旧版基于UnitAttackSpeed结合急速缓存、距离与昏迷判定门控以及招架加速修正来预估挥动时间，由于缺乏校准基准会逐渐产生漂移。"
+    },
+    {
+      "id": 655,
+      "source": "Mirrors critLanded's split exactly: HEAL_CRIT on the same personal COMBAT_TEXT_UPDATE feed. critLanded's incoming-vs-outgoing direction was independently confirmed live (2026-09-15) for damage; the same direction for heals is inferred by analogy (same feed, same self-scoped design), not separately re-tested — worth confirming live before trusting it's \"you were healed\" rather than \"you landed a heal\" if that distinction matters to you.",
+      "target": "完全对应critLanded的逻辑划分：在相同的个人COMBAT_TEXT_UPDATE数据流中监听HEAL_CRIT。critLanded对于伤害是“承受还是造成”的方向已在实机中独立证实（2026-09-15）；治疗的方向通过类比推断（相同的数据流，相同的自身作用域设计），未作单独复测——如果对你来说“受到治疗”与“造成治疗”的区别至关重要，建议在实机中先行验证。"
+    },
+    {
+      "id": 658,
+      "source": "Most triggers are a **pulse** — something happens, you feel one short burst, then it's gone.\n\nSome are a **texture** instead — a faint, continuous feeling for as long as something is true. Swimming, gliding, casting, riding a flight path, weathering a storm: these fade in in the moment they start and fade out the instant they stop, rather than announcing themselves once. They're built to layer underneath pulses rather than compete with them — a critical hit still lands as a distinct thump even while a casting texture is quietly running underneath it.\n\nMost textures ship switched off, on purpose: a constant hum is a bigger ask than an occasional pulse, and it's worth trying deliberately rather than discovering by accident.",
+      "target": "大多数触发器都是**脉冲**——某个事件发生，你感受到一次短促的震动，随后消失。\n\n部分触发器则是**材质纹理**——只要某种状态持续存在，就会伴随一种微弱而连续的感觉。游泳、滑翔、施法、乘坐飞行路线坐骑、经历暴风雨：它们在开始瞬间淡入并在结束瞬间淡出，而不是仅通报一次。它们被设计为垫在脉冲底层，而不是与之冲突——即使施法材质震动在底层悄然运行，爆击命中依然会以明确扎实的重击呈现。\n\n大多数材质震动默认特意处于关闭状态：持续的嗡鸣相比偶尔的脉冲对感官负担更大，值得你主动去尝试开启，而不是意外发现。"
+    },
+    {
+      "id": 673,
+      "source": "Naturalistic scout feel. Locomotion, flight gliding, wilderness weather, tracking/stealth cues, world exploration, and bow release.",
+      "target": "自然的斥候体感。移动、飞行滑翔、荒野天气、追踪/潜行提示、世界探索与拉弓射击释放感。"
+    },
+    {
+      "id": 686,
+      "source": "Note the event name: Forever uses LEARNED_SPELL_IN_SKILL_LINE, not the older LEARNED_SPELL_IN_TAB, which is absent from this client's documentation entirely. Can fire more than once for a single visit to a trainer if you buy several ranks.",
+      "target": "注意事件名称：Forever版本使用的是LEARNED_SPELL_IN_SKILL_LINE，而非旧版的LEARNED_SPELL_IN_TAB，后者在当前客户端的文档中已完全不存在。如果在训练师处连续学习了多个法术等级，单次拜访可能会触发多次。"
+    },
+    {
+      "id": 695,
+      "source": "Off by default and mounted-only by default, on purpose: a texture that plays whenever you move is the most fatiguing thing in this addon and the most likely to make you switch it off wholesale. Uses shaped transient layers with fast-attack kicks and exponential decay to produce crisp, distinct footfalls without motor hum in between. Distinct timbres (boots, hooves, paws, heavy claws/pads, metal) drive both Low (body mass) and High (impact crispness) motors in concert. Speed is read out of combat only and held through a fight; snares and boosts are not tracked there, which is a deliberate trade for never touching a secret value. Goes quiet while swimming, flying, gliding, riding a flight path, or airborne after a jump — each of those has its own cue and footfalls have nothing to add to them.",
+      "target": "默认关闭且特意默认仅在骑乘时启用：只要移动就持续播放的震动材质是本插件中最容易造成疲劳的部分，也是最可能促使你彻底关掉它的原因。采用带有快起音冲击与指数衰减的塑形瞬态层，产生清脆清晰的脚步感，其间没有马达多余的杂音嗡鸣。不同的音色材质（靴子、蹄音、爪垫、沉重的利爪/肉垫、金属）协同驱动重震（体量感）与轻震（打击清脆度）双马达。速度仅在脱战状态下读取并在战斗中保持；在此不追踪减速与加速效果，这是为了绝不触碰私密值而作出的刻意取舍。在游泳、飞行、滑翔、乘坐飞行坐骑或跳跃滞空期间保持静音——这些情况各自拥有专属提示，脚步声对其毫无增益。"
+    },
+    {
+      "id": 699,
+      "source": "Off by default. Suppresses \"Casting texture\" for the length of a craft so the two do not layer into one lumpy sensation. The profession is read by id from the recipe (C_TradeSkillUI.GetProfessionInfoByRecipeID), so no name matching and no localisation problem — but that field is documented nilable, and anything that does not resolve falls back to a generic work rhythm rather than going quiet. Gathering is NOT covered: swinging a pick at an ore node is not a recipe and has no recipe id. Per-profession toggles and strengths are on the Crafting page. Entirely untested.",
+      "target": "默认关闭。在制造期间抑制“施法材质震动”，以防两者叠合成模糊杂乱的感觉。专业技能是通过配方ID直接读取（C_TradeSkillUI.GetProfessionInfoByRecipeID），因此无需名称匹配，不存在本地化兼容问题——但该字段在文档中声明为可空（nilable），任何无法解析的情况都会回退至通用的制作节奏震动而非完全静音。采集【不包含】在内：挥镐挖掘矿脉不属于配方，也不存在配方ID。各专业的专属开关与强度可在“制造”页面中配置。完全未经测试。"
+    },
+    {
+      "id": 700,
+      "source": "Off means swings come from Forever's own PLAYER_SWING event — a real per-swing signal, confirmed non-secret and proven live. On forces the old prediction built from weapon speed instead. You should not need this: if Blizzard ever removes the event, Pulse detects that and falls back on its own. It exists so a patch that changes the event's BEHAVIOUR rather than removing it still leaves you a working cue.",
+      "target": "关闭表示挥动来源于Forever版本原生的PLAYER_SWING事件——一种真实且每次挥动都触发的信号，经实机测试确认为非私密数据。开启则强制使用基于武器速度构建的旧版估算。正常情况下无需开启：如果暴雪未来移除了该事件，Pulse会自动检测并自行回退。该选项的存在是为了防范未来补丁仅改变该事件的【行为】而非直接移除时，依然能为你提供可用的提示。"
+    },
+    {
+      "id": 702,
+      "source": "Offensive Combat Haptics",
+      "target": "进攻战斗触觉"
+    },
+    {
+      "id": 730,
+      "source": "Paced ranged rhythm with melee-weaving support. Auto-shot timing, weapon swings, pet status, trap triggers, and boss mechanics.",
+      "target": "富有节奏的远程循环并支持近战穿插输出。自动射击时间节点、武器挥动、宠物状态、陷阱触发与首领机制。"
+    },
+    {
+      "id": 751,
+      "source": "Physical strikes for weapon swings (main & off hand), auto-shot arrows, ability execution cadence, and completed and instant spellcasts.",
+      "target": "武器挥动（主手与副手）、自动射击箭矢、技能施展节奏以及读条完成和瞬发法术的物理打击反馈。"
+    },
+    {
+      "id": 804,
+      "source": "Pulse: not available in combat. Try again after combat.",
+      "target": "Pulse：战斗中不可用。请在脱离战斗后重试。"
+    },
+    {
+      "id": 809,
+      "source": "Pure competitive reaction. Instant tactical alerts for stuns, silences, disarms, lockouts, panic health warnings, and combat transitions.",
+      "target": "纯粹的竞技反应。针对昏迷、沉默、缴械、法系锁定、紧急低血量预警与战斗状态切换的即时战术告警。"
+    },
+    {
+      "id": 845,
+      "source": "Reads Blizzard's own default-UI LowHealthFrame (:IsShown()), not UnitHealth — that read is unconditionally secret, and the earlier color-curve attempt was confirmed dead too. LowHealthFrame's widget state is confirmed non-secret in-game instead. Very rarely can also fire for an unrelated reason (a fullscreen UI panel open in combat) — narrow enough to document rather than guard against. No `mode` field: this no longer plays a Core/Modes.lua shape, it drives Engine:Hold directly, same mechanism as lowHealthTexture.",
+      "target": "读取暴雪原生界面的LowHealthFrame（:IsShown()），而非UnitHealth——后者属于无条件的私密数据读取，早期的颜色曲线方案也已确认失效。游戏内已证实LowHealthFrame的控件状态属于非私密数据。极罕见情况下可能因其他不相关的原因触发（例如在战斗中打开全屏界面面板）——发生几率极低，仅在此记录说明而未作防御性拦截。无`mode`字段：此项不再播放Core/Modes.lua中的形态，而是直接驱动Engine:Hold，机制与lowHealthTexture相同。"
+    },
+    {
+      "id": 846,
+      "source": "Reads Blizzard's own pre-scripted encounter timeline (C_EncounterEvents), not real-time combat data — pre-computed metadata, not something Secret Values blocks. No confirmed \"targeted at you\" flag: this can say something big is coming, not that it's coming for you specifically.",
+      "target": "读取暴雪预设的首领战时间轴（C_EncounterEvents），而非实时战斗数据——这是预先计算好的元数据，不会被私密数据机制拦截。没有确认的“以你为目标”标识：它能提示重大技能即将到来，但无法判断是否专门针对你。"
+    },
+    {
+      "id": 847,
+      "source": "Reads CHAT_MSG_RAID_WARNING/MONSTER_YELL/MONSTER_EMOTE/MONSTER_WHISPER, gated on being inside an active encounter (ENCOUNTER_START/END) — never on C_EncounterEvents, so this works even if that namespace's data turns out unreliable. Occurrence-only: says a boss communicated something, not what or whether it's aimed at you. Known false-positive: a player manually using the raid-warning channel during a live pull also fires this — not filtered, since telling a boss-sent raid warning from a player-sent one isn't reliable.",
+      "target": "读取CHAT_MSG_RAID_WARNING/MONSTER_YELL/MONSTER_EMOTE/MONSTER_WHISPER，以处于激活的首领战（ENCOUNTER_START/END）中为触发门控——从不依赖C_EncounterEvents，因此即便该命名空间的数据不可靠也能正常运作。仅检测事件发生：仅表明首领发送了信息，不包含具体内容以及是否针对你。已知误报情况：玩家在开怪战斗中手动使用团队警告频道也会触发此提示——未作过滤，因为区分首领发送与玩家发送的团队警告并不完全可靠。"
+    },
+    {
+      "id": 848,
+      "source": "Reads COMBAT_TEXT_UPDATE's DAMAGE/SPELL_DAMAGE/DAMAGE_CRIT/SPELL_DAMAGE_CRIT messageTypes rather than UNIT_COMBAT, for no-churn reasons rather than necessity — UNIT_COMBAT's \"WOUND\" mechanism was believed dead (reported not firing 2026-09-15) but was confirmed live and firing on 2026-09-16 after all; this cue already worked on COMBAT_TEXT_UPDATE by then, so it wasn't switched back. The suspicion that UNIT_COMBAT has been non-functional since Cataclysm-era patches should not be trusted as settled. Deliberately TICK, not THUD — a routine hit should read as noticeably gentler than critLanded's own pulse, not the same weight repeated constantly. Its own Intensity slider (the generic per-cue one every trigger gets) defaults to 0.3 rather than 1.0, same reasoning: it fires far more often than a crit or a dodge, so it needs to stay in the background rather than compete with them.",
+      "target": "读取COMBAT_TEXT_UPDATE的DAMAGE/SPELL_DAMAGE/DAMAGE_CRIT/SPELL_DAMAGE_CRIT消息类型，而非UNIT_COMBAT，这是出于避免无谓改动而非必要性——此前认为UNIT_COMBAT的“WOUND”机制已失效（2026-09-15报告未触发），但随后在2026-09-16证实它依然正常触发；彼时该提示已经在COMBAT_TEXT_UPDATE上稳定工作，因此未切回。关于UNIT_COMBAT自大地的裂变补丁以来就失效的怀疑不应被视为定论。特意设计为【提示震动】而非【沉重打击】——常规受击在体感上应明显柔和于critLanded本身的脉冲，而不是反复承受相同重量的震动。其专属强度滑块（每个触发器通用的滑块）默认设为0.3而非1.0，同样基于该考量：它的触发频率远高于爆击或闪躲，因此需要保持在背景中而不喧宾夺主。"
+    },
+    {
+      "id": 849,
+      "source": "Reads COMBAT_TEXT_UPDATE's FACTION messageType — same personal combat-text feed critLanded/damageTaken already use, occurrence-only, no amount or faction name read.",
+      "target": "读取COMBAT_TEXT_UPDATE的FACTION消息类型——使用与critLanded/damageTaken相同的个人战斗文字数据流，仅检测发生，不读取数值或阵营名称。"
+    },
+    {
+      "id": 850,
+      "source": "Reads COMBAT_TEXT_UPDATE's HONOR_GAINED messageType — same personal combat-text feed critLanded/damageTaken already use, occurrence-only, no amount read.",
+      "target": "读取COMBAT_TEXT_UPDATE的HONOR_GAINED消息类型——使用与critLanded/damageTaken相同的个人战斗文字数据流，仅检测发生，不读取数值。"
+    },
+    {
+      "id": 853,
+      "source": "Reads HEAL/PERIODIC_HEAL/HEAL_CRIT — same feed and direction caveat as healCrit above. Same TICK/0.3-intensity treatment as damageTaken, for the same reason: this fires far more often than a crit heal, especially under any HoT, so it stays in the background rather than competing with it.",
+      "target": "读取HEAL/PERIODIC_HEAL/HEAL_CRIT——与上述healCrit享有相同的数据流与方向性说明。采用与damageTaken相同的【提示震动】及0.3强度设定，理由一致：它的触发频率远高于爆击治疗，尤其是在拥有持续治疗（HoT）的情况下，因此需要退居背景而不抢占主导。"
+    },
+    {
+      "id": 854,
+      "source": "Reads IsStealthed(), the player's own boolean state — not an aura scan, which would be both expensive and liable to return secret values. First cue built on Core/Waves.lua. Untested.",
+      "target": "读取玩家自身的布尔状态IsStealthed()——而非光环扫描，后者开销大且易返回私密值。首个基于Core/Waves.lua构建的提示。未经测试。"
+    },
+    {
+      "id": 898,
+      "source": "Same source as weaponSwingMain above — PLAYER_SWING, filtered to the OffHand swing type. Silent if you're not dual-wielding. Parry haste has never affected off-hand timing, so that correction does not apply here even on the fallback estimator.",
+      "target": "与上述weaponSwingMain数据源相同——PLAYER_SWING，按OffHand（副手）挥动类型过滤。未双持武器时保持静音。招架加速历来不影响副手攻击节奏，因此即便利使用后备估算器，此处也不应用该修正。"
+    },
+    {
+      "id": 907,
+      "source": "Second steepening point — the steepest segment of all, climbing to heartRateCritical by zero breath. Requested live 2026-09-16 as ~15% breath remaining.",
+      "target": "第二个陡升点——所有分段中最陡峭的一段，在呼吸耗尽时攀升至heartRateCritical。于2026-09-16实机调优设定为剩余约15%呼吸。"
+    },
+    {
+      "id": 913,
+      "source": "Sensory radar for survival: immediate physical warnings when taking damage, getting critically hit, deflecting attacks, being healed, receiving debuffs, threat changes, or losing control.",
+      "target": "生存感知雷达：在受到伤害、遭受爆击、招架偏转攻击、获得治疗、受到减益效果、仇恨变化或失去控制时提供即时的实体预警。"
+    },
+    {
+      "id": 922,
+      "source": "Shares its shape with \"Learned a new spell\" on purpose — both are the same moment to a player, just in different systems.",
+      "target": "特意与“学会新法术”共享相同的震动形态——对玩家而言两者在体感上属于同一时刻，只是处于不同系统中。"
+    },
+    {
+      "id": 923,
+      "source": "Shares the social-pull limitation of the threat-rising cue.",
+      "target": "与仇恨上升提示存在相同的社交拉怪局限性。"
+    },
+    {
+      "id": 934,
+      "source": "Slow, rhythmic breathing expansion wave keeping you aware of your stealth state.",
+      "target": "缓慢且富有节奏的呼吸起伏波浪感，让你时刻感知当前的潜行状态。"
+    },
+    {
+      "id": 943,
+      "source": "Spell activation proc",
+      "target": "法术激活特效触发"
+    },
+    {
+      "id": 944,
+      "source": "Spell flow, instant casts, and interrupts",
+      "target": "法术循环、瞬发法术与施法打断"
+    },
+    {
+      "id": 945,
+      "source": "Spellcasting Channel Hum",
+      "target": "施法引导法术嗡鸣"
+    },
+    {
+      "id": 955,
+      "source": "Stealth Breathing Wave",
+      "target": "潜行呼吸波浪"
+    },
+    {
+      "id": 956,
+      "source": "Stealth baseline",
+      "target": "潜行基础强度"
+    },
+    {
+      "id": 957,
+      "source": "Stealth texture",
+      "target": "潜行材质震动"
+    },
+    {
+      "id": 963,
+      "source": "Step 2: Combat Haptics & Class Role",
+      "target": "第2步：战斗触觉与职业职责"
+    },
+    {
+      "id": 992,
+      "source": "Switches every cue on the Combat page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "一次性开启或关闭“战斗”页面上的所有提示。每个提示在底层保留各自的独立设置。"
+    },
+    {
+      "id": 993,
+      "source": "Switches every cue on the Control & Threat page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "一次性开启或关闭“控制与仇恨”页面上的所有提示。每个提示在底层保留各自的独立设置。"
+    },
+    {
+      "id": 1009,
+      "source": "Target started channelling",
+      "target": "目标开始引导法术"
+    },
+    {
+      "id": 1038,
+      "source": "The standard authored baseline. Balanced game-feel across combat, environment, movement, and alerts.",
+      "target": "官方标准基准配置。兼顾战斗、环境、移动与警报的平衡游戏体感。"
+    },
+    {
+      "id": 1046,
+      "source": "Threat",
+      "target": "仇恨"
+    },
+    {
+      "id": 1047,
+      "source": "Threat loss/warning, heavy hits taken, defensive cooldowns, crowd control, enemy kick windows",
+      "target": "仇恨丢失/预警、承受重击、防御大招、群体控制、敌方打断时机"
+    },
+    {
+      "id": 1048,
+      "source": "Threat lost",
+      "target": "失去仇恨"
+    },
+    {
+      "id": 1049,
+      "source": "Threat rising",
+      "target": "仇恨上升"
+    },
+    {
+      "id": 1050,
+      "source": "Threat, mitigations, and CC",
+      "target": "仇恨、减伤与控制技能"
+    },
+    {
+      "id": 1071,
+      "source": "Two separate addons exist alongside Pulse, each with its own slash command — neither is required, and neither changes anything Pulse itself does.\n\n**PulseChecklist** (/pulsecheck or /pcheck) opens a standalone checklist window listing every trigger, for tracking which ones you've actually confirmed feel right on your own hardware.\n\n**PulseDebug** (/pdebug or /pd) opens an interactive diagnostic window with live telemetry — inspect currently blended layers, monitor real-time channel output, review a timestamped event log, and inspect module states.",
+      "target": "除了 Pulse 之外还存在两个独立的伴随插件，各自拥有专属的斜杠命令——两者均非必装，也不会改变 Pulse 本身的任何行为。\n\n**PulseChecklist**（/pulsecheck 或 /pcheck）可打开一个独立的检查清单窗口，列出所有触发器，用于追踪哪些提示已在你的硬件设备上确认体感良好。\n\n**PulseDebug**（/pdebug 或 /pd）可打开一个带有实时遥测数据的交互式诊断窗口——检查当前混合的震动层、监控实时通道输出、查看带时间戳的事件日志以及检查模块状态。"
+    },
+    {
+      "id": 1074,
+      "source": "Two soft ticks when you switch tabs inside a panel — Character, Spellbook, the map's zone tabs, and so on.",
+      "target": "在面板内切换标签页时产生两次轻柔的提示震动——例如角色、法术书、地图的区域标签等。"
+    },
+    {
+      "id": 1085,
+      "source": "Untested — the interruptedBy value itself is confirmed against Blizzard's own casting-bar code, not live. What's NOT confirmed: whether interruptedBy comes back secret for your own channel (the event is flagged SecretWhenUnitSpellCastRestricted in Blizzard's API docs). If this never fires, that's the first thing to check, not a sign the logic above is wrong.",
+      "target": "未经测试——interruptedBy数值本身已对照暴雪自身的施法条代码进行核对，但未在实机中验证。尚未确认的是：对于你自己引导的法术，interruptedBy是否会作为私密数据返回（该事件在暴雪API文档中被标记为SecretWhenUnitSpellCastRestricted）。如果该提示从未触发，应首先检查这一点，而非意味着上述逻辑有误。"
+    },
+    {
+      "id": 1092,
+      "source": "Uses WoW Forever's native C_SwingTimer range checking.",
+      "target": "使用 WoW Forever 原生的 C_SwingTimer 距离判定。"
+    },
+    {
+      "id": 1100,
+      "source": "Visceral physical game-feel. Armor-weighted footstep gait, terrain landings, parry and block impacts, swimming drag, weather, and rich world looting.",
+      "target": "拳拳到肉的实体游戏体感。按护甲重量区分的脚步步伐、地形着陆、招架与格挡撞击、游泳阻力、天气与丰富的世界拾取触感。"
+    },
+    {
+      "id": 1112,
+      "source": "Weapon swing (main hand)",
+      "target": "武器挥动（主手）"
+    },
+    {
+      "id": 1113,
+      "source": "Weapon swing (off hand)",
+      "target": "武器挥动（副手）"
+    },
+    {
+      "id": 1114,
+      "source": "Weapon swings, ability cadence, and auto-attack stops",
+      "target": "武器挥动、技能节奏与自动攻击停止"
+    },
+    {
+      "id": 1133,
+      "source": "Windfury (spellcast hook)",
+      "target": "风怒（施法钩子）"
+    },
+    {
+      "id": 1134,
+      "source": "Windfury (swing burst)",
+      "target": "风怒（挥动爆发）"
+    },
+    {
+      "id": 1135,
+      "source": "Windfury extra attacks",
+      "target": "风怒额外攻击"
+    },
+    {
+      "id": 1137,
+      "source": "With dozens of cues across movement, combat, environment, and interface systems, you might know what you want to adjust without knowing which tab owns it.\n\nThe **Cue index** page lists every cue in Pulse alphabetically, grouped under clean letter headers with real-time status dots showing whether each cue is currently enabled. Clicking any line jumps directly to that cue's page and settings.\n\nSearching the Cue Index searches all cue names, descriptions, and locations simultaneously, serving as an instant directory across the entire addon.",
+      "target": "移动、战斗、环境与界面系统涵盖数十种提示，你可能清楚自己想调整什么，却不知道它归属于哪个分页。\n\n**提示索引**页面按字母顺序罗列了 Pulse 中的每个提示，归类于整洁的字母标题下，并带有实时状态圆点指示各个提示当前是否已启用。点击任意行可直接跳转至该提示的专属页面与设置。\n\n在提示索引中搜索将同时检索所有提示名称、描述及所在位置，成为贯穿整个插件的即时速查目录。"
+    },
+    {
+      "id": 1150,
+      "source": "You cannot do that while in combat.",
+      "target": "在战斗中无法执行该操作。"
+    },
+    {
+      "id": 1153,
+      "source": "You parried, dodged, or blocked",
+      "target": "你进行了招架、闪躲或格挡"
+    },
+    {
+      "id": 1156,
+      "source": "Your cast interrupted",
+      "target": "你的施法被打断"
+    },
+    {
+      "id": 1159,
+      "source": "Your channel ended",
+      "target": "你的引导法术结束"
+    },
+    {
+      "id": 1160,
+      "source": "Your channel interrupted",
+      "target": "你的引导法术被打断"
+    },
+    {
+      "id": 1161,
+      "source": "Your channel started",
+      "target": "你的引导法术开始"
+    },
+    {
+      "id": 1192,
+      "source": "|cff4cb8ffPulse:|r Cannot open settings during combat.",
+      "target": "|cff4cb8ffPulse:|r 战斗中无法打开设置。"
+    },
+    {
+      "id": 1200,
+      "source": "|cffff5555Pulse:|r Cannot open Quick Setup during combat.",
+      "target": "|cffff5555Pulse:|r 战斗中无法打开快捷配置。"
+    }
+  ]
+}

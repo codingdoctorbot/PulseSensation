@@ -1,0 +1,1324 @@
+{
+  "items": [
+    {
+      "source": " (page off)|r",
+      "target": " (страница выкл.)|r"
+    },
+    {
+      "source": " (reported as \"",
+      "target": " (определяется как \""
+    },
+    {
+      "source": " Rules and management are on the Profiles page.",
+      "target": " Правила и управление находятся на странице профилей."
+    },
+    {
+      "source": " as a whole — both its pulses and the gaps between them, so a multi-hit mode keeps its rhythm instead of the hits stretching into their own gaps. 1.0 is the authored default.",
+      "target": " в целом — как его импульсы, так и паузы между ними, чтобы режим с несколькими ударами сохранял свой ритм, а не растягивал удары на паузы. 1.0 — авторское значение по умолчанию."
+    },
+    {
+      "source": " right now with whatever's currently set on its sliders above.",
+      "target": " прямо сейчас с текущими настройками ползунков выше."
+    },
+    {
+      "source": "\" is recommended — pick a different one to change how just this cue feels, without affecting anything else that also uses \"",
+      "target": "» рекомендуется — выберите другой, чтобы изменить ощущение только этого сигнала, не затрагивая остальные, которые также используют «"
+    },
+    {
+      "source": "\" — try one of: ",
+      "target": "» — попробуйте один из следующих: "
+    },
+    {
+      "source": "%d of %d cues on",
+      "target": "%d из %d сигналов включено"
+    },
+    {
+      "source": "%d of %d on",
+      "target": "%d из %d включено"
+    },
+    {
+      "source": "%s (%d)",
+      "target": "%s (%d)"
+    },
+    {
+      "source": "%s Activate   •   %s Try Texture   •   %s Categories",
+      "target": "%s Активировать   •   %s Проверить текстуру   •   %s Категории"
+    },
+    {
+      "source": "%s Adjust Intensity   •   %s Quick Step   •   |cff38BDF8◀/▶|r Controls   •   %s Try Texture   •   %s Categories",
+      "target": "%s Настроить интенсивность   •   %s Быстрый шаг   •   |cff38BDF8◀/▶|r Элементы управления   •   %s Проверить текстуру   •   %s Категории"
+    },
+    {
+      "source": "%s Browse Modes   •   %s Select   •   %s Cancel",
+      "target": "%s Обзор режимов   •   %s Выбрать   •   %s Отмена"
+    },
+    {
+      "source": "%s Select Mode   •   |cff38BDF8◀/▶|r Controls   •   %s Try Texture   •   %s Categories",
+      "target": "%s Выбрать режим   •   |cff38BDF8◀/▶|r Элементы управления   •   %s Проверить текстуру   •   %s Категории"
+    },
+    {
+      "source": "%s Switch Category   •   %s Navigate   •   %s Select   •   %s Close",
+      "target": "%s Сменить категорию   •   %s Навигация   •   %s Выбрать   •   %s Закрыть"
+    },
+    {
+      "source": "%s Toggle   •   |cff38BDF8▶|r Next Control   •   %s Try Texture   •   %s Categories",
+      "target": "%s Переключить   •   |cff38BDF8▶|r След. элемент управления   •   %s Проверить текстуру   •   %s Категории"
+    },
+    {
+      "source": "%s is felt as %s struck about %.1f times a second, over the bed.",
+      "target": "%s ощущается как %s с частотой около %.1f раз в секунду поверх фонового гула."
+    },
+    {
+      "source": "%s/%s Try Texture   •   |cff38BDF8◀|r Controls   •   %s Categories",
+      "target": "%s/%s Проверить текстуру   •   |cff38BDF8◀|r Элементы управления   •   %s Категории"
+    },
+    {
+      "source": "(Toggles all continuous sensations)",
+      "target": "(Переключает все непрерывные ощущения)"
+    },
+    {
+      "source": ", heartbeat, warningbeat",
+      "target": ", heartbeat, warningbeat"
+    },
+    {
+      "source": ", not ",
+      "target": ", а не "
+    },
+    {
+      "source": ", so there is nothing to test.",
+      "target": ", поэтому тестировать нечего."
+    },
+    {
+      "source": "0 = one soft pulse. 1 = a sharp lub, then a clearly separate softer dub. Derives the knock timing and intensity split automatically — see lowHealthTexture if you want those set by hand instead.",
+      "target": "0 = один мягкий импульс. 1 = резкий первый удар «тук», затем четко отделенный более мягкий второй «тук». Автоматически рассчитывает интервал между ударами и разделение интенсивности — см. lowHealthTexture, если хотите настроить их вручную."
+    },
+    {
+      "source": "1 = every scripted event, 3 = only the most severe. Higher means rarer, more significant warnings.",
+      "target": "1 = каждое скриптовое событие, 3 = только самые критические. Чем выше значение, тем реже и важнее предупреждения."
+    },
+    {
+      "source": "3. World",
+      "target": "3. Мир"
+    },
+    {
+      "source": "4. Interface",
+      "target": "4. Интерфейс"
+    },
+    {
+      "source": "5. Immersion",
+      "target": "5. Погружение"
+    },
+    {
+      "source": "6. Finish",
+      "target": "6. Завершение"
+    },
+    {
+      "source": "< Back",
+      "target": "< Назад"
+    },
+    {
+      "source": "A bright tick when you learn a new ability.",
+      "target": "Четкий щелчок при изучении новой способности."
+    },
+    {
+      "source": "A crisp mechanical snap on the high motor.",
+      "target": "Четкий механический щелчок на высокочастотном моторе."
+    },
+    {
+      "source": "A dense 3-pulse tactical flurry.",
+      "target": "Плотный тактический шквал из 3 импульсов."
+    },
+    {
+      "source": "A dry click when you use an ability that has no cast time.",
+      "target": "Сухой щелчок при использовании способности без времени применения."
+    },
+    {
+      "source": "A heavy, decisive impact when your current target dies.",
+      "target": "Тяжелый, решительный удар при гибели текущей цели."
+    },
+    {
+      "source": "A light click when a major UI panel is dismissed.",
+      "target": "Легкий щелчок при закрытии основной панели интерфейса."
+    },
+    {
+      "source": "A light click when the last confirmation dialog closes.",
+      "target": "Легкий щелчок при закрытии последнего диалога подтверждения."
+    },
+    {
+      "source": "A light tick when you step away from an NPC or close its window.",
+      "target": "Легкий щелчок, когда вы отходите от NPC или закрываете его окно."
+    },
+    {
+      "source": "A ringing anvil strike when repairing armor and weapons at a vendor.",
+      "target": "Звонкий удар по наковальне при починке брони и оружия у торговца."
+    },
+    {
+      "source": "A rising celebratory surge when you gain a level.",
+      "target": "Восходящий торжественный всплеск при повышении уровня."
+    },
+    {
+      "source": "A sharp alert pulse when your hostile target or focus turns to target you.",
+      "target": "Резкий сигнал тревоги, когда враждебная цель или фокус переключается на вас."
+    },
+    {
+      "source": "A sharp deflection tick when a cast of yours is rejected outright — out of range, not facing the target, still on cooldown.",
+      "target": "Резкий щелчок отклонения, когда применение вашего заклинания сразу отклоняется — вне зоны действия, цель вне поля зрения, способность еще на перезарядке."
+    },
+    {
+      "source": "A sharp deflection tick when the game refuses an action — out of range, facing the wrong way, not enough resource, still on cooldown.",
+      "target": "Резкий щелчок отклонения, когда игра отклоняет действие — вне зоны действия, цель вне поля зрения, недостаточно ресурсов, способность еще на перезарядке."
+    },
+    {
+      "source": "A sharp snap when a harmful effect lands on you.",
+      "target": "Резкий щелчок при наложении на вас вредоносного эффекта."
+    },
+    {
+      "source": "A sharp snap with a short tail.",
+      "target": "Резкий щелчок с коротким затуханием."
+    },
+    {
+      "source": "A short warning before a significant scripted boss ability, using Blizzard's own built-in Boss Warnings timeline.",
+      "target": "Короткое предупреждение перед важной особой способностью босса на основе встроенной шкалы времени предупреждений Blizzard."
+    },
+    {
+      "source": "A short, sharp tick instead of the normal one when the segment you land on can't be used.",
+      "target": "Короткий резкий щелчок вместо обычного, когда выбранный сектор невозможно использовать."
+    },
+    {
+      "source": "A single dry click, lighter than a tick.",
+      "target": "Одиночный сухой щелчок, легче обычного щелчка."
+    },
+    {
+      "source": "A single very short, very hard hit.",
+      "target": "Одиночный очень короткий, очень сильный удар."
+    },
+    {
+      "source": "A slow low/high oscillation — the caller supplies the phase.",
+      "target": "Медленные колебания между низко- и высокочастотным моторами — фаза передается вызывающей функцией."
+    },
+    {
+      "source": "A soft tick followed by a brighter one.",
+      "target": "Мягкий щелчок, за которым следует более звонкий."
+    },
+    {
+      "source": "A soft tick when releasing the group targeting modifier back to normal navigation.",
+      "target": "Мягкий щелчок при отпускании модификатора выбора участников группы и возврате к обычной навигации."
+    },
+    {
+      "source": "A soft tick when you cancel a radial selection instead of committing to it.",
+      "target": "Мягкий щелчок при отмене выбора в круговом меню вместо подтверждения."
+    },
+    {
+      "source": "A soft tick when you start auto-attacking with a ranged weapon (Auto Shot, Shoot, wands).",
+      "target": "Мягкий щелчок при начале автоатаки оружием дальнего боя (Автоматическая стрельба, Выстрел, жезлы)."
+    },
+    {
+      "source": "A soft tick when you start meleeing.",
+      "target": "Мягкий щелчок при начале автоатаки в ближнем бою."
+    },
+    {
+      "source": "A soft tick when you start resting in an inn or major city.",
+      "target": "Мягкий щелчок при переходе в режим отдыха в таверне или столице."
+    },
+    {
+      "source": "A soft tick when your melee auto-attack stops — catches walking out of range or a target dying without noticing.",
+      "target": "Мягкий щелчок при остановке автоатаки ближнего боя — срабатывает при выходе из зоны действия или незамеченной гибели цели."
+    },
+    {
+      "source": "A soft, quick tick.",
+      "target": "Мягкий, быстрый щелчок."
+    },
+    {
+      "source": "A steady, low ambient texture.",
+      "target": "Равномерная, низкая фоновая текстура."
+    },
+    {
+      "source": "A steady, stronger texture — meant to be scaled by the caller (e.g. speed).",
+      "target": "Равномерная, более выраженная текстура — масштабируется вызывающей функцией (например, по скорости)."
+    },
+    {
+      "source": "A tactile micro-tick each time the stack splitter quantity slider changes.",
+      "target": "Тактильный микрощелчок при каждом изменении ползунка количества в окне разделения стопки."
+    },
+    {
+      "source": "A tactile recoil kick on every Auto Shot arrow, timed to the real shot, not estimated.",
+      "target": "Тактильная отдача при каждом выстреле «Автоматической стрельбы», синхронизированная с реальным выстрелом, а не приблизительная."
+    },
+    {
+      "source": "A tap when a confirmation dialog opens.",
+      "target": "Легкий импульс при открытии диалога подтверждения."
+    },
+    {
+      "source": "A tap when an NPC or world object opens a window nothing else here covers.",
+      "target": "Легкий импульс, когда NPC или объект игрового мира открывает окно, не охваченное другими сигналами."
+    },
+    {
+      "source": "A texture that builds as your gliding speed climbs toward a boost.",
+      "target": "Текстура, нарастающая по мере того, как скорость планирования приближается к ускорению."
+    },
+    {
+      "source": "A tick when a book, plaque, gravestone or signpost opens to be read.",
+      "target": "Щелчок при открытии для чтения книги, таблички, надгробия или указателя."
+    },
+    {
+      "source": "A tick when a piece of your gear's durability drops into the low or broken range.",
+      "target": "Щелчок, когда прочность элемента вашей экипировки опускается до низкого уровня или ломается."
+    },
+    {
+      "source": "A tiny blip when you gain experience.",
+      "target": "Крошечный импульс при получении опыта."
+    },
+    {
+      "source": "A tiny low blip, for things that happen often.",
+      "target": "Крошечный низкий импульс для часто происходящих событий."
+    },
+    {
+      "source": "A triumphant dual-tone chime when you earn an achievement.",
+      "target": "Торжественный двухтональный перезвон при получении достижения."
+    },
+    {
+      "source": "A very light micro-pulse.",
+      "target": "Очень легкий микроимпульс."
+    },
+    {
+      "source": "A very light tick per combo point, building toward a full resource.",
+      "target": "Очень легкий щелчок за каждый прием серии, нарастающий по мере заполнения ресурса."
+    },
+    {
+      "source": "A very light tick when your equipped gear changes.",
+      "target": "Очень легкий щелчок при смене надетой экипировки."
+    },
+    {
+      "source": "A very short, sharp tick when you avoid an incoming attack.",
+      "target": "Очень короткий резкий щелчок при избежании входящей атаки."
+    },
+    {
+      "source": "AFK or DND toggled",
+      "target": "Переключение статуса «Отошел» или «Не беспокоить»"
+    },
+    {
+      "source": "Ability pulse",
+      "target": "Импульс способности"
+    },
+    {
+      "source": "Achievement earned",
+      "target": "Получено достижение"
+    },
+    {
+      "source": "Action bar page changed",
+      "target": "Смена страницы панели команд"
+    },
+    {
+      "source": "Action bars",
+      "target": "Панели команд"
+    },
+    {
+      "source": "Action failed",
+      "target": "Действие не удалось"
+    },
+    {
+      "source": "Action feedback",
+      "target": "Отклик на действия"
+    },
+    {
+      "source": "Activate",
+      "target": "Активировать"
+    },
+    {
+      "source": "Active Profile: |cffffd100%s|r",
+      "target": "Активный профиль: |cffffd100%s|r"
+    },
+    {
+      "source": "Active profile",
+      "target": "Активный профиль"
+    },
+    {
+      "source": "Actuator profile: %s\n%s",
+      "target": "Профиль привода: %s\n%s"
+    },
+    {
+      "source": "Addon language",
+      "target": "Язык модификации"
+    },
+    {
+      "source": "Adjust your global master vibration strength. Individual cues can always be fine-tuned in settings.",
+      "target": "Настройте общую мастер-силу вибрации. Отдельные сигналы всегда можно точно настроить в параметрах."
+    },
+    {
+      "source": "Advanced Settings",
+      "target": "Расширенные настройки"
+    },
+    {
+      "source": "Also fires when you cancel a cast yourself, or move out of range — it means \"your cast did not finish\", not specifically \"you were kicked\".",
+      "target": "Также срабатывает, когда вы сами отменяете заклинание или выходите из зоны действия — это означает «заклинание не завершено», а не обязательно «вас сбили»."
+    },
+    {
+      "source": "Also fires when you switch to a target that is already mid-cast.",
+      "target": "Также срабатывает, когда вы переключаетесь на цель, уже применяющую заклинание."
+    },
+    {
+      "source": "Alternates between the motors — an unsteady, rolling feel.",
+      "target": "Чередуется между моторами — создает неравномерное, перекатывающееся ощущение."
+    },
+    {
+      "source": "Alternating low thud and high snap across motors.",
+      "target": "Чередование низкого глухого удара и высокого щелчка между моторами."
+    },
+    {
+      "source": "Any other window",
+      "target": "Любое другое окно"
+    },
+    {
+      "source": "Anything else",
+      "target": "Все остальное"
+    },
+    {
+      "source": "Applies only while this character is in this specialization. Switching specialization switches profile with it, with no further action from you.",
+      "target": "Применяется, только когда этот персонаж находится в этой специализации. При смене специализации профиль переключается автоматически."
+    },
+    {
+      "source": "Applies to this character whatever specialization it is in. This is the rule the profile picker on the Pulse page has always written to.",
+      "target": "Применяется к этому персонажу независимо от специализации. Именно это правило всегда использовалось при выборе профиля на главной странице Pulse."
+    },
+    {
+      "source": "Attack time (s)",
+      "target": "Время нарастания (с)"
+    },
+    {
+      "source": "Attentive triage. Emergency low health warnings, dispel/CC alerts, kick warnings, and heal completion confirmation with subdued personal damage.",
+      "target": "Внимательное распределение приоритетов: экстренные предупреждения о низком здоровье, оповещения о рассеивании/контроле, предупреждения о сбивании кастов и подтверждение завершения исцеления с приглушенными эффектами получаемого урона."
+    },
+    {
+      "source": "Auto Shot fired",
+      "target": "Выстрел «Автоматической стрельбы»"
+    },
+    {
+      "source": "Auto-switch in %s",
+      "target": "Автопереключение в %s"
+    },
+    {
+      "source": "Automatic — game language",
+      "target": "Автоматически — язык игры"
+    },
+    {
+      "source": "Automatically switch to %s whenever this character is in this specialization.",
+      "target": "Автоматически переключаться на %s, когда этот персонаж находится в этой специализации."
+    },
+    {
+      "source": "Battleground queue ready",
+      "target": "Очередь на поле боя готова"
+    },
+    {
+      "source": "Bed strength",
+      "target": "Интенсивность фонового гула"
+    },
+    {
+      "source": "Bends the relationship between what a cue asks for and what the motor is told. Below 1.0 makes quiet cues louder; above 1.0 makes them quieter and reserves more of the range for strong ones. 1.0 is the unbent default.",
+      "target": "Корректирует кривую зависимости между запросом сигнала и командой мотору. Значения ниже 1.0 делают тихие сигналы громче; выше 1.0 делают их тише, сохраняя больший диапазон для мощных эффектов. 1.0 — стандартная линейная зависимость."
+    },
+    {
+      "source": "Boss ability warning",
+      "target": "Предупреждение о способности босса"
+    },
+    {
+      "source": "Boss chat warning",
+      "target": "Предупреждение о боссе в чате"
+    },
+    {
+      "source": "Boss encounter ended",
+      "target": "Бой с боссом завершен"
+    },
+    {
+      "source": "Boss encounter started",
+      "target": "Бой с боссом начался"
+    },
+    {
+      "source": "Breakaway floor",
+      "target": "Порог страгивания"
+    },
+    {
+      "source": "Builds from a low hum into a high pulse.",
+      "target": "Нарастает от низкого гула до высокого импульса."
+    },
+    {
+      "source": "CLICK %s:LeftButton",
+      "target": "CLICK %s:LeftButton"
+    },
+    {
+      "source": "Cancel",
+      "target": "Отмена"
+    },
+    {
+      "source": "Cast outcomes",
+      "target": "Итоги применения заклинаний"
+    },
+    {
+      "source": "Cast presence (low)",
+      "target": "Присутствие применения (низкочастотный)"
+    },
+    {
+      "source": "Cast sent",
+      "target": "Заклинание отправлено"
+    },
+    {
+      "source": "Cast swell peak (high)",
+      "target": "Пик нарастания применения (высокочастотный)"
+    },
+    {
+      "source": "Cast texture, cast finish confirmation, lockout/pushback warnings, proc glows, kick alerts",
+      "target": "Текстура применения заклинаний, подтверждение завершения, предупреждения о блокировке/задержке, свечение проков, оповещения о сбивании"
+    },
+    {
+      "source": "Casting",
+      "target": "Применение заклинаний"
+    },
+    {
+      "source": "Casting texture",
+      "target": "Текстура применения заклинаний"
+    },
+    {
+      "source": "Change threshold",
+      "target": "Порог изменения"
+    },
+    {
+      "source": "Character & Status",
+      "target": "Персонаж и статус"
+    },
+    {
+      "source": "Character state",
+      "target": "Состояние персонажа"
+    },
+    {
+      "source": "Checked via C_UnitAuras.AuraIsBigDefensive. Occurrence only.",
+      "target": "Проверяется через C_UnitAuras.AuraIsBigDefensive. Только факт срабатывания."
+    },
+    {
+      "source": "Choose the addon display language. Automatic follows the game client. Missing translations use English. Changes apply after /reload.",
+      "target": "Выберите язык интерфейса модификации. Вариант «Автоматически» следует языку игры. Отсутствующие переводы заменяются английскими. Изменения вступают в силу после /reload."
+    },
+    {
+      "source": "Click to open settings",
+      "target": "Щелкните, чтобы открыть настройки"
+    },
+    {
+      "source": "Climbs this motor slowly from silence to %d%% power over %d seconds, ",
+      "target": "Плавно разгоняет этот мотор от тишины до %d%% мощности за %d сек., "
+    },
+    {
+      "source": "Close",
+      "target": "Закрыть"
+    },
+    {
+      "source": "Combo point gained",
+      "target": "Получен прием серии"
+    },
+    {
+      "source": "Companion tools",
+      "target": "Сопутствующие инструменты"
+    },
+    {
+      "source": "Competitive & Baseline",
+      "target": "Соревновательные и базовые"
+    },
+    {
+      "source": "Configure tactile rewards for exploring Azeroth and sensory spatial awareness for targeting.",
+      "target": "Настройте тактильный отклик за исследование Азерота и пространственное восприятие целей."
+    },
+    {
+      "source": "Confirmation popup appeared",
+      "target": "Появилось окно подтверждения"
+    },
+    {
+      "source": "Confirmation popup closed",
+      "target": "Окно подтверждения закрыто"
+    },
+    {
+      "source": "Confused or possessed",
+      "target": "Замешательство или подчинение"
+    },
+    {
+      "source": "Conversation & reading",
+      "target": "Диалоги и чтение"
+    },
+    {
+      "source": "Copy",
+      "target": "Копировать"
+    },
+    {
+      "source": "Copy \"%s\" to a new custom profile named:",
+      "target": "Скопировать «%s» в новый пользовательский профиль с именем:"
+    },
+    {
+      "source": "Copy \"%s\" to a new profile named:",
+      "target": "Скопировать «%s» в новый профиль с именем:"
+    },
+    {
+      "source": "Copy this profile",
+      "target": "Скопировать этот профиль"
+    },
+    {
+      "source": "Copy...",
+      "target": "Копировать..."
+    },
+    {
+      "source": "Create",
+      "target": "Создать"
+    },
+    {
+      "source": "Create a new editable custom profile that starts as an exact copy of %s.",
+      "target": "Создать новый редактируемый пользовательский профиль, являющийся точной копией %s."
+    },
+    {
+      "source": "Create a new profile from Registry.lua's stock defaults and switch to it.",
+      "target": "Создать новый профиль со стандартными настройками из Registry.lua и переключиться на него."
+    },
+    {
+      "source": "Create a new profile that starts as an exact copy of the one in use, and switch to it. The two are independent from the first edit.",
+      "target": "Создать новый профиль, являющийся точной копией текущего, и переключиться на него. Профили становятся полностью независимыми с момента первого изменения."
+    },
+    {
+      "source": "Create editable copy",
+      "target": "Создать редактируемую копию"
+    },
+    {
+      "source": "Create...",
+      "target": "Создать..."
+    },
+    {
+      "source": "Crest froth & spray",
+      "target": "Пена и брызги гребня волны"
+    },
+    {
+      "source": "Cue index",
+      "target": "Указатель сигналов"
+    },
+    {
+      "source": "Danger start threshold",
+      "target": "Порог начала опасности"
+    },
+    {
+      "source": "Death Knight",
+      "target": "Рыцарь смерти"
+    },
+    {
+      "source": "Debuff received",
+      "target": "Получен отрицательный эффект"
+    },
+    {
+      "source": "Debug logging",
+      "target": "Журнал отладки"
+    },
+    {
+      "source": "Default",
+      "target": "По умолчанию"
+    },
+    {
+      "source": "Default (Balanced Baseline)",
+      "target": "По умолчанию (сбалансированная база)"
+    },
+    {
+      "source": "Default profiles",
+      "target": "Стандартные профили"
+    },
+    {
+      "source": "Defensive",
+      "target": "Защитные способности"
+    },
+    {
+      "source": "Delete",
+      "target": "Удалить"
+    },
+    {
+      "source": "Delete profile \"%s\"? This can't be undone.",
+      "target": "Удалить профиль «%s»? Это действие нельзя отменить."
+    },
+    {
+      "source": "Delete this profile",
+      "target": "Удалить этот профиль"
+    },
+    {
+      "source": "Delete...",
+      "target": "Удалить..."
+    },
+    {
+      "source": "Device",
+      "target": "Устройство"
+    },
+    {
+      "source": "Disable All",
+      "target": "Отключить все"
+    },
+    {
+      "source": "Disable all cues",
+      "target": "Отключить все сигналы"
+    },
+    {
+      "source": "Disable all cues in profile",
+      "target": "Отключить все сигналы в профиле"
+    },
+    {
+      "source": "Disable every vibration cue in the active profile in one sweep for quiet testing or building a profile from scratch.",
+      "target": "Отключить сразу все тактильные сигналы в активном профиле для тихого тестирования или создания профиля с нуля."
+    },
+    {
+      "source": "Disarmed",
+      "target": "Обезоруживание"
+    },
+    {
+      "source": "Displays a shortcut button on the edge of your minimap for quick access to settings and toggling vibration.",
+      "target": "Отображает кнопку на краю миникарты для быстрого доступа к настройкам и переключения вибрации."
+    },
+    {
+      "source": "Distinctiveness",
+      "target": "Выразительность"
+    },
+    {
+      "source": "Distinguished from cancelling by Blizzard's own `isCancelled` flag, which it sets before ending the selection — so a cancel never counts as a choice.",
+      "target": "Отличается от отмены собственным флагом Blizzard `isCancelled`, устанавливаемым перед завершением выбора, поэтому отмена никогда не считается сделанным выбором."
+    },
+    {
+      "source": "Doubles as the catch-all: a loss-of-control type this addon does not recognise — a new one added by a patch — fires this generic cue instead of being silently dropped.",
+      "target": "Служит универсальным запасным вариантом: не распознанный модификацией тип потери контроля (например, добавленный в новом патче) вызывает этот общий сигнал вместо тихого игнорирования."
+    },
+    {
+      "source": "Druid",
+      "target": "Друид"
+    },
+    {
+      "source": "Dual asymmetrical ERM motors, balanced 75ms spin-up",
+      "target": "Два асимметричных ERM-мотора, сбалансированный разгон 75 мс"
+    },
+    {
+      "source": "Dual-motor rumble & vibration schemas",
+      "target": "Схемы двухмоторной вибрации и виброотклика"
+    },
+    {
+      "source": "Duel request",
+      "target": "Запрос дуэли"
+    },
+    {
+      "source": "Dungeon queue popped",
+      "target": "Очередь в подземелье подошла"
+    },
+    {
+      "source": "Dungeon: Caster",
+      "target": "Подземелье: Заклинатель"
+    },
+    {
+      "source": "Dungeon: Caster DPS",
+      "target": "Подземелье: Заклинатель-боец"
+    },
+    {
+      "source": "Dungeon: Healer",
+      "target": "Подземелье: Лекарь"
+    },
+    {
+      "source": "Dungeon: Hunter",
+      "target": "Подземелье: Охотник"
+    },
+    {
+      "source": "Dungeon: Melee",
+      "target": "Подземелье: Ближний бой"
+    },
+    {
+      "source": "Dungeon: Melee DPS",
+      "target": "Подземелье: Боец ближнего боя"
+    },
+    {
+      "source": "Dungeon: Tank",
+      "target": "Подземелье: Танк"
+    },
+    {
+      "source": "Effort peak",
+      "target": "Пик усилия"
+    },
+    {
+      "source": "Empowered cast stage",
+      "target": "Ступень усиленного заклинания"
+    },
+    {
+      "source": "Enable All",
+      "target": "Включить все"
+    },
+    {
+      "source": "Enable Cue",
+      "target": "Включить сигнал"
+    },
+    {
+      "source": "Enable Pulse",
+      "target": "Включить Pulse"
+    },
+    {
+      "source": "Enable all cues",
+      "target": "Включить все сигналы"
+    },
+    {
+      "source": "Enable all cues in profile",
+      "target": "Включить все сигналы в профиле"
+    },
+    {
+      "source": "Enable every vibration cue in the active profile in one sweep for testing and debugging.",
+      "target": "Включить сразу все тактильные сигналы в активном профиле для тестирования и отладки."
+    },
+    {
+      "source": "Encounter",
+      "target": "Сражение"
+    },
+    {
+      "source": "Entered a vehicle",
+      "target": "Посадка в транспорт"
+    },
+    {
+      "source": "Entered melee range",
+      "target": "Вход в радиус ближнего боя"
+    },
+    {
+      "source": "Environment",
+      "target": "Окружающий мир"
+    },
+    {
+      "source": "Equipment",
+      "target": "Экипировка"
+    },
+    {
+      "source": "Every character",
+      "target": "Каждый персонаж"
+    },
+    {
+      "source": "Evoker-only in practice. It stays registered for every class and simply never fires for the others.",
+      "target": "На практике только для пробудителей. Остается зарегистрированным для всех классов, но просто не срабатывает для остальных."
+    },
+    {
+      "source": "Experience gained",
+      "target": "Получен опыт"
+    },
+    {
+      "source": "Experimental",
+      "target": "Экспериментальное"
+    },
+    {
+      "source": "Fast attack time constant used specifically for discrete impacts, clicks, and strikes. Gives snappy transients without making sustained immersion textures harsh.",
+      "target": "Быстрая постоянная времени нарастания, используемая специально для дискретных ударов, щелчков и атак. Обеспечивает резкие переходные процессы, не делая продолжительные текстуры погружения грубыми."
+    },
+    {
+      "source": "Feared or charmed",
+      "target": "Страх или подчинение"
+    },
+    {
+      "source": "Feel ",
+      "target": "Ощутить "
+    },
+    {
+      "source": "Feel Strength",
+      "target": "Сила ощущения"
+    },
+    {
+      "source": "Feel this texture",
+      "target": "Ощутить эту текстуру"
+    },
+    {
+      "source": "Feels like",
+      "target": "Ощущается как"
+    },
+    {
+      "source": "Feels like: ",
+      "target": "Ощущается как: "
+    },
+    {
+      "source": "Find breakaway floor",
+      "target": "Найти порог страгивания"
+    },
+    {
+      "source": "Fires as an empowered cast of yours begins and ends.",
+      "target": "Срабатывает в начале и конце применения вашего усиленного заклинания."
+    },
+    {
+      "source": "Fires at most ",
+      "target": "Срабатывает не чаще чем "
+    },
+    {
+      "source": "Fires for any summon confirmation dialog, not only a player summoning you.",
+      "target": "Срабатывает для любого диалога подтверждения призыва, а не только при призыве игроком."
+    },
+    {
+      "source": "Fires on PLAYER_TARGET_DIED.",
+      "target": "Срабатывает по событию PLAYER_TARGET_DIED."
+    },
+    {
+      "source": "Fires on input, so it also fires for casts that then fail. That is intentional: this is an input-acknowledgement cue, not a success cue.",
+      "target": "Срабатывает при вводе команды, поэтому срабатывает и для заклинаний, которые затем срываются. Это сделано намеренно: данный сигнал подтверждает ввод, а не успех действия."
+    },
+    {
+      "source": "Fires on the change itself, not on every flag update.",
+      "target": "Срабатывает при самом изменении, а не при каждом обновлении флага."
+    },
+    {
+      "source": "Fires on the crossing into low, not repeatedly while low.",
+      "target": "Срабатывает при переходе к низкому уровню, а не непрерывно при низком значении."
+    },
+    {
+      "source": "Fires on the yellow informational messages the game shows in the top centre of the screen.",
+      "target": "Срабатывает при появлении желтых информационных сообщений по центру в верхней части экрана."
+    },
+    {
+      "source": "Fires only when a queue enters the ready-to-enter state, not on every status update.",
+      "target": "Срабатывает только тогда, когда очередь переходит в статус готовности к входу, а не при каждом обновлении статуса."
+    },
+    {
+      "source": "Fires the instant you press a cast, before the server has confirmed it.",
+      "target": "Срабатывает в момент нажатия заклинания, еще до подтверждения сервером."
+    },
+    {
+      "source": "Fires upon arrival at destination when player control is restored.",
+      "target": "Срабатывает по прибытии в пункт назначения, когда управление возвращается игроку."
+    },
+    {
+      "source": "Fires when a battleground or arena queue is ready to enter.",
+      "target": "Срабатывает, когда очередь на поле боя или арену готова к входу."
+    },
+    {
+      "source": "Fires when a boss encounter begins.",
+      "target": "Срабатывает при начале боя с боссом."
+    },
+    {
+      "source": "Fires when a boss encounter ends, in victory or in a wipe.",
+      "target": "Срабатывает при завершении боя с боссом — победой или гибелью группы."
+    },
+    {
+      "source": "Fires when a flight master's map opens.",
+      "target": "Срабатывает при открытии карты распорядителя полетов."
+    },
+    {
+      "source": "Fires when a loading screen ends and the world is back.",
+      "target": "Срабатывает, когда экран загрузки завершается и мир снова отображается."
+    },
+    {
+      "source": "Fires when a quest is handed in and its reward is taken.",
+      "target": "Срабатывает при сдаче задания и получении награды."
+    },
+    {
+      "source": "Fires when a quest's completion page opens, ready to hand in.",
+      "target": "Срабатывает при открытии страницы завершения задания, готового к сдаче."
+    },
+    {
+      "source": "Fires when a quest's detail page opens, ready to accept.",
+      "target": "Срабатывает при открытии страницы с описанием задания, готового к принятию."
+    },
+    {
+      "source": "Fires when a ready check completes or times out.",
+      "target": "Срабатывает при завершении проверки готовности или истечении ее времени."
+    },
+    {
+      "source": "Fires when a ready check starts.",
+      "target": "Срабатывает при начале проверки готовности."
+    },
+    {
+      "source": "Fires when a role check starts.",
+      "target": "Срабатывает при начале проверки ролей."
+    },
+    {
+      "source": "Fires when a trade window opens.",
+      "target": "Срабатывает при открытии окна торговли."
+    },
+    {
+      "source": "Fires when a vendor window opens.",
+      "target": "Срабатывает при открытии окна торговца."
+    },
+    {
+      "source": "Fires when an innkeeper asks to make this your home.",
+      "target": "Срабатывает, когда трактирщик предлагает сделать таверну вашим домом."
+    },
+    {
+      "source": "Fires when gaining money with an open vendor window.",
+      "target": "Срабатывает при получении денег при открытом окне торговца."
+    },
+    {
+      "source": "Fires when group leadership changes hands.",
+      "target": "Срабатывает при передаче лидерства в группе."
+    },
+    {
+      "source": "Fires when one of your own casts begins.",
+      "target": "Срабатывает при начале применения вашего заклинания."
+    },
+    {
+      "source": "Fires when one of your own casts completes successfully — distinct from a cast simply ending.",
+      "target": "Срабатывает при успешном завершении вашего заклинания — в отличие от простого окончания применения."
+    },
+    {
+      "source": "Fires when one of your own casts ends, whether or not it completed.",
+      "target": "Срабатывает при окончании применения вашего заклинания независимо от того, завершилось ли оно успешно."
+    },
+    {
+      "source": "Fires when someone challenges you to a duel.",
+      "target": "Срабатывает, когда кто-то вызывает вас на дуэль."
+    },
+    {
+      "source": "Fires when someone invites you to a group.",
+      "target": "Срабатывает, когда вас приглашают в группу."
+    },
+    {
+      "source": "Fires when someone joins or leaves your group.",
+      "target": "Срабатывает, когда кто-то присоединяется к вашей группе или покидает ее."
+    },
+    {
+      "source": "Fires when someone offers you a resurrection and the accept dialog appears.",
+      "target": "Срабатывает, когда вам предлагают воскрешение и появляется окно подтверждения."
+    },
+    {
+      "source": "Fires when someone summons you and the accept dialog appears.",
+      "target": "Срабатывает, когда вас призывают и появляется окно подтверждения."
+    },
+    {
+      "source": "Fires when spending money with an open vendor window.",
+      "target": "Срабатывает при трате денег при открытом окне торговца."
+    },
+    {
+      "source": "Fires when the stable master's window opens.",
+      "target": "Срабатывает при открытии окна смотрителя стойл."
+    },
+    {
+      "source": "Fires when you accept a quest.",
+      "target": "Срабатывает при принятии задания."
+    },
+    {
+      "source": "Fires when you are confused or possessed (CONFUSE, POSSESS).",
+      "target": "Срабатывает при замешательстве или подчинении (CONFUSE, POSSESS)."
+    },
+    {
+      "source": "Fires when you are disarmed (DISARM).",
+      "target": "Срабатывает при обезоруживании (DISARM)."
+    },
+    {
+      "source": "Fires when you are feared or charmed (FEAR, FEAR_MECHANIC, CHARM).",
+      "target": "Срабатывает при страхе или подчинении (FEAR, FEAR_MECHANIC, CHARM)."
+    },
+    {
+      "source": "Fires when you are resurrected or leave ghost form.",
+      "target": "Срабатывает при воскрешении или выходе из формы призрака."
+    },
+    {
+      "source": "Fires when you are rooted in place (ROOT). You can still act, so this is a rung below the cues that stop you entirely.",
+      "target": "Срабатывает при обездвиживании (ROOT). Вы все еще можете действовать, поэтому данный сигнал на ступень ниже тех, что полностью сковывают вас."
+    },
+    {
+      "source": "Fires when you are silenced (SILENCE).",
+      "target": "Срабатывает при наложении немоты (SILENCE)."
+    },
+    {
+      "source": "Fires when you are stunned (STUN, STUN_MECHANIC).",
+      "target": "Срабатывает при оглушении (STUN, STUN_MECHANIC)."
+    },
+    {
+      "source": "Fires when you change target, including when you clear it.",
+      "target": "Срабатывает при смене цели, включая ее сброс."
+    },
+    {
+      "source": "Fires when you die.",
+      "target": "Срабатывает при вашей гибели."
+    },
+    {
+      "source": "Fires when you enter a new zone.",
+      "target": "Срабатывает при входе в новую зону."
+    },
+    {
+      "source": "Fires when you enter a vehicle and your action bar is replaced.",
+      "target": "Срабатывает при посадке в транспорт, когда заменяется ваша панель команд."
+    },
+    {
+      "source": "Fires when you leave a vehicle and your own action bar returns.",
+      "target": "Срабатывает при выходе из транспорта, когда возвращается ваша панель команд."
+    },
+    {
+      "source": "Fires when you set or clear your focus target.",
+      "target": "Срабатывает при установке или сбросе фокуса."
+    },
+    {
+      "source": "Fires when your class's secondary resource fills up — combo points, holy power, soul shards, chi, arcane charges, essence or runes, whichever your specialisation uses.",
+      "target": "Срабатывает при заполнении вторичного ресурса вашего класса — приемов серии, энергии Света, осколков душ, ци, зарядов чародейства, сущности или рун, в зависимости от специализации."
+    },
+    {
+      "source": "Fires when your focus target begins casting.",
+      "target": "Срабатывает, когда цель в фокусе начинает применение заклинания."
+    },
+    {
+      "source": "Fires when your own away or do-not-disturb flag actually changes.",
+      "target": "Срабатывает при фактическом изменении вашего статуса «Отошел» или «Не беспокоить»."
+    },
+    {
+      "source": "Flight map opened",
+      "target": "Карта полетов открыта"
+    },
+    {
+      "source": "Focus",
+      "target": "Фокус"
+    },
+    {
+      "source": "Focus changed",
+      "target": "Фокус изменен"
+    },
+    {
+      "source": "Focus started casting",
+      "target": "Фокус начал применение заклинания"
+    },
+    {
+      "source": "Focused element became unavailable",
+      "target": "Выбранный элемент стал недоступен"
+    },
+    {
+      "source": "Four rapid, sharp ticks.",
+      "target": "Четыре быстрых резких щелчка."
+    },
+    {
+      "source": "Gait strength",
+      "target": "Интенсивность походки"
+    },
+    {
+      "source": "Gasp peak",
+      "target": "Пик нехватки воздуха"
+    },
+    {
+      "source": "Gear needs repair",
+      "target": "Экипировке требуется починка"
+    },
+    {
+      "source": "Generic / Unknown",
+      "target": "Общие / Неизвестные"
+    },
+    {
+      "source": "Generic / unknown",
+      "target": "Общие / неизвестные"
+    },
+    {
+      "source": "Gentle steady engine-like cruise vibration while riding flight master gryphons, bats, or wyverns.",
+      "target": "Мягкая равномерная крейсерская вибрация при полете на грифонах, нетопырях или вивернах распорядителя полетов."
+    },
+    {
+      "source": "Group changes",
+      "target": "Изменения в группе"
+    },
+    {
+      "source": "Group readiness",
+      "target": "Готовность группы"
+    },
+    {
+      "source": "Group roster changed",
+      "target": "Состав группы изменен"
+    },
+    {
+      "source": "Group targeting active",
+      "target": "Выбор участников группы активен"
+    },
+    {
+      "source": "Group targeting released",
+      "target": "Выбор участников группы отключен"
+    },
+    {
+      "source": "Hardware & Presets",
+      "target": "Оборудование и пресеты"
+    },
+    {
+      "source": "Harvest complete",
+      "target": "Сбор ресурсов завершен"
+    },
+    {
+      "source": "Heal casts and low-health triage",
+      "target": "Применение исцеления и приоритеты низкого здоровья"
+    },
+    {
+      "source": "Healing received",
+      "target": "Получено исцеление"
+    },
+    {
+      "source": "Health & survival",
+      "target": "Здоровье и выживание"
+    },
+    {
+      "source": "Heart rate (BPM)",
+      "target": "Пульс (уд./мин)"
+    },
+    {
+      "source": "Heart rate (calm), BPM",
+      "target": "Пульс (в покое), уд./мин"
+    },
+    {
+      "source": "Heavy Impacts",
+      "target": "Тяжелые удары"
+    },
+    {
+      "source": "Heavy left counterweight (85ms), light right counterweight (45ms)",
+      "target": "Тяжелый левый противовес (85 мс), легкий правый противовес (45 мс)"
+    },
+    {
+      "source": "High Motor Only",
+      "target": "Только высокочастотный мотор"
+    },
+    {
+      "source": "High motor",
+      "target": "Высокочастотный мотор"
+    },
+    {
+      "source": "Hooks StackSplitFrame:UpdateStackText.",
+      "target": "Перехватывает StackSplitFrame:UpdateStackText."
+    },
+    {
+      "source": "How far the hum swells either side of its baseline. 0 is a flat hold.",
+      "target": "Насколько сильно гул отклоняется в обе стороны от базового уровня. 0 — ровное удержание."
+    },
+    {
+      "source": "How fast the wingbeat-style undulation cycles.",
+      "target": "Скорость волнообразных циклов взмахов крыльев."
+    },
+    {
+      "source": "How many seconds before the scripted moment this fires.",
+      "target": "За сколько секунд до запланированного момента это срабатывает."
+    },
+    {
+      "source": "How pronounced each stroke is against its own baseline. Higher values (0.80-1.0) allow the counterweight to physically spin down during the glide phase between strokes. 0 is a flat drag with no rhythm at all.",
+      "target": "Насколько отчетлив каждый взмах относительно базового уровня. Более высокие значения (0.80–1.0) позволяют противовесу физически замедляться во время фазы планирования между взмахами. 0 — ровное скольжение без ритма."
+    },
+    {
+      "source": "How steady the low motor stays regardless of speed. Only audible while actually gliding.",
+      "target": "Насколько стабильно работает низкочастотный мотор независимо от скорости. Ощущается только во время планирования."
+    },
+    {
+      "source": "How strong the hum gets by the moment a regular cast completes. Only audible if \"Casting texture\" is also enabled on its own tab.",
+      "target": "Насколько усиливается гул к моменту завершения обычного заклинания. Ощущается, только если «Текстура применения заклинаний» также включена на соответствующей вкладке."
+    },
+    {
+      "source": "Hunter",
+      "target": "Охотник"
+    },
+    {
+      "source": "If nothing is happening",
+      "target": "Если ничего не происходит"
+    },
+    {
+      "source": "Immediately switch to %s for the current character.",
+      "target": "Немедленно переключиться на %s для текущего персонажа."
+    },
+    {
+      "source": "Immersion: Caster",
+      "target": "Погружение: Заклинатель"
+    },
+    {
+      "source": "Immersion: Melee",
+      "target": "Погружение: Ближний бой"
+    },
+    {
+      "source": "Immersion: Ranged",
+      "target": "Погружение: Дальний бой"
+    },
+    {
+      "source": "Impact attack (s)",
+      "target": "Атака удара (с)"
+    },
+    {
+      "source": "Initial software voltage boost applied during transient onset to accelerate the motor rapidly to target speed. 1.0 is disabled.",
+      "target": "Начальное программное повышение напряжения во время переходного процесса для быстрого разгона мотора до целевой скорости. 1.0 — отключено."
+    },
+    {
+      "source": "Innkeeper hearth prompt",
+      "target": "Предложение трактирщика сделать таверну домом"
+    },
+    {
+      "source": "Input device changed",
+      "target": "Устройство ввода изменено"
+    },
+    {
+      "source": "Input mode",
+      "target": "Режим ввода"
+    },
+    {
+      "source": "Instant ability used",
+      "target": "Использована мгновенная способность"
+    },
+    {
+      "source": "Intensity",
+      "target": "Интенсивность"
+    },
+    {
+      "source": "Intensity Slider",
+      "target": "Ползунок интенсивности"
+    },
+    {
+      "source": "Interface",
+      "target": "Интерфейс"
+    },
+    {
+      "source": "Interface & Accessibility",
+      "target": "Интерфейс и специальные возможности"
+    },
+    {
+      "source": "Interface message",
+      "target": "Сообщение интерфейса"
+    },
+    {
+      "source": "Interface tab changed",
+      "target": "Вкладка интерфейса изменена"
+    },
+    {
+      "source": "Inventory full warning",
+      "target": "Предупреждение о переполнении инвентаря"
+    },
+    {
+      "source": "Invites & requests",
+      "target": "Приглашения и запросы"
+    },
+    {
+      "source": "Jarring physical weapon clatter",
+      "target": "Резкий металлический скрежет оружия"
+    },
+    {
+      "source": "LRA (Classic ERM Emulation)",
+      "target": "LRA (классическая эмуляция ERM)"
+    },
+    {
+      "source": "Landed",
+      "target": "Приземление"
+    },
+    {
+      "source": "Leave this scope with no opinion and let the next one decide.",
+      "target": "Оставить эту область без явного выбора и позволить следующему уровню принять решение."
+    },
+    {
+      "source": "Left a vehicle",
+      "target": "Выход из транспорта"
+    },
+    {
+      "source": "Left melee range",
+      "target": "Выход из радиуса ближнего боя"
+    },
+    {
+      "source": "Level up",
+      "target": "Новый уровень"
+    },
+    {
+      "source": "Lifecycle (advanced)",
+      "target": "Жизненный цикл (расширенный)"
+    },
+    {
+      "source": "Load its starting values",
+      "target": "Загрузить начальные значения"
+    },
+    {
+      "source": "Loading screen finished",
+      "target": "Экран загрузки завершен"
+    },
+    {
+      "source": "Loss of control",
+      "target": "Потеря контроля"
+    },
+    {
+      "source": "Loss of control cues",
+      "target": "Сигналы потери контроля"
+    },
+    {
+      "source": "Low Health Heartbeat",
+      "target": "Сердцебиение при низком здоровье"
+    },
+    {
+      "source": "Low Motor Only",
+      "target": "Только низкочастотный мотор"
+    }
+  ]
+}

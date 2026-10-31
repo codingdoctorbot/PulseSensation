@@ -1,0 +1,436 @@
+{
+  "items": [
+    {
+      "source": "%s has no impacts — it is the bed alone, for the length of the craft.",
+      "target": "%s no tiene impactos: es solo la base de fabricación durante toda la creación."
+    },
+    {
+      "source": "A bed you feel for the length of a craft, with the profession's own work rhythm struck over it. While a craft is running this replaces |cffffd100Casting texture|r rather than layering with it, so one action is one sensation.\n\nThe profession is read from the recipe by id, so it does not depend on your language. Anything that does not resolve still gets a generic work rhythm rather than going quiet.",
+      "target": "Una base continua que sientes mientras dura la creación, sobre la que se marca el propio ritmo de trabajo de la profesión. Mientras se fabrica algo, esto sustituye a |cffffd100Textura de lanzamiento|r en lugar de superponerse, de modo que una acción sea una única sensación.\n\nLa profesión se obtiene de la receta mediante su identificador, por lo que no depende de tu idioma. Todo lo que no se reconozca recibirá igualmente un ritmo de trabajo genérico en vez de quedar en silencio."
+    },
+    {
+      "source": "A bright chime when gathering an herb node, mineral vein, or skinning loot completes.",
+      "target": "Un campanilleo brillante al completar la recolección de un nodo de hierbas, una veta mineral o el botín de desuello."
+    },
+    {
+      "source": "A bright tick when an item enters your bags — looted, crafted, or mailed.",
+      "target": "Un chasquido ligero cuando un objeto entra en tus bolsas: despojado, fabricado o recibido por correo."
+    },
+    {
+      "source": "A bright tick when you learn a new recipe or pattern.",
+      "target": "Un chasquido ligero cuando aprendes una nueva receta o patrón."
+    },
+    {
+      "source": "A chime when a craft completes successfully.",
+      "target": "Un campanilleo cuando una creación se completa con éxito."
+    },
+    {
+      "source": "A chime when the auction house opens.",
+      "target": "Un campanilleo cuando se abre la casa de subastas."
+    },
+    {
+      "source": "A heavy latch thud when closing a personal bank or guild bank vault.",
+      "target": "Un golpe sordo y pesado de cerrojo al cerrar el banco personal o la bóveda del banco de hermandad."
+    },
+    {
+      "source": "A light coin clink when depositing or withdrawing money from a bank or guild bank.",
+      "target": "Un ligero tintineo de monedas al depositar o retirar dinero de un banco o banco de hermandad."
+    },
+    {
+      "source": "A light coin-like tick when selling an item to a merchant.",
+      "target": "Un chasquido ligero de monedas al vender un objeto a un comerciante."
+    },
+    {
+      "source": "A light tick when a profession or weapon skill goes up a point.",
+      "target": "Un chasquido ligero cuando una habilidad de profesión o de arma sube un punto."
+    },
+    {
+      "source": "A light tick when an item enters your bag and occupies a slot.",
+      "target": "Un chasquido ligero cuando un objeto entra en tu bolsa y ocupa una ranura."
+    },
+    {
+      "source": "A playful tick on some of your own emotes.",
+      "target": "Un chasquido alegre en algunas de tus propias emociones."
+    },
+    {
+      "source": "A playful tick when an NPC emotes, yells, or whispers near you.",
+      "target": "Un chasquido alegre cuando un PNJ hace una emoción, grita o te susurra cerca."
+    },
+    {
+      "source": "A pleasant chime when you gain honor — a PvP kill or objective.",
+      "target": "Un campanilleo agradable cuando obtienes honor: una muerte o un objetivo JcJ."
+    },
+    {
+      "source": "A pleasant chime when you gain reputation with a faction.",
+      "target": "Un campanilleo agradable cuando aumentas la reputación con una facción."
+    },
+    {
+      "source": "A pleasant chime whenever your shapeshift form changes.",
+      "target": "Un campanilleo agradable cada vez que cambia tu forma de cambio de forma."
+    },
+    {
+      "source": "A soft chime when a crafting cast begins.",
+      "target": "Un campanilleo suave cuando comienza un lanzamiento de fabricación."
+    },
+    {
+      "source": "A soft tick when the item leaves the cursor.",
+      "target": "Un chasquido suave cuando el objeto se suelta del cursor."
+    },
+    {
+      "source": "A solid tap when buying an item from a merchant.",
+      "target": "Un toque firme al comprar un objeto a un comerciante."
+    },
+    {
+      "source": "A subtle thud when a consumable or item is used and empties a bag slot.",
+      "target": "Un golpe sordo y sutil cuando se usa un consumible u objeto y vacía una ranura de bolsa."
+    },
+    {
+      "source": "A very light tick when you loot money.",
+      "target": "Un chasquido muy ligero cuando despojas dinero."
+    },
+    {
+      "source": "An urgent stutter vibration when your bags become full or when you attempt an action with a full inventory.",
+      "target": "Una vibración entrecortada y urgente cuando tus bolsas se llenan o cuando intentas realizar una acción con el inventario lleno."
+    },
+    {
+      "source": "Auction house opened",
+      "target": "Casa de subastas abierta"
+    },
+    {
+      "source": "Bank gold transfer",
+      "target": "Transferencia de oro del banco"
+    },
+    {
+      "source": "Bank opened",
+      "target": "Banco abierto"
+    },
+    {
+      "source": "Battle.net whisper received",
+      "target": "Susurro de Battle.net recibido"
+    },
+    {
+      "source": "CURSOR_CHANGED, with C_Cursor.GetCursorItem() checked only for presence — never read, never compared, so a secret item can't break it (truthiness on a non-secret-boolean is legal). Distinct from this addon's own \"Item obtained\": that's loot arriving in your bags, this is you physically holding something.",
+      "target": "CURSOR_CHANGED, con C_Cursor.GetCursorItem() comprobado solo por presencia: nunca se lee ni se compara, por lo que un objeto secreto no puede romperlo (evaluar la veracidad de un booleano no secreto es válido). Difiere de la señal «Objeto obtenido» de este accesorio: esa corresponde a botín que llega a tus bolsas, mientras que esto es sostener físicamente algo."
+    },
+    {
+      "source": "Calibrated for standard third-party ERM rumble curves",
+      "target": "Calibrado para curvas de vibración ERM estándar de terceros"
+    },
+    {
+      "source": "Craft finished",
+      "target": "Creación finalizada"
+    },
+    {
+      "source": "Craft started",
+      "target": "Creación iniciada"
+    },
+    {
+      "source": "Crafting",
+      "target": "Fabricación"
+    },
+    {
+      "source": "Crafting Rhythms",
+      "target": "Ritmos de fabricación"
+    },
+    {
+      "source": "Crafting texture",
+      "target": "Textura de fabricación"
+    },
+    {
+      "source": "Distinct from this addon's own \"Gold looted\"/\"Item obtained\" (World category) — this is Tremor's original item-award cue, kept alongside rather than merged, since the underlying events differ.",
+      "target": "Difiere de las señales «Oro despojado» y «Objeto obtenido» de este accesorio (categoría Mundo): esta es la señal original de recompensa de objetos de Tremor, que se mantiene de forma independiente en lugar de fusionarse, ya que los eventos subyacentes son distintos."
+    },
+    {
+      "source": "Distinguished from craftStopped by whether the cast actually succeeded, which Core/CastActivity.lua tracks across the cast lifecycle rather than guessing from one event. Untested.",
+      "target": "Se distingue de craftStopped según si el lanzamiento realmente tuvo éxito, lo cual Core/CastActivity.lua rastrea durante el ciclo de vida del lanzamiento en lugar de deducirlo a partir de un único evento. No probado."
+    },
+    {
+      "source": "Dungeons & Raids",
+      "target": "Mazmorras y bandas"
+    },
+    {
+      "source": "Feel crafting",
+      "target": "Sentir fabricación"
+    },
+    {
+      "source": "Fires on BAG_OVERFLOW_WITH_FULL_INVENTORY, UI_ERROR_MESSAGE (inventory full error) and when free bag slots drop to zero.",
+      "target": "Se activa con BAG_OVERFLOW_WITH_FULL_INVENTORY, UI_ERROR_MESSAGE (error de inventario lleno) y cuando las ranuras libres de las bolsas caen a cero."
+    },
+    {
+      "source": "Fires on BAG_UPDATE_DELAYED when total free bag slots decrease. Complements Item obtained (which tracks ITEM_PUSH fly-in loot animations).",
+      "target": "Se activa con BAG_UPDATE_DELAYED cuando disminuye el total de ranuras libres en las bolsas. Complementa a «Objeto obtenido» (que rastrea las animaciones de entrada de botín ITEM_PUSH)."
+    },
+    {
+      "source": "Fires on BAG_UPDATE_DELAYED when total free bag slots increase while not interacting with a merchant, bank, or mail.",
+      "target": "Se activa con BAG_UPDATE_DELAYED cuando aumenta el total de ranuras libres en las bolsas mientras no se interactúa con un comerciante, banco o buzón de correo."
+    },
+    {
+      "source": "Fires on LOOT_READY when gathering loot is ready.",
+      "target": "Se activa con LOOT_READY cuando el botín de recolección está listo."
+    },
+    {
+      "source": "Fires on money changes with an open bank frame or guild bank money update.",
+      "target": "Se activa con cambios de dinero al tener abierta la ventana del banco o con actualizaciones de dinero del banco de hermandad."
+    },
+    {
+      "source": "Fires when a dungeon or raid finder queue pops and the accept dialog appears.",
+      "target": "Se activa cuando salta una cola del buscador de mazmorras o bandas y aparece el diálogo de confirmación."
+    },
+    {
+      "source": "Fires when a group loot roll opens and the roll buttons appear.",
+      "target": "Se activa cuando comienza una tirada de dados de botín en grupo y aparecen los botones para tirar."
+    },
+    {
+      "source": "Fires when a loot window opens.",
+      "target": "Se activa cuando se abre una ventana de botín."
+    },
+    {
+      "source": "Fires when a profession or crafting window opens.",
+      "target": "Se activa cuando se abre una ventana de profesión o de fabricación."
+    },
+    {
+      "source": "Fires when loot is awarded to you.",
+      "target": "Se activa cuando se te otorga botín."
+    },
+    {
+      "source": "Fires when raid target markers are set or cleared.",
+      "target": "Se activa cuando se colocan o eliminan marcadores de objetivo de banda."
+    },
+    {
+      "source": "Fires when repairing durability at a merchant.",
+      "target": "Se activa al reparar la durabilidad en un comerciante."
+    },
+    {
+      "source": "Fires when someone invites you to a guild.",
+      "target": "Se activa cuando alguien te invita a una hermandad."
+    },
+    {
+      "source": "Fires when the bank window opens.",
+      "target": "Se activa cuando se abre la ventana del banco."
+    },
+    {
+      "source": "Fires when the game asks you to confirm a loot roll.",
+      "target": "Se activa cuando el juego te pide confirmar una tirada de dados de botín."
+    },
+    {
+      "source": "Fires when the mailbox opens.",
+      "target": "Se activa cuando se abre el buzón."
+    },
+    {
+      "source": "Fires when you receive a Battle.net whisper.",
+      "target": "Se activa cuando recibes un susurro de Battle.net."
+    },
+    {
+      "source": "Fires when you receive a whisper.",
+      "target": "Se activa cuando recibes un susurro."
+    },
+    {
+      "source": "Gold looted",
+      "target": "Oro despojado"
+    },
+    {
+      "source": "Guild bank opened",
+      "target": "Banco de hermandad abierto"
+    },
+    {
+      "source": "Guild invite",
+      "target": "Invitación de hermandad"
+    },
+    {
+      "source": "Honor gained",
+      "target": "Honor obtenido"
+    },
+    {
+      "source": "Item consumed from bag",
+      "target": "Objeto consumido de la bolsa"
+    },
+    {
+      "source": "Item cursor",
+      "target": "Cursor de objeto"
+    },
+    {
+      "source": "Item obtained",
+      "target": "Objeto obtenido"
+    },
+    {
+      "source": "Item placed in bag",
+      "target": "Objeto colocado en la bolsa"
+    },
+    {
+      "source": "Learned a new recipe",
+      "target": "Nueva receta aprendida"
+    },
+    {
+      "source": "Loot & inventory",
+      "target": "Botín e inventario"
+    },
+    {
+      "source": "Loot received",
+      "target": "Botín recibido"
+    },
+    {
+      "source": "Loot roll confirmation",
+      "target": "Confirmación de tirada de botín"
+    },
+    {
+      "source": "Loot roll started",
+      "target": "Tirada de botín iniciada"
+    },
+    {
+      "source": "Loot window opened",
+      "target": "Ventana de botín abierta"
+    },
+    {
+      "source": "Mailbox opened",
+      "target": "Buzón abierto"
+    },
+    {
+      "source": "Multiplies every impact, on top of each profession's own weight. Set it to zero for a craft you feel but never get hit by.",
+      "target": "Multiplica cada impacto, además del peso propio de cada profesión. Establécelo en cero para una creación que sientas pero en la que nunca recibas golpes."
+    },
+    {
+      "source": "Multiplies every impact, on top of each profession's own weight. Set to zero for a craft you feel but never get hit by.",
+      "target": "Multiplica cada impacto, además del peso propio de cada profesión. Establécelo en cero para una creación que sientas pero en la que nunca recibas golpes."
+    },
+    {
+      "source": "Multiplies the continuous layer under every craft, on top of each profession's own weight. This is the part you feel for the whole craft rather than the individual blows.",
+      "target": "Multiplica la capa continua bajo cada creación, además del peso propio de cada profesión. Esta es la parte que sientes durante toda la fabricación y no los golpes individuales."
+    },
+    {
+      "source": "NPC emote nearby",
+      "target": "Emoción de PNJ cercana"
+    },
+    {
+      "source": "Never miss an important group alert, even while looking away:\n• |cffffffffDirect Whispers:|r Distinct personal communication blip on incoming whispers.\n• |cffffffffParty & Raid Invites:|r Dual-pulse notification when receiving group invitations.\n• |cffffffffQueue Pops & Ready Checks:|r High-priority attention-grabbing pulse when instances are ready.",
+      "target": "No te pierdas ninguna alerta de grupo importante, incluso cuando no estés mirando la pantalla:\n• |cffffffffSusurros directos:|r Señal distintiva de comunicación personal al recibir susurros.\n• |cffffffffInvitaciones de grupo y banda:|r Notificación de doble pulso al recibir invitaciones de grupo.\n• |cffffffffSalto de colas y comprobaciones de listos:|r Pulso de alta prioridad que capta tu atención cuando las estancias están listas."
+    },
+    {
+      "source": "Noisy. In a raid this event fires very frequently. Kept for completeness and defaulted off.",
+      "target": "Ruidoso. En una banda este evento se activa con mucha frecuencia. Se mantiene por exhaustividad y está desactivado por defecto."
+    },
+    {
+      "source": "Not filtered by rarity yet — fires for anything, common items included.",
+      "target": "Aún no se filtra por calidad: se activa con todo, incluidos los objetos comunes."
+    },
+    {
+      "source": "One pattern for every kind of refusal. May also do nothing inside dungeons and raids.",
+      "target": "Un único patrón para cualquier tipo de rechazo. También puede no hacer nada dentro de mazmorras y bandas."
+    },
+    {
+      "source": "Party invite",
+      "target": "Invitación de grupo"
+    },
+    {
+      "source": "Party leader changed",
+      "target": "Líder de grupo cambiado"
+    },
+    {
+      "source": "Performed an emote",
+      "target": "Emoción realizada"
+    },
+    {
+      "source": "Picked up an item",
+      "target": "Objeto recogido"
+    },
+    {
+      "source": "Profession skill increased",
+      "target": "Habilidad de profesión aumentada"
+    },
+    {
+      "source": "Profession window opened",
+      "target": "Ventana de profesión abierta"
+    },
+    {
+      "source": "Professions with a rhythm",
+      "target": "Profesiones con ritmo"
+    },
+    {
+      "source": "Professions without one",
+      "target": "Profesiones sin ritmo"
+    },
+    {
+      "source": "Purchased item from vendor",
+      "target": "Objeto comprado a un comerciante"
+    },
+    {
+      "source": "Pure flavor, sibling to \"Performed an emote\" above. Fires often in busy areas with lots of ambient NPCs — this is opt-in noise, not a curated signal, same as its sibling. Off by default.",
+      "target": "Puro ambiente, hermana de «Emoción realizada» indicada arriba. Se activa con frecuencia en zonas concurridas con muchos PNJ ambientales; es un ruido opcional, no una señal depurada, al igual que su hermana. Desactivado por defecto."
+    },
+    {
+      "source": "Put down an item",
+      "target": "Objeto soltado"
+    },
+    {
+      "source": "Raid marker changed",
+      "target": "Marcador de banda cambiado"
+    },
+    {
+      "source": "Raiding",
+      "target": "Bandas"
+    },
+    {
+      "source": "Raiding (Encounter Focus)",
+      "target": "Bandas (enfoque en encuentros)"
+    },
+    {
+      "source": "Reads GetShapeshiftForm()/UPDATE_SHAPESHIFT_FORM, the player's own state — one generic cue for any change, not split by direction, since forms chain (e.g. Bear -> Cat -> Moonkin) without necessarily passing back through no-form in between.",
+      "target": "Lee GetShapeshiftForm()/UPDATE_SHAPESHIFT_FORM, el propio estado del jugador: una señal genérica para cualquier cambio, no dividida por dirección, ya que las formas se encadenan (p. ej., Oso -> Felino -> Lechúcico lunar) sin necesidad de pasar de nuevo por la forma básica intermedia."
+    },
+    {
+      "source": "Reads the skill-up chat feed rather than SKILL_LINES_CHANGED, which also fires for unrelated skill-list changes. Occurrence-only, no text parsing — this says a skill went up, not which one or to what. Deliberately light: early profession levelling fires this constantly.",
+      "target": "Lee las notificaciones de chat de aumento de habilidad en lugar de SKILL_LINES_CHANGED, que también se activa con cambios no relacionados en la lista de habilidades. Solo registra el evento sin analizar texto: indica que una habilidad ha subido, no cuál ni a qué nivel. Deliberadamente ligero: subir de nivel las profesiones al inicio activa esto de forma constante."
+    },
+    {
+      "source": "Reputation gained",
+      "target": "Reputación obtenida"
+    },
+    {
+      "source": "Same weight and shape as the vendor, mailbox and bank cues alongside it — all four are \"a window you walked up to has opened\", and they deliberately feel alike rather than each inventing a signature.",
+      "target": "El mismo peso y forma que las señales contiguas de comerciante, buzón y banco: las cuatro representan «se ha abierto una ventana a la que te has acercado», y deliberadamente se sienten similares en lugar de inventar una señal propia para cada una."
+    },
+    {
+      "source": "Shapeshift form changed",
+      "target": "Forma de cambio de forma cambiada"
+    },
+    {
+      "source": "Sold item to vendor",
+      "target": "Objeto vendido al comerciante"
+    },
+    {
+      "source": "TRADE_SKILL_CRAFT_BEGIN via Core/CastActivity.lua. Untested — no crafting cue has ever existed in this addon, so nothing here has been felt. Off by default.",
+      "target": "TRADE_SKILL_CRAFT_BEGIN mediante Core/CastActivity.lua. No probado: nunca ha existido una señal de fabricación en este accesorio, por lo que nada aquí se ha llegado a sentir. Desactivado por defecto."
+    },
+    {
+      "source": "Tactile sensations for living in the world of Azeroth:\n• |cffffffffLoot Drops & Currency:|r Feel items and gold collected into your bags.\n• |cffffffffQuests & Turn-ins:|r Physical confirmation upon accepting and completing objectives.\n• |cffffffffProgression:|r Rewarding celebration pulses for leveling up, achievements, and XP gains.",
+      "target": "Sensaciones táctiles para vivir en el mundo de Azeroth:\n• |cffffffffBotín y monedas:|r Siente los objetos y el oro que recoges en tus bolsas.\n• |cffffffffMisiones y entregas:|r Confirmación física al aceptar y completar objetivos.\n• |cffffffffProgresión:|r Gratificantes pulsos de celebración al subir de nivel, conseguir logros y ganar experiencia."
+    },
+    {
+      "source": "The other edge of the same CURSOR_CHANGED transition. Fires whether the item was placed somewhere or the drag was simply cancelled — the event doesn't distinguish, and nothing readable does.",
+      "target": "El otro extremo de la misma transición de CURSOR_CHANGED. Se activa tanto si el objeto se colocó en algún lugar como si simplemente se canceló el arrastre: el evento no hace distinción y nada que pueda leerse lo hace."
+    },
+    {
+      "source": "The work itself while you craft — a bed for the length of it, with the profession's own rhythm struck on top. A hammer for blacksmithing, a pick for mining, nothing percussive for tailoring or enchanting.",
+      "target": "El propio trabajo mientras fabricas: una base continua durante todo el proceso, sobre la que se marca el ritmo propio de la profesión. Un martillo para herrería, un pico para minería y nada percusivo para sastrería o encantamiento."
+    },
+    {
+      "source": "These strike. The shape and the rate come from the craft — a hammer is slower and heavier than a pick — and the last blow lands on completion.",
+      "target": "Estos golpean. La forma y la frecuencia proceden de la creación: un martillo es más lento y pesado que un pico, y el último golpe asesta al completarse."
+    },
+    {
+      "source": "Two solid hits when an item attaches to the cursor.",
+      "target": "Dos golpes firmes cuando un objeto se adhiere al cursor."
+    },
+    {
+      "source": "Two taps when the guild bank opens — heavier than the personal bank, because it is a bigger door.",
+      "target": "Dos toques cuando se abre el banco de hermandad: más pesados que el banco personal, porque es una puerta más grande."
+    },
+    {
+      "source": "Vault door closed",
+      "target": "Puerta de la bóveda cerrada"
+    },
+    {
+      "source": "Whisper received",
+      "target": "Susurro recibido"
+    }
+  ]
+}

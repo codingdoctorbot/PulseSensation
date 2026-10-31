@@ -1,0 +1,432 @@
+{
+  "items": [
+    {
+      "source": "1. Controller",
+      "target": "1. Manette"
+    },
+    {
+      "source": "8BitDo (Ultimate / Pro 2)",
+      "target": "8BitDo (Ultimate / Pro 2)"
+    },
+    {
+      "source": "8BitDo / Other XInput",
+      "target": "8BitDo / Autre XInput"
+    },
+    {
+      "source": "A bright tick when the game switches between controller and mouse-and-keyboard.",
+      "target": "Un tic net lorsque le jeu bascule entre la manette et le clavier/souris."
+    },
+    {
+      "source": "A bright tick when you commit to a radial segment by letting the stick return to centre.",
+      "target": "Un tic net lorsque vous validez un segment radial en laissant le stick revenir au centre."
+    },
+    {
+      "source": "A distinct tap when holding the controller modifier to target party or raid members.",
+      "target": "Une impulsion distincte lorsque vous maintenez le modificateur de la manette pour cibler les membres du groupe ou du raid."
+    },
+    {
+      "source": "A falling pulse when the controller hands control back to your character.",
+      "target": "Une pulsation descendante lorsque la manette rend le contrôle à votre personnage."
+    },
+    {
+      "source": "A rising pulse when the controller radial menu opens.",
+      "target": "Une pulsation montante à l'ouverture du menu radial de la manette."
+    },
+    {
+      "source": "A rising pulse when the controller starts driving a UI panel instead of your character.",
+      "target": "Une pulsation montante lorsque la manette commence à piloter un panneau d'interface à la place de votre personnage."
+    },
+    {
+      "source": "A short, sharp tick when controller focus runs into the edge of a list or grid and can't go further.",
+      "target": "Un tic court et net lorsque le focus de la manette atteint le bord d'une liste ou d'une grille et ne peut aller plus loin."
+    },
+    {
+      "source": "A tactile click when native gamepad or action targeting triggers an interaction with the soft target.",
+      "target": "Un clic tactile lorsque la manette native ou le ciblage d'action déclenche une interaction avec la cible souple."
+    },
+    {
+      "source": "A very light tick each time controller focus moves to a different interface element.",
+      "target": "Un très léger tic chaque fois que le focus de la manette se déplace vers un autre élément d'interface."
+    },
+    {
+      "source": "A very light tick per segment as you sweep the stick around the radial — the wheel gets detents you can feel.",
+      "target": "Un très léger tic par segment lorsque vous balayez le menu radial avec le stick — la roue est dotée de crans tactiles perceptibles."
+    },
+    {
+      "source": "ACTIONBAR_PAGE_CHANGED. Useful on a controller specifically, where the bar you're on isn't always where your eyes are. Does not cover the vehicle/override/possess bar swaps, which are their own events and would want their own cue if they turn out to matter.",
+      "target": "ACTIONBAR_PAGE_CHANGED. Particulièrement utile sur manette, où la barre active ne se trouve pas toujours là où se porte votre regard. Ne couvre pas les changements de barre de véhicule, de remplacement ou de possession, qui disposent de leurs propres événements et nécessiteraient leur propre signal si cela s'avérait nécessaire."
+    },
+    {
+      "source": "Apply the \"%s\" starting point? This overwrites every motor's strength, floor, timing and curve with that controller's values — any trimming you have already done is lost.",
+      "target": "Appliquer le point de départ « %s » ? Cela remplace la puissance, le seuil de décollement, le timing et la courbe de chaque moteur par les valeurs de cette manette — tous les ajustements déjà effectués seront perdus."
+    },
+    {
+      "source": "Asks the controller what it is and suggests a row from the list above. Only prints a suggestion — it never selects or applies anything for you.",
+      "target": "Interroge la manette sur son modèle et suggère une ligne dans la liste ci-dessus. N'affiche qu'une suggestion — ne sélectionne ni n'applique jamais rien à votre place."
+    },
+    {
+      "source": "Balances this motor against the others. Raise it if this motor is the weak one on your controller, lower it if it drowns everything else out. This is the knob the old \"Low Motor Only\"/\"High Motor Only\" schemas were being misused for — those still exist, but for a motor that is actually dead, not merely quieter.",
+      "target": "Équilibre ce moteur par rapport aux autres. Augmentez la valeur si ce moteur est trop faible sur votre manette, diminuez-la s'il étouffe tout le reste. C'est le réglage pour lequel les anciens schémas « Moteur lourd uniquement » / « Moteur rapide uniquement » étaient détournés — ceux-ci existent toujours, mais pour un moteur réellement inopérant, pas simplement plus silencieux."
+    },
+    {
+      "source": "Both rumble motors work normally. Start here, then balance their strength on the Controller calibration page.",
+      "target": "Les deux moteurs de vibration fonctionnent normalement. Commencez par ici, puis équilibrez leur puissance sur la page Calibrage de la manette."
+    },
+    {
+      "source": "Bound to the right-stick press in Blizzard's own radial.",
+      "target": "Assigné à la pression du stick droit dans le menu radial de Blizzard."
+    },
+    {
+      "source": "Brings Blizzard's native gamepad interface alive under your thumbs:\n• |cffffffffRadial & Menus:|r Soft tactile micro-taps as your stick moves across buttons and tabs.\n• |cffffffffWindows:|r Physical confirmation when opening bags, merchant shops, banks, and mail.\n• |cffffffffDialogs & Prompts:|r Tactile prompt when NPC interaction windows or quest frames appear.",
+      "target": "Donne vie à l'interface de manette native de Blizzard sous vos pouces :\n• |cffffffffMenu radial et menus :|r Micro-impulsions tactiles douces lorsque votre stick parcourt les boutons et les onglets.\n• |cffffffffFenêtres :|r Confirmation physique lors de l'ouverture des sacs, des marchands, de la banque et du courrier.\n• |cffffffffDialogues et invites :|r Signal tactile lorsque des fenêtres d'interaction de PNJ ou de quête apparaissent."
+    },
+    {
+      "source": "Captures the active vibration level from a running Ramp sweep and writes it directly to this motor's Breakaway floor slider below, then stops the ramp. Press this the moment you first feel the motor move!",
+      "target": "Capture le niveau de vibration actif d'un balayage de rampe en cours et l'applique directement au curseur de seuil de décollement de ce moteur ci-dessous, puis arrête la rampe. Appuyez dès que vous sentez le moteur bouger pour la première fois !"
+    },
+    {
+      "source": "Choose whether gamepad menu navigation and group communication produce controller vibration.",
+      "target": "Choisissez si la navigation dans les menus à la manette et la communication de groupe produisent des vibrations."
+    },
+    {
+      "source": "Clears any vibration still in flight when the controller disconnects.",
+      "target": "Interrompt toute vibration en cours lors de la déconnexion de la manette."
+    },
+    {
+      "source": "Controller",
+      "target": "Manette"
+    },
+    {
+      "source": "Controller Interactions",
+      "target": "Interactions à la manette"
+    },
+    {
+      "source": "Controller UI",
+      "target": "Interface manette"
+    },
+    {
+      "source": "Controller UI & Window Feedback",
+      "target": "Interface manette et retours de fenêtre"
+    },
+    {
+      "source": "Controller battery low",
+      "target": "Batterie de manette faible"
+    },
+    {
+      "source": "Controller calibration",
+      "target": "Calibrage de la manette"
+    },
+    {
+      "source": "Controller connected",
+      "target": "Manette connectée"
+    },
+    {
+      "source": "Controller disconnected",
+      "target": "Manette déconnectée"
+    },
+    {
+      "source": "Controllers differ in which motors they have, and the game never reports whether a vibration actually happened. Nothing can detect this for you, so you have to feel it.\n\nPick a mode from the **Mode to test** dropdown near the top of the panel and press **Play**. Try a few — sharp ones, sustained ones, textures. Pay attention to which ones you can feel clearly, which are faint, and which do not arrive at all.\n\nIf some were missing or silent, check two places:\n\nThe **Vibration schema** dropdown near the top of the panel. A schema decides which motor each pulse drives, and swapping it works around a controller that only drives one of them.\n\nThe **Controller calibration** page. Real motors need a minimum amount of power just to start spinning (their breakaway floor). If quiet cues vanish entirely, use the **Ramp** tool there to calibrate your motor floors and balance their strength.",
+      "target": "Les manettes diffèrent par les moteurs dont elles sont équipées, et le jeu ne signale jamais si une vibration a réellement eu lieu. Rien ne peut le détecter à votre place, vous devez donc la ressentir.\n\nChoisissez un mode dans la liste déroulante **Mode à tester** en haut du panneau et appuyez sur **Jouer**. Essayez-en plusieurs — des nets, des continus, des textures. Faites attention à ceux que vous ressentez nettement, ceux qui sont faibles et ceux qui n'arrivent pas du tout.\n\nSi certains sont absents ou silencieux, vérifiez deux éléments :\n\nLa liste déroulante **Schéma de vibration** en haut du panneau. Un schéma détermine quel moteur reçoit chaque impulsion, et en changer permet de contourner une manette qui n'en pilote qu'un seul.\n\nLa page **Calibrage de la manette**. Les moteurs réels ont besoin d'une puissance minimale pour commencer à tourner (leur seuil de décollement). Si les signaux discrets disparaissent complètement, utilisez l'outil **Rampe** pour calibrer le seuil de vos moteurs et équilibrer leur puissance."
+    },
+    {
+      "source": "Drive this motor at half power for a second and a half, bypassing every setting on this page and every schema. If you feel nothing here, this channel does not work on your controller and no amount of tuning below will change that.",
+      "target": "Fait tourner ce moteur à mi-puissance pendant une seconde et demie, en ignorant tous les réglages de cette page et chaque schéma. Si vous ne ressentez rien ici, ce canal ne fonctionne pas sur votre manette et aucun ajustement ci-dessous n'y changera rien."
+    },
+    {
+      "source": "DualSense (PS5)",
+      "target": "DualSense (PS5)"
+    },
+    {
+      "source": "DualShock 4 (PS4)",
+      "target": "DualShock 4 (PS4)"
+    },
+    {
+      "source": "Engine defaults without device-specific calibration",
+      "target": "Paramètres par défaut du moteur sans calibrage spécifique à l'appareil"
+    },
+    {
+      "source": "Every cue, its intensity and \"feels like\" shape, your profiles, per-mode motor and timing tuning, controller calibration, the mode tester and the guide — all of it is in Pulse's own window.\n\nIt draws itself rather than living as pages in this panel, which is what lets it build only what you are looking at instead of every control in the addon at every login.",
+      "target": "Chaque signal, son intensité et son profil de rendu (« sensation »), vos profils, l'ajustement des moteurs et des timings par mode, le calibrage de la manette, le testeur de mode et le guide — tout se trouve dans la fenêtre dédiée de Pulse.\n\nElle s'affiche de manière dynamique au lieu d'exister sous forme d'onglets fixes dans ce panneau, ce qui lui permet de ne charger que ce que vous regardez au lieu de construire chaque commande de l'addon à chaque connexion."
+    },
+    {
+      "source": "Fires once when the controller's battery drops into its low or critical range.",
+      "target": "Se déclenche une fois lorsque la batterie de la manette atteint un niveau faible ou critique."
+    },
+    {
+      "source": "Fires when a controller connects.",
+      "target": "Se déclenche lorsqu'une manette se connecte."
+    },
+    {
+      "source": "Fires when the element controller focus is currently on becomes disabled.",
+      "target": "Se déclenche lorsque l'élément actuellement ciblé par le focus de la manette est désactivé."
+    },
+    {
+      "source": "First: switch controller support on",
+      "target": "Premièrement : activer la prise en charge de la manette"
+    },
+    {
+      "source": "How sharply the high motor ramps in with speed. 1 = linear, higher = holds back more until near max speed. Only audible while actually gliding.",
+      "target": "Détermine la progressivité avec laquelle le moteur rapide monte en régime selon la vitesse. 1 = linéaire, une valeur plus élevée temporise la montée jusqu'à l'approche de la vitesse maximale. Perceptible uniquement en vol plané."
+    },
+    {
+      "source": "Interface released controller focus",
+      "target": "L'interface a libéré le focus de la manette"
+    },
+    {
+      "source": "Interface took controller focus",
+      "target": "L'interface a pris le focus de la manette"
+    },
+    {
+      "source": "Launch the interactive onboarding wizard to configure controller hardware, combat haptics, world feedback, and immersion textures.",
+      "target": "Lancer l'assistant de configuration interactif pour configurer la manette, les retours haptiques de combat, l'immersion dans l'environnement et les textures continues."
+    },
+    {
+      "source": "Mark floor from ramp",
+      "target": "Définir le seuil depuis la rampe"
+    },
+    {
+      "source": "Master switch for all menu, window, tab, and radial controller haptics. Turn off to silence all UI navigation haptics at once while keeping combat and world rumble active.",
+      "target": "Interrupteur général pour tous les retours haptiques de menus, fenêtres, onglets et menus radiaux à la manette. Désactivez-le pour couper d'un coup toutes les vibrations de navigation dans l'interface tout en conservant les vibrations de combat et d'environnement."
+    },
+    {
+      "source": "Menu & controller UI haptics",
+      "target": "Retours haptiques des menus et de l'interface manette"
+    },
+    {
+      "source": "Nintendo Switch Pro",
+      "target": "Nintendo Switch Pro"
+    },
+    {
+      "source": "Overall gasp-knock strength — fixed per beat, not scaled by danger (2026-09-16: a danger-scaled lub/dub risked landing under the controller motor's own minimum activation threshold at low danger, causing missing \"dub\" knocks live). Urgency comes from heartRateCalm/heartRateCritical instead. Only audible if \"Underwater breath texture\" is also enabled on its own tab.",
+      "target": "Puissance globale du battement d'étouffement — fixe par pulsation, non proportionnelle au danger (16/09/2026 : un poum-poum indexé sur le danger risquait de descendre sous le seuil minimal d'activation du moteur de la manette à faible danger, provoquant l'absence du « poum » en jeu). L'urgence provient plutôt de heartRateCalm/heartRateCritical. Perceptible uniquement si « Texture de respiration aquatique » est également activée dans son propre onglet."
+    },
+    {
+      "source": "Overwrite every motor's calibration with the selected controller's starting values. Ask first, because this discards any trimming you have already done.",
+      "target": "Écrase le calibrage de chaque moteur avec les valeurs initiales de la manette sélectionnée. Demande confirmation au préalable, car cela annule tous les ajustements déjà effectués."
+    },
+    {
+      "source": "PLAYER_SOFT_TARGET_INTERACTION. Fires when native gamepad/action interact executes on the current soft target.",
+      "target": "PLAYER_SOFT_TARGET_INTERACTION. Se déclenche lorsque l'interaction native à la manette/action s'exécute sur la cible souple actuelle."
+    },
+    {
+      "source": "Passively polled from GamepadRadial:IsShown() to eliminate EventRegistry callback taint during radial menu activation.",
+      "target": "Sondé passivement via GamepadRadial:IsShown() pour éliminer toute contamination de rappel (taint) d'EventRegistry lors de l'activation du menu radial."
+    },
+    {
+      "source": "Passively polled from GamepadRadial:IsShown(). Picking a segment that opens a panel also closes the radial.",
+      "target": "Sondé passivement via GamepadRadial:IsShown(). Choisir un segment qui ouvre un panneau ferme également le menu radial."
+    },
+    {
+      "source": "Passively polled from SmartNavigation focus state. Fires when controller navigation gains focus on a UI element.",
+      "target": "Sondé passivement d'après l'état du focus de SmartNavigation. Se déclenche lorsque la navigation à la manette prend le focus sur un élément d'interface."
+    },
+    {
+      "source": "Passively polled from SmartNavigation focus state. Fires when controller navigation releases focus back to world control.",
+      "target": "Sondé passivement d'après l'état du focus de SmartNavigation. Se déclenche lorsque la navigation à la manette libère le focus pour rendre le contrôle au monde."
+    },
+    {
+      "source": "Passively polled from SmartNavigation's currentButton every 0.05s to eliminate execution taint when gamepad mode is toggled. Fires on real focus changes rather than stick motion. Gated on gamepad UI being active.",
+      "target": "Sondé passivement via currentButton de SmartNavigation toutes les 0,05 s pour éliminer la contamination d'exécution lors du basculement en mode manette. Se déclenche lors des véritables changements de focus plutôt que sur les mouvements de stick. Conditionné à l'activation de l'interface manette."
+    },
+    {
+      "source": "Passively polled via GroupTargeting.isTargetingActive to eliminate execution taint when targeting stops or gamepad mode is toggled.",
+      "target": "Sondé passivement via GroupTargeting.isTargetingActive pour éliminer la contamination d'exécution lors de l'arrêt du ciblage ou du basculement en mode manette."
+    },
+    {
+      "source": "Play this cue exactly as it is configured right now — its own intensity, and its own \"Feels like\" shape if you changed it. Works whether or not the cue is switched on, and needs a connected controller.",
+      "target": "Joue ce signal exactement tel qu'il est configuré actuellement — avec sa propre intensité et son propre profil de rendu (« sensation ») si vous l'avez modifié. Fonctionne que le signal soit activé ou non, et nécessite une manette connectée."
+    },
+    {
+      "source": "Polled from StaticPopup1..4's IsShown() four times a second rather than hooked. StaticPopup_Show is called from all over Blizzard's UI by code that then touches protected frames, and this addon already has one taint incident from exactly that shape (Modules/ControllerUI.lua's ActivateRadial note). Untested.",
+      "target": "Sondé via IsShown() de StaticPopup1..4 quatre fois par seconde plutôt que crocheté (hooked). StaticPopup_Show est appelé depuis l'ensemble de l'interface de Blizzard par du code qui touche ensuite à des cadres protégés, et cet addon a déjà connu un incident de contamination lié exactement à ce cas (note ActivateRadial de Modules/ControllerUI.lua). Non testé."
+    },
+    {
+      "source": "Produces no vibration — the controller is gone. Turning it off changes nothing you can feel: the engine clears in-flight vibration whenever it loses the device, because it has to.",
+      "target": "Ne produit aucune vibration — la manette est déconnectée. Désactiver cette option ne change rien de perceptible : le moteur annule les vibrations en cours chaque fois qu'il perd l'appareil, par nécessité."
+    },
+    {
+      "source": "Pulse is engineered to drive both the Low (heavy counterweight) and High (sharp tick) rumble motors in concert across all supported gamepads.\n\nVibration schemas define how logical haptic roles map to physical motors: **Standard Rumble** routes low-frequency signals to the heavy motor and high-frequency signals to the sharp motor; **High Motor Only** or **Low Motor Only** collapse signals when a motor is mechanically silent; and **Swapped / Inverted** reverses the mapping for custom grips.",
+      "target": "Pulse est conçu pour piloter de concert les moteurs de vibration lourd (contrepoids lourd) et rapide (tic net) sur toutes les manettes prises en charge.\n\nLes schémas de vibration définissent la façon dont les rôles haptiques logiques sont assignés aux moteurs physiques : **Vibration standard** achemine les signaux basse fréquence vers le moteur lourd et les signaux haute fréquence vers le moteur rapide ; **Moteur rapide uniquement** ou **Moteur lourd uniquement** regroupent les signaux lorsqu'un moteur est mécaniquement inaudible ; et **Inversé** permute l'attribution pour les prises en main personnalisées."
+    },
+    {
+      "source": "Pulse provides purpose-built default profiles engineered for specific roles and activities — browse them on the dedicated **Default profiles** page:\n\n• **Dungeon & Raid Roles** (Tank, Healer, Melee DPS, Caster DPS, Hunter) prioritize high signal-to-noise: threat loss, mitigations, kick windows, and spell completion ticks take priority over ambient clutter.\n• **World Immersion** (Melee, Caster, Ranged) maximizes atmospheric game-feel: footstep weight by armor type, mount strides, swimming resistance, weather, and exploration.\n• **PvP** delivers pure tactical radar with zero ambient distraction.\n\nOn the **Profiles** page, you can configure automatic rules that switch profiles on the fly when you change talent specializations, or create custom copies of any default profile. To protect combat performance, any profile switch requested while fighting is safely deferred until combat ends.",
+      "target": "Pulse propose des profils par défaut conçus sur mesure pour des rôles et des activités spécifiques — découvrez-les sur la page dédiée **Profils par défaut** :\n\n• **Rôles en donjon et raid** (Tank, Soigneur, DPS mêlée, DPS distance/lanceur, Chasseur) privilégient la clarté tactique : pertes de menace, atténuations, opportunités d'interruption et tics de fin d'incantation priment sur les bruits de fond ambiants.\n• **Immersion en extérieur** (Mêlée, Lanceur de sorts, À distance) sublime les sensations de jeu dans l'environnement : poids des pas selon l'armure, foulées de monture, résistance à la nage, météo et exploration.\n• **JcJ** fournit un véritable radar tactique épuré de toute distraction ambiante.\n\nSur la page **Profils**, vous pouvez configurer des règles automatiques qui changent de profil à la volée lorsque vous changez de spécialisation de talents, ou créer des copies personnalisées de n'importe quel profil par défaut. Pour préserver les performances en combat, tout changement de profil demandé en cours d'affrontement est reporté en toute sécurité jusqu'à la fin du combat."
+    },
+    {
+      "source": "Pulse turns what's happening in the game into controller vibration — landing hard, gliding fast, taking a critical hit, a storm rolling in. It's texture for ordinary play, closer to what a console game's rumble does than to a notification.\n\nIt also carries a second, separate set of controls: a full accessibility toggle set imported from Tremor, this addon's sibling project. Those work the same way Tremor's own cues do — an event happens, one pulse tells you about it — but they share Pulse's channel with everything else here, which is a real difference worth understanding. See \"The Accessibility section\" below.",
+      "target": "Pulse traduit ce qui se passe dans le jeu en vibrations de manette — atterrissage brutal, vol rapide en piqué, coup critique subi, tempête qui approche. C'est une texture pour le jeu de tous les jours, plus proche des vibrations d'un jeu sur console que d'une simple notification.\n\nIl intègre également un second ensemble distinct de réglages : un jeu complet d'options d'accessibilité importé de Tremor, le projet frère de cet addon. Celles-ci fonctionnent de la même manière que les signaux de Tremor — un événement survient, une impulsion vous en avertit — mais elles partagent le canal de Pulse avec tout le reste, ce qui constitue une différence essentielle à comprendre. Voir la section « Accessibilité » ci-dessous."
+    },
+    {
+      "source": "Pulse: captured %s breakaway floor at %.3f (ramp was at %.3f when clicked)",
+      "target": "Pulse : seuil de décollement de %s capturé à %.3f (la rampe était à %.3f lors du clic)"
+    },
+    {
+      "source": "Pulse: controller found, but it reports no usable name. Use Generic and Ramp each motor.",
+      "target": "Pulse : manette détectée, mais aucun nom utilisable n'a été signalé. Utilisez Générique et l'outil Rampe pour chaque moteur."
+    },
+    {
+      "source": "Pulse: controller reports itself as \"%s\", which isn't in the list. Use Generic and Ramp each motor.",
+      "target": "Pulse : la manette est identifiée sous le nom « %s », qui ne figure pas dans la liste. Utilisez Générique et l'outil Rampe pour chaque moteur."
+    },
+    {
+      "source": "Ramps up in three steps, then releases.",
+      "target": "Monte en puissance en trois étapes, puis se relâche."
+    },
+    {
+      "source": "Reset calibration",
+      "target": "Réinitialiser le calibrage"
+    },
+    {
+      "source": "Reverses the rumble motors: heavy low-frequency thuds go to the High motor, and sharp high-frequency ticks go to the Low motor. For reverse-wired or custom controller grips.",
+      "target": "Inverse les moteurs de vibration : les secousses sourdes basse fréquence vont vers le moteur rapide, et les tics nets haute fréquence vont vers le moteur lourd. Pour les manettes au câblage inversé ou les prises en main personnalisées."
+    },
+    {
+      "source": "Second: find out what your controller can do",
+      "target": "Deuxièmement : découvrir ce que votre manette peut faire"
+    },
+    {
+      "source": "Sensory spatial awareness when aiming and selecting units:\n• |cffffffffTarget Lock & Switch:|r Distinct click when acquiring a new target or cycling units.\n• |cffffffffFocus Target:|r Physical confirmation when assigning or swapping your focus target.\n• |cffffffffSoft Interaction:|r Tactile blip when your controller reticle aligns with an interactable NPC.",
+      "target": "Conscience spatiale sensorielle lors de la visée et de la sélection d'unités :\n• |cffffffffVerrouillage et changement de cible :|r Clic distinct lors de l'acquisition d'une nouvelle cible ou du défilement des unités.\n• |cffffffffCible de focalisation :|r Confirmation physique lors de l'assignation ou du changement de votre cible de focalisation.\n• |cffffffffInteraction souple :|r Signal tactile discret lorsque le réticule de votre manette s'aligne sur un PNJ interactif."
+    },
+    {
+      "source": "Steam Controller (v1)",
+      "target": "Steam Controller (v1)"
+    },
+    {
+      "source": "Steam Controller 2 (2026)",
+      "target": "Steam Controller 2 (2026)"
+    },
+    {
+      "source": "Steam Deck (LCD & OLED)",
+      "target": "Steam Deck (LCD & OLED)"
+    },
+    {
+      "source": "Steam Deck / Controller",
+      "target": "Steam Deck / Manette"
+    },
+    {
+      "source": "Step 1: Choose Your Controller Hardware",
+      "target": "Étape 1 : Choisissez votre modèle de manette"
+    },
+    {
+      "source": "Switch Pro Controller",
+      "target": "Switch Pro Controller"
+    },
+    {
+      "source": "Switches every cue on the Controller Interactions page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Active ou désactive d'un coup tous les signaux de la page Interactions à la manette. Chaque signal conserve sa propre configuration individuelle."
+    },
+    {
+      "source": "The most promising cue here: a radial is an analog sweep through discrete stops, which is exactly what haptics are good at, and it's the one that could let you pick a segment without looking. Blizzard already change-gates this and applies its own stick hysteresis, so it should not fire continuously while you hold a direction. Untested whether the rate still feels like too much.",
+      "target": "Le signal le plus prometteur ici : un menu radial est un balayage analogique à travers des crans discrets, ce pour quoi le retour haptique excelle, et c'est celui qui pourrait vous permettre de choisir un segment sans regarder l'écran. Blizzard filtre déjà les changements et applique sa propre hystérésis de stick, il ne devrait donc pas se déclencher en continu pendant que vous maintenez une direction. Il reste à tester si la cadence ne paraît pas trop élevée."
+    },
+    {
+      "source": "The smallest value that makes this motor actually spin. Anything above zero is remapped into the range above this floor, so a quiet cue still moves the mass instead of dying silently. Zero input still means completely off. Use \"Ramp\" below to find your controller's real figure.",
+      "target": "La plus petite valeur permettant de faire tourner ce moteur. Toute valeur supérieure à zéro est rééchelonnée dans la plage située au-dessus de ce seuil, de sorte qu'un signal discret mette tout de même la masse en mouvement au lieu de s'éteindre silencieusement. Une valeur d'entrée de zéro reste synonyme d'arrêt complet. Utilisez le bouton « Rampe » ci-dessous pour déterminer la valeur réelle de votre manette."
+    },
+    {
+      "source": "There is no way to detect which motors a controller actually drives — pick a schema above, then play a few modes to find out.",
+      "target": "Il est impossible de détecter automatiquement quels moteurs une manette pilote réellement — choisissez un schéma ci-dessus, puis essayez quelques modes pour le découvrir."
+    },
+    {
+      "source": "Use when the high motor produces nothing you can feel at all. Everything collapses onto the low motor. If it works but is just weak, use Standard and raise its Strength on the Controller calibration page instead.",
+      "target": "À utiliser lorsque le moteur rapide ne produit absolument rien de perceptible. Tout est basculé sur le moteur lourd. S'il fonctionne mais paraît simplement trop faible, utilisez plutôt Standard et augmentez sa puissance sur la page Calibrage de la manette."
+    },
+    {
+      "source": "Use when the low motor produces nothing you can feel at all. Everything collapses onto the high motor. If the low motor works but is just weak, use Standard and raise its Strength on the Controller calibration page instead.",
+      "target": "À utiliser lorsque le moteur lourd ne produit absolument rien de perceptible. Tout est basculé sur le moteur rapide. Si le moteur lourd fonctionne mais paraît simplement trop faible, utilisez plutôt Standard et augmentez sa puissance sur la page Calibrage de la manette."
+    },
+    {
+      "source": "Verify controller connection and motor calibration:",
+      "target": "Vérifier la connexion de la manette et le calibrage des moteurs :"
+    },
+    {
+      "source": "What the game is doing, felt through the controller.",
+      "target": "Ce qui se passe dans le jeu, ressenti à travers la manette."
+    },
+    {
+      "source": "Which controller is this?",
+      "target": "De quelle manette s'agit-il ?"
+    },
+    {
+      "source": "Which controller you are holding. Picking one changes nothing on its own — press Apply below to load its starting values. These are starting points reasoned from what kind of actuators each controller uses, not measurements: Ramp is what measures YOUR controller, and whatever you enter afterwards wins.",
+      "target": "La manette que vous tenez entre les mains. En sélectionner une ne modifie rien en soi — appuyez sur Appliquer ci-dessous pour charger ses valeurs initiales. Il s'agit de points de départ déduits du type d'actionneurs utilisés par chaque manette, et non de mesures : l'outil Rampe mesure VOTRE manette, et toute valeur saisie ensuite prévaut."
+    },
+    {
+      "source": "Which saved cue configuration is active on this character. Every cue's on/off, its intensity and its mode override belong to the profile picked here; the master switch, the schema and the calibration stay global.",
+      "target": "Indique quelle configuration de signaux enregistrée est active sur ce personnage. L'activation/désactivation de chaque signal, son intensité et son remplacement de mode dépendent du profil sélectionné ici ; l'interrupteur général, le schéma et le calibrage restent globaux."
+    },
+    {
+      "source": "Work down this list in order.\n\nIs controller support on? See the first section — this is by far the most common cause.\n\nDoes the controller vibrate at all? Test a mode from the panel. If that's silent, the problem is the controller or the game, not your settings.\n\nIs Pulse switched on, and is the trigger you're waiting for switched on? Both have to be — and for an Accessibility trigger, check the section's master switch too, if it has one.\n\nIs it a texture rather than a pulse? Textures only run while their cause is actually happening — nothing to feel while standing still.\n\nIs the motor's breakaway floor too low? Some gamepads require a higher minimum floor to overcome mechanical inertia. Check the **Controller calibration** page and test the motor ramp.",
+      "target": "Parcourez cette liste dans l'ordre.\n\nLa prise en charge de la manette est-elle activée ? Consultez la première section — c'est de loin la cause la plus fréquente.\n\nLa manette vibre-t-elle ? Testez un mode depuis le panneau. Si rien ne se produit, le problème vient de la manette ou du jeu, pas de vos réglages.\n\nPulse est-il activé, et le déclencheur que vous attendez est-il activé ? Les deux doivent l'être — et pour un déclencheur d'Accessibilité, vérifiez aussi l'interrupteur général de la section, s'il en a un.\n\nS'agit-il d'une texture plutôt que d'une impulsion ? Les textures ne tournent que lorsque leur événement est réellement en cours — rien à ressentir lorsque vous restez immobile.\n\nLe seuil de décollement du moteur est-il trop bas ? Certaines manettes exigent un seuil minimal plus élevé pour vaincre l'inertie mécanique. Consultez la page **Calibrage de la manette** et testez la rampe des moteurs."
+    },
+    {
+      "source": "World of Warcraft ignores controllers entirely until you turn them on, and this is off by default. Pairing the controller to your computer is not enough — the game has to be told separately.\n\nType this into chat, then restart the game:\n\n    /console GamePadEnable 1\n\nUntil that is done nothing here can work, and nothing will warn you. If Pulse seems completely dead, check this first.",
+      "target": "World of Warcraft ignore complètement les manettes tant que vous ne les avez pas activées, et cette option est désactivée par défaut. Associer la manette à votre ordinateur ne suffit pas — il faut l'indiquer séparément au jeu.\n\nTapez ceci dans la discussion, puis redémarrez le jeu :\n\n    /console GamePadEnable 1\n\nTant que cela n'est pas fait, rien ne pourra fonctionner ici et aucun message ne vous en avertira. Si Pulse semble totalement inactif, vérifiez ce point en premier."
+    },
+    {
+      "source": "Xbox (One / Series)",
+      "target": "Xbox (One / Series)"
+    },
+    {
+      "source": "Xbox Elite Series 2",
+      "target": "Xbox Elite Series 2"
+    },
+    {
+      "source": "Xbox One / Series",
+      "target": "Xbox One / Series"
+    },
+    {
+      "source": "a ramp is currently running on ",
+      "target": "un test de rampe est actuellement en cours sur "
+    },
+    {
+      "source": "no controller detected",
+      "target": "aucune manette détectée"
+    },
+    {
+      "source": "no ramp is running on this channel (press Ramp first, then Set Floor when you feel it)",
+      "target": "aucun test de rampe en cours sur ce canal (appuyez d'abord sur Rampe, puis sur Définir le seuil dès que vous le ressentez)"
+    },
+    {
+      "source": "printing each step to chat. Watch the chat, and note the number showing when you FIRST feel anything — that is this motor's breakaway floor. Type it into the slider below and quiet cues stop disappearing. Pressing Test cancels a ramp in progress.",
+      "target": "en affichant chaque étape dans la discussion. Surveillez la discussion et notez le chiffre affiché dès que vous ressentez la TOUTE PREMIÈRE vibration — c'est le seuil de décollement de ce moteur. Entrez-le dans le curseur ci-dessous pour que les signaux discrets cessent de disparaître. Appuyer sur Tester interrompt une rampe en cours."
+    },
+    {
+      "source": "pro controller",
+      "target": "Pro Controller"
+    },
+    {
+      "source": "|A:gamepad-ps-buttonsquare-normal:12:12|a Square: open settings",
+      "target": "|A:gamepad-ps-buttonsquare-normal:12:12|a Carré : ouvrir les réglages"
+    },
+    {
+      "source": "|A:gamepad-switch-128x-face-y-normal:12:12|a Y: open settings",
+      "target": "|A:gamepad-switch-128x-face-y-normal:12:12|a Y : ouvrir les réglages"
+    },
+    {
+      "source": "|A:gamepad-xbox1-buttonx-normal:12:12|a X: open settings",
+      "target": "|A:gamepad-xbox1-buttonx-normal:12:12|a X : ouvrir les réglages"
+    },
+    {
+      "source": "|cff00ff88●|r |cffffffffGamepad Active|r   |cff3a4b5d•|r   |cff8899aa%d Cues|r   |cff3a4b5d•|r   |cff667788%s|r",
+      "target": "|cff00ff88●|r |cffffffffManette active|r   |cff3a4b5d•|r   |cff8899aa%d signaux|r   |cff3a4b5d•|r   |cff667788%s|r"
+    },
+    {
+      "source": "|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[D-Pad]|r Navigate  •  |cff38BDF8[A]|r Select",
+      "target": "|cff38BDF8[L1/R1]|r Onglets  •  |cff38BDF8[D-Pad]|r Naviguer  •  |cff38BDF8[A]|r Sélectionner"
+    },
+    {
+      "source": "|cff666666●|r |cff888888Gamepad Inactive|r   |cff3a4b5d•|r   |cff8899aa%d Cues|r   |cff3a4b5d•|r   |cff667788%s|r",
+      "target": "|cff666666●|r |cff888888Manette inactive|r   |cff3a4b5d•|r   |cff8899aa%d signaux|r   |cff3a4b5d•|r   |cff667788%s|r"
+    },
+    {
+      "source": "|cff888888Controller UI cues are governed by the master switch on the main Pulse page.|r",
+      "target": "|cff888888Les signaux d'interface de la manette sont régis par l'interrupteur général sur la page principale de Pulse.|r"
+    },
+    {
+      "source": "• Selected Controller Hardware: |cffffffff%s|r\n• Character Class & Planned Role: |cffffffff%s (%s)|r\n• Active Continuous Textures: |cffffffff%d active|r\n• Master Haptic Strength: |cffffffff%d%%|r\n\nAll preferences are saved directly to your active profile.\nYou can re-run this setup anytime by typing |cff4cb8ff/pulse setup|r.",
+      "target": "• Modèle de manette sélectionné : |cffffffff%s|r\n• Classe du personnage et rôle prévu : |cffffffff%s (%s)|r\n• Textures continues actives : |cffffffff%d active(s)|r\n• Puissance haptique générale : |cffffffff%d%%|r\n\nToutes les préférences sont directement enregistrées dans votre profil actif.\nVous pouvez relancer cette configuration à tout moment en tapant |cff4cb8ff/pulse setup|r."
+    }
+  ]
+}

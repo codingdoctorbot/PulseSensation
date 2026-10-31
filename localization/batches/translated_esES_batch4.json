@@ -1,0 +1,548 @@
+{
+  "items": [
+    {
+      "source": "100% stripped of footsteps, weather, swimming, flight, loot, quest, and UI noise",
+      "target": "100% sin ruido de pisadas, clima, natación, vuelo, botín, misiones ni interfaz"
+    },
+    {
+      "source": "A bright tick when something you could interact with — an NPC, a node, a door — comes under your reticle.",
+      "target": "Un chasquido ligero cuando un elemento interactivo —un PNJ, un nodo de recolección, una puerta— pasa bajo tu retícula."
+    },
+    {
+      "source": "A bright tick when the weather changes.",
+      "target": "Un chasquido ligero cuando cambia el clima."
+    },
+    {
+      "source": "A clear tactical chime when a waypoint ping pin is placed on the terrain or map.",
+      "target": "Un campanilleo táctico y claro al colocar un marcador de punto de ruta en el terreno o en el mapa."
+    },
+    {
+      "source": "A continuous gait texture while moving — footfalls on foot, hoofbeats mounted.",
+      "target": "Una textura continua de desplazamiento al moverte: pisadas a pie y cascos al ir montado."
+    },
+    {
+      "source": "A continuous texture underwater that intensifies as your breath depletes.",
+      "target": "Una textura continua bajo el agua que se intensifica a medida que se agota tu respiración."
+    },
+    {
+      "source": "A falling pulse when the radial menu closes.",
+      "target": "Un pulso descendente al cerrarse el menú radial."
+    },
+    {
+      "source": "A firm impact as your flight path mount touches down at your destination.",
+      "target": "Un impacto firme cuando tu montura de transporte aterriza en tu destino."
+    },
+    {
+      "source": "A gentle, steady texture for the duration of a taxi flight.",
+      "target": "Una textura suave y constante durante todo el trayecto en una ruta de vuelo."
+    },
+    {
+      "source": "A heartbeat-like warning when your breath meter drops below a quarter, underwater.",
+      "target": "Un aviso similar a un latido cuando tu medidor de respiración desciende por debajo de un cuarto bajo el agua."
+    },
+    {
+      "source": "A heavy, suffocating thud each time you take damage from drowning underwater.",
+      "target": "Un golpe sordo, pesado y asfixiante cada vez que recibes daño por ahogamiento bajo el agua."
+    },
+    {
+      "source": "A light tick the instant you jump or start a Skyriding ascend.",
+      "target": "Un chasquido ligero en el instante en que saltas o inicias un ascenso con Vuelo dinámico."
+    },
+    {
+      "source": "A light tick when you land after a short fall or jump.",
+      "target": "Un chasquido ligero al aterrizar tras un salto o una caída corta."
+    },
+    {
+      "source": "A near-subliminal sense of being in water, for as long as you are — buoyancy rather than effort.",
+      "target": "Una sensación casi subliminal de estar en el agua mientras permanezcas en ella: flotabilidad en lugar de esfuerzo."
+    },
+    {
+      "source": "A sharp impact when you land after a long fall.",
+      "target": "Un impacto seco al aterrizar tras una caída prolongada."
+    },
+    {
+      "source": "A soft release tick when stepping out of auto-attack melee range of your target.",
+      "target": "Un chasquido suave de liberación al salir del alcance de melé para el ataque automático de tu objetivo."
+    },
+    {
+      "source": "A soft tick when you dismount.",
+      "target": "Un chasquido suave al desmontar."
+    },
+    {
+      "source": "A strong impulse of thrust as your flight path mount launches into the air.",
+      "target": "Un fuerte impulso de propulsión cuando tu montura de transporte despega hacia el aire."
+    },
+    {
+      "source": "A subtle tick when stepping within auto-attack melee range of your target.",
+      "target": "Un chasquido sutil al entrar en el alcance de melé para el ataque automático de tu objetivo."
+    },
+    {
+      "source": "A very light tick when a friendly unit comes under your reticle.",
+      "target": "Un chasquido muy ligero cuando una unidad amistosa pasa bajo tu retícula."
+    },
+    {
+      "source": "A very light tick when something you could attack comes under your reticle.",
+      "target": "Un chasquido muy ligero cuando un objetivo atacable pasa bajo tu retícula."
+    },
+    {
+      "source": "Ambient weather, world dialogs, merchant/mail",
+      "target": "Clima ambiental, diálogos del mundo, comerciante y correo"
+    },
+    {
+      "source": "Asymmetric oceanic gravity swells and coastal wave surges while swimming in the sea.",
+      "target": "Oleaje gravitacional oceánico asimétrico y embates de olas costeras al nadar en el mar."
+    },
+    {
+      "source": "Base strength of rain drops on the light motor.",
+      "target": "Fuerza base de las gotas de lluvia en el motor rápido."
+    },
+    {
+      "source": "Bracketed by PLAYER_CONTROL_LOST/GAINED filtered to UnitOnTaxi — those events also fire for other control-loss cases (e.g. fear), filtered out here.",
+      "target": "Delimitado por PLAYER_CONTROL_LOST/GAINED filtrado con UnitOnTaxi; esos eventos también se activan con otras pérdidas de control (p. ej., efectos de miedo), que se filtran aquí."
+    },
+    {
+      "source": "Breath Depletion",
+      "target": "Agotamiento de respiración"
+    },
+    {
+      "source": "Breath depth",
+      "target": "Profundidad de respiración"
+    },
+    {
+      "source": "Breath rate (Hz)",
+      "target": "Frecuencia de respiración (Hz)"
+    },
+    {
+      "source": "Breath texture stays completely silent (no ambient, no gasps) while breath remaining is above this — requested live 2026-09-16 as ~70% breath remaining, well before real danger, so the calm bradycardic heartbeat has room to establish before anything steepens.",
+      "target": "La textura de respiración permanece totalmente silenciosa (sin ambiente ni jadeos) mientras el aire restante supere este valor; solicitado en directo el 16-09-2026 con ~70 % restante de respiración, mucho antes del peligro real, para que el pulso bradicárdico y calmado tenga tiempo de asentarse antes de acelerar."
+    },
+    {
+      "source": "C_Weather/WEATHER_CHANGED is new as of Patch 12.1.5 and its exact return shape hasn't been verified in-game here — this fires on any change, not filtered to storm-type weather yet.",
+      "target": "C_Weather/WEATHER_CHANGED se incorporó en el parche 12.1.5 y la estructura exacta de sus datos de retorno no se ha verificado aún en el juego; esto se activa con cualquier cambio, sin filtrar todavía por clima de tormenta."
+    },
+    {
+      "source": "Cast flow, flight & skyriding, swimming, weather changes, quest and item haptics",
+      "target": "Flujo de lanzamientos, vuelo y Vuelo dinámico, natación, cambios de clima y respuesta háptica de misiones y objetos"
+    },
+    {
+      "source": "Continuous atmospheric vibration matching the current weather (rain, snow, sandstorm) and its intensity.",
+      "target": "Vibración atmosférica continua que coincide con el clima actual (lluvia, nieve, tormenta de arena) y su intensidad."
+    },
+    {
+      "source": "Cycles per second, if you turn the swell on below. 0.15 is roughly one slow rise and fall every seven seconds. Deliberately far slower than the stroke rate above — two layers sharing a frequency read as one sensation instead of two.",
+      "target": "Ciclos por segundo si activas el oleaje más abajo. 0,15 equivale aproximadamente a una subida y bajada lenta cada siete segundos. Es deliberadamente mucho más lenta que la frecuencia de brazada anterior: dos capas con la misma frecuencia se perciben como una sola sensación en lugar de dos."
+    },
+    {
+      "source": "Delete the profile in use. Every rule naming it is cleared, so those scopes fall through to the next one down. Built-in profiles can't be deleted.",
+      "target": "Elimina el perfil en uso. Se borrarán todas las reglas que lo utilicen, pasando esos ámbitos al siguiente nivel inferior. Los perfiles predeterminados no se pueden eliminar."
+    },
+    {
+      "source": "Directory of all %d vibration cues in Pulse, in alphabetical order. Click any entry to jump directly to its controls.",
+      "target": "Directorio con las %d señales de vibración en Pulse, en orden alfabético. Haz clic en cualquier entrada para ir directamente a sus controles."
+    },
+    {
+      "source": "Dismounted",
+      "target": "Desmontado"
+    },
+    {
+      "source": "Dragonriding / Skyriding thrust",
+      "target": "Propulsión de Jinete de dragones / Vuelo dinámico"
+    },
+    {
+      "source": "Drowning damage",
+      "target": "Daño por ahogamiento"
+    },
+    {
+      "source": "Drowning heartbeat interval",
+      "target": "Intervalo de latidos por ahogamiento"
+    },
+    {
+      "source": "Drowning panic peak",
+      "target": "Pico de pánico por ahogamiento"
+    },
+    {
+      "source": "Effort only, routed by default to the heavy motor alongside \"In water\", so the two merge into natural fluid resistance with clean glide coast-down between strokes. Turn on \"Own motor\" only if you want the stroke isolated on the high-frequency motor. Scales on your speed relative to your own swim speed, so it is silent while floating.",
+      "target": "Solo esfuerzo, redirigido por defecto al motor pesado junto con «En el agua», de modo que ambos se fusionan en una resistencia fluida natural con un suave deslizamiento entre brazadas. Activa «Motor propio» únicamente si deseas aislar la brazada en el motor de alta frecuencia. Se ajusta según tu velocidad relativa de nado, por lo que es silencioso al flotar."
+    },
+    {
+      "source": "Fires for every interaction window, including the ones with their own opening cue. Untested.",
+      "target": "Se activa para todas las ventanas de interacción, incluidas las que tienen su propia señal de apertura. No probado."
+    },
+    {
+      "source": "Fires from GUILDBANKFRAME_OPENED or from the interaction manager's GuildBanker type, whichever this client sends. Untested.",
+      "target": "Se activa desde GUILDBANKFRAME_OPENED o desde el tipo GuildBanker del gestor de interacciones, lo que envíe este cliente. No probado."
+    },
+    {
+      "source": "Fires on BANKFRAME_CLOSED, GUILDBANKFRAME_CLOSED, or interaction manager banker hide.",
+      "target": "Se activa con BANKFRAME_CLOSED, GUILDBANKFRAME_CLOSED o al ocultarse el banquero en el gestor de interacciones."
+    },
+    {
+      "source": "Fires on taxi takeoff when control is lost to the flight master mount.",
+      "target": "Se activa al despegar en una ruta de vuelo cuando se cede el control a la montura del maestro de vuelo."
+    },
+    {
+      "source": "Fires when a class or profession trainer's window opens.",
+      "target": "Se activa cuando se abre la ventana de un instructor de clase o profesión."
+    },
+    {
+      "source": "First steepening point — heart rate climbs faster below this than it did between dangerStartThreshold and here. Requested live 2026-09-16 as ~40% breath remaining.",
+      "target": "Primer punto de aceleración: el ritmo cardíaco se incrementa más rápido por debajo de este umbral que entre dangerStartThreshold y este punto. Solicitado en directo el 16-09-2026 con ~40 % restante de respiración."
+    },
+    {
+      "source": "Flight Path Cruise",
+      "target": "Crucero de ruta de vuelo"
+    },
+    {
+      "source": "Flight path landing",
+      "target": "Aterrizaje de ruta de vuelo"
+    },
+    {
+      "source": "Flight path takeoff",
+      "target": "Despegue de ruta de vuelo"
+    },
+    {
+      "source": "Footfalls & Mount Gait",
+      "target": "Pisadas y marcha de montura"
+    },
+    {
+      "source": "Footfalls and gait",
+      "target": "Pisadas y marcha"
+    },
+    {
+      "source": "Footstep pacing, mount travel, gliding, weather, soft-target interaction, weapon draw/release",
+      "target": "Ritmo de pasos, desplazamiento en montura, planeo, clima, interacción con objetivos dinámicos y desenfunde o guardado de armas"
+    },
+    {
+      "source": "Footsteps, mount strides, weather, water presence, looting, quest dialogs, tracking",
+      "target": "Pasos, zancadas de montura, clima, presencia de agua, despojo, diálogos de misión y rastreo"
+    },
+    {
+      "source": "Footsteps, weather, swimming, quest dialogs, merchant/mail, world interaction",
+      "target": "Pasos, clima, natación, diálogos de misión, comerciante y correo e interacción con el mundo"
+    },
+    {
+      "source": "Friendly target under reticle",
+      "target": "Objetivo amistoso bajo la retícula"
+    },
+    {
+      "source": "Gentle crystalline drift during snowfall.",
+      "target": "Suave deslizamiento cristalino durante las nevadas."
+    },
+    {
+      "source": "Hard landing",
+      "target": "Aterrizaje duro"
+    },
+    {
+      "source": "Hostile target under reticle",
+      "target": "Objetivo hostil bajo la retícula"
+    },
+    {
+      "source": "How long this motor takes to fall back toward silence. Too high and consecutive taps blur into one buzz; too low and sustained textures sound chopped. 0.028 reproduces the engine's old behaviour at 60fps.",
+      "target": "Tiempo que tarda este motor en volver al silencio. Si es muy alto, los toques consecutivos se funden en un solo zumbido; si es muy bajo, las texturas sostenidas se perciben entrecortadas. Un valor de 0,028 reproduce el comportamiento anterior del motor a 60 fps."
+    },
+    {
+      "source": "How often the hum swells, in cycles per second. 0.30 is roughly one slow breath every three seconds.",
+      "target": "Frecuencia con la que aumenta el zumbido, en ciclos por segundo. 0,30 equivale aproximadamente a una respiración lenta cada tres segundos."
+    },
+    {
+      "source": "Hydrodynamic water drag that scales as you swim forward through rivers and seas.",
+      "target": "Resistencia hidrodinámica del agua que escala a medida que nadas hacia delante por ríos y mares."
+    },
+    {
+      "source": "Immersive open-world adventures. Terrain footsteps, swimming, mount travel, weather, item discovery, and quest interactions.",
+      "target": "Aventuras inmersivas en mundo abierto. Pasos en el terreno, natación, desplazamiento en montura, clima, descubrimiento de objetos e interacciones de misión."
+    },
+    {
+      "source": "In Water (Buoyancy)",
+      "target": "En el agua (flotabilidad)"
+    },
+    {
+      "source": "In water",
+      "target": "En el agua"
+    },
+    {
+      "source": "Intensity of choking pulses when breath runs out underwater and suffocation damage begins.",
+      "target": "Intensidad de los pulsos de asfixia cuando se agota la respiración bajo el agua y comienza el daño por asfixia."
+    },
+    {
+      "source": "Interactable under reticle",
+      "target": "Elemento interactivo bajo la retícula"
+    },
+    {
+      "source": "Interaction window closed",
+      "target": "Ventana de interacción cerrada"
+    },
+    {
+      "source": "Jumped",
+      "target": "Salto"
+    },
+    {
+      "source": "Late breath threshold",
+      "target": "Umbral tardío de respiración"
+    },
+    {
+      "source": "Layers with \"Underwater breath texture\" when breath runs out. Fires on suffocation damage while submerged.",
+      "target": "Se superpone con «Textura de respiración bajo el agua» cuando se agota el aire. Se activa con el daño por asfixia mientras estás sumergido."
+    },
+    {
+      "source": "Light rain patter, crisp snow rustle, and deep desert sandstorm rumbles.",
+      "target": "Repiqueteo de lluvia ligera, crujido nítido de nieve y estruendos profundos de tormentas de arena en el desierto."
+    },
+    {
+      "source": "Low on breath",
+      "target": "Respiración baja"
+    },
+    {
+      "source": "Low, irregular micro-pulses — rain, patter.",
+      "target": "Micropulsos bajos e irregulares: lluvia, repiqueteo."
+    },
+    {
+      "source": "Mid breath threshold",
+      "target": "Umbral medio de respiración"
+    },
+    {
+      "source": "Mount weight",
+      "target": "Peso de la montura"
+    },
+    {
+      "source": "Mounted up",
+      "target": "Montado"
+    },
+    {
+      "source": "Mounts & travel",
+      "target": "Monturas y viajes"
+    },
+    {
+      "source": "Multiplies gait strength while mounted, on top of the racial mount's own weight. A kodo is already heavier than a hawkstrider before this touches it.",
+      "target": "Multiplica la fuerza de la marcha al ir montado, además del peso propio de la montura racial. Un kodo ya es más pesado que un halcón zancudo antes de aplicar este ajuste."
+    },
+    {
+      "source": "New setups enable casting, crafting, low-health and breath effects. Other effects start off; your saved choices are kept.",
+      "target": "Las nuevas configuraciones activan lanzamientos, profesiones y efectos de salud baja y respiración. Los demás efectos empiezan desactivados; tus elecciones guardadas se conservan."
+    },
+    {
+      "source": "No legacy event for this one — it arrives only through the interaction manager, so it is silent if this client does not send that. Untested.",
+      "target": "No hay ningún evento clásico para esto: solo llega a través del gestor de interacciones, por lo que permanecerá en silencio si este cliente no lo envía. No probado."
+    },
+    {
+      "source": "Occurrence only, deliberately near-subliminal so it doesn't compete with \"Levelled up\". No size scaling: the amount would need UnitXP diffing and isn't worth the bookkeeping for a cue this quiet.",
+      "target": "Solo evento puntual, deliberadamente casi subliminal para no competir con «Subida de nivel». Sin escalado por cantidad: requeriría calcular diferencias en UnitXP y no justifica la sobrecarga para una señal tan discreta."
+    },
+    {
+      "source": "Off by default, layers with \"Low health\" rather than replacing it — same relationship as breathWarning/breathTexture. Same mechanism and same fullscreen-panel caveat as lowHealthWarning above. The shape itself is a code-level switch (Modules/Health.lua's HEARTBEAT_STYLE: smooth glow, flash-synced lub-dub, or an independently-timed lub-dub), not exposed here — flash-synced won out by feel. The knock's own gap/duration/intensity used to be four sliders here; fixed as plain constants in Modules/Health.lua once this exact combination was confirmed to feel right (2026-09-15).",
+      "target": "Desactivado por defecto, se superpone con «Salud baja» en vez de reemplazarlo: misma relación que entre breathWarning y breathTexture. Mismo mecanismo y misma advertencia sobre paneles a pantalla completa que lowHealthWarning más arriba. El patrón en sí es un selector a nivel de código (HEARTBEAT_STYLE en Modules/Health.lua: resplandor suave, lub-dub sincronizado con el destello o lub-dub independiente), no expuesto aquí; la sincronización con el destello ofreció mejores sensaciones. El intervalo, duración e intensidad del golpe solían ser cuatro deslizadores aquí; se fijaron como constantes en Modules/Health.lua una vez confirmado que esta combinación exacta ofrecía la mejor sensación (15-09-2026)."
+    },
+    {
+      "source": "Off by default, layers with \"Low on breath\" rather than replacing it.",
+      "target": "Desactivado por defecto, se superpone con «Respiración baja» en lugar de reemplazarlo."
+    },
+    {
+      "source": "One cue for all four edges (top, bottom, left, right), observed via SmartNavigation's directional edge callbacks while keeping button selection isolated via polling to prevent execution taint. Standard default is off.",
+      "target": "Una sola señal para los cuatro bordes (superior, inferior, izquierdo, derecho), supervisada mediante las llamadas de retorno de bordes de SmartNavigation y manteniendo aislada la selección de botones mediante sondeo para evitar la contaminación de ejecución (taint). Por defecto está desactivada."
+    },
+    {
+      "source": "Only audible if \"Riding a flight path\" is also enabled on its own tab.",
+      "target": "Solo perceptible si «En ruta de vuelo» también está activado en su propia pestaña."
+    },
+    {
+      "source": "Only while mounted",
+      "target": "Solo al ir montado"
+    },
+    {
+      "source": "Overall strength of each footfall before speed and state scaling.",
+      "target": "Fuerza general de cada pisada antes del escalado por velocidad y estado."
+    },
+    {
+      "source": "PLAYER_SOFT_ENEMY_CHANGED, an occurrence-only event with no payload at all — there is nothing here to come back secret. Fires on the soft target changing, which is not the same as actually targeting something; that's still \"Target changed\" on the Target & Focus page. Expect this to fire often while sweeping the camera through a crowd.",
+      "target": "PLAYER_SOFT_ENEMY_CHANGED, un evento puntual sin datos adjuntos; no hay información oculta aquí. Se activa al cambiar de objetivo dinámico, lo cual no equivale a seleccionar un objetivo propiamente dicho (eso sigue siendo «Objetivo cambiado» en la página de Objetivo y Foco). Ten en cuenta que esto se activará a menudo al girar la cámara entre una multitud."
+    },
+    {
+      "source": "Pans left and right footfalls across the Low and High motors so the stride walks across your hands. Turn off for centered dual-motor footfalls.",
+      "target": "Distribuye las pisadas izquierda y derecha entre los motores lento y rápido para que la marcha avance a través de tus manos. Desactívalo para obtener pisadas centradas en ambos motores."
+    },
+    {
+      "source": "Personal damage clutter, footsteps, weather, world dialogs",
+      "target": "Saturación de daño personal, pasos, clima y diálogos del mundo"
+    },
+    {
+      "source": "Ping placed",
+      "target": "Marcador de punto de ruta colocado"
+    },
+    {
+      "source": "Present whether or not you are moving, and it does not read your speed at all, so it keeps working while speed comes back as a secret value. Drives the SLOW motor, whose large mass is what buoyancy actually feels like, leaving the sharp one to \"Swimming resistance\" — so the two never collide. Floating gives you this alone.",
+      "target": "Está presente tanto si te mueves como si no, y no comprueba tu velocidad en absoluto, por lo que sigue funcionando aunque la velocidad se reciba como un valor protegido. Activa el motor LENTO, cuya gran masa transmite la sensación real de flotabilidad, reservando el motor rápido para «Resistencia al nadar», evitando así que colisionen. Al flotar, solo sentirás esta señal."
+    },
+    {
+      "source": "Puts the stroke on the sharp motor. Turn off (recommended) to route swimming resistance to the heavy motor alongside ambient water, producing deep hydrodynamic drag instead of high-frequency motor buzz.",
+      "target": "Asigna la brazada al motor rápido. Desactívalo (recomendado) para canalizar la resistencia al nadar hacia el motor pesado junto con el agua ambiental, produciendo un arrastre hidrodinámico profundo en lugar de un zumbido de alta frecuencia."
+    },
+    {
+      "source": "Rain intensity",
+      "target": "Intensidad de la lluvia"
+    },
+    {
+      "source": "Rate of rain drops and micro-flutter patter.",
+      "target": "Cadencia de las gotas de lluvia y repiqueteo de microvibraciones."
+    },
+    {
+      "source": "Reads C_Weather.GetCurrentWeather() in WoW Forever. Modulates micro-flutter for rain, slow crystalline drift for snow, and dual rumble for sandstorms, scaled by weather intensity.",
+      "target": "Consulta C_Weather.GetCurrentWeather() en WoW Forever. Modula un repiqueteo sutil para la lluvia, un deslizamiento cristalino pausado para la nieve y un retumbe dual para tormentas de arena, escalado según la intensidad del clima."
+    },
+    {
+      "source": "Restricts the gait to mounted travel, where a sustained texture is most welcome. Turn off to feel your own footsteps too — try it before leaving it on.",
+      "target": "Limita la marcha al desplazamiento en montura, donde una textura sostenida resulta más agradable. Desactívalo para sentir también tus propios pasos a pie: pruébalo antes de dejarlo activado."
+    },
+    {
+      "source": "Rhythmic footsteps on foot and hoofbeat cadence while mounted, weighted by armor class.",
+      "target": "Pisadas rítmicas a pie y cadencia de cascos al ir montado, ponderadas según el tipo de armadura."
+    },
+    {
+      "source": "Riding a flight path",
+      "target": "En ruta de vuelo"
+    },
+    {
+      "source": "Rising heartbeat pulse that quickens and intensifies as your breath meter runs low underwater.",
+      "target": "Pulso de latido ascendente que se acelera e intensifica a medida que se agota tu medidor de respiración bajo el agua."
+    },
+    {
+      "source": "Same fall-duration proxy as \"Landed\", just a higher threshold and a heavier mode.",
+      "target": "Mismo indicador de duración de caída que «Aterrizaje», pero con un umbral más alto y un modo más pesado."
+    },
+    {
+      "source": "Sandstorm / Gale intensity",
+      "target": "Intensidad de vendaval / tormenta de arena"
+    },
+    {
+      "source": "Scored by how long you were airborne, not by fall damage — that number is unreadable. A short hop stays silent below the threshold.",
+      "target": "Se evalúa según el tiempo que pasaste en el aire y no por el daño de caída (ese valor no se puede leer). Un salto corto permanece en silencio por debajo del umbral."
+    },
+    {
+      "source": "Second-harmonic Stokes drift shaping. 0.0 is a pure symmetric sine wave; higher values create a sharp, steep crest and an elongated trough, matching real fluid gravity waves.",
+      "target": "Modelado de deriva de Stokes de segundo armónico. 0,0 es una onda senoidal simétrica pura; los valores más altos generan una cresta escarpada y un valle alargado, emulando las ondas gravitacionales reales de los fluidos."
+    },
+    {
+      "source": "Seconds between drowning damage pulses while submerged with zero breath.",
+      "target": "Segundos entre pulsos de daño por ahogamiento mientras estás sumergido sin respiración."
+    },
+    {
+      "source": "Simulates real fluid swell physics via harmonic wave synthesis: a slow, rhythmic rise into a steep wave crest, followed by a gentle glide into the trough. Driven primarily by the heavy slow motor with high-motor crest spray at peak amplitude. Automatically targets ocean and coastal waters unless configured to run in all swimming water.",
+      "target": "Simula la física del oleaje real de los fluidos mediante síntesis de ondas armónicas: una elevación lenta y rítmica hacia una cresta empinada, seguida de un suave descenso hacia el seno de la ola. Activado principalmente por el motor lento y pesado, con salpicaduras en la cresta generadas por el motor rápido en la amplitud máxima. Se aplica automáticamente a aguas oceánicas y costeras, a menos que se configure para ejecutarse en cualquier agua donde se nade."
+    },
+    {
+      "source": "Skyriding / Gliding Thrust",
+      "target": "Propulsión de planeo / Vuelo dinámico"
+    },
+    {
+      "source": "Snow intensity",
+      "target": "Intensidad de la nieve"
+    },
+    {
+      "source": "Step 3: World & Target Interactions",
+      "target": "Paso 3: Interacciones con el mundo y los objetivos"
+    },
+    {
+      "source": "Strength at full swimming speed. Replaces the old swimLowPeak/swimHighPeak pair, which were blended with max() and were therefore algebraically one knob: the smaller never did anything.",
+      "target": "Fuerza a máxima velocidad de nado. Reemplaza el antiguo par swimLowPeak/swimHighPeak, que se combinaban con max() y eran algebraicamente un único control: el menor nunca surtía efecto."
+    },
+    {
+      "source": "Strength of abrasive gusts and heavy windstorms.",
+      "target": "Fuerza de las ráfagas abrasivas y fuertes tormentas de viento."
+    },
+    {
+      "source": "Strokes per second at full speed. Swimming faster strokes faster, not merely harder — the old version only ever changed amplitude.",
+      "target": "Brazadas por segundo a máxima velocidad. Nadar más rápido aumenta la frecuencia de las brazadas, no solo su fuerza; la versión anterior solo modificaba la amplitud."
+    },
+    {
+      "source": "Subtle hydrostatic floating texture when swimming or bobbing in bodies of water.",
+      "target": "Textura sutil de flotación hidrostática al nadar o flotar en masas de agua."
+    },
+    {
+      "source": "Swimming Resistance",
+      "target": "Resistencia al nadar"
+    },
+    {
+      "source": "Swimming resistance",
+      "target": "Resistencia al nadar"
+    },
+    {
+      "source": "Tempo at zero breath remaining — the panic end of the climb, reached only in the final stretch below lateBreathThreshold.",
+      "target": "Cadencia al agotarse totalmente la respiración: el tramo de pánico del ascenso, alcanzado solo en la recta final por debajo de lateBreathThreshold."
+    },
+    {
+      "source": "Tempo from dangerStartThreshold down to midBreathThreshold — a real bradycardic rate (the diving reflex actually slows the heart at first, requested live 2026-09-16), not an elevated one.",
+      "target": "Cadencia desde dangerStartThreshold hasta midBreathThreshold: un ritmo bradicárdico real (el reflejo de inmersión ralentiza el corazón al principio, solicitado en directo el 16-09-2026) y no una frecuencia acelerada."
+    },
+    {
+      "source": "Temporarily disabled: UNIT_PING_PIN_ADDED is registration-restricted by Blizzard on WoW Forever / 12.x.",
+      "target": "Desactivado temporalmente: el registro de UNIT_PING_PIN_ADDED está restringido por Blizzard en WoW Forever / 12.x."
+    },
+    {
+      "source": "The catch-all. Enum.PlayerInteractionType has 81 values and most are retail systems a classic-shaped roster never meets; anything unmapped lands here rather than being silent, which also means a window type added to the client later is covered with no change to Pulse. Turn it on with /pulse debug to find out which types your client actually sends. Untested.",
+      "target": "El comodín general. Enum.PlayerInteractionType contiene 81 valores y la mayoría corresponden a sistemas de Retail que un cliente de Classic nunca utiliza; cualquier elemento sin asignar llega aquí en lugar de quedar en silencio. Esto también significa que cualquier ventana añadida al cliente más adelante quedará cubierta sin necesidad de actualizar Pulse. Actívalo con /pulse debug para averiguar qué tipos envía realmente tu cliente. No probado."
+    },
+    {
+      "source": "The effort of pulling yourself through water — a rhythmic hydrodynamic stroke that quickens and hardens with movement speed.",
+      "target": "El esfuerzo de impulsarte en el agua: una brazada hidrodinámica rítmica que se acelera y se hace más firme con la velocidad de movimiento."
+    },
+    {
+      "source": "The fallback for any character with no rule of its own — including characters you have not logged into yet. Set this to the profile you mostly want, then override the handful of characters that differ.",
+      "target": "El perfil de reserva para cualquier personaje sin una regla propia, incluidos los personajes con los que aún no has iniciado sesión. Asigna esto al perfil que prefieras de forma general y luego personaliza los pocos personajes que difieran."
+    },
+    {
+      "source": "Trainer window opened",
+      "target": "Ventana de instructor abierta"
+    },
+    {
+      "source": "Tuned for heavy chassis damping (+10% Low motor gain)",
+      "target": "Ajustado para una fuerte amortiguación de chasis (+10% más de ganancia en el motor lento)"
+    },
+    {
+      "source": "Two solid hits when you mount.",
+      "target": "Dos golpes contundentes al montar."
+    },
+    {
+      "source": "Underwater boost",
+      "target": "Aumento bajo el agua"
+    },
+    {
+      "source": "Underwater breath texture",
+      "target": "Textura de respiración bajo el agua"
+    },
+    {
+      "source": "Untested: this fires for a Skyriding ascend too, on top of glideThrust's own continuous texture easing in right after — may read as a clean \"liftoff, then flight\" or as a double-hit. Try it before assuming either.",
+      "target": "No probado: esto también se activa durante un ascenso con Vuelo dinámico, además de la propia textura continua de glideThrust que entra suavemente justo después; puede percibirse como un «despegue limpio y posterior vuelo» o como un doble golpe. Pruébalo antes de sacar conclusiones."
+    },
+    {
+      "source": "Water presence",
+      "target": "Presencia de agua"
+    },
+    {
+      "source": "Weather Atmosphere",
+      "target": "Atmósfera climática"
+    },
+    {
+      "source": "Weather changed",
+      "target": "Cambio de clima"
+    },
+    {
+      "source": "Weather texture",
+      "target": "Textura climática"
+    },
+    {
+      "source": "Weather, footsteps, loot popups, quest dialogs, merchant/mail",
+      "target": "Clima, pasos, avisos de botín, diálogos de misión, comerciante y correo"
+    },
+    {
+      "source": "When set to 1, restricts the rolling swell to ocean bodies, coasts, seas, and deep-water fatigue zones (English clients only; non-English clients play swell in all swimming water). Set to 0 to feel ocean swells in all swimming water.",
+      "target": "Si se establece en 1, restringe el oleaje a masas oceánicas, costas, mares y zonas de fatiga en aguas profundas (solo en clientes en inglés; en clientes de otros idiomas se reproduce el oleaje en todas las aguas navegables). Establécelo en 0 para sentir el oleaje oceánico en cualquier agua donde nades."
+    },
+    {
+      "source": "World dialogs, ambient weather, merchant/mail",
+      "target": "Diálogos del mundo, clima ambiental, comerciante y correo"
+    },
+    {
+      "source": "|cff38BDF8[A] Adjust Value|r  •  |cffffffff[→] Jump to Feel Button|r",
+      "target": "|cff38BDF8[A] Ajustar valor|r  •  |cffffffff[→] Ir al botón Probar|r"
+    }
+  ]
+}

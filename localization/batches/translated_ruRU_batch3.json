@@ -1,0 +1,616 @@
+{
+  "items": [
+    {
+      "source": "\n\nA profile change is waiting: cues re-register when you leave combat, so nothing is rebuilt mid-pull.",
+      "target": "\n\nОжидается смена профиля: сигналы перерегистрируются после выхода из боя, чтобы ничего не перестраивалось посреди боя."
+    },
+    {
+      "source": " Takes effect when you leave combat.",
+      "target": " Вступает в силу после выхода из боя."
+    },
+    {
+      "source": "1. Planned Class & Combat Role",
+      "target": "1. Планируемый класс и боевая роль"
+    },
+    {
+      "source": "2. Combat",
+      "target": "2. Бой"
+    },
+    {
+      "source": "A crisp tap when a major full-screen or side UI panel opens (character sheet, spellbook, quest log, etc.).",
+      "target": "Четкий импульс при открытии основного полноэкранного или бокового окна интерфейса (окно персонажа, книга заклинаний, журнал заданий и т. д.)."
+    },
+    {
+      "source": "A dense three-pulse tactical flurry on Windfury extra attacks, detected via sub-50% weapon speed PLAYER_SWING timing.",
+      "target": "Плотный трехчастный тактический шквал импульсов при дополнительных атаках «Неистовства ветра», определяемый по таймингу PLAYER_SWING менее 50% скорости оружия."
+    },
+    {
+      "source": "A dense three-pulse tactical flurry when the client receives UNIT_SPELLCAST_SUCCEEDED for Windfury Attack (Spell ID 25504).",
+      "target": "Плотный трехчастный тактический шквал импульсов, когда клиент получает событие UNIT_SPELLCAST_SUCCEEDED для заклинания «Удар неистовства ветра» (ID заклинания 25504)."
+    },
+    {
+      "source": "A distinct physical tap to land with each main-hand weapon swing.",
+      "target": "Отчетливый физический импульс при каждом замахе оружием в правой руке."
+    },
+    {
+      "source": "A faint constant on the slow motor for as long as a cast or channel lasts, underneath the swell. This is the part that says \"something is happening\"; the swell is the part that says \"it is nearly done\". Zero leaves only the swell.",
+      "target": "Слабый постоянный гул на низкочастотном моторе во время применения или поддержания заклинания под нарастанием вибрации. Эта часть дает понять, что «что-то происходит»; нарастание же сообщает, что «действие почти завершено». Значение ноль оставляет только нарастание."
+    },
+    {
+      "source": "A faint continuous hum for as long as you're casting or channelling.",
+      "target": "Слабый непрерывный гул на протяжении всего применения или поддержания заклинания."
+    },
+    {
+      "source": "A firm hit that bleeds away — slowing to a stop.",
+      "target": "Уверенный удар, постепенно затухающий и плавно сходящий на нет."
+    },
+    {
+      "source": "A heavy thud when your target activates a major defensive cooldown (e.g. Shield Wall, Ice Block, Divine Shield, Turtle, Cloak).",
+      "target": "Тяжелый глухой удар, когда ваша цель активирует мощное защитное умение (напр., «Глухая оборона», «Ледяная глыба», «Божественный щит», «Дух черепахи», «Плащ»)."
+    },
+    {
+      "source": "A light tick estimated to land with each off-hand weapon swing, while dual-wielding.",
+      "target": "Легкий щелчок, рассчитываемый для каждого замаха оружием в левой руке при бое двумя оружиями."
+    },
+    {
+      "source": "A near-silent breathing wave while stealthed or invisible.",
+      "target": "Почти неслышная дыхательная волна во время незаметности или невидимости."
+    },
+    {
+      "source": "A pleasant chime when you receive a critical heal.",
+      "target": "Приятный перезвон при получении критического исцеления."
+    },
+    {
+      "source": "A quick tap when a boss raid-warns, yells, emotes, or whispers during a fight — a text-channel fallback for bossAbilityWarning above.",
+      "target": "Быстрый импульс, когда босс использует объявление рейду, крик, эмоцию или шепот во время боя — текстовый резервный вариант для описанного выше bossAbilityWarning."
+    },
+    {
+      "source": "A sharp metallic parry clang.",
+      "target": "Резкий металлический звон при парировании."
+    },
+    {
+      "source": "A sharp thump when an attack against you crits.",
+      "target": "Резкий глухой удар при получении критического удара от входящей атаки."
+    },
+    {
+      "source": "A short deflecting tick when a craft is abandoned or interrupted.",
+      "target": "Короткий отсекающий щелчок при прерывании или отмене создания предмета."
+    },
+    {
+      "source": "A soft tick when your ranged auto-attack stops — catches walking out of range or getting interrupted without noticing.",
+      "target": "Мягкий щелчок при остановке автоатаки дальнего боя — помогает заметить выход из радиуса действия или случайное прерывание."
+    },
+    {
+      "source": "A tank-facing cue. Off by default because for anyone else losing threat is the normal, desirable state.",
+      "target": "Сигнал, ориентированный на танков. По умолчанию отключен, так как для остальных потеря угрозы — нормальное и желательное состояние."
+    },
+    {
+      "source": "A very light tap for an ordinary heal — deliberately gentle, distinct from the sharper healCrit pulse.",
+      "target": "Очень легкий импульс при обычном исцелении — нарочито мягкий, в отличие от более резкого импульса healCrit."
+    },
+    {
+      "source": "A very light tap for an ordinary hit — deliberately gentle, distinct from the sharper critLanded pulse.",
+      "target": "Очень легкий импульс при обычном попадании — нарочито мягкий, в отличие от более резкого импульса critLanded."
+    },
+    {
+      "source": "A very light tick every time you use an ability, while in combat.",
+      "target": "Очень легкий щелчок при каждом использовании способности во время боя."
+    },
+    {
+      "source": "Active Profile: |cffffd100%s|r |cffff8800(Pending exit from combat)|r",
+      "target": "Активный профиль: |cffffd100%s|r |cffff8800(Ожидается выход из боя)|r"
+    },
+    {
+      "source": "An electric burst when a reactive spell or talent lights up on your action bar.",
+      "target": "Электрический всплеск, когда на панели команд подсвечивается реактивное заклинание или талант."
+    },
+    {
+      "source": "Apply parry haste",
+      "target": "Применять ускорение атаки при парировании"
+    },
+    {
+      "source": "Atmospheric and arcane. Flowing spellcast textures, elemental channeling, environmental wind and weather, flight gliding, and magical world interactions.",
+      "target": "Атмосферный и чародейский. Плавные текстуры применения заклинаний, поддержание стихийной магии, шум ветра и погоды, планирование в полете и взаимодействие с волшебным миром."
+    },
+    {
+      "source": "Auto-shot cadence, weapon swings, pet status, trap triggers, execute range, boss mechanics",
+      "target": "Темп автовыстрелов, замахи оружием, состояние питомца, срабатывание ловушек, фаза «Казни», механики боссов"
+    },
+    {
+      "source": "Bends the motor response with a smoothstep curve (3x^2 - 2x^3) to widen contrast between gentle background textures and heavy combat impacts. When unchecked, standard linear scaling is used.",
+      "target": "Модифицирует отклик моторов с помощью функции smoothstep (3x^2 - 2x^3) для усиления контраста между мягкими фоновыми текстурами и тяжелыми боевыми ударами. Если флажок снят, используется стандартное линейное масштабирование."
+    },
+    {
+      "source": "Boss mechanics, heavy damage taken, personal cooldowns, debuffs, execute range, interrupt windows",
+      "target": "Механики боссов, получение тяжелого урона, личные защитные умения, отрицательные эффекты, фаза «Казни», окна для прерывания"
+    },
+    {
+      "source": "COMBAT_TEXT_UPDATE's SPELL_AURA_START_HARMFUL messageType, ruling out EXTRA_ATTACKS. Occurrence only — the amount on this feed is a secret value. Not confirmed to fire; off by default.",
+      "target": "Тип сообщения SPELL_AURA_START_HARMFUL из COMBAT_TEXT_UPDATE, исключая EXTRA_ATTACKS. Только факт события — значение в этом потоке является скрытым (secret value). Срабатывание не подтверждено; по умолчанию отключено."
+    },
+    {
+      "source": "Channel hum (high)",
+      "target": "Гул поддержания (высокий)"
+    },
+    {
+      "source": "Choose your planned class & role, and configure offensive and defensive combat feedback.",
+      "target": "Выберите планируемый класс и роль, а затем настройте тактильную отдачу для атаки и защиты в бою."
+    },
+    {
+      "source": "Combat",
+      "target": "Бой"
+    },
+    {
+      "source": "Combo points, resource cap, execute range, kick alert, boss telegraphs, burst cooldowns",
+      "target": "Длина серии (серийные удары), предел ресурсов, фаза «Казни», оповещение о сбивании каста, подсказки способностей боссов, мощные атакующие умения"
+    },
+    {
+      "source": "Commanding protection. High threat alerts, mitigation tracking, crowd control, and kick windows. Silences non-combat clutter.",
+      "target": "Надежная защита. Оповещения о высоком уровне угрозы, отслеживание защитных эффектов, контроль над персонажем и окна сбивания кастов. Отсекает лишние внебоевые эффекты."
+    },
+    {
+      "source": "Confirmed live 2026-09-17: PLAYER_ENTER_COMBAT/PLAYER_LEAVE_COMBAT specifically track the auto-attack toggle, not the broader in-combat state combatEnter/combatLeave already cover — kept as its own cue pair rather than merged with autoRepeatStart/Stop, since melee and ranged are a different event pair on a different frame.",
+      "target": "Подтверждено в игре 17.09.2026: PLAYER_ENTER_COMBAT/PLAYER_LEAVE_COMBAT отслеживают именно переключение автоатаки, а не общее состояние боя, которое уже обрабатывают combatEnter/combatLeave. Сохранено в виде отдельной пары сигналов, а не объединено с autoRepeatStart/Stop, так как ближний и дальний бой используют разные события в разных фреймах."
+    },
+    {
+      "source": "Confirmed live 2026-09-17: START_AUTOREPEAT_SPELL/STOP_AUTOREPEAT_SPELL fire reliably on this client. See meleeAttackStart for the separate melee equivalent.",
+      "target": "Подтверждено в игре 17.09.2026: START_AUTOREPEAT_SPELL/STOP_AUTOREPEAT_SPELL стабильно срабатывают на этом клиенте. См. meleeAttackStart для отдельного аналога ближнего боя."
+    },
+    {
+      "source": "Confirmed live 2026-09-17: UNIT_SPELLCAST_SUCCEEDED fires with spellID 75 once per arrow — a genuine per-shot signal, not a prediction. Melee auto-attack has no equivalent: the traditional swing-timer technique reads the combat log, and this same session confirmed COMBAT_LOG_EVENT_UNFILTERED errors on registration for an addon frame under Midnight, full stop. See weaponSwingMain/weaponSwingOff below for the estimated (not measured) melee equivalent, built anyway with that limitation stated plainly. Hunter-specific; other classes' ranged auto-repeat (Shoot, wands) untested.",
+      "target": "Подтверждено в игре 17.09.2026: UNIT_SPELLCAST_SUCCEEDED срабатывает со spellID 75 на каждую стрелу — реальный сигнал каждого выстрела, а не расчетный прогноз. В ближнем бою такого эквивалента нет: традиционный таймер замаха считывает журнал боя, но в той же сессии было подтверждено, что COMBAT_LOG_EVENT_UNFILTERED выдает ошибку при регистрации для фреймов модификаций в Midnight. См. ниже weaponSwingMain/weaponSwingOff для расчетного (а не измеряемого) эквивалента ближнего боя, созданного с явным учетом этого ограничения. Специфично для охотников; автоатака дальнего боя других классов («Выстрел», жезлы) не тестировалась."
+    },
+    {
+      "source": "Confirmed live, 2026-09-15: COMBAT_TEXT_UPDATE's DAMAGE_CRIT/SPELL_DAMAGE_CRIT fires when you are crit, not when you land one — the reverse of this cue's original name and description. The `critLanded` id and COMBAT category are kept as-is rather than renamed, so this stays the same saved preference for anyone who already toggled it.",
+      "target": "Подтверждено в игре 15.09.2026: DAMAGE_CRIT/SPELL_DAMAGE_CRIT из COMBAT_TEXT_UPDATE срабатывает, когда критический удар наносят вам, а не когда вы наносите его — в противоположность исходному названию и описанию этого сигнала. Идентификатор `critLanded` и категория COMBAT сохранены без изменений, чтобы настройки остались прежними для тех, кто уже переключал эту опцию."
+    },
+    {
+      "source": "Continuous magical hum that builds during casts and channels steadily through your hands.",
+      "target": "Непрерывный магический гул, нарастающий во время применения и поддержания заклинаний прямо в ваших руках."
+    },
+    {
+      "source": "Control & Threat",
+      "target": "Контроль и угроза"
+    },
+    {
+      "source": "Craft interrupted",
+      "target": "Создание предмета прервано"
+    },
+    {
+      "source": "Curated starting setups balanced for specific roles and playstyles. Unlike an empty configuration, each profile prioritizes the tactile signals most critical to that activity while filtering out background noise.\n\n|cffffd100Dungeons & Raids|r prioritize high signal-to-noise: threat loss, defensive mitigations, interrupt windows, and spell completion ticks take precedence.\n|cffffd100World Immersion|r profiles emphasize atmospheric game-feel: footstep weight by armor type, mount strides, swimming resistance, weather changes, and exploration.\n|cffffd100PvP|r provides pure tactical radar with zero ambient distraction.\n\nTip: Click |cffffd100Set for Spec|r to bind any profile to your active talent specialization, or customize auto-switch rules on the |cffffd100Profiles|r page.",
+      "target": "Тщательно подобранные стартовые наборы, сбалансированные под определенные роли и стили игры. В отличие от пустой конфигурации, каждый профиль выделяет наиболее критичные тактильные сигналы для конкретной активности, отсекая фоновый шум.\n\n|cffffd100«Подземелья и рейды»|r ставят в приоритет максимальную информативность: срыв угрозы, защитные эффекты, окна сбивания кастов и щелчки завершения заклинаний.\n|cffffd100«Погружение в мир»|r делает акцент на атмосфере: вес шагов в зависимости от типа брони, поступи верховых животных, сопротивление воды при плавании, изменения погоды и исследование мира.\n|cffffd100«PvP»|r обеспечивает чистый тактический радар без отвлекающих фоновых эффектов.\n\nСовет: нажмите |cffffd100«Привязать к специализации»|r, чтобы назначить любой профиль вашей активной специализации талантов, или настройте правила автопереключения на странице |cffffd100«Профили»|r."
+    },
+    {
+      "source": "Damage taken",
+      "target": "Получение урона"
+    },
+    {
+      "source": "Defensive Combat & Threat Feedback",
+      "target": "Тактильная отдача защиты и угрозы в бою"
+    },
+    {
+      "source": "Detected via the global cooldown (spell 61304 ticking), not a per-ability read — so it only fires for abilities that trigger the GCD, and fires once per GCD even if what you pressed doesn't share a name with it. Off by default — this is the one idea in the whole catalogue that genuinely competes for channel time during a pull. Try it, but it's not for everyone.",
+      "target": "Определяется по общему времени восстановления (тиками заклинания 61304), а не по отдельным способностям — поэтому срабатывает только для способностей, запускающих GCD, и срабатывает один раз за GCD, даже если нажатая кнопка называется иначе. По умолчанию отключено — это единственная идея во всем каталоге, которая всерьез соперничает за ресурсы вибромоторов во время боя. Попробуйте, но подойдет не всем."
+    },
+    {
+      "source": "Discordant combat spam",
+      "target": "Хаотичный спам в бою"
+    },
+    {
+      "source": "Entering combat",
+      "target": "Вход в бой"
+    },
+    {
+      "source": "Estimator only, and ignored while the real event is in use. Recalculates the predicted next swing when you parry an incoming attack (real formula: reduces remaining time by 40% of weapon speed, floored at 20%).",
+      "target": "Только расчетный прогноз; игнорируется, пока используется настоящее игровое событие. Пересчитывает ожидаемое время следующего замаха при парировании входящей атаки (реальная формула: уменьшает оставшееся время на 40% ot скорости оружия, но не менее 20%)."
+    },
+    {
+      "source": "Everything under the Accessibility headings is imported from Tremor, this addon's sibling — the same events, the same triggers, built for telling you about things you'd otherwise have to see, like a stun landing or your cast breaking.\n\nOne thing did not carry over: Tremor plays one cue at a time and makes the most urgent one win, on the reasoning that a late or blended signal is worse than none. Pulse doesn't work that way — everything here can layer together, which is what makes the movement and combat textures feel good, but it means an accessibility cue can arrive blended with something else rather than standing alone the way it would in Tremor.\n\nIf precise, unambiguous accessibility signals matter more to you than game-feel texture, Tremor on its own is built specifically for that and doesn't have this tradeoff. The two are not meant to run at the same time.",
+      "target": "Все функции в разделах специальных возможностей перенесены из Tremor, родственной модификации — те же события, те же триггеры, созданные для оповещения о событиях, которые иначе пришлось бы отслеживать взглядом (например, наложение оглушения или прерывание заклинания).\n\nОдно отличие все же есть: Tremor воспроизводит только один сигнал за раз, отдавая приоритет наиболее срочному, исходя из того, что запоздалый или смазанный сигнал хуже, чем его отсутствие. В Pulse все устроено иначе — здесь сигналы могут накладываться друг на друга, что обеспечивает великолепное ощущение текстур движения и боя. Однако это означает, что сигнал специальных возможностей может смешаться с другим эффектом, а не воспроизводиться изолированно, как в Tremor.\n\nЕсли для вас точные и однозначные сигналы доступности важнее игровых текстур, то модификация Tremor создана именно для этого и лишена подобных компромиссов. Одновременная работа обеих модификаций не предусмотрена."
+    },
+    {
+      "source": "Excessive combat telegraph alarms",
+      "target": "Чрезмерные предупреждения о способностях в бою"
+    },
+    {
+      "source": "Experimental. Listens for the client spellcast event of Windfury Attack (Spell ID 25504). Dependent on the server emitting UNIT_SPELLCAST_SUCCEEDED for item proc extra attacks.",
+      "target": "Экспериментально. Отслеживает клиентское событие применения заклинания «Удар неистовства ветра» (ID заклинания 25504). Зависит от отправки сервером события UNIT_SPELLCAST_SUCCEEDED при срабатывании дополнительных атак от чар или предметов."
+    },
+    {
+      "source": "Experimental. Measures the interval between consecutive main-hand swings. Extra attacks arrive well under 50% of weapon speed without needing combat log access. Confirmed working on WoW Forever.",
+      "target": "Экспериментально. Измеряет интервал между последовательными замахами правой руки. Дополнительные атаки происходят значительно быстрее 50% ot скорости оружия без необходимости доступа к журналу боя. Подтверждена работоспособность в WoW Forever."
+    },
+    {
+      "source": "Experimental: watches whichever spells the Cooldown Manager's Essential category shows, not a hardcoded list. The exact live \"just became ready\" signal was never independently confirmed before this shipped — built on the same C_Spell.GetSpellCooldown transition-tracking this file already uses for the GCD heartbeat.",
+      "target": "Экспериментально: отслеживает любые заклинания, отображаемые в категории «Основные» менеджера восстановления, а не фиксированный список. Точный сигнал готовности способности в игре («только что восстановилась») не был независимо подтвержден до релиза — построено на том же отслеживании переходов C_Spell.GetSpellCooldown, которое уже используется в этом файле для пульсации GCD."
+    },
+    {
+      "source": "Fires for a craft that stopped without succeeding — moving, being interrupted, or cancelling. Untested.",
+      "target": "Срабатывает при создании предмета, которое завершилось неудачно: при движении, прерывании или отмене. Не тестировалось."
+    },
+    {
+      "source": "Fires on SPELL_ACTIVATION_OVERLAY_GLOW_SHOW for procs such as Clearcasting, Nightfall, Overpower, Revenge, Riposte, or Art of War.",
+      "target": "Срабатывает по событию SPELL_ACTIVATION_OVERLAY_GLOW_SHOW при таких эффектах, как «Ясность мысли», «Погибель», «Превосходство», «Реванш», «Ответный удар» или «Искусство войны»."
+    },
+    {
+      "source": "Fires specifically when a channelled spell of yours is cut short by an interrupt, not when it simply ends.",
+      "target": "Срабатывает только тогда, когда ваше поддерживаемое заклинание сбито прерыванием, а не просто завершилось."
+    },
+    {
+      "source": "Fires when a channelled spell of yours ends, whether it ran to completion or was cut short.",
+      "target": "Срабатывает, когда ваше поддерживаемое заклинание заканчивается — как при полном завершении, так и при прерывании."
+    },
+    {
+      "source": "Fires when one of your own casts is interrupted or cancelled before completion.",
+      "target": "Срабатывает, когда применение вашего собственного заклинания прервано или отменено до его завершения."
+    },
+    {
+      "source": "Fires when you are pacified or a spell school is locked out (PACIFY, PACIFYSILENCE, SCHOOL_INTERRUPT).",
+      "target": "Срабатывает, когда на вас наложен эффект усмирения или заблокирована школа магии (PACIFY, PACIFYSILENCE, SCHOOL_INTERRUPT)."
+    },
+    {
+      "source": "Fires when you begin channelling a spell.",
+      "target": "Срабатывает, когда вы начинаете поддерживать заклинание."
+    },
+    {
+      "source": "Fires when you drop off the top of your target's threat table.",
+      "target": "Срабатывает, когда вы теряете лидерство по угрозе у вашей цели."
+    },
+    {
+      "source": "Fires when you drop out of combat.",
+      "target": "Срабатывает при выходе из боя."
+    },
+    {
+      "source": "Fires when you enter combat.",
+      "target": "Срабатывает при входе в бой."
+    },
+    {
+      "source": "Fires when you take over threat on your target (status 2 or 3).",
+      "target": "Срабатывает, когда вы перехватываете угрозу на вашей цели (статус 2 или 3)."
+    },
+    {
+      "source": "Fires when your current target begins casting. The cue is the occurrence only — which spell it is cannot be read.",
+      "target": "Срабатывает, когда текущая цель начинает применение заклинания. Сигнал сообщает только о самом событии — определить конкретное заклинание невозможно."
+    },
+    {
+      "source": "Fires when your current target begins channelling.",
+      "target": "Срабатывает, когда текущая цель начинает поддержание заклинания."
+    },
+    {
+      "source": "Fires when your focus target begins channelling.",
+      "target": "Срабатывает, когда запомненная цель начинает поддержание заклинания."
+    },
+    {
+      "source": "Fires when your target's spellcast is interrupted by a kick, stun, or counter-spell.",
+      "target": "Срабатывает, когда применение заклинания цели прерывается сбиванием каста, оглушением или антимагией."
+    },
+    {
+      "source": "Fires when your target's spellcast stops before it finishes.",
+      "target": "Срабатывает, когда применение заклинания цели прекращается до его завершения."
+    },
+    {
+      "source": "Fires when your threat on your target rises to high-but-not-tanking (status 1).",
+      "target": "Срабатывает, когда ваш уровень угрозы на цели становится высоким, но вы еще не танкуете ее (статус 1)."
+    },
+    {
+      "source": "Flat sustained level while channelling, distinct from a regular cast's swell.",
+      "target": "Ровный стабильный уровень вибрации во время поддержания заклинания, в отличие от нарастания при обычном применении."
+    },
+    {
+      "source": "Fluid spellcasting pacing. Continuous channel bed during casts, crisp completion snap, lockout warnings, and proc notifications.",
+      "target": "Плавный ритм применения заклинаний. Непрерывный фоновый гул во время применения, четкий щелчок завершения, предупреждения о блокировке школы магии и оповещения о срабатывании эффектов (проках)."
+    },
+    {
+      "source": "Focus started channelling",
+      "target": "Запомненная цель начала поддержание заклинания"
+    },
+    {
+      "source": "Full loss-of-control suite, kick opportunities, lockouts, panic health warning, combat enter/leave",
+      "target": "Полный набор эффектов потери контроля, окна сбивания кастов, блокировки школ магии, предупреждение о критическом уровне здоровья, вход/выход из боя"
+    },
+    {
+      "source": "Heart rate (critical), BPM",
+      "target": "Пульс (критический), уд./мин"
+    },
+    {
+      "source": "High-clarity encounter triage. Critical raid mechanics, debuffs, boss abilities, and personal survival alerts with world clutter silenced.",
+      "target": "Максимально четкая приоритизация в бою. Критические механики рейда, отрицательные эффекты, способности боссов и сигналы выживания при отключении второстепенного окружения."
+    },
+    {
+      "source": "High-tempo physical execution. Snappy combo points and resource spenders, execute range alerts, boss telegraphs, and kick windows.",
+      "target": "Высокий темп ближнего боя. Четкие серийные удары и затраты ресурсов, оповещения о фазе «Казни», подсказки способностей боссов и окна сбивания кастов."
+    },
+    {
+      "source": "Hit with a critical strike",
+      "target": "Получен критический удар"
+    },
+    {
+      "source": "How far a motor has to move before the addon bothers telling the client about it. Raise it to cut the number of calls; too high and slow fades turn into visible steps. Shared by every channel — this is a call-rate setting, not a motor property.",
+      "target": "Насколько должно измениться значение мотора, прежде чем модификация отправит вызов клиенту. Увеличьте, чтобы снизить количество вызовов; слишком высокое значение превратит плавные затухания в заметные ступени. Общий параметр для всех каналов — это настройка частоты вызовов, а не характеристика мотора."
+    },
+    {
+      "source": "How strong the stealth hum is overall. Meant to sit just at the edge of perception — if you notice it as a vibration rather than a presence, it is too high.",
+      "target": "Общая сила гула незаметности. Должна находиться на грани восприятия — если вы ощущаете ее как явную вибрацию, а не как ощущение присутствия, значение завышено."
+    },
+    {
+      "source": "Landed a critical heal",
+      "target": "Совершено критическое исцеление"
+    },
+    {
+      "source": "Learned a new spell",
+      "target": "Изучено новое заклинание"
+    },
+    {
+      "source": "Leaving combat",
+      "target": "Выход из боя"
+    },
+    {
+      "source": "Life & combat state",
+      "target": "Здоровье и состояние боя"
+    },
+    {
+      "source": "Locomotion & footsteps by armor weight, mount strides, weather, swimming drag, parry/blocks, full loot/quest haptics",
+      "target": "Передвижение и шаги по весу брони, поступи транспорта, погода, сопротивление воды, парирование/блокирование, полная тактильная отдача добычи и заданий"
+    },
+    {
+      "source": "Locomotion clatter, weapon swings, loot popups, world dialogs",
+      "target": "Шум передвижения, замахи оружием, всплывающие окна добычи, диалоги в мире"
+    },
+    {
+      "source": "Low health alarms, heal cast success, self/enemy interrupt warnings, dispellable CC",
+      "target": "Предупреждения о низком здоровье, успешное исцеление, оповещения о прерываниях игрока/врага, рассеиваемый контроль"
+    },
+    {
+      "source": "MEASURED as of 2026-09-21, not estimated. Driven by Forever's PLAYER_SWING event, which carries swingDuration and a MainHand/OffHand/Ranged type, both confirmed non-secret, and which Blizzard's own swing timer consumes. Note this is a SWING, not necessarily a connection — whether it also fires on a miss, dodge or parry is untested, and a \"successful hit\" cue would need a different source. The old weapon-speed estimator is kept as a fallback and engages automatically if the event ever disappears; it predicted swing times from UnitAttackSpeed with a haste cache, range and stun gating and a parry-haste correction, and drifted with nothing to correct against.",
+      "target": "ИЗМЕРЯЕТСЯ с 21.09.2026, а не рассчитывается. Работает на основе события PLAYER_SWING в Forever, которое передает параметры swingDuration и тип MainHand/OffHand/Ranged (оба гарантированно не являются скрытыми значениями), используемые собственным таймером замаха Blizzard. Обратите внимание: это именно ЗАМАХ, а не обязательное попадание — срабатывает ли оно при промахе, уклонении или парировании, не проверялось, а для сигнала «успешного удара» потребовался бы другой источник. Старый расчет по скорости оружия сохранен как резервный вариант и активируется автоматически, если событие исчезнет; он предсказывал время замаха по UnitAttackSpeed с кэшем скорости, проверкой дистанции и оглушений и поправкой на ускорение атаки при парировании, но накапливал погрешность без возможности синхронизации."
+    },
+    {
+      "source": "Mirrors critLanded's split exactly: HEAL_CRIT on the same personal COMBAT_TEXT_UPDATE feed. critLanded's incoming-vs-outgoing direction was independently confirmed live (2026-09-15) for damage; the same direction for heals is inferred by analogy (same feed, same self-scoped design), not separately re-tested — worth confirming live before trusting it's \"you were healed\" rather than \"you landed a heal\" if that distinction matters to you.",
+      "target": "В точности повторяет механику critLanded: HEAL_CRIT в том же персональном потоке COMBAT_TEXT_UPDATE. Направление critLanded (входящий или исходящий) для урона было подтверждено в игре (15.09.2026); такое же направление для исцеления предполагается по аналогии (тот же поток, та же персональная привязка) и отдельно не перепроверялось — стоит проверить в игре, прежде чем полагаться на то, что это «вас исцелили», а не «вы совершили исцеление», если это различие для вас важно."
+    },
+    {
+      "source": "Most triggers are a **pulse** — something happens, you feel one short burst, then it's gone.\n\nSome are a **texture** instead — a faint, continuous feeling for as long as something is true. Swimming, gliding, casting, riding a flight path, weathering a storm: these fade in in the moment they start and fade out the instant they stop, rather than announcing themselves once. They're built to layer underneath pulses rather than compete with them — a critical hit still lands as a distinct thump even while a casting texture is quietly running underneath it.\n\nMost textures ship switched off, on purpose: a constant hum is a bigger ask than an occasional pulse, and it's worth trying deliberately rather than discovering by accident.",
+      "target": "Большинство триггеров представляют собой **импульс** (pulse) — что-то происходит, вы ощущаете один короткий толчок, и он исчезает.\n\nНекоторые сигналы являются **текстурой** (texture) — слабым непрерывным ощущением, длящимся все то время, пока действует определенное состояние. Плавание, планирование, применение заклинаний, полет на такси, нахождение в эпицентре бури: они плавно нарастают при начале действия и мгновенно исчезают при его завершении, вместо одиночного оповещения. Они созданы для того, чтобы служить подложкой под импульсы, а не соперничать с ними — критический удар по-прежнему ощущается как отчетливый глухой толчок, даже если под ним тихо воспроизводится текстура применения заклинания.\n\nБольшинство текстур изначально отключены: постоянный гул утомляет сильнее редких импульсов, поэтому включать их стоит осознанно, а не сталкиваться с ними случайно."
+    },
+    {
+      "source": "Naturalistic scout feel. Locomotion, flight gliding, wilderness weather, tracking/stealth cues, world exploration, and bow release.",
+      "target": "Естественное ощущение разведчика. Передвижение, планирование в полете, погода в дикой местности, сигналы выслеживания/незаметности, исследование мира и спуск тетивы лука."
+    },
+    {
+      "source": "Note the event name: Forever uses LEARNED_SPELL_IN_SKILL_LINE, not the older LEARNED_SPELL_IN_TAB, which is absent from this client's documentation entirely. Can fire more than once for a single visit to a trainer if you buy several ranks.",
+      "target": "Обратите внимание на имя события: Forever использует LEARNED_SPELL_IN_SKILL_LINE, а не устаревшее LEARNED_SPELL_IN_TAB, которое полностью отсутствует в документации клиента. Может срабатывать несколько раз за одно посещение наставника, если вы изучаете сразу несколько рангов."
+    },
+    {
+      "source": "Off by default and mounted-only by default, on purpose: a texture that plays whenever you move is the most fatiguing thing in this addon and the most likely to make you switch it off wholesale. Uses shaped transient layers with fast-attack kicks and exponential decay to produce crisp, distinct footfalls without motor hum in between. Distinct timbres (boots, hooves, paws, heavy claws/pads, metal) drive both Low (body mass) and High (impact crispness) motors in concert. Speed is read out of combat only and held through a fight; snares and boosts are not tracked there, which is a deliberate trade for never touching a secret value. Goes quiet while swimming, flying, gliding, riding a flight path, or airborne after a jump — each of those has its own cue and footfalls have nothing to add to them.",
+      "target": "По умолчанию отключено и активно только верхом на транспорте: текстура, срабатывающая при каждом шаге, сильнее всего утомляет и чаще всего приводит к полному отключению модификации. Использует переходные слои с резкой атакой и экспоненциальным затуханием для создания четких, раздельных шагов без непрерывного гула моторов между ними. Различные тембры (сапоги, копыта, лапы, тяжелые когти/подушечки, металл) задействуют низкочастотный (масса тела) и высокочастотный (четкость удара) моторы согласованно. Скорость считывается только вне боя и сохраняется во время схватки; замедления и ускорения в бою не отслеживаются, что является осознанным компромиссом во избежание обращения к скрытым значениям (secret values). Затихает во время плавания, полета, планирования, полета на такси или нахождения в воздухе после прыжка — для каждого из этих состояний есть собственный сигнал, и шагам нечего к ним добавить."
+    },
+    {
+      "source": "Off by default. Suppresses \"Casting texture\" for the length of a craft so the two do not layer into one lumpy sensation. The profession is read by id from the recipe (C_TradeSkillUI.GetProfessionInfoByRecipeID), so no name matching and no localisation problem — but that field is documented nilable, and anything that does not resolve falls back to a generic work rhythm rather than going quiet. Gathering is NOT covered: swinging a pick at an ore node is not a recipe and has no recipe id. Per-profession toggles and strengths are on the Crafting page. Entirely untested.",
+      "target": "По умолчанию отключено. Заглушает «Текстуру применения заклинаний» на время создания предмета, чтобы два эффекта не сливались в неразборчивую вибрацию. Профессия определяется по ID из рецепта (C_TradeSkillUI.GetProfessionInfoByRecipeID), поэтому поиск по названию и проблемы локализации исключены — однако это поле по документации может быть nil, и в таком случае воспроизводится базовый рабочий ритм вместо тишины. Сбор ресурсов НЕ поддерживается: удар киркой по рудной жиле не является рецептом и не имеет ID рецепта. Переключатели и сила для каждой профессии находятся на странице «Ремесло». Полностью не протестировано."
+    },
+    {
+      "source": "Off means swings come from Forever's own PLAYER_SWING event — a real per-swing signal, confirmed non-secret and proven live. On forces the old prediction built from weapon speed instead. You should not need this: if Blizzard ever removes the event, Pulse detects that and falls back on its own. It exists so a patch that changes the event's BEHAVIOUR rather than removing it still leaves you a working cue.",
+      "target": "«Выкл.» означает, что замахи считываются из собственного события PLAYER_SWING в Forever — реального сигнала каждого замаха, проверенного в игре и не являющегося скрытым значением. «Вкл.» принудительно включает старый расчет на основе скорости оружия. Обычно в этом нет необходимости: если Blizzard когда-либо удалит это событие, Pulse обнаружит это и переключится самостоятельно. Эта опция нужна на случай, если патч изменит ПОВЕДЕНИЕ события, а не удалит его, чтобы сигнал продолжал работать."
+    },
+    {
+      "source": "Offensive Combat Haptics",
+      "target": "Тактильная отдача атаки в бою"
+    },
+    {
+      "source": "Paced ranged rhythm with melee-weaving support. Auto-shot timing, weapon swings, pet status, trap triggers, and boss mechanics.",
+      "target": "Размеренный ритм дальнего боя с поддержкой ударов в ближнем бою (melee-weaving). Тайминг автовыстрелов, замахи оружием, состояние питомца, срабатывание ловушек и механики боссов."
+    },
+    {
+      "source": "Physical strikes for weapon swings (main & off hand), auto-shot arrows, ability execution cadence, and completed and instant spellcasts.",
+      "target": "Физические удары при замахах оружием (правая и левая рука), выстрелы из лука/ружья, ритм выполнения способностей, а также завершенные и мгновенные заклинания."
+    },
+    {
+      "source": "Pulse: not available in combat. Try again after combat.",
+      "target": "Pulse: недоступно во время боя. Повторите попытку после окончания боя."
+    },
+    {
+      "source": "Pure competitive reaction. Instant tactical alerts for stuns, silences, disarms, lockouts, panic health warnings, and combat transitions.",
+      "target": "Чистая реакция для соревновательной игры. Мгновенные тактические оповещения об оглушениях, немоте, обезоруживании, блокировках школ магии, критическом здоровье и переходах состояния боя."
+    },
+    {
+      "source": "Reads Blizzard's own default-UI LowHealthFrame (:IsShown()), not UnitHealth — that read is unconditionally secret, and the earlier color-curve attempt was confirmed dead too. LowHealthFrame's widget state is confirmed non-secret in-game instead. Very rarely can also fire for an unrelated reason (a fullscreen UI panel open in combat) — narrow enough to document rather than guard against. No `mode` field: this no longer plays a Core/Modes.lua shape, it drives Engine:Hold directly, same mechanism as lowHealthTexture.",
+      "target": "Считывает состояние стандартного фрейма LowHealthFrame (:IsShown()) от Blizzard, а не UnitHealth — чтение UnitHealth безусловно является скрытым значением, а более ранняя попытка с цветовой кривой также оказалась неработоспособной. Состояние виджета LowHealthFrame, напротив, проверено в игре и не является скрытым. В редчайших случаях может сработать по посторонней причине (открытие полноэкранного окна интерфейса в бою) — ситуация достаточно редкая, поэтому описана в документации, а не заблокирована в коде. Поле `mode` отсутствует: сигнал больше не воспроизводит шаблон из Core/Modes.lua, а напрямую вызывает Engine:Hold по аналогии с lowHealthTexture."
+    },
+    {
+      "source": "Reads Blizzard's own pre-scripted encounter timeline (C_EncounterEvents), not real-time combat data — pre-computed metadata, not something Secret Values blocks. No confirmed \"targeted at you\" flag: this can say something big is coming, not that it's coming for you specifically.",
+      "target": "Считывает заранее заданную временную шкалу боя от Blizzard (C_EncounterEvents), а не боевые данные реального времени — это предварительно рассчитанные метаданные, которые не блокируются системой Secret Values. Подтвержденный флаг «направлено на вас» отсутствует: сигнал сообщает о приближении опасного события, но не о том, что оно направлено именно на вас."
+    },
+    {
+      "source": "Reads CHAT_MSG_RAID_WARNING/MONSTER_YELL/MONSTER_EMOTE/MONSTER_WHISPER, gated on being inside an active encounter (ENCOUNTER_START/END) — never on C_EncounterEvents, so this works even if that namespace's data turns out unreliable. Occurrence-only: says a boss communicated something, not what or whether it's aimed at you. Known false-positive: a player manually using the raid-warning channel during a live pull also fires this — not filtered, since telling a boss-sent raid warning from a player-sent one isn't reliable.",
+      "target": "Считывает события CHAT_MSG_RAID_WARNING/MONSTER_YELL/MONSTER_EMOTE/MONSTER_WHISPER только во время активного боя с боссом (между ENCOUNTER_START и ENCOUNTER_END) — без привязки к C_EncounterEvents, поэтому работает, даже если данные этого пространства окажутся недостоверными. Фиксирует только факт события: сообщает, что босс что-то произнес, но не текст и не адресата. Известное ложное срабатывание: сигнал также срабатывает, если игрок вручную отправляет сообщение в канал объявлений рейду во время боя — это не фильтруется, так как надежно отличить объявление босса от объявления игрока невозможно."
+    },
+    {
+      "source": "Reads COMBAT_TEXT_UPDATE's DAMAGE/SPELL_DAMAGE/DAMAGE_CRIT/SPELL_DAMAGE_CRIT messageTypes rather than UNIT_COMBAT, for no-churn reasons rather than necessity — UNIT_COMBAT's \"WOUND\" mechanism was believed dead (reported not firing 2026-09-15) but was confirmed live and firing on 2026-09-16 after all; this cue already worked on COMBAT_TEXT_UPDATE by then, so it wasn't switched back. The suspicion that UNIT_COMBAT has been non-functional since Cataclysm-era patches should not be trusted as settled. Deliberately TICK, not THUD — a routine hit should read as noticeably gentler than critLanded's own pulse, not the same weight repeated constantly. Its own Intensity slider (the generic per-cue one every trigger gets) defaults to 0.3 rather than 1.0, same reasoning: it fires far more often than a crit or a dodge, so it needs to stay in the background rather than compete with them.",
+      "target": "Считывает типы сообщений DAMAGE/SPELL_DAMAGE/DAMAGE_CRIT/SPELL_DAMAGE_CRIT из COMBAT_TEXT_UPDATE вместо UNIT_COMBAT — для стабильности кода, а не по необходимости: механизм \"WOUND\" в UNIT_COMBAT считался неработающим (не срабатывал 15.09.2026), но 16.09.2026 все же подтвердил работоспособность; к тому моменту сигнал уже работал на COMBAT_TEXT_UPDATE, поэтому переделывать его не стали. Предположение о том, что UNIT_COMBAT сломан со времен Cataclysm, нельзя считать окончательным. Нарочито используется ЩЕЛЧОК (TICK), а не УДАР (THUD) — обычное попадание должно ощущаться заметно мягче, чем импульс critLanded, не повторяя ту же тяжесть при каждом ударе. Ползунок интенсивности (стандартный для каждого триггера) по умолчанию выставлен на 0.3, а не 1.0 по той же причине: сигнал срабатывает намного чаще критического удара или уклонения, поэтому должен оставаться на заднем плане."
+    },
+    {
+      "source": "Reads COMBAT_TEXT_UPDATE's FACTION messageType — same personal combat-text feed critLanded/damageTaken already use, occurrence-only, no amount or faction name read.",
+      "target": "Считывает тип сообщения FACTION из COMBAT_TEXT_UPDATE — тот же персональный поток текста боя, который используют critLanded/damageTaken; только факт события, без считывания количества очков или названия фракции."
+    },
+    {
+      "source": "Reads COMBAT_TEXT_UPDATE's HONOR_GAINED messageType — same personal combat-text feed critLanded/damageTaken already use, occurrence-only, no amount read.",
+      "target": "Считывает тип сообщения HONOR_GAINED из COMBAT_TEXT_UPDATE — тот же персональный поток текста боя, который используют critLanded/damageTaken; только факт события, без считывания количества очков чести."
+    },
+    {
+      "source": "Reads HEAL/PERIODIC_HEAL/HEAL_CRIT — same feed and direction caveat as healCrit above. Same TICK/0.3-intensity treatment as damageTaken, for the same reason: this fires far more often than a crit heal, especially under any HoT, so it stays in the background rather than competing with it.",
+      "target": "Считывает события HEAL/PERIODIC_HEAL/HEAL_CRIT — тот же поток и та же оговорка о направлении эффекта, что и для healCrit выше. Настройка параметров аналогична damageTaken (ЩЕЛЧОК / интенсивность 0.3) по той же причине: сигнал срабатывает значительно чаще критического исцеления, особенно при периодическом лечении (HoT), и должен оставаться фоновым."
+    },
+    {
+      "source": "Reads IsStealthed(), the player's own boolean state — not an aura scan, which would be both expensive and liable to return secret values. First cue built on Core/Waves.lua. Untested.",
+      "target": "Считывает состояние IsStealthed() самого игрока — а не сканирование аур, которое было бы ресурсоемким и могло вернуть скрытые значения (secret values). Первый сигнал, построенный на Core/Waves.lua. Не тестировалось."
+    },
+    {
+      "source": "Same source as weaponSwingMain above — PLAYER_SWING, filtered to the OffHand swing type. Silent if you're not dual-wielding. Parry haste has never affected off-hand timing, so that correction does not apply here even on the fallback estimator.",
+      "target": "Тот же источник, что и weaponSwingMain выше — событие PLAYER_SWING с фильтром по замаху OffHand (левая рука). Не воспроизводится, если вы не используете бой двумя оружиями. Ускорение атаки при парировании никогда не влияло на тайминг левой руки, поэтому данная поправка здесь не применяется даже в резервном расчетном модуле."
+    },
+    {
+      "source": "Second steepening point — the steepest segment of all, climbing to heartRateCritical by zero breath. Requested live 2026-09-16 as ~15% breath remaining.",
+      "target": "Вторая точка крутого нарастания — самый резкий сегмент, повышающий частоту до heartRateCritical к моменту исчерпания запаса дыхания. Запрошено в игре 16.09.2026 при остатке дыхания ~15%."
+    },
+    {
+      "source": "Sensory radar for survival: immediate physical warnings when taking damage, getting critically hit, deflecting attacks, being healed, receiving debuffs, threat changes, or losing control.",
+      "target": "Тактильный радар выживания: мгновенные физические предупреждения при получении урона, критических ударах, отражении атак, исцелении, получении отрицательных эффектов, изменении угрозы или потере контроля."
+    },
+    {
+      "source": "Shares its shape with \"Learned a new spell\" on purpose — both are the same moment to a player, just in different systems.",
+      "target": "Намеренно использует ту же форму вибрации, что и «Изучено новое заклинание» — для игрока оба события означают один и тот же момент, но в разных системах."
+    },
+    {
+      "source": "Shares the social-pull limitation of the threat-rising cue.",
+      "target": "Имеет то же ограничение группового пула, что и сигнал возрастания угрозы."
+    },
+    {
+      "source": "Slow, rhythmic breathing expansion wave keeping you aware of your stealth state.",
+      "target": "Медленная ритмичная волна дыхания, напоминающая о нахождении в состоянии незаметности."
+    },
+    {
+      "source": "Spell activation proc",
+      "target": "Срабатывание заклинания (прок)"
+    },
+    {
+      "source": "Spell flow, instant casts, and interrupts",
+      "target": "Поток заклинаний, мгновенные чары и прерывания"
+    },
+    {
+      "source": "Spellcasting Channel Hum",
+      "target": "Гул поддержания заклинания"
+    },
+    {
+      "source": "Stealth Breathing Wave",
+      "target": "Дыхательная волна незаметности"
+    },
+    {
+      "source": "Stealth baseline",
+      "target": "Базовый уровень незаметности"
+    },
+    {
+      "source": "Stealth texture",
+      "target": "Текстура незаметности"
+    },
+    {
+      "source": "Step 2: Combat Haptics & Class Role",
+      "target": "Шаг 2: Боевая тактильная отдача и роль класса"
+    },
+    {
+      "source": "Switches every cue on the Combat page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Включает или выключает все сигналы на странице «Бой» одновременно. Каждый сигнал сохраняет свои индивидуальные настройки."
+    },
+    {
+      "source": "Switches every cue on the Control & Threat page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Включает или выключает все сигналы на странице «Контроль и угроза» одновременно. Каждый сигнал сохраняет свои индивидуальные настройки."
+    },
+    {
+      "source": "Target started channelling",
+      "target": "Цель начала поддержание заклинания"
+    },
+    {
+      "source": "The standard authored baseline. Balanced game-feel across combat, environment, movement, and alerts.",
+      "target": "Стандартный базовый набор от разработчиков. Сбалансированные ощущения от боя, окружения, движения и оповещений."
+    },
+    {
+      "source": "Threat",
+      "target": "Угроза"
+    },
+    {
+      "source": "Threat loss/warning, heavy hits taken, defensive cooldowns, crowd control, enemy kick windows",
+      "target": "Потеря/предупреждение об угрозе, получение тяжелых ударов, защитные умения, контроль, окна сбивания вражеских кастов"
+    },
+    {
+      "source": "Threat lost",
+      "target": "Угроза потеряна"
+    },
+    {
+      "source": "Threat rising",
+      "target": "Угроза возрастает"
+    },
+    {
+      "source": "Threat, mitigations, and CC",
+      "target": "Угроза, защита и контроль"
+    },
+    {
+      "source": "Two separate addons exist alongside Pulse, each with its own slash command — neither is required, and neither changes anything Pulse itself does.\n\n**PulseChecklist** (/pulsecheck or /pcheck) opens a standalone checklist window listing every trigger, for tracking which ones you've actually confirmed feel right on your own hardware.\n\n**PulseDebug** (/pdebug or /pd) opens an interactive diagnostic window with live telemetry — inspect currently blended layers, monitor real-time channel output, review a timestamped event log, and inspect module states.",
+      "target": "Рядом с Pulse существуют две отдельные модификации, каждая со своей слеш-командой — ни одна из них не обязательна и не меняет работу самого Pulse.\n\n**PulseChecklist** (/pulsecheck или /pcheck) открывает отдельный контрольный список со всеми триггерами, чтобы отслеживать, какие из них вы проверили и настроили под свое оборудование.\n\n**PulseDebug** (/pdebug или /pd) открывает интерактивное окно диагностики с телеметрией в реальном времени: просмотр накладывающихся слоев, мониторинг вывода каналов в реальном времени, журнал событий с временными метками и состояние модулей."
+    },
+    {
+      "source": "Two soft ticks when you switch tabs inside a panel — Character, Spellbook, the map's zone tabs, and so on.",
+      "target": "Два мягких щелчка при переключении вкладок внутри панели: персонаж, книга заклинаний, вкладки зон на карте и так далее."
+    },
+    {
+      "source": "Untested — the interruptedBy value itself is confirmed against Blizzard's own casting-bar code, not live. What's NOT confirmed: whether interruptedBy comes back secret for your own channel (the event is flagged SecretWhenUnitSpellCastRestricted in Blizzard's API docs). If this never fires, that's the first thing to check, not a sign the logic above is wrong.",
+      "target": "Не тестировалось: само значение interruptedBy сверено с кодом полосы применения заклинаний Blizzard, но не проверялось в игре. Что НЕ подтверждено: возвращается ли interruptedBy как скрытое значение (secret) для вашего собственного поддерживаемого заклинания (в документации API Blizzard событие помечено флагом SecretWhenUnitSpellCastRestricted). Если этот сигнал никогда не срабатывает, проверьте это в первую очередь — это не означает ошибку в приведенной логике."
+    },
+    {
+      "source": "Uses WoW Forever's native C_SwingTimer range checking.",
+      "target": "Использует встроенную проверку дистанции C_SwingTimer в WoW Forever."
+    },
+    {
+      "source": "Visceral physical game-feel. Armor-weighted footstep gait, terrain landings, parry and block impacts, swimming drag, weather, and rich world looting.",
+      "target": "Осязаемый физический отклик. Походка с ощущением веса брони, приземления на поверхность, удары парирования и блоков, сопротивление воды при плавании, погода и богатая тактильная отдача добычи."
+    },
+    {
+      "source": "Weapon swing (main hand)",
+      "target": "Замах оружием (правая рука)"
+    },
+    {
+      "source": "Weapon swing (off hand)",
+      "target": "Замах оружием (левая рука)"
+    },
+    {
+      "source": "Weapon swings, ability cadence, and auto-attack stops",
+      "target": "Замахи оружием, ритм способностей и остановка автоатаки"
+    },
+    {
+      "source": "Windfury (spellcast hook)",
+      "target": "Неистовство ветра (перехват применения)"
+    },
+    {
+      "source": "Windfury (swing burst)",
+      "target": "Неистовство ветра (серия замахов)"
+    },
+    {
+      "source": "Windfury extra attacks",
+      "target": "Дополнительные атаки «Неистовства ветра»"
+    },
+    {
+      "source": "With dozens of cues across movement, combat, environment, and interface systems, you might know what you want to adjust without knowing which tab owns it.\n\nThe **Cue index** page lists every cue in Pulse alphabetically, grouped under clean letter headers with real-time status dots showing whether each cue is currently enabled. Clicking any line jumps directly to that cue's page and settings.\n\nSearching the Cue Index searches all cue names, descriptions, and locations simultaneously, serving as an instant directory across the entire addon.",
+      "target": "Среди десятков сигналов передвижения, боя, окружения и интерфейса вы можете знать, что именно хотите настроить, но не помнить нужную вкладку.\n\nСтраница **Указатель сигналов** (Cue index) содержит алфавитный список всех сигналов Pulse, сгруппированных по буквам, с точками статуса в реальном времени, показывающими включен ли сигнал. Клик по любой строке открывает страницу и настройки этого сигнала.\n\nПоиск по указателю сигналов ищет одновременно по всем названиям, описаниям и разделам, служа мгновенным навигатором по всей модификации."
+    },
+    {
+      "source": "You cannot do that while in combat.",
+      "target": "Вы не можете сделать это в бою."
+    },
+    {
+      "source": "You parried, dodged, or blocked",
+      "target": "Вы парировали, уклонились или блокировали удар"
+    },
+    {
+      "source": "Your cast interrupted",
+      "target": "Применение вашего заклинания прервано"
+    },
+    {
+      "source": "Your channel ended",
+      "target": "Поддержание вашего заклинания завершено"
+    },
+    {
+      "source": "Your channel interrupted",
+      "target": "Поддержание вашего заклинания прервано"
+    },
+    {
+      "source": "Your channel started",
+      "target": "Поддержание вашего заклинания начато"
+    },
+    {
+      "source": "|cff4cb8ffPulse:|r Cannot open settings during combat.",
+      "target": "|cff4cb8ffPulse:|r Невозможно открыть настройки во время боя."
+    },
+    {
+      "source": "|cffff5555Pulse:|r Cannot open Quick Setup during combat.",
+      "target": "|cffff5555Pulse:|r Невозможно открыть быструю настройку во время боя."
+    }
+  ]
+}

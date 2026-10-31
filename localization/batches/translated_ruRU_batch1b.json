@@ -1,0 +1,1328 @@
+{
+  "items": [
+    {
+      "source": "Low health",
+      "target": "Низкий уровень здоровья"
+    },
+    {
+      "source": "Low health texture",
+      "target": "Текстура низкого уровня здоровья"
+    },
+    {
+      "source": "Low motor",
+      "target": "Низкочастотный мотор"
+    },
+    {
+      "source": "Low motor holds a steady presence, floored so it's never silent while gliding; high motor eases in from near-silent toward thrillPeak as speed climbs, shaped by thrillCurve.",
+      "target": "Низкочастотный мотор сохраняет постоянное присутствие с базовым порогом, чтобы никогда не затихать при планировании; высокочастотный мотор плавно нарастает от почти полной тишины к thrillPeak по мере роста скорости, согласно кривой thrillCurve."
+    },
+    {
+      "source": "Mage",
+      "target": "Маг"
+    },
+    {
+      "source": "Manage",
+      "target": "Управление"
+    },
+    {
+      "source": "Master Vibration Strength",
+      "target": "Общая сила вибрации"
+    },
+    {
+      "source": "Master switch for every loss-of-control cue below. With this off, none of them fire and no loss-of-control events are registered at all.",
+      "target": "Главный переключатель для всех сигналов потери контроля ниже. Если он выключен, ни один из них не срабатывает и события потери контроля не регистрируются вовсе."
+    },
+    {
+      "source": "Master switch. With this off, nothing registers and nothing costs anything.",
+      "target": "Главный переключатель. Если он выключен, ничего не регистрируется и не потребляет ресурсов."
+    },
+    {
+      "source": "Melee auto-attack started",
+      "target": "Автоатака ближнего боя начата"
+    },
+    {
+      "source": "Melee auto-attack stopped",
+      "target": "Автоатака ближнего боя прекращена"
+    },
+    {
+      "source": "Menus & tabs",
+      "target": "Меню и вкладки"
+    },
+    {
+      "source": "Messages",
+      "target": "Сообщения"
+    },
+    {
+      "source": "Minimum severity",
+      "target": "Минимальная серьезность"
+    },
+    {
+      "source": "Mode to test",
+      "target": "Режим для проверки"
+    },
+    {
+      "source": "Most specific wins. A scope set to |cffffd100No rule|r has no opinion and lets the one below it decide; with none of them set, Pulse uses Default.",
+      "target": "Наиболее конкретное правило имеет приоритет. Область с настройкой |cffffd100Без правила|r нейтральна и передает решение уровню ниже; если ни одно не задано, Pulse использует значение по умолчанию."
+    },
+    {
+      "source": "Movement",
+      "target": "Движение"
+    },
+    {
+      "source": "Movement & Travel",
+      "target": "Движение и перемещение"
+    },
+    {
+      "source": "Multiplies every trigger's intensity. Part of the current profile, not global.",
+      "target": "Умножает интенсивность каждого триггера. Относится к текущему профилю, не является глобальной."
+    },
+    {
+      "source": "Name the new profile:",
+      "target": "Назовите новый профиль:"
+    },
+    {
+      "source": "Navigation",
+      "target": "Навигация"
+    },
+    {
+      "source": "New profile",
+      "target": "Новый профиль"
+    },
+    {
+      "source": "Next >",
+      "target": "Далее >"
+    },
+    {
+      "source": "No rule",
+      "target": "Без правила"
+    },
+    {
+      "source": "None (full sensory richness)",
+      "target": "Нет (полное богатство тактильных ощущений)"
+    },
+    {
+      "source": "None (stock defaults)",
+      "target": "Нет (базовые настройки по умолчанию)"
+    },
+    {
+      "source": "ON — option changes and cue firings will print here.",
+      "target": "ВКЛ — изменения настроек и срабатывания сигналов будут выводиться здесь."
+    },
+    {
+      "source": "Ocean Waves & Swell",
+      "target": "Океанские волны и зыбь"
+    },
+    {
+      "source": "Ocean waves & swell",
+      "target": "Океанские волны и зыбь"
+    },
+    {
+      "source": "Ocean zones only (guessed from zone name)",
+      "target": "Только океанские зоны (определяются по названию зоны)"
+    },
+    {
+      "source": "Off by default and deliberately the faintest cue in the addon: this fires for EVERY NPC you talk to, which in a city is constantly. Try it before leaving it on. Untested.",
+      "target": "Отключено по умолчанию и намеренно сделано самым слабым сигналом в аддоне: срабатывает при разговоре с КАЖДЫМ NPC, что в городе происходит непрерывно. Опробуйте перед включением. Не протестировано."
+    },
+    {
+      "source": "Offensive",
+      "target": "Атакующее"
+    },
+    {
+      "source": "One cue for both directions, same reasoning as the navigation edge cue — a motor can't tell you which way you went.",
+      "target": "Один сигнал для обоих направлений по той же причине, что и сигнал границы навигации — мотор не может передать, в какую сторону вы переместились."
+    },
+    {
+      "source": "One full-bodied hit on both motors.",
+      "target": "Один полновесный удар на обоих моторах."
+    },
+    {
+      "source": "One long, sombre pulse when a spirit healer's window opens.",
+      "target": "Один долгий мрачный импульс при открытии окна целителя душ."
+    },
+    {
+      "source": "One sharp, heavy impact — fast attack, fast decay.",
+      "target": "Один резкий тяжелый удар — быстрая атака, быстрое затухание."
+    },
+    {
+      "source": "One strong, sustained pulse.",
+      "target": "Один мощный продолжительный импульс."
+    },
+    {
+      "source": "One sustained pulse.",
+      "target": "Один продолжительный импульс."
+    },
+    {
+      "source": "Open Pulse settings",
+      "target": "Открыть настройки Pulse"
+    },
+    {
+      "source": "Other",
+      "target": "Другое"
+    },
+    {
+      "source": "Overall heave amplitude of the oceanic swell. Sets the physical displacement intensity of the slow motor.",
+      "target": "Общая амплитуда подъема океанской зыби. Задает интенсивность физического смещения низкочастотного мотора."
+    },
+    {
+      "source": "Overall intensity",
+      "target": "Общая интенсивность"
+    },
+    {
+      "source": "Overall strength. Meant to sit at the edge of perception — if you notice it as a vibration rather than as being submerged, it is too high. Inherits the old idleFloatAmplitude, which was live-tuned to 0.04.",
+      "target": "Общая сила. Рассчитана на границу восприятия: если вы ощущаете ее как вибрацию, а не как погружение в воду, она слишком высока. Наследует старый параметр idleFloatAmplitude, настроенный в игре на 0.04."
+    },
+    {
+      "source": "Overdrive kick",
+      "target": "Импульс форсирования"
+    },
+    {
+      "source": "Overdrive time (s)",
+      "target": "Время форсирования (с)"
+    },
+    {
+      "source": "Own motor",
+      "target": "Собственный мотор"
+    },
+    {
+      "source": "PLAYER_ALIVE also fires when you release to a graveyard, so this can fire while you are still a ghost.",
+      "target": "Событие PLAYER_ALIVE также срабатывает при выходе духом на кладбище, поэтому этот сигнал может сработать, пока вы еще призрак."
+    },
+    {
+      "source": "PLAYER_SOFT_FRIEND_CHANGED, occurrence-only, no payload. Worth pairing with the hostile cue above only if you can tell two TICKs apart — if not, give one of them a different shape with its own \"Feels like\" dropdown.",
+      "target": "PLAYER_SOFT_FRIEND_CHANGED, только факт события, без параметров. Имеет смысл использовать в паре с враждебным сигналом выше, только если вы можете различить два щелчка — если нет, задайте одному из них другую форму через выпадающий список «Ощущается как»."
+    },
+    {
+      "source": "PULSE QUICK SETUP",
+      "target": "БЫСТРАЯ НАСТРОЙКА PULSE"
+    },
+    {
+      "source": "Pacified or school-locked",
+      "target": "Умиротворение или блокировка школы"
+    },
+    {
+      "source": "Page switches",
+      "target": "Переключатели страниц"
+    },
+    {
+      "source": "Paladin",
+      "target": "Паладин"
+    },
+    {
+      "source": "Passively polled by observing IsEnabled() on the currently focused element. Fires if the element becomes disabled while focused.",
+      "target": "Пассивно опрашивается через IsEnabled() для текущего сфокусированного элемента. Срабатывает, если элемент становится недоступным при наличии фокуса."
+    },
+    {
+      "source": "Passively polled via GetUIPanel every 0.05s to eliminate UIParentPanelManager execution taint on protected frames.",
+      "target": "Пассивно опрашивается через GetUIPanel каждые 0.05 с, чтобы исключить запятнывание выполнения UIParentPanelManager на защищенных фреймах."
+    },
+    {
+      "source": "Passively polled via GetUIPanel every 0.05s. Detects when major UI panels are dismissed without callback taint.",
+      "target": "Пассивно опрашивается через GetUIPanel каждые 0.05 с. Определяет закрытие основных панелей интерфейса без запятнывания обратных вызовов."
+    },
+    {
+      "source": "Passively polled via GroupTargeting.isTargetingActive. Fires when the group targeting modifier is released.",
+      "target": "Пассивно опрашивается через GroupTargeting.isTargetingActive. Срабатывает при отпускании модификатора выбора целей в группе."
+    },
+    {
+      "source": "Physical tool strikes: anvil hammer strokes, mining pickaxe impacts, tailoring stitches.",
+      "target": "Удары физических инструментов: удары молота о наковальню, удары кирки рудокопа, стежки портного."
+    },
+    {
+      "source": "Pick a mode to test below.",
+      "target": "Выберите режим для проверки ниже."
+    },
+    {
+      "source": "Play",
+      "target": "Воспроизвести"
+    },
+    {
+      "source": "Play ",
+      "target": "Воспроизвести "
+    },
+    {
+      "source": "Play a few seconds of this texture at its current intensity. Module-driven preview reproducing authentic physical dynamics and configured intensity.",
+      "target": "Воспроизвести несколько секунд этой текстуры при текущей интенсивности. Предпросмотр на уровне модуля воспроизводит аутентичную физическую динамику и настроенную интенсивность."
+    },
+    {
+      "source": "Presence floor (low)",
+      "target": "Порог присутствия (низкочастотный)"
+    },
+    {
+      "source": "Priest",
+      "target": "Жрец"
+    },
+    {
+      "source": "Prints every option you change and every cue that actually fires to chat, in real time. Same as /pulse debug — off by default, and resets to off on /reload since it's a testing aid, not a saved preference.",
+      "target": "Выводит в чат в реальном времени каждое изменение настроек и каждый сработавший сигнал. Аналогично команде /pulse debug — отключено по умолчанию и сбрасывается на отключено при /reload, так как это инструмент отладки, а не сохраняемый параметр."
+    },
+    {
+      "source": "Profile",
+      "target": "Профиль"
+    },
+    {
+      "source": "Profiles",
+      "target": "Профили"
+    },
+    {
+      "source": "Profiles and automatic rules",
+      "target": "Профили и автоматические правила"
+    },
+    {
+      "source": "Progression",
+      "target": "Прогресс"
+    },
+    {
+      "source": "Progressive low build leading to a sharp high break.",
+      "target": "Постепенное нарастание на низкочастотном моторе, переходящее в резкий спад на высокочастотном."
+    },
+    {
+      "source": "Pull / glide balance",
+      "target": "Баланс тяги и планирования"
+    },
+    {
+      "source": "Pulse",
+      "target": "Pulse"
+    },
+    {
+      "source": "Pulse is using |cffffd100%s|r, because a rule is set for %s.",
+      "target": "Pulse использует |cffffd100%s|r, так как задано правило для %s."
+    },
+    {
+      "source": "Pulse tunes motor spin-up attack, coast-down release, and breakaway friction to match your physical hardware actuators.",
+      "target": "Pulse настраивает атаку разгона мотора, спад затухания и трение срыва в соответствии с физическими приводами вашего устройства."
+    },
+    {
+      "source": "Pulse: (Engine recorded %d errors. Last error: %s)",
+      "target": "Pulse: (Движок зафиксировал %d ошибок. Последняя ошибка: %s)"
+    },
+    {
+      "source": "Pulse: /pulse test <mode>|heartbeat|warningbeat — try one of: ",
+      "target": "Pulse: /pulse test <mode>|heartbeat|warningbeat — попробуйте одно из: "
+    },
+    {
+      "source": "Pulse: activated profile \"%s\"",
+      "target": "Pulse: активирован профиль \"%s\""
+    },
+    {
+      "source": "Pulse: active profile is \"%s\" (%s)",
+      "target": "Pulse: активный профиль — \"%s\" (%s)"
+    },
+    {
+      "source": "Pulse: bound profile \"%s\" to specialization %s",
+      "target": "Pulse: профиль \"%s\" привязан к специализации %s"
+    },
+    {
+      "source": "Pulse: could not build settings row %q (%s)",
+      "target": "Pulse: не удалось создать строку настроек %q (%s)"
+    },
+    {
+      "source": "Pulse: could not build the settings window (",
+      "target": "Pulse: не удалось создать окно настроек ("
+    },
+    {
+      "source": "Pulse: debug ",
+      "target": "Pulse: отладка "
+    },
+    {
+      "source": "Pulse: disabled all %d cues in active profile.",
+      "target": "Pulse: отключены все %d сигналов в активном профиле."
+    },
+    {
+      "source": "Pulse: disabled all %d cues in profile \"%s\".",
+      "target": "Pulse: отключены все %d сигналов в профиле \"%s\"."
+    },
+    {
+      "source": "Pulse: disabled all %d cues in profile %s.",
+      "target": "Pulse: отключены все %d сигналов в профиле %s."
+    },
+    {
+      "source": "Pulse: enabled all %d cues in active profile.",
+      "target": "Pulse: включены все %d сигналов в активном профиле."
+    },
+    {
+      "source": "Pulse: enabled all %d cues in profile \"%s\".",
+      "target": "Pulse: включены все %d сигналов в профиле \"%s\"."
+    },
+    {
+      "source": "Pulse: enabled all %d cues in profile %s.",
+      "target": "Pulse: включены все %d сигналов в профиле %s."
+    },
+    {
+      "source": "Pulse: live oscilloscope is provided by the companion addon PulseDebug (/pdebug scope).",
+      "target": "Pulse: динамический осциллограф предоставляется вспомогательным аддоном PulseDebug (/pdebug scope)."
+    },
+    {
+      "source": "Pulse: minimap icon %s",
+      "target": "Pulse: иконка у миникарты %s"
+    },
+    {
+      "source": "Pulse: no profile matching \"%s\". Available: %s",
+      "target": "Pulse: нет профиля, соответствующего \"%s\". Доступно: %s"
+    },
+    {
+      "source": "Pulse: switched to profile \"%s\"",
+      "target": "Pulse: переключено на профиль \"%s\""
+    },
+    {
+      "source": "Pulse: that preview is unavailable.",
+      "target": "Pulse: этот предпросмотр недоступен."
+    },
+    {
+      "source": "Pulse: this looks like a %s%s. Pick it above, then press Apply.",
+      "target": "Pulse: похоже, это %s%s. Выберите его выше и нажмите «Применить»."
+    },
+    {
+      "source": "Pure flavour — nothing depends on it. Untested.",
+      "target": "Исключительно для атмосферы — ничего от этого не зависит. Не протестировано."
+    },
+    {
+      "source": "Pure novelty. Off by default forever, basically — nobody asked for this one.",
+      "target": "Чисто декоративный эффект. По сути, всегда отключен по умолчанию — никто о нем не просил."
+    },
+    {
+      "source": "Put every motor's strength, floor, timing and curve back to the engine defaults. Doesn't touch cues, per-cue intensity, mode tuning or your schema.",
+      "target": "Возвращает силу, базовый порог, тайминги и кривую каждого мотора к значениям движка по умолчанию. Не затрагивает сигналы, индивидуальную интенсивность сигналов, настройки режимов и схему."
+    },
+    {
+      "source": "Put the profile in use back to its stock defaults — works on built-ins too, restoring their curated content rather than blank Registry.lua defaults.",
+      "target": "Возвращает используемый профиль к базовым настройкам по умолчанию — работает и со встроенными профилями, восстанавливая их исходное наполнение, а не пустые значения Registry.lua."
+    },
+    {
+      "source": "PvP (Tactical Radar)",
+      "target": "PvP (Тактический радар)"
+    },
+    {
+      "source": "Quest accepted",
+      "target": "Задание принято"
+    },
+    {
+      "source": "Quest offered",
+      "target": "Задание предложено"
+    },
+    {
+      "source": "Quest ready to hand in",
+      "target": "Задание готово к сдаче"
+    },
+    {
+      "source": "Quest turned in",
+      "target": "Задание сдано"
+    },
+    {
+      "source": "Questing",
+      "target": "Задания"
+    },
+    {
+      "source": "Questing & Exploration",
+      "target": "Задания и исследование мира"
+    },
+    {
+      "source": "Quests",
+      "target": "Задания"
+    },
+    {
+      "source": "Quick Setup",
+      "target": "Быстрая настройка"
+    },
+    {
+      "source": "Quick Setup Wizard",
+      "target": "Мастер быстрой настройки"
+    },
+    {
+      "source": "Radial menu",
+      "target": "Круговое меню"
+    },
+    {
+      "source": "Radial menu closed",
+      "target": "Круговое меню закрыто"
+    },
+    {
+      "source": "Radial menu opened",
+      "target": "Круговое меню открыто"
+    },
+    {
+      "source": "Radial page changed",
+      "target": "Страница кругового меню изменена"
+    },
+    {
+      "source": "Radial segment changed",
+      "target": "Сектор кругового меню изменен"
+    },
+    {
+      "source": "Radial segment chosen",
+      "target": "Сектор кругового меню выбран"
+    },
+    {
+      "source": "Radial segment unavailable",
+      "target": "Сектор кругового меню недоступен"
+    },
+    {
+      "source": "Radial selection cancelled",
+      "target": "Выбор в круговом меню отменен"
+    },
+    {
+      "source": "Ranged auto-repeat started",
+      "target": "Автострельба дальнего боя начата"
+    },
+    {
+      "source": "Ranged auto-repeat stopped",
+      "target": "Автострельба дальнего боя прекращена"
+    },
+    {
+      "source": "Rapid staccato triple-click on the high motor.",
+      "target": "Быстрый отрывистый тройной щелчок на высокочастотном моторе."
+    },
+    {
+      "source": "Reading something",
+      "target": "Чтение"
+    },
+    {
+      "source": "Reads the segment's own IsEnabled() — the same value Blizzard reads to grey the highlight out, so this matches what you see on screen. Fires in place of \"Radial segment changed\", not alongside it.",
+      "target": "Считывает собственное значение IsEnabled() сектора — то же самое, что Blizzard считывает для затемнения подсветки, поэтому это совпадает с тем, что вы видите на экране. Срабатывает вместо «Сектор кругового меню изменен», а не одновременно с ним."
+    },
+    {
+      "source": "Ready check",
+      "target": "Проверка готовности"
+    },
+    {
+      "source": "Ready check finished",
+      "target": "Проверка готовности завершена"
+    },
+    {
+      "source": "Release time (s)",
+      "target": "Время затухания (с)"
+    },
+    {
+      "source": "Reload UI",
+      "target": "Перезагрузить интерфейс"
+    },
+    {
+      "source": "Reload UI to apply the language change.",
+      "target": "Перезагрузите интерфейс для применения смены языка."
+    },
+    {
+      "source": "Reload the interface to apply your selected addon language.",
+      "target": "Перезагрузите интерфейс, чтобы применить выбранный язык аддона."
+    },
+    {
+      "source": "Rename",
+      "target": "Переименовать"
+    },
+    {
+      "source": "Rename \"%s\" to:",
+      "target": "Переименовать \"%s\" в:"
+    },
+    {
+      "source": "Rename the profile in use. Every rule pointing at it follows the rename. Built-in profiles can't be renamed.",
+      "target": "Переименовать используемый профиль. Все ссылающиеся на него правила сохранят связь с новым именем. Встроенные профили нельзя переименовывать."
+    },
+    {
+      "source": "Rename this profile",
+      "target": "Переименовать этот профиль"
+    },
+    {
+      "source": "Rename...",
+      "target": "Переименовать..."
+    },
+    {
+      "source": "Repaired equipment",
+      "target": "Ремонт экипировки"
+    },
+    {
+      "source": "Reset",
+      "target": "Сброс"
+    },
+    {
+      "source": "Reset every motor's strength, floor, timing and curve back to the engine defaults? This can't be undone.",
+      "target": "Сбросить силу, базовый порог, тайминги и кривую каждого мотора к значениям движка по умолчанию? Это действие нельзя отменить."
+    },
+    {
+      "source": "Reset profile \"%s\" to defaults? Every cue, intensity and mode override in it goes back to stock values. This can't be undone.",
+      "target": "Сбросить профиль \"%s\" к значениям по умолчанию? Все сигналы, интенсивность и переопределения режимов вернутся к исходным значениям. Это действие нельзя отменить."
+    },
+    {
+      "source": "Reset this profile",
+      "target": "Сбросить этот профиль"
+    },
+    {
+      "source": "Reset...",
+      "target": "Сбросить..."
+    },
+    {
+      "source": "Resources",
+      "target": "Ресурсы"
+    },
+    {
+      "source": "Response curve",
+      "target": "Кривая отклика"
+    },
+    {
+      "source": "Resting",
+      "target": "В зоне отдыха"
+    },
+    {
+      "source": "Resurrection offered",
+      "target": "Предложено воскрешение"
+    },
+    {
+      "source": "Rewards",
+      "target": "Награды"
+    },
+    {
+      "source": "Rogue",
+      "target": "Разбойник"
+    },
+    {
+      "source": "Role poll",
+      "target": "Проверка ролей"
+    },
+    {
+      "source": "Rooted",
+      "target": "Обездвиживание"
+    },
+    {
+      "source": "Routing & Schema",
+      "target": "Маршрутизация и схема"
+    },
+    {
+      "source": "Rules",
+      "target": "Правила"
+    },
+    {
+      "source": "Run Wizard",
+      "target": "Запустить мастер"
+    },
+    {
+      "source": "Run cadence (steps/s)",
+      "target": "Темп бега (шагов/с)"
+    },
+    {
+      "source": "Same polled mechanism as \"Confirmation popup appeared\". Untested.",
+      "target": "Тот же механизм опроса, что и для «Появилось окно подтверждения». Не протестировано."
+    },
+    {
+      "source": "Save & Start Playing",
+      "target": "Сохранить и начать игру"
+    },
+    {
+      "source": "Scales both the bed and the strikes for %s, before the two shared strengths above.",
+      "target": "Масштабирует как фоновый гул, так и удары для %s перед применением двух общих значений силы выше."
+    },
+    {
+      "source": "Scales this cue on top of the overall intensity on the Pulse page.",
+      "target": "Масштабирует этот сигнал поверх общей интенсивности на странице Pulse."
+    },
+    {
+      "source": "School lockouts are frequent in melee-heavy content. Off by default because a cue every kick you eat can crowd out the ones that mean you cannot act at all.",
+      "target": "Блокировки школы магии часто случаются в боях с большим числом бойцов ближнего боя. Отключено по умолчанию, так как сигнал на каждый сбитый каст может заглушить сигналы о полной невозможности действовать."
+    },
+    {
+      "source": "Search %d cues...",
+      "target": "Поиск среди %d сигналов..."
+    },
+    {
+      "source": "Secondary resource full",
+      "target": "Вторичный ресурс полон"
+    },
+    {
+      "source": "Set Floor",
+      "target": "Задать базовый порог"
+    },
+    {
+      "source": "Set but not in force: |cffffd100%s|r. A more specific rule above is winning — clear it to let these take over.",
+      "target": "Задано, но не действует: |cffffd100%s|r. Более конкретное правило выше имеет приоритет — очистите его, чтобы эти настройки вступили в силу."
+    },
+    {
+      "source": "Set for Spec",
+      "target": "Задать для специализации"
+    },
+    {
+      "source": "Setup Summary",
+      "target": "Итоги настройки"
+    },
+    {
+      "source": "Shaman",
+      "target": "Шаман"
+    },
+    {
+      "source": "Shares its pulse pattern with the target cue. If your focus is also your target, you get one cue rather than two.",
+      "target": "Использует тот же шаблон импульса, что и сигнал цели. Если запомненная цель совпадает с текущей целью, воспроизводится один сигнал вместо двух."
+    },
+    {
+      "source": "Sharp high kick layered with heavy low kick and rumble decay.",
+      "target": "Резкий высокочастотный импульс, наложенный на тяжелый низкочастотный импульс с последующим затуханием вибрации."
+    },
+    {
+      "source": "Show a Play button on every cue",
+      "target": "Показывать кнопку воспроизведения у каждого сигнала"
+    },
+    {
+      "source": "Show minimap icon",
+      "target": "Показывать иконку у миникарты"
+    },
+    {
+      "source": "Show per-cue detail controls",
+      "target": "Показывать детальные настройки для каждого сигнала"
+    },
+    {
+      "source": "Shows only the page switches and this page. Every cue keeps its own settings; turn this off to get every page back exactly as it was.",
+      "target": "Отображает только переключатели страниц и эту страницу. Каждый сигнал сохраняет свои настройки; отключите этот режим, чтобы вернуть все страницы в исходный вид."
+    },
+    {
+      "source": "Silenced",
+      "target": "Немота"
+    },
+    {
+      "source": "Simple view",
+      "target": "Упрощенный вид"
+    },
+    {
+      "source": "Slow, harmonic oceanic gravity swells and coastal tides while submerged in deep oceans.",
+      "target": "Медленная гармоническая океанская гравитационная зыбь и прибрежные приливы при погружении в глубокие океанские воды."
+    },
+    {
+      "source": "Snappy & Taps",
+      "target": "Четкие щелчки и касания"
+    },
+    {
+      "source": "Social & Group",
+      "target": "Общение и группа"
+    },
+    {
+      "source": "Social & Group Communication",
+      "target": "Общение и связь в группе"
+    },
+    {
+      "source": "Soft target interact",
+      "target": "Взаимодействие с динамической целью"
+    },
+    {
+      "source": "Special casting",
+      "target": "Особое применение заклинаний"
+    },
+    {
+      "source": "Speeds up or slows down ",
+      "target": "Ускоряет или замедляет "
+    },
+    {
+      "source": "Spirit healer",
+      "target": "Целитель душ"
+    },
+    {
+      "source": "Split left and right",
+      "target": "Разделение на левый и правый"
+    },
+    {
+      "source": "Square / X: open settings",
+      "target": "Квадрат / X: открыть настройки"
+    },
+    {
+      "source": "Stable opened",
+      "target": "Окно стойл открыто"
+    },
+    {
+      "source": "Stack split ratchet",
+      "target": "Трещотка разделения стопки"
+    },
+    {
+      "source": "Standard Rumble",
+      "target": "Стандартная вибрация"
+    },
+    {
+      "source": "Standard balance across all categories",
+      "target": "Стандартный баланс во всех категориях"
+    },
+    {
+      "source": "Status: %s",
+      "target": "Статус: %s"
+    },
+    {
+      "source": "Step 4: Interface & Social Alerts",
+      "target": "Шаг 4: Оповещения интерфейса и группы"
+    },
+    {
+      "source": "Step 6: Master Strength & Completion",
+      "target": "Шаг 6: Общая сила и завершение"
+    },
+    {
+      "source": "Steps per second at full running speed. Scaled by how fast you are actually moving.",
+      "target": "Шагов в секунду при максимальной скорости бега. Масштабируется в зависимости от фактической скорости движения."
+    },
+    {
+      "source": "Steps per second at normal walking speed.",
+      "target": "Шагов в секунду при обычной скорости ходьбы."
+    },
+    {
+      "source": "Strength",
+      "target": "Сила"
+    },
+    {
+      "source": "Strike strength",
+      "target": "Сила ударов"
+    },
+    {
+      "source": "Stroke depth",
+      "target": "Глубина гребка"
+    },
+    {
+      "source": "Stroke rate, fast (Hz)",
+      "target": "Частота гребков, быстрая (Гц)"
+    },
+    {
+      "source": "Stroke rate, slow (Hz)",
+      "target": "Частота гребков, медленная (Гц)"
+    },
+    {
+      "source": "Strokes per second at barely-moving speed.",
+      "target": "Гребков в секунду при едва заметном движении."
+    },
+    {
+      "source": "Stunned",
+      "target": "Оглушение"
+    },
+    {
+      "source": "Summon offered",
+      "target": "Предложен призыв"
+    },
+    {
+      "source": "Swapped / Inverted Rumble",
+      "target": "Инвертированная вибрация"
+    },
+    {
+      "source": "Swell depth",
+      "target": "Глубина зыби"
+    },
+    {
+      "source": "Swell rate (Hz)",
+      "target": "Частота зыби (Гц)"
+    },
+    {
+      "source": "Swell strength",
+      "target": "Сила зыби"
+    },
+    {
+      "source": "Switch to this profile",
+      "target": "Переключиться на этот профиль"
+    },
+    {
+      "source": "Switches every cue on the Casting page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Включает или выключает все сигналы на вкладке «Применение заклинаний» разом. Каждый сигнал сохраняет собственную настройку."
+    },
+    {
+      "source": "Switches every cue on the Character & Status page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Включает или выключает все сигналы на вкладке «Персонаж и статус» разом. Каждый сигнал сохраняет собственную настройку."
+    },
+    {
+      "source": "Switches every cue on the Interface & Accessibility page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Включает или выключает все сигналы на вкладке «Интерфейс и доступность» разом. Каждый сигнал сохраняет собственную настройку."
+    },
+    {
+      "source": "Switches every cue on the Movement & Travel page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Включает или выключает все сигналы на вкладке «Движение и перемещение» разом. Каждый сигнал сохраняет собственную настройку."
+    },
+    {
+      "source": "Switches every cue on the Social & Group page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Включает или выключает все сигналы на вкладке «Общение и группа» разом. Каждый сигнал сохраняет собственную настройку."
+    },
+    {
+      "source": "Switches every cue on the Target & Focus page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Включает или выключает все сигналы на вкладке «Цель и фокус» разом. Каждый сигнал сохраняет собственную настройку."
+    },
+    {
+      "source": "Switches every cue on the World & Environment page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Включает или выключает все сигналы на вкладке «Окружающий мир» разом. Каждый сигнал сохраняет собственную настройку."
+    },
+    {
+      "source": "Talking to someone",
+      "target": "Разговор с NPC"
+    },
+    {
+      "source": "Target",
+      "target": "Цель"
+    },
+    {
+      "source": "Target & Crosshair Feedback",
+      "target": "Отклик цели и прицела"
+    },
+    {
+      "source": "Target & Focus",
+      "target": "Цель и фокус"
+    },
+    {
+      "source": "Target changed",
+      "target": "Смена цели"
+    },
+    {
+      "source": "Target died",
+      "target": "Цель погибла"
+    },
+    {
+      "source": "Target started casting",
+      "target": "Цель начала применение заклинания"
+    },
+    {
+      "source": "Target used major defensive",
+      "target": "Цель применила мощную защиту"
+    },
+    {
+      "source": "Target's cast stopped",
+      "target": "Применение заклинания цели прервано"
+    },
+    {
+      "source": "Targeted by enemy",
+      "target": "Вы выбраны целью противника"
+    },
+    {
+      "source": "Targeting",
+      "target": "Выбор целей"
+    },
+    {
+      "source": "Test Alert",
+      "target": "Проверить оповещение"
+    },
+    {
+      "source": "Test Impact",
+      "target": "Проверить удар"
+    },
+    {
+      "source": "Test Lock",
+      "target": "Проверить фиксацию"
+    },
+    {
+      "source": "Test Reward",
+      "target": "Проверить награду"
+    },
+    {
+      "source": "Test Rumble",
+      "target": "Проверить вибрацию"
+    },
+    {
+      "source": "Test Strike",
+      "target": "Проверить взмах"
+    },
+    {
+      "source": "Test UI",
+      "target": "Проверить интерфейс"
+    },
+    {
+      "source": "Test the selected mode",
+      "target": "Проверить выбранный режим"
+    },
+    {
+      "source": "Textures & Patterns",
+      "target": "Текстуры и шаблоны"
+    },
+    {
+      "source": "The Accessibility section",
+      "target": "Раздел специальных возможностей"
+    },
+    {
+      "source": "The Cue Index directory",
+      "target": "Каталог тактильных сигналов"
+    },
+    {
+      "source": "The _QUIET variant covers failures the game prints no error for, so this can fire with nothing visible on screen.",
+      "target": "Вариант _QUIET охватывает сбои, для которых игра не выводит текст ошибки, поэтому он может срабатывать без каких-либо видимых сообщений на экране."
+    },
+    {
+      "source": "The experimental section",
+      "target": "Экспериментальный раздел"
+    },
+    {
+      "source": "The lightest possible tick when a conversation window opens with any NPC.",
+      "target": "Едва уловимый щелчок при открытии окна диалога с любым NPC."
+    },
+    {
+      "source": "The master switch for this page. Also on the Casting page, where the cue lives alongside the other casting cues.",
+      "target": "Главный переключатель для этой страницы. Также находится на странице «Применение заклинаний», где этот сигнал расположен рядом с остальными сигналами заклинаний."
+    },
+    {
+      "source": "This character",
+      "target": "Этот персонаж"
+    },
+    {
+      "source": "This character reports no specialization, so there is no per-specialization rule to set. The row appears by itself on a character that has one.",
+      "target": "У этого персонажа нет специализации, поэтому индивидуальное правило для специализации недоступно. Эта строка появится автоматически у персонажа с выбранной специализацией."
+    },
+    {
+      "source": "This specialization",
+      "target": "Эта специализация"
+    },
+    {
+      "source": "This specialization (",
+      "target": "Эта специализация ("
+    },
+    {
+      "source": "Three rhythmic thuds.",
+      "target": "Три ритмичных глухих удара."
+    },
+    {
+      "source": "Three-stage rising tension building on the low motor.",
+      "target": "Трехступенчатое нарастание напряжения на низкочастотном моторе."
+    },
+    {
+      "source": "Thrill curve (high)",
+      "target": "Кривая динамики (высокочастотная)"
+    },
+    {
+      "source": "Thrill peak (high)",
+      "target": "Пик динамики (высокочастотный)"
+    },
+    {
+      "source": "Time in seconds for a complete wave cycle. Real oceanic swells roll every 8 to 12 seconds (~0.10 Hz). Shorter periods feel like choppy coastal chop; longer periods feel like open-ocean rollers.",
+      "target": "Время в секундах для полного цикла волны. Реальная океанская зыбь накатывает каждые 8–12 секунд (~0.10 Гц). Более короткие периоды ощущаются как мелкая прибрежная рябь, более длинные — как глубокие валы открытого океана."
+    },
+    {
+      "source": "Tracked cooldown ready",
+      "target": "Отслеживаемое восстановление готово"
+    },
+    {
+      "source": "Trade opened",
+      "target": "Окно обмена открыто"
+    },
+    {
+      "source": "Triggers, modes, and motor tuning",
+      "target": "Триггеры, режимы и настройка моторов"
+    },
+    {
+      "source": "Try Texture",
+      "target": "Опробовать текстуру"
+    },
+    {
+      "source": "Tuned for HD Rumble voice-coil actuators",
+      "target": "Оптимизировано для линейных приводов (LRA) HD Rumble"
+    },
+    {
+      "source": "Turn off every cue in the active profile in one sweep (useful for quiet debugging).",
+      "target": "Отключить все сигналы в активном профиле одним нажатием (удобно для бесшумной отладки)."
+    },
+    {
+      "source": "Turn on every cue in the active profile in one sweep (useful for testing/debugging).",
+      "target": "Включить все сигналы в активном профиле одним нажатием (удобно для тестирования и отладки)."
+    },
+    {
+      "source": "Turn whole pages of cues on or off. Each cue keeps its own setting underneath: switching a page back on restores exactly what was there.",
+      "target": "Включайте или выключайте целые страницы сигналов. Каждый сигнал сохраняет собственную настройку: повторное включение страницы возвратит все в прежнее состояние."
+    },
+    {
+      "source": "Two crisp ticks when a cooldown the built-in Cooldown Manager is tracking comes off cooldown.",
+      "target": "Два четких щелчка, когда время восстановления, отслеживаемое встроенным диспетчером восстановления, завершается."
+    },
+    {
+      "source": "Two heavier hits with a gap between them.",
+      "target": "Два более тяжелых удара с паузой между ними."
+    },
+    {
+      "source": "Two kinds of trigger: pulses and textures",
+      "target": "Два вида триггеров: импульсы и текстуры"
+    },
+    {
+      "source": "Two rhythmic thuds.",
+      "target": "Два ритмичных глухих удара."
+    },
+    {
+      "source": "Two soft ticks when the action bar pages to a different set of abilities.",
+      "target": "Два мягких щелчка при смене панели команд на другой набор способностей."
+    },
+    {
+      "source": "Two soft ticks when you page the radial left or right with the shoulder buttons.",
+      "target": "Два мягких щелчка при перелистывании страниц кругового меню влево или вправо кнопками-триггерами (бамперами)."
+    },
+    {
+      "source": "UI focus moved",
+      "target": "Фокус интерфейса перемещен"
+    },
+    {
+      "source": "UI navigation hit an edge",
+      "target": "Достигнут край навигации интерфейса"
+    },
+    {
+      "source": "UI panel closed",
+      "target": "Панель интерфейса закрыта"
+    },
+    {
+      "source": "UI panel opened",
+      "target": "Панель интерфейса открыта"
+    },
+    {
+      "source": "Untested whether this also fires on every instant-cast press rather than only real cast-bar completions — if so, it'll feel far too frequent to read as \"that landed\" specifically. Check before relying on it.",
+      "target": "Не проверено, срабатывает ли это при каждом нажатии мгновенного заклинания или только при реальном завершении полосы применения — если так, это покажется слишком частым, чтобы восприниматься именно как факт попадания. Проверьте перед использованием."
+    },
+    {
+      "source": "Untested.",
+      "target": "Не протестировано."
+    },
+    {
+      "source": "Use the old estimator",
+      "target": "Использовать старый алгоритм оценки"
+    },
+    {
+      "source": "Using \"%s\" — set for %s.",
+      "target": "Используется \"%s\" — задано для %s."
+    },
+    {
+      "source": "Vendor window opened",
+      "target": "Окно торговца открыто"
+    },
+    {
+      "source": "Vibration Mode",
+      "target": "Режим вибрации"
+    },
+    {
+      "source": "Vibration Schema: |cffffd100%s|r",
+      "target": "Схема вибрации: |cffffd100%s|r"
+    },
+    {
+      "source": "Vibration schema",
+      "target": "Схема вибрации"
+    },
+    {
+      "source": "Voice-coil actuators (LRA), ultra-low 0.025 floor, instant response",
+      "target": "Линейные резонансные приводы (LRA), сверхнизкий порог 0.025, мгновенный отклик"
+    },
+    {
+      "source": "Walk cadence (steps/s)",
+      "target": "Темп ходьбы (шагов/с)"
+    },
+    {
+      "source": "Warlock",
+      "target": "Чернокнижник"
+    },
+    {
+      "source": "Warning lead time",
+      "target": "Время упреждения предупреждения"
+    },
+    {
+      "source": "Warrior",
+      "target": "Воин"
+    },
+    {
+      "source": "Watches UNIT_TARGET and target swaps for hostile units whose target is the player. Uses UnitIsUnit('targettarget', 'player') with defensive secrecy guards.",
+      "target": "Отслеживает UNIT_TARGET и переключение целей для враждебных существ, чьей целью является игрок. Использует UnitIsUnit('targettarget', 'player') с защитными проверками."
+    },
+    {
+      "source": "Wave cycle (seconds)",
+      "target": "Цикл волны (секунды)"
+    },
+    {
+      "source": "Wave period (sec)",
+      "target": "Период волны (сек)"
+    },
+    {
+      "source": "Wave steepness",
+      "target": "Крутизна волны"
+    },
+    {
+      "source": "Weapon or gear swapped",
+      "target": "Смена оружия или экипировки"
+    },
+    {
+      "source": "What this does",
+      "target": "Что это делает"
+    },
+    {
+      "source": "When mobs are pulled socially — aggroing because a neighbour was pulled — the game often reports status 0 even though you have aggro.",
+      "target": "Когда монстры агрятся совместно (из-за нападения на соседнего), игра часто сообщает статус 0, хотя вы удерживаете угрозу."
+    },
+    {
+      "source": "Which of the preset shapes this specific cue plays when it fires. \"",
+      "target": "Какую из готовых форм воспроизводит этот сигнал при срабатывании. \""
+    },
+    {
+      "source": "Which physical motors each cue drives. Start with Standard Rumble, then calibrate the motors below.",
+      "target": "Какие физические моторы задействует каждый сигнал. Начните со стандартной вибрации (Standard Rumble), затем откалибруйте моторы ниже."
+    },
+    {
+      "source": "Which physical motors each trigger drives. Try one, test a mode below, keep the one you can feel.",
+      "target": "Какие физические моторы задействует каждый триггер. Попробуйте один, протестируйте режим ниже и выберите наиболее ощутимый."
+    },
+    {
+      "source": "Which profile to use right now. This writes to whichever rule is currently in force, so picking here always changes what you are actually using rather than editing a rule something more specific is overriding.",
+      "target": "Какой профиль использовать прямо сейчас. Выбор записывается в активное правило, так что изменение здесь всегда меняет используемый профиль, а не переопределяемое правило."
+    },
+    {
+      "source": "Wind amplitude",
+      "target": "Амплитуда ветра"
+    },
+    {
+      "source": "Wind resistance & thrust surge while flying. Scales dynamically with your flight speed.",
+      "target": "Сопротивление ветра и импульс тяги во время полета. Динамически масштабируется в зависимости от скорости полета."
+    },
+    {
+      "source": "Windows",
+      "target": "Окна"
+    },
+    {
+      "source": "World",
+      "target": "Окружающий мир"
+    },
+    {
+      "source": "World & Environment",
+      "target": "Окружающий мир"
+    },
+    {
+      "source": "World Immersion",
+      "target": "Погружение в мир"
+    },
+    {
+      "source": "You are alive again",
+      "target": "Вы снова живы"
+    },
+    {
+      "source": "You died",
+      "target": "Вы погибли"
+    },
+    {
+      "source": "You have aggro",
+      "target": "Угроза на вас"
+    },
+    {
+      "source": "Your cast ended",
+      "target": "Ваше применение заклинания завершено"
+    },
+    {
+      "source": "Your cast failed",
+      "target": "Ваше применение заклинания сорвалось"
+    },
+    {
+      "source": "Your cast started",
+      "target": "Ваше применение заклинания начато"
+    },
+    {
+      "source": "Your cast succeeded",
+      "target": "Ваше заклинание успешно применено"
+    },
+    {
+      "source": "Zone changed",
+      "target": "Смена зоны"
+    },
+    {
+      "source": "an impact",
+      "target": "удар"
+    },
+    {
+      "source": "could not apply that preset",
+      "target": "не удалось применить этот пресет"
+    },
+    {
+      "source": "could not run that",
+      "target": "не удалось выполнить это"
+    },
+    {
+      "source": "could not set that rule",
+      "target": "не удалось установить это правило"
+    },
+    {
+      "source": "detection unavailable",
+      "target": "определение недоступно"
+    },
+    {
+      "source": "in force",
+      "target": "действует"
+    },
+    {
+      "source": "no role chosen",
+      "target": "роль не выбрана"
+    },
+    {
+      "source": "once a minute",
+      "target": "раз в минуту"
+    },
+    {
+      "source": "once every ",
+      "target": "один раз каждые "
+    },
+    {
+      "source": "once every %.1f seconds",
+      "target": "один раз каждые %.1f сек."
+    },
+    {
+      "source": "|cff00ff00Left-Click:|r Open Settings",
+      "target": "|cff00ff00Левый клик:|r Открыть настройки"
+    },
+    {
+      "source": "|cff00ff00Right-Click:|r Toggle Master On/Off",
+      "target": "|cff00ff00Правый клик:|r Вкл/Выкл общий переключатель"
+    },
+    {
+      "source": "|cff00ff00[Adjusting %d%%]|r Use |cffffffff[← / →]|r to Change, |cff38BDF8[A]|r Confirm & Feel",
+      "target": "|cff00ff00[Настройка %d%%]|r Используйте |cffffffff[← / →]|r для изменения, |cff38BDF8[A]|r для подтверждения и проверки"
+    },
+    {
+      "source": "|cff38BDF8[L1 / LB]|r",
+      "target": "|cff38BDF8[L1 / LB]|r"
+    },
+    {
+      "source": "|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[A]|r Toggle Slider / Select",
+      "target": "|cff38BDF8[L1/R1]|r Вкладки  •  |cff38BDF8[A]|r Ползунок / Выбрать"
+    },
+    {
+      "source": "|cff38BDF8[R1 / RB]|r",
+      "target": "|cff38BDF8[R1 / RB]|r"
+    },
+    {
+      "source": "|cff444444[L1 / LB]|r",
+      "target": "|cff444444[L1 / LB]|r"
+    },
+    {
+      "source": "|cff444444[R1 / RB]|r",
+      "target": "|cff444444[R1 / RB]|r"
+    },
+    {
+      "source": "|cff4cb8ffPulse:|r Quick setup complete! Type |cffffffff/pulse|r anytime to fine-tune settings.",
+      "target": "|cff4cb8ffPulse:|r Быстрая настройка завершена! Введите |cffffffff/pulse|r в любое время для точной настройки."
+    },
+    {
+      "source": "|cff4db8ff✔ |r",
+      "target": "|cff4db8ff✔ |r"
+    },
+    {
+      "source": "|cff888888Drag:|r Move Icon",
+      "target": "|cff888888Перетаскивание:|r Переместить иконку"
+    },
+    {
+      "source": "|cff888888Loss of control cues are governed by the master switch on the main Pulse page.|r",
+      "target": "|cff888888Сигналы потери контроля управляются главным переключателем на основной странице Pulse.|r"
+    },
+    {
+      "source": "|cff888888Recommended intensity:|r %d%%",
+      "target": "|cff888888Рекомендуемая интенсивность:|r %d%%"
+    },
+    {
+      "source": "|cffffcc00◀/▶ Adjust Intensity|r   •   %s/%s Lock Value   •   %s Try Texture",
+      "target": "|cffffcc00◀/▶ Изменить интенсивность|r   •   %s/%s Зафиксировать значение   •   %s Опробовать текстуру"
+    },
+    {
+      "source": "|cffffd100%s|r  |cff00ff00[ACTIVE]|r",
+      "target": "|cffffd100%s|r  |cff00ff00[АКТИВНО]|r"
+    },
+    {
+      "source": "|cffffd100/pulseui|r opens it too. |cffffd100/pulse setup|r re-opens Quick Setup, |cffffd100/pulse test <mode>|r plays a shape.",
+      "target": "|cffffd100/pulseui|r также открывает настройки. |cffffd100/pulse setup|r снова открывает быструю настройку, |cffffd100/pulse test <mode>|r воспроизводит форму."
+    },
+    {
+      "source": "|r, |cffffd100",
+      "target": "|r, |cffffd100"
+    },
+    {
+      "source": "• |r",
+      "target": "• |r"
+    },
+    {
+      "source": "⚔️ Melee DPS",
+      "target": "⚔️ Боец ближнего боя"
+    },
+    {
+      "source": "🏹 Ranged DPS",
+      "target": "🏹 Боец дальнего боя"
+    },
+    {
+      "source": "💚 Healer",
+      "target": "💚 Лекарь"
+    },
+    {
+      "source": "🛡️ Tank",
+      "target": "🛡️ Танк"
+    }
+  ]
+}

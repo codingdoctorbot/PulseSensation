@@ -1,0 +1,297 @@
+{
+  "batch_id": 7,
+  "locale": "zhCN",
+  "count": 58,
+  "items": [
+    {
+      "id": 1211,
+      "source": " (reported as \"%s\")",
+      "target": " （报告为“%s”）"
+    },
+    {
+      "id": 1212,
+      "source": "ACTIVE",
+      "target": "已激活"
+    },
+    {
+      "id": 1213,
+      "source": "Accept",
+      "target": "接受"
+    },
+    {
+      "id": 1214,
+      "source": "Active",
+      "target": "激活"
+    },
+    {
+      "id": 1215,
+      "source": "Alchemy",
+      "target": "炼金术"
+    },
+    {
+      "id": 1216,
+      "source": "Apply",
+      "target": "应用"
+    },
+    {
+      "id": 1217,
+      "source": "Blacksmithing",
+      "target": "锻造"
+    },
+    {
+      "id": 1218,
+      "source": "Combat and life state",
+      "target": "战斗与生命状态"
+    },
+    {
+      "id": 1219,
+      "source": "Combat texture",
+      "target": "战斗材质"
+    },
+    {
+      "id": 1220,
+      "source": "Cooking",
+      "target": "烹饪"
+    },
+    {
+      "id": 1221,
+      "source": "Detect",
+      "target": "检测"
+    },
+    {
+      "id": 1222,
+      "source": "Disabled",
+      "target": "已禁用"
+    },
+    {
+      "id": 1223,
+      "source": "Duration",
+      "target": "持续时间"
+    },
+    {
+      "id": 1224,
+      "source": "Enabled",
+      "target": "已启用"
+    },
+    {
+      "id": 1225,
+      "source": "Enchanting",
+      "target": "附魔"
+    },
+    {
+      "id": 1226,
+      "source": "Engineering",
+      "target": "工程学"
+    },
+    {
+      "id": 1227,
+      "source": "Experimental (game-feel)",
+      "target": "实验性（游戏手感）"
+    },
+    {
+      "id": 1228,
+      "source": "Feel %s",
+      "target": "感受 %s"
+    },
+    {
+      "id": 1229,
+      "source": "Feels like: %s",
+      "target": "感觉类似：%s"
+    },
+    {
+      "id": 1230,
+      "source": "Fires at most %s.",
+      "target": "最多触发 %s。"
+    },
+    {
+      "id": 1231,
+      "source": "First Aid",
+      "target": "急救"
+    },
+    {
+      "id": 1232,
+      "source": "Fishing",
+      "target": "钓鱼"
+    },
+    {
+      "id": 1233,
+      "source": "Flight and mounts",
+      "target": "飞行与坐骑"
+    },
+    {
+      "id": 1234,
+      "source": "Group and social",
+      "target": "队伍与社交"
+    },
+    {
+      "id": 1235,
+      "source": "Herbalism",
+      "target": "草药学"
+    },
+    {
+      "id": 1236,
+      "source": "High motor (sharp rumble)",
+      "target": "轻震马达（高频震动）"
+    },
+    {
+      "id": 1237,
+      "source": "Inscription",
+      "target": "铭文"
+    },
+    {
+      "id": 1238,
+      "source": "Jewelcrafting",
+      "target": "珠宝加工"
+    },
+    {
+      "id": 1239,
+      "source": "Leatherworking",
+      "target": "制皮"
+    },
+    {
+      "id": 1240,
+      "source": "Low motor (heavy rumble)",
+      "target": "重震马达（低频震动）"
+    },
+    {
+      "id": 1241,
+      "source": "MUTED",
+      "target": "已静音"
+    },
+    {
+      "id": 1242,
+      "source": "Mining",
+      "target": "采矿"
+    },
+    {
+      "id": 1243,
+      "source": "Multiplies %s's high-motor intensity. 1.0 is the authored default; the top of this slider is where it stops making any further difference.",
+      "target": "乘以 %s 的轻震马达强度。1.0 为设计默认值；滑块拉到最顶端即为不再产生进一步差异的上限。"
+    },
+    {
+      "id": 1244,
+      "source": "Multiplies %s's low-motor intensity. 1.0 is the authored default; the top of this slider is where it stops making any further difference.",
+      "target": "乘以 %s 的重震马达强度。1.0 为设计默认值；滑块拉到最顶端即为不再产生进一步差异的上限。"
+    },
+    {
+      "id": 1245,
+      "source": "Okay",
+      "target": "确定"
+    },
+    {
+      "id": 1246,
+      "source": "Other crafting",
+      "target": "其他制造"
+    },
+    {
+      "id": 1247,
+      "source": "Play %s right now with whatever's currently set on its sliders above.",
+      "target": "立即以其上方滑块的当前设定播放 %s。"
+    },
+    {
+      "id": 1248,
+      "source": "PvP",
+      "target": "PvP"
+    },
+    {
+      "id": 1249,
+      "source": "Ramp",
+      "target": "递增"
+    },
+    {
+      "id": 1250,
+      "source": "Skinning",
+      "target": "剥皮"
+    },
+    {
+      "id": 1251,
+      "source": "Spec %s",
+      "target": "专精 %s"
+    },
+    {
+      "id": 1252,
+      "source": "Speeds up or slows down %s as a whole — both its pulses and the gaps between them, so a multi-hit mode keeps its rhythm instead of the hits stretching into their own gaps. 1.0 is the authored default.",
+      "target": "加速或减慢 %s 作为一个整体——包括其脉冲以及脉冲之间的间隔，从而使多重打击模式保持其固有节奏，而不是让打击延伸进入其自身的间隔中。1.0 为作者设定的默认值。"
+    },
+    {
+      "id": 1253,
+      "source": "Tailoring",
+      "target": "裁缝"
+    },
+    {
+      "id": 1254,
+      "source": "Target and focus",
+      "target": "目标与焦点"
+    },
+    {
+      "id": 1255,
+      "source": "Test",
+      "target": "测试"
+    },
+    {
+      "id": 1256,
+      "source": "This specialization (%s)",
+      "target": "此专精 (%s)"
+    },
+    {
+      "id": 1257,
+      "source": "World (accessibility)",
+      "target": "世界（无障碍）"
+    },
+    {
+      "id": 1258,
+      "source": "World (game-feel)",
+      "target": "世界（游戏手感）"
+    },
+    {
+      "id": 1259,
+      "source": "Your casting",
+      "target": "你的施法"
+    },
+    {
+      "id": 1260,
+      "source": "a ramp is currently running on %s, not %s",
+      "target": "递增当前正在 %s 上运行，而不是 %s"
+    },
+    {
+      "id": 1261,
+      "source": "every character",
+      "target": "所有角色"
+    },
+    {
+      "id": 1262,
+      "source": "nothing set — falling back to Default",
+      "target": "未设置——回退到默认设置"
+    },
+    {
+      "id": 1263,
+      "source": "once every %d minutes",
+      "target": "每 %d 分钟一次"
+    },
+    {
+      "id": 1264,
+      "source": "once every %d seconds",
+      "target": "每 %d 秒一次"
+    },
+    {
+      "id": 1265,
+      "source": "this character",
+      "target": "当前角色"
+    },
+    {
+      "id": 1266,
+      "source": "this specialization (%s)",
+      "target": "此专精 (%s)"
+    },
+    {
+      "id": 1267,
+      "source": "|cff888888Silences:|r %s",
+      "target": "|cff888888静音：|r%s"
+    },
+    {
+      "id": 1268,
+      "source": "|cffffd100Emphasizes:|r %s",
+      "target": "|cffffd100强调：|r%s"
+    }
+  ]
+}

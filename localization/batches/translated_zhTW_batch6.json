@@ -1,0 +1,229 @@
+{
+  "items": [
+    {
+      "id": 22,
+      "source": "'s high-motor intensity. 1.0 is the authored default; the top of this slider is where it stops making any further difference.",
+      "target": " 的輕震馬達強度。1.0 為預設設計值；此滑桿頂端為數值不再產生差異的上限。"
+    },
+    {
+      "id": 23,
+      "source": "'s low-motor intensity. 1.0 is the authored default; the top of this slider is where it stops making any further difference.",
+      "target": " 的重震馬達強度。1.0 為預設設計值；此滑桿頂端為數值不再產生差異的上限。"
+    },
+    {
+      "id": 41,
+      "source": "A **trigger** is an occasion — something happening that you want to feel. A **mode** is a feeling — the shape of the vibration itself.\n\nEvery trigger plays one mode, and many triggers share one. You can customize this relationship at two levels:\n\n**Per-cue customization**: Enable advanced controls to change what a specific cue \"Feels like\" from its dropdown, or adjust its individual intensity slider without affecting other cues.\n\n**Motor & Timing page**: Reshape any vibration mode across the entire addon — adjust its low motor or high motor balance, and speed up or slow down its duration envelope.",
+      "target": "**觸發器**是觸發的時機——即遊戲中發生且你想感受的事情。**模式**則是觸感——即震動本身的波形形態。\n\n每個觸發器播放一種模式，且多個觸發器可共用同一模式。你可以在兩個層次自訂此關係：\n\n**個別提示自訂**：啟用進階控制項，即可從下拉選單變更特定提示的「體感觸感」，或調整其個別強度滑桿而不影響其他提示。\n\n**「馬達與節奏」頁面**：在整個插件中重構任何震動模式——調整其重震馬達或輕震馬達平衡，並加快或放慢其持續時間包絡。"
+    },
+    {
+      "id": 42,
+      "source": "A barely-there fade, for the quietest ambient onset.",
+      "target": "極為微弱的漸入淡出，用於最細緻沉靜的環境氛圍起點。"
+    },
+    {
+      "id": 57,
+      "source": "A continuous texture — a steady feeling for as long as it's happening, not a single pulse.",
+      "target": "持續質感——在事件持續期間提供穩定的體感，而非單次脈衝。"
+    },
+    {
+      "id": 70,
+      "source": "A few triggers, in both the game-feel and Accessibility parts of the panel, rest on questions about the game that have no settled answer yet.\n\nWhen one of them fails it does not produce an error. It simply never fires, and there is nothing to fix. They may also change or stop working after any game update.\n\nTry them if you're curious. Don't build a habit on one.",
+      "target": "在面板的「遊戲體感」與「無障礙」部分中，有少數觸發器取決於遊戲中尚無定論的機制。\n\n當其中之一失效時並不會產生錯誤訊息，它只是單純從未觸發，且無從修復。在任何遊戲版本更新後，它們也可能有所變動或停止運作。\n\n若你感到好奇不妨一試，但請勿將其養成操作習慣。"
+    },
+    {
+      "id": 73,
+      "source": "A firm mechanical detent on the high motor.",
+      "target": "輕震馬達上紮實明確的機械段落感。"
+    },
+    {
+      "id": 106,
+      "source": "A sharp double-knock ('lub-dub') repeating at its own independent rate while Blizzard's own low-health screen flash is active.",
+      "target": "當暴雪原生的低生命值螢幕閃爍啟用時，以其自身的獨立頻率重複發出清脆的雙擊心跳震動 ('lub-dub')。"
+    },
+    {
+      "id": 107,
+      "source": "A sharp double-knock ('lub-dub') timed to each pulse of Blizzard's own low-health screen flash, rather than a single beat.",
+      "target": "與暴雪原生的低生命值螢幕閃爍每次脈衝同步發出清脆的雙擊心跳震動 ('lub-dub')，而非單次拍擊。"
+    },
+    {
+      "id": 177,
+      "source": "Adds a row under each cue that plays it, so you can find out what something feels like without waiting for it to happen. Useful while tuning, but it doubles the length of every page. The mode tester below still works either way. Takes effect immediately — no /reload needed.",
+      "target": "在每個提示下方新增一行播放按鈕，讓你可以直接體驗其震感，而無需等待遊戲中事件發生。在微調時非常實用，但會使每個頁面的長度增加一倍。下方的模式測試器無論如何皆可正常運作。立即生效——無需輸入 /reload。"
+    },
+    {
+      "id": 178,
+      "source": "Adds each cue's own intensity slider, \"Feels like\" shape picker and any bespoke dials to its page. On by default: uncheck for a compact one-line list that is easier to read when you just want to switch cues on and off. Takes effect immediately in this panel — no /reload needed.",
+      "target": "在頁面中為每個提示顯示其專屬的強度滑桿、「體感觸感」波形選擇器與各項自訂旋鈕。預設開啟：取消勾選可呈現緊湊的單行清單，在僅需切換提示開關時更加易讀。在此面板中立即生效——無需輸入 /reload。"
+    },
+    {
+      "id": 188,
+      "source": "Anatomical lub-dub cardiac rhythm.",
+      "target": "仿人體心臟跳動的雙擊心跳節奏 (lub-dub)。"
+    },
+    {
+      "id": 263,
+      "source": "Complements rather than duplicates a \"resource full\" cue — this ticks on every point, not just the cap. Reads UnitPower(\"player\", Enum.PowerType.ComboPoints) via UNIT_POWER_UPDATE, firing only when the count increases — confirmed live 2026-09-16 that this event also fires on the drop back to 0 after a finisher, so an unfiltered version would tick on that reset too. An ability that grants more than one point in a single event ticks once, not once per point — a simplification, not confirmed against every point-granting ability.",
+      "target": "互補而非重複「資源全滿」提示——此項在獲得每一點時發出微震，而不僅僅在達到上限時觸發。透過 UNIT_POWER_UPDATE 讀取 UnitPower(\"player\", Enum.PowerType.ComboPoints)，僅在點數增加時觸發——已於 2026-09-16 實機確認，施放終結技後點數歸零時該事件亦會觸發，因此未過濾的版本在重設歸零時也會發出微震。在單一事件中賦予多點點數的技能僅會微震一次，而非每點微震一次——此為簡化設計，尚未針對所有獲得點數的技能逐一驗證。"
+    },
+    {
+      "id": 274,
+      "source": "Continuous textures",
+      "target": "持續質感"
+    },
+    {
+      "id": 304,
+      "source": "Crisp high-frequency motor vibration applied right as the wave crest reaches peak amplitude. Fades out smoothly when submerged.",
+      "target": "在波峰達到最大振幅的瞬間觸發清脆的輕震馬達震動。潛入水中時平滑淡出。"
+    },
+    {
+      "id": 338,
+      "source": "Does nothing on a specialisation with no secondary resource. Expect it to fire often on a class that refills constantly, such as a rogue rebuilding combo points. Not a duplicate of this addon's own \"Combo point gained\" above — that ticks per point, this fires once on reaching the cap for any of the seven candidate resources.",
+      "target": "對沒有次要資源的天賦專精無效。在資源持續回復的職業（例如盜賊累積連擊點數）上會頻繁觸發。並非重複本插件上方的「獲得連擊點數」提示——後者在獲得每點時微震，此項則是在七種候選資源中的任一種達到上限時觸發一次。"
+    },
+    {
+      "id": 360,
+      "source": "Duration of the software overdrive kick. 0.030s on heavy ERM counterweights, 0.0 on LRAs.",
+      "target": "軟體超驅動衝擊的持續時間。重型 ERM 偏心轉子馬達建議為 0.030 秒，LRA 線性馬達則為 0.0 秒。"
+    },
+    {
+      "id": 365,
+      "source": "Enable Continuous Immersion Haptics (Master)",
+      "target": "啟用持續沉浸觸覺震動（總開關）"
+    },
+    {
+      "id": 529,
+      "source": "Guide",
+      "target": "指南"
+    },
+    {
+      "id": 546,
+      "source": "High-motor ceiling at full gliding speed. Only audible while actually gliding.",
+      "target": "全速滑翔時的輕震馬達上限。僅在實際滑翔時可感知。"
+    },
+    {
+      "id": 550,
+      "source": "Hooks Blizzard's shared tab plumbing (TabSystemMixin:SetTab, TabSystemOwnerMixin:SetTab, PanelTemplates_SetTab). Filtered on those functions' own `isUserAction` argument where they provide one, so a panel setting its own tab as it opens stays silent and only a tab YOU changed fires. Two known gaps: PanelTemplates_SetTab is the legacy path and has no such flag, so a few older panels may still fire on open; and the two mixin hooks only reach panels created AFTER Pulse loads, because Mixin() copies function references onto a frame at creation. Most big tabbed panels are load-on-demand and so are covered, but anything built before this addon isn't. Expect this one to be patchy.",
+      "target": "攔截暴雪共用的分頁標籤底層機制 (TabSystemMixin:SetTab, TabSystemOwnerMixin:SetTab, PanelTemplates_SetTab)。在有提供參數的情況下，根據這些函式自帶的 `isUserAction` 參數進行過濾，因此面板在開啟時自動設定分頁會保持靜音，只有由你主動切換的分頁才會觸發。兩個已知限制：PanelTemplates_SetTab 屬於舊版路徑且無此標記，因此少數較舊的面板在開啟時仍可能觸發；此外，兩個 Mixin Hook 只能涵蓋在 Pulse 載入「之後」建立的面板，因為 Mixin() 會在框架建立時將函式參照複製至框架上。大多數具備分頁的大型面板皆為隨選載入 (Load-on-Demand) 因而受到涵蓋，但在本插件之前構建的內容則無法支援。請預期此功能在某些介面上可能偶有缺漏。"
+    },
+    {
+      "id": 557,
+      "source": "How long this motor takes to reach a new, stronger level during continuous textures. Higher is softer and more gradual; lower is snappier. 0.075 reproduces the engine's old behaviour at 60fps.",
+      "target": "在持續質感運作期間，此馬達達到更強新強度等級所需的時間。數值愈高愈柔和漸進；數值愈低愈俐落乾脆。0.075 可重現引擎在 60fps 下的舊版運作表現。"
+    },
+    {
+      "id": 560,
+      "source": "How often the lub-dub repeats while the warning stays active. Higher is more urgent; lower is less annoying. Independent of the screen flash's own (fixed, ~57 BPM) rate — this is a separate timer, not synced to it.",
+      "target": "當警告持續處於作用狀態時，雙擊心跳節奏 (lub-dub) 的重複頻率。數值愈高愈緊迫急促；數值愈低愈不易受到干擾。獨立於螢幕閃爍本身的固定頻率（約 57 BPM）——此為獨立計時器，並未與其強制同步。"
+    },
+    {
+      "id": 568,
+      "source": "INPUT_DEVICE_INTERFACE_TRANSITION, carrying newMode/oldMode. This event is FOREVER-ONLY — it was not found anywhere in the retail Midnight archive used for comparison, so don't expect this cue to do anything on retail. Fires on any transition in either direction; the payload would let it be split into separate entered/left cues later if that's worth having.",
+      "target": "INPUT_DEVICE_INTERFACE_TRANSITION，帶有 newMode/oldMode 參數。此事件為 WoW Forever 獨佔——在用於比對的正式服 Midnight 封存檔中未見其蹤影，因此請勿預期此提示能在正式服運作。雙向切換時皆會觸發；其附帶的酬載資料日後若有需要，可再拆分為獨立的進入／離開提示。"
+    },
+    {
+      "id": 583,
+      "source": "Instants and completed casts arrive on the same event, so \"Cast succeeded\" has always fired for both. Core/CastActivity.lua tells them apart by whether a START was seen first; this is the instant half. Leave \"Cast succeeded\" off if you want only one of the two. Untested.",
+      "target": "瞬發法術與完成施法皆透過同一個事件傳遞，因此「施法成功」一直以來對兩者都會觸發。Core/CastActivity.lua 根據是否先偵測到 START 事件來區分兩者；此項為瞬發法術部分。若你只想保留其中之一，請關閉「施法成功」。尚未測試。"
+    },
+    {
+      "id": 659,
+      "source": "Motor & Timing",
+      "target": "馬達與節奏"
+    },
+    {
+      "id": 669,
+      "source": "Multiplies the baseline while fully submerged rather than bobbing at the surface, via IsSubmerged(). Set to 1.0 to feel the same either way. UNVERIFIED: IsSubmerged is confirmed present in the client API list, but whether it really distinguishes the two cases here has not been checked live.",
+      "target": "透過 IsSubmerged() 在完全沒入水中（而非漂浮於水面）時倍增基底震動。設為 1.0 則兩種狀態體感相同。未經實機證實：IsSubmerged 已確認存在於客戶端 API 清單中，但實機上能否確實區分這兩種狀態尚未驗證。"
+    },
+    {
+      "id": 687,
+      "source": "Nothing about these is percussive, so they get the bed alone. Inventing a hammer for enchanting would be inventing a sensation that is not there.",
+      "target": "這些過程毫無敲擊性質，因此僅提供單純的底層基底震動。為附魔憑空捏造鐵鎚敲擊感，無異於憑空創造現實中不存在的體感。"
+    },
+    {
+      "id": 688,
+      "source": "OFF BY DEFAULT, and that is deliberate. A rolling swell suggests ocean, and this cue fires in rivers, lakes and canals too, where it would read as wrong rather than as atmosphere — Classic has no wave physics for it to be tracking, so it would be inventing something the world is not doing. Flat presence is the honest default. Raise it if you want a swell anyway; it is a good sensation, just not a true one.",
+      "target": "預設關閉，且為刻意如此設計。起伏的湧浪容易讓人聯想到海洋，但此提示在河流、湖泊與運河中亦會觸發，在那些水域反而會顯得突兀違和而非增添氛圍——經典版並無可供追蹤的波浪物理系統，因此這等同於捏造遊戲世界中不存在的事物。平穩的沉浸存在感才是忠實的預設值。若你無論如何都想要湧浪感可調高此值；這種體感固然令人愉悅，但並非真實體現。"
+    },
+    {
+      "id": 696,
+      "source": "Off by default — a continuous texture, not a notification.",
+      "target": "預設關閉——屬於持續質感，而非單次通知。"
+    },
+    {
+      "id": 727,
+      "source": "PLAYER_SOFT_INTERACT_CHANGED. Unlike its two siblings this one DOES carry a payload (oldTarget/newTarget GUIDs) and is flagged SecretWhenUnitIdentityRestricted in Blizzard's own docs, so this cue deliberately reads none of it and fires on the occurrence alone. Probably the most useful of the three: it's the one that says \"there is something here\" while you're looking around.",
+      "target": "PLAYER_SOFT_INTERACT_CHANGED。與另外兩個相關事件不同，此事件確實帶有酬載資料（oldTarget/newTarget 的 GUID），且在暴雪自身的文件中被標示為 SecretWhenUnitIdentityRestricted，因此本提示刻意完全不讀取任何內容，僅在事件發生時單純觸發。可能是三者中最實用的一個：它能在你環顧四周時傳達「這裡有目標」的訊息。"
+    },
+    {
+      "id": 747,
+      "source": "Patter frequency (Hz)",
+      "target": "雨點輕拍頻率 (Hz)"
+    },
+    {
+      "id": 748,
+      "source": "Perceptual S-Curve",
+      "target": "感知 S 曲線"
+    },
+    {
+      "id": 777,
+      "source": "Pulse Haptics",
+      "target": "Pulse Haptics"
+    },
+    {
+      "id": 787,
+      "source": "Pulse: all haptic vibrations stopped.",
+      "target": "Pulse：所有觸覺震動已停止。"
+    },
+    {
+      "id": 872,
+      "source": "Reset every mode's motor and duration multiplier back to 1.0? This can't be undone.",
+      "target": "是否將所有模式的馬達與持續時間倍率重設回 1.0？此操作無法復原。"
+    },
+    {
+      "id": 873,
+      "source": "Reset every mode's motor and duration multiplier on this page back to 1.0. Doesn't touch cues, per-cue intensity, or per-trigger mode picks.",
+      "target": "將本頁面中所有模式的馬達與持續時間倍率重設回 1.0。不會影響提示、個別提示強度或依觸發器設定的模式選擇。"
+    },
+    {
+      "id": 875,
+      "source": "Reset motor & timing",
+      "target": "重設馬達與節奏"
+    },
+    {
+      "id": 909,
+      "source": "Second-harmonic content, which is what makes a stroke feel like pull-then-glide rather than a symmetric swell. Six earlier tuning rounds all felt \"rough\" because they modulated the amplitude of a constant; a pure sine cannot express this asymmetry and that is most likely why. 0 reverts to a plain swell.",
+      "target": "二次諧波成分，這正是賦予划水動作「划水加速－順勢滑行」體感的核心，而非對稱的單純湧動。前六輪調校體感皆顯「粗糙」，因為當時僅調變常數的振幅；純正弦波無法表現出這種不對稱性，而這極可能就是原因所在。設為 0 則還原為單純的湧浪。"
+    },
+    {
+      "id": 953,
+      "source": "Starts high, fades into a low hum.",
+      "target": "以高頻起振，隨後漸弱並轉化為低沉的嗡鳴。"
+    },
+    {
+      "id": 966,
+      "source": "Step 5: Immersion & Continuous Textures",
+      "target": "步驟 5：沉浸感與持續質感"
+    },
+    {
+      "id": 1063,
+      "source": "Tuned for trackpad & chassis LRA haptics",
+      "target": "專為觸控板與機身 LRA 觸覺回饋調校"
+    },
+    {
+      "id": 1088,
+      "source": "Urgent repeating cardiac 'lub-dub' rhythm in sync with screen warnings below 20% health.",
+      "target": "生命值低於 20% 時，與螢幕警告同步的急促重複雙擊心跳節奏 ('lub-dub')。"
+    },
+    {
+      "id": 1138,
+      "source": "With this turned off, navigation, edge bumps, radial wheels, tab switches, and popups produce no haptics and unhook from the interface to save processing.",
+      "target": "關閉此項後，導覽、邊緣碰撞、環形選單、分頁標籤切換與彈出視窗將不再產生觸覺震動，並會解除介面掛鉤 (Unhook) 以節省系統運算資源。"
+    },
+    {
+      "id": 1141,
+      "source": "World & Discovery Haptics",
+      "target": "世界與探索觸覺震動"
+    }
+  ]
+}

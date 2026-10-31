@@ -1,0 +1,548 @@
+{
+  "items": [
+    {
+      "source": "100% stripped of footsteps, weather, swimming, flight, loot, quest, and UI noise",
+      "target": "100% stripped（完全过滤）脚步声、天气、游泳、飞行、拾取、任务和界面杂音"
+    },
+    {
+      "source": "A bright tick when something you could interact with — an NPC, a node, a door — comes under your reticle.",
+      "target": "当可交互对象（NPC、采集点、门等）进入你的准星时，产生清脆的提示震动。"
+    },
+    {
+      "source": "A bright tick when the weather changes.",
+      "target": "当天气发生变化时，产生清脆的提示震动。"
+    },
+    {
+      "source": "A clear tactical chime when a waypoint ping pin is placed on the terrain or map.",
+      "target": "当在地形或地图上放置路径点标记时，产生清晰明确的战术提示鸣响。"
+    },
+    {
+      "source": "A continuous gait texture while moving — footfalls on foot, hoofbeats mounted.",
+      "target": "移动时产生持续的步态纹理——步行时的脚步踏击，骑乘时的马蹄踏鸣。"
+    },
+    {
+      "source": "A continuous texture underwater that intensifies as your breath depletes.",
+      "target": "水下产生的持续材质纹理，并随着剩余呼吸消耗而逐渐增强。"
+    },
+    {
+      "source": "A falling pulse when the radial menu closes.",
+      "target": "当轮盘菜单关闭时，产生渐弱的震动脉冲。"
+    },
+    {
+      "source": "A firm impact as your flight path mount touches down at your destination.",
+      "target": "当飞行路线坐骑降落在目的地着陆时，产生稳健的撞击震动。"
+    },
+    {
+      "source": "A gentle, steady texture for the duration of a taxi flight.",
+      "target": "乘坐飞行坐骑的整个飞行期间，产生平缓稳定的材质纹理。"
+    },
+    {
+      "source": "A heartbeat-like warning when your breath meter drops below a quarter, underwater.",
+      "target": "在水下当呼吸条降至四分之一以下时，产生类似心跳的警示震动。"
+    },
+    {
+      "source": "A heavy, suffocating thud each time you take damage from drowning underwater.",
+      "target": "在水下每次受到溺水伤害时，产生沉重窒息的沉闷重击。"
+    },
+    {
+      "source": "A light tick the instant you jump or start a Skyriding ascend.",
+      "target": "起跳或开始驭龙术/天空飞跃升空的瞬间，产生轻微的提示跳动。"
+    },
+    {
+      "source": "A light tick when you land after a short fall or jump.",
+      "target": "跳跃或短距离下落着陆时，产生轻微的提示跳动。"
+    },
+    {
+      "source": "A near-subliminal sense of being in water, for as long as you are — buoyancy rather than effort.",
+      "target": "只要处于水中，就会产生一种若有若无的水体存在感——是浮力而非划水做功。"
+    },
+    {
+      "source": "A sharp impact when you land after a long fall.",
+      "target": "长距离高处跌落着陆时，产生剧烈的撞击震动。"
+    },
+    {
+      "source": "A soft release tick when stepping out of auto-attack melee range of your target.",
+      "target": "脱离目标的自动攻击近战范围时，产生柔和的脱离提示跳动。"
+    },
+    {
+      "source": "A soft tick when you dismount.",
+      "target": "下马时产生柔和的提示跳动。"
+    },
+    {
+      "source": "A strong impulse of thrust as your flight path mount launches into the air.",
+      "target": "当飞行路线坐骑腾空起飞时，产生强劲的推力脉冲。"
+    },
+    {
+      "source": "A subtle tick when stepping within auto-attack melee range of your target.",
+      "target": "进入目标的自动攻击近战范围时，产生微妙的提示跳动。"
+    },
+    {
+      "source": "A very light tick when a friendly unit comes under your reticle.",
+      "target": "当友方单位进入你的准星时，产生极轻微的提示跳动。"
+    },
+    {
+      "source": "A very light tick when something you could attack comes under your reticle.",
+      "target": "当可攻击目标进入你的准星时，产生极轻微的提示跳动。"
+    },
+    {
+      "source": "Ambient weather, world dialogs, merchant/mail",
+      "target": "环境天气、世界对话、商人/邮件"
+    },
+    {
+      "source": "Asymmetric oceanic gravity swells and coastal wave surges while swimming in the sea.",
+      "target": "在海中游泳时产生非对称的海洋重力涌浪与海岸波浪起伏。"
+    },
+    {
+      "source": "Base strength of rain drops on the light motor.",
+      "target": "轻震马达上雨滴击打的基础强度。"
+    },
+    {
+      "source": "Bracketed by PLAYER_CONTROL_LOST/GAINED filtered to UnitOnTaxi — those events also fire for other control-loss cases (e.g. fear), filtered out here.",
+      "target": "由 PLAYER_CONTROL_LOST/GAINED 事件界定，并通过 UnitOnTaxi 过滤——这些事件也会在其他失控情况（如恐惧）下触发，此处已将其过滤排除。"
+    },
+    {
+      "source": "Breath Depletion",
+      "target": "呼吸消耗"
+    },
+    {
+      "source": "Breath depth",
+      "target": "呼吸深度"
+    },
+    {
+      "source": "Breath rate (Hz)",
+      "target": "呼吸频率 (Hz)"
+    },
+    {
+      "source": "Breath texture stays completely silent (no ambient, no gasps) while breath remaining is above this — requested live 2026-09-16 as ~70% breath remaining, well before real danger, so the calm bradycardic heartbeat has room to establish before anything steepens.",
+      "target": "当剩余呼吸高于此阈值时，呼吸纹理保持完全静音（无环境水声，无喘息）——根据 2026-09-16 实机测试需求设为约 70% 剩余呼吸，远早于真正危险发生之前，以便在心率陡增之前让平缓的心动过缓心跳有足够铺垫空间。"
+    },
+    {
+      "source": "C_Weather/WEATHER_CHANGED is new as of Patch 12.1.5 and its exact return shape hasn't been verified in-game here — this fires on any change, not filtered to storm-type weather yet.",
+      "target": "C_Weather/WEATHER_CHANGED 为 12.1.5 补丁新增接口，其实机返回值结构在此处尚未完全验证——目前会在任何天气变化时触发，暂未单独筛选暴风雨类天气。"
+    },
+    {
+      "source": "Cast flow, flight & skyriding, swimming, weather changes, quest and item haptics",
+      "target": "施法节奏、飞行与驭龙术、游泳、天气变化、任务与物品触觉"
+    },
+    {
+      "source": "Continuous atmospheric vibration matching the current weather (rain, snow, sandstorm) and its intensity.",
+      "target": "匹配当前天气（雨、雪、沙尘暴）及其强度的持续环境氛围震动。"
+    },
+    {
+      "source": "Cycles per second, if you turn the swell on below. 0.15 is roughly one slow rise and fall every seven seconds. Deliberately far slower than the stroke rate above — two layers sharing a frequency read as one sensation instead of two.",
+      "target": "若在下方开启涌浪，此项设定每秒周期数。0.15 约等于每 7 秒一次缓慢的起伏升降。刻意设定为远慢于上方的划水频率——若两层触感共享相同频率，会被感知为一个整体而非两个独立的层次。"
+    },
+    {
+      "source": "Delete the profile in use. Every rule naming it is cleared, so those scopes fall through to the next one down. Built-in profiles can't be deleted.",
+      "target": "删除当前使用的配置文件。所有引用该配置文件的规则都将被清除，相应作用域将回退至下一级配置。内置预设配置文件无法删除。"
+    },
+    {
+      "source": "Directory of all %d vibration cues in Pulse, in alphabetical order. Click any entry to jump directly to its controls.",
+      "target": "Pulse 中全部 %d 个震动提示的索引目录，按字母顺序排列。点击任意条目可直接跳转至其控制选项。"
+    },
+    {
+      "source": "Dismounted",
+      "target": "下马"
+    },
+    {
+      "source": "Dragonriding / Skyriding thrust",
+      "target": "驭龙术 / 天空飞跃推力"
+    },
+    {
+      "source": "Drowning damage",
+      "target": "溺水伤害"
+    },
+    {
+      "source": "Drowning heartbeat interval",
+      "target": "溺水心跳间隔"
+    },
+    {
+      "source": "Drowning panic peak",
+      "target": "溺水恐慌峰值"
+    },
+    {
+      "source": "Effort only, routed by default to the heavy motor alongside \"In water\", so the two merge into natural fluid resistance with clean glide coast-down between strokes. Turn on \"Own motor\" only if you want the stroke isolated on the high-frequency motor. Scales on your speed relative to your own swim speed, so it is silent while floating.",
+      "target": "仅划水做功，默认与“水中浮力”一同路由至重震马达，使二者融合成自然的流体阻力，并在每次划水之间伴随清爽的滑行减速感。仅当你希望将划水感隔离至轻震马达时，才开启“独立马达”。根据相对于自身游泳速度的移速缩放，因此静止漂浮时保持静音。"
+    },
+    {
+      "source": "Fires for every interaction window, including the ones with their own opening cue. Untested.",
+      "target": "在打开任何交互窗口时触发，包括那些拥有专属打开提示的窗口。未测试。"
+    },
+    {
+      "source": "Fires from GUILDBANKFRAME_OPENED or from the interaction manager's GuildBanker type, whichever this client sends. Untested.",
+      "target": "由 GUILDBANKFRAME_OPENED 或交互管理器的 GuildBanker 类型触发，取决于当前客户端发送哪个事件。未测试。"
+    },
+    {
+      "source": "Fires on BANKFRAME_CLOSED, GUILDBANKFRAME_CLOSED, or interaction manager banker hide.",
+      "target": "在 BANKFRAME_CLOSED、GUILDBANKFRAME_CLOSED 或交互管理器银行职员隐藏时触发。"
+    },
+    {
+      "source": "Fires on taxi takeoff when control is lost to the flight master mount.",
+      "target": "当控制权交由飞行管理员坐骑并起飞时触发。"
+    },
+    {
+      "source": "Fires when a class or profession trainer's window opens.",
+      "target": "当职业或专业训练师窗口打开时触发。"
+    },
+    {
+      "source": "First steepening point — heart rate climbs faster below this than it did between dangerStartThreshold and here. Requested live 2026-09-16 as ~40% breath remaining.",
+      "target": "第一级心率攀升拐点——呼吸低于此值后，心率上升速度快于 dangerStartThreshold 与此阈值之间的阶段。根据 2026-09-16 实机测试需求设为约 40% 剩余呼吸。"
+    },
+    {
+      "source": "Flight Path Cruise",
+      "target": "飞行路线巡航"
+    },
+    {
+      "source": "Flight path landing",
+      "target": "飞行路线着陆"
+    },
+    {
+      "source": "Flight path takeoff",
+      "target": "飞行路线起飞"
+    },
+    {
+      "source": "Footfalls & Mount Gait",
+      "target": "脚步与骑乘步态"
+    },
+    {
+      "source": "Footfalls and gait",
+      "target": "脚步与步态"
+    },
+    {
+      "source": "Footstep pacing, mount travel, gliding, weather, soft-target interaction, weapon draw/release",
+      "target": "脚步节奏、骑乘行进、滑翔、天气、软目标交互、拔出/收回武器"
+    },
+    {
+      "source": "Footsteps, mount strides, weather, water presence, looting, quest dialogs, tracking",
+      "target": "脚步声、骑乘步伐、天气、水体存在感、拾取、任务对话、追踪"
+    },
+    {
+      "source": "Footsteps, weather, swimming, quest dialogs, merchant/mail, world interaction",
+      "target": "脚步声、天气、游泳、任务对话、商人/邮件、世界交互"
+    },
+    {
+      "source": "Friendly target under reticle",
+      "target": "准星下的友方目标"
+    },
+    {
+      "source": "Gentle crystalline drift during snowfall.",
+      "target": "降雪时产生晶莹轻柔的飘雪触感。"
+    },
+    {
+      "source": "Hard landing",
+      "target": "重摔着陆"
+    },
+    {
+      "source": "Hostile target under reticle",
+      "target": "准星下的敌方目标"
+    },
+    {
+      "source": "How long this motor takes to fall back toward silence. Too high and consecutive taps blur into one buzz; too low and sustained textures sound chopped. 0.028 reproduces the engine's old behaviour at 60fps.",
+      "target": "该马达衰减回静音所需的时间。数值过高会导致连续轻击粘连成一片蜂鸣；数值过低会导致持续纹理听起来断断续续。0.028 可在 60fps 下复现引擎此前的行为特性。"
+    },
+    {
+      "source": "How often the hum swells, in cycles per second. 0.30 is roughly one slow breath every three seconds.",
+      "target": "蜂鸣起伏膨胀的频率（以每秒周期数计）。0.30 约等于每三秒一次缓慢的呼吸起伏。"
+    },
+    {
+      "source": "Hydrodynamic water drag that scales as you swim forward through rivers and seas.",
+      "target": "在江河与大海中向前游泳时，随速度变化的流体水动力阻力。"
+    },
+    {
+      "source": "Immersive open-world adventures. Terrain footsteps, swimming, mount travel, weather, item discovery, and quest interactions.",
+      "target": "沉浸式开放世界冒险。包含地形脚步声、游泳、骑乘行进、天气、物品发现与任务交互。"
+    },
+    {
+      "source": "In Water (Buoyancy)",
+      "target": "水中（浮力）"
+    },
+    {
+      "source": "In water",
+      "target": "水中"
+    },
+    {
+      "source": "Intensity of choking pulses when breath runs out underwater and suffocation damage begins.",
+      "target": "水下呼吸耗尽并开始受到窒息伤害时，窒息脉冲的强度。"
+    },
+    {
+      "source": "Interactable under reticle",
+      "target": "准星下的可交互对象"
+    },
+    {
+      "source": "Interaction window closed",
+      "target": "交互窗口关闭"
+    },
+    {
+      "source": "Jumped",
+      "target": "跳跃"
+    },
+    {
+      "source": "Late breath threshold",
+      "target": "末期呼吸阈值"
+    },
+    {
+      "source": "Layers with \"Underwater breath texture\" when breath runs out. Fires on suffocation damage while submerged.",
+      "target": "呼吸耗尽时与“水下呼吸纹理”叠加生效。在潜水受到窒息伤害时触发。"
+    },
+    {
+      "source": "Light rain patter, crisp snow rustle, and deep desert sandstorm rumbles.",
+      "target": "轻柔的雨滴敲打、清脆的飘雪沙沙声与荒漠沙尘暴深沉的轰鸣。"
+    },
+    {
+      "source": "Low on breath",
+      "target": "呼吸不足"
+    },
+    {
+      "source": "Low, irregular micro-pulses — rain, patter.",
+      "target": "低沉、不规则的微脉冲——雨丝、雨滴敲打。"
+    },
+    {
+      "source": "Mid breath threshold",
+      "target": "中期呼吸阈值"
+    },
+    {
+      "source": "Mount weight",
+      "target": "坐骑重量感"
+    },
+    {
+      "source": "Mounted up",
+      "target": "上马"
+    },
+    {
+      "source": "Mounts & travel",
+      "target": "坐骑与旅行"
+    },
+    {
+      "source": "Multiplies gait strength while mounted, on top of the racial mount's own weight. A kodo is already heavier than a hawkstrider before this touches it.",
+      "target": "在种族坐骑自身重量的基础上，倍增骑乘时的步态强度。在此参数生效前，科多兽的体感本就比陆行鸟更沉重。"
+    },
+    {
+      "source": "New setups enable casting, crafting, low-health and breath effects. Other effects start off; your saved choices are kept.",
+      "target": "新配置将启用施法、制造、低生命值与呼吸效果。其他效果默认关闭；你已保存的自定义选择将予以保留。"
+    },
+    {
+      "source": "No legacy event for this one — it arrives only through the interaction manager, so it is silent if this client does not send that. Untested.",
+      "target": "该事件无传统旧版事件对应——仅通过交互管理器送达，因此若当前客户端未发送该事件则保持静音。未测试。"
+    },
+    {
+      "source": "Occurrence only, deliberately near-subliminal so it doesn't compete with \"Levelled up\". No size scaling: the amount would need UnitXP diffing and isn't worth the bookkeeping for a cue this quiet.",
+      "target": "仅单次触发事件，刻意调校为若有若无以避免与“升级”提示相冲突。无数值缩放：计算经验量需要对比 UnitXP 差异，对于如此轻微静音的提示而言不值得增加此项性能开销。"
+    },
+    {
+      "source": "Off by default, layers with \"Low health\" rather than replacing it — same relationship as breathWarning/breathTexture. Same mechanism and same fullscreen-panel caveat as lowHealthWarning above. The shape itself is a code-level switch (Modules/Health.lua's HEARTBEAT_STYLE: smooth glow, flash-synced lub-dub, or an independently-timed lub-dub), not exposed here — flash-synced won out by feel. The knock's own gap/duration/intensity used to be four sliders here; fixed as plain constants in Modules/Health.lua once this exact combination was confirmed to feel right (2026-09-15).",
+      "target": "默认关闭，与“低生命值”叠加生效而非取而代之——类似于 breathWarning 与 breathTexture 的关系。机制与上述 lowHealthWarning 完全相同，并受相同的全屏面板限制。震动形态本身是代码级开关（Modules/Health.lua 的 HEARTBEAT_STYLE：平滑发光、闪烁同步的“怦-怦”心跳，或独立计时的“怦-怦”心跳），未在此处公开——根据体感最终采用闪烁同步方案。敲击的心跳间隔/持续时间/强度曾在此处设有四个滑块；在确认该组合体感完美后，已直接固化为 Modules/Health.lua 中的常量（2026-09-15）。"
+    },
+    {
+      "source": "Off by default, layers with \"Low on breath\" rather than replacing it.",
+      "target": "默认关闭，与“呼吸不足”叠加生效而非取而代之。"
+    },
+    {
+      "source": "One cue for all four edges (top, bottom, left, right), observed via SmartNavigation's directional edge callbacks while keeping button selection isolated via polling to prevent execution taint. Standard default is off.",
+      "target": "四条边缘（上、下、左、右）通用的单一提示，通过 SmartNavigation 的方向边缘回调监测，同时按钮选择通过轮询隔离以防止执行污染。标准默认设置处于关闭状态。"
+    },
+    {
+      "source": "Only audible if \"Riding a flight path\" is also enabled on its own tab.",
+      "target": "仅当其所属标签页中的“乘坐飞行路线”同时启用时方可感知。"
+    },
+    {
+      "source": "Only while mounted",
+      "target": "仅限骑乘时"
+    },
+    {
+      "source": "Overall strength of each footfall before speed and state scaling.",
+      "target": "在根据移速和状态缩放之前，每次脚步踏击的整体强度。"
+    },
+    {
+      "source": "PLAYER_SOFT_ENEMY_CHANGED, an occurrence-only event with no payload at all — there is nothing here to come back secret. Fires on the soft target changing, which is not the same as actually targeting something; that's still \"Target changed\" on the Target & Focus page. Expect this to fire often while sweeping the camera through a crowd.",
+      "target": "PLAYER_SOFT_ENEMY_CHANGED，无任何附加参数的纯单次触发事件——此处没有任何涉密数据。在软目标发生变更时触发，这与实际选定目标不同；实际选定目标仍由“目标与焦点”页面上的“目标已变更”负责。在人群中快速转动镜头时，预计该事件会频繁触发。"
+    },
+    {
+      "source": "Pans left and right footfalls across the Low and High motors so the stride walks across your hands. Turn off for centered dual-motor footfalls.",
+      "target": "将左右脚步踏击声像在重震与轻震马达之间平移分配，使步伐在双手掌心间交替踏过。关闭此项可获得居中的双马达同步脚步震动。"
+    },
+    {
+      "source": "Personal damage clutter, footsteps, weather, world dialogs",
+      "target": "自身伤害干扰、脚步声、天气、世界对话"
+    },
+    {
+      "source": "Ping placed",
+      "target": "已放置标记"
+    },
+    {
+      "source": "Present whether or not you are moving, and it does not read your speed at all, so it keeps working while speed comes back as a secret value. Drives the SLOW motor, whose large mass is what buoyancy actually feels like, leaving the sharp one to \"Swimming resistance\" — so the two never collide. Floating gives you this alone.",
+      "target": "无论移动与否均持续存在，且完全不读取移动速度，因此即便速度作为机密值返回时也能正常工作。主要驱动慢速重震马达（其较大的转动惯量能真实模拟水体浮力），将轻快马达留给“游泳阻力”——使二者互不冲突。静止漂浮时仅呈现此项效果。"
+    },
+    {
+      "source": "Puts the stroke on the sharp motor. Turn off (recommended) to route swimming resistance to the heavy motor alongside ambient water, producing deep hydrodynamic drag instead of high-frequency motor buzz.",
+      "target": "将划水动作分配至轻震马达。关闭此项（推荐）可将游泳阻力与环境水体一同路由至重震马达，营造深沉的水动力拖拽感，而非高频马达的蜂鸣感。"
+    },
+    {
+      "source": "Rain intensity",
+      "target": "降雨强度"
+    },
+    {
+      "source": "Rate of rain drops and micro-flutter patter.",
+      "target": "雨滴敲击与细密颤动轻拍的频率。"
+    },
+    {
+      "source": "Reads C_Weather.GetCurrentWeather() in WoW Forever. Modulates micro-flutter for rain, slow crystalline drift for snow, and dual rumble for sandstorms, scaled by weather intensity.",
+      "target": "读取 WoW Forever 中的 C_Weather.GetCurrentWeather()。根据天气强度按比例调制：下雨表现为细密微颤，下雪表现为缓慢晶莹飘荡，沙尘暴表现为双马达深沉轰鸣。"
+    },
+    {
+      "source": "Restricts the gait to mounted travel, where a sustained texture is most welcome. Turn off to feel your own footsteps too — try it before leaving it on.",
+      "target": "将步态限制为骑乘行进，在骑乘状态下持续的材质纹理体感最为舒适。关闭此项亦可感知自身的步行脚步声——在决定常开之前不妨先试用体验。"
+    },
+    {
+      "source": "Rhythmic footsteps on foot and hoofbeat cadence while mounted, weighted by armor class.",
+      "target": "徒步时的节奏性脚步与骑乘时的马蹄踏鸣韵律，并根据护甲类型赋予不同重量感。"
+    },
+    {
+      "source": "Riding a flight path",
+      "target": "乘坐飞行路线"
+    },
+    {
+      "source": "Rising heartbeat pulse that quickens and intensifies as your breath meter runs low underwater.",
+      "target": "水下呼吸量偏低时逐渐增强的心跳脉冲，随着呼吸耗尽而加快并加剧。"
+    },
+    {
+      "source": "Same fall-duration proxy as \"Landed\", just a higher threshold and a heavier mode.",
+      "target": "与“着陆”采用相同的下落时长估算机制，仅具有更高的触发阈值和更厚重的震动模式。"
+    },
+    {
+      "source": "Sandstorm / Gale intensity",
+      "target": "沙尘暴 / 大风强度"
+    },
+    {
+      "source": "Scored by how long you were airborne, not by fall damage — that number is unreadable. A short hop stays silent below the threshold.",
+      "target": "根据滞空时间长短进行评估，而非根据坠落伤害——该数值无法直接读取。短距离小跳低于阈值时保持静音。"
+    },
+    {
+      "source": "Second-harmonic Stokes drift shaping. 0.0 is a pure symmetric sine wave; higher values create a sharp, steep crest and an elongated trough, matching real fluid gravity waves.",
+      "target": "二阶谐波斯托克斯漂移波形塑造。0.0 为纯对称正弦波；数值越高会产生尖锐陡峭的波峰与拉长平缓的波谷，贴近真实的流体重力波。"
+    },
+    {
+      "source": "Seconds between drowning damage pulses while submerged with zero breath.",
+      "target": "潜水呼吸归零后，溺水伤害脉冲之间的间隔秒数。"
+    },
+    {
+      "source": "Simulates real fluid swell physics via harmonic wave synthesis: a slow, rhythmic rise into a steep wave crest, followed by a gentle glide into the trough. Driven primarily by the heavy slow motor with high-motor crest spray at peak amplitude. Automatically targets ocean and coastal waters unless configured to run in all swimming water.",
+      "target": "通过谐波合成模拟真实流体涌浪物理效果：缓慢、有节奏地升至陡峭波峰，随后平稳滑入波谷。主要由慢速重震马达驱动，在振幅峰值处辅以轻震马达呈现浪花飞溅感。默认自动针对海洋与沿海水域生效，除非配置为在所有游泳水体中生效。"
+    },
+    {
+      "source": "Skyriding / Gliding Thrust",
+      "target": "驭龙术 / 滑翔推力"
+    },
+    {
+      "source": "Snow intensity",
+      "target": "降雪强度"
+    },
+    {
+      "source": "Step 3: World & Target Interactions",
+      "target": "步骤 3：世界与目标交互"
+    },
+    {
+      "source": "Strength at full swimming speed. Replaces the old swimLowPeak/swimHighPeak pair, which were blended with max() and were therefore algebraically one knob: the smaller never did anything.",
+      "target": "全速游泳时的震动强度。替代了过去的 swimLowPeak/swimHighPeak 组合，旧方案通过 max() 混合，代数上实际等同于单个旋钮：较小的那个数值完全不起作用。"
+    },
+    {
+      "source": "Strength of abrasive gusts and heavy windstorms.",
+      "target": "刺骨狂风与强沙尘暴的震动强度。"
+    },
+    {
+      "source": "Strokes per second at full speed. Swimming faster strokes faster, not merely harder — the old version only ever changed amplitude.",
+      "target": "全速游泳时每秒的划水次数。游得更快时划水频率亦会提升，而非仅仅增强力度——旧版本此前仅改变了震动幅度。"
+    },
+    {
+      "source": "Subtle hydrostatic floating texture when swimming or bobbing in bodies of water.",
+      "target": "在水体中游泳或漂浮时微妙的静水浮力纹理。"
+    },
+    {
+      "source": "Swimming Resistance",
+      "target": "游泳阻力"
+    },
+    {
+      "source": "Swimming resistance",
+      "target": "游泳阻力"
+    },
+    {
+      "source": "Tempo at zero breath remaining — the panic end of the climb, reached only in the final stretch below lateBreathThreshold.",
+      "target": "剩余呼吸归零时的节奏——心率攀升的恐慌极点，仅在低于 lateBreathThreshold 的最后阶段触发。"
+    },
+    {
+      "source": "Tempo from dangerStartThreshold down to midBreathThreshold — a real bradycardic rate (the diving reflex actually slows the heart at first, requested live 2026-09-16), not an elevated one.",
+      "target": "从 dangerStartThreshold 降至 midBreathThreshold 期间的节奏——真实的心动过缓速率（潜水反射起初实际上会减慢心率，根据 2026-09-16 实机测试需求调整），而非心率上升。"
+    },
+    {
+      "source": "Temporarily disabled: UNIT_PING_PIN_ADDED is registration-restricted by Blizzard on WoW Forever / 12.x.",
+      "target": "暂时禁用：在 WoW Forever / 12.x 上，暴雪对 UNIT_PING_PIN_ADDED 限制了注册权限。"
+    },
+    {
+      "source": "The catch-all. Enum.PlayerInteractionType has 81 values and most are retail systems a classic-shaped roster never meets; anything unmapped lands here rather than being silent, which also means a window type added to the client later is covered with no change to Pulse. Turn it on with /pulse debug to find out which types your client actually sends. Untested.",
+      "target": "通用兜底项。Enum.PlayerInteractionType 拥有 81 个枚举值，其中大多数属于经典旧世框架从未涉及的正式服系统；任何未明确映射的类型都会归入此处而非保持静音，这也意味着后续客户端若新增窗口类型，无需修改 Pulse 即可自动覆盖。可通过 /pulse debug 开启以查明你的客户端实际发送了哪些类型。未测试。"
+    },
+    {
+      "source": "The effort of pulling yourself through water — a rhythmic hydrodynamic stroke that quickens and hardens with movement speed.",
+      "target": "在水中划水前行的做功感——一种有节奏的流体水动力划击，随着移动速度加快而变得更为迅捷与坚实。"
+    },
+    {
+      "source": "The fallback for any character with no rule of its own — including characters you have not logged into yet. Set this to the profile you mostly want, then override the handful of characters that differ.",
+      "target": "没有任何专属规则的角色的兜底配置——包含你尚未登录过的角色。建议将其设为你最常用的主要配置文件，随后只需为少数特殊角色单独覆盖规则即可。"
+    },
+    {
+      "source": "Trainer window opened",
+      "target": "训练师窗口已打开"
+    },
+    {
+      "source": "Tuned for heavy chassis damping (+10% Low motor gain)",
+      "target": "针对重机身阻尼进行调校（+10% 重震马达增益）"
+    },
+    {
+      "source": "Two solid hits when you mount.",
+      "target": "上马时产生两次扎实的撞击感。"
+    },
+    {
+      "source": "Underwater boost",
+      "target": "水下增益"
+    },
+    {
+      "source": "Underwater breath texture",
+      "target": "水下呼吸纹理"
+    },
+    {
+      "source": "Untested: this fires for a Skyriding ascend too, on top of glideThrust's own continuous texture easing in right after — may read as a clean \"liftoff, then flight\" or as a double-hit. Try it before assuming either.",
+      "target": "未测试：该项在驭龙术升空时亦会触发，紧接着叠加 glideThrust 自身的持续纹理平滑介入——体感上可能是干净利落的“起飞后飞行”，也可能表现为双重撞击。在妄下定论前不妨亲自体验。"
+    },
+    {
+      "source": "Water presence",
+      "target": "水体存在感"
+    },
+    {
+      "source": "Weather Atmosphere",
+      "target": "天气氛围"
+    },
+    {
+      "source": "Weather changed",
+      "target": "天气已变更"
+    },
+    {
+      "source": "Weather texture",
+      "target": "天气纹理"
+    },
+    {
+      "source": "Weather, footsteps, loot popups, quest dialogs, merchant/mail",
+      "target": "天气、脚步声、拾取弹窗、任务对话、商人/邮件"
+    },
+    {
+      "source": "When set to 1, restricts the rolling swell to ocean bodies, coasts, seas, and deep-water fatigue zones (English clients only; non-English clients play swell in all swimming water). Set to 0 to feel ocean swells in all swimming water.",
+      "target": "设置为 1 时，仅在海洋、海岸、海域与深水力竭区域呈现起伏涌浪（仅限英文客户端；非英文客户端将在所有游泳水体中播放涌浪）。设置为 0 时可在所有游泳水体中感受海洋涌浪。"
+    },
+    {
+      "source": "World dialogs, ambient weather, merchant/mail",
+      "target": "世界对话、环境天气、商人/邮件"
+    },
+    {
+      "source": "|cff38BDF8[A] Adjust Value|r  •  |cffffffff[→] Jump to Feel Button|r",
+      "target": "|cff38BDF8[A] 调整数值|r  •  |cffffffff[→] 跳转至体感按钮|r"
+    }
+  ]
+}

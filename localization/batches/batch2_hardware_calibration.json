@@ -1,0 +1,542 @@
+{
+  "batch_id": 2,
+  "name": "Hardware Presets & Calibration",
+  "count": 107,
+  "items": [
+    {
+      "id": 30,
+      "source": "1. Controller",
+      "signature": ""
+    },
+    {
+      "id": 38,
+      "source": "8BitDo (Ultimate / Pro 2)",
+      "signature": ""
+    },
+    {
+      "id": 39,
+      "source": "8BitDo / Other XInput",
+      "signature": ""
+    },
+    {
+      "id": 47,
+      "source": "A bright tick when the game switches between controller and mouse-and-keyboard.",
+      "signature": ""
+    },
+    {
+      "id": 49,
+      "source": "A bright tick when you commit to a radial segment by letting the stick return to centre.",
+      "signature": ""
+    },
+    {
+      "id": 64,
+      "source": "A distinct tap when holding the controller modifier to target party or raid members.",
+      "signature": ""
+    },
+    {
+      "id": 68,
+      "source": "A falling pulse when the controller hands control back to your character.",
+      "signature": ""
+    },
+    {
+      "id": 101,
+      "source": "A rising pulse when the controller radial menu opens.",
+      "signature": ""
+    },
+    {
+      "id": 102,
+      "source": "A rising pulse when the controller starts driving a UI panel instead of your character.",
+      "signature": ""
+    },
+    {
+      "id": 116,
+      "source": "A short, sharp tick when controller focus runs into the edge of a list or grid and can't go further.",
+      "signature": ""
+    },
+    {
+      "id": 139,
+      "source": "A tactile click when native gamepad or action targeting triggers an interaction with the soft target.",
+      "signature": ""
+    },
+    {
+      "id": 154,
+      "source": "A very light tick each time controller focus moves to a different interface element.",
+      "signature": ""
+    },
+    {
+      "id": 157,
+      "source": "A very light tick per segment as you sweep the stick around the radial — the wheel gets detents you can feel.",
+      "signature": ""
+    },
+    {
+      "id": 163,
+      "source": "ACTIONBAR_PAGE_CHANGED. Useful on a controller specifically, where the bar you're on isn't always where your eyes are. Does not cover the vehicle/override/possess bar swaps, which are their own events and would want their own cue if they turn out to matter.",
+      "signature": ""
+    },
+    {
+      "id": 194,
+      "source": "Apply the \"%s\" starting point? This overwrites every motor's strength, floor, timing and curve with that controller's values — any trimming you have already done is lost.",
+      "signature": "s"
+    },
+    {
+      "id": 195,
+      "source": "Asks the controller what it is and suggests a row from the list above. Only prints a suggestion — it never selects or applies anything for you.",
+      "signature": ""
+    },
+    {
+      "id": 206,
+      "source": "Balances this motor against the others. Raise it if this motor is the weak one on your controller, lower it if it drowns everything else out. This is the knob the old \"Low Motor Only\"/\"High Motor Only\" schemas were being misused for — those still exist, but for a motor that is actually dead, not merely quieter.",
+      "signature": ""
+    },
+    {
+      "id": 220,
+      "source": "Both rumble motors work normally. Start here, then balance their strength on the Controller calibration page.",
+      "signature": ""
+    },
+    {
+      "id": 221,
+      "source": "Bound to the right-stick press in Blizzard's own radial.",
+      "signature": ""
+    },
+    {
+      "id": 228,
+      "source": "Brings Blizzard's native gamepad interface alive under your thumbs:\n• |cffffffffRadial & Menus:|r Soft tactile micro-taps as your stick moves across buttons and tabs.\n• |cffffffffWindows:|r Physical confirmation when opening bags, merchant shops, banks, and mail.\n• |cffffffffDialogs & Prompts:|r Tactile prompt when NPC interaction windows or quest frames appear.",
+      "signature": ""
+    },
+    {
+      "id": 236,
+      "source": "Captures the active vibration level from a running Ramp sweep and writes it directly to this motor's Breakaway floor slider below, then stops the ramp. Press this the moment you first feel the motor move!",
+      "signature": ""
+    },
+    {
+      "id": 251,
+      "source": "Choose whether gamepad menu navigation and group communication produce controller vibration.",
+      "signature": ""
+    },
+    {
+      "id": 253,
+      "source": "Clears any vibration still in flight when the controller disconnects.",
+      "signature": ""
+    },
+    {
+      "id": 276,
+      "source": "Controller",
+      "signature": ""
+    },
+    {
+      "id": 277,
+      "source": "Controller Interactions",
+      "signature": ""
+    },
+    {
+      "id": 278,
+      "source": "Controller UI",
+      "signature": ""
+    },
+    {
+      "id": 279,
+      "source": "Controller UI & Window Feedback",
+      "signature": ""
+    },
+    {
+      "id": 280,
+      "source": "Controller battery low",
+      "signature": ""
+    },
+    {
+      "id": 281,
+      "source": "Controller calibration",
+      "signature": ""
+    },
+    {
+      "id": 282,
+      "source": "Controller connected",
+      "signature": ""
+    },
+    {
+      "id": 283,
+      "source": "Controller disconnected",
+      "signature": ""
+    },
+    {
+      "id": 284,
+      "source": "Controllers differ in which motors they have, and the game never reports whether a vibration actually happened. Nothing can detect this for you, so you have to feel it.\n\nPick a mode from the **Mode to test** dropdown near the top of the panel and press **Play**. Try a few — sharp ones, sustained ones, textures. Pay attention to which ones you can feel clearly, which are faint, and which do not arrive at all.\n\nIf some were missing or silent, check two places:\n\nThe **Vibration schema** dropdown near the top of the panel. A schema decides which motor each pulse drives, and swapping it works around a controller that only drives one of them.\n\nThe **Controller calibration** page. Real motors need a minimum amount of power just to start spinning (their breakaway floor). If quiet cues vanish entirely, use the **Ramp** tool there to calibrate your motor floors and balance their strength.",
+      "signature": ""
+    },
+    {
+      "id": 341,
+      "source": "Drive this motor at half power for a second and a half, bypassing every setting on this page and every schema. If you feel nothing here, this channel does not work on your controller and no amount of tuning below will change that.",
+      "signature": ""
+    },
+    {
+      "id": 348,
+      "source": "DualSense (PS5)",
+      "signature": ""
+    },
+    {
+      "id": 349,
+      "source": "DualShock 4 (PS4)",
+      "signature": ""
+    },
+    {
+      "id": 372,
+      "source": "Engine defaults without device-specific calibration",
+      "signature": ""
+    },
+    {
+      "id": 380,
+      "source": "Every cue, its intensity and \"feels like\" shape, your profiles, per-mode motor and timing tuning, controller calibration, the mode tester and the guide — all of it is in Pulse's own window.\n\nIt draws itself rather than living as pages in this panel, which is what lets it build only what you are looking at instead of every control in the addon at every login.",
+      "signature": ""
+    },
+    {
+      "id": 417,
+      "source": "Fires once when the controller's battery drops into its low or critical range.",
+      "signature": ""
+    },
+    {
+      "id": 427,
+      "source": "Fires when a controller connects.",
+      "signature": ""
+    },
+    {
+      "id": 460,
+      "source": "Fires when the element controller focus is currently on becomes disabled.",
+      "signature": ""
+    },
+    {
+      "id": 496,
+      "source": "First: switch controller support on",
+      "signature": ""
+    },
+    {
+      "id": 562,
+      "source": "How sharply the high motor ramps in with speed. 1 = linear, higher = holds back more until near max speed. Only audible while actually gliding.",
+      "signature": ""
+    },
+    {
+      "id": 592,
+      "source": "Interface released controller focus",
+      "signature": ""
+    },
+    {
+      "id": 594,
+      "source": "Interface took controller focus",
+      "signature": ""
+    },
+    {
+      "id": 607,
+      "source": "Launch the interactive onboarding wizard to configure controller hardware, combat haptics, world feedback, and immersion textures.",
+      "signature": ""
+    },
+    {
+      "id": 643,
+      "source": "Mark floor from ramp",
+      "signature": ""
+    },
+    {
+      "id": 645,
+      "source": "Master switch for all menu, window, tab, and radial controller haptics. Turn off to silence all UI navigation haptics at once while keeping combat and world rumble active.",
+      "signature": ""
+    },
+    {
+      "id": 650,
+      "source": "Menu & controller UI haptics",
+      "signature": ""
+    },
+    {
+      "id": 679,
+      "source": "Nintendo Switch Pro",
+      "signature": ""
+    },
+    {
+      "id": 715,
+      "source": "Overall gasp-knock strength — fixed per beat, not scaled by danger (2026-09-16: a danger-scaled lub/dub risked landing under the controller motor's own minimum activation threshold at low danger, causing missing \"dub\" knocks live). Urgency comes from heartRateCalm/heartRateCritical instead. Only audible if \"Underwater breath texture\" is also enabled on its own tab.",
+      "signature": ""
+    },
+    {
+      "id": 722,
+      "source": "Overwrite every motor's calibration with the selected controller's starting values. Ask first, because this discards any trimming you have already done.",
+      "signature": ""
+    },
+    {
+      "id": 728,
+      "source": "PLAYER_SOFT_TARGET_INTERACTION. Fires when native gamepad/action interact executes on the current soft target.",
+      "signature": ""
+    },
+    {
+      "id": 738,
+      "source": "Passively polled from GamepadRadial:IsShown() to eliminate EventRegistry callback taint during radial menu activation.",
+      "signature": ""
+    },
+    {
+      "id": 739,
+      "source": "Passively polled from GamepadRadial:IsShown(). Picking a segment that opens a panel also closes the radial.",
+      "signature": ""
+    },
+    {
+      "id": 740,
+      "source": "Passively polled from SmartNavigation focus state. Fires when controller navigation gains focus on a UI element.",
+      "signature": ""
+    },
+    {
+      "id": 741,
+      "source": "Passively polled from SmartNavigation focus state. Fires when controller navigation releases focus back to world control.",
+      "signature": ""
+    },
+    {
+      "id": 742,
+      "source": "Passively polled from SmartNavigation's currentButton every 0.05s to eliminate execution taint when gamepad mode is toggled. Fires on real focus changes rather than stick motion. Gated on gamepad UI being active.",
+      "signature": ""
+    },
+    {
+      "id": 745,
+      "source": "Passively polled via GroupTargeting.isTargetingActive to eliminate execution taint when targeting stops or gamepad mode is toggled.",
+      "signature": ""
+    },
+    {
+      "id": 759,
+      "source": "Play this cue exactly as it is configured right now — its own intensity, and its own \"Feels like\" shape if you changed it. Works whether or not the cue is switched on, and needs a connected controller.",
+      "signature": ""
+    },
+    {
+      "id": 760,
+      "source": "Polled from StaticPopup1..4's IsShown() four times a second rather than hooked. StaticPopup_Show is called from all over Blizzard's UI by code that then touches protected frames, and this addon already has one taint incident from exactly that shape (Modules/ControllerUI.lua's ActivateRadial note). Untested.",
+      "signature": ""
+    },
+    {
+      "id": 765,
+      "source": "Produces no vibration — the controller is gone. Turning it off changes nothing you can feel: the engine clears in-flight vibration whenever it loses the device, because it has to.",
+      "signature": ""
+    },
+    {
+      "id": 778,
+      "source": "Pulse is engineered to drive both the Low (heavy counterweight) and High (sharp tick) rumble motors in concert across all supported gamepads.\n\nVibration schemas define how logical haptic roles map to physical motors: **Standard Rumble** routes low-frequency signals to the heavy motor and high-frequency signals to the sharp motor; **High Motor Only** or **Low Motor Only** collapse signals when a motor is mechanically silent; and **Swapped / Inverted** reverses the mapping for custom grips.",
+      "signature": ""
+    },
+    {
+      "id": 780,
+      "source": "Pulse provides purpose-built default profiles engineered for specific roles and activities — browse them on the dedicated **Default profiles** page:\n\n• **Dungeon & Raid Roles** (Tank, Healer, Melee DPS, Caster DPS, Hunter) prioritize high signal-to-noise: threat loss, mitigations, kick windows, and spell completion ticks take priority over ambient clutter.\n• **World Immersion** (Melee, Caster, Ranged) maximizes atmospheric game-feel: footstep weight by armor type, mount strides, swimming resistance, weather, and exploration.\n• **PvP** delivers pure tactical radar with zero ambient distraction.\n\nOn the **Profiles** page, you can configure automatic rules that switch profiles on the fly when you change talent specializations, or create custom copies of any default profile. To protect combat performance, any profile switch requested while fighting is safely deferred until combat ends.",
+      "signature": ""
+    },
+    {
+      "id": 782,
+      "source": "Pulse turns what's happening in the game into controller vibration — landing hard, gliding fast, taking a critical hit, a storm rolling in. It's texture for ordinary play, closer to what a console game's rumble does than to a notification.\n\nIt also carries a second, separate set of controls: a full accessibility toggle set imported from Tremor, this addon's sibling project. Those work the same way Tremor's own cues do — an event happens, one pulse tells you about it — but they share Pulse's channel with everything else here, which is a real difference worth understanding. See \"The Accessibility section\" below.",
+      "signature": ""
+    },
+    {
+      "id": 789,
+      "source": "Pulse: captured %s breakaway floor at %.3f (ramp was at %.3f when clicked)",
+      "signature": "s,f,f"
+    },
+    {
+      "id": 790,
+      "source": "Pulse: controller found, but it reports no usable name. Use Generic and Ramp each motor.",
+      "signature": ""
+    },
+    {
+      "id": 791,
+      "source": "Pulse: controller reports itself as \"%s\", which isn't in the list. Use Generic and Ramp each motor.",
+      "signature": "s"
+    },
+    {
+      "id": 839,
+      "source": "Ramps up in three steps, then releases.",
+      "signature": ""
+    },
+    {
+      "id": 871,
+      "source": "Reset calibration",
+      "signature": ""
+    },
+    {
+      "id": 884,
+      "source": "Reverses the rumble motors: heavy low-frequency thuds go to the High motor, and sharp high-frequency ticks go to the Low motor. For reverse-wired or custom controller grips.",
+      "signature": ""
+    },
+    {
+      "id": 910,
+      "source": "Second: find out what your controller can do",
+      "signature": ""
+    },
+    {
+      "id": 914,
+      "source": "Sensory spatial awareness when aiming and selecting units:\n• |cffffffffTarget Lock & Switch:|r Distinct click when acquiring a new target or cycling units.\n• |cffffffffFocus Target:|r Physical confirmation when assigning or swapping your focus target.\n• |cffffffffSoft Interaction:|r Tactile blip when your controller reticle aligns with an interactable NPC.",
+      "signature": ""
+    },
+    {
+      "id": 958,
+      "source": "Steam Controller (v1)",
+      "signature": ""
+    },
+    {
+      "id": 959,
+      "source": "Steam Controller 2 (2026)",
+      "signature": ""
+    },
+    {
+      "id": 960,
+      "source": "Steam Deck (LCD & OLED)",
+      "signature": ""
+    },
+    {
+      "id": 961,
+      "source": "Steam Deck / Controller",
+      "signature": ""
+    },
+    {
+      "id": 962,
+      "source": "Step 1: Choose Your Controller Hardware",
+      "signature": ""
+    },
+    {
+      "id": 988,
+      "source": "Switch Pro Controller",
+      "signature": ""
+    },
+    {
+      "id": 994,
+      "source": "Switches every cue on the Controller Interactions page on or off at once. Each cue keeps its own setting underneath.",
+      "signature": ""
+    },
+    {
+      "id": 1035,
+      "source": "The most promising cue here: a radial is an analog sweep through discrete stops, which is exactly what haptics are good at, and it's the one that could let you pick a segment without looking. Blizzard already change-gates this and applies its own stick hysteresis, so it should not fire continuously while you hold a direction. Untested whether the rate still feels like too much.",
+      "signature": ""
+    },
+    {
+      "id": 1037,
+      "source": "The smallest value that makes this motor actually spin. Anything above zero is remapped into the range above this floor, so a quiet cue still moves the mass instead of dying silently. Zero input still means completely off. Use \"Ramp\" below to find your controller's real figure.",
+      "signature": ""
+    },
+    {
+      "id": 1040,
+      "source": "There is no way to detect which motors a controller actually drives — pick a schema above, then play a few modes to find out.",
+      "signature": ""
+    },
+    {
+      "id": 1090,
+      "source": "Use when the high motor produces nothing you can feel at all. Everything collapses onto the low motor. If it works but is just weak, use Standard and raise its Strength on the Controller calibration page instead.",
+      "signature": ""
+    },
+    {
+      "id": 1091,
+      "source": "Use when the low motor produces nothing you can feel at all. Everything collapses onto the high motor. If the low motor works but is just weak, use Standard and raise its Strength on the Controller calibration page instead.",
+      "signature": ""
+    },
+    {
+      "id": 1096,
+      "source": "Verify controller connection and motor calibration:",
+      "signature": ""
+    },
+    {
+      "id": 1119,
+      "source": "What the game is doing, felt through the controller.",
+      "signature": ""
+    },
+    {
+      "id": 1123,
+      "source": "Which controller is this?",
+      "signature": ""
+    },
+    {
+      "id": 1124,
+      "source": "Which controller you are holding. Picking one changes nothing on its own — press Apply below to load its starting values. These are starting points reasoned from what kind of actuators each controller uses, not measurements: Ramp is what measures YOUR controller, and whatever you enter afterwards wins.",
+      "signature": ""
+    },
+    {
+      "id": 1129,
+      "source": "Which saved cue configuration is active on this character. Every cue's on/off, its intensity and its mode override belong to the profile picked here; the master switch, the schema and the calibration stay global.",
+      "signature": ""
+    },
+    {
+      "id": 1139,
+      "source": "Work down this list in order.\n\nIs controller support on? See the first section — this is by far the most common cause.\n\nDoes the controller vibrate at all? Test a mode from the panel. If that's silent, the problem is the controller or the game, not your settings.\n\nIs Pulse switched on, and is the trigger you're waiting for switched on? Both have to be — and for an Accessibility trigger, check the section's master switch too, if it has one.\n\nIs it a texture rather than a pulse? Textures only run while their cause is actually happening — nothing to feel while standing still.\n\nIs the motor's breakaway floor too low? Some gamepads require a higher minimum floor to overcome mechanical inertia. Check the **Controller calibration** page and test the motor ramp.",
+      "signature": ""
+    },
+    {
+      "id": 1145,
+      "source": "World of Warcraft ignores controllers entirely until you turn them on, and this is off by default. Pairing the controller to your computer is not enough — the game has to be told separately.\n\nType this into chat, then restart the game:\n\n    /console GamePadEnable 1\n\nUntil that is done nothing here can work, and nothing will warn you. If Pulse seems completely dead, check this first.",
+      "signature": ""
+    },
+    {
+      "id": 1146,
+      "source": "Xbox (One / Series)",
+      "signature": ""
+    },
+    {
+      "id": 1147,
+      "source": "Xbox Elite Series 2",
+      "signature": ""
+    },
+    {
+      "id": 1148,
+      "source": "Xbox One / Series",
+      "signature": ""
+    },
+    {
+      "id": 1163,
+      "source": "a ramp is currently running on ",
+      "signature": ""
+    },
+    {
+      "id": 1170,
+      "source": "no controller detected",
+      "signature": ""
+    },
+    {
+      "id": 1171,
+      "source": "no ramp is running on this channel (press Ramp first, then Set Floor when you feel it)",
+      "signature": ""
+    },
+    {
+      "id": 1176,
+      "source": "printing each step to chat. Watch the chat, and note the number showing when you FIRST feel anything — that is this motor's breakaway floor. Type it into the slider below and quiet cues stop disappearing. Pressing Test cancels a ramp in progress.",
+      "signature": ""
+    },
+    {
+      "id": 1177,
+      "source": "pro controller",
+      "signature": ""
+    },
+    {
+      "id": 1178,
+      "source": "|A:gamepad-ps-buttonsquare-normal:12:12|a Square: open settings",
+      "signature": ""
+    },
+    {
+      "id": 1179,
+      "source": "|A:gamepad-switch-128x-face-y-normal:12:12|a Y: open settings",
+      "signature": ""
+    },
+    {
+      "id": 1180,
+      "source": "|A:gamepad-xbox1-buttonx-normal:12:12|a X: open settings",
+      "signature": ""
+    },
+    {
+      "id": 1184,
+      "source": "|cff00ff88●|r |cffffffffGamepad Active|r   |cff3a4b5d•|r   |cff8899aa%d Cues|r   |cff3a4b5d•|r   |cff667788%s|r",
+      "signature": "d,s"
+    },
+    {
+      "id": 1188,
+      "source": "|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[D-Pad]|r Navigate  •  |cff38BDF8[A]|r Select",
+      "signature": ""
+    },
+    {
+      "id": 1195,
+      "source": "|cff666666●|r |cff888888Gamepad Inactive|r   |cff3a4b5d•|r   |cff8899aa%d Cues|r   |cff3a4b5d•|r   |cff667788%s|r",
+      "signature": "d,s"
+    },
+    {
+      "id": 1196,
+      "source": "|cff888888Controller UI cues are governed by the master switch on the main Pulse page.|r",
+      "signature": ""
+    },
+    {
+      "id": 1205,
+      "source": "• Selected Controller Hardware: |cffffffff%s|r\n• Character Class & Planned Role: |cffffffff%s (%s)|r\n• Active Continuous Textures: |cffffffff%d active|r\n• Master Haptic Strength: |cffffffff%d%%|r\n\nAll preferences are saved directly to your active profile.\nYou can re-run this setup anytime by typing |cff4cb8ff/pulse setup|r.",
+      "signature": "s,s,s,d,d"
+    }
+  ]
+}

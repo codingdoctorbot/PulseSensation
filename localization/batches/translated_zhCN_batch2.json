@@ -1,0 +1,432 @@
+{
+  "items": [
+    {
+      "source": "1. Controller",
+      "target": "1. 手柄"
+    },
+    {
+      "source": "8BitDo (Ultimate / Pro 2)",
+      "target": "8BitDo (Ultimate / Pro 2)"
+    },
+    {
+      "source": "8BitDo / Other XInput",
+      "target": "8BitDo / 其他 XInput"
+    },
+    {
+      "source": "A bright tick when the game switches between controller and mouse-and-keyboard.",
+      "target": "当游戏在手柄与键盘鼠标之间切换时，产生清脆的提示震动。"
+    },
+    {
+      "source": "A bright tick when you commit to a radial segment by letting the stick return to centre.",
+      "target": "当你通过让摇杆回中确认选定轮盘扇区时，产生清脆的提示震动。"
+    },
+    {
+      "source": "A distinct tap when holding the controller modifier to target party or raid members.",
+      "target": "按住手柄组合修饰键以选择小队或团队成员时，产生清晰的轻触震动。"
+    },
+    {
+      "source": "A falling pulse when the controller hands control back to your character.",
+      "target": "当手柄将控制权交还给你的角色时，产生渐弱的震动脉冲。"
+    },
+    {
+      "source": "A rising pulse when the controller radial menu opens.",
+      "target": "当手柄轮盘菜单打开时，产生渐强的震动脉冲。"
+    },
+    {
+      "source": "A rising pulse when the controller starts driving a UI panel instead of your character.",
+      "target": "当手柄开始控制界面面板而非你的角色时，产生渐强的震动脉冲。"
+    },
+    {
+      "source": "A short, sharp tick when controller focus runs into the edge of a list or grid and can't go further.",
+      "target": "当手柄焦点移至列表或网格边缘且无法继续移动时，产生短促清脆的提示震动。"
+    },
+    {
+      "source": "A tactile click when native gamepad or action targeting triggers an interaction with the soft target.",
+      "target": "当原生手柄或动作目标锁定触发与软目标的交互时，产生触感明确的点击震动。"
+    },
+    {
+      "source": "A very light tick each time controller focus moves to a different interface element.",
+      "target": "每次手柄焦点移动到不同的界面元素时，产生极轻微的提示震动。"
+    },
+    {
+      "source": "A very light tick per segment as you sweep the stick around the radial — the wheel gets detents you can feel.",
+      "target": "转动摇杆划过轮盘时，每个扇区都会产生极轻微的提示震动——赋予轮盘清晰可触的阻尼刻度感。"
+    },
+    {
+      "source": "ACTIONBAR_PAGE_CHANGED. Useful on a controller specifically, where the bar you're on isn't always where your eyes are. Does not cover the vehicle/override/possess bar swaps, which are their own events and would want their own cue if they turn out to matter.",
+      "target": "ACTIONBAR_PAGE_CHANGED（动作条翻页）。对手柄操作尤为实用，因为视线不一定总停留在当前的动作条上。本提示不包含载具/覆盖/控制动作条的切换，那些属于独立事件，若有必要可为其配置专属提示。"
+    },
+    {
+      "source": "Apply the \"%s\" starting point? This overwrites every motor's strength, floor, timing and curve with that controller's values — any trimming you have already done is lost.",
+      "target": "是否应用“%s”初始预设？这将使用该手柄的配置覆盖每个马达的强度、启转阈值、时间节奏与响应曲线——你此前所作的任何微调都将丢失。"
+    },
+    {
+      "source": "Asks the controller what it is and suggests a row from the list above. Only prints a suggestion — it never selects or applies anything for you.",
+      "target": "检测手柄型号并在上方列表中给出推荐项。仅输出建议——绝不会自动为你选择或应用任何设置。"
+    },
+    {
+      "source": "Balances this motor against the others. Raise it if this motor is the weak one on your controller, lower it if it drowns everything else out. This is the knob the old \"Low Motor Only\"/\"High Motor Only\" schemas were being misused for — those still exist, but for a motor that is actually dead, not merely quieter.",
+      "target": "平衡该马达与其他马达的出力。若该马达在手柄上表现较弱请调高；若其震感过强掩盖了其他效果请调低。过去旧的“仅重震马达”/“仅轻震马达”震动方案常被误用于此——这些方案仍然存在，但只适用于马达彻底失效的情况，而非仅仅偏弱。"
+    },
+    {
+      "source": "Both rumble motors work normally. Start here, then balance their strength on the Controller calibration page.",
+      "target": "两个震动马达均正常工作。建议从此项开始，然后在“手柄校准”页面平衡它们的强度。"
+    },
+    {
+      "source": "Bound to the right-stick press in Blizzard's own radial.",
+      "target": "绑定至暴雪原生轮盘中的右摇杆按下。"
+    },
+    {
+      "source": "Brings Blizzard's native gamepad interface alive under your thumbs:\n• |cffffffffRadial & Menus:|r Soft tactile micro-taps as your stick moves across buttons and tabs.\n• |cffffffffWindows:|r Physical confirmation when opening bags, merchant shops, banks, and mail.\n• |cffffffffDialogs & Prompts:|r Tactile prompt when NPC interaction windows or quest frames appear.",
+      "target": "让暴雪原生手柄界面在你的指尖栩栩如生：\n• |cffffffff轮盘与菜单：|r摇杆滑过按钮和标签页时产生柔和的微触感震动。\n• |cffffffff窗口：|r打开背包、商人店铺、银行和邮箱时产生明确的确认震动。\n• |cffffffff对话与提示：|rNPC交互窗口或任务面板出现时产生触觉提示。"
+    },
+    {
+      "source": "Captures the active vibration level from a running Ramp sweep and writes it directly to this motor's Breakaway floor slider below, then stops the ramp. Press this the moment you first feel the motor move!",
+      "target": "从正在运行的渐变测试中捕获当前震动强度，直接写入下方该马达的“启转阈值”滑块，随后停止测试。一旦初次感觉到马达震动，请立即点击此项！"
+    },
+    {
+      "source": "Choose whether gamepad menu navigation and group communication produce controller vibration.",
+      "target": "选择手柄菜单导航和小队沟通是否产生手柄震动。"
+    },
+    {
+      "source": "Clears any vibration still in flight when the controller disconnects.",
+      "target": "手柄断开连接时，清除所有正在执行的震动。"
+    },
+    {
+      "source": "Controller",
+      "target": "手柄"
+    },
+    {
+      "source": "Controller Interactions",
+      "target": "手柄交互"
+    },
+    {
+      "source": "Controller UI",
+      "target": "手柄界面"
+    },
+    {
+      "source": "Controller UI & Window Feedback",
+      "target": "手柄界面与窗口反馈"
+    },
+    {
+      "source": "Controller battery low",
+      "target": "手柄电量过低"
+    },
+    {
+      "source": "Controller calibration",
+      "target": "手柄校准"
+    },
+    {
+      "source": "Controller connected",
+      "target": "手柄已连接"
+    },
+    {
+      "source": "Controller disconnected",
+      "target": "手柄已断开"
+    },
+    {
+      "source": "Controllers differ in which motors they have, and the game never reports whether a vibration actually happened. Nothing can detect this for you, so you have to feel it.\n\nPick a mode from the **Mode to test** dropdown near the top of the panel and press **Play**. Try a few — sharp ones, sustained ones, textures. Pay attention to which ones you can feel clearly, which are faint, and which do not arrive at all.\n\nIf some were missing or silent, check two places:\n\nThe **Vibration schema** dropdown near the top of the panel. A schema decides which motor each pulse drives, and swapping it works around a controller that only drives one of them.\n\nThe **Controller calibration** page. Real motors need a minimum amount of power just to start spinning (their breakaway floor). If quiet cues vanish entirely, use the **Ramp** tool there to calibrate your motor floors and balance their strength.",
+      "target": "不同手柄搭载的马达类型各异，而且游戏永远不会向系统回报震动是否真正触发。没有任何程序能替你侦测这一点，因此必须由你亲自感知。\n\n从面板顶部附近的**测试模式**下拉菜单中选择一个模式，然后点击**播放**。多试几种——清脆的、持续的、材质纹理震动。留意哪些能清晰感受到、哪些微弱、哪些完全没有动静。\n\n如果有部分震动缺失或静音，请检查两处：\n\n面板顶部附近的**震动方案**下拉菜单。震动方案决定了每个脉冲驱动哪个马达，切换方案可以解决某些手柄仅支持单马达驱动的问题。\n\n**手柄校准**页面。实体马达需要一定的最低功率才能克服阻力起动旋转（即启转阈值）。如果微弱的提示完全消失，请使用该页面中的**渐变测试**工具校准马达的启转阈值并平衡各马达的强度。"
+    },
+    {
+      "source": "Drive this motor at half power for a second and a half, bypassing every setting on this page and every schema. If you feel nothing here, this channel does not work on your controller and no amount of tuning below will change that.",
+      "target": "以半数功率驱动该马达1.5秒，绕过本页面的所有设置与所有震动方案。若此处感受不到任何震动，说明你的手柄不支持该通道，下方的任何调校都无法改变这一点。"
+    },
+    {
+      "source": "DualSense (PS5)",
+      "target": "DualSense (PS5)"
+    },
+    {
+      "source": "DualShock 4 (PS4)",
+      "target": "DualShock 4 (PS4)"
+    },
+    {
+      "source": "Engine defaults without device-specific calibration",
+      "target": "引擎默认值（未进行特定设备校准）"
+    },
+    {
+      "source": "Every cue, its intensity and \"feels like\" shape, your profiles, per-mode motor and timing tuning, controller calibration, the mode tester and the guide — all of it is in Pulse's own window.\n\nIt draws itself rather than living as pages in this panel, which is what lets it build only what you are looking at instead of every control in the addon at every login.",
+      "target": "每个提示、其强度与“体感”形态、你的配置文件、各模式马达与时间节奏微调、手柄校准、模式测试器与指南——全部都在 Pulse 的独立窗口中。\n\n该界面完全自主绘制，而非作为本面板内的分页存在，这让它仅在你查看时动态构建所需内容，避免每次登录时预载插件的每一个控件。"
+    },
+    {
+      "source": "Fires once when the controller's battery drops into its low or critical range.",
+      "target": "当手柄电量降至偏低或严重不足时触发一次。"
+    },
+    {
+      "source": "Fires when a controller connects.",
+      "target": "当手柄连接时触发。"
+    },
+    {
+      "source": "Fires when the element controller focus is currently on becomes disabled.",
+      "target": "当手柄焦点当前所在的元素被禁用时触发。"
+    },
+    {
+      "source": "First: switch controller support on",
+      "target": "第一步：开启手柄支持"
+    },
+    {
+      "source": "How sharply the high motor ramps in with speed. 1 = linear, higher = holds back more until near max speed. Only audible while actually gliding.",
+      "target": "轻震马达随速度递增的陡峭程度。1 = 线性，数值越高 = 越接近极速时才猛烈介入。仅在实际滑翔时可感知。"
+    },
+    {
+      "source": "Interface released controller focus",
+      "target": "界面释放手柄焦点"
+    },
+    {
+      "source": "Interface took controller focus",
+      "target": "界面获取手柄焦点"
+    },
+    {
+      "source": "Launch the interactive onboarding wizard to configure controller hardware, combat haptics, world feedback, and immersion textures.",
+      "target": "启动交互式入门向导，配置手柄硬件、战斗触觉、世界环境反馈与沉浸震动材质。"
+    },
+    {
+      "source": "Mark floor from ramp",
+      "target": "从渐变测试标记启转阈值"
+    },
+    {
+      "source": "Master switch for all menu, window, tab, and radial controller haptics. Turn off to silence all UI navigation haptics at once while keeping combat and world rumble active.",
+      "target": "所有菜单、窗口、标签页和轮盘手柄触觉的总开关。关闭此项可一次性静音所有界面导航震动，同时保留战斗与世界环境震动。"
+    },
+    {
+      "source": "Menu & controller UI haptics",
+      "target": "菜单与手柄界面触觉"
+    },
+    {
+      "source": "Nintendo Switch Pro",
+      "target": "Nintendo Switch Pro"
+    },
+    {
+      "source": "Overall gasp-knock strength — fixed per beat, not scaled by danger (2026-09-16: a danger-scaled lub/dub risked landing under the controller motor's own minimum activation threshold at low danger, causing missing \"dub\" knocks live). Urgency comes from heartRateCalm/heartRateCritical instead. Only audible if \"Underwater breath texture\" is also enabled on its own tab.",
+      "target": "喘息敲击的整体强度——每次心跳固定，不随危险程度缩放（2026-09-16：按危险程度缩放的双心跳震动在危险较低时容易低于手柄马达的最小启转阈值，导致实机中缺失“咚”的第二声敲击）。紧迫感改由平静心率/危机心率呈现。仅在“水下呼吸材质震动”于对应标签页开启时才可感知。"
+    },
+    {
+      "source": "Overwrite every motor's calibration with the selected controller's starting values. Ask first, because this discards any trimming you have already done.",
+      "target": "使用所选手柄的预设初始值覆盖所有马达的校准。操作前会请求确认，因为这会丢弃你此前所作的任何微调。"
+    },
+    {
+      "source": "PLAYER_SOFT_TARGET_INTERACTION. Fires when native gamepad/action interact executes on the current soft target.",
+      "target": "PLAYER_SOFT_TARGET_INTERACTION。当原生手柄/动作交互对当前软目标执行时触发。"
+    },
+    {
+      "source": "Passively polled from GamepadRadial:IsShown() to eliminate EventRegistry callback taint during radial menu activation.",
+      "target": "通过被动轮询 GamepadRadial:IsShown() 实现，以消除轮盘菜单激活期间 EventRegistry 回调引起的执行污染。"
+    },
+    {
+      "source": "Passively polled from GamepadRadial:IsShown(). Picking a segment that opens a panel also closes the radial.",
+      "target": "通过被动轮询 GamepadRadial:IsShown() 实现。选择会打开界面的扇区时也会关闭轮盘。"
+    },
+    {
+      "source": "Passively polled from SmartNavigation focus state. Fires when controller navigation gains focus on a UI element.",
+      "target": "通过被动轮询 SmartNavigation 焦点状态实现。当手柄导航聚焦于界面元素时触发。"
+    },
+    {
+      "source": "Passively polled from SmartNavigation focus state. Fires when controller navigation releases focus back to world control.",
+      "target": "通过被动轮询 SmartNavigation 焦点状态实现。当手柄导航释放焦点交还世界控制权时触发。"
+    },
+    {
+      "source": "Passively polled from SmartNavigation's currentButton every 0.05s to eliminate execution taint when gamepad mode is toggled. Fires on real focus changes rather than stick motion. Gated on gamepad UI being active.",
+      "target": "每 0.05 秒被动轮询 SmartNavigation 的 currentButton，以消除切换手柄模式时的执行污染。仅在真实发生焦点变化而非摇杆晃动时触发。仅在手柄界面处于活动状态时生效。"
+    },
+    {
+      "source": "Passively polled via GroupTargeting.isTargetingActive to eliminate execution taint when targeting stops or gamepad mode is toggled.",
+      "target": "通过 GroupTargeting.isTargetingActive 进行被动轮询，以消除停止目标选择或切换手柄模式时的执行污染。"
+    },
+    {
+      "source": "Play this cue exactly as it is configured right now — its own intensity, and its own \"Feels like\" shape if you changed it. Works whether or not the cue is switched on, and needs a connected controller.",
+      "target": "完全按照当前配置试听此提示——包括其自身的强度，以及你修改后的“体感”形态。无论该提示当前是否启用均可播放，需要连接手柄。"
+    },
+    {
+      "source": "Polled from StaticPopup1..4's IsShown() four times a second rather than hooked. StaticPopup_Show is called from all over Blizzard's UI by code that then touches protected frames, and this addon already has one taint incident from exactly that shape (Modules/ControllerUI.lua's ActivateRadial note). Untested.",
+      "target": "每秒轮询四次 StaticPopup1..4 的 IsShown() 而非采用钩子函数。StaticPopup_Show 会被暴雪界面多处随后涉及受保护框架的代码调用，本插件此前正因此模式产生过执行污染（详见 Modules/ControllerUI.lua 中的 ActivateRadial 说明）。未经充分测试。"
+    },
+    {
+      "source": "Produces no vibration — the controller is gone. Turning it off changes nothing you can feel: the engine clears in-flight vibration whenever it loses the device, because it has to.",
+      "target": "不产生震动——手柄已断开。关闭此项不会带来任何体感变化：引擎在失去设备连接时必须清除所有正在执行的震动。"
+    },
+    {
+      "source": "Pulse is engineered to drive both the Low (heavy counterweight) and High (sharp tick) rumble motors in concert across all supported gamepads.\n\nVibration schemas define how logical haptic roles map to physical motors: **Standard Rumble** routes low-frequency signals to the heavy motor and high-frequency signals to the sharp motor; **High Motor Only** or **Low Motor Only** collapse signals when a motor is mechanically silent; and **Swapped / Inverted** reverses the mapping for custom grips.",
+      "target": "Pulse 经过精心设计，可在所有受支持的手柄上协同驱动重震马达（慢速配重）与轻震马达（快速清脆）。\n\n震动方案定义了逻辑触觉角色如何映射到实体马达：**标准震动**将低频信号分配给重震马达，高频信号分配给轻震马达；**仅轻震马达**或**仅重震马达**在某个马达硬件损坏无声时合并信号；**对调 / 反转**则为特殊握持习惯反转映射关系。"
+    },
+    {
+      "source": "Pulse provides purpose-built default profiles engineered for specific roles and activities — browse them on the dedicated **Default profiles** page:\n\n• **Dungeon & Raid Roles** (Tank, Healer, Melee DPS, Caster DPS, Hunter) prioritize high signal-to-noise: threat loss, mitigations, kick windows, and spell completion ticks take priority over ambient clutter.\n• **World Immersion** (Melee, Caster, Ranged) maximizes atmospheric game-feel: footstep weight by armor type, mount strides, swimming resistance, weather, and exploration.\n• **PvP** delivers pure tactical radar with zero ambient distraction.\n\nOn the **Profiles** page, you can configure automatic rules that switch profiles on the fly when you change talent specializations, or create custom copies of any default profile. To protect combat performance, any profile switch requested while fighting is safely deferred until combat ends.",
+      "target": "Pulse 为特定职责与游戏活动量身打造了默认配置文件——可在专门的**默认配置文件**页面中浏览：\n\n• **地下城与团队副本职责**（坦克、治疗、近战输出、远程法系输出、猎人）以高信噪比为核心：仇恨丢失、减伤覆盖、打断时机与施法完成提示优先于环境杂音。\n• **大世界沉浸**（近战、法系、远程）最大化烘托游戏氛围感：不同护甲类型的脚步重量感、坐骑步伐、游泳阻力、天气与探索反馈。\n• **PvP** 提供纯粹的战术雷达感知，杜绝环境干扰。\n\n在**配置文件**页面中，你可以配置自动化规则，以便在切换天赋专精时实时切换配置文件，或为任意默认配置创建自定义副本。为保障战斗流畅度，战斗中触发的任何配置切换请求都将安全推迟至脱战后执行。"
+    },
+    {
+      "source": "Pulse turns what's happening in the game into controller vibration — landing hard, gliding fast, taking a critical hit, a storm rolling in. It's texture for ordinary play, closer to what a console game's rumble does than to a notification.\n\nIt also carries a second, separate set of controls: a full accessibility toggle set imported from Tremor, this addon's sibling project. Those work the same way Tremor's own cues do — an event happens, one pulse tells you about it — but they share Pulse's channel with everything else here, which is a real difference worth understanding. See \"The Accessibility section\" below.",
+      "target": "Pulse 将游戏中发生的一切转化为手柄震动——重重着陆、飞速滑翔、承受爆击、暴风雨来袭。它是日常游戏中的触感纹理，比起通知提示，它更接近主机游戏的原生手柄震动。\n\n它还包含第二套独立的控制选项：从其兄弟项目 Tremor 引入的完整辅助功能开关。这些提示与 Tremor 原生提示的工作方式相同——事件发生时以单次脉冲通知你——但它们与此处的所有其他功能共享 Pulse 的震动通道，这是一个值得理解的关键区别。请参阅下方的“辅助功能部分”。"
+    },
+    {
+      "source": "Pulse: captured %s breakaway floor at %.3f (ramp was at %.3f when clicked)",
+      "target": "Pulse：捕获 %s 启转阈值于 %.3f（点击时渐变测试处于 %.3f）"
+    },
+    {
+      "source": "Pulse: controller found, but it reports no usable name. Use Generic and Ramp each motor.",
+      "target": "Pulse：检测到手柄，但其未报告可用名称。请使用通用手柄预设并对各马达进行渐变测试。"
+    },
+    {
+      "source": "Pulse: controller reports itself as \"%s\", which isn't in the list. Use Generic and Ramp each motor.",
+      "target": "Pulse：手柄报告其型号为“%s”，不在预设列表中。请使用通用手柄预设并对各马达进行渐变测试。"
+    },
+    {
+      "source": "Ramps up in three steps, then releases.",
+      "target": "分三步递增，随后释放。"
+    },
+    {
+      "source": "Reset calibration",
+      "target": "重置校准"
+    },
+    {
+      "source": "Reverses the rumble motors: heavy low-frequency thuds go to the High motor, and sharp high-frequency ticks go to the Low motor. For reverse-wired or custom controller grips.",
+      "target": "反转震动马达：沉重的低频冲击分配至轻震马达，清脆的高频提示分配至重震马达。适用于反向接线或自定义握持方式的手柄。"
+    },
+    {
+      "source": "Second: find out what your controller can do",
+      "target": "第二步：了解你的手柄性能"
+    },
+    {
+      "source": "Sensory spatial awareness when aiming and selecting units:\n• |cffffffffTarget Lock & Switch:|r Distinct click when acquiring a new target or cycling units.\n• |cffffffffFocus Target:|r Physical confirmation when assigning or swapping your focus target.\n• |cffffffffSoft Interaction:|r Tactile blip when your controller reticle aligns with an interactable NPC.",
+      "target": "瞄准与选择单位时的空间感官反馈：\n• |cffffffff目标锁定与切换：|r获取新目标或循环切换单位时产生清晰的点击感。\n• |cffffffff焦点目标：|r设置或更换焦点目标时产生明确的确认震动。\n• |cffffffff软交互：|r手柄准星对准可交互NPC时产生触感提示。"
+    },
+    {
+      "source": "Steam Controller (v1)",
+      "target": "Steam Controller (v1)"
+    },
+    {
+      "source": "Steam Controller 2 (2026)",
+      "target": "Steam Controller 2 (2026)"
+    },
+    {
+      "source": "Steam Deck (LCD & OLED)",
+      "target": "Steam Deck (LCD & OLED)"
+    },
+    {
+      "source": "Steam Deck / Controller",
+      "target": "Steam Deck / 手柄"
+    },
+    {
+      "source": "Step 1: Choose Your Controller Hardware",
+      "target": "第1步：选择你的手柄硬件"
+    },
+    {
+      "source": "Switch Pro Controller",
+      "target": "Switch Pro Controller"
+    },
+    {
+      "source": "Switches every cue on the Controller Interactions page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "一次性开启或关闭“手柄交互”页面中的所有提示。每个提示在其下保留各自独立的设置。"
+    },
+    {
+      "source": "The most promising cue here: a radial is an analog sweep through discrete stops, which is exactly what haptics are good at, and it's the one that could let you pick a segment without looking. Blizzard already change-gates this and applies its own stick hysteresis, so it should not fire continuously while you hold a direction. Untested whether the rate still feels like too much.",
+      "target": "此处最具潜力的提示：轮盘是在离散卡点间进行模拟划动，这正是触觉反馈所擅长的领域，甚至能让你无需直视屏幕即可盲操选择扇区。暴雪已对此进行了变更过滤并内置了摇杆防抖迟滞，因此推住摇杆时不会持续连发。震动频率是否依然偏强尚待实测。"
+    },
+    {
+      "source": "The smallest value that makes this motor actually spin. Anything above zero is remapped into the range above this floor, so a quiet cue still moves the mass instead of dying silently. Zero input still means completely off. Use \"Ramp\" below to find your controller's real figure.",
+      "target": "使该马达真正起动旋转的最小值。任何大于零的数值都会被重新映射至该阈值之上的区间，让微弱的提示仍能驱动配重起振，而非无声消逝。零输入仍表示完全静止。请使用下方的“渐变测试”获取你手柄的实际数值。"
+    },
+    {
+      "source": "There is no way to detect which motors a controller actually drives — pick a schema above, then play a few modes to find out.",
+      "target": "系统无法检测手柄实际能驱动哪些马达——请在上方选择一个震动方案，随后播放几个测试模式亲自确认。"
+    },
+    {
+      "source": "Use when the high motor produces nothing you can feel at all. Everything collapses onto the low motor. If it works but is just weak, use Standard and raise its Strength on the Controller calibration page instead.",
+      "target": "当轻震马达完全无法感受到任何震动时使用。所有信号将合并至重震马达输出。如果该马达能工作只是偏弱，请改用标准方案并在“手柄校准”页面调高其强度。"
+    },
+    {
+      "source": "Use when the low motor produces nothing you can feel at all. Everything collapses onto the high motor. If the low motor works but is just weak, use Standard and raise its Strength on the Controller calibration page instead.",
+      "target": "当重震马达完全无法感受到任何震动时使用。所有信号将合并至轻震马达输出。如果该马达能工作只是偏弱，请改用标准方案并在“手柄校准”页面调高其强度。"
+    },
+    {
+      "source": "Verify controller connection and motor calibration:",
+      "target": "验证手柄连接与马达校准："
+    },
+    {
+      "source": "What the game is doing, felt through the controller.",
+      "target": "游戏中发生的一切，皆可通过手柄亲身感知。"
+    },
+    {
+      "source": "Which controller is this?",
+      "target": "当前是哪款手柄？"
+    },
+    {
+      "source": "Which controller you are holding. Picking one changes nothing on its own — press Apply below to load its starting values. These are starting points reasoned from what kind of actuators each controller uses, not measurements: Ramp is what measures YOUR controller, and whatever you enter afterwards wins.",
+      "target": "你当前所握持的手柄。仅选择此项不会生效——需点击下方的“应用”以加载其初始预设值。这些是根据各款手柄搭载的执行器类型推导的初始起点，而非实测值：“渐变测试”才能测量出属于你个人手柄的实际数据，且随后手动填入的数值拥有最高优先级。"
+    },
+    {
+      "source": "Which saved cue configuration is active on this character. Every cue's on/off, its intensity and its mode override belong to the profile picked here; the master switch, the schema and the calibration stay global.",
+      "target": "当前角色处于激活状态的已保存提示配置。每个提示的启用/禁用、强度及其模式覆盖均归属于此处选定的配置文件；总开关、震动方案与校准数据则保持全局通用。"
+    },
+    {
+      "source": "Work down this list in order.\n\nIs controller support on? See the first section — this is by far the most common cause.\n\nDoes the controller vibrate at all? Test a mode from the panel. If that's silent, the problem is the controller or the game, not your settings.\n\nIs Pulse switched on, and is the trigger you're waiting for switched on? Both have to be — and for an Accessibility trigger, check the section's master switch too, if it has one.\n\nIs it a texture rather than a pulse? Textures only run while their cause is actually happening — nothing to feel while standing still.\n\nIs the motor's breakaway floor too low? Some gamepads require a higher minimum floor to overcome mechanical inertia. Check the **Controller calibration** page and test the motor ramp.",
+      "target": "请按顺序依次排查以下各项。\n\n手柄支持是否开启？请参见第一小节——这是迄今为止最常见的原因。\n\n手柄是否有任何震动？请在面板中测试一个模式。如果毫无反应，问题出在手柄或游戏本身，而非你的插件设置。\n\nPulse 是否开启，且你正在等待的触发器是否也已开启？两者必须同时处于开启状态——如果是辅助功能触发器，若该分组设有总开关，也需一并检查。\n\n它是震动材质还是脉冲？材质震动仅在其成因实际发生时才会持续运行——静止站立时没有任何体感。\n\n马达的启转阈值是否设置过低？部分手柄需要更高的最低阈值来克服机械惯性。请查看**手柄校准**页面并测试马达渐变。"
+    },
+    {
+      "source": "World of Warcraft ignores controllers entirely until you turn them on, and this is off by default. Pairing the controller to your computer is not enough — the game has to be told separately.\n\nType this into chat, then restart the game:\n\n    /console GamePadEnable 1\n\nUntil that is done nothing here can work, and nothing will warn you. If Pulse seems completely dead, check this first.",
+      "target": "《魔兽世界》在手动开启手柄支持之前会完全忽略手柄，且该功能默认处于关闭状态。仅仅将手柄与电脑配对是不够的——必须在游戏中单独启用。\n\n请在聊天框中输入以下命令，然后重启游戏：\n\n    /console GamePadEnable 1\n\n在完成此操作前，本插件的所有功能均无法工作，且系统不会弹出任何警告。如果 Pulse 看起来完全毫无反应，请首先检查此项。"
+    },
+    {
+      "source": "Xbox (One / Series)",
+      "target": "Xbox (One / Series)"
+    },
+    {
+      "source": "Xbox Elite Series 2",
+      "target": "Xbox Elite Series 2"
+    },
+    {
+      "source": "Xbox One / Series",
+      "target": "Xbox One / Series"
+    },
+    {
+      "source": "a ramp is currently running on ",
+      "target": "渐变测试正在运行于 "
+    },
+    {
+      "source": "no controller detected",
+      "target": "未检测到手柄"
+    },
+    {
+      "source": "no ramp is running on this channel (press Ramp first, then Set Floor when you feel it)",
+      "target": "此通道上没有正在运行的渐变测试（请先点击“渐变测试”，感知到震动时再点击“设定阈值”）"
+    },
+    {
+      "source": "printing each step to chat. Watch the chat, and note the number showing when you FIRST feel anything — that is this motor's breakaway floor. Type it into the slider below and quiet cues stop disappearing. Pressing Test cancels a ramp in progress.",
+      "target": "正在将每个阶跃数值输出至聊天栏。请留意聊天栏，并记录你【首次】感受到震动时显示的数值——这就是该马达的启转阈值。将其填入下方的滑块中，微弱的提示便不会再无声消失。点击“测试”可取消正在进行的渐变测试。"
+    },
+    {
+      "source": "pro controller",
+      "target": "Pro Controller"
+    },
+    {
+      "source": "|A:gamepad-ps-buttonsquare-normal:12:12|a Square: open settings",
+      "target": "|A:gamepad-ps-buttonsquare-normal:12:12|a 方块：打开设置"
+    },
+    {
+      "source": "|A:gamepad-switch-128x-face-y-normal:12:12|a Y: open settings",
+      "target": "|A:gamepad-switch-128x-face-y-normal:12:12|a Y：打开设置"
+    },
+    {
+      "source": "|A:gamepad-xbox1-buttonx-normal:12:12|a X: open settings",
+      "target": "|A:gamepad-xbox1-buttonx-normal:12:12|a X：打开设置"
+    },
+    {
+      "source": "|cff00ff88●|r |cffffffffGamepad Active|r   |cff3a4b5d•|r   |cff8899aa%d Cues|r   |cff3a4b5d•|r   |cff667788%s|r",
+      "target": "|cff00ff88●|r |cffffffff手柄已激活|r   |cff3a4b5d•|r   |cff8899aa%d 个提示|r   |cff3a4b5d•|r   |cff667788%s|r"
+    },
+    {
+      "source": "|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[D-Pad]|r Navigate  •  |cff38BDF8[A]|r Select",
+      "target": "|cff38BDF8[L1/R1]|r 标签页  •  |cff38BDF8[十字键]|r 导航  •  |cff38BDF8[A]|r 选择"
+    },
+    {
+      "source": "|cff666666●|r |cff888888Gamepad Inactive|r   |cff3a4b5d•|r   |cff8899aa%d Cues|r   |cff3a4b5d•|r   |cff667788%s|r",
+      "target": "|cff666666●|r |cff888888手柄未激活|r   |cff3a4b5d•|r   |cff8899aa%d 个提示|r   |cff3a4b5d•|r   |cff667788%s|r"
+    },
+    {
+      "source": "|cff888888Controller UI cues are governed by the master switch on the main Pulse page.|r",
+      "target": "|cff888888手柄界面提示受控于 Pulse 主页面上的总开关。|r"
+    },
+    {
+      "source": "• Selected Controller Hardware: |cffffffff%s|r\n• Character Class & Planned Role: |cffffffff%s (%s)|r\n• Active Continuous Textures: |cffffffff%d active|r\n• Master Haptic Strength: |cffffffff%d%%|r\n\nAll preferences are saved directly to your active profile.\nYou can re-run this setup anytime by typing |cff4cb8ff/pulse setup|r.",
+      "target": "• 已选手柄硬件：|cffffffff%s|r\n• 角色职业与规划职责：|cffffffff%s (%s)|r\n• 启用中的持续材质震动：|cffffffff%d 项已启用|r\n• 主触觉强度：|cffffffff%d%%|r\n\n所有偏好设置均已直接保存至你的当前配置文件。\n你可以随时通过输入 |cff4cb8ff/pulse setup|r 重新运行此设置向导。"
+    }
+  ]
+}

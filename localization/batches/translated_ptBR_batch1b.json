@@ -1,0 +1,1328 @@
+{
+  "items": [
+    {
+      "source": "Low health",
+      "target": "Vida baixa"
+    },
+    {
+      "source": "Low health texture",
+      "target": "Textura de vida baixa"
+    },
+    {
+      "source": "Low motor",
+      "target": "Motor pesado/lento"
+    },
+    {
+      "source": "Low motor holds a steady presence, floored so it's never silent while gliding; high motor eases in from near-silent toward thrillPeak as speed climbs, shaped by thrillCurve.",
+      "target": "O motor pesado/lento mantém uma presença constante, com limiar mínimo para nunca ficar em silêncio ao planar; o motor leve/rápido surge quase do silêncio em direção a thrillPeak conforme a velocidade aumenta, moldado por thrillCurve."
+    },
+    {
+      "source": "Mage",
+      "target": "Mago"
+    },
+    {
+      "source": "Manage",
+      "target": "Gerenciar"
+    },
+    {
+      "source": "Master Vibration Strength",
+      "target": "Força geral de vibração"
+    },
+    {
+      "source": "Master switch for every loss-of-control cue below. With this off, none of them fire and no loss-of-control events are registered at all.",
+      "target": "Interruptor principal para cada sinal de perda de controle abaixo. Com isso desativado, nenhum deles dispara e nenhum evento de perda de controle é registrado."
+    },
+    {
+      "source": "Master switch. With this off, nothing registers and nothing costs anything.",
+      "target": "Interruptor principal. Com isso desativado, nada é registrado e não há custo de processamento."
+    },
+    {
+      "source": "Melee auto-attack started",
+      "target": "Ataque automático corpo a corpo iniciado"
+    },
+    {
+      "source": "Melee auto-attack stopped",
+      "target": "Ataque automático corpo a corpo interrompido"
+    },
+    {
+      "source": "Menus & tabs",
+      "target": "Menus e abas"
+    },
+    {
+      "source": "Messages",
+      "target": "Mensagens"
+    },
+    {
+      "source": "Minimum severity",
+      "target": "Gravidade mínima"
+    },
+    {
+      "source": "Mode to test",
+      "target": "Modo a testar"
+    },
+    {
+      "source": "Most specific wins. A scope set to |cffffd100No rule|r has no opinion and lets the one below it decide; with none of them set, Pulse uses Default.",
+      "target": "A regra mais específica prevalece. Um escopo definido como |cffffd100Sem regra|r é neutro e deixa o nível abaixo decidir; sem nenhum definido, o Pulse usa o Padrão."
+    },
+    {
+      "source": "Movement",
+      "target": "Movimento"
+    },
+    {
+      "source": "Movement & Travel",
+      "target": "Movimento e viagem"
+    },
+    {
+      "source": "Multiplies every trigger's intensity. Part of the current profile, not global.",
+      "target": "Multiplica a intensidade de cada gatilho. Faz parte do perfil atual, não é global."
+    },
+    {
+      "source": "Name the new profile:",
+      "target": "Nomeie o novo perfil:"
+    },
+    {
+      "source": "Navigation",
+      "target": "Navegação"
+    },
+    {
+      "source": "New profile",
+      "target": "Novo perfil"
+    },
+    {
+      "source": "Next >",
+      "target": "Avançar >"
+    },
+    {
+      "source": "No rule",
+      "target": "Sem regra"
+    },
+    {
+      "source": "None (full sensory richness)",
+      "target": "Nenhum (riqueza sensorial completa)"
+    },
+    {
+      "source": "None (stock defaults)",
+      "target": "Nenhum (padrões originais)"
+    },
+    {
+      "source": "ON — option changes and cue firings will print here.",
+      "target": "LIGADO — alterações de opções e disparos de sinais serão exibidos aqui."
+    },
+    {
+      "source": "Ocean Waves & Swell",
+      "target": "Ondas oceânicas e ondulação"
+    },
+    {
+      "source": "Ocean waves & swell",
+      "target": "Ondas oceânicas e ondulação"
+    },
+    {
+      "source": "Ocean zones only (guessed from zone name)",
+      "target": "Apenas zonas oceânicas (deduzidas pelo nome da zona)"
+    },
+    {
+      "source": "Off by default and deliberately the faintest cue in the addon: this fires for EVERY NPC you talk to, which in a city is constantly. Try it before leaving it on. Untested.",
+      "target": "Desativado por padrão e deliberadamente o sinal mais sutil do addon: dispara para CADA PNJ com quem você conversa, o que em uma cidade ocorre constantemente. Experimente antes de manter ativado. Não testado."
+    },
+    {
+      "source": "Offensive",
+      "target": "Ofensivo"
+    },
+    {
+      "source": "One cue for both directions, same reasoning as the navigation edge cue — a motor can't tell you which way you went.",
+      "target": "Um único sinal para ambas as direções, pelo mesmo motivo do sinal de borda de navegação — um motor não pode indicar para qual direção você foi."
+    },
+    {
+      "source": "One full-bodied hit on both motors.",
+      "target": "Um impacto encorpado em ambos os motores."
+    },
+    {
+      "source": "One long, sombre pulse when a spirit healer's window opens.",
+      "target": "Um pulso longo e sombrio quando a janela do anjo da cura se abre."
+    },
+    {
+      "source": "One sharp, heavy impact — fast attack, fast decay.",
+      "target": "Um impacto seco e pesado — ataque rápido, decaimento rápido."
+    },
+    {
+      "source": "One strong, sustained pulse.",
+      "target": "Um pulso forte e sustentado."
+    },
+    {
+      "source": "One sustained pulse.",
+      "target": "Um pulso sustentado."
+    },
+    {
+      "source": "Open Pulse settings",
+      "target": "Abrir configurações do Pulse"
+    },
+    {
+      "source": "Other",
+      "target": "Outro"
+    },
+    {
+      "source": "Overall heave amplitude of the oceanic swell. Sets the physical displacement intensity of the slow motor.",
+      "target": "Amplitude geral de elevação da ondulação oceânica. Define a intensidade de deslocamento físico do motor lento."
+    },
+    {
+      "source": "Overall intensity",
+      "target": "Intensidade geral"
+    },
+    {
+      "source": "Overall strength. Meant to sit at the edge of perception — if you notice it as a vibration rather than as being submerged, it is too high. Inherits the old idleFloatAmplitude, which was live-tuned to 0.04.",
+      "target": "Força geral. Projetada para ficar no limiar da percepção — se você notar isso como uma vibração em vez de sensação de submersão, está alta demais. Herda o antigo idleFloatAmplitude, ajustado em jogo para 0.04."
+    },
+    {
+      "source": "Overdrive kick",
+      "target": "Impulso de sobrecarga"
+    },
+    {
+      "source": "Overdrive time (s)",
+      "target": "Tempo de sobrecarga (s)"
+    },
+    {
+      "source": "Own motor",
+      "target": "Motor próprio"
+    },
+    {
+      "source": "PLAYER_ALIVE also fires when you release to a graveyard, so this can fire while you are still a ghost.",
+      "target": "PLAYER_ALIVE também dispara quando você libera o espírito para o cemitério, então isso pode disparar enquanto você ainda é um fantasma."
+    },
+    {
+      "source": "PLAYER_SOFT_FRIEND_CHANGED, occurrence-only, no payload. Worth pairing with the hostile cue above only if you can tell two TICKs apart — if not, give one of them a different shape with its own \"Feels like\" dropdown.",
+      "target": "PLAYER_SOFT_FRIEND_CHANGED, apenas ocorrência, sem payload. Vale a pena combinar com o sinal hostil acima apenas se você conseguir distinguir dois ESTALIDOS — caso contrário, atribua a um deles um formato diferente com seu menu suspenso \"Sensação tátil\"."
+    },
+    {
+      "source": "PULSE QUICK SETUP",
+      "target": "CONFIGURAÇÃO RÁPIDA DO PULSE"
+    },
+    {
+      "source": "Pacified or school-locked",
+      "target": "Pacificado ou escola bloqueada"
+    },
+    {
+      "source": "Page switches",
+      "target": "Trocas de página"
+    },
+    {
+      "source": "Paladin",
+      "target": "Paladino"
+    },
+    {
+      "source": "Passively polled by observing IsEnabled() on the currently focused element. Fires if the element becomes disabled while focused.",
+      "target": "Monitorado passivamente observando IsEnabled() no elemento atualmente focado. Dispara se o elemento for desativado enquanto focado."
+    },
+    {
+      "source": "Passively polled via GetUIPanel every 0.05s to eliminate UIParentPanelManager execution taint on protected frames.",
+      "target": "Monitorado passivamente via GetUIPanel a cada 0.05s para eliminar contaminação de execução de UIParentPanelManager em quadros protegidos."
+    },
+    {
+      "source": "Passively polled via GetUIPanel every 0.05s. Detects when major UI panels are dismissed without callback taint.",
+      "target": "Monitorado passivamente via GetUIPanel a cada 0.05s. Detecta quando painéis principais da interface são fechados sem contaminação por retorno."
+    },
+    {
+      "source": "Passively polled via GroupTargeting.isTargetingActive. Fires when the group targeting modifier is released.",
+      "target": "Monitorado passivamente via GroupTargeting.isTargetingActive. Dispara quando o modificador de seleção de grupo é liberado."
+    },
+    {
+      "source": "Physical tool strikes: anvil hammer strokes, mining pickaxe impacts, tailoring stitches.",
+      "target": "Golpes de ferramentas físicas: marteladas na bigorna, impactos da picareta de mineração, pontos de costura de alfaiataria."
+    },
+    {
+      "source": "Pick a mode to test below.",
+      "target": "Escolha um modo para testar abaixo."
+    },
+    {
+      "source": "Play",
+      "target": "Reproduzir"
+    },
+    {
+      "source": "Play ",
+      "target": "Reproduzir "
+    },
+    {
+      "source": "Play a few seconds of this texture at its current intensity. Module-driven preview reproducing authentic physical dynamics and configured intensity.",
+      "target": "Reproduz alguns segundos desta textura em sua intensidade atual. Pré-visualização orientada por módulo reproduzindo dinâmica física autêntica e intensidade configurada."
+    },
+    {
+      "source": "Presence floor (low)",
+      "target": "Limiar mínimo de presença (lento)"
+    },
+    {
+      "source": "Priest",
+      "target": "Sacerdote"
+    },
+    {
+      "source": "Prints every option you change and every cue that actually fires to chat, in real time. Same as /pulse debug — off by default, and resets to off on /reload since it's a testing aid, not a saved preference.",
+      "target": "Exibe no bate-papo cada opção alterada e cada sinal disparado em tempo real. Igual a /pulse debug — desativado por padrão e redefinido para desativado ao recarregar a interface (/reload), pois é um auxílio de teste e não uma preferência salva."
+    },
+    {
+      "source": "Profile",
+      "target": "Perfil"
+    },
+    {
+      "source": "Profiles",
+      "target": "Perfis"
+    },
+    {
+      "source": "Profiles and automatic rules",
+      "target": "Perfis e regras automáticas"
+    },
+    {
+      "source": "Progression",
+      "target": "Progressão"
+    },
+    {
+      "source": "Progressive low build leading to a sharp high break.",
+      "target": "Construção progressiva no motor lento culminando em uma quebra nítida no rápido."
+    },
+    {
+      "source": "Pull / glide balance",
+      "target": "Equilíbrio de tração / planeio"
+    },
+    {
+      "source": "Pulse",
+      "target": "Pulse"
+    },
+    {
+      "source": "Pulse is using |cffffd100%s|r, because a rule is set for %s.",
+      "target": "O Pulse está usando |cffffd100%s|r, porque há uma regra definida para %s."
+    },
+    {
+      "source": "Pulse tunes motor spin-up attack, coast-down release, and breakaway friction to match your physical hardware actuators.",
+      "target": "O Pulse ajusta o ataque de aceleração do motor, a desaceleração gradual e a inércia mecânica para corresponder aos atuadores físicos do seu hardware."
+    },
+    {
+      "source": "Pulse: (Engine recorded %d errors. Last error: %s)",
+      "target": "Pulse: (O mecanismo registrou %d erros. Último erro: %s)"
+    },
+    {
+      "source": "Pulse: /pulse test <mode>|heartbeat|warningbeat — try one of: ",
+      "target": "Pulse: /pulse test <mode>|heartbeat|warningbeat — experimente um destes: "
+    },
+    {
+      "source": "Pulse: activated profile \"%s\"",
+      "target": "Pulse: perfil \"%s\" ativado"
+    },
+    {
+      "source": "Pulse: active profile is \"%s\" (%s)",
+      "target": "Pulse: o perfil ativo é \"%s\" (%s)"
+    },
+    {
+      "source": "Pulse: bound profile \"%s\" to specialization %s",
+      "target": "Pulse: perfil \"%s\" vinculado à especialização %s"
+    },
+    {
+      "source": "Pulse: could not build settings row %q (%s)",
+      "target": "Pulse: não foi possível criar a linha de configurações %q (%s)"
+    },
+    {
+      "source": "Pulse: could not build the settings window (",
+      "target": "Pulse: não foi possível criar a janela de configurações ("
+    },
+    {
+      "source": "Pulse: debug ",
+      "target": "Pulse: depuração "
+    },
+    {
+      "source": "Pulse: disabled all %d cues in active profile.",
+      "target": "Pulse: todos os %d sinais desativados no perfil ativo."
+    },
+    {
+      "source": "Pulse: disabled all %d cues in profile \"%s\".",
+      "target": "Pulse: todos os %d sinais desativados no perfil \"%s\"."
+    },
+    {
+      "source": "Pulse: disabled all %d cues in profile %s.",
+      "target": "Pulse: todos os %d sinais desativados no perfil %s."
+    },
+    {
+      "source": "Pulse: enabled all %d cues in active profile.",
+      "target": "Pulse: todos os %d sinais ativados no perfil ativo."
+    },
+    {
+      "source": "Pulse: enabled all %d cues in profile \"%s\".",
+      "target": "Pulse: todos os %d sinais ativados no perfil \"%s\"."
+    },
+    {
+      "source": "Pulse: enabled all %d cues in profile %s.",
+      "target": "Pulse: todos os %d sinais ativados no perfil %s."
+    },
+    {
+      "source": "Pulse: live oscilloscope is provided by the companion addon PulseDebug (/pdebug scope).",
+      "target": "Pulse: o osciloscópio em tempo real é fornecido pelo addon complementar PulseDebug (/pdebug scope)."
+    },
+    {
+      "source": "Pulse: minimap icon %s",
+      "target": "Pulse: ícone do minimapa %s"
+    },
+    {
+      "source": "Pulse: no profile matching \"%s\". Available: %s",
+      "target": "Pulse: nenhum perfil corresponde a \"%s\". Disponíveis: %s"
+    },
+    {
+      "source": "Pulse: switched to profile \"%s\"",
+      "target": "Pulse: alternado para o perfil \"%s\""
+    },
+    {
+      "source": "Pulse: that preview is unavailable.",
+      "target": "Pulse: essa pré-visualização não está disponível."
+    },
+    {
+      "source": "Pulse: this looks like a %s%s. Pick it above, then press Apply.",
+      "target": "Pulse: este dispositivo parece ser um %s%s. Selecione-o acima e pressione Aplicar."
+    },
+    {
+      "source": "Pure flavour — nothing depends on it. Untested.",
+      "target": "Puramente imersivo — nada depende disso. Não testado."
+    },
+    {
+      "source": "Pure novelty. Off by default forever, basically — nobody asked for this one.",
+      "target": "Pura novidade. Basicamente desativado por padrão para sempre — ninguém pediu por isso."
+    },
+    {
+      "source": "Put every motor's strength, floor, timing and curve back to the engine defaults. Doesn't touch cues, per-cue intensity, mode tuning or your schema.",
+      "target": "Restaura a força, o limiar mínimo, a temporização e a curva de cada motor para os padrões do mecanismo. Não altera sinais, intensidade por sinal, ajustes de modo ou seu esquema."
+    },
+    {
+      "source": "Put the profile in use back to its stock defaults — works on built-ins too, restoring their curated content rather than blank Registry.lua defaults.",
+      "target": "Restaura o perfil em uso para seus padrões de fábrica — também funciona nos perfis integrados, restaurando seu conteúdo selecionado em vez dos padrões vazios de Registry.lua."
+    },
+    {
+      "source": "PvP (Tactical Radar)",
+      "target": "JxJ (Radar tático)"
+    },
+    {
+      "source": "Quest accepted",
+      "target": "Missão aceita"
+    },
+    {
+      "source": "Quest offered",
+      "target": "Missão oferecida"
+    },
+    {
+      "source": "Quest ready to hand in",
+      "target": "Missão pronta para entrega"
+    },
+    {
+      "source": "Quest turned in",
+      "target": "Missão entregue"
+    },
+    {
+      "source": "Questing",
+      "target": "Missões"
+    },
+    {
+      "source": "Questing & Exploration",
+      "target": "Missões e exploração"
+    },
+    {
+      "source": "Quests",
+      "target": "Missões"
+    },
+    {
+      "source": "Quick Setup",
+      "target": "Configuração rápida"
+    },
+    {
+      "source": "Quick Setup Wizard",
+      "target": "Assistente de configuração rápida"
+    },
+    {
+      "source": "Radial menu",
+      "target": "Menu radial"
+    },
+    {
+      "source": "Radial menu closed",
+      "target": "Menu radial fechado"
+    },
+    {
+      "source": "Radial menu opened",
+      "target": "Menu radial aberto"
+    },
+    {
+      "source": "Radial page changed",
+      "target": "Página radial alterada"
+    },
+    {
+      "source": "Radial segment changed",
+      "target": "Segmento radial alterado"
+    },
+    {
+      "source": "Radial segment chosen",
+      "target": "Segmento radial escolhido"
+    },
+    {
+      "source": "Radial segment unavailable",
+      "target": "Segmento radial indisponível"
+    },
+    {
+      "source": "Radial selection cancelled",
+      "target": "Seleção radial cancelada"
+    },
+    {
+      "source": "Ranged auto-repeat started",
+      "target": "Disparo automático de longo alcance iniciado"
+    },
+    {
+      "source": "Ranged auto-repeat stopped",
+      "target": "Disparo automático de longo alcance interrompido"
+    },
+    {
+      "source": "Rapid staccato triple-click on the high motor.",
+      "target": "Clique triplo em staccato rápido no motor leve/rápido."
+    },
+    {
+      "source": "Reading something",
+      "target": "Lendo algo"
+    },
+    {
+      "source": "Reads the segment's own IsEnabled() — the same value Blizzard reads to grey the highlight out, so this matches what you see on screen. Fires in place of \"Radial segment changed\", not alongside it.",
+      "target": "Lê o IsEnabled() do próprio segmento — o mesmo valor que a Blizzard lê para esmaecer o destaque, correspondendo exatamente ao que você vê na tela. Dispara no lugar de \"Segmento radial alterado\", e não simultaneamente."
+    },
+    {
+      "source": "Ready check",
+      "target": "Confirmação de prontidão"
+    },
+    {
+      "source": "Ready check finished",
+      "target": "Confirmação de prontidão concluída"
+    },
+    {
+      "source": "Release time (s)",
+      "target": "Tempo de liberação (s)"
+    },
+    {
+      "source": "Reload UI",
+      "target": "Recarregar interface"
+    },
+    {
+      "source": "Reload UI to apply the language change.",
+      "target": "Recarregue a interface para aplicar a alteração de idioma."
+    },
+    {
+      "source": "Reload the interface to apply your selected addon language.",
+      "target": "Recarregue a interface para aplicar o idioma selecionado do addon."
+    },
+    {
+      "source": "Rename",
+      "target": "Renomear"
+    },
+    {
+      "source": "Rename \"%s\" to:",
+      "target": "Renomear \"%s\" para:"
+    },
+    {
+      "source": "Rename the profile in use. Every rule pointing at it follows the rename. Built-in profiles can't be renamed.",
+      "target": "Renomeia o perfil em uso. Todas as regras vinculadas a ele seguirão a alteração. Perfis integrados não podem ser renomeados."
+    },
+    {
+      "source": "Rename this profile",
+      "target": "Renomear este perfil"
+    },
+    {
+      "source": "Rename...",
+      "target": "Renomear..."
+    },
+    {
+      "source": "Repaired equipment",
+      "target": "Equipamento reparado"
+    },
+    {
+      "source": "Reset",
+      "target": "Redefinir"
+    },
+    {
+      "source": "Reset every motor's strength, floor, timing and curve back to the engine defaults? This can't be undone.",
+      "target": "Redefinir a força, o limiar mínimo, a temporização e a curva de cada motor para os padrões do mecanismo? Esta ação não pode ser desfeita."
+    },
+    {
+      "source": "Reset profile \"%s\" to defaults? Every cue, intensity and mode override in it goes back to stock values. This can't be undone.",
+      "target": "Redefinir o perfil \"%s\" para os padrões? Cada sinal, intensidade e substituição de modo nele retornará aos valores originais. Esta ação não pode ser desfeita."
+    },
+    {
+      "source": "Reset this profile",
+      "target": "Redefinir este perfil"
+    },
+    {
+      "source": "Reset...",
+      "target": "Redefinir..."
+    },
+    {
+      "source": "Resources",
+      "target": "Recursos"
+    },
+    {
+      "source": "Response curve",
+      "target": "Curva de resposta"
+    },
+    {
+      "source": "Resting",
+      "target": "Descansando"
+    },
+    {
+      "source": "Resurrection offered",
+      "target": "Ressurreição oferecida"
+    },
+    {
+      "source": "Rewards",
+      "target": "Recompensas"
+    },
+    {
+      "source": "Rogue",
+      "target": "Ladino"
+    },
+    {
+      "source": "Role poll",
+      "target": "Votação de função"
+    },
+    {
+      "source": "Rooted",
+      "target": "Enraizado"
+    },
+    {
+      "source": "Routing & Schema",
+      "target": "Roteamento e esquema"
+    },
+    {
+      "source": "Rules",
+      "target": "Regras"
+    },
+    {
+      "source": "Run Wizard",
+      "target": "Executar assistente"
+    },
+    {
+      "source": "Run cadence (steps/s)",
+      "target": "Cadência de corrida (passos/s)"
+    },
+    {
+      "source": "Same polled mechanism as \"Confirmation popup appeared\". Untested.",
+      "target": "Mesmo mecanismo monitorado de \"Janela pop-up de confirmação exibida\". Não testado."
+    },
+    {
+      "source": "Save & Start Playing",
+      "target": "Salvar e começar a jogar"
+    },
+    {
+      "source": "Scales both the bed and the strikes for %s, before the two shared strengths above.",
+      "target": "Escala tanto a base contínua quanto os golpes para %s, antes das duas forças compartilhadas acima."
+    },
+    {
+      "source": "Scales this cue on top of the overall intensity on the Pulse page.",
+      "target": "Escala este sinal sobreposto à intensidade geral na página do Pulse."
+    },
+    {
+      "source": "School lockouts are frequent in melee-heavy content. Off by default because a cue every kick you eat can crowd out the ones that mean you cannot act at all.",
+      "target": "Bloqueios de escola de magia são frequentes em conteúdos com muitos ataques corpo a corpo. Desativado por padrão porque um sinal a cada chute recebido pode ofuscar aqueles que indicam incapacidade total de agir."
+    },
+    {
+      "source": "Search %d cues...",
+      "target": "Pesquisar %d sinais..."
+    },
+    {
+      "source": "Secondary resource full",
+      "target": "Recurso secundário cheio"
+    },
+    {
+      "source": "Set Floor",
+      "target": "Definir limiar mínimo"
+    },
+    {
+      "source": "Set but not in force: |cffffd100%s|r. A more specific rule above is winning — clear it to let these take over.",
+      "target": "Definido, mas inativo: |cffffd100%s|r. Uma regra mais específica acima está prevalecendo — remova-a para permitir que estas assumam o controle."
+    },
+    {
+      "source": "Set for Spec",
+      "target": "Definir para especialização"
+    },
+    {
+      "source": "Setup Summary",
+      "target": "Resumo da configuração"
+    },
+    {
+      "source": "Shaman",
+      "target": "Xamã"
+    },
+    {
+      "source": "Shares its pulse pattern with the target cue. If your focus is also your target, you get one cue rather than two.",
+      "target": "Compartilha seu padrão de pulso com o sinal de alvo. Se o seu foco também for o seu alvo, você receberá apenas um sinal em vez de dois."
+    },
+    {
+      "source": "Sharp high kick layered with heavy low kick and rumble decay.",
+      "target": "Golpe seco no motor leve/rápido sobreposto a um golpe pesado no motor lento com decaimento de vibração."
+    },
+    {
+      "source": "Show a Play button on every cue",
+      "target": "Mostrar botão Reproduzir em cada sinal"
+    },
+    {
+      "source": "Show minimap icon",
+      "target": "Mostrar ícone do minimapa"
+    },
+    {
+      "source": "Show per-cue detail controls",
+      "target": "Mostrar controles detalhados por sinal"
+    },
+    {
+      "source": "Shows only the page switches and this page. Every cue keeps its own settings; turn this off to get every page back exactly as it was.",
+      "target": "Mostra apenas as opções de troca de página e esta página. Cada sinal mantém suas próprias configurações; desative para restaurar todas as páginas exatamente como estavam."
+    },
+    {
+      "source": "Silenced",
+      "target": "Silenciado"
+    },
+    {
+      "source": "Simple view",
+      "target": "Visualização simples"
+    },
+    {
+      "source": "Slow, harmonic oceanic gravity swells and coastal tides while submerged in deep oceans.",
+      "target": "Ondulações gravitacionais oceânicas lentas e harmônicas e marés costeiras enquanto submerso em oceanos profundos."
+    },
+    {
+      "source": "Snappy & Taps",
+      "target": "Toques secos e rápidos"
+    },
+    {
+      "source": "Social & Group",
+      "target": "Social e grupo"
+    },
+    {
+      "source": "Social & Group Communication",
+      "target": "Comunicação social e de grupo"
+    },
+    {
+      "source": "Soft target interact",
+      "target": "Interação com alvo suave"
+    },
+    {
+      "source": "Special casting",
+      "target": "Lançamento especial"
+    },
+    {
+      "source": "Speeds up or slows down ",
+      "target": "Acelera ou desacelera "
+    },
+    {
+      "source": "Spirit healer",
+      "target": "Anjo da cura"
+    },
+    {
+      "source": "Split left and right",
+      "target": "Dividir esquerda e direita"
+    },
+    {
+      "source": "Square / X: open settings",
+      "target": "Quadrado / X: abrir configurações"
+    },
+    {
+      "source": "Stable opened",
+      "target": "Estábulo aberto"
+    },
+    {
+      "source": "Stack split ratchet",
+      "target": "Catraca de divisão de pilha"
+    },
+    {
+      "source": "Standard Rumble",
+      "target": "Vibração padrão"
+    },
+    {
+      "source": "Standard balance across all categories",
+      "target": "Equilíbrio padrão em todas as categorias"
+    },
+    {
+      "source": "Status: %s",
+      "target": "Status: %s"
+    },
+    {
+      "source": "Step 4: Interface & Social Alerts",
+      "target": "Etapa 4: Alertas de interface e sociais"
+    },
+    {
+      "source": "Step 6: Master Strength & Completion",
+      "target": "Etapa 6: Força geral e conclusão"
+    },
+    {
+      "source": "Steps per second at full running speed. Scaled by how fast you are actually moving.",
+      "target": "Passos por segundo na velocidade máxima de corrida. Dimensionado de acordo com a velocidade real de movimento."
+    },
+    {
+      "source": "Steps per second at normal walking speed.",
+      "target": "Passos por segundo na velocidade normal de caminhada."
+    },
+    {
+      "source": "Strength",
+      "target": "Força"
+    },
+    {
+      "source": "Strike strength",
+      "target": "Força do golpe"
+    },
+    {
+      "source": "Stroke depth",
+      "target": "Profundidade da braçada"
+    },
+    {
+      "source": "Stroke rate, fast (Hz)",
+      "target": "Frequência de braçada, rápida (Hz)"
+    },
+    {
+      "source": "Stroke rate, slow (Hz)",
+      "target": "Frequência de braçada, lenta (Hz)"
+    },
+    {
+      "source": "Strokes per second at barely-moving speed.",
+      "target": "Braçadas por segundo em velocidade mínima de movimento."
+    },
+    {
+      "source": "Stunned",
+      "target": "Atordoado"
+    },
+    {
+      "source": "Summon offered",
+      "target": "Evocação oferecida"
+    },
+    {
+      "source": "Swapped / Inverted Rumble",
+      "target": "Vibração invertida / trocada"
+    },
+    {
+      "source": "Swell depth",
+      "target": "Profundidade da ondulação"
+    },
+    {
+      "source": "Swell rate (Hz)",
+      "target": "Frequência de ondulação (Hz)"
+    },
+    {
+      "source": "Swell strength",
+      "target": "Força da ondulação"
+    },
+    {
+      "source": "Switch to this profile",
+      "target": "Alternar para este perfil"
+    },
+    {
+      "source": "Switches every cue on the Casting page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Ativa ou desativa todos os sinais da página Lançamento de uma só vez. Cada sinal mantém sua configuração individual subjacente."
+    },
+    {
+      "source": "Switches every cue on the Character & Status page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Ativa ou desativa todos os sinais da página Personagem e status de uma só vez. Cada sinal mantém sua configuração individual subjacente."
+    },
+    {
+      "source": "Switches every cue on the Interface & Accessibility page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Ativa ou desativa todos os sinais da página Interface e acessibilidade de uma só vez. Cada sinal mantém sua configuração individual subjacente."
+    },
+    {
+      "source": "Switches every cue on the Movement & Travel page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Ativa ou desativa todos os sinais da página Movimento e viagem de uma só vez. Cada sinal mantém sua configuração individual subjacente."
+    },
+    {
+      "source": "Switches every cue on the Social & Group page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Ativa ou desativa todos os sinais da página Social e grupo de uma só vez. Cada sinal mantém sua configuração individual subjacente."
+    },
+    {
+      "source": "Switches every cue on the Target & Focus page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Ativa ou desativa todos os sinais da página Alvo e foco de uma só vez. Cada sinal mantém sua configuração individual subjacente."
+    },
+    {
+      "source": "Switches every cue on the World & Environment page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "Ativa ou desativa todos os sinais da página Mundo e ambiente de uma só vez. Cada sinal mantém sua configuração individual subjacente."
+    },
+    {
+      "source": "Talking to someone",
+      "target": "Conversando com alguém"
+    },
+    {
+      "source": "Target",
+      "target": "Alvo"
+    },
+    {
+      "source": "Target & Crosshair Feedback",
+      "target": "Retorno de alvo e retículo"
+    },
+    {
+      "source": "Target & Focus",
+      "target": "Alvo e foco"
+    },
+    {
+      "source": "Target changed",
+      "target": "Alvo alterado"
+    },
+    {
+      "source": "Target died",
+      "target": "Alvo morreu"
+    },
+    {
+      "source": "Target started casting",
+      "target": "Alvo começou a lançar feitiço"
+    },
+    {
+      "source": "Target used major defensive",
+      "target": "Alvo usou habilidade defensiva importante"
+    },
+    {
+      "source": "Target's cast stopped",
+      "target": "Lançamento do alvo interrompido"
+    },
+    {
+      "source": "Targeted by enemy",
+      "target": "Alvo de inimigo"
+    },
+    {
+      "source": "Targeting",
+      "target": "Seleção de alvos"
+    },
+    {
+      "source": "Test Alert",
+      "target": "Testar alerta"
+    },
+    {
+      "source": "Test Impact",
+      "target": "Testar impacto"
+    },
+    {
+      "source": "Test Lock",
+      "target": "Testar bloqueio"
+    },
+    {
+      "source": "Test Reward",
+      "target": "Testar recompensa"
+    },
+    {
+      "source": "Test Rumble",
+      "target": "Testar vibração"
+    },
+    {
+      "source": "Test Strike",
+      "target": "Testar golpe"
+    },
+    {
+      "source": "Test UI",
+      "target": "Testar interface"
+    },
+    {
+      "source": "Test the selected mode",
+      "target": "Testar o modo selecionado"
+    },
+    {
+      "source": "Textures & Patterns",
+      "target": "Texturas e padrões"
+    },
+    {
+      "source": "The Accessibility section",
+      "target": "A seção de Acessibilidade"
+    },
+    {
+      "source": "The Cue Index directory",
+      "target": "O diretório do Índice de sinais"
+    },
+    {
+      "source": "The _QUIET variant covers failures the game prints no error for, so this can fire with nothing visible on screen.",
+      "target": "A variante _QUIET cobre falhas para as quais o jogo não exibe nenhum erro, portanto pode disparar sem nada visível na tela."
+    },
+    {
+      "source": "The experimental section",
+      "target": "A seção experimental"
+    },
+    {
+      "source": "The lightest possible tick when a conversation window opens with any NPC.",
+      "target": "O estalido mais sutil possível quando uma janela de conversa se abre com qualquer PNJ."
+    },
+    {
+      "source": "The master switch for this page. Also on the Casting page, where the cue lives alongside the other casting cues.",
+      "target": "O interruptor principal para esta página. Também presente na página Lançamento, onde o sinal reside junto com os outros sinais de lançamento."
+    },
+    {
+      "source": "This character",
+      "target": "Este personagem"
+    },
+    {
+      "source": "This character reports no specialization, so there is no per-specialization rule to set. The row appears by itself on a character that has one.",
+      "target": "Este personagem não informa especialização, portanto não há regra por especialização para definir. A linha aparecerá automaticamente em um personagem que possua uma."
+    },
+    {
+      "source": "This specialization",
+      "target": "Esta especialização"
+    },
+    {
+      "source": "This specialization (",
+      "target": "Esta especialização ("
+    },
+    {
+      "source": "Three rhythmic thuds.",
+      "target": "Três impactos rítmicos."
+    },
+    {
+      "source": "Three-stage rising tension building on the low motor.",
+      "target": "Tensão crescente em três etapas aumentando no motor pesado/lento."
+    },
+    {
+      "source": "Thrill curve (high)",
+      "target": "Curva de adrenalina (rápido)"
+    },
+    {
+      "source": "Thrill peak (high)",
+      "target": "Pico de adrenalina (rápido)"
+    },
+    {
+      "source": "Time in seconds for a complete wave cycle. Real oceanic swells roll every 8 to 12 seconds (~0.10 Hz). Shorter periods feel like choppy coastal chop; longer periods feel like open-ocean rollers.",
+      "target": "Tempo em segundos para um ciclo completo de onda. Ondulações oceânicas reais ocorrem a cada 8 a 12 segundos (~0.10 Hz). Períodos mais curtos parecem águas costeiras agitadas; períodos mais longos parecem vagas de mar aberto."
+    },
+    {
+      "source": "Tracked cooldown ready",
+      "target": "Tempo de recarga monitorado pronto"
+    },
+    {
+      "source": "Trade opened",
+      "target": "Negociação aberta"
+    },
+    {
+      "source": "Triggers, modes, and motor tuning",
+      "target": "Gatilhos, modos e ajustes de motores"
+    },
+    {
+      "source": "Try Texture",
+      "target": "Testar textura"
+    },
+    {
+      "source": "Tuned for HD Rumble voice-coil actuators",
+      "target": "Ajustado para atuadores de bobina de voz HD Rumble"
+    },
+    {
+      "source": "Turn off every cue in the active profile in one sweep (useful for quiet debugging).",
+      "target": "Desativa todos os sinais no perfil ativo de uma só vez (útil para depuração silenciosa)."
+    },
+    {
+      "source": "Turn on every cue in the active profile in one sweep (useful for testing/debugging).",
+      "target": "Ativa todos os sinais no perfil ativo de uma só vez (útil para testes/depuração)."
+    },
+    {
+      "source": "Turn whole pages of cues on or off. Each cue keeps its own setting underneath: switching a page back on restores exactly what was there.",
+      "target": "Ativa ou desativa páginas inteiras de sinais. Cada sinal mantém sua configuração individual subjacente: reativar uma página restaura exatamente o que estava lá."
+    },
+    {
+      "source": "Two crisp ticks when a cooldown the built-in Cooldown Manager is tracking comes off cooldown.",
+      "target": "Dois estalidos nítidos quando uma recarga monitorada pelo Gerenciador de recargas integrado fica disponível."
+    },
+    {
+      "source": "Two heavier hits with a gap between them.",
+      "target": "Dois impactos mais pesados com um intervalo entre eles."
+    },
+    {
+      "source": "Two kinds of trigger: pulses and textures",
+      "target": "Dois tipos de gatilho: pulsos e texturas"
+    },
+    {
+      "source": "Two rhythmic thuds.",
+      "target": "Dois impactos rítmicos."
+    },
+    {
+      "source": "Two soft ticks when the action bar pages to a different set of abilities.",
+      "target": "Dois estalidos suaves quando a barra de ações muda para outro conjunto de habilidades."
+    },
+    {
+      "source": "Two soft ticks when you page the radial left or right with the shoulder buttons.",
+      "target": "Dois estalidos suaves ao alternar o menu radial para a esquerda ou direita com os botões superiores."
+    },
+    {
+      "source": "UI focus moved",
+      "target": "Foco da interface movido"
+    },
+    {
+      "source": "UI navigation hit an edge",
+      "target": "Navegação da interface atingiu uma borda"
+    },
+    {
+      "source": "UI panel closed",
+      "target": "Painel da interface fechado"
+    },
+    {
+      "source": "UI panel opened",
+      "target": "Painel da interface aberto"
+    },
+    {
+      "source": "Untested whether this also fires on every instant-cast press rather than only real cast-bar completions — if so, it'll feel far too frequent to read as \"that landed\" specifically. Check before relying on it.",
+      "target": "Não foi testado se isso também dispara a cada toque de lançamento instantâneo em vez de apenas nas conclusões reais da barra de lançamento — se for o caso, parecerá frequente demais para ser interpretado como \"atingiu o alvo\" especificamente. Verifique antes de confiar nisso."
+    },
+    {
+      "source": "Untested.",
+      "target": "Não testado."
+    },
+    {
+      "source": "Use the old estimator",
+      "target": "Usar o estimador antigo"
+    },
+    {
+      "source": "Using \"%s\" — set for %s.",
+      "target": "Usando \"%s\" — definido para %s."
+    },
+    {
+      "source": "Vendor window opened",
+      "target": "Janela do comerciante aberta"
+    },
+    {
+      "source": "Vibration Mode",
+      "target": "Modo de vibração"
+    },
+    {
+      "source": "Vibration Schema: |cffffd100%s|r",
+      "target": "Esquema de vibração: |cffffd100%s|r"
+    },
+    {
+      "source": "Vibration schema",
+      "target": "Esquema de vibração"
+    },
+    {
+      "source": "Voice-coil actuators (LRA), ultra-low 0.025 floor, instant response",
+      "target": "Atuadores de bobina de voz (LRA), limiar mínimo ultrabaixo de 0.025, resposta instantânea"
+    },
+    {
+      "source": "Walk cadence (steps/s)",
+      "target": "Cadência de caminhada (passos/s)"
+    },
+    {
+      "source": "Warlock",
+      "target": "Bruxo"
+    },
+    {
+      "source": "Warning lead time",
+      "target": "Tempo de antecedência do aviso"
+    },
+    {
+      "source": "Warrior",
+      "target": "Guerreiro"
+    },
+    {
+      "source": "Watches UNIT_TARGET and target swaps for hostile units whose target is the player. Uses UnitIsUnit('targettarget', 'player') with defensive secrecy guards.",
+      "target": "Monitora UNIT_TARGET e trocas de alvo em busca de unidades hostis cujo alvo seja o jogador. Usa UnitIsUnit('targettarget', 'player') com proteção defensiva contra falhas."
+    },
+    {
+      "source": "Wave cycle (seconds)",
+      "target": "Ciclo de onda (segundos)"
+    },
+    {
+      "source": "Wave period (sec)",
+      "target": "Período da onda (s)"
+    },
+    {
+      "source": "Wave steepness",
+      "target": "Declividade da onda"
+    },
+    {
+      "source": "Weapon or gear swapped",
+      "target": "Arma ou equipamento trocado"
+    },
+    {
+      "source": "What this does",
+      "target": "O que isto faz"
+    },
+    {
+      "source": "When mobs are pulled socially — aggroing because a neighbour was pulled — the game often reports status 0 even though you have aggro.",
+      "target": "Quando criaturas entram em combate socialmente — gerando agressividade porque uma criatura vizinha foi atraída — o jogo geralmente relata status 0, mesmo que você esteja com a ameaça."
+    },
+    {
+      "source": "Which of the preset shapes this specific cue plays when it fires. \"",
+      "target": "Qual dos formatos predefinidos este sinal específico reproduz quando dispara. \""
+    },
+    {
+      "source": "Which physical motors each cue drives. Start with Standard Rumble, then calibrate the motors below.",
+      "target": "Quais motores físicos cada sinal aciona. Comece com Vibração padrão e calibre os motores abaixo."
+    },
+    {
+      "source": "Which physical motors each trigger drives. Try one, test a mode below, keep the one you can feel.",
+      "target": "Quais motores físicos cada gatilho aciona. Experimente um, teste um modo abaixo e mantenha aquele que conseguir sentir."
+    },
+    {
+      "source": "Which profile to use right now. This writes to whichever rule is currently in force, so picking here always changes what you are actually using rather than editing a rule something more specific is overriding.",
+      "target": "Qual perfil usar no momento. Isso altera a regra que está em vigor no momento, de modo que selecionar aqui sempre altera o que você está usando de fato, em vez de editar uma regra que algo mais específico está substituindo."
+    },
+    {
+      "source": "Wind amplitude",
+      "target": "Amplitude do vento"
+    },
+    {
+      "source": "Wind resistance & thrust surge while flying. Scales dynamically with your flight speed.",
+      "target": "Resistência do vento e impulso de propulsão ao voar. Dimensiona-se dinamicamente com sua velocidade de voo."
+    },
+    {
+      "source": "Windows",
+      "target": "Janelas"
+    },
+    {
+      "source": "World",
+      "target": "Mundo"
+    },
+    {
+      "source": "World & Environment",
+      "target": "Mundo e ambiente"
+    },
+    {
+      "source": "World Immersion",
+      "target": "Imersão no mundo"
+    },
+    {
+      "source": "You are alive again",
+      "target": "Você está vivo novamente"
+    },
+    {
+      "source": "You died",
+      "target": "Você morreu"
+    },
+    {
+      "source": "You have aggro",
+      "target": "Você está com a ameaça"
+    },
+    {
+      "source": "Your cast ended",
+      "target": "Seu lançamento terminou"
+    },
+    {
+      "source": "Your cast failed",
+      "target": "Seu lançamento falhou"
+    },
+    {
+      "source": "Your cast started",
+      "target": "Seu lançamento começou"
+    },
+    {
+      "source": "Your cast succeeded",
+      "target": "Seu lançamento foi bem-sucedido"
+    },
+    {
+      "source": "Zone changed",
+      "target": "Zona alterada"
+    },
+    {
+      "source": "an impact",
+      "target": "um impacto"
+    },
+    {
+      "source": "could not apply that preset",
+      "target": "não foi possível aplicar essa predefinição"
+    },
+    {
+      "source": "could not run that",
+      "target": "não foi possível executar isso"
+    },
+    {
+      "source": "could not set that rule",
+      "target": "não foi possível definir essa regra"
+    },
+    {
+      "source": "detection unavailable",
+      "target": "detecção indisponível"
+    },
+    {
+      "source": "in force",
+      "target": "em vigor"
+    },
+    {
+      "source": "no role chosen",
+      "target": "nenhuma função escolhida"
+    },
+    {
+      "source": "once a minute",
+      "target": "uma vez por minuto"
+    },
+    {
+      "source": "once every ",
+      "target": "uma vez a cada "
+    },
+    {
+      "source": "once every %.1f seconds",
+      "target": "uma vez a cada %.1f segundos"
+    },
+    {
+      "source": "|cff00ff00Left-Click:|r Open Settings",
+      "target": "|cff00ff00Clique com o botão esquerdo:|r Abrir configurações"
+    },
+    {
+      "source": "|cff00ff00Right-Click:|r Toggle Master On/Off",
+      "target": "|cff00ff00Clique com o botão direito:|r Alternar geral ligado/desligado"
+    },
+    {
+      "source": "|cff00ff00[Adjusting %d%%]|r Use |cffffffff[← / →]|r to Change, |cff38BDF8[A]|r Confirm & Feel",
+      "target": "|cff00ff00[Ajustando %d%%]|r Use |cffffffff[← / →]|r para alterar, |cff38BDF8[A]|r Confirmar e sentir"
+    },
+    {
+      "source": "|cff38BDF8[L1 / LB]|r",
+      "target": "|cff38BDF8[L1 / LB]|r"
+    },
+    {
+      "source": "|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[A]|r Toggle Slider / Select",
+      "target": "|cff38BDF8[L1/R1]|r Abas  •  |cff38BDF8[A]|r Alternar controle deslizante / Selecionar"
+    },
+    {
+      "source": "|cff38BDF8[R1 / RB]|r",
+      "target": "|cff38BDF8[R1 / RB]|r"
+    },
+    {
+      "source": "|cff444444[L1 / LB]|r",
+      "target": "|cff444444[L1 / LB]|r"
+    },
+    {
+      "source": "|cff444444[R1 / RB]|r",
+      "target": "|cff444444[R1 / RB]|r"
+    },
+    {
+      "source": "|cff4cb8ffPulse:|r Quick setup complete! Type |cffffffff/pulse|r anytime to fine-tune settings.",
+      "target": "|cff4cb8ffPulse:|r Configuração rápida concluída! Digite |cffffffff/pulse|r a qualquer momento para ajustar as configurações."
+    },
+    {
+      "source": "|cff4db8ff✔ |r",
+      "target": "|cff4db8ff✔ |r"
+    },
+    {
+      "source": "|cff888888Drag:|r Move Icon",
+      "target": "|cff888888Arrastar:|r Mover ícone"
+    },
+    {
+      "source": "|cff888888Loss of control cues are governed by the master switch on the main Pulse page.|r",
+      "target": "|cff888888Os sinais de perda de controle são gerenciados pelo interruptor principal na página inicial do Pulse.|r"
+    },
+    {
+      "source": "|cff888888Recommended intensity:|r %d%%",
+      "target": "|cff888888Intensidade recomendada:|r %d%%"
+    },
+    {
+      "source": "|cffffcc00◀/▶ Adjust Intensity|r   •   %s/%s Lock Value   •   %s Try Texture",
+      "target": "|cffffcc00◀/▶ Ajustar intensidade|r   •   %s/%s Bloquear valor   •   %s Testar textura"
+    },
+    {
+      "source": "|cffffd100%s|r  |cff00ff00[ACTIVE]|r",
+      "target": "|cffffd100%s|r  |cff00ff00[ATIVO]|r"
+    },
+    {
+      "source": "|cffffd100/pulseui|r opens it too. |cffffd100/pulse setup|r re-opens Quick Setup, |cffffd100/pulse test <mode>|r plays a shape.",
+      "target": "|cffffd100/pulseui|r também abre a janela. |cffffd100/pulse setup|r reabre a Configuração rápida, |cffffd100/pulse test <modo>|r reproduz um formato."
+    },
+    {
+      "source": "|r, |cffffd100",
+      "target": "|r, |cffffd100"
+    },
+    {
+      "source": "• |r",
+      "target": "• |r"
+    },
+    {
+      "source": "⚔️ Melee DPS",
+      "target": "⚔️ DPS Corpo a Corpo"
+    },
+    {
+      "source": "🏹 Ranged DPS",
+      "target": "🏹 DPS de Longo Alcance"
+    },
+    {
+      "source": "💚 Healer",
+      "target": "💚 Curador"
+    },
+    {
+      "source": "🛡️ Tank",
+      "target": "🛡️ Tanque"
+    }
+  ]
+}

@@ -1,0 +1,229 @@
+{
+  "items": [
+    {
+      "id": 22,
+      "source": "'s high-motor intensity. 1.0 is the authored default; the top of this slider is where it stops making any further difference.",
+      "target": "'s intensidad del motor rápido. 1.0 es el valor predeterminado original; el extremo superior de este deslizador es donde deja de marcar diferencia alguna."
+    },
+    {
+      "id": 23,
+      "source": "'s low-motor intensity. 1.0 is the authored default; the top of this slider is where it stops making any further difference.",
+      "target": "'s intensidad del motor lento. 1.0 es el valor predeterminado original; el extremo superior de este deslizador es donde deja de marcar diferencia alguna."
+    },
+    {
+      "id": 41,
+      "source": "A **trigger** is an occasion — something happening that you want to feel. A **mode** is a feeling — the shape of the vibration itself.\n\nEvery trigger plays one mode, and many triggers share one. You can customize this relationship at two levels:\n\n**Per-cue customization**: Enable advanced controls to change what a specific cue \"Feels like\" from its dropdown, or adjust its individual intensity slider without affecting other cues.\n\n**Motor & Timing page**: Reshape any vibration mode across the entire addon — adjust its low motor or high motor balance, and speed up or slow down its duration envelope.",
+      "target": "Un **disparador** es una ocasión: algo que sucede y que deseas sentir. Un **modo** es una sensación: la forma de la vibración en sí.\n\nCada disparador reproduce un modo, y muchos disparadores comparten el mismo. Puedes personalizar esta relación en dos niveles:\n\n**Personalización por señal**: Activa los controles avanzados para cambiar cómo \"Se siente\" una señal específica desde su menú desplegable, o ajusta su deslizador de intensidad individual sin afectar a otras señales.\n\n**Página de Motor y sincronización**: Modifica cualquier modo de vibración en todo el accesorio: ajusta el balance entre su motor lento o motor rápido, y acelera o ralentiza su envolvente de duración."
+    },
+    {
+      "id": 42,
+      "source": "A barely-there fade, for the quietest ambient onset.",
+      "target": "Un desvanecimiento apenas perceptible, para el inicio ambiental más sutil."
+    },
+    {
+      "id": 57,
+      "source": "A continuous texture — a steady feeling for as long as it's happening, not a single pulse.",
+      "target": "Una textura continua: una sensación constante mientras está sucediendo, no un pulso único."
+    },
+    {
+      "id": 70,
+      "source": "A few triggers, in both the game-feel and Accessibility parts of the panel, rest on questions about the game that have no settled answer yet.\n\nWhen one of them fails it does not produce an error. It simply never fires, and there is nothing to fix. They may also change or stop working after any game update.\n\nTry them if you're curious. Don't build a habit on one.",
+      "target": "Algunos disparadores, tanto en la sección de sensación de juego como en la de Accesibilidad del panel, dependen de aspectos del juego que aún no tienen una respuesta definitiva.\n\nCuando uno de ellos falla, no produce un error. Simplemente nunca se activa, y no hay nada que reparar. También pueden cambiar o dejar de funcionar después de cualquier actualización del juego.\n\nPruébalos si tienes curiosidad. No te acostumbres a depender de ellos."
+    },
+    {
+      "id": 73,
+      "source": "A firm mechanical detent on the high motor.",
+      "target": "Un retén mecánico firme en el motor rápido."
+    },
+    {
+      "id": 106,
+      "source": "A sharp double-knock ('lub-dub') repeating at its own independent rate while Blizzard's own low-health screen flash is active.",
+      "target": "Un golpe doble nítido ('lub-dub') que se repite a su propio ritmo independiente mientras el destello en pantalla de salud baja propio de Blizzard está activo."
+    },
+    {
+      "id": 107,
+      "source": "A sharp double-knock ('lub-dub') timed to each pulse of Blizzard's own low-health screen flash, rather than a single beat.",
+      "target": "Un golpe doble nítido ('lub-dub') sincronizado con cada pulso del destello en pantalla de salud baja propio de Blizzard, en lugar de un solo latido."
+    },
+    {
+      "id": 177,
+      "source": "Adds a row under each cue that plays it, so you can find out what something feels like without waiting for it to happen. Useful while tuning, but it doubles the length of every page. The mode tester below still works either way. Takes effect immediately — no /reload needed.",
+      "target": "Agrega una fila debajo de cada señal para reproducirla, de modo que puedas descubrir cómo se siente algo sin esperar a que ocurra en el juego. Útil durante el ajuste, pero duplica la longitud de cada página. El probador de modos inferior sigue funcionando en ambos casos. Se aplica de inmediato; no es necesario hacer /reload."
+    },
+    {
+      "id": 178,
+      "source": "Adds each cue's own intensity slider, \"Feels like\" shape picker and any bespoke dials to its page. On by default: uncheck for a compact one-line list that is easier to read when you just want to switch cues on and off. Takes effect immediately in this panel — no /reload needed.",
+      "target": "Agrega a su página el deslizador de intensidad propio de cada señal, el selector de perfil \"Cómo se siente\" y cualquier ajuste específico. Activado por defecto: desmárcalo para obtener una lista compacta de una sola línea que es más fácil de leer si solo quieres activar y desactivar señales. Se aplica de inmediato en este panel; no es necesario hacer /reload."
+    },
+    {
+      "id": 188,
+      "source": "Anatomical lub-dub cardiac rhythm.",
+      "target": "Ritmo cardíaco anatómico lub-dub."
+    },
+    {
+      "id": 263,
+      "source": "Complements rather than duplicates a \"resource full\" cue — this ticks on every point, not just the cap. Reads UnitPower(\"player\", Enum.PowerType.ComboPoints) via UNIT_POWER_UPDATE, firing only when the count increases — confirmed live 2026-09-16 that this event also fires on the drop back to 0 after a finisher, so an unfiltered version would tick on that reset too. An ability that grants more than one point in a single event ticks once, not once per point — a simplification, not confirmed against every point-granting ability.",
+      "target": "Complementa en lugar de duplicar una señal de \"recurso lleno\": hace un chasquido en cada punto, no solo en el límite máximo. Lee UnitPower(\"player\", Enum.PowerType.ComboPoints) mediante UNIT_POWER_UPDATE, activándose solo cuando la cantidad aumenta; confirmado en vivo el 16-09-2026 que este evento también se activa al volver a 0 tras un remate, por lo que una versión sin filtrar también haría un chasquido en ese restablecimiento. Una habilidad que otorga más de un punto en un solo evento hace un chasquido una vez, no uno por punto; una simplificación no confirmada en todas las habilidades que otorgan puntos."
+    },
+    {
+      "id": 274,
+      "source": "Continuous textures",
+      "target": "Texturas continuas"
+    },
+    {
+      "id": 304,
+      "source": "Crisp high-frequency motor vibration applied right as the wave crest reaches peak amplitude. Fades out smoothly when submerged.",
+      "target": "Vibración nítida del motor de alta frecuencia aplicada justo cuando la cresta de la ola alcanza su amplitud máxima. Se desvanece suavemente al sumergirse."
+    },
+    {
+      "id": 338,
+      "source": "Does nothing on a specialisation with no secondary resource. Expect it to fire often on a class that refills constantly, such as a rogue rebuilding combo points. Not a duplicate of this addon's own \"Combo point gained\" above — that ticks per point, this fires once on reaching the cap for any of the seven candidate resources.",
+      "target": "No hace nada en una especialización sin recurso secundario. Se activará con frecuencia en una clase que recarga constantemente, como un pícaro acumulando puntos de combo. No duplica la señal \"Punto de combo obtenido\" de este mismo accesorio indicada arriba: esa hace un chasquido por punto, mientras que esta se activa una sola vez al alcanzar el límite máximo de cualquiera de los siete recursos posibles."
+    },
+    {
+      "id": 360,
+      "source": "Duration of the software overdrive kick. 0.030s on heavy ERM counterweights, 0.0 on LRAs.",
+      "target": "Duración del impulso de sobreaceleración por software. 0.030 s en contrapesos ERM pesados, 0.0 en actuadores LRA."
+    },
+    {
+      "id": 365,
+      "source": "Enable Continuous Immersion Haptics (Master)",
+      "target": "Activar respuesta háptica continua de inmersión (General)"
+    },
+    {
+      "id": 529,
+      "source": "Guide",
+      "target": "Guía"
+    },
+    {
+      "id": 546,
+      "source": "High-motor ceiling at full gliding speed. Only audible while actually gliding.",
+      "target": "Límite máximo del motor rápido a velocidad máxima de planeo. Solo perceptible mientras se planea realmente."
+    },
+    {
+      "id": 550,
+      "source": "Hooks Blizzard's shared tab plumbing (TabSystemMixin:SetTab, TabSystemOwnerMixin:SetTab, PanelTemplates_SetTab). Filtered on those functions' own `isUserAction` argument where they provide one, so a panel setting its own tab as it opens stays silent and only a tab YOU changed fires. Two known gaps: PanelTemplates_SetTab is the legacy path and has no such flag, so a few older panels may still fire on open; and the two mixin hooks only reach panels created AFTER Pulse loads, because Mixin() copies function references onto a frame at creation. Most big tabbed panels are load-on-demand and so are covered, but anything built before this addon isn't. Expect this one to be patchy.",
+      "target": "Se conecta a la estructura compartida de pestañas de Blizzard (TabSystemMixin:SetTab, TabSystemOwnerMixin:SetTab, PanelTemplates_SetTab). Se filtra mediante el argumento `isUserAction` propio de esas funciones cuando lo proporcionan, de modo que un panel que establece su propia pestaña al abrirse permanezca en silencio y solo se active una pestaña que TÚ hayas cambiado. Dos limitaciones conocidas: PanelTemplates_SetTab es la ruta heredada y no tiene dicho parámetro, por lo que algunos paneles antiguos aún pueden activarse al abrirse; y los dos enlaces de mixin solo llegan a los paneles creados DESPUÉS de que se carga Pulse, porque Mixin() copia las referencias de funciones en un marco al momento de crearlo. La mayoría de los paneles grandes con pestañas se cargan a petición y, por lo tanto, están cubiertos, pero todo lo creado antes de este accesorio no lo está. Ten en cuenta que esta función puede ser irregular."
+    },
+    {
+      "id": 557,
+      "source": "How long this motor takes to reach a new, stronger level during continuous textures. Higher is softer and more gradual; lower is snappier. 0.075 reproduces the engine's old behaviour at 60fps.",
+      "target": "El tiempo que tarda este motor en alcanzar un nuevo nivel más fuerte durante las texturas continuas. Un valor más alto es más suave y gradual; un valor más bajo es más instantáneo. 0.075 reproduce el comportamiento anterior del motor a 60 fps."
+    },
+    {
+      "id": 560,
+      "source": "How often the lub-dub repeats while the warning stays active. Higher is more urgent; lower is less annoying. Independent of the screen flash's own (fixed, ~57 BPM) rate — this is a separate timer, not synced to it.",
+      "target": "Con qué frecuencia se repite el latido lub-dub mientras la advertencia permanece activa. Un valor más alto es más urgente; un valor más bajo es menos molesto. Es independiente de la frecuencia propia (fija, ~57 LPM) del destello en pantalla: es un temporizador independiente, no sincronizado con él."
+    },
+    {
+      "id": 568,
+      "source": "INPUT_DEVICE_INTERFACE_TRANSITION, carrying newMode/oldMode. This event is FOREVER-ONLY — it was not found anywhere in the retail Midnight archive used for comparison, so don't expect this cue to do anything on retail. Fires on any transition in either direction; the payload would let it be split into separate entered/left cues later if that's worth having.",
+      "target": "INPUT_DEVICE_INTERFACE_TRANSITION, que transmite newMode/oldMode. Este evento es EXCLUSIVO DE FOREVER; no se encontró en ninguna parte del archivo de Midnight de la versión comercial (retail) utilizado para comparar, así que no esperes que esta señal haga nada en retail. Se activa en cualquier transición en cualquiera de las dos direcciones; la carga útil permitiría dividirla más adelante en señales separadas de entrada y salida si vale la pena hacerlo."
+    },
+    {
+      "id": 583,
+      "source": "Instants and completed casts arrive on the same event, so \"Cast succeeded\" has always fired for both. Core/CastActivity.lua tells them apart by whether a START was seen first; this is the instant half. Leave \"Cast succeeded\" off if you want only one of the two. Untested.",
+      "target": "Los lanzamientos instantáneos y los completados llegan en el mismo evento, por lo que \"Lanzamiento exitoso\" siempre se ha activado para ambos. Core/CastActivity.lua los distingue según si se detectó un START primero; esta es la parte de los instantáneos. Desactiva \"Lanzamiento exitoso\" si solo deseas uno de los dos. Sin probar."
+    },
+    {
+      "id": 659,
+      "source": "Motor & Timing",
+      "target": "Motor y sincronización"
+    },
+    {
+      "id": 669,
+      "source": "Multiplies the baseline while fully submerged rather than bobbing at the surface, via IsSubmerged(). Set to 1.0 to feel the same either way. UNVERIFIED: IsSubmerged is confirmed present in the client API list, but whether it really distinguishes the two cases here has not been checked live.",
+      "target": "Multiplica la línea base cuando estás completamente sumergido en lugar de flotar en la superficie, mediante IsSubmerged(). Establécelo en 1.0 para que se sienta igual en ambos casos. NO VERIFICADO: Se confirmó que IsSubmerged está presente en la lista de la API del cliente, pero no se ha comprobado en vivo si realmente distingue ambos casos aquí."
+    },
+    {
+      "id": 687,
+      "source": "Nothing about these is percussive, so they get the bed alone. Inventing a hammer for enchanting would be inventing a sensation that is not there.",
+      "target": "Nada en estas acciones es percusivo, por lo que solo reciben la base continua sola. Inventar un martillo para encantamiento sería inventar una sensación que no existe."
+    },
+    {
+      "id": 688,
+      "source": "OFF BY DEFAULT, and that is deliberate. A rolling swell suggests ocean, and this cue fires in rivers, lakes and canals too, where it would read as wrong rather than as atmosphere — Classic has no wave physics for it to be tracking, so it would be inventing something the world is not doing. Flat presence is the honest default. Raise it if you want a swell anyway; it is a good sensation, just not a true one.",
+      "target": "DESACTIVADA POR DEFECTO, y es deliberado. Un oleaje ondulante sugiere océano, y esta señal también se activa en ríos, lagos y canales, donde se percibiría como un error más que como ambientación; Classic no tiene físicas de olas que pueda rastrear, por lo que estaría inventando algo que el mundo no está haciendo. Una presencia plana es la opción predeterminada honesta. Auméntala si deseas un oleaje de todos modos; es una buena sensación, pero no una real."
+    },
+    {
+      "id": 696,
+      "source": "Off by default — a continuous texture, not a notification.",
+      "target": "Desactivada por defecto: una textura continua, no una notificación."
+    },
+    {
+      "id": 727,
+      "source": "PLAYER_SOFT_INTERACT_CHANGED. Unlike its two siblings this one DOES carry a payload (oldTarget/newTarget GUIDs) and is flagged SecretWhenUnitIdentityRestricted in Blizzard's own docs, so this cue deliberately reads none of it and fires on the occurrence alone. Probably the most useful of the three: it's the one that says \"there is something here\" while you're looking around.",
+      "target": "PLAYER_SOFT_INTERACT_CHANGED. A diferencia de sus dos variantes hermanas, esta SÍ incluye datos de carga útil (GUID de oldTarget/newTarget) y está marcada como SecretWhenUnitIdentityRestricted en la propia documentación de Blizzard, por lo que esta señal deliberadamente no lee nada de eso y se activa solo con la ocurrencia. Probablemente la más útil de las tres: es la que indica \"hay algo aquí\" mientras miras a tu alrededor."
+    },
+    {
+      "id": 747,
+      "source": "Patter frequency (Hz)",
+      "target": "Frecuencia de repiqueteo (Hz)"
+    },
+    {
+      "id": 748,
+      "source": "Perceptual S-Curve",
+      "target": "Curva en S perceptual"
+    },
+    {
+      "id": 777,
+      "source": "Pulse Haptics",
+      "target": "Pulse Haptics"
+    },
+    {
+      "id": 787,
+      "source": "Pulse: all haptic vibrations stopped.",
+      "target": "Pulse: se detuvieron todas las vibraciones hápticas."
+    },
+    {
+      "id": 872,
+      "source": "Reset every mode's motor and duration multiplier back to 1.0? This can't be undone.",
+      "target": "¿Restablecer el multiplicador de motor y duración de cada modo a 1.0? Esto no se puede deshacer."
+    },
+    {
+      "id": 873,
+      "source": "Reset every mode's motor and duration multiplier on this page back to 1.0. Doesn't touch cues, per-cue intensity, or per-trigger mode picks.",
+      "target": "Restablece el multiplicador de motor y duración de cada modo en esta página a 1.0. No modifica las señales, la intensidad por señal ni las selecciones de modo por disparador."
+    },
+    {
+      "id": 875,
+      "source": "Reset motor & timing",
+      "target": "Restablecer motor y sincronización"
+    },
+    {
+      "id": 909,
+      "source": "Second-harmonic content, which is what makes a stroke feel like pull-then-glide rather than a symmetric swell. Six earlier tuning rounds all felt \"rough\" because they modulated the amplitude of a constant; a pure sine cannot express this asymmetry and that is most likely why. 0 reverts to a plain swell.",
+      "target": "Contenido de segundo armónico, que es lo que hace que una brazada se sienta como tracción y luego deslizamiento en lugar de un oleaje simétrico. Seis rondas de ajuste previas se sentían \"bruscas\" porque modulaban la amplitud de una constante; una onda senoidal pura no puede expresar esta asimetría y esa es muy probablemente la razón. 0 vuelve a un oleaje simple."
+    },
+    {
+      "id": 953,
+      "source": "Starts high, fades into a low hum.",
+      "target": "Comienza alto y se desvanece en un zumbido grave."
+    },
+    {
+      "id": 966,
+      "source": "Step 5: Immersion & Continuous Textures",
+      "target": "Paso 5: Inmersión y texturas continuas"
+    },
+    {
+      "id": 1063,
+      "source": "Tuned for trackpad & chassis LRA haptics",
+      "target": "Ajustado para la respuesta háptica LRA de trackpad y chasis"
+    },
+    {
+      "id": 1088,
+      "source": "Urgent repeating cardiac 'lub-dub' rhythm in sync with screen warnings below 20% health.",
+      "target": "Ritmo cardíaco 'lub-dub' urgente y repetitivo sincronizado con las advertencias en pantalla por debajo del 20 por ciento de salud."
+    },
+    {
+      "id": 1138,
+      "source": "With this turned off, navigation, edge bumps, radial wheels, tab switches, and popups produce no haptics and unhook from the interface to save processing.",
+      "target": "Con esto desactivado, la navegación, los topes de bordes, los menús radiales, los cambios de pestaña y las ventanas emergentes no producen respuesta háptica y se desconectan de la interfaz para ahorrar procesamiento."
+    },
+    {
+      "id": 1141,
+      "source": "World & Discovery Haptics",
+      "target": "Háptica de mundo y descubrimiento"
+    }
+  ]
+}

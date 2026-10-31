@@ -1,0 +1,297 @@
+{
+  "batch_id": 7,
+  "name": "Engineering Delta Additions",
+  "count": 58,
+  "items": [
+    {
+      "id": 1211,
+      "source": " (reported as \"%s\")",
+      "signature": "s"
+    },
+    {
+      "id": 1212,
+      "source": "ACTIVE",
+      "signature": ""
+    },
+    {
+      "id": 1213,
+      "source": "Accept",
+      "signature": ""
+    },
+    {
+      "id": 1214,
+      "source": "Active",
+      "signature": ""
+    },
+    {
+      "id": 1215,
+      "source": "Alchemy",
+      "signature": ""
+    },
+    {
+      "id": 1216,
+      "source": "Apply",
+      "signature": ""
+    },
+    {
+      "id": 1217,
+      "source": "Blacksmithing",
+      "signature": ""
+    },
+    {
+      "id": 1218,
+      "source": "Combat and life state",
+      "signature": ""
+    },
+    {
+      "id": 1219,
+      "source": "Combat texture",
+      "signature": ""
+    },
+    {
+      "id": 1220,
+      "source": "Cooking",
+      "signature": ""
+    },
+    {
+      "id": 1221,
+      "source": "Detect",
+      "signature": ""
+    },
+    {
+      "id": 1222,
+      "source": "Disabled",
+      "signature": ""
+    },
+    {
+      "id": 1223,
+      "source": "Duration",
+      "signature": ""
+    },
+    {
+      "id": 1224,
+      "source": "Enabled",
+      "signature": ""
+    },
+    {
+      "id": 1225,
+      "source": "Enchanting",
+      "signature": ""
+    },
+    {
+      "id": 1226,
+      "source": "Engineering",
+      "signature": ""
+    },
+    {
+      "id": 1227,
+      "source": "Experimental (game-feel)",
+      "signature": ""
+    },
+    {
+      "id": 1228,
+      "source": "Feel %s",
+      "signature": "s"
+    },
+    {
+      "id": 1229,
+      "source": "Feels like: %s",
+      "signature": "s"
+    },
+    {
+      "id": 1230,
+      "source": "Fires at most %s.",
+      "signature": "s"
+    },
+    {
+      "id": 1231,
+      "source": "First Aid",
+      "signature": ""
+    },
+    {
+      "id": 1232,
+      "source": "Fishing",
+      "signature": ""
+    },
+    {
+      "id": 1233,
+      "source": "Flight and mounts",
+      "signature": ""
+    },
+    {
+      "id": 1234,
+      "source": "Group and social",
+      "signature": ""
+    },
+    {
+      "id": 1235,
+      "source": "Herbalism",
+      "signature": ""
+    },
+    {
+      "id": 1236,
+      "source": "High motor (sharp rumble)",
+      "signature": ""
+    },
+    {
+      "id": 1237,
+      "source": "Inscription",
+      "signature": ""
+    },
+    {
+      "id": 1238,
+      "source": "Jewelcrafting",
+      "signature": ""
+    },
+    {
+      "id": 1239,
+      "source": "Leatherworking",
+      "signature": ""
+    },
+    {
+      "id": 1240,
+      "source": "Low motor (heavy rumble)",
+      "signature": ""
+    },
+    {
+      "id": 1241,
+      "source": "MUTED",
+      "signature": ""
+    },
+    {
+      "id": 1242,
+      "source": "Mining",
+      "signature": ""
+    },
+    {
+      "id": 1243,
+      "source": "Multiplies %s's high-motor intensity. 1.0 is the authored default; the top of this slider is where it stops making any further difference.",
+      "signature": "s"
+    },
+    {
+      "id": 1244,
+      "source": "Multiplies %s's low-motor intensity. 1.0 is the authored default; the top of this slider is where it stops making any further difference.",
+      "signature": "s"
+    },
+    {
+      "id": 1245,
+      "source": "Okay",
+      "signature": ""
+    },
+    {
+      "id": 1246,
+      "source": "Other crafting",
+      "signature": ""
+    },
+    {
+      "id": 1247,
+      "source": "Play %s right now with whatever's currently set on its sliders above.",
+      "signature": "s"
+    },
+    {
+      "id": 1248,
+      "source": "PvP",
+      "signature": ""
+    },
+    {
+      "id": 1249,
+      "source": "Ramp",
+      "signature": ""
+    },
+    {
+      "id": 1250,
+      "source": "Skinning",
+      "signature": ""
+    },
+    {
+      "id": 1251,
+      "source": "Spec %s",
+      "signature": "s"
+    },
+    {
+      "id": 1252,
+      "source": "Speeds up or slows down %s as a whole — both its pulses and the gaps between them, so a multi-hit mode keeps its rhythm instead of the hits stretching into their own gaps. 1.0 is the authored default.",
+      "signature": "s"
+    },
+    {
+      "id": 1253,
+      "source": "Tailoring",
+      "signature": ""
+    },
+    {
+      "id": 1254,
+      "source": "Target and focus",
+      "signature": ""
+    },
+    {
+      "id": 1255,
+      "source": "Test",
+      "signature": ""
+    },
+    {
+      "id": 1256,
+      "source": "This specialization (%s)",
+      "signature": "s"
+    },
+    {
+      "id": 1257,
+      "source": "World (accessibility)",
+      "signature": ""
+    },
+    {
+      "id": 1258,
+      "source": "World (game-feel)",
+      "signature": ""
+    },
+    {
+      "id": 1259,
+      "source": "Your casting",
+      "signature": ""
+    },
+    {
+      "id": 1260,
+      "source": "a ramp is currently running on %s, not %s",
+      "signature": "s,s"
+    },
+    {
+      "id": 1261,
+      "source": "every character",
+      "signature": ""
+    },
+    {
+      "id": 1262,
+      "source": "nothing set — falling back to Default",
+      "signature": ""
+    },
+    {
+      "id": 1263,
+      "source": "once every %d minutes",
+      "signature": "d"
+    },
+    {
+      "id": 1264,
+      "source": "once every %d seconds",
+      "signature": "d"
+    },
+    {
+      "id": 1265,
+      "source": "this character",
+      "signature": ""
+    },
+    {
+      "id": 1266,
+      "source": "this specialization (%s)",
+      "signature": "s"
+    },
+    {
+      "id": 1267,
+      "source": "|cff888888Silences:|r %s",
+      "signature": "s"
+    },
+    {
+      "id": 1268,
+      "source": "|cffffd100Emphasizes:|r %s",
+      "signature": "s"
+    }
+  ]
+}

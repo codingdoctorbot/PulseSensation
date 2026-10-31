@@ -1,0 +1,1328 @@
+{
+  "items": [
+    {
+      "source": "Low health",
+      "target": "低生命值"
+    },
+    {
+      "source": "Low health texture",
+      "target": "低生命值震感"
+    },
+    {
+      "source": "Low motor",
+      "target": "重震馬達"
+    },
+    {
+      "source": "Low motor holds a steady presence, floored so it's never silent while gliding; high motor eases in from near-silent toward thrillPeak as speed climbs, shaped by thrillCurve.",
+      "target": "重震馬達保持持續存在感，設有起轉門檻使其在滑翔時永不沉寂；輕震馬達則隨著速度提升從近乎無聲平穩過渡至 thrillPeak，受 thrillCurve 曲線調節。"
+    },
+    {
+      "source": "Mage",
+      "target": "法師"
+    },
+    {
+      "source": "Manage",
+      "target": "管理"
+    },
+    {
+      "source": "Master Vibration Strength",
+      "target": "主震動強度"
+    },
+    {
+      "source": "Master switch for every loss-of-control cue below. With this off, none of them fire and no loss-of-control events are registered at all.",
+      "target": "下方所有失去控制提示的總開關。關閉後，所有提示均不會觸發，且完全不會註冊任何失去控制事件。"
+    },
+    {
+      "source": "Master switch. With this off, nothing registers and nothing costs anything.",
+      "target": "總開關。關閉後，不註冊任何事件且無任何效能開銷。"
+    },
+    {
+      "source": "Melee auto-attack started",
+      "target": "近戰自動攻擊開始"
+    },
+    {
+      "source": "Melee auto-attack stopped",
+      "target": "近戰自動攻擊停止"
+    },
+    {
+      "source": "Menus & tabs",
+      "target": "選單與分頁"
+    },
+    {
+      "source": "Messages",
+      "target": "訊息"
+    },
+    {
+      "source": "Minimum severity",
+      "target": "最低嚴重度"
+    },
+    {
+      "source": "Mode to test",
+      "target": "待測試模式"
+    },
+    {
+      "source": "Most specific wins. A scope set to |cffffd100No rule|r has no opinion and lets the one below it decide; with none of them set, Pulse uses Default.",
+      "target": "最特定的規則優先。若範圍設為|cffffd100無規則|r，則不作設定並由其下層規則決定；若均未設定，Pulse 將使用預設設定檔。"
+    },
+    {
+      "source": "Movement",
+      "target": "移動"
+    },
+    {
+      "source": "Movement & Travel",
+      "target": "移動與旅行"
+    },
+    {
+      "source": "Multiplies every trigger's intensity. Part of the current profile, not global.",
+      "target": "按倍率縮放每個觸發器的強度。屬於目前設定檔，非全域設定。"
+    },
+    {
+      "source": "Name the new profile:",
+      "target": "為新設定檔命名："
+    },
+    {
+      "source": "Navigation",
+      "target": "導覽"
+    },
+    {
+      "source": "New profile",
+      "target": "新增設定檔"
+    },
+    {
+      "source": "Next >",
+      "target": "下一步 >"
+    },
+    {
+      "source": "No rule",
+      "target": "無規則"
+    },
+    {
+      "source": "None (full sensory richness)",
+      "target": "無（完全感官豐富度）"
+    },
+    {
+      "source": "None (stock defaults)",
+      "target": "無（初始預設值）"
+    },
+    {
+      "source": "ON — option changes and cue firings will print here.",
+      "target": "開啟——選項變更與提示觸發將在此處輸出。"
+    },
+    {
+      "source": "Ocean Waves & Swell",
+      "target": "海浪與海湧"
+    },
+    {
+      "source": "Ocean waves & swell",
+      "target": "海浪與海湧"
+    },
+    {
+      "source": "Ocean zones only (guessed from zone name)",
+      "target": "僅限海洋區域（根據區域名稱推測）"
+    },
+    {
+      "source": "Off by default and deliberately the faintest cue in the addon: this fires for EVERY NPC you talk to, which in a city is constantly. Try it before leaving it on. Untested.",
+      "target": "預設關閉，且刻意設計為本插件中最微弱的提示：與任何 NPC 對話時都會觸發，而在城市中對話極其頻繁。建議在保持開啟前先體驗測試。未經測試。"
+    },
+    {
+      "source": "Offensive",
+      "target": "進攻"
+    },
+    {
+      "source": "One cue for both directions, same reasoning as the navigation edge cue — a motor can't tell you which way you went.",
+      "target": "雙向共用一個提示，原因與導覽邊緣提示相同——馬達無法傳達你移動的具體方向。"
+    },
+    {
+      "source": "One full-bodied hit on both motors.",
+      "target": "雙馬達上產生一次飽滿有力的敲擊。"
+    },
+    {
+      "source": "One long, sombre pulse when a spirit healer's window opens.",
+      "target": "靈魂醫者視窗開啟時，產生一次漫長而沉鬱的脈衝。"
+    },
+    {
+      "source": "One sharp, heavy impact — fast attack, fast decay.",
+      "target": "一次清脆沉重的撞擊——快速起振，快速消退。"
+    },
+    {
+      "source": "One strong, sustained pulse.",
+      "target": "一次強烈而持續的脈衝。"
+    },
+    {
+      "source": "One sustained pulse.",
+      "target": "一次持續脈衝。"
+    },
+    {
+      "source": "Open Pulse settings",
+      "target": "開啟 Pulse 設定"
+    },
+    {
+      "source": "Other",
+      "target": "其他"
+    },
+    {
+      "source": "Overall heave amplitude of the oceanic swell. Sets the physical displacement intensity of the slow motor.",
+      "target": "海浪起伏的整體振幅。設定重震馬達的物理位移強度。"
+    },
+    {
+      "source": "Overall intensity",
+      "target": "整體強度"
+    },
+    {
+      "source": "Overall strength. Meant to sit at the edge of perception — if you notice it as a vibration rather than as being submerged, it is too high. Inherits the old idleFloatAmplitude, which was live-tuned to 0.04.",
+      "target": "整體強度。旨在維持在感官察覺的邊緣——若你感覺它是一陣震動而非置身水下，代表強度偏高。繼承了舊版 idleFloatAmplitude，實機調校設定為 0.04。"
+    },
+    {
+      "source": "Overdrive kick",
+      "target": "超驅衝量"
+    },
+    {
+      "source": "Overdrive time (s)",
+      "target": "超驅時間 (秒)"
+    },
+    {
+      "source": "Own motor",
+      "target": "獨立馬達"
+    },
+    {
+      "source": "PLAYER_ALIVE also fires when you release to a graveyard, so this can fire while you are still a ghost.",
+      "target": "釋放靈魂到墓地時也會觸發 PLAYER_ALIVE，因此當你仍處於鬼魂狀態時可能觸發此提示。"
+    },
+    {
+      "source": "PLAYER_SOFT_FRIEND_CHANGED, occurrence-only, no payload. Worth pairing with the hostile cue above only if you can tell two TICKs apart — if not, give one of them a different shape with its own \"Feels like\" dropdown.",
+      "target": "PLAYER_SOFT_FRIEND_CHANGED，僅事件觸發，無額外資料。只有當你能分辨兩種不同的「TICK」提示震動時，才建議與上方的敵對提示搭配使用——若無法分辨，請在各自的「體感觸感」下拉選單中為其指定不同的震動形態。"
+    },
+    {
+      "source": "PULSE QUICK SETUP",
+      "target": "PULSE 快速設定"
+    },
+    {
+      "source": "Pacified or school-locked",
+      "target": "處於被安撫或法術系別封鎖狀態"
+    },
+    {
+      "source": "Page switches",
+      "target": "頁面總開關"
+    },
+    {
+      "source": "Paladin",
+      "target": "聖騎士"
+    },
+    {
+      "source": "Passively polled by observing IsEnabled() on the currently focused element. Fires if the element becomes disabled while focused.",
+      "target": "透過監測目前焦點元素的 IsEnabled() 進行被動輪詢。若焦點元素在處於焦點狀態時變為停用則觸發。"
+    },
+    {
+      "source": "Passively polled via GetUIPanel every 0.05s to eliminate UIParentPanelManager execution taint on protected frames.",
+      "target": "每 0.05 秒透過 GetUIPanel 被動輪詢，避免受保護框架產生 UIParentPanelManager 執行污染。"
+    },
+    {
+      "source": "Passively polled via GetUIPanel every 0.05s. Detects when major UI panels are dismissed without callback taint.",
+      "target": "每 0.05 秒透過 GetUIPanel 被動輪詢。在不產生回呼污染的前提下偵測主要介面面板的關閉。"
+    },
+    {
+      "source": "Passively polled via GroupTargeting.isTargetingActive. Fires when the group targeting modifier is released.",
+      "target": "透過 GroupTargeting.isTargetingActive 被動輪詢。在放開隊伍目標組合鍵時觸發。"
+    },
+    {
+      "source": "Physical tool strikes: anvil hammer strokes, mining pickaxe impacts, tailoring stitches.",
+      "target": "物理工具敲擊：鐵砧錘擊、採礦鎬擊打、裁縫縫紉針線。"
+    },
+    {
+      "source": "Pick a mode to test below.",
+      "target": "在下方選擇要測試的模式。"
+    },
+    {
+      "source": "Play",
+      "target": "播放"
+    },
+    {
+      "source": "Play ",
+      "target": "播放 "
+    },
+    {
+      "source": "Play a few seconds of this texture at its current intensity. Module-driven preview reproducing authentic physical dynamics and configured intensity.",
+      "target": "以目前強度播放數秒該震感。模組驅動的預覽能夠真實還原物理動態與配置強度。"
+    },
+    {
+      "source": "Presence floor (low)",
+      "target": "最低存在感底限（重震）"
+    },
+    {
+      "source": "Priest",
+      "target": "牧師"
+    },
+    {
+      "source": "Prints every option you change and every cue that actually fires to chat, in real time. Same as /pulse debug — off by default, and resets to off on /reload since it's a testing aid, not a saved preference.",
+      "target": "在對話框中即時輸出你變更的每個選項以及實際觸發的每個提示。等同於 /pulse debug——預設關閉，且在 /reload 後重設為關閉，因為此項僅為測試輔助工具，而非儲存的偏好設定。"
+    },
+    {
+      "source": "Profile",
+      "target": "設定檔"
+    },
+    {
+      "source": "Profiles",
+      "target": "設定檔"
+    },
+    {
+      "source": "Profiles and automatic rules",
+      "target": "設定檔與自動規則"
+    },
+    {
+      "source": "Progression",
+      "target": "角色成長"
+    },
+    {
+      "source": "Progressive low build leading to a sharp high break.",
+      "target": "重震漸強積聚，隨後爆發清脆的輕震碎裂。"
+    },
+    {
+      "source": "Pull / glide balance",
+      "target": "拉力 / 滑翔平衡"
+    },
+    {
+      "source": "Pulse",
+      "target": "Pulse"
+    },
+    {
+      "source": "Pulse is using |cffffd100%s|r, because a rule is set for %s.",
+      "target": "Pulse 正在使用|cffffd100%s|r，因為已為 %s 設定了規則。"
+    },
+    {
+      "source": "Pulse tunes motor spin-up attack, coast-down release, and breakaway friction to match your physical hardware actuators.",
+      "target": "Pulse 調校馬達的起轉加速、減速釋放與起轉摩擦力，以精確符合你的實體硬體震動致動器。"
+    },
+    {
+      "source": "Pulse: (Engine recorded %d errors. Last error: %s)",
+      "target": "Pulse: (引擎記錄了 %d 個錯誤。最後錯誤：%s)"
+    },
+    {
+      "source": "Pulse: /pulse test <mode>|heartbeat|warningbeat — try one of: ",
+      "target": "Pulse: /pulse test <mode>|heartbeat|warningbeat —— 推薦嘗試："
+    },
+    {
+      "source": "Pulse: activated profile \"%s\"",
+      "target": "Pulse: 已啟用設定檔「%s」"
+    },
+    {
+      "source": "Pulse: active profile is \"%s\" (%s)",
+      "target": "Pulse: 目前使用中設定檔為「%s」(%s)"
+    },
+    {
+      "source": "Pulse: bound profile \"%s\" to specialization %s",
+      "target": "Pulse: 已將設定檔「%s」綁定至專精 %s"
+    },
+    {
+      "source": "Pulse: could not build settings row %q (%s)",
+      "target": "Pulse: 無法建構設定列 %q (%s)"
+    },
+    {
+      "source": "Pulse: could not build the settings window (",
+      "target": "Pulse: 無法建構設定視窗 ("
+    },
+    {
+      "source": "Pulse: debug ",
+      "target": "Pulse: 偵錯 "
+    },
+    {
+      "source": "Pulse: disabled all %d cues in active profile.",
+      "target": "Pulse: 已停用目前設定檔中的全部 %d 個提示。"
+    },
+    {
+      "source": "Pulse: disabled all %d cues in profile \"%s\".",
+      "target": "Pulse: 已停用全部 %d 個提示（設定檔「%s」）。"
+    },
+    {
+      "source": "Pulse: disabled all %d cues in profile %s.",
+      "target": "Pulse: 已停用全部 %d 個提示（設定檔 %s）。"
+    },
+    {
+      "source": "Pulse: enabled all %d cues in active profile.",
+      "target": "Pulse: 已啟用目前設定檔中的全部 %d 個提示。"
+    },
+    {
+      "source": "Pulse: enabled all %d cues in profile \"%s\".",
+      "target": "Pulse: 已啟用全部 %d 個提示（設定檔「%s」）。"
+    },
+    {
+      "source": "Pulse: enabled all %d cues in profile %s.",
+      "target": "Pulse: 已啟用全部 %d 個提示（設定檔 %s）。"
+    },
+    {
+      "source": "Pulse: live oscilloscope is provided by the companion addon PulseDebug (/pdebug scope).",
+      "target": "Pulse: 即時示波器由隨附插件 PulseDebug (/pdebug scope) 提供。"
+    },
+    {
+      "source": "Pulse: minimap icon %s",
+      "target": "Pulse: 小地圖圖示 %s"
+    },
+    {
+      "source": "Pulse: no profile matching \"%s\". Available: %s",
+      "target": "Pulse: 找不到相符「%s」的設定檔。可用設定檔：%s"
+    },
+    {
+      "source": "Pulse: switched to profile \"%s\"",
+      "target": "Pulse: 已切換至設定檔「%s」"
+    },
+    {
+      "source": "Pulse: that preview is unavailable.",
+      "target": "Pulse: 該預覽無法使用。"
+    },
+    {
+      "source": "Pulse: this looks like a %s%s. Pick it above, then press Apply.",
+      "target": "Pulse: 偵測到目前裝置疑似為 %s%s。請在上方選取它，然後按一下套用。"
+    },
+    {
+      "source": "Pure flavour — nothing depends on it. Untested.",
+      "target": "僅用於增添氛圍——無任何邏輯依賴它。未經測試。"
+    },
+    {
+      "source": "Pure novelty. Off by default forever, basically — nobody asked for this one.",
+      "target": "純屬新奇體驗。基本上永遠預設關閉——畢竟從未有人要求過這項功能。"
+    },
+    {
+      "source": "Put every motor's strength, floor, timing and curve back to the engine defaults. Doesn't touch cues, per-cue intensity, mode tuning or your schema.",
+      "target": "將每個馬達的強度、起轉門檻、時序與曲線恢復為引擎預設值。不會影響提示、個別提示強度、模式調校或你的震動架構方案。"
+    },
+    {
+      "source": "Put the profile in use back to its stock defaults — works on built-ins too, restoring their curated content rather than blank Registry.lua defaults.",
+      "target": "將使用中的設定檔恢復為初始預設值——對內建設定檔同樣有效，恢復其精心策劃的內容而非空白的 Registry.lua 預設值。"
+    },
+    {
+      "source": "PvP (Tactical Radar)",
+      "target": "PvP（戰術雷達）"
+    },
+    {
+      "source": "Quest accepted",
+      "target": "接受任務"
+    },
+    {
+      "source": "Quest offered",
+      "target": "提供任務"
+    },
+    {
+      "source": "Quest ready to hand in",
+      "target": "任務可回報"
+    },
+    {
+      "source": "Quest turned in",
+      "target": "回報任務"
+    },
+    {
+      "source": "Questing",
+      "target": "任務"
+    },
+    {
+      "source": "Questing & Exploration",
+      "target": "任務與探索"
+    },
+    {
+      "source": "Quests",
+      "target": "任務"
+    },
+    {
+      "source": "Quick Setup",
+      "target": "快速設定"
+    },
+    {
+      "source": "Quick Setup Wizard",
+      "target": "快速設定精靈"
+    },
+    {
+      "source": "Radial menu",
+      "target": "環形選單"
+    },
+    {
+      "source": "Radial menu closed",
+      "target": "環形選單已關閉"
+    },
+    {
+      "source": "Radial menu opened",
+      "target": "環形選單已開啟"
+    },
+    {
+      "source": "Radial page changed",
+      "target": "環形選單切換分頁"
+    },
+    {
+      "source": "Radial segment changed",
+      "target": "環形扇區切換"
+    },
+    {
+      "source": "Radial segment chosen",
+      "target": "環形扇區已選取"
+    },
+    {
+      "source": "Radial segment unavailable",
+      "target": "環形扇區無法使用"
+    },
+    {
+      "source": "Radial selection cancelled",
+      "target": "環形選取已取消"
+    },
+    {
+      "source": "Ranged auto-repeat started",
+      "target": "遠程自動射擊開始"
+    },
+    {
+      "source": "Ranged auto-repeat stopped",
+      "target": "遠程自動射擊停止"
+    },
+    {
+      "source": "Rapid staccato triple-click on the high motor.",
+      "target": "輕震馬達上快速斷奏的三連擊。"
+    },
+    {
+      "source": "Reading something",
+      "target": "正在閱讀"
+    },
+    {
+      "source": "Reads the segment's own IsEnabled() — the same value Blizzard reads to grey the highlight out, so this matches what you see on screen. Fires in place of \"Radial segment changed\", not alongside it.",
+      "target": "讀取該扇區自身的 IsEnabled()——與 Blizzard 用於將高亮變灰的值完全相同，因此與你在螢幕上看到的完全一致。此提示會替代「環形扇區切換」觸發，而非並列觸發。"
+    },
+    {
+      "source": "Ready check",
+      "target": "就位確認"
+    },
+    {
+      "source": "Ready check finished",
+      "target": "就位確認結束"
+    },
+    {
+      "source": "Release time (s)",
+      "target": "釋放時間 (秒)"
+    },
+    {
+      "source": "Reload UI",
+      "target": "重載介面"
+    },
+    {
+      "source": "Reload UI to apply the language change.",
+      "target": "重載介面以套用語言變更。"
+    },
+    {
+      "source": "Reload the interface to apply your selected addon language.",
+      "target": "重載介面以套用你所選取的插件語言。"
+    },
+    {
+      "source": "Rename",
+      "target": "重新命名"
+    },
+    {
+      "source": "Rename \"%s\" to:",
+      "target": "將「%s」重新命名為："
+    },
+    {
+      "source": "Rename the profile in use. Every rule pointing at it follows the rename. Built-in profiles can't be renamed.",
+      "target": "重新命名使用中的設定檔。指向該設定檔的所有規則都將同步更新名稱。內建設定檔無法重新命名。"
+    },
+    {
+      "source": "Rename this profile",
+      "target": "重新命名此設定檔"
+    },
+    {
+      "source": "Rename...",
+      "target": "重新命名..."
+    },
+    {
+      "source": "Repaired equipment",
+      "target": "已修復裝備"
+    },
+    {
+      "source": "Reset",
+      "target": "重設"
+    },
+    {
+      "source": "Reset every motor's strength, floor, timing and curve back to the engine defaults? This can't be undone.",
+      "target": "是否將每個馬達的強度、起轉門檻、時序與曲線重設為引擎預設值？此操作無法復原。"
+    },
+    {
+      "source": "Reset profile \"%s\" to defaults? Every cue, intensity and mode override in it goes back to stock values. This can't be undone.",
+      "target": "是否將設定檔「%s」重設為預設值？其中的所有提示、強度以及模式覆寫都將恢復為初始值。此操作無法復原。"
+    },
+    {
+      "source": "Reset this profile",
+      "target": "重設此設定檔"
+    },
+    {
+      "source": "Reset...",
+      "target": "重設..."
+    },
+    {
+      "source": "Resources",
+      "target": "資源"
+    },
+    {
+      "source": "Response curve",
+      "target": "反應曲線"
+    },
+    {
+      "source": "Resting",
+      "target": "休息狀態"
+    },
+    {
+      "source": "Resurrection offered",
+      "target": "受到復活邀請"
+    },
+    {
+      "source": "Rewards",
+      "target": "獎勵"
+    },
+    {
+      "source": "Rogue",
+      "target": "盜賊"
+    },
+    {
+      "source": "Role poll",
+      "target": "職責確認"
+    },
+    {
+      "source": "Rooted",
+      "target": "被定身"
+    },
+    {
+      "source": "Routing & Schema",
+      "target": "路由與架構方案"
+    },
+    {
+      "source": "Rules",
+      "target": "規則"
+    },
+    {
+      "source": "Run Wizard",
+      "target": "執行精靈"
+    },
+    {
+      "source": "Run cadence (steps/s)",
+      "target": "奔跑踏步節奏 (步/秒)"
+    },
+    {
+      "source": "Same polled mechanism as \"Confirmation popup appeared\". Untested.",
+      "target": "與「確認彈出視窗出現」相同的輪詢機制。未經測試。"
+    },
+    {
+      "source": "Save & Start Playing",
+      "target": "儲存並開始遊戲"
+    },
+    {
+      "source": "Scales both the bed and the strikes for %s, before the two shared strengths above.",
+      "target": "在上方的兩個共用強度之前，按比例縮放 %s 的持續底震與敲擊震動。"
+    },
+    {
+      "source": "Scales this cue on top of the overall intensity on the Pulse page.",
+      "target": "在 Pulse 主頁面的整體強度之上，按比例縮放此提示。"
+    },
+    {
+      "source": "School lockouts are frequent in melee-heavy content. Off by default because a cue every kick you eat can crowd out the ones that mean you cannot act at all.",
+      "target": "在近戰密集的戰鬥中法系封鎖相當頻繁。預設關閉，因為每次被斷法都產生震動提示可能會掩蓋那些導致你完全無法行動的關鍵提示。"
+    },
+    {
+      "source": "Search %d cues...",
+      "target": "搜尋 %d 個提示..."
+    },
+    {
+      "source": "Secondary resource full",
+      "target": "次要資源已滿"
+    },
+    {
+      "source": "Set Floor",
+      "target": "設定起轉門檻"
+    },
+    {
+      "source": "Set but not in force: |cffffd100%s|r. A more specific rule above is winning — clear it to let these take over.",
+      "target": "已設定但未生效：|cffffd100%s|r。上方更特定的規則優先——清除該規則即可讓此項生效。"
+    },
+    {
+      "source": "Set for Spec",
+      "target": "為專精設定"
+    },
+    {
+      "source": "Setup Summary",
+      "target": "設定摘要"
+    },
+    {
+      "source": "Shaman",
+      "target": "薩滿"
+    },
+    {
+      "source": "Shares its pulse pattern with the target cue. If your focus is also your target, you get one cue rather than two.",
+      "target": "與目標提示共用相同的脈衝模式。若專注目標同時也是你的當前目標，你只會感受到一次提示而非兩次。"
+    },
+    {
+      "source": "Sharp high kick layered with heavy low kick and rumble decay.",
+      "target": "清脆的輕震衝量疊加沉重的重震衝量，並伴隨漸弱餘震。"
+    },
+    {
+      "source": "Show a Play button on every cue",
+      "target": "在每個提示旁顯示播放按鈕"
+    },
+    {
+      "source": "Show minimap icon",
+      "target": "顯示小地圖圖示"
+    },
+    {
+      "source": "Show per-cue detail controls",
+      "target": "顯示個別提示的詳細控制項"
+    },
+    {
+      "source": "Shows only the page switches and this page. Every cue keeps its own settings; turn this off to get every page back exactly as it was.",
+      "target": "僅顯示頁面總開關以及本頁面。每個提示都會保留其各自的設定；關閉此項即可完全恢復所有頁面的原貌。"
+    },
+    {
+      "source": "Silenced",
+      "target": "被沉默"
+    },
+    {
+      "source": "Simple view",
+      "target": "簡潔檢視"
+    },
+    {
+      "source": "Slow, harmonic oceanic gravity swells and coastal tides while submerged in deep oceans.",
+      "target": "潛入深海時，產生緩慢而和諧的海洋重力海湧與海岸潮汐感。"
+    },
+    {
+      "source": "Snappy & Taps",
+      "target": "清脆敲擊"
+    },
+    {
+      "source": "Social & Group",
+      "target": "社交與隊伍"
+    },
+    {
+      "source": "Social & Group Communication",
+      "target": "社交與隊伍溝通"
+    },
+    {
+      "source": "Soft target interact",
+      "target": "互動軟目標"
+    },
+    {
+      "source": "Special casting",
+      "target": "特殊施法"
+    },
+    {
+      "source": "Speeds up or slows down ",
+      "target": "加快或減慢 "
+    },
+    {
+      "source": "Spirit healer",
+      "target": "靈魂醫者"
+    },
+    {
+      "source": "Split left and right",
+      "target": "左右聲道分離"
+    },
+    {
+      "source": "Square / X: open settings",
+      "target": "Square / X: 開啟設定"
+    },
+    {
+      "source": "Stable opened",
+      "target": "獸欄已開啟"
+    },
+    {
+      "source": "Stack split ratchet",
+      "target": "拆分堆疊棘輪感"
+    },
+    {
+      "source": "Standard Rumble",
+      "target": "標準震動"
+    },
+    {
+      "source": "Standard balance across all categories",
+      "target": "所有分類的均衡標準配置"
+    },
+    {
+      "source": "Status: %s",
+      "target": "狀態：%s"
+    },
+    {
+      "source": "Step 4: Interface & Social Alerts",
+      "target": "第 4 步：介面與社交警報"
+    },
+    {
+      "source": "Step 6: Master Strength & Completion",
+      "target": "第 6 步：主強度與完成"
+    },
+    {
+      "source": "Steps per second at full running speed. Scaled by how fast you are actually moving.",
+      "target": "全速奔跑時每秒的踏步次數。根據你實際移動的速度進行動態縮放。"
+    },
+    {
+      "source": "Steps per second at normal walking speed.",
+      "target": "正常步行時每秒的踏步次數。"
+    },
+    {
+      "source": "Strength",
+      "target": "強度"
+    },
+    {
+      "source": "Strike strength",
+      "target": "敲擊強度"
+    },
+    {
+      "source": "Stroke depth",
+      "target": "划水深度"
+    },
+    {
+      "source": "Stroke rate, fast (Hz)",
+      "target": "划水頻率，快速 (Hz)"
+    },
+    {
+      "source": "Stroke rate, slow (Hz)",
+      "target": "划水頻率，慢速 (Hz)"
+    },
+    {
+      "source": "Strokes per second at barely-moving speed.",
+      "target": "在極慢微動速度下每秒的划水次數。"
+    },
+    {
+      "source": "Stunned",
+      "target": "被昏迷"
+    },
+    {
+      "source": "Summon offered",
+      "target": "受到召喚"
+    },
+    {
+      "source": "Swapped / Inverted Rumble",
+      "target": "對調 / 反轉震動"
+    },
+    {
+      "source": "Swell depth",
+      "target": "海湧深度"
+    },
+    {
+      "source": "Swell rate (Hz)",
+      "target": "海湧頻率 (Hz)"
+    },
+    {
+      "source": "Swell strength",
+      "target": "海湧強度"
+    },
+    {
+      "source": "Switch to this profile",
+      "target": "切換至此設定檔"
+    },
+    {
+      "source": "Switches every cue on the Casting page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "一鍵開啟或關閉「施法」頁面上的所有提示。每個提示仍會保留其各自的底層設定。"
+    },
+    {
+      "source": "Switches every cue on the Character & Status page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "一鍵開啟或關閉「角色與狀態」頁面上的所有提示。每個提示仍會保留其各自的底層設定。"
+    },
+    {
+      "source": "Switches every cue on the Interface & Accessibility page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "一鍵開啟或關閉「介面與無障礙」頁面上的所有提示。每個提示仍會保留其各自的底層設定。"
+    },
+    {
+      "source": "Switches every cue on the Movement & Travel page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "一鍵開啟或關閉「移動與旅行」頁面上的所有提示。每個提示仍會保留其各自的底層設定。"
+    },
+    {
+      "source": "Switches every cue on the Social & Group page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "一鍵開啟或關閉「社交與隊伍」頁面上的所有提示。每個提示仍會保留其各自的底層設定。"
+    },
+    {
+      "source": "Switches every cue on the Target & Focus page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "一鍵開啟或關閉「目標與專注目標」頁面上的所有提示。每個提示仍會保留其各自的底層設定。"
+    },
+    {
+      "source": "Switches every cue on the World & Environment page on or off at once. Each cue keeps its own setting underneath.",
+      "target": "一鍵開啟或關閉「世界與環境」頁面上的所有提示。每個提示仍會保留其各自的底層設定。"
+    },
+    {
+      "source": "Talking to someone",
+      "target": "與某人交談"
+    },
+    {
+      "source": "Target",
+      "target": "目標"
+    },
+    {
+      "source": "Target & Crosshair Feedback",
+      "target": "目標與準星反饋"
+    },
+    {
+      "source": "Target & Focus",
+      "target": "目標與專注目標"
+    },
+    {
+      "source": "Target changed",
+      "target": "目標已切換"
+    },
+    {
+      "source": "Target died",
+      "target": "目標死亡"
+    },
+    {
+      "source": "Target started casting",
+      "target": "目標開始施法"
+    },
+    {
+      "source": "Target used major defensive",
+      "target": "目標使用了主要防禦技能"
+    },
+    {
+      "source": "Target's cast stopped",
+      "target": "目標的施法已停止"
+    },
+    {
+      "source": "Targeted by enemy",
+      "target": "被敵人選為目標"
+    },
+    {
+      "source": "Targeting",
+      "target": "目標鎖定"
+    },
+    {
+      "source": "Test Alert",
+      "target": "測試警報"
+    },
+    {
+      "source": "Test Impact",
+      "target": "測試撞擊"
+    },
+    {
+      "source": "Test Lock",
+      "target": "測試鎖定"
+    },
+    {
+      "source": "Test Reward",
+      "target": "測試獎勵"
+    },
+    {
+      "source": "Test Rumble",
+      "target": "測試震動"
+    },
+    {
+      "source": "Test Strike",
+      "target": "測試敲擊"
+    },
+    {
+      "source": "Test UI",
+      "target": "測試介面"
+    },
+    {
+      "source": "Test the selected mode",
+      "target": "測試所選模式"
+    },
+    {
+      "source": "Textures & Patterns",
+      "target": "質感與模式"
+    },
+    {
+      "source": "The Accessibility section",
+      "target": "「無障礙」分類"
+    },
+    {
+      "source": "The Cue Index directory",
+      "target": "提示索引目錄"
+    },
+    {
+      "source": "The _QUIET variant covers failures the game prints no error for, so this can fire with nothing visible on screen.",
+      "target": "_QUIET 變體涵蓋了遊戲未輸出錯誤訊息的失敗情況，因此在螢幕上沒有任何可見提示時也可能觸發。"
+    },
+    {
+      "source": "The experimental section",
+      "target": "實驗性分類"
+    },
+    {
+      "source": "The lightest possible tick when a conversation window opens with any NPC.",
+      "target": "與任何 NPC 開啟對話視窗時，產生最為輕微的提示震動。"
+    },
+    {
+      "source": "The master switch for this page. Also on the Casting page, where the cue lives alongside the other casting cues.",
+      "target": "本頁面的總開關。同時也存在於「施法」頁面中，與該頁面中的其他施法提示並列。"
+    },
+    {
+      "source": "This character",
+      "target": "目前角色"
+    },
+    {
+      "source": "This character reports no specialization, so there is no per-specialization rule to set. The row appears by itself on a character that has one.",
+      "target": "目前角色無專精資訊，因此無可設定的個別專精規則。當角色擁有專精時該列將自動顯示。"
+    },
+    {
+      "source": "This specialization",
+      "target": "目前專精"
+    },
+    {
+      "source": "This specialization (",
+      "target": "目前專精 ("
+    },
+    {
+      "source": "Three rhythmic thuds.",
+      "target": "三次有節奏的沉重撞擊。"
+    },
+    {
+      "source": "Three-stage rising tension building on the low motor.",
+      "target": "重震馬達上呈現三段漸強的緊張感積蓄。"
+    },
+    {
+      "source": "Thrill curve (high)",
+      "target": "俯衝快感曲線（輕震）"
+    },
+    {
+      "source": "Thrill peak (high)",
+      "target": "俯衝快感峰值（輕震）"
+    },
+    {
+      "source": "Time in seconds for a complete wave cycle. Real oceanic swells roll every 8 to 12 seconds (~0.10 Hz). Shorter periods feel like choppy coastal chop; longer periods feel like open-ocean rollers.",
+      "target": "一個完整海浪週期的秒數。現實中的大洋湧浪每 8 到 12 秒湧動一次 (~0.10 Hz)。週期較短感覺像近岸碎浪；週期較長感覺像遠洋起伏巨浪。"
+    },
+    {
+      "source": "Tracked cooldown ready",
+      "target": "追蹤的冷卻已就緒"
+    },
+    {
+      "source": "Trade opened",
+      "target": "交易視窗已開啟"
+    },
+    {
+      "source": "Triggers, modes, and motor tuning",
+      "target": "觸發器、模式與馬達調校"
+    },
+    {
+      "source": "Try Texture",
+      "target": "測試震感"
+    },
+    {
+      "source": "Tuned for HD Rumble voice-coil actuators",
+      "target": "專為 HD 震動音圈致動器調校"
+    },
+    {
+      "source": "Turn off every cue in the active profile in one sweep (useful for quiet debugging).",
+      "target": "一鍵關閉使用中設定檔中的所有提示（對靜音偵錯非常實用）。"
+    },
+    {
+      "source": "Turn on every cue in the active profile in one sweep (useful for testing/debugging).",
+      "target": "一鍵開啟使用中設定檔中的所有提示（對測試/偵錯非常實用）。"
+    },
+    {
+      "source": "Turn whole pages of cues on or off. Each cue keeps its own setting underneath: switching a page back on restores exactly what was there.",
+      "target": "整頁開啟或關閉提示。每個提示在底層均會保留各自的設定：重新開啟頁面將完全恢復先前的狀態。"
+    },
+    {
+      "source": "Two crisp ticks when a cooldown the built-in Cooldown Manager is tracking comes off cooldown.",
+      "target": "內建冷卻管理器追蹤的技能結束冷卻時，產生兩次清脆的提示震動。"
+    },
+    {
+      "source": "Two heavier hits with a gap between them.",
+      "target": "兩次較重的敲擊，中間帶有明顯間隔。"
+    },
+    {
+      "source": "Two kinds of trigger: pulses and textures",
+      "target": "兩類觸發器：脈衝與持續質感"
+    },
+    {
+      "source": "Two rhythmic thuds.",
+      "target": "兩次有節奏的沉重撞擊。"
+    },
+    {
+      "source": "Two soft ticks when the action bar pages to a different set of abilities.",
+      "target": "快捷列翻頁至另一組技能時，產生兩次柔和的提示震動。"
+    },
+    {
+      "source": "Two soft ticks when you page the radial left or right with the shoulder buttons.",
+      "target": "使用肩鍵向左或向右翻動環形選單時，產生兩次柔和的提示震動。"
+    },
+    {
+      "source": "UI focus moved",
+      "target": "介面焦點移動"
+    },
+    {
+      "source": "UI navigation hit an edge",
+      "target": "介面導覽觸碰邊緣"
+    },
+    {
+      "source": "UI panel closed",
+      "target": "介面面板已關閉"
+    },
+    {
+      "source": "UI panel opened",
+      "target": "介面面板已開啟"
+    },
+    {
+      "source": "Untested whether this also fires on every instant-cast press rather than only real cast-bar completions — if so, it'll feel far too frequent to read as \"that landed\" specifically. Check before relying on it.",
+      "target": "未經測試每次按下瞬發技能是否也會觸發，而非僅在實際施法條讀條完成時觸發——若是前者，震動將過於頻繁而無法準確傳達「技能命中」的感受。依賴此項前請先進行驗證。"
+    },
+    {
+      "source": "Untested.",
+      "target": "未經測試。"
+    },
+    {
+      "source": "Use the old estimator",
+      "target": "使用舊版估算演算法"
+    },
+    {
+      "source": "Using \"%s\" — set for %s.",
+      "target": "正在使用「%s」——已為 %s 設定。"
+    },
+    {
+      "source": "Vendor window opened",
+      "target": "商人視窗已開啟"
+    },
+    {
+      "source": "Vibration Mode",
+      "target": "震動模式"
+    },
+    {
+      "source": "Vibration Schema: |cffffd100%s|r",
+      "target": "震動架構方案：|cffffd100%s|r"
+    },
+    {
+      "source": "Vibration schema",
+      "target": "震動架構方案"
+    },
+    {
+      "source": "Voice-coil actuators (LRA), ultra-low 0.025 floor, instant response",
+      "target": "線性音圈致動器 (LRA)，0.025 超低起轉門檻，瞬時響應"
+    },
+    {
+      "source": "Walk cadence (steps/s)",
+      "target": "步行踏步節奏 (步/秒)"
+    },
+    {
+      "source": "Warlock",
+      "target": "術士"
+    },
+    {
+      "source": "Warning lead time",
+      "target": "警報前置時間"
+    },
+    {
+      "source": "Warrior",
+      "target": "戰士"
+    },
+    {
+      "source": "Watches UNIT_TARGET and target swaps for hostile units whose target is the player. Uses UnitIsUnit('targettarget', 'player') with defensive secrecy guards.",
+      "target": "監測 UNIT_TARGET 以及目標切換，追蹤以玩家為目標的敵對單位。使用 UnitIsUnit('targettarget', 'player') 並帶有防禦性私密保護。"
+    },
+    {
+      "source": "Wave cycle (seconds)",
+      "target": "海浪週期 (秒)"
+    },
+    {
+      "source": "Wave period (sec)",
+      "target": "海浪週期 (秒)"
+    },
+    {
+      "source": "Wave steepness",
+      "target": "海浪陡度"
+    },
+    {
+      "source": "Weapon or gear swapped",
+      "target": "更換武器或裝備"
+    },
+    {
+      "source": "What this does",
+      "target": "功能說明"
+    },
+    {
+      "source": "When mobs are pulled socially — aggroing because a neighbour was pulled — the game often reports status 0 even though you have aggro.",
+      "target": "當怪物被連帶引怪拉到時（因鄰近的怪物被引而產生仇恨），遊戲往往回報仇恨狀態為 0，即便你實際上持有仇恨。"
+    },
+    {
+      "source": "Which of the preset shapes this specific cue plays when it fires. \"",
+      "target": "此提示觸發時播放哪種預設震動形態。「"
+    },
+    {
+      "source": "Which physical motors each cue drives. Start with Standard Rumble, then calibrate the motors below.",
+      "target": "每個提示驅動哪些實體馬達。建議從「標準震動」開始，然後在下方校準馬達。"
+    },
+    {
+      "source": "Which physical motors each trigger drives. Try one, test a mode below, keep the one you can feel.",
+      "target": "每個觸發器驅動哪些實體馬達。嘗試一種並測試下方的模式，保留你能清晰感知的設定。"
+    },
+    {
+      "source": "Which profile to use right now. This writes to whichever rule is currently in force, so picking here always changes what you are actually using rather than editing a rule something more specific is overriding.",
+      "target": "目前使用的設定檔。這會直接寫入目前生效的規則，因此在此選擇始終會改變你實際使用的設定，而不會編輯被更高優先級規則覆寫的內容。"
+    },
+    {
+      "source": "Wind amplitude",
+      "target": "風力振幅"
+    },
+    {
+      "source": "Wind resistance & thrust surge while flying. Scales dynamically with your flight speed.",
+      "target": "飛行時的風阻與推力湧動。根據飛行速度動態縮放。"
+    },
+    {
+      "source": "Windows",
+      "target": "視窗"
+    },
+    {
+      "source": "World",
+      "target": "世界"
+    },
+    {
+      "source": "World & Environment",
+      "target": "世界與環境"
+    },
+    {
+      "source": "World Immersion",
+      "target": "世界沉浸"
+    },
+    {
+      "source": "You are alive again",
+      "target": "你復活了"
+    },
+    {
+      "source": "You died",
+      "target": "你死亡了"
+    },
+    {
+      "source": "You have aggro",
+      "target": "你獲得了仇恨"
+    },
+    {
+      "source": "Your cast ended",
+      "target": "你的施法結束"
+    },
+    {
+      "source": "Your cast failed",
+      "target": "你的施法失敗"
+    },
+    {
+      "source": "Your cast started",
+      "target": "你的施法開始"
+    },
+    {
+      "source": "Your cast succeeded",
+      "target": "你的施法成功"
+    },
+    {
+      "source": "Zone changed",
+      "target": "區域已變更"
+    },
+    {
+      "source": "an impact",
+      "target": "一次撞擊"
+    },
+    {
+      "source": "could not apply that preset",
+      "target": "無法套用該預設"
+    },
+    {
+      "source": "could not run that",
+      "target": "無法執行該項"
+    },
+    {
+      "source": "could not set that rule",
+      "target": "無法設定該規則"
+    },
+    {
+      "source": "detection unavailable",
+      "target": "偵測無法使用"
+    },
+    {
+      "source": "in force",
+      "target": "生效中"
+    },
+    {
+      "source": "no role chosen",
+      "target": "未選擇職責"
+    },
+    {
+      "source": "once a minute",
+      "target": "每分鐘一次"
+    },
+    {
+      "source": "once every ",
+      "target": "每隔 "
+    },
+    {
+      "source": "once every %.1f seconds",
+      "target": "每 %.1f 秒一次"
+    },
+    {
+      "source": "|cff00ff00Left-Click:|r Open Settings",
+      "target": "|cff00ff00左鍵點擊：|r開啟設定"
+    },
+    {
+      "source": "|cff00ff00Right-Click:|r Toggle Master On/Off",
+      "target": "|cff00ff00右鍵點擊：|r切換主開關開啟/關閉"
+    },
+    {
+      "source": "|cff00ff00[Adjusting %d%%]|r Use |cffffffff[← / →]|r to Change, |cff38BDF8[A]|r Confirm & Feel",
+      "target": "|cff00ff00[正在調整 %d%%]|r 使用 |cffffffff[← / →]|r 調整，|cff38BDF8[A]|r 確認並感受"
+    },
+    {
+      "source": "|cff38BDF8[L1 / LB]|r",
+      "target": "|cff38BDF8[L1 / LB]|r"
+    },
+    {
+      "source": "|cff38BDF8[L1/R1]|r Tabs  •  |cff38BDF8[A]|r Toggle Slider / Select",
+      "target": "|cff38BDF8[L1/R1]|r 分頁  •  |cff38BDF8[A]|r 切換滑桿 / 選取"
+    },
+    {
+      "source": "|cff38BDF8[R1 / RB]|r",
+      "target": "|cff38BDF8[R1 / RB]|r"
+    },
+    {
+      "source": "|cff444444[L1 / LB]|r",
+      "target": "|cff444444[L1 / LB]|r"
+    },
+    {
+      "source": "|cff444444[R1 / RB]|r",
+      "target": "|cff444444[R1 / RB]|r"
+    },
+    {
+      "source": "|cff4cb8ffPulse:|r Quick setup complete! Type |cffffffff/pulse|r anytime to fine-tune settings.",
+      "target": "|cff4cb8ffPulse:|r 快速設定完成！隨時輸入 |cffffffff/pulse|r 即可微調各項設定。"
+    },
+    {
+      "source": "|cff4db8ff✔ |r",
+      "target": "|cff4db8ff✔ |r"
+    },
+    {
+      "source": "|cff888888Drag:|r Move Icon",
+      "target": "|cff888888拖曳：|r移動圖示"
+    },
+    {
+      "source": "|cff888888Loss of control cues are governed by the master switch on the main Pulse page.|r",
+      "target": "|cff888888失去控制提示受 Pulse 主頁面上的總開關統一控制。|r"
+    },
+    {
+      "source": "|cff888888Recommended intensity:|r %d%%",
+      "target": "|cff888888推薦強度：|r%d%%"
+    },
+    {
+      "source": "|cffffcc00◀/▶ Adjust Intensity|r   •   %s/%s Lock Value   •   %s Try Texture",
+      "target": "|cffffcc00◀/▶ 調整強度|r   •   %s/%s 鎖定數值   •   %s 測試震感"
+    },
+    {
+      "source": "|cffffd100%s|r  |cff00ff00[ACTIVE]|r",
+      "target": "|cffffd100%s|r  |cff00ff00[已啟用]|r"
+    },
+    {
+      "source": "|cffffd100/pulseui|r opens it too. |cffffd100/pulse setup|r re-opens Quick Setup, |cffffd100/pulse test <mode>|r plays a shape.",
+      "target": "|cffffd100/pulseui|r 亦可將其開啟。|cffffd100/pulse setup|r 重新開啟快速設定，|cffffd100/pulse test <mode>|r 試聽播放震動形態。"
+    },
+    {
+      "source": "|r, |cffffd100",
+      "target": "|r, |cffffd100"
+    },
+    {
+      "source": "• |r",
+      "target": "• |r"
+    },
+    {
+      "source": "⚔️ Melee DPS",
+      "target": "⚔️ 近戰輸出"
+    },
+    {
+      "source": "🏹 Ranged DPS",
+      "target": "🏹 遠程輸出"
+    },
+    {
+      "source": "💚 Healer",
+      "target": "💚 治療"
+    },
+    {
+      "source": "🛡️ Tank",
+      "target": "🛡️ 坦克"
+    }
+  ]
+}

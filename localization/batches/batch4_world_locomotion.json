@@ -1,0 +1,687 @@
+{
+  "batch_id": 4,
+  "name": "World, Environment & Locomotion",
+  "count": 136,
+  "items": [
+    {
+      "id": 32,
+      "source": "100% stripped of footsteps, weather, swimming, flight, loot, quest, and UI noise",
+      "signature": "s"
+    },
+    {
+      "id": 46,
+      "source": "A bright tick when something you could interact with — an NPC, a node, a door — comes under your reticle.",
+      "signature": ""
+    },
+    {
+      "id": 48,
+      "source": "A bright tick when the weather changes.",
+      "signature": ""
+    },
+    {
+      "id": 54,
+      "source": "A clear tactical chime when a waypoint ping pin is placed on the terrain or map.",
+      "signature": ""
+    },
+    {
+      "id": 55,
+      "source": "A continuous gait texture while moving — footfalls on foot, hoofbeats mounted.",
+      "signature": ""
+    },
+    {
+      "id": 56,
+      "source": "A continuous texture underwater that intensifies as your breath depletes.",
+      "signature": ""
+    },
+    {
+      "id": 69,
+      "source": "A falling pulse when the radial menu closes.",
+      "signature": ""
+    },
+    {
+      "id": 72,
+      "source": "A firm impact as your flight path mount touches down at your destination.",
+      "signature": ""
+    },
+    {
+      "id": 74,
+      "source": "A gentle, steady texture for the duration of a taxi flight.",
+      "signature": ""
+    },
+    {
+      "id": 75,
+      "source": "A heartbeat-like warning when your breath meter drops below a quarter, underwater.",
+      "signature": ""
+    },
+    {
+      "id": 79,
+      "source": "A heavy, suffocating thud each time you take damage from drowning underwater.",
+      "signature": ""
+    },
+    {
+      "id": 85,
+      "source": "A light tick the instant you jump or start a Skyriding ascend.",
+      "signature": ""
+    },
+    {
+      "id": 88,
+      "source": "A light tick when you land after a short fall or jump.",
+      "signature": ""
+    },
+    {
+      "id": 91,
+      "source": "A near-subliminal sense of being in water, for as long as you are — buoyancy rather than effort.",
+      "signature": ""
+    },
+    {
+      "id": 108,
+      "source": "A sharp impact when you land after a long fall.",
+      "signature": ""
+    },
+    {
+      "id": 121,
+      "source": "A soft release tick when stepping out of auto-attack melee range of your target.",
+      "signature": ""
+    },
+    {
+      "id": 126,
+      "source": "A soft tick when you dismount.",
+      "signature": ""
+    },
+    {
+      "id": 136,
+      "source": "A strong impulse of thrust as your flight path mount launches into the air.",
+      "signature": ""
+    },
+    {
+      "id": 138,
+      "source": "A subtle tick when stepping within auto-attack melee range of your target.",
+      "signature": ""
+    },
+    {
+      "id": 158,
+      "source": "A very light tick when a friendly unit comes under your reticle.",
+      "signature": ""
+    },
+    {
+      "id": 159,
+      "source": "A very light tick when something you could attack comes under your reticle.",
+      "signature": ""
+    },
+    {
+      "id": 185,
+      "source": "Ambient weather, world dialogs, merchant/mail",
+      "signature": ""
+    },
+    {
+      "id": 196,
+      "source": "Asymmetric oceanic gravity swells and coastal wave surges while swimming in the sea.",
+      "signature": ""
+    },
+    {
+      "id": 209,
+      "source": "Base strength of rain drops on the light motor.",
+      "signature": ""
+    },
+    {
+      "id": 222,
+      "source": "Bracketed by PLAYER_CONTROL_LOST/GAINED filtered to UnitOnTaxi — those events also fire for other control-loss cases (e.g. fear), filtered out here.",
+      "signature": ""
+    },
+    {
+      "id": 224,
+      "source": "Breath Depletion",
+      "signature": ""
+    },
+    {
+      "id": 225,
+      "source": "Breath depth",
+      "signature": ""
+    },
+    {
+      "id": 226,
+      "source": "Breath rate (Hz)",
+      "signature": ""
+    },
+    {
+      "id": 227,
+      "source": "Breath texture stays completely silent (no ambient, no gasps) while breath remaining is above this — requested live 2026-09-16 as ~70% breath remaining, well before real danger, so the calm bradycardic heartbeat has room to establish before anything steepens.",
+      "signature": ""
+    },
+    {
+      "id": 233,
+      "source": "C_Weather/WEATHER_CHANGED is new as of Patch 12.1.5 and its exact return shape hasn't been verified in-game here — this fires on any change, not filtered to storm-type weather yet.",
+      "signature": ""
+    },
+    {
+      "id": 237,
+      "source": "Cast flow, flight & skyriding, swimming, weather changes, quest and item haptics",
+      "signature": ""
+    },
+    {
+      "id": 272,
+      "source": "Continuous atmospheric vibration matching the current weather (rain, snow, sandstorm) and its intensity.",
+      "signature": ""
+    },
+    {
+      "id": 307,
+      "source": "Cycles per second, if you turn the swell on below. 0.15 is roughly one slow rise and fall every seven seconds. Deliberately far slower than the stroke rate above — two layers sharing a frequency read as one sensation instead of two.",
+      "signature": ""
+    },
+    {
+      "id": 320,
+      "source": "Delete the profile in use. Every rule naming it is cleared, so those scopes fall through to the next one down. Built-in profiles can't be deleted.",
+      "signature": ""
+    },
+    {
+      "id": 325,
+      "source": "Directory of all %d vibration cues in Pulse, in alphabetical order. Click any entry to jump directly to its controls.",
+      "signature": "d"
+    },
+    {
+      "id": 332,
+      "source": "Dismounted",
+      "signature": ""
+    },
+    {
+      "id": 340,
+      "source": "Dragonriding / Skyriding thrust",
+      "signature": ""
+    },
+    {
+      "id": 342,
+      "source": "Drowning damage",
+      "signature": ""
+    },
+    {
+      "id": 343,
+      "source": "Drowning heartbeat interval",
+      "signature": ""
+    },
+    {
+      "id": 344,
+      "source": "Drowning panic peak",
+      "signature": ""
+    },
+    {
+      "id": 361,
+      "source": "Effort only, routed by default to the heavy motor alongside \"In water\", so the two merge into natural fluid resistance with clean glide coast-down between strokes. Turn on \"Own motor\" only if you want the stroke isolated on the high-frequency motor. Scales on your speed relative to your own swim speed, so it is silent while floating.",
+      "signature": ""
+    },
+    {
+      "id": 402,
+      "source": "Fires for every interaction window, including the ones with their own opening cue. Untested.",
+      "signature": ""
+    },
+    {
+      "id": 403,
+      "source": "Fires from GUILDBANKFRAME_OPENED or from the interaction manager's GuildBanker type, whichever this client sends. Untested.",
+      "signature": ""
+    },
+    {
+      "id": 407,
+      "source": "Fires on BANKFRAME_CLOSED, GUILDBANKFRAME_CLOSED, or interaction manager banker hide.",
+      "signature": ""
+    },
+    {
+      "id": 413,
+      "source": "Fires on taxi takeoff when control is lost to the flight master mount.",
+      "signature": ""
+    },
+    {
+      "id": 426,
+      "source": "Fires when a class or profession trainer's window opens.",
+      "signature": ""
+    },
+    {
+      "id": 495,
+      "source": "First steepening point — heart rate climbs faster below this than it did between dangerStartThreshold and here. Requested live 2026-09-16 as ~40% breath remaining.",
+      "signature": ""
+    },
+    {
+      "id": 498,
+      "source": "Flight Path Cruise",
+      "signature": ""
+    },
+    {
+      "id": 500,
+      "source": "Flight path landing",
+      "signature": ""
+    },
+    {
+      "id": 501,
+      "source": "Flight path takeoff",
+      "signature": ""
+    },
+    {
+      "id": 508,
+      "source": "Footfalls & Mount Gait",
+      "signature": ""
+    },
+    {
+      "id": 509,
+      "source": "Footfalls and gait",
+      "signature": ""
+    },
+    {
+      "id": 510,
+      "source": "Footstep pacing, mount travel, gliding, weather, soft-target interaction, weapon draw/release",
+      "signature": ""
+    },
+    {
+      "id": 511,
+      "source": "Footsteps, mount strides, weather, water presence, looting, quest dialogs, tracking",
+      "signature": ""
+    },
+    {
+      "id": 512,
+      "source": "Footsteps, weather, swimming, quest dialogs, merchant/mail, world interaction",
+      "signature": ""
+    },
+    {
+      "id": 514,
+      "source": "Friendly target under reticle",
+      "signature": ""
+    },
+    {
+      "id": 521,
+      "source": "Gentle crystalline drift during snowfall.",
+      "signature": ""
+    },
+    {
+      "id": 532,
+      "source": "Hard landing",
+      "signature": ""
+    },
+    {
+      "id": 552,
+      "source": "Hostile target under reticle",
+      "signature": ""
+    },
+    {
+      "id": 556,
+      "source": "How long this motor takes to fall back toward silence. Too high and consecutive taps blur into one buzz; too low and sustained textures sound chopped. 0.028 reproduces the engine's old behaviour at 60fps.",
+      "signature": ""
+    },
+    {
+      "id": 559,
+      "source": "How often the hum swells, in cycles per second. 0.30 is roughly one slow breath every three seconds.",
+      "signature": ""
+    },
+    {
+      "id": 567,
+      "source": "Hydrodynamic water drag that scales as you swim forward through rivers and seas.",
+      "signature": ""
+    },
+    {
+      "id": 574,
+      "source": "Immersive open-world adventures. Terrain footsteps, swimming, mount travel, weather, item discovery, and quest interactions.",
+      "signature": ""
+    },
+    {
+      "id": 576,
+      "source": "In Water (Buoyancy)",
+      "signature": ""
+    },
+    {
+      "id": 577,
+      "source": "In water",
+      "signature": ""
+    },
+    {
+      "id": 586,
+      "source": "Intensity of choking pulses when breath runs out underwater and suffocation damage begins.",
+      "signature": ""
+    },
+    {
+      "id": 587,
+      "source": "Interactable under reticle",
+      "signature": ""
+    },
+    {
+      "id": 588,
+      "source": "Interaction window closed",
+      "signature": ""
+    },
+    {
+      "id": 602,
+      "source": "Jumped",
+      "signature": ""
+    },
+    {
+      "id": 606,
+      "source": "Late breath threshold",
+      "signature": ""
+    },
+    {
+      "id": 608,
+      "source": "Layers with \"Underwater breath texture\" when breath runs out. Fires on suffocation damage while submerged.",
+      "signature": ""
+    },
+    {
+      "id": 618,
+      "source": "Light rain patter, crisp snow rustle, and deep desert sandstorm rumbles.",
+      "signature": ""
+    },
+    {
+      "id": 637,
+      "source": "Low on breath",
+      "signature": ""
+    },
+    {
+      "id": 638,
+      "source": "Low, irregular micro-pulses — rain, patter.",
+      "signature": ""
+    },
+    {
+      "id": 653,
+      "source": "Mid breath threshold",
+      "signature": ""
+    },
+    {
+      "id": 660,
+      "source": "Mount weight",
+      "signature": ""
+    },
+    {
+      "id": 661,
+      "source": "Mounted up",
+      "signature": ""
+    },
+    {
+      "id": 662,
+      "source": "Mounts & travel",
+      "signature": ""
+    },
+    {
+      "id": 668,
+      "source": "Multiplies gait strength while mounted, on top of the racial mount's own weight. A kodo is already heavier than a hawkstrider before this touches it.",
+      "signature": ""
+    },
+    {
+      "id": 677,
+      "source": "New setups enable casting, crafting, low-health and breath effects. Other effects start off; your saved choices are kept.",
+      "signature": ""
+    },
+    {
+      "id": 680,
+      "source": "No legacy event for this one — it arrives only through the interaction manager, so it is silent if this client does not send that. Untested.",
+      "signature": ""
+    },
+    {
+      "id": 690,
+      "source": "Occurrence only, deliberately near-subliminal so it doesn't compete with \"Levelled up\". No size scaling: the amount would need UnitXP diffing and isn't worth the bookkeeping for a cue this quiet.",
+      "signature": ""
+    },
+    {
+      "id": 697,
+      "source": "Off by default, layers with \"Low health\" rather than replacing it — same relationship as breathWarning/breathTexture. Same mechanism and same fullscreen-panel caveat as lowHealthWarning above. The shape itself is a code-level switch (Modules/Health.lua's HEARTBEAT_STYLE: smooth glow, flash-synced lub-dub, or an independently-timed lub-dub), not exposed here — flash-synced won out by feel. The knock's own gap/duration/intensity used to be four sliders here; fixed as plain constants in Modules/Health.lua once this exact combination was confirmed to feel right (2026-09-15).",
+      "signature": ""
+    },
+    {
+      "id": 698,
+      "source": "Off by default, layers with \"Low on breath\" rather than replacing it.",
+      "signature": ""
+    },
+    {
+      "id": 703,
+      "source": "One cue for all four edges (top, bottom, left, right), observed via SmartNavigation's directional edge callbacks while keeping button selection isolated via polling to prevent execution taint. Standard default is off.",
+      "signature": ""
+    },
+    {
+      "id": 711,
+      "source": "Only audible if \"Riding a flight path\" is also enabled on its own tab.",
+      "signature": ""
+    },
+    {
+      "id": 712,
+      "source": "Only while mounted",
+      "signature": ""
+    },
+    {
+      "id": 718,
+      "source": "Overall strength of each footfall before speed and state scaling.",
+      "signature": ""
+    },
+    {
+      "id": 725,
+      "source": "PLAYER_SOFT_ENEMY_CHANGED, an occurrence-only event with no payload at all — there is nothing here to come back secret. Fires on the soft target changing, which is not the same as actually targeting something; that's still \"Target changed\" on the Target & Focus page. Expect this to fire often while sweeping the camera through a crowd.",
+      "signature": ""
+    },
+    {
+      "id": 734,
+      "source": "Pans left and right footfalls across the Low and High motors so the stride walks across your hands. Turn off for centered dual-motor footfalls.",
+      "signature": ""
+    },
+    {
+      "id": 750,
+      "source": "Personal damage clutter, footsteps, weather, world dialogs",
+      "signature": ""
+    },
+    {
+      "id": 755,
+      "source": "Ping placed",
+      "signature": ""
+    },
+    {
+      "id": 762,
+      "source": "Present whether or not you are moving, and it does not read your speed at all, so it keeps working while speed comes back as a secret value. Drives the SLOW motor, whose large mass is what buoyancy actually feels like, leaving the sharp one to \"Swimming resistance\" — so the two never collide. Floating gives you this alone.",
+      "signature": ""
+    },
+    {
+      "id": 816,
+      "source": "Puts the stroke on the sharp motor. Turn off (recommended) to route swimming resistance to the heavy motor alongside ambient water, producing deep hydrodynamic drag instead of high-frequency motor buzz.",
+      "signature": ""
+    },
+    {
+      "id": 838,
+      "source": "Rain intensity",
+      "signature": ""
+    },
+    {
+      "id": 843,
+      "source": "Rate of rain drops and micro-flutter patter.",
+      "signature": ""
+    },
+    {
+      "id": 851,
+      "source": "Reads C_Weather.GetCurrentWeather() in WoW Forever. Modulates micro-flutter for rain, slow crystalline drift for snow, and dual rumble for sandstorms, scaled by weather intensity.",
+      "signature": ""
+    },
+    {
+      "id": 882,
+      "source": "Restricts the gait to mounted travel, where a sustained texture is most welcome. Turn off to feel your own footsteps too — try it before leaving it on.",
+      "signature": ""
+    },
+    {
+      "id": 886,
+      "source": "Rhythmic footsteps on foot and hoofbeat cadence while mounted, weighted by armor class.",
+      "signature": ""
+    },
+    {
+      "id": 887,
+      "source": "Riding a flight path",
+      "signature": ""
+    },
+    {
+      "id": 888,
+      "source": "Rising heartbeat pulse that quickens and intensifies as your breath meter runs low underwater.",
+      "signature": ""
+    },
+    {
+      "id": 896,
+      "source": "Same fall-duration proxy as \"Landed\", just a higher threshold and a heavier mode.",
+      "signature": ""
+    },
+    {
+      "id": 900,
+      "source": "Sandstorm / Gale intensity",
+      "signature": ""
+    },
+    {
+      "id": 905,
+      "source": "Scored by how long you were airborne, not by fall damage — that number is unreadable. A short hop stays silent below the threshold.",
+      "signature": ""
+    },
+    {
+      "id": 908,
+      "source": "Second-harmonic Stokes drift shaping. 0.0 is a pure symmetric sine wave; higher values create a sharp, steep crest and an elongated trough, matching real fluid gravity waves.",
+      "signature": ""
+    },
+    {
+      "id": 912,
+      "source": "Seconds between drowning damage pulses while submerged with zero breath.",
+      "signature": ""
+    },
+    {
+      "id": 931,
+      "source": "Simulates real fluid swell physics via harmonic wave synthesis: a slow, rhythmic rise into a steep wave crest, followed by a gentle glide into the trough. Driven primarily by the heavy slow motor with high-motor crest spray at peak amplitude. Automatically targets ocean and coastal waters unless configured to run in all swimming water.",
+      "signature": ""
+    },
+    {
+      "id": 932,
+      "source": "Skyriding / Gliding Thrust",
+      "signature": ""
+    },
+    {
+      "id": 936,
+      "source": "Snow intensity",
+      "signature": ""
+    },
+    {
+      "id": 964,
+      "source": "Step 3: World & Target Interactions",
+      "signature": ""
+    },
+    {
+      "id": 971,
+      "source": "Strength at full swimming speed. Replaces the old swimLowPeak/swimHighPeak pair, which were blended with max() and were therefore algebraically one knob: the smaller never did anything.",
+      "signature": ""
+    },
+    {
+      "id": 972,
+      "source": "Strength of abrasive gusts and heavy windstorms.",
+      "signature": ""
+    },
+    {
+      "id": 978,
+      "source": "Strokes per second at full speed. Swimming faster strokes faster, not merely harder — the old version only ever changed amplitude.",
+      "signature": ""
+    },
+    {
+      "id": 980,
+      "source": "Subtle hydrostatic floating texture when swimming or bobbing in bodies of water.",
+      "signature": ""
+    },
+    {
+      "id": 986,
+      "source": "Swimming Resistance",
+      "signature": ""
+    },
+    {
+      "id": 987,
+      "source": "Swimming resistance",
+      "signature": ""
+    },
+    {
+      "id": 1014,
+      "source": "Tempo at zero breath remaining — the panic end of the climb, reached only in the final stretch below lateBreathThreshold.",
+      "signature": ""
+    },
+    {
+      "id": 1015,
+      "source": "Tempo from dangerStartThreshold down to midBreathThreshold — a real bradycardic rate (the diving reflex actually slows the heart at first, requested live 2026-09-16), not an elevated one.",
+      "signature": ""
+    },
+    {
+      "id": 1016,
+      "source": "Temporarily disabled: UNIT_PING_PIN_ADDED is registration-restricted by Blizzard on WoW Forever / 12.x.",
+      "signature": ""
+    },
+    {
+      "id": 1029,
+      "source": "The catch-all. Enum.PlayerInteractionType has 81 values and most are retail systems a classic-shaped roster never meets; anything unmapped lands here rather than being silent, which also means a window type added to the client later is covered with no change to Pulse. Turn it on with /pulse debug to find out which types your client actually sends. Untested.",
+      "signature": ""
+    },
+    {
+      "id": 1030,
+      "source": "The effort of pulling yourself through water — a rhythmic hydrodynamic stroke that quickens and hardens with movement speed.",
+      "signature": ""
+    },
+    {
+      "id": 1032,
+      "source": "The fallback for any character with no rule of its own — including characters you have not logged into yet. Set this to the profile you mostly want, then override the handful of characters that differ.",
+      "signature": ""
+    },
+    {
+      "id": 1058,
+      "source": "Trainer window opened",
+      "signature": ""
+    },
+    {
+      "id": 1062,
+      "source": "Tuned for heavy chassis damping (+10% Low motor gain)",
+      "signature": ""
+    },
+    {
+      "id": 1076,
+      "source": "Two solid hits when you mount.",
+      "signature": ""
+    },
+    {
+      "id": 1082,
+      "source": "Underwater boost",
+      "signature": ""
+    },
+    {
+      "id": 1083,
+      "source": "Underwater breath texture",
+      "signature": ""
+    },
+    {
+      "id": 1087,
+      "source": "Untested: this fires for a Skyriding ascend too, on top of glideThrust's own continuous texture easing in right after — may read as a clean \"liftoff, then flight\" or as a double-hit. Try it before assuming either.",
+      "signature": ""
+    },
+    {
+      "id": 1107,
+      "source": "Water presence",
+      "signature": ""
+    },
+    {
+      "id": 1115,
+      "source": "Weather Atmosphere",
+      "signature": ""
+    },
+    {
+      "id": 1116,
+      "source": "Weather changed",
+      "signature": ""
+    },
+    {
+      "id": 1117,
+      "source": "Weather texture",
+      "signature": ""
+    },
+    {
+      "id": 1118,
+      "source": "Weather, footsteps, loot popups, quest dialogs, merchant/mail",
+      "signature": ""
+    },
+    {
+      "id": 1122,
+      "source": "When set to 1, restricts the rolling swell to ocean bodies, coasts, seas, and deep-water fatigue zones (English clients only; non-English clients play swell in all swimming water). Set to 0 to feel ocean swells in all swimming water.",
+      "signature": ""
+    },
+    {
+      "id": 1144,
+      "source": "World dialogs, ambient weather, merchant/mail",
+      "signature": ""
+    },
+    {
+      "id": 1185,
+      "source": "|cff38BDF8[A] Adjust Value|r  •  |cffffffff[→] Jump to Feel Button|r",
+      "signature": ""
+    }
+  ]
+}
